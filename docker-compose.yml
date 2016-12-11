@@ -1,2 +1,5 @@
 # bootstrap docker compose file
 version: '2'
+services:
+  redis:
+    image: "redis:3.0.7-alpine"
