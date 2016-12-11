@@ -5,3 +5,8 @@ services:
     image: "redis:3.0.7-alpine"
   postgres:
     image: "postgres:9.6.1-alpine"
+  gitlab-development-kit:
+    build: .
+    volumes:
+      - .:/gitlab-development-kit
+    command: sleep 10000
