@@ -36,7 +36,11 @@ foreman_start() {
 }
 
 db() {
-  foreman_start -m all=0,redis=1,postgresql=1,openldap=1,influxdb=1,webpack=1,registry=1
+  if [ -z "$GTK_DOCKER_COMPOSE" ] ; then
+    foreman_start -m all=0,redis=1,postgresql=1,openldap=1,influxdb=1,webpack=1,registry=1
+  else
+    foreman_start -m all=0,redis=0,postgresql=0,openldap=1,influxdb=1,webpack=1,registry=1
+  fi
 }
 
 geo_db() {

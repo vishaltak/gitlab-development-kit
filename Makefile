@@ -237,7 +237,7 @@ redis/redis.conf:
 postgresql: postgresql/data
 
 postgresql/data:
-	${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data
+	# ${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data
 	support/bootstrap-rails
 
 postgresql-sensible-defaults:
