@@ -15,3 +15,8 @@ Unicorn is not compatible with Pry.
 Then launch GDK as usual (e.g. with `gdk run`) and in a separate
 terminal run: `gdk run thin`. Your Pry prompts will appear in the window
 that runs Thin.
+
+There is an [open
+issue](https://gitlab.com/gitlab-org/gitlab-development-kit/issues/183)
+about `gdk run thin` not allowing concurrent requests. This breaks
+features like the web editor.
