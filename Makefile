@@ -55,7 +55,8 @@ gitlab/config/unicorn.rb:
 	echo "listen '${gitlab_development_root}/gitlab.socket'" >> $@
 
 gitlab/config/resque.yml:
-	sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@
+	#sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@
+	sed "s|unix:/home/git/redis/redis.socket|127.0.0.1|" redis/resque.yml.example > $@
 
 gitlab/public/uploads:
 	mkdir $@
@@ -234,7 +235,8 @@ Procfile:
 redis: redis/redis.conf
 
 redis/redis.conf:
-	sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
+	#sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
+	sed "s|unixsocket /home/git/redis/redis.socket|bind 127.0.0.1|" $@.example > $@
 
 postgresql: postgresql/data
 

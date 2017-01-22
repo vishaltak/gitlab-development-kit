@@ -25,6 +25,8 @@ RUN apk add --no-cache go
 # needed for mysql gem
 RUN apk add --no-cache mariadb-dev
 
+RUN apk add --no-cache tzdata
+
 RUN adduser -D -u 1000 gdk
 
 
