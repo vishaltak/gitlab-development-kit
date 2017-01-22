@@ -3,10 +3,14 @@ version: '2'
 services:
   redis:
     image: "redis:3.0.7-alpine"
+    network_mode: host
   postgres:
     image: "postgres:9.6.1-alpine"
+    network_mode: host
   gitlab-development-kit:
     build: .
+    image: gdk
+    network_mode: host
     volumes:
       - .:/gitlab-development-kit
     command: sleep 10000

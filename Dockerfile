@@ -32,6 +32,6 @@ USER gdk
 
 ENV BUNDLE_PATH="/gitlab-development-kit/.bundle"
 
-ENV GTK_DOCKER_COMPOSE=true
+ENV GDK_DOCKER_COMPOSE=true
 WORKDIR /gitlab-development-kit
 
