@@ -13,6 +13,7 @@ port = $(shell cat port 2>/dev/null)
 username = $(shell whoami)
 sshd_bin = $(shell which sshd)
 git_bin = $(shell which git)
+docker_repo = "ayufan/gitlab-development-kit"
 
 all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly-setup
 
@@ -91,25 +92,36 @@ update: gitlab-update gitlab-shell-update gitlab-workhorse-update gitaly-update
 gitlab-update: gitlab/.git/pull
 	cd ${gitlab_development_root}/gitlab && \
 		bundle install --without mysql production --jobs 4
+ifeq ($(OFFLINE_UPDATE),)
 	@echo ""
 	@echo "------------------------------------------------------------"
 	@echo "Make sure Postgres is running otherwise db:migrate will fail"
 	@echo "------------------------------------------------------------"
 	@echo ""
 	cd ${gitlab_development_root}/gitlab && \
-		bundle exec rake db:migrate db:test:prepare && \
-		npm prune && \
-		npm install
+		bin/rake db:migrate db:test:prepare
+else
+	support/migrate-rails
+endif
+	cd ${gitlab_development_root}/gitlab && \
+	npm prune && \
+	npm install
 
 gitlab-shell-update: gitlab-shell/.git/pull
 	cd ${gitlab_development_root}/gitlab-shell && \
 		bundle install --without production --jobs 4
 
 gitlab/.git/pull:
+ifeq ($(CI_CHECKOUT_SHA),)
 	cd ${gitlab_development_root}/gitlab && \
 		git checkout -- Gemfile.lock db/schema.rb && \
 		git stash && git checkout master && \
 		git pull --ff-only upstream master
+else
+	cd ${gitlab_development_root}/gitlab && \
+		git fetch origin && \
+		git checkout -f $(CI_CHECKOUT_SHA)
+endif
 
 gitlab-shell/.git/pull:
 	cd ${gitlab_development_root}/gitlab-shell && \
@@ -155,9 +167,9 @@ redis: redis/redis.conf
 redis/redis.conf:
 	sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
 
-postgresql: postgresql/data
+postgresql: postgresql/data/PG_VERSION
 
-postgresql/data:
+postgresql/data/PG_VERSION:
 	${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data
 	support/bootstrap-rails
 
@@ -272,3 +284,13 @@ clean-config:
 	redis/redis.conf \
 	.ruby-version \
 	Procfile \
+
+docker_build:
+	docker build --cache-from=ayufan/gitlab-development-kit -t $(docker_repo) .
+
+docker_build_and_run: docker_build
+	-docker rm -f -v gdk
+	docker run -it --name=gdk --rm $(docker_repo) $(docker_cmd)
+
+docker_build_and_push: docker_build
+	docker push $(docker_repo)

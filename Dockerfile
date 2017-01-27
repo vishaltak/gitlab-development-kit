@@ -32,3 +32,21 @@ RUN echo 'eval "$(rbenv init -)"' >> /home/gdk/.bash_profile
 RUN mkdir /home/gdk/.rbenv/plugins
 RUN git clone https://github.com/sstephenson/ruby-build.git /home/gdk/.rbenv/plugins/ruby-build
 RUN bash -l -c "rbenv install 2.3.3 && rbenv global 2.3.3"
+
+WORKDIR /home/gdk
+
+ENV host=0.0.0.0 port=5000
+
+ADD review-apps/init /review-apps/init
+RUN /review-apps/init
+
+USER root
+RUN apt-get install -y nano vim ed
+USER gdk
+
+ADD review-apps/run /review-apps/run
+COPY support /home/gdk/gitlab-development-kit/support
+COPY Makefile /home/gdk/gitlab-development-kit/Makefile
+
+EXPOSE 5000
+CMD ["/review-apps/run"]

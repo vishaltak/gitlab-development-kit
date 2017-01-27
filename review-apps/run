@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+set -xe
+
+export ENABLE_SPRING=true
+
+cd gitlab-development-kit
+
+make update \
+  OFFLINE_UPDATE=1 \
+  CI_CHECKOUT_SHA=$CI_CHECKOUT_SHA
+
+gdk run

@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+success = true
+begin
+  foreman_pid = spawn('./run', 'db')
+  [
+    %W(bin/rake db:migrate),
+    %W(bin/rake db:test:prepare),
+  ].each do |cmd|
+    success &&= system(*cmd, chdir: 'gitlab')
+  end
+ensure
+  Process.kill('TERM', foreman_pid)
+end
+
+Process.wait(foreman_pid)
+
+exit true if success
+
+abort "#$0 failed"
