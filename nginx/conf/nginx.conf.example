@@ -41,7 +41,7 @@ http {
   server {
     listen 127.0.0.1:3080;
 
-    location ~* favicon.*\.ico$ {
+    location ~* /assets/favicon.*\.ico$ {
         alias /home/git/nginx/favicon-gdk.ico;
     }
 
