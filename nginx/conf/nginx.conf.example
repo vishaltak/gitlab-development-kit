@@ -51,31 +51,7 @@ http {
         proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
         proxy_set_header    X-Forwarded-Proto   $scheme;
         proxy_set_header    Upgrade             $http_upgrade;
-        proxy_set-header    Connection          $connection_upgrade;
-
-        proxy_read_timeout 300;
-
-        proxy_pass http://gitlab-workhorse;
-    }
-  }
-
-  server {
-    listen 127.0.0.1:3443 ssl;
-
-    ssl_certificate /home/git/localhost.crt;
-    ssl_certificate_key /home/git/localhost.key;
-
-    location ~* favicon.*\.ico$ {
-        alias /home/git/nginx/favicon-gdk.ico;
-    }
-
-    location / {
-        proxy_set_header    Host                $http_host;
-        proxy_set_header    X-Real-IP           $remote_addr;
-        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
-        proxy_set_header    X-Forwarded-Proto   $scheme;
-        proxy_set_header    Upgrade             $http_upgrade;
-        proxy_set-header    Connection          $connection_upgrade;
+        proxy_set_header    Connection          $connection_upgrade;
 
         proxy_read_timeout 300;
 
