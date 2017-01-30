@@ -12,5 +12,5 @@ rails-background-jobs: exec /usr/bin/env SIDEKIQ_LOG_ARGUMENTS=1 RAILS_ENV=devel
 #influxdb: exec influxdb/bin/influxd -config influxdb/influxdb.conf
 #grafana: exec support/wait-postgresql-ready support/exec-cd grafana bin/grafana-server -config grafana.ini
 #sshd: exec /usr/sbin/sshd -e -D -f /home/git/openssh/sshd_config
-nginx: exec nginx -p /home/git/nginx -c /home/git/nginc/conf/nginx.conf
+nginx: exec nginx -p /home/git/nginx -c conf/nginx.conf
 #gitaly: exec /usr/bin/env GITALY_SOCKET_PATH=/home/git/gitaly.socket GITALY_PROMETHEUS_LISTEN_ADDR=:9101 gitaly/bin/gitaly
