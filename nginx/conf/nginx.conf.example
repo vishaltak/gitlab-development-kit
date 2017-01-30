@@ -44,6 +44,10 @@ http {
     ssl_certificate /home/git/localhost.crt;
     ssl_certificate_key /home/git/localhost.key;
 
+    location ~* favicon.*\.ico$ {
+        alias /home/git/nginx/favicon-gdk.ico;
+    }
+
     location / {
         proxy_set_header    Host                $http_host;
         proxy_set_header    X-Real-IP           $remote_addr;

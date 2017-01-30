@@ -49,6 +49,7 @@ We are using PostgreSQL-9.5 in the following example. If you want to use another
 
 ```
 sudo port install git redis libiconv postgresql95-server icu pkgconfig cmake nodejs4 go openssl npm2
+sudo port install nginx +ssl
 bundle config build.eventmachine --with-cppflags=-I/opt/local/include/openssl
 sudo npm install phantomjs-prebuilt@2.1.12 -g
 echo 'export PATH=/opt/local/lib/postgresql95/bin/:$PATH' >> ~/.profile
@@ -65,7 +66,7 @@ sudo apt-get install software-properties-common python-software-properties
 # This PPA contains an up-to-date version of Go
 sudo apt-add-repository -y ppa:ubuntu-lxc/lxd-stable
 sudo apt-get update
-sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs nodejs-legacy npm libkrb5-dev golang ed pkg-config
+sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs nodejs-legacy npm libkrb5-dev golang ed pkg-config nginx
 npm install phantomjs-prebuilt@2.1.12 -g
 ```
 
@@ -74,7 +75,7 @@ npm install phantomjs-prebuilt@2.1.12 -g
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
 ```
-pacman -S postgresql redis postgresql-libs icu nodejs ed cmake openssh git go
+pacman -S postgresql redis postgresql-libs icu nodejs ed cmake openssh git go nginx
 npm install phantomjs-prebuilt@2.1.12 -g
 ```
 
@@ -83,7 +84,7 @@ npm install phantomjs-prebuilt@2.1.12 -g
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
 ```
-sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs npm libkrb5-dev ed pkg-config
+sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs npm libkrb5-dev ed pkg-config nginx-full
 ```
 
 If you are running Debian Stretch or newer you will need to install Go
@@ -108,7 +109,7 @@ You may need to install Redis 2.8 or newer manually.
 We assume you are using Fedora >= 22.
 
 ```
-sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel nodejs git ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server postgresql-contrib
+sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel nodejs git ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server postgresql-contrib nginx
 ```
 
 Install `phantomJS` manually, or download it and put in your $PATH. For
@@ -125,7 +126,7 @@ This is tested on CentOS 6.5:
 ```
 sudo yum install http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-redhat93-9.3-1.noarch.rpm
 sudo yum install https://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-sudo yum install postgresql93-server libicu-devel cmake gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 libstdc++.so.6 golang nodejs
+sudo yum install postgresql93-server libicu-devel cmake gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 libstdc++.so.6 golang nodejs nginx
 
 sudo rvm install 2.3
 sudo rvm use 2.3
@@ -156,7 +157,7 @@ sudo zypper dup
 
 sudo zypper install libxslt-devel  postgresql postgresql-devel libpqxx-devel redis libicu-devel nodejs git ed cmake \
          rpm-build gcc-c++ krb5-devel go postgresql-server postgresql-contrib \
-         libxml2-devel libxml2-devel-32bit findutils-locate
+         libxml2-devel libxml2-devel-32bit findutils-locate nginx
 
 sudo npm install -g phantomjs
 ```
@@ -189,7 +190,7 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
 
 ```
 sudo pkg install postgresql93-server postgresql93-contrib postgresql-libpqxx \
-redis go node icu krb5 phantomjs gmake
+redis go node icu krb5 phantomjs gmake nginx
 ```
 
 ### Other platforms
