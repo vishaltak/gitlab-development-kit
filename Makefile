@@ -252,6 +252,7 @@ openssh/ssh_host_rsa_key:
 
 nginx-setup: nginx/conf/nginx.conf nginx/logs nginx/tmp
 
+.PHONY: nginx/conf/nginx.conf
 nginx/conf/nginx.conf:
 	sed -e "s|/home/git|${gitlab_development_root}|" nginx/conf/nginx.conf.example > $@
 
