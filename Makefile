@@ -147,6 +147,7 @@ Procfile:
 		-e "s|postgres |${postgres_bin_dir}/postgres |"\
 		-e "s|DEV_SERVER_PORT=3808 |DEV_SERVER_PORT=${webpack_port} |"\
 		$@.example > $@
+	cat $@
 	if [ -f .vagrant_enabled ]; then \
 		echo "0.0.0.0" > host; \
 		echo "3000" > port; \
