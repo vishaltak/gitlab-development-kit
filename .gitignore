@@ -27,6 +27,7 @@
 /host
 /port
 /webpack_port
+/webpack_livereload
 /.ruby-version
 /.ruby-gemset
 /localhost.*

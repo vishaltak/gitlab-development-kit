@@ -14,6 +14,8 @@ username = $(shell whoami)
 sshd_bin = $(shell which sshd)
 git_bin = $(shell which git)
 webpack_port = $(shell cat webpack_port 2>/dev/null || echo '3808')
+# We count any existance as true
+webpack_livereload = $(shell cat webpack_livereload 2>/dev/null || echo 'true')
 
 all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly-setup
 
@@ -146,6 +148,7 @@ Procfile:
 		-e "s|/usr/sbin/sshd|${sshd_bin}|"\
 		-e "s|postgres |${postgres_bin_dir}/postgres |"\
 		-e "s|DEV_SERVER_PORT=3808 |DEV_SERVER_PORT=${webpack_port} |"\
+		-e "s|DEV_SERVER_LIVERELOAD=true |DEV_SERVER_LIVERELOAD=${webpack_livereload} |"\
 		$@.example > $@
 	if [ -f .vagrant_enabled ]; then \
 		echo "0.0.0.0" > host; \
