@@ -4,9 +4,9 @@
 
 This is a step-by-step guide on how to get the GDK working under the current `Windows 10 Bash (Creators Update / April 2017)`. Due to the overlapping of directories between Windows and the Linux subsystem, you will need a little bit of a workaround to get it working, so that you can also edit files from Window but let it run under the Linux subsystem. If you would install it only in the `mnt` directory you would run into permission errors (especially with sockets).
 
-1. Create a non root User or use an existing one
+1. Create a non-root user or use an existing one
 
-2. Prepare your machine based on this [guide for WSL](./prepare.md#experimental-windows-10-using-the-wsl-windows-subsystem-for-linux) 
+2. Prepare your machine based on this [guide for WSL](./prepare.md#experimental-windows-10-using-the-wsl-windows-subsystem-for-linux). 
 
 3. Install GDK normally in the users home directory (~) with [gdk install](./set-up-gdk.md)
 
@@ -92,4 +92,4 @@ To the TCP Address :
 
 20. Run it again `gdk run`
 
-21. You should have now a GDK instance running on `localhost:3000` in your browser which is taking the Source files from the `/mnt/` installation but simply saves some of the needed connection parts in the `/home/` installation
+21. You should have now a GDK instance running on `localhost:3000` in your browser which is taking the Source files from the `/mnt/` installation but simply saves some of the needed connection sockets in the `/home/` installation
