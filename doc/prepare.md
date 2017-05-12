@@ -239,6 +239,8 @@ Start the PostgreSQL database
 sudo service postgresql start
 ```
 
+For a Windows 10 Bash Setup Guide of the GDK please follow this [guide](./set-up-winbash.md)
+
 For some common troubleshooting steps for Windows 10 GDK installs please refer to [Troubleshooting](./howto/troubleshooting.md)
 
 ### Other platforms
