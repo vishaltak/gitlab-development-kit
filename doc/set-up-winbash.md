@@ -2,7 +2,7 @@
 
 ## Setting up GDK on WSL (Linux Bash on Windows, Ubuntu 16.04 Base)
 
-This is a step-by-step guide on how to get the GDK working under the current `Windows 10 Bash (Creators Update / April 2017)`. Due to the overlapping of directories between Windows and the Linux subsystem, you will need a little bit of a workaround to get it working, so that you can also edit files from Window but let it run under the Linux subsystem. If you would install it only in the `mnt` directory you would run into permission errors (especially with sockets).
+This is a step-by-step guide on how to get the GDK working under the current `Windows 10 Bash (Creators Update / April 2017)`. Due to the overlapping of directories between Windows and the Linux subsystem, you will need a little bit of a workaround to get it working, so that you can also edit files from Windows but let it run under the Linux subsystem. If you would install it only in the `mnt` directory you would run into permission errors (especially with sockets).
 
 1. Create a non-root user or use an existing one
 
@@ -10,21 +10,21 @@ This is a step-by-step guide on how to get the GDK working under the current `Wi
 
 3. Install GDK normally in the users home directory (~) with [gdk install](./set-up-gdk.md)
 
-4. Run it with `gdk run` (Can take quite a while until it starts, refresh multiple times in browser 'localhost:3000') , after some time (~30 minutes) it will come up and show the `users/sign_in` page (couple of 502 / EOF errors before it starts correctly, restarting the whole machine also helps)
+4. Run it with `gdk run` (Can take quite a while until it starts, refresh multiple times in browser 'localhost:3000') , after some time (time will depend on your hardware and setup) it will come up and show the `users/sign_in` page (couple of 502 / EOF errors before it starts correctly, restarting the whole machine also helps)
 
 5. So now you should have a fully running GDK instance , try it out by logging in on [http://localhost:3000](http://localhost:3000) and browse. Only problem is you can’t really edit those files from the Windows machine (permission problems , etc. MS even states don’t edit Linux files with Windows applications)
 
 6. What we will do is now do a second installation in your `/mnt/…` directory which is setup with your Windows hard drive. So I will create a directory on `C:/` with the name `tzwsl` (as an example)
 
-7. Run in your bash `cd /mnt/c/tzwsl`
+7. Now change directory `cd /mnt/c/tzwsl`
 
-8. Run here again `gdk init`
+8. Run `gdk init`
 
 9. Change to the created directory `cd gitlab-development-kit`
 
 10. Run `gdk install`
 
-11. Rund `gdk run` -> Now you will get multiple errors as WSL has a problem to create .socket files in mnt due to permission problems . Solution reconfigure GDK to use the directory in `/home/…` for creating the sockets
+11. Run `gdk run` -> Now you will get multiple errors as WSL has a problem to create .socket files in mnt due to permission problems. Solution reconfigure GDK to use the directory in `/home/…` for creating the sockets
 
 12. **./Procfile** changes :
 
@@ -46,7 +46,7 @@ Change :
 To :   
 `gitlab-workhorse: exec /usr/bin/env PATH="/mnt/c/tzwsl/gitlab-development-kit/gitlab-workhorse/bin:$PATH" gitlab-workhorse -authSocket /home/tz/gitlab-development-kit/gitlab.socket -listenAddr $host:$port -documentRoot /mnt/c/tzwsl/gitlab-development-kit/gitlab/public -developmentMode -secretPath /mnt/c/tzwsl/gitlab-development-kit/gitlab/.gitlab_workhorse_secret -config /mnt/c/tzwsl/gitlab-development-kit/gitlab-workhorse/config.toml`
 
-13. Run `gdk install` again, then it finished for me also with cloning gitaly, etc.
+13. Run `gdk install` again, then it it should be able to finish the installation while also cloning gitaly, etc.
 
 14. Configure gitaly (if you retry gdk run after this , it shouldn’t stop anymore with gitaly problems) :   
 Go to **/gitaly/config.toml** , change from :   
