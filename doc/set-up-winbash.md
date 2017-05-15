@@ -16,7 +16,7 @@ This is a step-by-step guide on how to get the GDK working under the current `Wi
 
 6. What we will do is now do a second installation in your `/mnt/…` directory which is setup with your Windows hard drive. So I will create a directory on `C:/` with the name `tzwsl` (as an example)
 
-7. Now change directory `cd /mnt/c/tzwsl`
+7. Now change directory `cd /mnt/c/tzwsl` (Tip: Create an alias to go make it easier to reach your mounted directory `alias wslhome="cd /mnt/c/Users/YOUR_USER_NAME_HERE"`)
 
 8. Run `gdk init`
 
