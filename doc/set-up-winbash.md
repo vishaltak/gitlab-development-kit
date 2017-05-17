@@ -10,7 +10,7 @@ This is a step-by-step guide on how to get the GDK working under the current `Wi
 
 3. Install GDK normally in the users home directory (~) with [gdk install](./set-up-gdk.md)
 
-4. Run it with `gdk run` (Can take quite a while until it starts, refresh multiple times in browser 'localhost:3000') , after some time (time will depend on your hardware and setup) it will come up and show the `users/sign_in` page (couple of 502 / EOF errors before it starts correctly, restarting the whole machine also helps)
+4. Run it with `gdk run` (Can take quite a while until it starts, refresh multiple times in browser [http://localhost:3000](http://localhost:3000)) , after some time (time will depend on your hardware and setup) it will come up and show the `users/sign_in` page (couple of 502 / EOF errors before it starts correctly, restarting the whole machine also helps)
 
 5. So now you should have a fully running GDK instance , try it out by logging in on [http://localhost:3000](http://localhost:3000) and browse. Only problem is you can’t really edit those files from the Windows machine (permission problems , etc. MS even states don’t edit Linux files with Windows applications)
 
@@ -24,7 +24,7 @@ This is a step-by-step guide on how to get the GDK working under the current `Wi
 
 10. Run `gdk install`
 
-11. Run `gdk run` -> Now you will get multiple errors as WSL has a problem to create .socket files in mnt due to permission problems. Solution reconfigure GDK to use the directory in `/home/…` for creating the sockets
+11. Run `gdk run` -> Now you will get multiple errors as WSL has a problem to create .socket files in mnt due to permission problems. The solution is to reconfigure the GDK to use the installation in the `/home` directory for creating the sockets
 
 12. **./Procfile** changes :
 
@@ -46,7 +46,7 @@ Change :
 To :   
 `gitlab-workhorse: exec /usr/bin/env PATH="/mnt/c/tzwsl/gitlab-development-kit/gitlab-workhorse/bin:$PATH" gitlab-workhorse -authSocket /home/tz/gitlab-development-kit/gitlab.socket -listenAddr $host:$port -documentRoot /mnt/c/tzwsl/gitlab-development-kit/gitlab/public -developmentMode -secretPath /mnt/c/tzwsl/gitlab-development-kit/gitlab/.gitlab_workhorse_secret -config /mnt/c/tzwsl/gitlab-development-kit/gitlab-workhorse/config.toml`
 
-13. Run `gdk install` again, then it it should be able to finish the installation while also cloning gitaly, etc.
+13. Run `gdk install` again, then it should be able to finish the installation while also cloning gitaly, etc.
 
 14. Configure gitaly (if you retry gdk run after this , it shouldn’t stop anymore with gitaly problems) :   
 Go to **/gitaly/config.toml** , change from :   
@@ -68,16 +68,16 @@ To
 `development: unix:/home/tz/gitlab-development-kit/redis/redis.socket`  
 `test: unix:/home/tz/gitlab-development-kit/redis/redis.socket`  
 
-17. Fix the GItlab Workhorse Config to the new Redis Path :   
+17. Fix the GitLab Workhorse Config to the new Redis Path :   
 Change in **/gitlab-workhorse/config.toml** the line :   
 `URL = "unix:///mnt/c/tzwsl/gitlab-development-kit/redis/redis.socket"`  
 To the /home Path :   
 `URL = "unix:///home/tz/gitlab-development-kit/redis/redis.socket"`  
 
 18. Update the Database Socket in **/gitlab/config/database.yml** :   
-CHange the 2 host paths :   
+Change the 2 host paths :   
 `host: /mnt/c/tzwsl/gitlab-development-kit/postgresql`  
-To using your home path :   
+So they use the installation in your home path instead :   
 `host: /home/tz/gitlab-development-kit/postgresql`
 
 19. Update the Path to the example repositories (somehow it is not possible to pull them in the /mnt/ directory with the default installation) :   
