@@ -35,7 +35,7 @@ end
 runner_file = prompt.ask('Tell me your runner configuration file', default: ENV['HOME']+'/.gitlab-runner/config.toml')
 # puts "runner_file: #{runner_file}"
 File.read(runner_file).tap do |content|
-  new_content = content.gsub(/(url = "http:\/\/)([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|localhost)(::\d+\/(ci|)")/, '\1'+ip+'\3')
+  new_content = content.gsub(/(url = "http:\/\/)([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|localhost)(:\d+\/(ci|)")/, '\1'+ip+'\3')
   File.open(runner_file, 'w') { |file| file.write(new_content) }
 end
 
