@@ -67,3 +67,16 @@ test:install:
     - gdk run &
     - sleep 30
     - curl -f --retry 10 --retry-delay 5 http://127.0.0.1:3000/
+
+test:vagrant:
+  image: "ruby:2.4"
+  stage: test
+  script:
+    - apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common rsync
+    - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+    - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+    - apt-get update && apt-get install -y docker-ce
+    - service docker start
+    - wget https://releases.hashicorp.com/vagrant/1.9.7/vagrant_1.9.7_x86_64.deb
+    - dpkg -i vagrant_1.9.7_x86_64.deb
+    - vagrant up --provider=docker
