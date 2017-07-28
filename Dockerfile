@@ -13,9 +13,11 @@ RUN apk add --no-cache mariadb-dev postgresql-dev
 RUN apk add --no-cache tzdata
 RUN gem install gitlab-development-kit
 
-RUN adduser -D -u 1000 gdk
+RUN adduser -D -g sudo -u 1000 gdk
+RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
 USER gdk
 
+ENV BUNDLE_PATH="/home/gdk/gitlab-development-kit/.bundle"
 ENV GDK_DOCKER_COMPOSE=true
 
 WORKDIR /home/gdk/
