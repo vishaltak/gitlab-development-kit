@@ -15,9 +15,9 @@ services:
     image: gdk
     network_mode: host
     volumes:
-      - gitlab/:/home/gdk/gitlab-development-kit
-      - go-gitlab-shell/:/home/gdk/go-gitlab-shell
-      - gitlab-runner/:/home/gdk/gitlab-runner
+      - ./gitlab/:/home/gdk/gitlab-development-kit
+      - ./go-gitlab-shell/:/home/gdk/go-gitlab-shell
+      - ./gitlab-runner/:/home/gdk/gitlab-runner
     depends_on:
       - gitlab-development-kit-base
     command: gdk run
