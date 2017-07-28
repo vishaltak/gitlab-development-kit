@@ -7,10 +7,15 @@ LABEL authors.contributor "Matija Cupic <matija@gitlab.com>"
 # sudo nodejs npm
 # libpq-dev ed pkg-config
 
-RUN apk add --no-cache bash git make build-base krb5-dev icu-dev cmake linux-headers
-RUN apk add --no-cache sudo nodejs go
-RUN apk add --no-cache mariadb-dev postgresql-dev
-RUN apk add --no-cache tzdata
+RUN apk update
+# build basics
+RUN apk add --no-cache bash git linux-headers build-base cmake pkgconfig
+# runtime dependencies
+RUN apk add --no-cache icu-dev krb5-dev libre2-dev postgresql-dev sqlite
+# runtimes
+RUN apk add --no-cache nodejs go
+# misc
+RUN apk add --no-cache sudo tzdata
 RUN gem install gitlab-development-kit
 
 RUN adduser -D -g sudo -u 1000 gdk
