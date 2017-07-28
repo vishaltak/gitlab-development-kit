@@ -11,9 +11,9 @@ RUN apk update
 # build basics
 RUN apk add --no-cache bash git linux-headers build-base cmake pkgconfig
 # runtime dependencies
-RUN apk add --no-cache icu-dev krb5-dev libre2-dev postgresql-dev sqlite
+RUN apk add --no-cache icu-dev krb5-dev libre2-dev postgresql-dev sqlite-dev
 # runtimes
-RUN apk add --no-cache nodejs go
+RUN apk add --no-cache nodejs yarn go
 # misc
 RUN apk add --no-cache sudo tzdata
 RUN gem install gitlab-development-kit
