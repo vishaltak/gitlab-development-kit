@@ -9,13 +9,13 @@ LABEL authors.contributor "Matija Cupic <matija@gitlab.com>"
 
 RUN apk update
 # build basics
-RUN apk add --no-cache bash git linux-headers build-base cmake pkgconfig
-# runtime dependencies
+RUN apk add --no-cache git linux-headers build-base cmake pkgconfig
+# build dependencies
 RUN apk add --no-cache icu-dev libc6-compat libre2-dev krb5-dev postgresql-dev sqlite-dev
-# runtimes
-RUN apk add --no-cache nodejs yarn go
+# runtime dependencies
+RUN apk add --no-cache postgresql nodejs yarn go
 # misc
-RUN apk add --no-cache sudo tzdata
+RUN apk add --no-cache bash sudo tzdata
 
 RUN adduser -D -g sudo -u 1000 gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
@@ -46,5 +46,4 @@ ENV GDK_DOCKER_COMPOSE true
 
 RUN gdk init /home/gdk/gitlab-development-kit
 WORKDIR /home/gdk/gitlab-development-kit
-RUN gem list
 RUN gdk install
