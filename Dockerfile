@@ -2,11 +2,6 @@ FROM gdk-base
 LABEL authors.maintainer hrvoje.marjanovic@gmail.com
 LABEL authors.contributor "Matija Cupic <matija@gitlab.com>"
 
-# rest of gitlab requirements
-
-# sudo nodejs npm
-# libpq-dev ed pkg-config
-
 RUN apk update
 # build basics
 RUN apk add --no-cache git linux-headers build-base cmake pkgconfig
@@ -46,3 +41,7 @@ ENV GDK_DOCKER_COMPOSE true
 
 RUN gdk init /home/gdk/gitlab-development-kit
 WORKDIR /home/gdk/gitlab-development-kit
+
+COPY compose-entrypoint.sh .
+RUN sudo chown gdk:gdk compose-entrypoint.sh
+ENTRYPOINT ["./compose-entrypoint.sh"]
