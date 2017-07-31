@@ -3,6 +3,5 @@
 if [ -f .gdk-installed ]; then
 	gdk run
 else
-	gdk install
-	touch .gdk-installed
+	gdk install && touch .gdk-installed && gdk run
 fi
