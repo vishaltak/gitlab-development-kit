@@ -15,7 +15,7 @@ RUN apk add --no-cache icu-dev libc6-compat libre2-dev krb5-dev postgresql-dev s
 # runtime dependencies
 RUN apk add --no-cache postgresql nodejs yarn go
 # misc
-RUN apk add --no-cache bash sudo tzdata
+RUN apk add --no-cache bash sudo openssh-keygen tzdata
 
 RUN adduser -D -g sudo -u 1000 gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
@@ -30,7 +30,7 @@ RUN cd ./protobuf && \
 	    make check && \
 	    make install
 RUN chmod 777 ./protobuf/ruby && cd ./protobuf/ruby && \
-	    sed -i 's/s.version     = "3.3.2"/s.version     = "3.2.0.2"/' google-protobuf.gemspec && \
+	    sed -i 's/s.version     = "3.3.2"/s.version     = "3.3.0"/' google-protobuf.gemspec && \
 	    sed -i '12 i\
 	    	s.platform       = "x86_64-linux"' google-protobuf.gemspec && \
 	    sudo -u gdk bundle && rake && \
@@ -46,4 +46,3 @@ ENV GDK_DOCKER_COMPOSE true
 
 RUN gdk init /home/gdk/gitlab-development-kit
 WORKDIR /home/gdk/gitlab-development-kit
-RUN gdk install
