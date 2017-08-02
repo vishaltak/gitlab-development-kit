@@ -8,9 +8,9 @@ RUN apk add --no-cache git linux-headers build-base cmake pkgconfig
 # build dependencies
 RUN apk add --no-cache icu-dev libc6-compat libre2-dev krb5-dev postgresql-dev sqlite-dev
 # runtime dependencies
-RUN apk add --no-cache postgresql nodejs yarn go
+RUN apk add --no-cache postgresql-client nodejs yarn go
 # misc
-RUN apk add --no-cache bash sudo openssh-keygen tzdata
+RUN apk add --no-cache bash sudo openssh-client openssh-keygen tzdata
 
 RUN adduser -D -g sudo -u 1000 gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
@@ -37,9 +37,13 @@ USER gdk
 
 RUN gem install gitlab-development-kit
 
+COPY . /home/gdk/gitlab-development-kit
+RUN sudo chown gdk:gdk -R /home/gdk/gitlab-development-kit
+RUN echo "/home/gdk/gitlab-development-kit" > /home/gdk/gitlab-development-kit/.gdk-install-root
+RUN gdk trust /home/gdk/gitlab-development-kit
+
 ENV GDK_DOCKER_COMPOSE true
 
-RUN gdk init /home/gdk/gitlab-development-kit
 WORKDIR /home/gdk/gitlab-development-kit
 
 COPY compose-entrypoint.sh .
