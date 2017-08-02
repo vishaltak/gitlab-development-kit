@@ -66,7 +66,11 @@ gitaly() {
 
 all() {
   print_port
-  foreman_start
+  if [ -z "$GDK_DOCKER_COMPOSE" ] ; then
+    foreman_start
+  else
+    foreman_start -c postgresql=0,redis=0
+  fi
 }
 
 main() {
