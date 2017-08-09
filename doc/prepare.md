@@ -49,6 +49,8 @@ sudo npm install phantomjs-prebuilt@2.1.12 -g
 echo 'export PATH=/opt/local/lib/postgresql95/bin/:$PATH' >> ~/.profile
 ```
 
+##### Troubleshooting
+You may be run into this [issue](https://github.com/Medium/phantomjs/issues/707) when installing `phantomjs-prebuilt@2.1.12` with recent versions of npm. You can workaround it by either using an older version of npm `npm install -g npm@3`, or installing phantomjs-prebuilt with the `--unsafe-perm` flag `sudo npm install phantomjs-prebuilt@2.1.12 -g --unsafe-perm`.
 
 ### Ubuntu
 
