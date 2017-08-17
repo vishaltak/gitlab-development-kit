@@ -1,0 +1,5 @@
+.git
+gitlab/
+go-gitlab-shell/
+gitlab-runner/
+postgres-data/
