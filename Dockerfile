@@ -1,37 +1,25 @@
-FROM gdk-base
+FROM ruby:slim-stretch
 LABEL authors.maintainer hrvoje.marjanovic@gmail.com
 LABEL authors.contributor "Matija Cupic <matija@gitlab.com>"
 
-RUN apk update
+RUN apt-get update && apt-get install -y curl gnupg2 apt-transport-https
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update
 # build basics
-RUN apk add --no-cache git linux-headers build-base cmake pkgconfig
+RUN apt-get install -y git linux-headers-amd64 build-essential cmake pkg-config
 # build dependencies
-RUN apk add --no-cache icu-dev libc6-compat libre2-dev krb5-dev postgresql-dev sqlite-dev
+RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev postgresql-server-dev-all libsqlite3-dev
 # runtime dependencies
-RUN apk add --no-cache postgresql-client nodejs yarn go
-# misc
-RUN apk add --no-cache bash sudo openssh-client openssh-keygen tzdata
+RUN apt-get install -y postgresql-client nodejs yarn golang-1.8
+ENV PATH="$PATH:/usr/lib/go-1.8/bin/"
+RUN ln -s `which nodejs` /usr/local/bin/node
+RUN apt-get install -y bash sudo openssh-client tzdata
 
-RUN adduser -D -g sudo -u 1000 gdk
+RUN useradd --groups sudo --uid 1000 --shell /bin/bash --create-home --user-group gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
-
-# workaround for https://github.com/google/protobuf/issues/2335
-RUN apk add --no-cache curl autoconf automake libtool
-RUN git clone https://github.com/google/protobuf/
-RUN cd ./protobuf && \
-	    ./autogen.sh && \
-	    ./configure --prefix=/usr && \
-	    make -j 3 && \
-	    make check && \
-	    make install
-RUN chmod 777 ./protobuf/ruby && cd ./protobuf/ruby && \
-	    sed -i 's/s.version     = "3.3.2"/s.version     = "3.3.0"/' google-protobuf.gemspec && \
-	    sed -i '12 i\
-	    	s.platform       = "x86_64-linux"' google-protobuf.gemspec && \
-	    sudo -u gdk bundle && rake && \
-	    rake clobber_package gem && \
-	    sudo -u gdk gem install --install-dir $GEM_HOME `ls pkg/google-protobuf-*.gem`
-RUN apk del curl autoconf automake libtool && rm -rf ./protobuf
 
 USER gdk
 
