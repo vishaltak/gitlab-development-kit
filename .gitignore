@@ -67,3 +67,4 @@
 /registry_port
 /registry/storage/
 /registry/config.yml
+/postgres-data
