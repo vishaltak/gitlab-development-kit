@@ -19,12 +19,13 @@ to learn how to develop GitLab CE.
 
 - [GitLab performance metrics](performance_metrics.md)
 - [Local network binding](local_network.md)
+- [Load testing](load_testing.md)
 
 ## Special topics
 
 - [Simulate slow or broken repository storage](simulate_storage.md)
 - [MySQL](mysql.md)
-- [Postgresql replication](postgresql_replication.md)
+- [GitLab Geo](geo.md)
 - [LDAP](ldap.md)
 - [Elasticsearch](elasticsearch.md)
 - [NFS](nfs.md)
@@ -32,3 +33,4 @@ to learn how to develop GitLab CE.
 - [SSH](ssh.md)
 - [Using GitLab Runner with GDK](runner.md)
 - [Using Prometheus with GDK](prometheus.md)
+- [Preview and test the docs site locally](gitlab_docs.md)

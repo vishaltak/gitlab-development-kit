@@ -6,7 +6,7 @@ puts "set_ip configuration: start"
 
 # Search ip on this machine
 addr_infos = Socket.ip_address_list
-ipv4 = []
+ipv4 = ['localhost']
 addr_infos.each do |addr_info|
   ip = addr_info.ip_address
   # puts "ip: #{ip}"

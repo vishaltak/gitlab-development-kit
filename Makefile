@@ -7,6 +7,7 @@ gitlab_workhorse_repo = https://gitlab.com/gitlab-org/gitlab-workhorse.git
 gitlab_workhorse_clone_dir = gitlab-workhorse/src/gitlab.com/gitlab-org/gitlab-workhorse
 gitaly_repo = https://gitlab.com/gitlab-org/gitaly.git
 gitaly_clone_dir = gitaly/src/gitlab.com/gitlab-org/gitaly
+gitlab_docs_repo = https://gitlab.com/gitlab-com/gitlab-docs.git
 gitlab_development_root = $(shell pwd)
 postgres_bin_dir = $(shell pg_config --bindir)
 postgres_replication_user = gitlab_replication
@@ -58,7 +59,7 @@ gitlab/public/uploads:
 	touch $@
 
 .gettext:
-	cd ${gitlab_development_root}/gitlab && bundle exec rake gettext:compile
+	cd ${gitlab_development_root}/gitlab && bundle exec rake gettext:compile && git checkout locale/*/gitlab.po
 	touch $@
 
 .PHONY:	bundler
@@ -79,7 +80,7 @@ gitlab-shell-setup: symlink-gitlab-shell ${gitlab_shell_clone_dir}/.git gitlab-s
 	if [ -x gitlab-shell/bin/compile ] ; then gitlab-shell/bin/compile; fi
 
 symlink-gitlab-shell:
-	support/symlink-gitlab-shell gitlab-shell ${gitlab_shell_clone_dir}
+	support/symlink gitlab-shell ${gitlab_shell_clone_dir}
 
 ${gitlab_shell_clone_dir}/.git:
 	git clone ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
@@ -100,7 +101,7 @@ gitlab-shell/.gitlab_shell_secret:
 
 # Set up gitaly
 
-gitaly-setup: gitaly/bin/gitaly gitaly/config.toml
+gitaly-setup: gitaly/bin/gitaly gitaly/config.toml gitaly/ruby .gitaly-ruby-bundle
 
 ${gitaly_clone_dir}/.git:
 	git clone ${gitaly_repo} ${gitaly_clone_dir}
@@ -110,6 +111,55 @@ gitaly/config.toml:
 	  -e "s|^socket_path.*|socket_path = \"${gitlab_development_root}/gitaly.socket\"|" \
 	  -e "s|# prometheus_listen_addr|prometheus_listen_addr|" \
 	  -e "s|/home/git|${gitlab_development_root}|" ${gitaly_clone_dir}/config.toml.example > $@
+
+gitaly/ruby:
+	ln -s ${gitlab_development_root}/${gitaly_clone_dir}/ruby $@
+
+.gitaly-ruby-bundle:	gitaly/ruby/Gemfile.lock
+	cd gitaly/ruby && bundle install
+	touch $@
+
+# Set up gitlab-docs
+
+gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs/nanoc.yaml symlink-gitlab-docs
+
+gitlab-docs/.git:
+	git clone ${gitlab_docs_repo} gitlab-docs
+
+gitlab-docs/.git/pull:
+	cd gitlab-docs && \
+		git stash && \
+		git checkout master &&\
+		git pull --ff-only
+
+
+# We need to force delete since there's already a nanoc.yaml file
+# in the docs folder which we need to overwrite.
+gitlab-docs/rm-nanoc.yaml:
+	rm -f gitlab-docs/nanoc.yaml
+
+gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
+	cp nanoc.yaml.example $@
+
+gitlab-docs-bundle:
+	cd ${gitlab_development_root}/gitlab-docs && bundle install --jobs 4
+
+symlink-gitlab-docs:
+	support/symlink ${gitlab_development_root}/gitlab-docs/content/docs ${gitlab_development_root}/gitlab/doc
+
+gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.yaml
+
+# Update GDK itself
+
+self-update: unlock-dependency-installers
+	@echo ""
+	@echo "--------------------------"
+	@echo "Running self-update on GDK"
+	@echo "--------------------------"
+	@echo ""
+	cd ${gitlab_development_root} && \
+		git stash && git checkout master && \
+		git pull --ff-only
 
 # Update gitlab, gitlab-shell, gitlab-workhorse and gitaly
 
@@ -146,6 +196,7 @@ gitaly/.git/pull:
 
 gitaly-clean:
 	rm -rf gitaly/bin
+	rm -rf gitlab/tmp/tests/gitaly
 
 .PHONY:	gitaly/bin/gitaly
 gitaly/bin/gitaly:	${gitaly_clone_dir}/.git
@@ -153,7 +204,7 @@ gitaly/bin/gitaly:	${gitaly_clone_dir}/.git
 
 # Set up supporting services
 
-support-setup: .ruby-version foreman Procfile redis postgresql openssh-setup nginx-setup
+support-setup: .ruby-version foreman Procfile redis gitaly-setup postgresql openssh-setup nginx-setup
 	@echo ""
 	@echo "*********************************************"
 	@echo "************** Setup finished! **************"
@@ -208,8 +259,11 @@ postgresql-replication/config:
 
 # Setup GitLab Geo databases
 
-.PHONY: geo-setup
-geo-setup: gitlab/config/database_geo.yml postgresql/geo gitlab/config/gitlab.yml/geo
+.PHONY: geo-setup geo-cursor
+geo-setup: Procfile geo-cursor gitlab/config/database_geo.yml postgresql/geo
+
+geo-cursor:
+	grep '^geo-cursor:' Procfile || (printf ',s/^#geo-cursor/geo-cursor/\nwq\n' | ed -s Procfile)
 
 gitlab/config/database_geo.yml:
 	sed "s|/home/git|${gitlab_development_root}|" database_geo.yml.example > gitlab/config/database_geo.yml
@@ -218,9 +272,6 @@ postgresql/geo:
 	${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql-geo/data
 	grep '^postgresql-geo:' Procfile || (printf ',s/^#postgresql-geo/postgresql-geo/\nwq\n' | ed -s Procfile)
 	support/bootstrap-geo
-
-gitlab/config/gitlab.yml/geo:
-	sed -i '' -e '/geo_secondary_role\:/ {' -e 'n; s/enabled\: false/enabled\: true/' -e '}' gitlab/config/gitlab.yml
 
 .PHONY:	foreman
 foreman:
@@ -325,6 +376,7 @@ clean-config:
 	Procfile \
 	gitlab-workhorse/config.toml \
 	gitaly/config.toml \
+	gitaly/ruby \
 	nginx/conf/nginx.conf \
 
 unlock-dependency-installers:
@@ -332,4 +384,5 @@ unlock-dependency-installers:
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
-	.gettext
+	.gettext \
+	.gitaly-ruby-bundle \

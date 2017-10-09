@@ -4,7 +4,7 @@
 # part of the gitlab-development-kit gem so that we can iterate faster.
 
 module GDK
-  PROGNAME = 'gdk'
+  PROGNAME = 'gdk'.freeze
   MAKE = RUBY_PLATFORM =~ /bsd/ ? 'gmake' : 'make'
 
   # This function is called from bin/gdk. It must return true/false or
@@ -25,7 +25,41 @@ module GDK
     when 'install'
       exec(MAKE, *ARGV, chdir: $gdk_root)
     when 'update'
-      exec(MAKE, 'update', chdir: $gdk_root)
+      # Run `make self-update` separately in case the Makefile is updated.
+      # Otherwise we would miss it and end up in a weird state.
+      system(MAKE, 'self-update', chdir: $gdk_root)
+      exec(MAKE, 'self-update', 'update', chdir: $gdk_root)
+    when 'diff-config'
+      require_relative './config_diff.rb'
+
+      files = %w[
+        gitlab/config/gitlab.yml
+        gitlab/config/database.yml
+        gitlab/config/unicorn.rb
+        gitlab/config/resque.yml
+        gitlab-shell/config.yml
+        gitlab-shell/.gitlab_shell_secret
+        redis/redis.conf
+        .ruby-version
+        Procfile
+        gitlab-workhorse/config.toml
+        gitaly/config.toml
+        nginx/conf/nginx.conf
+      ]
+
+      file_diffs = files.map do |file|
+        ConfigDiff.new(file)
+      end
+
+      file_diffs.each do |diff|
+        $stderr.puts diff.make_output
+      end
+
+      file_diffs.each do |diff|
+        puts diff.output unless diff.output == ""
+      end
+
+      true
     when 'reconfigure'
       remember!($gdk_root)
       exec(MAKE, 'clean-config', 'unlock-dependency-installers', 'all', chdir: $gdk_root)

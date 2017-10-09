@@ -5,13 +5,16 @@
 Make sure that none of the directories 'above' GitLab Development Kit
 contain 'problematic' characters such as ` ` and `(`. For example,
 `/home/janedoe/projects` is OK, but `/home/janedoe/my projects` will
-cause problems:
+cause problems.
+
+Execute the following with the Ruby version manager of your choice (`rvm`, `rbenv`, `chruby`, etc.) with the current `gitlab-ce` Ruby version:
 
 ```
 gem install gitlab-development-kit
 gdk init
-cd gitlab-development-kit
 ```
+
+The GDK is now cloned into `./gitlab-development-kit`. Enter that directory.
 
 ## Install GDK
 
@@ -19,6 +22,8 @@ The `gdk install` command will clone the repositories, install the Gem bundles a
 basic configuration files. Pick one of the methods below. If you don't have
 write access to the upstream repositories, you should use the 'Develop in a fork'
 method.
+
+In either case, use your Ruby version manager to run `gdk install` with the `gitlab-ce` Ruby version.
 
 ### Develop in a fork
 
@@ -76,24 +81,7 @@ License key generator is only available for GitLab employees.
 
 ### GitLab Geo
 
-Development on GitLab Geo requires two Enterprise Edition GDK instances running
-side-by-side. You can reuse the `gdk-ee` instance you set up in the previous
-section as your primary node, and now we'll create a secondary instance in a
-`gdk-geo` folder to act as a secondary node. We'll configure unique ports for
-the new instance so that it can run alongside the primary.
-
-```
-gdk init gdk-geo
-cd gdk-geo
-echo 3002 > port
-echo 3807 > webpack_port
-gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-ee.git
-make geo-setup
-```
-
-Now that you've installed a primary and a secondary GDK instance, follow the
-[PostgreSQL replication guide](./howto/postgresql_replication.md) before
-continuing to "Post-installation" below.
+Check the [GitLab Geo instructions](./howto/geo.md).
 
 ## Post-installation
 
@@ -125,4 +113,3 @@ If you want to work on GitLab CI you will need to install [GitLab Runner](https:
 To enable the OpenLDAP server, see the OpenLDAP instructions in this [README](./howto/ldap.md).
 
 After installation [learn how to use GDK](./howto/README.md).
-

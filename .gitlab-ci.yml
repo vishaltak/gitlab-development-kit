@@ -2,12 +2,20 @@ services:
 - docker:dind
 
 stages:
+- rubocop
 - build
 - test
 
 variables:
   DOCKER_DRIVER: overlay
   TEST_IMAGE: registry.gitlab.com/$CI_PROJECT_NAMESPACE/gitlab-development-kit:latest
+
+rubocop:
+  image: "ruby:2.3"
+  stage: rubocop
+  script:
+    - gem install rubocop
+    - rubocop -c gdk-rubocop.yml
 
 build:image:
   image: docker:git
@@ -28,6 +36,12 @@ build:image:
 test:install:
   image: $TEST_IMAGE
   stage: test
+  artifacts:
+    paths:
+      - ./*.log
+      - ./gitlab/log/*.log
+    expire_in: 2 days
+    when: always
   script:
     - source /home/gdk/.bash_profile
     - cd gem
@@ -36,6 +50,7 @@ test:install:
     - cd /home/gdk
     - gdk init
     - cd gitlab-development-kit
+    - git checkout $CI_COMMIT_SHA
     - netstat -lpt
     - gdk install
     - support/set-gitlab-upstream

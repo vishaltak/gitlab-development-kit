@@ -9,10 +9,9 @@ during installation.
 
 1. A non-root Unix user, this can be your normal user but **DO NOT** run the
    installation as a root user
-1. Ruby 2.3 (2.3.3 or newer) installed with a Ruby version manager
+1. The current [`gitlab-ce` Ruby version](https://gitlab.com/gitlab-org/gitlab-ce/blob/master/.ruby-version) installed with a Ruby version manager
    ([RVM](https://rvm.io/), [rbenv], [chruby], etc.), **DO NOT** use the
    system Ruby
-1. Go 1.8 or newer
 1. Bundler, which you can install with `gem install bundler`
 1. Git version of 2.7.X or higher
 1. Node 4.3 or newer and Yarn 0.17 or newer.  If your package manage does not
@@ -34,7 +33,7 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
 #### Install OS X prerequisites using homebrew
 
 ```
-brew install git redis postgresql libiconv icu4c pkg-config cmake nodejs go openssl node npm yarn coreutils
+brew install git redis postgresql libiconv icu4c pkg-config cmake nodejs go openssl node npm yarn coreutils re2
 bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
 sudo npm install phantomjs-prebuilt@2.1.12 -g
 ```
@@ -44,7 +43,7 @@ sudo npm install phantomjs-prebuilt@2.1.12 -g
 We are using PostgreSQL-9.5 in the following example. If you want to use another version, please adjust paths accordingly.
 
 ```
-sudo port install git redis libiconv postgresql95-server icu pkgconfig cmake nodejs4 go openssl npm2 yarn coreutils
+sudo port install git redis libiconv postgresql95-server icu pkgconfig cmake nodejs4 go openssl npm2 yarn coreutils re2
 bundle config build.eventmachine --with-cppflags=-I/opt/local/include/openssl
 sudo npm install phantomjs-prebuilt@2.1.12 -g
 echo 'export PATH=/opt/local/lib/postgresql95/bin/:$PATH' >> ~/.profile
@@ -61,16 +60,19 @@ sudo apt-get install software-properties-common python-software-properties
 # This PPA contains an up-to-date version of Go
 sudo add-apt-repository ppa:longsleep/golang-backports
 sudo apt-get update
-sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs nodejs-legacy npm libkrb5-dev golang-1.8-go ed pkg-config
+sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs nodejs-legacy npm libre2-dev libkrb5-dev golang-1.8-go ed pkg-config
 sudo npm install phantomjs-prebuilt@2.1.12 yarn -g
 ```
+
+Ubuntu 14.04 (Trusty Tahr) doesn't have the `libre2-dev` package available, but
+you can [install re2 manually](https://github.com/google/re2/wiki/Install).
 
 ### Arch Linux
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
 ```
-pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git go
+pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git go re2
 npm install phantomjs-prebuilt@2.1.12 yarn -g
 ```
 
@@ -79,7 +81,7 @@ npm install phantomjs-prebuilt@2.1.12 yarn -g
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
 ```
-sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs npm libkrb5-dev ed pkg-config
+sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs npm libkrb5-dev libre2-dev ed pkg-config
 ```
 
 If you are running Debian Experimenal or newer you can install a Go
@@ -108,7 +110,7 @@ We assume you are using Fedora >= 22.
 If you are running Fedora < 26 you'll need to install `go` manually using [go] official installation instructions.
 
 ```
-sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel nodejs git ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server postgresql-contrib
+sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel nodejs git ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server postgresql-contrib re2
 ```
 
 Install `phantomJS` manually, or download it and put in your $PATH. For
@@ -125,13 +127,14 @@ This is tested on CentOS 6.5:
 ```
 sudo yum install http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-redhat95-9.5-2.noarch.rpm
 sudo yum install https://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-sudo yum install postgresql95-server postgresql95-devel libicu-devel cmake gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 libstdc++.so.6 nodejs npm
+sudo yum install postgresql95-server postgresql95-devel libicu-devel cmake gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 libstdc++.so.6 nodejs npm re2
 
 sudo npm install phantomjs-prebuilt@2.1.12 -g
 
 bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config
-sudo rvm install 2.3
-sudo rvm use 2.3
+# This example uses Ruby 2.3.3. Substitute with the current version if different.
+sudo rvm install 2.3.3
+sudo rvm use 2.3.3
 #Ensure your user is in rvm group
 sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
@@ -161,7 +164,7 @@ sudo zypper dup
 
 sudo zypper install libxslt-devel  postgresql postgresql-devel libpqxx-devel redis libicu-devel nodejs git ed cmake \
          rpm-build gcc-c++ krb5-devel postgresql-server postgresql-contrib \
-         libxml2-devel libxml2-devel-32bit findutils-locate
+         libxml2-devel libxml2-devel-32bit findutils-locate re2
 
 sudo npm install -g phantomjs yarn
 ```
@@ -196,7 +199,7 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
 
 ```
 sudo pkg install postgresql93-server postgresql93-contrib postgresql-libpqxx \
-redis go node icu krb5 phantomjs gmake
+redis go node icu krb5 phantomjs gmake re2
 ```
 
 ### **Experimental** Windows 10 using the WSL (Windows Subsystem for Linux)
@@ -217,9 +220,10 @@ make -j4 # adjust according to your available CPU capacity
 sudo make install
 ```
 
-Install Ruby 2.3.3 using [RVM](https://rvm.io/)
+Install the current `gitlab-ce` Ruby version using [RVM](https://rvm.io/):
 
 ```
+# This example uses Ruby 2.3.3. Substitute with the current version if different.
 rvm install 2.3.3
 rvm use 2.3.3
 ```
@@ -239,7 +243,7 @@ sudo apt-get install software-properties-common python-software-properties
 # This PPA contains an up-to-date version of Go
 sudo apt-add-repository -y ppa:ubuntu-lxc/lxd-stable
 sudo apt-get update
-sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ libkrb5-dev golang ed pkg-config
+sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ libkrb5-dev libre2-dev golang ed pkg-config
 sudo npm install phantomjs-prebuilt@2.1.12 -g
 ```
 
