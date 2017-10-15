@@ -1,9 +1,10 @@
-FROM ruby:slim-stretch
+FROM ruby:2.3-slim
 LABEL authors.maintainer hrvoje.marjanovic@gmail.com
 LABEL authors.contributor "Matija Cupic <matija@gitlab.com>"
 
 RUN apt-get update && apt-get install -y curl gnupg2 apt-transport-https
 
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
@@ -13,9 +14,12 @@ RUN apt-get install -y git linux-headers-amd64 build-essential cmake pkg-config
 # build dependencies
 RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev postgresql-server-dev-all libsqlite3-dev
 # runtime dependencies
-RUN apt-get install -y postgresql-client nodejs yarn golang-1.8
-ENV PATH="$PATH:/usr/lib/go-1.8/bin/"
-RUN ln -s `which nodejs` /usr/local/bin/node
+RUN apt-get install -y postgresql-client nodejs yarn
+RUN curl -O https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz && rm go1.8.3.linux-amd64.tar.gz
+ENV GOROOT /usr/local/go
+ENV PATH=$GOROOT/bin:$PATH
+RUN ln -s $(which nodejs) /usr/local/bin/node
 RUN apt-get install -y bash sudo openssh-client tzdata
 
 RUN useradd --groups sudo --uid 1000 --shell /bin/bash --create-home --user-group gdk
