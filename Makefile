@@ -106,6 +106,7 @@ gitaly-setup: gitaly/bin/gitaly gitaly/config.toml
 
 ${gitaly_clone_dir}/.git:
 	git clone ${gitaly_repo} ${gitaly_clone_dir}
+	cd ${gitaly_clone_dir} && git checkout always-bundle-config
 
 gitaly/config.toml:
 	sed \
