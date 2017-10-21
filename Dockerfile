@@ -26,18 +26,18 @@ RUN useradd --groups sudo --uid 1000 --shell /bin/bash --create-home --user-grou
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
 
 USER gdk
+WORKDIR /home/gdk/
+
+# Gems
+RUN curl -O https://gitlab.com/gitlab-org/gitlab-ce/raw/master/Gemfile https://gitlab.com/gitlab-org/gitlab-ce/raw/master/Gemfile.lock && bundle install --without mysql production --jobs 4 && rm Gemfile Gemfile.lock
+RUN curl -O https://gitlab.com/gitlab-org/gitlab-shell/raw/master/Gemfile https://gitlab.com/gitlab-org/gitlab-shell/raw/master/Gemfile.lock && bundle install --without production --jobs 4 && rm Gemfile Gemfile.lock
+RUN curl -O https://gitlab.com/gitlab-com/gitlab-docs/raw/master/Gemfile https://gitlab.com/gitlab-com/gitlab-docs/raw/master/Gemfile.lock && bundle install --jobs 4 && rm Gemfile Gemfile.lock
 
 RUN gem install gitlab-development-kit
-
-COPY . /home/gdk/gitlab-development-kit
-RUN sudo chown gdk:gdk -R /home/gdk/gitlab-development-kit
-RUN echo "/home/gdk/gitlab-development-kit" > /home/gdk/gitlab-development-kit/.gdk-install-root
-RUN gdk trust /home/gdk/gitlab-development-kit
+RUN gdk init
 
 ENV GDK_DOCKER_COMPOSE true
 
 WORKDIR /home/gdk/gitlab-development-kit
 
-COPY compose-entrypoint.sh .
-RUN sudo chown gdk:gdk compose-entrypoint.sh
 ENTRYPOINT ["./compose-entrypoint.sh"]
