@@ -8,15 +8,16 @@ services:
     image: "postgres:9.6.1-alpine"
     network_mode: host
     volumes:
-      - ./postgres-data/:/var/lib/postgresql/data
+      - ./postgresql/data/:/var/lib/postgresql/data
   gitlab-development-kit:
     build: .
     image: gdk
     network_mode: host
     volumes:
       - ./gitlab/:/home/gdk/gitlab-development-kit/gitlab
-      - ./go-gitlab-shell/:/home/gdk/go-gitlab-shell
-      - ./gitlab-runner/:/home/gdk/gitlab-runner
+      - ./go-gitlab-shell/:/home/gdk/gitlab-development-kit/go-gitlab-shell
+      - ./gitlab-workhorse/:/home/gdk/gitlab-development-kit/gitlab-workhorse
+      - ./gitaly/:/home/gdk/gitlab-development-kit/gitaly
     depends_on:
       - postgres
       - redis
