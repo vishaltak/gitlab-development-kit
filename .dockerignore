@@ -1,5 +1,6 @@
 .git
 gitlab/
 go-gitlab-shell/
-gitlab-runner/
+gitlab-workhorse/
+gitaly/
 postgres-data/
