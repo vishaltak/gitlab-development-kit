@@ -44,10 +44,10 @@ gitlab/config/gitlab.yml:
 	hostname=${hostname} port=${port} webpack_port=${webpack_port} registry_enabled=${registry_enabled} registry_port=${registry_port} support/edit-gitlab.yml gitlab/config/gitlab.yml
 
 gitlab/config/database.yml:
-	if [ ! -z "${GDK_DOCKER_COMPOSE}" ] ; then \
-	sed "s|/home/git/postgresql|127.0.0.1|" database.yml.example > gitlab/config/database.yml; \
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
+	  sed "s|/home/git|${gitlab_development_root}|" -e "s|5432|${postgresql_port}|" database.yml.example > gitlab/config/database.yml ; \
 	else \
-	sed "s|/home/git|${gitlab_development_root}|" -e "s|5432|${postgresql_port}|" database.yml.example > gitlab/config/database.yml ; \
+	  sed "s|/home/git/postgresql|127.0.0.1|" database.yml.example > gitlab/config/database.yml; \
 	fi
 
 gitlab/config/unicorn.rb:
@@ -55,8 +55,11 @@ gitlab/config/unicorn.rb:
 	echo "listen '${gitlab_development_root}/gitlab.socket'" >> $@
 
 gitlab/config/resque.yml:
-	#sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@
-	sed "s|unix:/home/git/redis/redis.socket|127.0.0.1|" redis/resque.yml.example > $@
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
+	  sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@; \
+	else \
+	  sed "s|unix:/home/git/redis/redis.socket|127.0.0.1|" redis/resque.yml.example > $@; \
+	fi
 
 gitlab/public/uploads:
 	mkdir $@
@@ -235,13 +238,18 @@ Procfile:
 redis: redis/redis.conf
 
 redis/redis.conf:
-	#sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
-	sed "s|unixsocket /home/git/redis/redis.socket|bind 127.0.0.1|" $@.example > $@
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
+	  sed "s|/home/git|${gitlab_development_root}|" $@.example > $@; \
+	else \
+	  sed "s|unixsocket /home/git/redis/redis.socket|bind 127.0.0.1|" $@.example > $@; \
+	fi
 
 postgresql: postgresql/data
 
 postgresql/data:
-	# ${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
+	  ${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data; \
+	fi \
 	support/bootstrap-rails
 
 postgresql-sensible-defaults:
