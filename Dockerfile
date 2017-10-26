@@ -9,18 +9,19 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 RUN apt-get update
+# apt basics
+RUN apt-get install -y software-properties-common python-software-properties
 # build basics
-RUN apt-get install -y git linux-headers-amd64 build-essential cmake pkg-config
+RUN apt-get install -y git ed wget linux-headers-amd64 build-essential cmake g++ pkg-config
 # build dependencies
-RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev postgresql-server-dev-all libsqlite3-dev
+RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev postgresql-server-dev-all libsqlite3-dev libreadline-dev libssl-dev
 # runtime dependencies
-RUN apt-get install -y postgresql-client nodejs yarn
+RUN apt-get install -y bash sudo postgresql-client openssh-client yarn tzdata
+RUN apt-get install -y nodejs && ln -s $(which nodejs) /usr/local/bin/node
 RUN curl -O https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz && rm go1.8.3.linux-amd64.tar.gz
 ENV GOROOT /usr/local/go
 ENV PATH=$GOROOT/bin:$PATH
-RUN ln -s $(which nodejs) /usr/local/bin/node
-RUN apt-get install -y bash sudo openssh-client tzdata
 
 RUN useradd --groups sudo --uid 1000 --shell /bin/bash --create-home --user-group gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
