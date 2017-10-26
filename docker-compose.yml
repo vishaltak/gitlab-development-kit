@@ -2,10 +2,10 @@
 version: '3'
 services:
   redis:
-    image: "redis:3.0.7-alpine"
+    image: "redis:4.0-alpine"
     network_mode: host
   postgres:
-    image: "postgres:9.6.1-alpine"
+    image: "postgres:9.6-alpine"
     network_mode: host
     volumes:
       - ./postgresql/data/:/var/lib/postgresql/data
