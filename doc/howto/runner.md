@@ -5,6 +5,25 @@ Most features of [GitLab CI](http://docs.gitlab.com/ce/ci/) need a
 the GitLab installation. This HOWTO will take you through the necessary steps to
 do so when GitLab is running under GDK.
 
+GDK provides a working runner integration based on Docker executor that works out of the box.
+If you need to configure a custom runner please jump to [Custom Runners section](#custom-runners).
+
+Before enabling the integrated runner support you must first
+install [docker](https://www.docker.com/#/developers).
+
+In order to enable the runner you have to write `true` in `runner_enabled`
+file and reconfigure your `gdk` installation.
+
+```bash
+echo true > runner_enabled
+gdk reconfigure
+```
+
+At this point you have to register your runner within GitLab, after starting
+everything with `gdk run` open another shell and type `make register-runner`.
+
+# Custom Runners
+
 ## Set up GitLab
 
 Start by [preparing your computer](../prepare.md) and

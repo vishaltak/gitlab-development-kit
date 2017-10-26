@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+gdk_root=$(pwd)
+
+export CONFIG_FILE="$gdk_root/gitlab-runner-config.toml"
+export MACHINE_STORAGE_PATH="$gdk_root/.docker-machine"
+
+exec gitlab-runner/out/binaries/gitlab-runner "$@"
+

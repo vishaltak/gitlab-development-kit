@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+runner_enabled=$(cat runner_enabled 2>/dev/null || echo 'false')
+config_file=$(pwd)/gitlab-runner-config.toml
+
+if [[ "${runner_enabled}" == "true" ]]; then
+  touch "$config_file"
+
+  exec support/gitlab-runner "$@"
+else
+  echo "GitLab runner disabled."
+  # If we exit now, Foreman will shut down all our sibling process too.
+  # We want to block until Foreman signals us to exit.
+  tail -f /dev/null
+fi
+

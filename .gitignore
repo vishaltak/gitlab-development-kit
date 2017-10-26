@@ -61,9 +61,12 @@ gitlab-development-kit/**
 /.gitlab-bundle
 /.gitlab-npm
 /.gitlab-yarn
+/.gitlab-runner
 /.gettext
 /gem/*.gem
+/gitlab-runner/
 /gitlab-runner-config.toml
+/.docker-machine/
 /.gdk-install-root
 /builds
 /gitaly/
@@ -87,3 +90,4 @@ gitlab-development-kit/**
 /gettext.log
 /elasticsearch*
 /env.mk
+/runner_enabled

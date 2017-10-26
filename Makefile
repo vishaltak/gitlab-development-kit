@@ -17,6 +17,7 @@ gitaly_proto_clone_dir = ${gitaly_gopath}/src/gitlab.com/gitlab-org/gitaly-proto
 gitlab_pages_repo = https://gitlab.com/gitlab-org/gitlab-pages.git
 gitlab_pages_clone_dir = gitlab-pages/src/gitlab.com/gitlab-org/gitlab-pages
 gitlab_docs_repo = https://gitlab.com/gitlab-com/gitlab-docs.git
+gitlab_runner_repo = https://gitlab.com/gitlab-org/gitlab-runner.git
 gitlab_development_root = $(shell pwd)
 gitaly_assembly_dir = ${gitlab_development_root}/gitaly/assembly
 postgres_bin_dir ?= $(shell ruby support/pg_bindir)
@@ -48,7 +49,7 @@ elasticsearch_version = 5.5.3
 elasticsearch_tar_gz_sha1 = 81af33ec3ae08a5294133ade331de8e6aa0b146a
 ruby_version = UNKNOWN
 
-all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup gitlab-pages-setup support-setup gitaly-setup prom-setup object-storage-setup
+all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup gitlab-pages-setup gitlab-runner-setup support-setup gitaly-setup prom-setup object-storage-setup
 
 # Set up the GitLab Rails app
 
@@ -518,6 +519,43 @@ object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/upl
 
 minio/data/%:
 	mkdir -p $@
+
+gitlab-runner-setup: gitlab-runner/out/binaries/gitlab-runner
+
+gitlab-runner-update:	gitlab-runner/.git gitlab-runner/.git/pull gitlab-runner-clean-bin gitlab-runner/out/binaries/gitlab-runner
+
+gitlab-runner-clean-bin:
+	rm -rf gitlab-runner/out/
+
+.PHONY:	gitlab-runner/out/binaries/gitlab-runner
+gitlab-runner/out/binaries/gitlab-runner: gitlab-runner/.git
+	cd gitlab-runner && make build_current
+
+gitlab-runner/.git:
+	git clone ${gitlab_runner_repo} gitlab-runner
+
+gitlab-runner/.git/pull:
+	cd gitlab-runner && \
+		git stash &&\
+		git checkout master &&\
+		git pull --ff-only
+
+register-runner: .docker-machine/certs/key.pem .gitlab-runner
+
+.gitlab-runner:
+	/usr/bin/env RAILS_ENV=development support/exec-cd gitlab bin/rails runner ../support/register_runner.rb
+	touch $@
+
+unregister-runner:
+	support/gitlab-runner unregister -c gitlab-runner-config.toml --all-runners
+	rm .gitlab-runner
+
+# concurrent docker-machine create on first run break your environment
+# this make target will ensure a proper docker-machine bootstrap
+# see https://docs.gitlab.com/runner/executors/docker_machine.html#configuring-gitlab-runner
+.docker-machine/certs/key.pem:
+	support/docker-machine create --driver virtualbox gdk-to-delete
+	support/docker-machine rm -y gdk-to-delete
 
 pry:
 	grep '^#rails-web:' Procfile || (printf ',s/^rails-web/#rails-web/\nwq\n' | ed -s Procfile)

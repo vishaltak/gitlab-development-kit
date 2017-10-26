@@ -14,6 +14,8 @@ def main(argv)
     end
   when 'grafana'
     foreman_exec(%w[grafana])
+  when 'runner'
+    foreman_exec(%w[runner])
   when 'thin'
     exec(
       {'RAILS_ENV' => 'development'},
