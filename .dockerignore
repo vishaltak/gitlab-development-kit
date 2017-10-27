@@ -3,4 +3,4 @@ gitlab/
 go-gitlab-shell/
 gitlab-workhorse/
 gitaly/
-postgres-data/
+postgresql/

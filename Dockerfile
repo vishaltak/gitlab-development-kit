@@ -14,7 +14,7 @@ RUN apt-get install -y software-properties-common python-software-properties
 # build basics
 RUN apt-get install -y git ed wget linux-headers-amd64 build-essential cmake g++ pkg-config
 # build dependencies
-RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev postgresql-server-dev-all libsqlite3-dev libreadline-dev libssl-dev
+RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev libsqlite3-dev libreadline-dev libssl-dev libpq-dev
 # runtime dependencies
 RUN apt-get install -y bash sudo postgresql-client openssh-client yarn tzdata
 RUN apt-get install -y nodejs && ln -s $(which nodejs) /usr/local/bin/node
