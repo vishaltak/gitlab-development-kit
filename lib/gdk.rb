@@ -64,7 +64,7 @@ module GDK
       remember!($gdk_root)
       exec(MAKE, 'clean-config', 'unlock-dependency-installers', 'all', chdir: $gdk_root)
     when 'set_ip'
-      require "#{$gdk_root}/set_ip.rb"
+      exec('ruby', 'set_ip.rb', *ARGV, chdir: $gdk_root)
     when 'psql'
       exec('psql', '-h', File.join($gdk_root, 'postgresql'), *ARGV, chdir: $gdk_root)
     when 'redis-cli'
