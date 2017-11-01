@@ -100,11 +100,20 @@ ${gitlab_shell_clone_dir}/.git:
 	git clone ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 gitlab-shell/config.yml:
-	sed -e "s|/home/git|${gitlab_development_root}|"\
-	  -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
-	  -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
-	  -e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|"\
-	  gitlab-shell/config.yml.example > gitlab-shell/config.yml
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then\
+	  sed -e "s|/home/git|${gitlab_development_root}|"\
+	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
+	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
+	    -e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|"\
+	    gitlab-shell/config.yml.example > gitlab-shell/config.yml;\
+	else\
+	  sed -e "s|/home/git|${gitlab_development_root}|"\
+	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
+	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
+	    -e "s|^  socket: |  # socket: |"\
+	    -e "s|^  # host: |  host: |"\
+	    gitlab-shell/config.yml.example > gitlab-shell/config.yml;\
+	fi
 
 .gitlab-shell-bundle:
 	cd ${gitlab_development_root}/gitlab-shell && bundle install --without production --jobs 4
@@ -317,7 +326,11 @@ localhost.key:
 gitlab-workhorse-setup: gitlab-workhorse/bin/gitlab-workhorse gitlab-workhorse/config.toml
 
 gitlab-workhorse/config.toml:
-	sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then\
+	  sed "s|/home/git|${gitlab_development_root}|" $@.example > $@;\
+	else\
+	  sed "s|URL = .*|URL = \"tcp://localhost:6379\"|" $@.example > $@;\
+	fi
 
 gitlab-workhorse-update:	${gitlab_workhorse_clone_dir}/.git gitlab-workhorse/.git/pull gitlab-workhorse-clean-bin gitlab-workhorse/bin/gitlab-workhorse
 

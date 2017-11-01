@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-PG_HOST = "#{Dir.pwd}/postgresql".freeze
+PG_HOST = ENV.has_key?('GDK_DOCKER_COMPOSE') ? 'localhost' : "#{Dir.pwd}/postgresql".freeze
 PG_PORT_FILE = File.join(Dir.pwd, 'postgresql_port')
 PG_PORT = File.exist?(PG_PORT_FILE) ? File.read(PG_PORT_FILE) : 5432
 
