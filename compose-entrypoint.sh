@@ -3,5 +3,5 @@
 if [ -f gitlab/.gdk-installed ]; then
 	gdk run
 else
-	gdk install && touch gitlab/.gdk-installed && gdk run
+	gdk install && touch gitlab/.gdk-installed && pkill node && gdk run
 fi
