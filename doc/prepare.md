@@ -26,7 +26,7 @@ during installation.
 [yarn]: https://yarnpkg.com/en/docs/install/
 [go]: https://golang.org/doc/install
 
-### OS X 10.9 (Mavericks), 10.10 (Yosemite), 10.11 (El Capitan), macOS 10.12 (Sierra)
+### OS X 10.9 (Mavericks), 10.10 (Yosemite), 10.11 (El Capitan), macOS 10.12 (Sierra), 10.13 (High Sierra)
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
