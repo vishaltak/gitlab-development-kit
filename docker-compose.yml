@@ -3,16 +3,13 @@ version: '3'
 services:
   redis:
     image: "redis:4.0-alpine"
-    network_mode: host
   postgres:
     image: "postgres:9.6-alpine"
-    network_mode: host
     volumes:
       - ./postgresql/data/:/var/lib/postgresql/data
   gitlab-development-kit:
     build: .
     image: gdk
-    network_mode: host
     volumes:
       - ./gitlab/:/home/gdk/gitlab-development-kit/gitlab
       - ./go-gitlab-shell/:/home/gdk/gitlab-development-kit/go-gitlab-shell

@@ -47,7 +47,7 @@ gitlab/config/database.yml:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
 	  sed "s|/home/git|${gitlab_development_root}|" -e "s|5432|${postgresql_port}|" database.yml.example > gitlab/config/database.yml ; \
 	else \
-	  sed "s|/home/git/postgresql|127.0.0.1|" database.yml.example > gitlab/config/database.yml; \
+	  sed "s|/home/git/postgresql|postgres|" database.yml.example > gitlab/config/database.yml; \
 	fi
 
 gitlab/config/unicorn.rb:
@@ -58,7 +58,7 @@ gitlab/config/resque.yml:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
 	  sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@; \
 	else \
-	  sed "s|unix:/home/git/redis/redis.socket|127.0.0.1|" redis/resque.yml.example > $@; \
+	  sed "s|unix:/home/git/redis/redis.socket|tcp://redis:6379|" redis/resque.yml.example > $@; \
 	fi
 
 gitlab/public/uploads:
@@ -110,8 +110,8 @@ gitlab-shell/config.yml:
 	  sed -e "s|/home/git|${gitlab_development_root}|"\
 	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
 	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
-	    -e "s|^  socket: |  # socket: |"\
-	    -e "s|^  # host: |  host: |"\
+	    -e "s|^  socket: |  # socket:|"\
+	    -e "s|^  # host: .*|  host: redis|"\
 	    gitlab-shell/config.yml.example > gitlab-shell/config.yml;\
 	fi
 
@@ -250,7 +250,7 @@ redis/redis.conf:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
 	  sed "s|/home/git|${gitlab_development_root}|" $@.example > $@; \
 	else \
-	  sed "s|unixsocket /home/git/redis/redis.socket|bind 127.0.0.1|" $@.example > $@; \
+	  sed "s|unixsocket /home/git/redis/redis.socket|bind redis|" $@.example > $@; \
 	fi
 
 postgresql: postgresql/data
@@ -329,7 +329,7 @@ gitlab-workhorse/config.toml:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then\
 	  sed "s|/home/git|${gitlab_development_root}|" $@.example > $@;\
 	else\
-	  sed "s|URL = .*|URL = \"tcp://localhost:6379\"|" $@.example > $@;\
+	  sed "s|URL = .*|URL = \"tcp://redis:6379\"|" $@.example > $@;\
 	fi
 
 gitlab-workhorse-update:	${gitlab_workhorse_clone_dir}/.git gitlab-workhorse/.git/pull gitlab-workhorse-clean-bin gitlab-workhorse/bin/gitlab-workhorse
