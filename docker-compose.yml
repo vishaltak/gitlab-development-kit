@@ -8,7 +8,9 @@ services:
     volumes:
       - ./postgresql/data/:/var/lib/postgresql/data
   gitlab-development-kit:
-    build: .
+    build:
+      context: .
+      dockerfile: compose/Dockerfile
     image: gdk
     volumes:
       - ./gitlab/:/home/gdk/gitlab-development-kit/gitlab

@@ -1,56 +1,49 @@
-FROM ruby:2.3-slim
-LABEL authors.maintainer hrvoje.marjanovic@gmail.com
-LABEL authors.contributor "Matija Cupic <matija@gitlab.com>"
+FROM ubuntu:16.04
+LABEL authors.maintainer "Grzegorz Bizon <grzegorz@gitlab.com>"
+LABEL authors.contributor "Hrvoje Marjanovic <hrvoje.marjanovic@gmail.com>"
 
-RUN apt-get update && apt-get install -y curl gnupg2 apt-transport-https
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+# install essentials
 
 RUN apt-get update
-# apt basics
-RUN apt-get install -y software-properties-common python-software-properties
-# build basics
-RUN apt-get install -y git ed wget linux-headers-amd64 build-essential cmake g++ pkg-config
-# build dependencies
-RUN apt-get install -y libicu-dev libre2-dev libkrb5-dev libsqlite3-dev libreadline-dev libssl-dev libpq-dev
-# runtime dependencies
-RUN apt-get install -y bash sudo postgresql-client openssh-client yarn tzdata
-RUN apt-get install -y nodejs && ln -s $(which nodejs) /usr/local/bin/node
-RUN curl -O https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz && rm go1.8.3.linux-amd64.tar.gz
-ENV GOROOT /usr/local/go
-ENV PATH=$GOROOT/bin:$PATH
+RUN apt-get -y install curl wget git sudo build-essential \
+                       software-properties-common \
+                       python-software-properties
 
-RUN useradd --groups sudo --uid 1000 --shell /bin/bash --create-home --user-group gdk
-RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk
+# rest of gitlab requirements
+RUN apt-get install -y git postgresql postgresql-contrib libpq-dev \
+                       redis-server libicu-dev cmake g++ libkrb5-dev libre2-dev \
+                       ed pkg-config libsqlite3-dev libreadline-dev libssl-dev
+
+# install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
+
+# GDK tools
+RUN apt-get install -y net-tools psmisc apt-transport-https
+
+# install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install -y yarn
+
+# install Go
+RUN wget -q https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz
+ENV PATH $PATH:/usr/local/go/bin
+
+# Add GDK user
+RUN useradd --user-group --create-home gdk
 
 USER gdk
-WORKDIR /home/gdk/
 
-# Gems
-RUN curl -OO https://gitlab.com/gitlab-org/gitlab-ce/raw/master/{Gemfile,Gemfile.lock} && bundle install --without mysql production --jobs 4 && rm Gemfile Gemfile.lock
-RUN curl -OO https://gitlab.com/gitlab-org/gitlab-shell/raw/master/{Gemfile,Gemfile.lock} && bundle install --without production --jobs 4 && rm Gemfile Gemfile.lock
-RUN curl -OO https://gitlab.com/gitlab-org/gitaly/raw/master/ruby/{Gemfile,Gemfile.lock} && bundle install && rm Gemfile Gemfile.lock
-RUN curl -OO https://gitlab.com/gitlab-com/gitlab-docs/raw/master/{Gemfile,Gemfile.lock} && bundle install --jobs 4 && rm Gemfile Gemfile.lock
+# Install rbenv
+RUN git clone https://github.com/sstephenson/rbenv.git /home/gdk/.rbenv
+RUN echo 'export PATH="/home/gdk/.rbenv/bin:$PATH"' >> /home/gdk/.bash_profile
+RUN echo 'eval "$(rbenv init -)"' >> /home/gdk/.bash_profile
 
-RUN gem install gitlab-development-kit
-# RUN gdk init
-
-###
-# Needed only while the docker-compose branch isn't merged to master
-COPY . /home/gdk/gitlab-development-kit
-RUN sudo chown gdk:gdk -R /home/gdk/gitlab-development-kit
-RUN echo "/home/gdk/gitlab-development-kit" > /home/gdk/gitlab-development-kit/.gdk-install-root
-RUN gdk trust /home/gdk/gitlab-development-kit
-
-ENV GDK_DOCKER_COMPOSE true
-
-WORKDIR /home/gdk/gitlab-development-kit
-
-COPY compose-entrypoint.sh .
-RUN sudo chown gdk:gdk compose-entrypoint.sh
-###
-
-ENTRYPOINT ["./compose-entrypoint.sh"]
+# install ruby-build
+RUN mkdir /home/gdk/.rbenv/plugins
+RUN git clone https://github.com/sstephenson/ruby-build.git /home/gdk/.rbenv/plugins/ruby-build
+RUN bash -l -c "rbenv install 2.3.5 && rbenv global 2.3.5"

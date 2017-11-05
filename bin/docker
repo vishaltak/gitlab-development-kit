@@ -23,7 +23,7 @@ case "$1" in
         docker save "${TEST_IMAGE}" $(docker history -q ${TEST_IMAGE} | grep -v '<missing>') > "${build_cache_archive}"
         ;;
     build)
-        docker build -t "${TEST_IMAGE}" -f ci/ubuntu/Dockerfile .
+        docker build -t "${TEST_IMAGE}" .
         ;;
     publish)
         docker login --username gitlab-ci-token --password "${CI_BUILD_TOKEN}" registry.gitlab.com
