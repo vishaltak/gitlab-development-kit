@@ -38,8 +38,8 @@ gitlab/.git:
 gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/resque.yml gitlab/public/uploads
 
 gitlab/config/gitlab.yml:
-	sed -e "s|/home/git|${gitlab_development_root}|"\
-	  -e "s|/usr/bin/git|${git_bin}|"\
+	sed -e "s|/home/git|${gitlab_development_root}|" \
+	  -e "s|/usr/bin/git|${git_bin}|" \
 	  gitlab/config/gitlab.yml.example > gitlab/config/gitlab.yml
 	hostname=${hostname} port=${port} webpack_port=${webpack_port} registry_enabled=${registry_enabled} registry_port=${registry_port} support/edit-gitlab.yml gitlab/config/gitlab.yml
 
@@ -82,10 +82,10 @@ bundler:
 
 .PHONY:	yarn
 yarn:
-	@command -v $@ > /dev/null || {\
-		echo "Error: Yarn executable was not detected in the system.";\
-		echo "Download Yarn at https://yarnpkg.com/en/docs/install";\
-		exit 1;\
+	@command -v $@ > /dev/null || { \
+		echo "Error: Yarn executable was not detected in the system."; \
+		echo "Download Yarn at https://yarnpkg.com/en/docs/install"; \
+		exit 1; \
 	}
 
 # Set up gitlab-shell
@@ -100,20 +100,20 @@ ${gitlab_shell_clone_dir}/.git:
 	git clone ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 gitlab-shell/config.yml:
-	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then\
-	  sed -e "s|/home/git|${gitlab_development_root}|"\
-	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
-	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
-	    -e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|"\
-	    gitlab-shell/config.yml.example > gitlab-shell/config.yml;\
-	else\
-	  sed -e "s|/home/git|${gitlab_development_root}|"\
-	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
-	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
-	    -e "s|^  socket: |  # socket:|"\
-	    -e "s|^  # host: .*|  host: redis|"\
-	    gitlab-shell/config.yml.example > gitlab-shell/config.yml;\
-	fi
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
+	  sed -e "s|/home/git|${gitlab_development_root}|" \
+	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|" \
+	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|" \
+	    -e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|" \
+	    gitlab-shell/config.yml.example > gitlab-shell/config.yml; \
+	else \
+	  sed -e "s|/home/git|${gitlab_development_root}|" \
+	    -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|" \
+	    -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|" \
+	    -e "s|^  socket: |  # socket:|" \
+	    -e "s|^  # host: .*|  host: redis|" \
+	    gitlab-shell/config.yml.example > gitlab-shell/config.yml; \
+	fi;
 
 .gitlab-shell-bundle:
 	cd ${gitlab_development_root}/gitlab-shell && bundle install --without production --jobs 4
@@ -146,7 +146,7 @@ gitlab-docs/.git:
 gitlab-docs/.git/pull:
 	cd gitlab-docs && \
 		git stash && \
-		git checkout master &&\
+		git checkout master && \
 		git pull --ff-only
 
 
@@ -234,10 +234,10 @@ support-setup: .ruby-version foreman Procfile redis gitaly-setup postgresql open
 	@echo "*********************************************"
 
 Procfile:
-	sed -e "s|/home/git|${gitlab_development_root}|g"\
-		-e "s|/usr/sbin/sshd|${sshd_bin}|"\
-		-e "s|postgres |${postgres_bin_dir}/postgres |"\
-		-e "s|DEV_SERVER_PORT=3808 |DEV_SERVER_PORT=${webpack_port} |"\
+	sed -e "s|/home/git|${gitlab_development_root}|g" \
+		-e "s|/usr/sbin/sshd|${sshd_bin}|" \
+		-e "s|postgres |${postgres_bin_dir}/postgres |" \
+		-e "s|DEV_SERVER_PORT=3808 |DEV_SERVER_PORT=${webpack_port} |" \
 		$@.example > $@
 	if [ -f .vagrant_enabled ]; then \
 		echo "0.0.0.0" > host; \
@@ -329,10 +329,10 @@ localhost.key:
 gitlab-workhorse-setup: gitlab-workhorse/bin/gitlab-workhorse gitlab-workhorse/config.toml
 
 gitlab-workhorse/config.toml:
-	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then\
-	  sed "s|/home/git|${gitlab_development_root}|" $@.example > $@;\
-	else\
-	  sed "s|URL = .*|URL = \"tcp://redis:6379\"|" $@.example > $@;\
+	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
+	  sed "s|/home/git|${gitlab_development_root}|" $@.example > $@; \
+	else \
+	  sed "s|URL = .*|URL = \"tcp://redis:6379\"|" $@.example > $@; \
 	fi
 
 gitlab-workhorse-update:	${gitlab_workhorse_clone_dir}/.git gitlab-workhorse/.git/pull gitlab-workhorse-clean-bin gitlab-workhorse/bin/gitlab-workhorse
@@ -349,8 +349,8 @@ ${gitlab_workhorse_clone_dir}/.git:
 
 gitlab-workhorse/.git/pull:
 	cd ${gitlab_workhorse_clone_dir} && \
-		git stash &&\
-		git checkout master &&\
+		git stash && \
+		git checkout master && \
 		git pull --ff-only
 
 influxdb-setup:	influxdb/influxdb.conf influxdb/bin/influxd influxdb/meta/meta.db
@@ -441,11 +441,11 @@ clean-config:
 	gitlab-workhorse/config.toml \
 	gitaly/config.toml \
 	nginx/conf/nginx.conf \
-	registry/config.yml \
+	registry/config.yml
 
 unlock-dependency-installers:
 	rm -f \
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
-	.gettext \
+	.gettext
