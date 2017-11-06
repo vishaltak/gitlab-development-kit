@@ -258,8 +258,11 @@ postgresql: postgresql/data
 postgresql/data:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
 	  ${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data; \
-	fi; \
-	support/bootstrap-rails
+	  support/bootstrap-rails; \
+	elif [ ! -f gitlab/.database-seed ]; then \
+	  support/bootstrap-rails; \
+	  touch gitlab/.database-seeded; \
+	fi;
 
 postgresql-sensible-defaults:
 	./support/postgresql-sensible-defaults ${postgres_dir}
