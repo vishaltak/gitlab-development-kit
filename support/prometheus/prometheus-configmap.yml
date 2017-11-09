@@ -20,3 +20,46 @@ data:
           target_label: environment
           regex: (.+)-.+-.+
           replacement: $1
+      - job_name: kubernetes-cadvisor
+        scrape_interval: 15s
+        scrape_timeout: 15s
+        metrics_path: /metrics
+        scheme: https
+        kubernetes_sd_configs:
+        - api_server: https://kubernetes.default.svc:443
+          role: node
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            insecure_skip_verify: false
+          namespaces:
+            names: []
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: false
+        relabel_configs:
+        - source_labels: []
+          separator: ;
+          regex: __meta_kubernetes_node_label_(.+)
+          replacement: $1
+          action: labelmap
+        - source_labels: []
+          separator: ;
+          regex: (.*)
+          target_label: __address__
+          replacement: kubernetes.default.svc:443
+          action: replace
+        - source_labels: [__meta_kubernetes_node_name]
+          separator: ;
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+          action: replace
+        metric_relabel_configs:
+        - source_labels: [pod_name]
+          separator: ;
+          regex: (.+)-.+-.+
+          target_label: environment
+          replacement: $1
+          action: replace
