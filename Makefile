@@ -47,7 +47,8 @@ gitlab/config/database.yml:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
 	  sed "s|/home/git|${gitlab_development_root}|" -e "s|5432|${postgresql_port}|" database.yml.example > gitlab/config/database.yml ; \
 	else \
-	  sed "s|/home/git/postgresql|postgres|" database.yml.example > gitlab/config/database.yml; \
+	sed  -e "\|^  host: /home/git/postgresql|a\  username: postgres" \
+	  -e "s|/home/git/postgresql|postgres|" database.yml.example > gitlab/config/database.yml; \
 	fi
 
 gitlab/config/unicorn.rb:
