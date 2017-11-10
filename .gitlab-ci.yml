@@ -72,12 +72,8 @@ test:compose:
   image: docker
   stage: test
   script:
-    - apk add --no-cache curl py-pip ruby git
+    - apk add --no-cache curl py-pip
     - pip install docker-compose
-    - gem install --no-document gitlab-development-kit
-    - cd
-    - gdk init
-    - cd gitlab-development-kit
     - docker-compose up -d
     - while [ ! -f gitlab/.gdk-installed ]; do sleep 2; done;
     - sleep 30
