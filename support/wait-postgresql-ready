@@ -2,6 +2,7 @@
 PG_HOST = ENV.has_key?('GDK_DOCKER_COMPOSE') ? 'postgres' : "#{Dir.pwd}/postgresql".freeze
 PG_PORT_FILE = File.join(Dir.pwd, 'postgresql_port')
 PG_PORT = File.exist?(PG_PORT_FILE) ? File.read(PG_PORT_FILE) : 5432
+PG_USER = ENV.has_key?('GDK_DOCKER_COMPOSE') ? 'postgres' : ENV['USER']
 
 def main
   abort "#{$PROGRAM_NAME}: could not connect to Postgres at #{PG_HOST}" unless pg_ready?
@@ -11,7 +12,7 @@ end
 
 def pg_ready?
   10.times do
-    if system(*%W[psql -h #{PG_HOST} -d template1 -p #{PG_PORT} -c SELECT\ now()], out: '/dev/null', err: '/dev/null')
+    if system(*%W[psql -h #{PG_HOST} -d template1 -p #{PG_PORT} -c SELECT\ now() #{PG_USER}], out: '/dev/null', err: '/dev/null')
       return true
     end
     sleep 1
