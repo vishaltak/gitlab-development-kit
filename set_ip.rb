@@ -37,6 +37,8 @@ runner_file =
     ENV['HOME']+'/.gitlab-runner/config.toml'
   elsif ARGV[0] == 'ee'
     ENV['HOME']+'/.gitlab-runner/config-ee.toml'
+  elsif ARGV[0] == 'geo'
+    ENV['HOME']+'/.gitlab-runner/config-geo.toml'
   else
     prompt.ask('Tell me your runner configuration file', default: ENV['HOME']+'/.gitlab-runner/config.toml')
   end
