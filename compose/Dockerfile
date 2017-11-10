@@ -30,10 +30,11 @@ USER gdk
 WORKDIR /home/gdk/
 
 # Gems
-RUN curl -OO https://gitlab.com/gitlab-org/gitlab-ce/raw/master/{Gemfile,Gemfile.lock} && bundle install --without mysql production --jobs 4 && rm Gemfile Gemfile.lock
-RUN curl -OO https://gitlab.com/gitlab-org/gitlab-shell/raw/master/{Gemfile,Gemfile.lock} && bundle install --without production --jobs 4 && rm Gemfile Gemfile.lock
-RUN curl -OO https://gitlab.com/gitlab-org/gitaly/raw/master/ruby/{Gemfile,Gemfile.lock} && bundle install && rm Gemfile Gemfile.lock
-RUN curl -OO https://gitlab.com/gitlab-com/gitlab-docs/raw/master/{Gemfile,Gemfile.lock} && bundle install --jobs 4 && rm Gemfile Gemfile.lock
+RUN mkdir gitlab-development-kit
+RUN cd /home/gdk/gitlab-development-kit && mkdir gitlab && cd gitlab && curl -OO https://gitlab.com/gitlab-org/gitlab-ce/raw/master/{Gemfile,Gemfile.lock} && bundle install --without mysql production --jobs 4
+RUN cd /home/gdk/gitlab-development-kit && mkdir gitlab-shell && cd gitlab-shell && curl -OO https://gitlab.com/gitlab-org/gitlab-shell/raw/master/{Gemfile,Gemfile.lock} && bundle install --without production --jobs 4
+RUN cd /home/gdk/gitlab-development-kit && mkdir -p gitaly/ruby && cd gitaly/ruby && curl -OO https://gitlab.com/gitlab-org/gitaly/raw/master/ruby/{Gemfile,Gemfile.lock} && bundle install --jobs 4 && rm Gemfile Gemfile.lock
+RUN cd /home/gdk && rm -rf gitlab-development-kit
 
 RUN gem install gitlab-development-kit
 # RUN gdk init
