@@ -4,3 +4,4 @@ go-gitlab-shell/
 gitlab-workhorse/
 gitaly/
 postgresql/
+Procfile
