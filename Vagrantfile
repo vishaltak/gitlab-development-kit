@@ -111,6 +111,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true
+  config.vm.network "forwarded_port", guest: 3808, host: 3808, auto_correct: true
 
   config.vm.provider "docker" do |d, override|
     d.build_dir = "vagrant"
