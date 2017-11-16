@@ -78,24 +78,39 @@ make postgresql-replication-secondary
 Now you can go back to **terminal window 1** and stop `foreman` by hitting
 <kbd>Ctrl-C</kbd>.
 
-## Known hosts
+### Running tests
 
-The secondary will connect to the primary by SSH to synchronize
-repositories. To make sure the secondary recognizes the primary as
-known host, make sure you have connected at least once to your primary
-node from your local machine (the secondary will use your default
-known hosts from `~/.ssh/known_hosts`).
+The secondary has a read-write tracking database, which is necessary for some
+Geo tests to run. However, its copy of the replicated database is read-only, so
+tests will fail to run.
+
+You can add the tracking database to the primary node by running:
+
+```
+# From the gdk-ee folder:
+make geo-setup
+```
+
+This will add both development and test instances, but the primary will continue
+to operate *as* a primary except in tests where the current Geo node has been
+stubbed.
+
+To ensure the tracking database is started, restart GDK. You will need to use
+`gdk run`, rather than `gdk run db`, to run the tests.
 
 ## Copy database encryption key
 
 The primary and the secondary nodes will be using the same secret key
 to encrypt attributes in the database. To copy the secret from your primary to your secondary:
 
-1. Open `gdk-ee/gitlab/config/secrets` with your editor of choice
+1. Open `gdk-ee/gitlab/config/secrets.yml` with your editor of choice
 1. Copy the value of `development.db_key_base`
-1. Paste it into `gdk-geo/gitlab/config/secrets`
+1. Paste it into `gdk-geo/gitlab/config/secrets.yml`
 
 ## Store SSH keys in database
+
+This step is only required if you want to clone from the secondary using SSH.
+In most cases it can be skipped.
 
 GitLab Geo requires SSH keys storage in the database. Check the
 [official documentation](https://docs.gitlab.com/ee/administration/operations/speed_up_ssh.html#the-solution).
@@ -105,6 +120,8 @@ parent directories, should be owned by `root`. For example, you can
 place it in the directory as documented:
 `/opt/gitlab-shell/authorized_keys`
 
+You'll also have to follow the [GDK SSH howto](ssh.md).
+
 ## Configure Geo nodes
 
 ### Add primary node
@@ -113,8 +130,6 @@ place it in the directory as documented:
    in your browser.
 1. Fill in the full URL of the primary, e.g. `http://localhost:3001/`
 1. Check the box 'This is a primary node'.
-1. Fill in the public key. You can take it from
-   `gdk-ee/openssh/ssh_host_rsa_key.pub`
 1. Click the **Add node** button.
 
 ### Add secondary node
@@ -123,19 +138,4 @@ place it in the directory as documented:
    in your browser.
 1. Fill in the full URL of the secondary, e.g. `http://localhost:3002/`
 1. **Do not** check the box 'This is a primary node'.
-1. Fill in the public key. You can take it from
-   `gdk-geo/openssh/ssh_host_rsa_key.pub`
 1. Click the **Add node** button.
-
-You need to make sure when the secondary has SSH access to all the git
-repositories on the primary. To pull from the primary, the secondary
-will probably use your default ssh key (at `~/.ssh/id_rsa`). So there
-are 2 options to configure this:
-
-- Add your default public key `~/.ssh/id_rsa.pub` to an admin account (you
-  might already have this).
-- Use your default public key `~/.ssh/id_rsa.pub` while configuring
-  the secondary node (see above).
-
-Doing both is not possible, because all SSH key fingerprints should
-be unique.

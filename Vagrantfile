@@ -80,7 +80,7 @@ $user_setup = <<EOT
   DEV_USER=$(stat -c %U /vagrant)
   echo "$DEV_USER ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/$DEV_USER
   sudo addgroup $DEV_USER rvm
-  sudo -u $DEV_USER -i bash -l -c "rvm install 2.3.3 && rvm use 2.3.3 --default && gem install bundler"
+  sudo -u $DEV_USER -i bash -l -c "rvm install 2.3.5 && rvm use 2.3.5 --default && gem install bundler"
   sudo chown -R $DEV_USER:$DEV_USER /home/$DEV_USER
   sudo ln -s /vagrant /home/$DEV_USER/gitlab-development-kit
 
@@ -113,7 +113,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true
 
   config.vm.provider "docker" do |d, override|
-    d.build_dir = "docker"
+    d.build_dir = "vagrant"
     d.has_ssh         = true
     d.remains_running = true
     enable_shares(override, false)

@@ -9,6 +9,7 @@ gitaly_repo = https://gitlab.com/gitlab-org/gitaly.git
 gitaly_clone_dir = gitaly/src/gitlab.com/gitlab-org/gitaly
 gitlab_docs_repo = https://gitlab.com/gitlab-com/gitlab-docs.git
 gitlab_development_root = $(shell pwd)
+gitaly_assembly_dir = ${gitlab_development_root}/gitaly/assembly
 postgres_bin_dir = $(shell pg_config --bindir)
 postgres_replication_user = gitlab_replication
 postgres_dir = $(realpath ./postgresql)
@@ -19,6 +20,10 @@ username = $(shell whoami)
 sshd_bin = $(shell which sshd)
 git_bin = $(shell which git)
 webpack_port = $(shell cat webpack_port 2>/dev/null || echo '3808')
+registry_enabled = $(shell cat registry_enabled 2>/dev/null || echo 'false')
+registry_port = $(shell cat registry_port 2>/dev/null || echo '5000')
+gitlab_from_container = $(shell [ "$(uname)" = "Linux" ] && echo 'localhost' || echo 'docker.for.mac.localhost')
+postgresql_port = $(shell cat postgresql_port 2>/dev/null || echo '5432')
 
 all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly-setup
 
@@ -35,10 +40,12 @@ gitlab/config/gitlab.yml:
 	sed -e "s|/home/git|${gitlab_development_root}|"\
 	  -e "s|/usr/bin/git|${git_bin}|"\
 	  gitlab/config/gitlab.yml.example > gitlab/config/gitlab.yml
-	port=${port} webpack_port=${webpack_port} support/edit-gitlab.yml gitlab/config/gitlab.yml
+	port=${port} webpack_port=${webpack_port} registry_enabled=${registry_enabled} registry_port=${registry_port} support/edit-gitlab.yml gitlab/config/gitlab.yml
 
 gitlab/config/database.yml:
-	sed "s|/home/git|${gitlab_development_root}|" database.yml.example > gitlab/config/database.yml
+	sed -e "s|/home/git|${gitlab_development_root}|"\
+		-e "s|5432|${postgresql_port}|"\
+		database.yml.example > gitlab/config/database.yml
 
 gitlab/config/unicorn.rb:
 	cp gitlab/config/unicorn.rb.example.development gitlab/config/unicorn.rb
@@ -101,7 +108,7 @@ gitlab-shell/.gitlab_shell_secret:
 
 # Set up gitaly
 
-gitaly-setup: gitaly/bin/gitaly gitaly/config.toml gitaly/ruby .gitaly-ruby-bundle
+gitaly-setup: gitaly/bin/gitaly gitaly/config.toml
 
 ${gitaly_clone_dir}/.git:
 	git clone ${gitaly_repo} ${gitaly_clone_dir}
@@ -111,13 +118,6 @@ gitaly/config.toml:
 	  -e "s|^socket_path.*|socket_path = \"${gitlab_development_root}/gitaly.socket\"|" \
 	  -e "s|# prometheus_listen_addr|prometheus_listen_addr|" \
 	  -e "s|/home/git|${gitlab_development_root}|" ${gitaly_clone_dir}/config.toml.example > $@
-
-gitaly/ruby:
-	ln -s ${gitlab_development_root}/${gitaly_clone_dir}/ruby $@
-
-.gitaly-ruby-bundle:	gitaly/ruby/Gemfile.lock
-	cd gitaly/ruby && bundle install
-	touch $@
 
 # Set up gitlab-docs
 
@@ -163,7 +163,7 @@ self-update: unlock-dependency-installers
 
 # Update gitlab, gitlab-shell, gitlab-workhorse and gitaly
 
-update: unlock-dependency-installers gitlab-update gitlab-shell-update gitlab-workhorse-update gitaly-update
+update: unlock-dependency-installers gitlab-shell-update gitlab-workhorse-update gitaly-update gitlab-update
 
 gitlab-update: gitlab/.git/pull gitlab-setup
 	@echo ""
@@ -195,16 +195,20 @@ gitaly/.git/pull:
 		git pull --ff-only
 
 gitaly-clean:
-	rm -rf gitaly/bin
+	rm -rf ${gitaly_assembly_dir}
 	rm -rf gitlab/tmp/tests/gitaly
 
 .PHONY:	gitaly/bin/gitaly
 gitaly/bin/gitaly:	${gitaly_clone_dir}/.git
-	GO15VENDOREXPERIMENT=1 GOPATH=${gitlab_development_root}/gitaly go install gitlab.com/gitlab-org/gitaly/cmd/...
+	make -C ${gitaly_clone_dir} assemble ASSEMBLY_ROOT=${gitaly_assembly_dir}
+	mkdir -p ${gitlab_development_root}/gitaly/bin
+	ln -sf ${gitaly_assembly_dir}/bin/* ${gitlab_development_root}/gitaly/bin
+	rm -rf ${gitlab_development_root}/gitaly/ruby
+	ln -sf ${gitaly_assembly_dir}/ruby ${gitlab_development_root}/gitaly/ruby
 
 # Set up supporting services
 
-support-setup: .ruby-version foreman Procfile redis gitaly-setup postgresql openssh-setup nginx-setup
+support-setup: .ruby-version foreman Procfile redis gitaly-setup postgresql openssh-setup nginx-setup registry-setup
 	@echo ""
 	@echo "*********************************************"
 	@echo "************** Setup finished! **************"
@@ -234,6 +238,9 @@ postgresql/data:
 	${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data
 	support/bootstrap-rails
 
+postgresql-sensible-defaults:
+	./support/postgresql-sensible-defaults ${postgres_dir}
+
 postgresql-replication-primary: postgresql-replication/access postgresql-replication/role postgresql-replication/config
 
 postgresql-replication-secondary: postgresql-replication/data postgresql-replication/access postgresql-replication/backup postgresql-replication/config
@@ -249,9 +256,11 @@ postgresql-replication/role:
 
 postgresql-replication/backup:
 	$(eval postgres_primary_dir := $(realpath postgresql-primary))
-	psql -h ${postgres_primary_dir} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
+	$(eval postgres_primary_port := $(shell cat ${postgres_primary_dir}/postgresql_port 2>/dev/null || echo '5432'))
+
+	psql -h ${postgres_primary_dir} -p ${postgres_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
 	rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgres_primary_dir}/data postgresql
-	psql -h ${postgres_primary_dir} -d postgres -c "select pg_stop_backup(), current_timestamp"
+	psql -h ${postgres_primary_dir} -p ${postgres_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
 	./support/recovery.conf ${postgres_primary_dir} > postgresql/data/recovery.conf
 
 postgresql-replication/config:
@@ -278,7 +287,7 @@ foreman:
 	command -v $@ > /dev/null || gem install $@
 
 .ruby-version:
-	ln -s ${gitlab_development_root}/gitlab/.ruby-version $@
+	ln -s ${gitlab_development_root}/gitlab/.ruby-version ${gitlab_development_root}/$@
 
 localhost.crt:	localhost.key
 
@@ -298,7 +307,7 @@ gitlab-workhorse-clean-bin:
 
 .PHONY:	gitlab-workhorse/bin/gitlab-workhorse
 gitlab-workhorse/bin/gitlab-workhorse: ${gitlab_workhorse_clone_dir}/.git
-	GO15VENDOREXPERIMENT=1 GOPATH=${gitlab_development_root}/gitlab-workhorse go install gitlab.com/gitlab-org/gitlab-workhorse/...
+	GOPATH=${gitlab_development_root}/gitlab-workhorse go install gitlab.com/gitlab-org/gitlab-workhorse/...
 
 ${gitlab_workhorse_clone_dir}/.git:
 	git clone ${gitlab_workhorse_repo} ${gitlab_workhorse_clone_dir}
@@ -363,6 +372,15 @@ nginx/logs:
 nginx/tmp:
 	mkdir -p $@
 
+registry-setup: registry/storage registry/config.yml localhost.crt
+
+registry/storage:
+	mkdir -p $@
+
+registry/config.yml:
+	cp registry/config.yml.example $@
+	gitlab_host=${gitlab_from_container} gitlab_port=${port} registry_port=${registry_port} support/edit-registry-config.yml $@
+
 clean-config:
 	rm -f \
 	gitlab/config/gitlab.yml \
@@ -376,8 +394,8 @@ clean-config:
 	Procfile \
 	gitlab-workhorse/config.toml \
 	gitaly/config.toml \
-	gitaly/ruby \
 	nginx/conf/nginx.conf \
+	registry/config.yml \
 
 unlock-dependency-installers:
 	rm -f \
@@ -385,4 +403,3 @@ unlock-dependency-installers:
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
 	.gettext \
-	.gitaly-ruby-bundle \

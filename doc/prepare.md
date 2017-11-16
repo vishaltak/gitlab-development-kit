@@ -13,29 +13,33 @@ during installation.
    ([RVM](https://rvm.io/), [rbenv], [chruby], etc.), **DO NOT** use the
    system Ruby
 1. Bundler, which you can install with `gem install bundler`
-1. Git version of 2.7.X or higher
+1. Git version of 2.13.6 or higher
 1. Node 4.3 or newer and Yarn 0.17 or newer.  If your package manage does not
    have up-to-date versions of node or yarn available, visit the official
    websites for [node] and [yarn] for installation instructions.
 1. Go 1.8.3 or newer. If your package manager does not have up-to-date versions
    of Go available, visit the official website for [go] for installation instructions.
+1. [Google Chrome] 60 or greater with [ChromeDriver] version 2.33 or greater. 
+   Visit the [installation details](https://sites.google.com/a/chromium.org/chromedriver/getting-started) for more details.
 
 [rbenv]: https://github.com/rbenv/rbenv
 [chruby]: https://github.com/postmodern/chruby
 [node]: https://nodejs.org/en/download/package-manager/
 [yarn]: https://yarnpkg.com/en/docs/install/
 [go]: https://golang.org/doc/install
+[Google Chrome]: https://www.google.com/chrome/
+[ChromeDriver]: https://sites.google.com/a/chromium.org/chromedriver/downloads
 
-### OS X 10.9 (Mavericks), 10.10 (Yosemite), 10.11 (El Capitan), macOS 10.12 (Sierra)
+### OS X 10.9 (Mavericks), 10.10 (Yosemite), 10.11 (El Capitan), macOS 10.12 (Sierra), macOS 10.13 (High Sierra)
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
 #### Install OS X prerequisites using homebrew
 
 ```
-brew install git redis postgresql libiconv icu4c pkg-config cmake nodejs go openssl node npm yarn coreutils re2
+brew install git redis postgresql@9.6 libiconv icu4c pkg-config cmake nodejs go openssl node npm yarn coreutils re2
 bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-sudo npm install phantomjs-prebuilt@2.1.12 -g
+sudo npm install phantomjs-prebuilt@2.1.12 -g --unsafe-perm
 ```
 
 #### Install OS X prerequisites using macports
@@ -45,7 +49,7 @@ We are using PostgreSQL-9.5 in the following example. If you want to use another
 ```
 sudo port install git redis libiconv postgresql95-server icu pkgconfig cmake nodejs4 go openssl npm2 yarn coreutils re2
 bundle config build.eventmachine --with-cppflags=-I/opt/local/include/openssl
-sudo npm install phantomjs-prebuilt@2.1.12 -g
+sudo npm install phantomjs-prebuilt@2.1.12 -g --unsafe-perm
 echo 'export PATH=/opt/local/lib/postgresql95/bin/:$PATH' >> ~/.profile
 ```
 
@@ -61,7 +65,7 @@ sudo apt-get install software-properties-common python-software-properties
 sudo add-apt-repository ppa:longsleep/golang-backports
 sudo apt-get update
 sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs nodejs-legacy npm libre2-dev libkrb5-dev golang-1.8-go ed pkg-config
-sudo npm install phantomjs-prebuilt@2.1.12 yarn -g
+sudo npm install phantomjs-prebuilt@2.1.12 yarn -g --unsafe-perm
 ```
 
 Ubuntu 14.04 (Trusty Tahr) doesn't have the `libre2-dev` package available, but
@@ -73,7 +77,7 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
 
 ```
 pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git go re2
-npm install phantomjs-prebuilt@2.1.12 yarn -g
+npm install phantomjs-prebuilt@2.1.12 yarn -g --unsafe-perm
 ```
 
 ### Debian
@@ -129,12 +133,12 @@ sudo yum install http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-redhat9
 sudo yum install https://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 sudo yum install postgresql95-server postgresql95-devel libicu-devel cmake gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 libstdc++.so.6 nodejs npm re2
 
-sudo npm install phantomjs-prebuilt@2.1.12 -g
+sudo npm install phantomjs-prebuilt@2.1.12 -g --unsafe-perm
 
 bundle config build.pg --with-pg-config=/usr/pgsql-9.5/bin/pg_config
-# This example uses Ruby 2.3.3. Substitute with the current version if different.
-sudo rvm install 2.3.3
-sudo rvm use 2.3.3
+# This example uses Ruby 2.3.5. Substitute with the current version if different.
+sudo rvm install 2.3.5
+sudo rvm use 2.3.5
 #Ensure your user is in rvm group
 sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
@@ -223,9 +227,9 @@ sudo make install
 Install the current `gitlab-ce` Ruby version using [RVM](https://rvm.io/):
 
 ```
-# This example uses Ruby 2.3.3. Substitute with the current version if different.
-rvm install 2.3.3
-rvm use 2.3.3
+# This example uses Ruby 2.3.5. Substitute with the current version if different.
+rvm install 2.3.5
+rvm use 2.3.5
 ```
 
 Install yarn
@@ -244,7 +248,7 @@ sudo apt-get install software-properties-common python-software-properties
 sudo apt-add-repository -y ppa:ubuntu-lxc/lxd-stable
 sudo apt-get update
 sudo apt-get install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ libkrb5-dev libre2-dev golang ed pkg-config
-sudo npm install phantomjs-prebuilt@2.1.12 -g
+sudo npm install phantomjs-prebuilt@2.1.12 -g --unsafe-perm
 ```
 
 Start the PostgreSQL database

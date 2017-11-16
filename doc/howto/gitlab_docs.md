@@ -3,7 +3,7 @@
 Our CI includes [some checks][lint] for the documentation in GitLab. In order
 to run the relative links checks locally or preview the changes, do the following:
 
-1. Pull the `gitlab-docs` repo:
+1. Pull the `gitlab-docs` repo from within your GDK directory:
 
     ```
     make gitlab-docs-setup
@@ -18,7 +18,7 @@ to run the relative links checks locally or preview the changes, do the followin
 1. Create the HTML files:
 
     ```
-    bundle exec rake nanoc
+    bundle exec nanoc
     ```
 
 1. Run the internal links check:

@@ -17,6 +17,46 @@ extensions:
 gem pristine charlock_holmes
 ```
 
+## `charlock_holmes` `0.7.x` cannot be installed on macOS Sierra
+
+The installation of the `charlock_holmes` gem (`0.7.3` or greater) during
+`bundle install` may fail on macOS Sierra with the following error:
+
+```
+[SNIPPED]
+
+/usr/local/Cellar/icu4c/59.1/include/unicode/unistr.h:3025:7: error: delegating constructors are permitted only in C++11
+      UnicodeString(ConstChar16Ptr(text)) {}
+      ^~~~~~~~~~~~~
+/usr/local/Cellar/icu4c/59.1/include/unicode/unistr.h:3087:7: error: delegating constructors are permitted only in C++11
+      UnicodeString(ConstChar16Ptr(text), length) {}
+      ^~~~~~~~~~~~~
+/usr/local/Cellar/icu4c/59.1/include/unicode/unistr.h:3180:7: error: delegating constructors are permitted only in C++11
+      UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
+
+[SNIPPED]
+```
+
+A working solution is to configure the `--with-cxxflags=-std=c++11` flag
+in the Rubygems global build options for this gem:
+
+```
+$ bundle config --global build.charlock_holmes "--with-cxxflags=-std=c++11"
+$ bundle install
+```
+
+The solution can be found at
+https://github.com/brianmario/charlock_holmes/issues/117#issuecomment-329798280.
+
+**Note:** If you get installation problems related to `icu4c`, make sure to also
+set the `--with-icu-dir=/usr/local/opt/icu4c` option:
+
+```
+$ bundle config --global build.charlock_holmes "--with-icu-dir=/usr/local/opt/icu4c --with-cxxflags=-std=c++11"
+```
+
+[Gitaly]: https://gitlab.com/gitlab-org/gitaly/blob/14fd3b2e3adae00f0a792516e74a4bac29a5b5c1/Makefile#L58
+
 ## Error in database migrations when pg_trgm extension is missing
 
 Since GitLab 8.6+ the PostgreSQL extension `pg_trgm` must be installed. If you
@@ -363,6 +403,22 @@ RAILS_ENV=test bundle exec rake db:reset
     If you have restarted your computer recently, don't forget to start PostgreSQL server manually; init.d scripts don't work currently as of build 15063.138:
 
     `sudo service postgresql start`
+
+## Homebrew: Postgres 10.0: "database files are incompatible with server"
+
+```
+FATAL:  database files are incompatible with server
+DETAIL:  The data directory was initialized by PostgreSQL version 9.6, which is not compatible with this version 10.0.
+```
+
+GitLab is not compatible with Postgres 10.0. The following workaround
+lets you get back Postgres 9.6. TODO: find a good way to co-exist with
+Postgres 10.0 in Homebrew.
+
+```
+brew install postgresql@9.6
+brew link --force postgresql@9.6
+```
 
 ## Other problems
 

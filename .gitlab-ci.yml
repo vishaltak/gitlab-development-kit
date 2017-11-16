@@ -2,20 +2,27 @@ services:
 - docker:dind
 
 stages:
-- rubocop
+- static
 - build
 - test
 
 variables:
   DOCKER_DRIVER: overlay
-  TEST_IMAGE: registry.gitlab.com/$CI_PROJECT_NAMESPACE/gitlab-development-kit:latest
+  TEST_IMAGE: registry.gitlab.com/gitlab-org/gitlab-development-kit:latest
 
-rubocop:
-  image: "ruby:2.3"
-  stage: rubocop
+codequality:
+  image: docker:latest
+  stage: static
+  variables:
+    DOCKER_DRIVER: overlay
+  services:
+    - docker:dind
   script:
-    - gem install rubocop
-    - rubocop -c gdk-rubocop.yml
+    - docker pull codeclimate/codeclimate
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate validate-config
+    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze -f json > codeclimate.json
+  artifacts:
+    paths: [codeclimate.json]
 
 build:image:
   image: docker:git
@@ -50,10 +57,13 @@ test:install:
     - cd /home/gdk
     - gdk init
     - cd gitlab-development-kit
+    - git remote set-url origin $CI_REPOSITORY_URL
+    - git fetch
     - git checkout $CI_COMMIT_SHA
     - netstat -lpt
     - gdk install
     - support/set-gitlab-upstream
+    - killall node || true
     - gdk run &
     - sleep 30
     - curl -f --retry 10 --retry-delay 5 http://127.0.0.1:3000/
