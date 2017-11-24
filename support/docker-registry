@@ -7,6 +7,8 @@ if [[ "${registry_enabled}" == "true" ]]; then
     run_opts="--net host"
   fi
 
+  service docker status || sudo service docker start
+
   exec docker run --rm -p ${registry_port:-5000}:5000 ${run_opts} \
        -v $(pwd)/registry/config.yml:/etc/docker/registry/config.yml \
        -v $(pwd)/registry/storage:/var/lib/registry \
