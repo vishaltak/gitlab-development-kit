@@ -13,7 +13,7 @@ during installation.
    ([RVM](https://rvm.io/), [rbenv], [chruby], etc.), **DO NOT** use the
    system Ruby
 1. Bundler, which you can install with `gem install bundler`
-1. Git version of 2.13.6 or higher
+1. Git version of 2.14.3 or higher
 1. Node 4.3 or newer and Yarn 0.17 or newer.  If your package manage does not
    have up-to-date versions of node or yarn available, visit the official
    websites for [node] and [yarn] for installation instructions.
@@ -76,7 +76,7 @@ you can [install re2 manually](https://github.com/google/re2/wiki/Install).
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
 ```
-pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git go re2
+pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git go re2 unzip
 npm install phantomjs-prebuilt@2.1.12 yarn -g --unsafe-perm
 ```
 
