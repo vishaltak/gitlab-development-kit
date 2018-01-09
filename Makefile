@@ -1,6 +1,8 @@
 .NOTPARALLEL:
 
+gitlab_development_root = $(shell pwd)
 gitlab_repo = https://gitlab.com/gitlab-org/gitlab-ce.git
+gitlab_clone_dir = ${gitlab_clone_dir}
 gitlab_shell_repo = https://gitlab.com/gitlab-org/gitlab-shell.git
 gitlab_shell_clone_dir = go-gitlab-shell/src/gitlab.com/gitlab-org/gitlab-shell
 gitlab_workhorse_repo = https://gitlab.com/gitlab-org/gitlab-workhorse.git
@@ -8,7 +10,6 @@ gitlab_workhorse_clone_dir = gitlab-workhorse/src/gitlab.com/gitlab-org/gitlab-w
 gitaly_repo = https://gitlab.com/gitlab-org/gitaly.git
 gitaly_clone_dir = gitaly/src/gitlab.com/gitlab-org/gitaly
 gitlab_docs_repo = https://gitlab.com/gitlab-com/gitlab-docs.git
-gitlab_development_root = $(shell pwd)
 gitaly_assembly_dir = ${gitlab_development_root}/gitaly/assembly
 postgres_bin_dir = $(shell pg_config --bindir)
 postgres_replication_user = gitlab_replication
@@ -31,44 +32,44 @@ all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly
 
 # Set up the GitLab Rails app
 
-gitlab-setup: gitlab/.git gitlab-config bundler .gitlab-bundle yarn .gitlab-yarn .gettext
+gitlab-setup: ${gitlab_clone_dir}/.git gitlab-config bundler .gitlab-bundle yarn .gitlab-yarn .gettext
 
-gitlab/.git:
-	git clone ${gitlab_repo} gitlab
+${gitlab_clone_dir}/.git:
+	git clone ${gitlab_repo} ${gitlab_clone_dir}
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/resque.yml gitlab/public/uploads
+gitlab-config: ${gitlab_clone_dir}/config/gitlab.yml ${gitlab_clone_dir}/config/database.yml ${gitlab_clone_dir}/config/unicorn.rb ${gitlab_clone_dir}/config/resque.yml ${gitlab_clone_dir}/public/uploads
 
-gitlab/config/gitlab.yml:
+${gitlab_clone_dir}/config/gitlab.yml:
 	sed -e "s|/home/git|${gitlab_development_root}|"\
 	  -e "s|/usr/bin/git|${git_bin}|"\
-	  gitlab/config/gitlab.yml.example > gitlab/config/gitlab.yml
-	hostname=${hostname} port=${port} webpack_port=${webpack_port} registry_enabled=${registry_enabled} registry_port=${registry_port} support/edit-gitlab.yml gitlab/config/gitlab.yml
+	  ${gitlab_clone_dir}/config/gitlab.yml.example > ${gitlab_clone_dir}/config/gitlab.yml
+	hostname=${hostname} port=${port} webpack_port=${webpack_port} registry_enabled=${registry_enabled} registry_port=${registry_port} support/edit-gitlab.yml ${gitlab_clone_dir}/config/gitlab.yml
 
-gitlab/config/database.yml:
+${gitlab_clone_dir}/config/database.yml:
 	sed -e "s|/home/git|${gitlab_development_root}|"\
 		-e "s|5432|${postgresql_port}|"\
-		database.yml.example > gitlab/config/database.yml
+		database.yml.example > ${gitlab_clone_dir}/config/database.yml
 
-gitlab/config/unicorn.rb:
-	cp gitlab/config/unicorn.rb.example.development gitlab/config/unicorn.rb
-	echo "listen '${gitlab_development_root}/gitlab.socket'" >> $@
+${gitlab_clone_dir}/config/unicorn.rb:
+	cp ${gitlab_clone_dir}/config/unicorn.rb.example.development ${gitlab_clone_dir}/config/unicorn.rb
+	echo "listen '${gitlab_clone_dir}.socket'" >> $@
 
-gitlab/config/resque.yml:
+${gitlab_clone_dir}/config/resque.yml:
 	sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@
 
-gitlab/public/uploads:
+${gitlab_clone_dir}/public/uploads:
 	mkdir $@
 
 .gitlab-bundle:
-	cd ${gitlab_development_root}/gitlab && bundle install --without mysql production --jobs 4
+	cd ${gitlab_clone_dir} && bundle install --without mysql production --jobs 4
 	touch $@
 
 .gitlab-yarn:
-	cd ${gitlab_development_root}/gitlab && yarn install --pure-lockfile
+	cd ${gitlab_clone_dir} && yarn install --pure-lockfile
 	touch $@
 
 .gettext:
-	cd ${gitlab_development_root}/gitlab && bundle exec rake gettext:compile && git checkout locale/*/gitlab.po
+	cd ${gitlab_clone_dir} && bundle exec rake gettext:compile && git checkout locale/*/gitlab.po
 	touch $@
 
 .PHONY:	bundler
@@ -96,17 +97,17 @@ ${gitlab_shell_clone_dir}/.git:
 
 gitlab-shell/config.yml:
 	sed -e "s|/home/git|${gitlab_development_root}|"\
-	  -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
+	  -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_clone_dir}.socket | sed 's|/|%2F|g'}|"\
 	  -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
 	  -e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|"\
 	  gitlab-shell/config.yml.example > gitlab-shell/config.yml
 
 .gitlab-shell-bundle:
-	cd ${gitlab_development_root}/gitlab-shell && bundle install --without production --jobs 4
+	cd ${gitlab_shell_clone_dir} && bundle install --without production --jobs 4
 	touch $@
 
 gitlab-shell/.gitlab_shell_secret:
-	ln -s ${gitlab_development_root}/gitlab/.gitlab_shell_secret $@
+	ln -s ${gitlab_clone_dir}/.gitlab_shell_secret $@
 
 # Set up gitaly
 
@@ -150,10 +151,10 @@ gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
 	cp nanoc.yaml.example $@
 
 gitlab-docs-bundle:
-	cd ${gitlab_development_root}/gitlab-docs && bundle install --jobs 4
+	cd ${gitlab_clone_dir}-docs && bundle install --jobs 4
 
 symlink-gitlab-docs:
-	support/symlink ${gitlab_development_root}/gitlab-docs/content/docs ${gitlab_development_root}/gitlab/doc
+	support/symlink ${gitlab_clone_dir}-docs/content/docs ${gitlab_clone_dir}/doc
 
 gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.yaml
 
@@ -173,25 +174,25 @@ self-update: unlock-dependency-installers
 
 update: unlock-dependency-installers gitlab-shell-update gitlab-workhorse-update gitaly-update gitlab-update
 
-gitlab-update: gitlab/.git/pull gitlab-setup
+gitlab-update: ${gitlab_clone_dir}/.git/pull gitlab-setup
 	@echo ""
 	@echo "------------------------------------------------------------"
 	@echo "Make sure Postgres is running otherwise db:migrate will fail"
 	@echo "------------------------------------------------------------"
 	@echo ""
-	cd ${gitlab_development_root}/gitlab && \
+	cd ${gitlab_clone_dir} && \
 		bundle exec rake db:migrate db:test:prepare
 
 gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
 
-gitlab/.git/pull:
-	cd ${gitlab_development_root}/gitlab && \
+${gitlab_clone_dir}/.git/pull:
+	cd ${gitlab_clone_dir} && \
 		git checkout -- Gemfile.lock db/schema.rb && \
 		git stash && git checkout master && \
 		git pull --ff-only
 
 gitlab-shell/.git/pull:
-	cd ${gitlab_development_root}/gitlab-shell && \
+	cd ${gitlab_shell_clone_dir} && \
 		git stash && git checkout master && \
 		git pull --ff-only
 
@@ -204,7 +205,7 @@ gitaly/.git/pull:
 
 gitaly-clean:
 	rm -rf ${gitaly_assembly_dir}
-	rm -rf gitlab/tmp/tests/gitaly
+	rm -rf ${gitlab_clone_dir}/tmp/tests/gitaly
 
 .PHONY:	gitaly/bin/gitaly
 gitaly/bin/gitaly:	${gitaly_clone_dir}/.git
@@ -292,13 +293,13 @@ postgresql-replication/config:
 # Setup GitLab Geo databases
 
 .PHONY: geo-setup geo-cursor
-geo-setup: Procfile geo-cursor gitlab/config/database_geo.yml postgresql/geo
+geo-setup: Procfile geo-cursor ${gitlab_clone_dir}/config/database_geo.yml postgresql/geo
 
 geo-cursor:
 	grep '^geo-cursor:' Procfile || (printf ',s/^#geo-cursor/geo-cursor/\nwq\n' | ed -s Procfile)
 
-gitlab/config/database_geo.yml:
-	sed "s|/home/git|${gitlab_development_root}|" database_geo.yml.example > gitlab/config/database_geo.yml
+${gitlab_clone_dir}/config/database_geo.yml:
+	sed "s|/home/git|${gitlab_development_root}|" database_geo.yml.example > ${gitlab_clone_dir}/config/database_geo.yml
 
 postgresql/geo:
 	${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql-geo/data
@@ -332,7 +333,7 @@ foreman:
 	command -v $@ > /dev/null || gem install $@
 
 .ruby-version:
-	ln -s ${gitlab_development_root}/gitlab/.ruby-version ${gitlab_development_root}/$@
+	ln -s ${gitlab_development_root}/${gitlab_clone_dir}/.ruby-version ${gitlab_development_root}/$@
 
 localhost.crt:	localhost.key
 
@@ -352,7 +353,7 @@ gitlab-workhorse-clean-bin:
 
 .PHONY:	gitlab-workhorse/bin/gitlab-workhorse
 gitlab-workhorse/bin/gitlab-workhorse: ${gitlab_workhorse_clone_dir}/.git
-	GOPATH=${gitlab_development_root}/gitlab-workhorse go install gitlab.com/gitlab-org/gitlab-workhorse/...
+	GOPATH=${gitlab_clone_dir}-workhorse go install gitlab.com/gitlab-org/gitlab-workhorse/...
 
 ${gitlab_workhorse_clone_dir}/.git:
 	git clone ${gitlab_workhorse_repo} ${gitlab_workhorse_clone_dir}
@@ -439,10 +440,10 @@ pry-off:
 
 clean-config:
 	rm -f \
-	gitlab/config/gitlab.yml \
-	gitlab/config/database.yml \
-	gitlab/config/unicorn.rb \
-	gitlab/config/resque.yml \
+	${gitlab_clone_dir}/config/gitlab.yml \
+	${gitlab_clone_dir}/config/database.yml \
+	${gitlab_clone_dir}/config/unicorn.rb \
+	${gitlab_clone_dir}/config/resque.yml \
 	gitlab-shell/config.yml \
 	gitlab-shell/.gitlab_shell_secret \
 	redis/redis.conf \
