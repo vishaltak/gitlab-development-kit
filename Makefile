@@ -73,7 +73,7 @@ gitlab/public/uploads:
 	touch $@
 
 .gitlab-svgs:
-	node scripts/copy_svgs.js
+	cd ${gitlab_development_root}/gitlab && yarn svg
 	touch $@
 
 .gettext:
