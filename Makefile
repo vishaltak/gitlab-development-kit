@@ -33,7 +33,7 @@ all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly
 
 # Set up the GitLab Rails app
 
-gitlab-setup: gitlab/.git gitlab-config bundler .gitlab-bundle yarn .gitlab-yarn .gettext
+gitlab-setup: gitlab/.git gitlab-config bundler .gitlab-bundle yarn .gitlab-yarn .gitlab-svgs .gettext
 
 gitlab/.git:
 	git clone ${gitlab_repo} gitlab
@@ -70,6 +70,10 @@ gitlab/public/uploads:
 
 .gitlab-yarn:
 	cd ${gitlab_development_root}/gitlab && yarn install --pure-lockfile
+	touch $@
+
+.gitlab-svgs:
+	node scripts/copy_svgs.js
 	touch $@
 
 .gettext:

@@ -51,6 +51,7 @@
 /.gitlab-bundle
 /.gitlab-npm
 /.gitlab-yarn
+/.gitlab-svgs
 /.gettext
 /gem/*.gem
 /gitlab-runner-config.toml
