@@ -1,0 +1,9 @@
+- authorized:
+    authorized_emails:
+      - admin@example.com
+      - root@example.com
+    authorized_dns:
+      - admin
+- default-label:
+    authorized_emails:
+      - adrien@terry.name
