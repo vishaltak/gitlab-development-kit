@@ -1,6 +1,7 @@
 .NOTPARALLEL:
 
 gitlab_repo = https://gitlab.com/gitlab-org/gitlab-ce.git
+gitlab_sha = $(shell cat gitlab_sha 2>/dev/null || echo 'master')
 gitlab_shell_repo = https://gitlab.com/gitlab-org/gitlab-shell.git
 gitlab_shell_clone_dir = go-gitlab-shell/src/gitlab.com/gitlab-org/gitlab-shell
 gitlab_workhorse_repo = https://gitlab.com/gitlab-org/gitlab-workhorse.git
@@ -145,7 +146,6 @@ gitlab-docs/.git/pull:
 		git checkout master &&\
 		git pull --ff-only
 
-
 # We need to force delete since there's already a nanoc.yaml file
 # in the docs folder which we need to overwrite.
 gitlab-docs/rm-nanoc.yaml:
@@ -192,8 +192,11 @@ gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
 gitlab/.git/pull:
 	cd ${gitlab_development_root}/gitlab && \
 		git checkout -- Gemfile.lock db/schema.rb && \
-		git stash && git checkout master && \
-		git pull --ff-only
+		git stash && git checkout ${gitlab_sha}
+
+	# We use the != in conjuction with || to ensure a 0 exit code is always achieved
+	cd ${gitlab_development_root}/gitlab && \
+		test "${gitlab_sha}" "!=" "master" || (git pull --ff-only ; true)
 
 gitlab-shell/.git/pull:
 	cd ${gitlab_development_root}/gitlab-shell && \

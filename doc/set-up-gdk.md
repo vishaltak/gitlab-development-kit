@@ -60,6 +60,13 @@ Alternatively, you can clone all components from their official source.
 gdk install
 ```
 
+### Develop on a specific tag
+
+```
+echo tag > gitlab_sha 
+gdk install
+```
+
 ## GitLab Enterprise Edition
 
 The recommended way to do development on GitLab Enterprise Edition is
