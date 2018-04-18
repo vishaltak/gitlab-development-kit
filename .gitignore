@@ -1,3 +1,7 @@
+.DS_Store
+gdk-ce/**
+gdk-ee/**
+gitlab-development-kit/**
 /gitlab-shell/
 /gitlab-shell
 /.ssh/
@@ -69,3 +73,6 @@
 /registry/config.yml
 /postgresql_port
 /postgresql_geo_port
+/object_store_enabled
+/object_store_port
+/minio

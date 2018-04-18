@@ -14,11 +14,12 @@ VAGRANTFILE_API_VERSION = "2".freeze
 def enable_shares(config, nfs)
   # paths must be listed as shortest to longest per bug: https://github.com/GM-Alex/vagrant-winnfsd/issues/12#issuecomment-78195957
   config.vm.synced_folder ".", "/vagrant", type: "rsync",
-                                           rsync__exclude: ['gitlab', 'postgresql', 'gitlab-shell', 'gitlab-runner'],
+                                           rsync__exclude: ['gitlab', 'postgresql', 'gitlab-shell', 'gitlab-runner', 'gitlab-workhorse'],
                                            rsync__auto: false
   config.vm.synced_folder "gitlab/", "/vagrant/gitlab", create: true, nfs: nfs
   config.vm.synced_folder "go-gitlab-shell/", "/vagrant/go-gitlab-shell", create: true, nfs: nfs
   config.vm.synced_folder "gitlab-runner/", "/vagrant/gitlab-runner", create: true, nfs: nfs
+  config.vm.synced_folder "gitlab-workhorse/", "/vagrant/gitlab-workhorse", create: true, nfs: nfs
 end
 
 def running_in_admin_mode?
@@ -60,7 +61,7 @@ $apt_reqs = <<EOT
   echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   export DEBIAN_FRONTEND=noninteractive
   export RUNLEVEL=1
-  apt-get update && apt-get -y install git postgresql postgresql-contrib libpq-dev phantomjs redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed golang-go nginx libgmp-dev rvm yarn libre2-dev docker.io
+  apt-get update && apt-get -y install git postgresql postgresql-contrib libpq-dev redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed golang-go nginx libgmp-dev rvm yarn libre2-dev docker.io
   apt-get update && apt-get -y upgrade
 EOT
 
@@ -81,7 +82,7 @@ $user_setup = <<EOT
   echo "$DEV_USER ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/$DEV_USER
   sudo addgroup $DEV_USER rvm
   sudo addgroup $DEV_USER docker
-  sudo -u $DEV_USER -i bash -l -c "rvm install 2.3.5 && rvm use 2.3.5 --default && gem install bundler"
+  sudo -u $DEV_USER -i bash -l -c "rvm install 2.3.7 && rvm use 2.3.7 --default && gem install bundler"
   sudo chown -R $DEV_USER:$DEV_USER /home/$DEV_USER
   sudo ln -s /vagrant /home/$DEV_USER/gitlab-development-kit
 
@@ -112,6 +113,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.network "forwarded_port", guest: 3000, host: 3000, auto_correct: true
+
+  # Forward SSH agent to allow SSH git operations
+  config.ssh.forward_agent = true
 
   config.vm.provider "docker" do |d, override|
     d.build_dir = "vagrant"

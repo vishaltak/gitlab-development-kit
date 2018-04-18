@@ -12,9 +12,10 @@ gitlab_development_root = $(shell pwd)
 gitaly_assembly_dir = ${gitlab_development_root}/gitaly/assembly
 postgres_bin_dir = $(shell pg_config --bindir)
 postgres_replication_user = gitlab_replication
-postgres_dir = $(realpath ./postgresql)
-postgres_replica_dir = $(realpath ./postgresql-replica)
-postgres_geo_dir = $(realpath ./postgresql-geo)
+postgres_dir = $(abspath ./postgresql)
+postgres_replica_dir = $(abspath ./postgresql-replica)
+postgres_geo_dir = $(abspath ./postgresql-geo)
+postgres_data_dir = ${postgres_dir}/data
 hostname = $(shell cat hostname 2>/dev/null || echo 'localhost')
 port = $(shell cat port 2>/dev/null || echo '3000')
 username = $(shell whoami)
@@ -26,8 +27,10 @@ registry_port = $(shell cat registry_port 2>/dev/null || echo '5000')
 gitlab_from_container = $(shell [ "$(uname)" = "Linux" ] && echo 'localhost' || echo 'docker.for.mac.localhost')
 postgresql_port = $(shell cat postgresql_port 2>/dev/null || echo '5432')
 postgresql_geo_port = $(shell cat postgresql_geo_port 2>/dev/null || echo '5432')
+object_store_enabled = $(shell cat object_store_enabled 2>/dev/null || echo 'false')
+object_store_port = $(shell cat object_store_port 2>/dev/null || echo '9000')
 
-all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly-setup prom-setup
+all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup support-setup gitaly-setup prom-setup object-storage-setup
 
 # Set up the GitLab Rails app
 
@@ -42,7 +45,10 @@ gitlab/config/gitlab.yml:
 	sed -e "s|/home/git|${gitlab_development_root}|" \
 	  -e "s|/usr/bin/git|${git_bin}|" \
 	  gitlab/config/gitlab.yml.example > gitlab/config/gitlab.yml
-	hostname=${hostname} port=${port} webpack_port=${webpack_port} registry_enabled=${registry_enabled} registry_port=${registry_port} support/edit-gitlab.yml gitlab/config/gitlab.yml
+	hostname=${hostname} port=${port} webpack_port=${webpack_port}\
+		registry_enabled=${registry_enabled} registry_port=${registry_port}\
+		object_store_enabled=${object_store_enabled} object_store_port=${object_store_port}\
+		support/edit-gitlab.yml gitlab/config/gitlab.yml
 
 gitlab/config/database.yml:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
@@ -139,7 +145,7 @@ gitaly/config.toml:
 	  -e "s|/home/git|${gitlab_development_root}|" ${gitaly_clone_dir}/config.toml.example > $@
 
 prom-setup:
-	if [ "$(uname -s)" == "Linux" ]; then \
+	if [ "$(uname -s)" = "Linux" ]; then \
 		sed -i -e 's/docker\.for\.mac\.localhost/localhost/g' ${gitlab_development_root}/prometheus/prometheus.yml; \
 	fi
 
@@ -187,14 +193,12 @@ self-update: unlock-dependency-installers
 
 # Update gitlab, gitlab-shell, gitlab-workhorse and gitaly
 
-update: unlock-dependency-installers gitlab-shell-update gitlab-workhorse-update gitaly-update gitlab-update
+update: ensure-postgres-running unlock-dependency-installers gitlab-shell-update gitlab-workhorse-update gitaly-update gitlab-update
 
-gitlab-update: gitlab/.git/pull gitlab-setup
-	@echo ""
-	@echo "------------------------------------------------------------"
-	@echo "Make sure Postgres is running otherwise db:migrate will fail"
-	@echo "------------------------------------------------------------"
-	@echo ""
+ensure-postgres-running:
+	@test -f ${postgres_data_dir}/postmaster.pid || ([[ "${IGNORE_POSTGRES_WARNING}X" != "trueX" ]] && (echo "WARNING: Postgres is not running.  Run 'gdk run db' or 'gdk run' in another shell." ; /bin/echo -n "WARNING: Hit <ENTER> to ignore or <CTRL-C> to quit." ; read))
+
+gitlab-update: ensure-postgres-running gitlab/.git/pull gitlab-setup
 	cd ${gitlab_development_root}/gitlab && \
 		bundle exec rake db:migrate db:test:prepare
 
@@ -264,7 +268,7 @@ postgresql: postgresql/data
 
 postgresql/data:
 	if [ -z "${GDK_DOCKER_COMPOSE}" ]; then \
-	  ${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data; \
+	  ${postgres_bin_dir}/initdb --locale=C -E utf-8 ${postgres_data_dir}; \
 	  support/bootstrap-rails; \
 	elif [ ! -f gitlab/.database-seed ]; then \
 	  support/bootstrap-rails; \
@@ -284,10 +288,10 @@ postgresql-replication-secondary: postgresql-replication/data postgresql-replica
 postgresql-replication-primary-create-slot: postgresql-replication/slot
 
 postgresql-replication/data:
-	${postgres_bin_dir}/initdb --locale=C -E utf-8 postgresql/data
+	${postgres_bin_dir}/initdb --locale=C -E utf-8 ${postgres_data_dir}
 
 postgresql-replication/access:
-	cat support/pg_hba.conf.add >> postgresql/data/pg_hba.conf
+	cat support/pg_hba.conf.add >> ${postgres_data_dir}/pg_hba.conf
 
 postgresql-replication/role:
 	${postgres_bin_dir}/psql -h ${postgres_dir} -p ${postgresql_port} -d postgres -c "CREATE ROLE ${postgres_replication_user} WITH REPLICATION LOGIN;"
@@ -299,7 +303,7 @@ postgresql-replication/backup:
 	psql -h ${postgres_primary_dir} -p ${postgres_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
 	rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgres_primary_dir}/data postgresql
 	psql -h ${postgres_primary_dir} -p ${postgres_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
-	./support/recovery.conf ${postgres_primary_dir} ${postgres_primary_port} > postgresql/data/recovery.conf
+	./support/recovery.conf ${postgres_primary_dir} ${postgres_primary_port} > ${postgres_data_dir}/recovery.conf
 	$(MAKE) postgresql/port
 
 postgresql-replication/slot:
@@ -330,27 +334,35 @@ postgresql/geo:
 	grep '^postgresql-geo:' Procfile || (printf ',s/^#postgresql-geo/postgresql-geo/\nwq\n' | ed -s Procfile)
 	support/bootstrap-geo
 
-postgresql/geo-fdw: postgresql/geo-fdw/dev postgresql/geo-fdw/test
+postgresql/geo-fdw: postgresql/geo-fdw/development/create postgresql/geo-fdw/test/create
 
-postgresql/geo-fdw/dev:
-	$(eval dbname := gitlabhq_geo_development)
-	$(eval fdw_dbname := gitlabhq_development)
+# Function to read values from database.yml, parameters:
+#   - file: e.g. database, database_geo
+#   - environment: e.g. development, test
+#   - value: e.g. host, port
+from_db_config = $(shell grep -A6 "$(2):" ${gitlab_development_root}/gitlab/config/$(1).yml | grep -m1 "$(3):" | cut -d ':' -f 2 | tr -d ' ')
 
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE EXTENSION postgres_fdw;"
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SERVER gitlab_secondary FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$(postgres_dir)', dbname '${fdw_dbname}', port '$(postgresql_port)' );"
+postgresql/geo-fdw/%: dbname = $(call from_db_config,database_geo,$*,database)
+postgresql/geo-fdw/%: fdw_dbname = $(call from_db_config,database,$*,database)
+postgresql/geo-fdw/%: fdw_host = $(call from_db_config,database,$*,host)
+postgresql/geo-fdw/%: fdw_port = $(call from_db_config,database,$*,port)
+postgresql/geo-fdw/test/%: rake_namespace = test:
+
+postgresql/geo-fdw/%/create:
+	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE EXTENSION IF NOT EXISTS postgres_fdw;"
+	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SERVER gitlab_secondary FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$(fdw_host)', dbname '${fdw_dbname}', port '$(fdw_port)' );"
 	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE USER MAPPING FOR current_user SERVER gitlab_secondary OPTIONS (user '$(USER)');"
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SCHEMA gitlab_secondary;"
+	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SCHEMA IF NOT EXISTS gitlab_secondary;"
 	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "GRANT USAGE ON FOREIGN SERVER gitlab_secondary TO current_user;"
+	cd ${gitlab_development_root}/gitlab && bundle exec rake geo:db:${rake_namespace}refresh_foreign_tables
 
-postgresql/geo-fdw/test:
-	$(eval dbname := gitlabhq_geo_test)
-	$(eval fdw_dbname := gitlabhq_test)
+postgresql/geo-fdw/%/drop:
+	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SERVER gitlab_secondary CASCADE;"
+	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SCHEMA gitlab_secondary;"
 
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE EXTENSION postgres_fdw;"
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SERVER gitlab_secondary FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$(postgres_dir)', dbname '${fdw_dbname}', port '$(postgresql_port)' );"
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE USER MAPPING FOR current_user SERVER gitlab_secondary OPTIONS (user '$(USER)');"
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SCHEMA gitlab_secondary;"
-	${postgres_bin_dir}/psql -h ${postgres_geo_dir} -p ${postgresql_geo_port} -d ${dbname} -c "GRANT USAGE ON FOREIGN SERVER gitlab_secondary TO current_user;"
+postgresql/geo-fdw/%/rebuild:
+	$(MAKE) postgresql/geo-fdw/$*/drop || true
+	$(MAKE) postgresql/geo-fdw/$*/create
 
 .PHONY:	foreman
 foreman:
@@ -454,6 +466,11 @@ registry/storage:
 registry/config.yml:
 	cp registry/config.yml.example $@
 	gitlab_host=${gitlab_from_container} gitlab_port=${port} registry_port=${registry_port} support/edit-registry-config.yml $@
+
+object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads
+
+minio/data/%:
+	mkdir -p $@
 
 pry:
 	grep '^#rails-web:' Procfile || (printf ',s/^rails-web/#rails-web/\nwq\n' | ed -s Procfile)

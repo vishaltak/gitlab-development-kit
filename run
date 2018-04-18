@@ -26,7 +26,7 @@ print_port() {
   "
   echo
   echo
-  echo "Starting GitLab in $(pwd) on port ${host}:${port}"
+  echo "Starting GitLab in $(pwd) on port http://${host}:${port}"
   echo
   echo
 }
@@ -37,9 +37,9 @@ foreman_start() {
 
 db() {
   if [ -z "$GTK_DOCKER_COMPOSE" ] ; then
-    foreman_start -m all=0,redis=1,postgresql=1,openldap=1,influxdb=1,webpack=1,registry=1
+    foreman_start -m all=0,redis=1,postgresql=1,openldap=1,influxdb=1,webpack=1,registry=1,minio=1
   else
-    foreman_start -m all=0,redis=0,postgresql=0,openldap=1,influxdb=1,webpack=1,registry=1
+    foreman_start -m all=0,redis=0,postgresql=0,openldap=1,influxdb=1,webpack=1,registry=1,minio=1
   fi
 }
 

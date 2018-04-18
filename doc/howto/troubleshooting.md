@@ -57,6 +57,68 @@ $ bundle config --global build.charlock_holmes "--with-icu-dir=/usr/local/opt/ic
 
 [Gitaly]: https://gitlab.com/gitlab-org/gitaly/blob/14fd3b2e3adae00f0a792516e74a4bac29a5b5c1/Makefile#L58
 
+## `charlock_holmes` `0.7.5` cannot be installed with icu4c 61.1
+
+The installation of the `charlock_holmes` v0.7.5 gem during `bundle install`
+may fail with the following error:
+
+```
+[SNIPPED]
+
+transliterator.cpp:108:3: error: no template named 'StringByteSink'; did you mean 'icu_61::StringByteSink'?
+  StringByteSink<std::string> sink(&result);
+  ^~~~~~~~~~~~~~
+  icu_61::StringByteSink
+/usr/local/include/unicode/bytestream.h:232:7: note: 'icu_61::StringByteSink' declared here
+class StringByteSink : public ByteSink {
+      ^
+transliterator.cpp:106:34: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int32_t' (aka 'int') [-Wshorten-64-to-32]
+  u_txt = new UnicodeString(txt, txt_len);
+              ~~~~~~~~~~~~~      ^~~~~~~
+1 warning and 9 errors generated.
+make: *** [transliterator.o] Error 1
+```
+
+To fix this, you can run:
+
+```
+gem install charlock_holmes -v '0.7.5' -- --with-cppflags=-DU_USING_ICU_NAMESPACE=1
+```
+
+0.7.6 fixes this issue. See [this issue](https://github.com/brianmario/charlock_holmes/issues/126) for more details.
+
+## Unable to build and install pg gem on gdk run
+
+After installing PostgreSQL with brew you will have to set the proper path to PostgreSQL.
+You may run into the following errors on running `gdk run`
+```
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/janedoe/.rvm/gems/ruby-2.3.3/gems/pg-0.18.4/ext
+/Users/janedoe/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20180330-95521-1k5x76v.rb extconf.rb
+checking for pg_config... no
+No pg_config... trying anyway. If building fails, please try again with
+ --with-pg-config=/path/to/pg_config
+
+ ...
+
+An error occurred while installing pg (0.18.4), and Bundler cannot continue.
+Make sure that `gem install pg -v '0.18.4'` succeeds before bundling.
+
+```
+
+This is because the script fails to find the PostgreSQL instance in the path.
+The instructions for this may show up after installing PostgreSQL.
+The example below is from running `brew install postgresql@9.6` on OS X installation.
+For other versions, other platform install and other shell terminal please adjust the path accordingly.
+
+```
+If you need to have this software first in your PATH run:
+  echo 'export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"' >> ~/.bash_profile
+```
+
+Once this is set, run the `gdk run` command again.
+
 ## Error in database migrations when pg_trgm extension is missing
 
 Since GitLab 8.6+ the PostgreSQL extension `pg_trgm` must be installed. If you
