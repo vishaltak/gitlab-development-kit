@@ -17,7 +17,7 @@ during installation.
 1. Node 6.x or newer and Yarn 0.17 or newer.  If your package manager does not
    have up-to-date versions of node or yarn available, visit the official
    websites for [node] and [yarn] for installation instructions.
-1. Go 1.8.3 or newer. If your package manager does not have up-to-date versions
+1. Go 1.9 or newer. If your package manager does not have up-to-date versions
    of Go available, visit the official website for [go] for installation instructions.
 1. [Google Chrome] 60 or greater with [ChromeDriver] version 2.33 or greater.
    Visit the [installation details](https://sites.google.com/a/chromium.org/chromedriver/getting-started) for more details.
