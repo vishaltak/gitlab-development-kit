@@ -6,23 +6,22 @@ environment.
 
 ## Installation: macOS
 
-1. Install Java 1.8 + (Elasticsearch dependency)
+### Docker install (recommended)
 
-    ```sh
-    brew cask install java
-    ```
+```
+docker run --name elastic55 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:5.5.3
+```
 
-1. Install Elasticsearch with [Homebrew]:
+after the container is up you can control it with `docker start elastic55` and `docker stop elastic55`
 
-    ```sh
-    brew install elasticsearch
-    ```
+### Host install
+We need version 5.5.3 at the most but brew does not have that version available anymore, so you need to use an old brew - 
 
-1. Install the `delete-by-query` plugin:
+```
+brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/f1a767645f61112762f05e68a610d89b161faa99/Formula/elasticsearch.rb
+```
 
-    ```sh
-    `brew info elasticsearch | awk '/plugin script:/ { print $NF }'` install delete-by-query
-    ```
+There is no need to install any plugins
 
 ## Setup
 
