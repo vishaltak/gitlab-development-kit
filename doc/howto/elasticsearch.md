@@ -6,7 +6,7 @@ environment.
 
 ## Installation: macOS
 
-### Docker install (recommended)
+### Docker install
 
 ```
 docker run --name elastic55 -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:5.5.3
@@ -20,8 +20,6 @@ We need version 5.5.3 at the most but brew does not have that version available 
 ```
 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/f1a767645f61112762f05e68a610d89b161faa99/Formula/elasticsearch.rb
 ```
-
-There is no need to install any plugins
 
 ## Setup
 
