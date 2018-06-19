@@ -45,7 +45,12 @@ geo_db() {
 
 app() {
   print_url
-  foreman_start -m all=0,rails-web=1,rails-background-jobs=1,gitlab-workhorse=1,nginx=1,grafana=1,sshd=1,gitaly=1,storage-check=1
+  foreman_start -m all=0,rails-web=1,rails-background-jobs=1,gitlab-workhorse=0,nginx=1,grafana=1,sshd=1,gitaly=1,storage-check=1
+}
+
+workhorse() {
+  print_url
+  foreman_start -m all=0,rails-web=0,rails-background-jobs=0,gitlab-workhorse=1,nginx=0,grafana=0,sshd=0,gitaly=0,storage-check=0
 }
 
 grafana() {
@@ -94,6 +99,9 @@ main() {
       ;;
     xapp)
       app
+      ;;
+    xworkhorse)
+      workhorse
       ;;
     xgrafana)
       grafana

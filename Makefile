@@ -367,6 +367,10 @@ gitlab-workhorse/config.toml:
 
 gitlab-workhorse-update: ${gitlab_workhorse_clone_dir}/.git gitlab-workhorse/.git/pull gitlab-workhorse-clean-bin gitlab-workhorse/bin/gitlab-workhorse
 
+gitlab-workhorse-build:
+	rm -rf gitlab-workhorse/bin
+	GOPATH=${gitlab_development_root}/gitlab-workhorse go install gitlab.com/gitlab-org/gitlab-workhorse/...
+
 gitlab-workhorse-clean-bin:
 	rm -rf gitlab-workhorse/bin
 
