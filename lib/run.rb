@@ -1,19 +1,21 @@
 def main(argv)
   case argv[0]
-  when 'db'
+  when 'dev_all', 'tests'
     foreman_exec(%w[redis postgresql openldap influxdb webpack registry minio elasticsearch jaeger])
+  when 'dev'
+    foreman_exec(%w[redis postgresql webpack jaeger gitaly])
   when 'geo_db'
     foreman_exec(%w[postgresql-geo])
   when 'app'
-    svcs = %w[gitlab-workhorse nginx grafana sshd gitaly storage-check gitlab-pages]
+    svcs = %w[gitlab-workhorse nginx grafana sshd storage-check gitlab-pages]
 
     foreman_exec(svcs + %w[rails-web rails-background-jobs])
   when 'grafana'
     foreman_exec(%w[grafana])
-  when 'thin'
+  when 'puma'
     exec(
       { 'RAILS_ENV' => 'development' },
-      *%W[bundle exec thin --socket=#{Dir.pwd}/gitlab.socket start],
+      *%W[bundle exec puma -b unix://#{Dir.pwd}/gitlab.socket --tag GitLab],
       chdir: 'gitlab'
     )
   when 'gitaly'

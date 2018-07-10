@@ -1,13 +1,15 @@
 # GitLab Development Kit cheat sheet
 
 gdk run            # Start everything
-gdk run db         # Start enough to run tests
+gdk run tests      # Start enough dependencies to run tests
+gdk run dev        # Minimal development dependencies (requires App Server)
+gdk run dev_all    # All optional development dependencies (requires App Server)
 gdk run geo_db     # Start Geo tracking database
 gdk run gitaly     # Start gitaly (git backend service)
 gdk run jobs       # Start GitLab background jobs
 gdk run grafana    # Start Grafana in a separate port
 
-# Application Server (needs `gdk run db`):
+# Application Server (needs `gdk run dev` or `gdk run dev_all):
 gdk run app        # Start GitLab rails and frontend servers
 gdk run thin       # Run only rails with thin
 
