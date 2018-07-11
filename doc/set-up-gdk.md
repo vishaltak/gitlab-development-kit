@@ -106,10 +106,16 @@ Start GitLab and all required services:
 gdk run
 ```
 
-To start only the databases use:
+To start only the databases and required services use:
 
 ```sh
-gdk run db
+gdk run dev
+```
+
+To start all required services to execute any test use:
+
+```sh
+gdk run tests
 ```
 
 To start only the app (assuming the DBs are already running):

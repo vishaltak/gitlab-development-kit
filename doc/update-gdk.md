@@ -4,11 +4,11 @@
 
     ```
     cd <gdk-dir>
-    gdk run db
+    gdk run dev
     ```
 
 1. Then, **open a separate terminal window** and update gdk along with all its
-    components:
+   components:
 
     ```
     cd <gdk-dir>
@@ -17,5 +17,5 @@
     gdk reconfigure
     ```
 
-1. Then stop the `gdk run db` process running in the first tab.  It must be
-    restarted once `gdk reconfigure` has been run.
+1. Then stop the `gdk run dev` process running in the first tab.  It must be
+   restarted once `gdk reconfigure` has been run.

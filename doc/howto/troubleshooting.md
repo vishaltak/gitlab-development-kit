@@ -494,7 +494,7 @@ If you still encounter some errors, see the troubleshooting FAQ below:
 
     ---
 
-* I'm getting the following error when I try to run `gdk run` or `gdk run db`:
+* I'm getting the following error when I try to run `gdk run`, `gdk run dev` or `gdk run tests`:
 
     ```
     09:46:05 webpack.1               | npm ERR! argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "dev-server"
@@ -512,7 +512,7 @@ If you still encounter some errors, see the troubleshooting FAQ below:
 
     ---
 
-* I'm getting the following error when I try to run `gdk run` or `gdk run db`:
+* I'm getting the following error when I try to run `gdk run`, `gdk run dev` or `gdk run tests`:
 
     ```
     09:54:15 webpack.1               | > @ dev-server /Users/mike/Projects/gitlab-development-kit/gitlab
@@ -559,7 +559,7 @@ RAILS_ENV=test bundle exec rake db:reset
 
 ## Windows 10 WSL common issues
 
-* `gdk run db` fails with exit code X
+* `gdk run dev` fails with exit code X
 
     If you have restarted your computer recently, don't forget to start PostgreSQL server manually; init.d scripts don't work currently as of build 15063.138:
 
