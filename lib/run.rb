@@ -2,25 +2,21 @@ def set_env_vars
   # Try to read the gitlab-workhorse host:port from the environments
   # Otherwise fallback to localhost:3000
   unless ENV['host']
-    host_filepath = File.expand_path('../host', __dir__)
-    ENV['host'] = File.read(host_filepath).chomp if File.exist?(host_filepath)
-    ENV['host'] ||= 'localhost'
+    ENV['host'] = read_file('host') || 'localhost'
   end
 
   unless ENV['port']
-    port_filepath = File.expand_path('../port', __dir__)
-    ENV['port'] = File.read(port_filepath).chomp if File.exist?(port_filepath)
-    ENV['port'] ||= '3000'
+    ENV['port'] = read_file('port') || '3000'
   end
 
   unless ENV['relative_url_root']
-    relative_url_root_filepath = File.expand_path('../relative_url_root', __dir__)
-    ENV['relative_url_root'] = File.read(relative_url_root_filepath).chomp if File.exist?(relative_url_root_filepath)
-    ENV['relative_url_root'] ||= '/'
+    ENV['relative_url_root'] = read_file('relative_url_root') || '/'
   end
 end
 
 def main(argv)
+  set_env_vars
+
   case argv[0]
   when 'db'
     foreman_exec(%w[redis postgresql openldap influxdb webpack registry minio elasticsearch jaeger])
@@ -52,6 +48,12 @@ def main(argv)
     puts
     exit 1
   end
+end
+
+def read_file(filename)
+  File.read(filename).chomp if File.exist?(filename)
+rescue Errno::ENOENT
+  # return nil
 end
 
 def foreman_exec(svcs = [], exclude: [])
@@ -102,5 +104,4 @@ def print_url
   puts
 end
 
-set_env_vars
 main(ARGV)
