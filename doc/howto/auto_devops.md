@@ -158,7 +158,7 @@ You should now be ready to run the test :
 
 ```
 cd qa
-GITLAB_PASSWORD=<root-user-password> GCLOUD_ZONE=us-central1-a CHROME_HEADLESS=false bin/qa Test::Integration::Kubernetes https://1337.qa-tunnel.gitlab.info/
+GITLAB_PASSWORD=<root-user-password> GCLOUD_ZONE=us-central1-a CHROME_HEADLESS=false gitab-qa Test::Integration::Kubernetes https://1337.qa-tunnel.gitlab.info/
 ```
 
 NOTE: This test will run as the default project ID. To set or override
