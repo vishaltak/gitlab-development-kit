@@ -102,6 +102,9 @@ $user_setup = <<EOT
   # set git defaults
   sudo -u $DEV_USER -i bash -c "git config --global user.name 'GitLab Development'"
   sudo -u $DEV_USER -i bash -c "git config --global user.email gitlab@local.local"
+
+  wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O /home/$DEV_USER/.ssh/authorized_keys
+
 EOT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -116,6 +119,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Forward SSH agent to allow SSH git operations
   config.ssh.forward_agent = true
+  config.ssh.insert_key = false
 
   config.vm.provider "docker" do |d, override|
     d.build_dir = "vagrant"
