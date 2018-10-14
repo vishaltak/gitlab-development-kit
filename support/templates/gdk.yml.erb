@@ -1,0 +1,8 @@
+repositories:
+  gitlab: <%= value_or_default(@repositories[:gitlab], 'https://gitlab.com/gitlab-org/gitlab-ce.git') %>
+  gitlab_shell: <%= value_or_default(@repositories[:gitlab_shell], 'https://gitlab.com/gitlab-org/gitlab-shell.git') %>
+  gitlab_workhorse: <%= value_or_default(@repositories[:workhorse], 'https://gitlab.com/gitlab-org/gitlab-workhorse.git') %>
+  gitaly: <%= value_or_default(@repositories[:gitaly], 'https://gitlab.com/gitlab-org/gitaly.git') %>
+  gitaly_proto: <%= value_or_default(@repositories[:gitaly_proto], 'https://gitlab.com/gitlab-org/gitaly-proto.git') %>
+  gitlab_pages: <%= value_or_default(@repositories[:gitlab_pages], 'https://gitlab.com/gitlab-org/gitlab-pages.git') %>
+  gitlab_docs: <%= value_or_default(@repositories[:gitlab_docs], 'https://gitlab.com/gitlab-com/gitlab-docs.git') %>

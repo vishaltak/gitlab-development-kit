@@ -96,3 +96,4 @@ gitlab-development-kit/**
 /jaeger-artifacts/
 /jaeger/
 /gdk.yml
+.idea
