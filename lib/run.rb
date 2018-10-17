@@ -26,10 +26,10 @@ def main(argv)
     foreman_exec(%w[rails-background-jobs])
   when 'rails5'
     print_url
-    foreman_exec(%w[all], exclude: %w[rails-web rails-background-jobs])
+    foreman_exec(%w[all], exclude: %w[rails5-web rails-background-jobs])
   when nil
     print_url
-    foreman_exec(%w[all], exclude: %w[rails5-web rails5-background-jobs])
+    foreman_exec(%w[all], exclude: %w[rails-web rails5-background-jobs])
   else
     puts
     puts "GitLab Development Kit does not recognize this command."
