@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+require 'erb'
+
+if ARGV.count != 1
+  abort "usage: render-erb ERB_FILE"
+end
+
+ERB.new(File.read(ARGV.first)).run

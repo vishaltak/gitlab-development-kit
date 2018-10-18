@@ -47,6 +47,8 @@ rails_bundle_install_cmd := bundle install --jobs 4 --without production $(if $(
 elasticsearch_version = 5.5.3
 elasticsearch_tar_gz_sha1 = 81af33ec3ae08a5294133ade331de8e6aa0b146a
 ruby_version = UNKNOWN
+redis_port ?= 6379
+export redis_port
 
 all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup gitlab-pages-setup support-setup gitaly-setup prom-setup object-storage-setup
 
@@ -90,7 +92,7 @@ gitlab/config/unicorn.rb:
 	echo "listen '${gitlab_development_root}/gitlab.socket'" >> $@
 
 gitlab/config/resque.yml:
-	sed "s|/home/git|${gitlab_development_root}|" redis/resque.yml.example > $@
+	support/render-erb redis/resque.yml.erb > $@
 
 gitlab/public/uploads:
 	mkdir $@
@@ -134,8 +136,6 @@ ${gitlab_shell_clone_dir}/.git:
 gitlab-shell/config.yml:
 	sed -e "s|/home/git|${gitlab_development_root}|"\
 	  -e "s|^gitlab_url:.*|gitlab_url: http+unix://${shell echo ${gitlab_development_root}/gitlab.socket | sed 's|/|%2F|g'}|"\
-	  -e "s|/usr/bin/redis-cli|$(shell which redis-cli)|"\
-	  -e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|"\
 	  gitlab-shell/config.yml.example > gitlab-shell/config.yml
 
 .gitlab-shell-bundle:
@@ -262,7 +262,7 @@ gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
 
 # Set up supporting services
 
-support-setup: .ruby-version foreman Procfile redis gitaly-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup
+support-setup: .ruby-version foreman Procfile gitaly-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup docker-compose.yml
 	@echo ""
 	@echo "*********************************************"
 	@echo "************** Setup finished! **************"
@@ -281,11 +281,6 @@ Procfile:
 		echo "0.0.0.0" > host; \
 		echo "3000" > port; \
 	fi
-
-redis: redis/redis.conf
-
-redis/redis.conf:
-	sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
 
 postgresql: postgresql/data
 
@@ -382,6 +377,8 @@ postgresql/geo-fdw/%/rebuild:
 	$(MAKE) postgresql/geo-fdw/$*/drop || true
 	$(MAKE) postgresql/geo-fdw/$*/create
 
+docker-compose.yml: docker-compose.yml.erb
+	support/render-erb $< > $@
 .PHONY: foreman
 foreman:
 	command -v $@ > /dev/null || gem install $@
@@ -398,7 +395,7 @@ localhost.key:
 gitlab-workhorse-setup: gitlab-workhorse/bin/gitlab-workhorse gitlab-workhorse/config.toml
 
 gitlab-workhorse/config.toml:
-	sed "s|/home/git|${gitlab_development_root}|" $@.example > $@
+	support/render-erb  $@.erb > $@
 
 gitlab-workhorse-update: ${gitlab_workhorse_clone_dir}/.git gitlab-workhorse/.git/pull gitlab-workhorse-clean-bin gitlab-workhorse/bin/gitlab-workhorse
 
@@ -545,6 +542,7 @@ clean-config:
 	gitaly/config.toml \
 	nginx/conf/nginx.conf \
 	registry/config.yml \
+	docker-compose.yml \
 
 unlock-dependency-installers:
 	rm -f \

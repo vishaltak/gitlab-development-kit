@@ -87,3 +87,4 @@ gitlab-development-kit/**
 /gettext.log
 /elasticsearch*
 /env.mk
+/docker-compose.yml

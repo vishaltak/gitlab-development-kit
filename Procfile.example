@@ -5,7 +5,8 @@
 
 # Datasources
 #
-redis: exec redis-server /home/git/redis/redis.conf
+#redis: exec redis-server /home/git/redis/redis.conf
+docker-compose: exec docker-compose up
 minio: exec support/object-store
 postgresql: exec support/postgresql-signal-wrapper postgres -D /home/git/postgresql/data -k /home/git/postgresql -h ''
 #postgresql-replica: exec support/postgresql-signal-wrapper postgres -D /home/git/postgresql-replica/data -k /home/git/postgresql-replica -h ''
