@@ -2,14 +2,18 @@ development:
   adapter: postgresql
   encoding: unicode
   database: gitlabhq_development
-  host: /home/git/postgresql
-  port: 5432
+  host: localhost
+  port: <%= ENV['postgresql_port'] %>
   pool: 6
+  user: postgres
+  password: password
 
 test: &test
   adapter: postgresql
   encoding: unicode
   database: gitlabhq_test
-  host: /home/git/postgresql
-  port: 5432
+  host: localhost
+  port: <%= ENV['postgresql_port'] %>
   pool: 6
+  user: postgres
+  password: password

@@ -2,4 +2,11 @@ version: '3'
 services:
   redis:
     image: "redis:alpine"
-    ports: ["<%= ENV['redis_port'] %>:6379"]
+    ports:
+      - "<%= ENV['redis_port'] %>:6379"
+  postgres:
+    image: "postgres:9-alpine"
+    ports:
+      - "<%= ENV['postgresql_port'] %>:5432"
+    environment:
+      - POSTGRES_PASSWORD=password

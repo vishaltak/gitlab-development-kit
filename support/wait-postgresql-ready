@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-PG_HOST = "#{Dir.pwd}/postgresql".freeze
+PG_HOST = 'localhost'#"#{Dir.pwd}/postgresql".freeze
 PG_PORT_FILE = File.join(Dir.pwd, 'postgresql_port')
 PG_PORT = File.exist?(PG_PORT_FILE) ? File.read(PG_PORT_FILE) : 5432
 
@@ -11,7 +11,7 @@ end
 
 def pg_ready?
   10.times do
-    if system(*%W[psql -h #{PG_HOST} -d template1 -p #{PG_PORT} -c SELECT\ now()], out: '/dev/null', err: '/dev/null')
+    if system({'PGPASSWORD' => 'password'}, *%W[psql -U postgres -h #{PG_HOST} -d template1 -p #{PG_PORT} -c SELECT\ now()], out: '/dev/null', err: '/dev/null')
       return true
     end
     sleep 1

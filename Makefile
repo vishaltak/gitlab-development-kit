@@ -39,6 +39,7 @@ registry_external_port = $(shell cat registry_external_port 2>/dev/null || echo 
 registry_port = $(shell cat registry_port 2>/dev/null || echo '5000')
 gitlab_from_container = $(shell [ "$(uname)" = "Linux" ] && echo 'localhost' || echo 'docker.for.mac.localhost')
 postgresql_port = $(shell cat postgresql_port 2>/dev/null || echo '5432')
+export postgresql_port
 postgresql_geo_port = $(shell cat postgresql_geo_port 2>/dev/null || echo '5432')
 object_store_enabled = $(shell cat object_store_enabled 2>/dev/null || echo 'false')
 object_store_port = $(shell cat object_store_port 2>/dev/null || echo '9000')
@@ -83,9 +84,7 @@ gitlab/config/gitlab.yml:
 		support/edit-gitlab.yml gitlab/config/gitlab.yml
 
 gitlab/config/database.yml:
-	sed -e "s|/home/git|${gitlab_development_root}|"\
-		-e "s|5432|${postgresql_port}|"\
-		database.yml.example > gitlab/config/database.yml
+	support/render-erb database.yml.erb > gitlab/config/database.yml
 
 gitlab/config/unicorn.rb:
 	cp gitlab/config/unicorn.rb.example.development gitlab/config/unicorn.rb
@@ -285,8 +284,8 @@ Procfile:
 postgresql: postgresql/data
 
 postgresql/data:
-	${postgres_bin_dir}/initdb --locale=C -E utf-8 ${postgres_data_dir}
 	support/bootstrap-rails
+	touch $@
 
 postgresql/port:
 	./support/postgres-port ${postgres_dir} ${postgresql_port}
