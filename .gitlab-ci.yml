@@ -84,6 +84,7 @@ test:install:
     when: always
   script:
     - source /home/gdk/.bash_profile
+    - gem update --system
     - cd gem
     - gem build gitlab-development-kit.gemspec
     - gem install gitlab-development-kit-*.gem
