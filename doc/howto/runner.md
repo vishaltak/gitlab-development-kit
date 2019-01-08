@@ -73,8 +73,12 @@ All the methods should (eventually) create a `gitlab-runner` binary.
 ## Setting up the Runner
 
 Run `gitlab-runner register --config <path-to-gdk>/gitlab-runner-config.toml`
-(as your normal user), and follow the prompts. Use `http://localhost:3000/`
-for the coordinator URL, and the `Registration token` as the `gitlab-ci token`.
+(as your normal user), and follow the prompts.
+
+For the "coordinator URL", use `http://localhost:3000/`, or `http://<your custom IP>:3000/`
+if you are using the special docker executor configuration above.
+For the "gitlab-ci token", use the `Registration token` you noted above.
+
 The Runner will write its configuration file to `gitlab-runner-config.toml`,
 which is in GDK's `.gitignore` file.
 
