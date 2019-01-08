@@ -224,7 +224,7 @@ self-update: unlock-dependency-installers
 
 # Update gitlab, gitlab-shell, gitlab-workhorse and gitaly
 
-update: ensure-postgres-running unlock-dependency-installers gitlab-shell-update gitlab-workhorse-update gitaly-update gitlab-update
+update: ensure-postgres-running unlock-dependency-installers gitlab-shell-update gitlab-workhorse-update gitaly-update gitlab-pages-update gitlab-update
 
 ensure-postgres-running:
 	@test -f ${postgres_data_dir}/postmaster.pid || \
