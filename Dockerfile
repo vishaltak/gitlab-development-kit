@@ -14,12 +14,12 @@ FROM alpine AS fetch
 RUN apk add --no-cache coreutils curl tar git
 
 FROM fetch AS source-rbenv
-ARG RBENV_REVISION=59785f6762e9325982584cdab1a4c988ed062020
-RUN git clone https://github.com/rbenv/rbenv && cd rbenv && git checkout $RBENV_REVISION
+ARG RBENV_REVISION=v1.1.1
+RUN git clone --branch $RBENV_REVISION --depth 1 https://github.com/rbenv/rbenv
 
 FROM fetch AS source-ruby-build
-ARG RUBY_BUILD_REVISION=095d9db34fcbe24d38a16c9462cb853748bc65e7
-RUN git clone https://github.com/rbenv/ruby-build && cd ruby-build && git checkout $RUBY_BUILD_REVISION
+ARG RUBY_BUILD_REVISION=v20181225
+RUN git clone --branch $RUBY_BUILD_REVISION --depth 1 https://github.com/rbenv/ruby-build
 
 FROM fetch AS go
 ARG GO_SHA256=4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff
@@ -31,6 +31,10 @@ RUN tar -C /usr/local -xzf go.tar.gz
 FROM node:8-jessie AS nodejs
 # contains nodejs and yarn in /usr/local
 # https://github.com/nodejs/docker-node/blob/86b9618674b01fc5549f83696a90d5bc21f38af0/8/jessie/Dockerfile
+WORKDIR /stage
+RUN install -d usr opt
+RUN cp -al /usr/local usr
+RUN cp -al /opt/yarn* opt
 
 FROM base AS rbenv
 WORKDIR /home/gdk
@@ -48,7 +52,10 @@ WORKDIR /home/gdk
 ENV PATH $PATH:/usr/local/go/bin
 
 COPY --from=go /usr/local/ /usr/local/
-COPY --from=nodejs /usr/local/ /usr/local/
+COPY --from=nodejs /stage/ /
 COPY --from=rbenv --chown=gdk /home/gdk/ .
 
 USER gdk
+
+# simple tests that tools work
+RUN ["bash", "-lec", "yarn --version; node --version; rbenv --version" ]
