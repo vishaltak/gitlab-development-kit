@@ -50,6 +50,7 @@ But you can also install NodeJS 8.x LTS using Homebrew and prevent Homebrew from
 
 ```
 brew install git redis postgresql@9.6 libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick node@8
+brew link --force postgresql@9.6
 brew install yarn --without-node
 brew pin node@8
 bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
