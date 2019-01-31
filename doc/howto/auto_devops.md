@@ -116,6 +116,11 @@ GitLab and registry, so with a valid SSL cert (terminated in the
 tunnel server) you should be able to run the full Auto DevOps
 flow.
 
+[This video](https://www.youtube.com/watch?v=u3jFf3tTtMk) shows simple example of
+using Auto DevOps. You can use
+[minimal-ruby-app](https://gitlab.com/auto-devops-examples/minimal-ruby-app) as
+test project.
+
 ## Running The Auto DevOps Integration Tests
 
 Since you may want to save yourself the hassle of manually setting up a whole
