@@ -77,10 +77,18 @@ module GDK
     when 'env'
       GDK::Env.exec(ARGV)
     when 'help'
-      puts File.read(File.join($gdk_root, 'HELP'))
+      puts File.read(File.join( $gdk_root, 'HELP'))
+      true
+    when 'kill'
+      pids = `ps -aef | grep #{$gdk_root} | grep -v grep | awk '{print $2}'`.split(' ')
+
+      pids.each do |pid|
+        puts "Killing #{pid}"
+        Process.kill('KILL', pid.to_i)
+      end
       true
     else
-      puts "Usage: #{PROGNAME} run|init|install|update|reconfigure|psql|redis-cli|diff-config|version|help [ARGS...]"
+      puts "Usage: #{PROGNAME} run|init|install|update|reconfigure|psql|redis-cli|diff-config|kill|version|help [ARGS...]"
       false
     end
   end

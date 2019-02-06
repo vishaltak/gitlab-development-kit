@@ -6,6 +6,7 @@ gdk run geo_db     # Start Geo tracking database
 gdk run gitaly     # Start gitaly (git backend service)
 gdk run jobs       # Start GitLab background jobs
 gdk run grafana    # Start Grafana in a separate port
+gdk kill           # Kill all GDK processes
 
 # Application Server (needs `gdk run db`):
 gdk run app        # Start GitLab rails and frontend servers
