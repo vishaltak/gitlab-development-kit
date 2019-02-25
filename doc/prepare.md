@@ -35,7 +35,7 @@ We are using PostgreSQL 9.6 in the following example. If you want to use another
 | We recommend manual installation of Node.js LTS instead of using Homebrew to avoid breaking your development setup when you run `brew upgrade`. Install Node.js 10.x LTS [manually](https://nodejs.org/en/download/) or use a tool like [NVM](https://github.com/creationix/nvm). If you want to use Homebrew, you can prevent it from upgrading the current Node.js formula by pinning it with `brew pin node@10`. |
 
 ```
-brew install git redis postgresql@9.6 libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick node@10 gpg
+brew install git redis postgresql@9.6 mysql libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick node@10 gpg
 brew install yarn --without-node
 brew link pkg-config
 brew pin node@10
