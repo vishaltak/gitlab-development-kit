@@ -33,16 +33,13 @@ def main(argv)
 end
 
 def foreman_exec(svcs = [], exclude: [])
-  args = %w[foreman start]
+  args = %w[foreman start -e gdk.env]
   unless svcs.empty? && exclude.empty?
     args << '-m'
     svc_string = ['all=0', svcs.map { |svc| svc + '=1' }, exclude.map { |svc| svc + '=0' }].join(',')
     args << svc_string
   end
-  exec({
-    'GITLAB_TRACING' => 'opentracing://jaeger?http_endpoint=http%3A%2F%2Flocalhost%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1',
-    'GITLAB_TRACING_URL' => 'http://localhost:16686/search?service={{ service }}&tags=%7B"correlation_id"%3A"{{ correlation_id }}"%7D'
-  }, *args)
+  exec({}, *args)
 end
 
 def print_logo

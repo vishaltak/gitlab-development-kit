@@ -89,3 +89,4 @@ gitlab-development-kit/**
 /env.mk
 /jaeger-artifacts/
 /jaeger/
+/gdk.env

@@ -54,6 +54,7 @@ pages_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_r
 tracer_build_tags = tracer_static tracer_static_jaeger
 jaeger_server_enabled ?= true
 jaeger_version = 1.10.1
+GITLAB_TRACING ?= opentracing://jaeger?http_endpoint=http%3A%2F%2Flocalhost%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1
 
 all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup gitlab-pages-setup support-setup gitaly-setup prom-setup object-storage-setup
 
@@ -75,7 +76,12 @@ gitlab-setup: check-ruby-version gitlab/.git gitlab-config bundler .gitlab-bundl
 gitlab/.git:
 	git clone ${gitlab_repo} gitlab
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
+gitlab-config: gdk.env gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
+
+gdk.env: gdk.env.example
+	bin/safe-sed "$@" \
+		-e "s|^GITLAB_TRACING=.*$$|GITLAB_TRACING=$(subst &,\&,$(GITLAB_TRACING))|" \
+		"$<"
 
 gitlab/config/gitlab.yml: gitlab/config/gitlab.yml.example
 	bin/safe-sed "$@" \
@@ -161,6 +167,7 @@ gitlab-shell/config.yml: gitlab-shell/config.yml.example
 		-e "s|^gitlab_url:.*|gitlab_url: http+unix://$(subst /,%2F,${gitlab_development_root}/gitlab.socket)|" \
 		-e "s|/usr/bin/redis-cli|$(shell which redis-cli)|" \
 		-e "s|^  socket: .*|  socket: ${gitlab_development_root}/redis/redis.socket|" \
+		-e "s|^# *gitlab_tracing:.*|gitlab_tracing: '$(subst &,\&,$(GITLAB_TRACING))'|" \
 		"$<"
 
 .gitlab-shell-bundle:
@@ -599,6 +606,7 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 
 clean-config:
 	rm -rf \
+	gdk.env \
 	gitlab/config/gitlab.yml \
 	gitlab/config/database.yml \
 	gitlab/config/unicorn.rb \
