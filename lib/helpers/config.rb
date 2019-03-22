@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'erb'
 require 'yaml'
 require 'lib/helpers/output_helpers'
@@ -23,7 +25,7 @@ module Helpers
       erb = ERB.new(File.read(template))
       erb.filename = template_file
 
-      yaml = erb.result(ConfigData.new())
+      yaml = erb.result(ConfigData.new)
       File.open(config_file, 'w') { |file| file.write(yaml) }
     end
 
@@ -42,7 +44,7 @@ module Helpers
     private
 
     def deep_symbolize_keys(hash)
-      hash.each_with_object({}) do |(key,value),mem|
+      hash.each_with_object({}) do |(key, value), mem|
         mem[key.to_sym] = value.is_a?(Hash) ? deep_symbolize_keys(value) : value
       end
     end

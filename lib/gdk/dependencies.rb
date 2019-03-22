@@ -1,7 +1,7 @@
 # frozen_string_literals: true
 require 'English'
 
-module Gdk
+module GDK
   class Dependencies
     def self.mysql_present?
       `mysql_config --libs 2>/dev/null`

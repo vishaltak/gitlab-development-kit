@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift('.')
+
 require 'pp'
 require 'lib/helpers/config'
 require 'lib/helpers/dependencies_finder'
@@ -43,9 +44,6 @@ namespace :gitlab do
 
     # Run yarn
     Rake::Task['gitlab:yarn_install'].invoke
-
-
-    dot_gettext
   end
 
   task :config do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Helpers
   class ConfigData
     def initialize(repositories = {})

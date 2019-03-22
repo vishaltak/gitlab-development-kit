@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 def main(argv)
   case argv[0]
   when 'db'
     foreman_exec(%w[redis postgresql openldap influxdb webpack registry minio elasticsearch jaeger])
+  when 'dev'
+    foreman_exec(%w[redis postgresql webpack gitaly])
   when 'geo_db'
     foreman_exec(%w[postgresql-geo])
   when 'app'

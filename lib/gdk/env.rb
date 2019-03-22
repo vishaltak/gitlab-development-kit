@@ -24,8 +24,8 @@ module GDK
       end
 
       def exec_env(argv)
-        # Use Kernel:: namespace to avoid recursive method call
-        Kernel::exec(env, *argv)
+        # Use Kernel namespace to avoid recursive method call
+        Kernel.exec(env, *argv)
       end
 
       def env

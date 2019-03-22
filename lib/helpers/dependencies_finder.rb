@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'lib/gdk/dependencies'
 require 'lib/helpers/output_helpers'
 
@@ -5,6 +7,7 @@ module Helpers
   class DependenciesFinder
     extend OutputHelpers
 
+    # @param required_version string with the required ruby version
     def self.check_ruby_version!(required_version)
       return unless required_version != RUBY_VERSION
 
