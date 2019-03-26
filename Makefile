@@ -98,7 +98,7 @@ gitlab/config/gitlab.yml: support/templates/gitlab.yml.erb auto_devops_enabled a
 		registry_host=${registry_host} registry_external_port=${registry_external_port}\
 		registry_enabled=${registry_enabled} registry_port=${registry_port}\
 		object_store_enabled=${object_store_enabled} object_store_port=${object_store_port}\
-		gitlab_pages_port=${gitlab_pages_port}\
+		gitlab_pages_port=${gitlab_pages_port} \
 		support/edit-gitlab-yml gitlab/config/gitlab.yml
 
 gitlab/config/database.yml: database.yml.example
@@ -184,7 +184,7 @@ gitlab-shell/.gitlab_shell_secret:
 
 # Set up gitaly
 
-gitaly-setup: gitaly/bin/gitaly gitaly/config.toml ${gitaly_proto_clone_dir}/.git
+gitaly-setup: gitaly/bin/gitaly gitaly/config.toml ${gitaly_proto_clone_dir}/.git gitaly/praefect-config.toml
 
 ${gitaly_clone_dir}/.git:
 	git clone ${git_depth_param} --quiet ${gitaly_repo} ${gitaly_clone_dir}
@@ -203,6 +203,13 @@ gitaly/config.toml: $(gitaly_clone_dir)/config.toml.example
 		-e "s|# level = \"warn\"|level = \"warn\"|" \
 		-e "s|^#[^[]*\[git\].*|\[git\]|" \
 		-e "s|^# catfile_cache_size.*|catfile_cache_size = 5|" \
+		"$<"
+
+gitaly/praefect-config.toml: $(gitaly_clone_dir)/config.praefect.toml.example
+	bin/safe-sed "$@" \
+		-e "s|/home/git|${gitlab_development_root}|g" \
+		-e "s|^# socket_path.*|socket_path = \"unix:${gitlab_development_root}/praefect.socket\"|" \
+		-e "s|..listen_addr =.*|  listen_addr = \"unix:${gitlab_development_root}/gitaly.socket\"|"\
 		"$<"
 
 prom-setup:

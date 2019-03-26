@@ -57,6 +57,9 @@ variable assignment is:
   copies of GDK, you should set `jaeger_server_enabled=false` in all but
   one GDK instance, and have traces get send to a single instance.
 
+- `praefect_enabled`: `false` by default, when set to true is a proxy between
+  clients and Gitaly which soon is to provide repository replication.
+
 If you change these files, make sure to call `gdk reconfigure` to ensure
 they are respected (e.g. that Jaeger is disabled).
 

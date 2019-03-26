@@ -653,7 +653,7 @@ production: &base
     storages: # You must have at least a `default` storage path.
       default:
         path: <%= File.join(GDK_ROOT, "repositories") %>
-        gitaly_address: unix:<%= File.join(GDK_ROOT, "gitaly.socket") %>
+        gitaly_address: unix:<%= File.join(GDK_ROOT, "praefect.socket") %>
 
   ## Backup settings
   backup:
