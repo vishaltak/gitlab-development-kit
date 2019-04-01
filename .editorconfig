@@ -34,6 +34,13 @@ insert_final_newline = unset
 indent_size = unset
 indent_style = unset
 
+# Gemfile.lock is auto-generated.
+# It mostly uses 2 spaces but
+# BUNDLED_WITH section has 3 spaces :(
+[Gemfile.lock]
+indent_size = unset
+indent_style = unset
+
 [**/.gitkeep]
 end_of_line = unset
 trim_trailing_whitespace = unset

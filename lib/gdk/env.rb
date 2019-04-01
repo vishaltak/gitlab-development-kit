@@ -13,6 +13,22 @@ module GDK
         end
       end
 
+      def set_env_vars
+        # Try to read the gitlab-workhorse host:port from the environments
+        # Otherwise fallback to localhost:3000
+        unless ENV['host']
+          ENV['host'] = read_file('host') || 'localhost'
+        end
+
+        unless ENV['port']
+          ENV['port'] = read_file('port') || '3000'
+        end
+
+        unless ENV['relative_url_root']
+          ENV['relative_url_root'] = read_file('relative_url_root') || '/'
+        end
+      end
+
       private
 
       def print_env
@@ -24,6 +40,12 @@ module GDK
       def exec_env(argv)
         # Use Kernel:: namespace to avoid recursive method call
         Kernel::exec(env, *argv)
+      end
+
+      def read_file(filename)
+        File.read(filename).chomp if File.exist?(filename)
+      rescue Errno::ENOENT
+        # return nil
       end
 
       def env

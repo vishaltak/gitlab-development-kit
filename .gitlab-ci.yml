@@ -80,6 +80,14 @@ build:image:
       paths:
         - ./latest_image.tar
 
+rspec:
+  image: ruby:2.5-alpine
+  stage: test
+  script:
+    - gem install bundler -N
+    - bundle install
+    - bundle exec rspec
+
 test:install:
   image: $TEST_IMAGE
   stage: test

@@ -1,21 +1,7 @@
-def set_env_vars
-  # Try to read the gitlab-workhorse host:port from the environments
-  # Otherwise fallback to localhost:3000
-  unless ENV['host']
-    ENV['host'] = read_file('host') || 'localhost'
-  end
-
-  unless ENV['port']
-    ENV['port'] = read_file('port') || '3000'
-  end
-
-  unless ENV['relative_url_root']
-    ENV['relative_url_root'] = read_file('relative_url_root') || '/'
-  end
-end
+require_relative 'gdk/env'
 
 def main(argv)
-  set_env_vars
+  GDK::Env.set_env_vars
 
   case argv[0]
   when 'db'
@@ -48,12 +34,6 @@ def main(argv)
     puts
     exit 1
   end
-end
-
-def read_file(filename)
-  File.read(filename).chomp if File.exist?(filename)
-rescue Errno::ENOENT
-  # return nil
 end
 
 def foreman_exec(svcs = [], exclude: [])
