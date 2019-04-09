@@ -52,4 +52,12 @@ Minikube requires virtualization. Install the appropriate driver for your operat
 
 **Note:** If you are using a network filter such as [LittleSnitch](https://www.obdev.at/products/littlesnitch/index.html) you may need to disable it or permit `minikube`, as minikube needs to download multiple ISO's to operate correctly.
 
+To ensure minikube is configured correctly, we'll test instance creation and startup by running:
+
+```
+minikube start
+```
+
+This will create a default minikube instance called `minikube`. Once the instance is up and running, call either `minikube stop` to stop the instance or `minikube delete` to stop and destroy the instance. While we have both Community Edition and Enterprise edition, running two separate profiles will be easier to manage, so you won't need this default machine anymore.
+
 Continue with the steps under [First time setup](doc/howto/prometheus/minikube_usage.md#first-time-setup) to run minikube for use with GDK.

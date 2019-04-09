@@ -1,7 +1,7 @@
 # Shell Methods for Minikube
 
 1. Copy and paste the following scripts into your bash profile.
-1. Update `$WORKSPACE` and `$VM_DRIVER` with the values for your local setup.
+1. Update `$WORKSPACE` to the value for your local setup. Linux users, update the value for vm-driver to `kvm2` in the `mini-new` function.
 1. Save the file and restart your terminal.
 1. Note that all of the commands found below are independent - they do not rely on one another. Take whichever you like!
 
@@ -9,11 +9,6 @@
 # Defines parent directory for cloned gdks; wherever gdk-ee and gdk-ce live
 # Ex) export WORKSPACE="$HOME/gitlab-repos"
 export WORKSPACE="REPLACE ME"
-
-# Defines the virtualization driver used with minikiube; likely either hyperkit (MacOS) or kvm2 (Linux)
-# Ex) export VM_DRIVER="hyperkit"
-export VM_DRIVER="REPLACE ME"
-
 
 # Prints the available minikube shell commands to the console.
 mini-help () {
@@ -37,6 +32,7 @@ mini-help () {
     mini-help                                          | Lists the GitLab minikube commands available.
 
     Other helpful commands:
+      minikube start --logtostderr
       kubectl get pods --namespace gitlab-managed-apps
       kubectl get pods --all-namespaces
       kubectl logs --namespace gitlab-managed-apps <pod-name>
@@ -48,13 +44,12 @@ mini-help () {
 
 # Delete and recreate a new minikube cluster of the specified name. Handles RBAC.
 mini-new () {
-  # Default to hyperkit if VM_DRIVER is unspecified
-  local vm_driver${VM_DRIVER:-"hyperkit"}
-
   # Remove existing minikube machine to ensure a clean start
   minikube delete --profile $1
 
-  minikube start --vm-driver $vm_driver --disk-size=20g --logtostderr --profile $1
+  # For Linux users or alternate vm drivers, replace "hyperkit" with the
+  # appropriate value in the line below:
+  minikube start --vm-driver=hyperkit --disk-size=20g --profile $1
 
   # Disable RBAC
   kubectl create clusterrolebinding permissive-binding \

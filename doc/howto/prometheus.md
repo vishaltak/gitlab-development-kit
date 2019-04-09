@@ -12,8 +12,7 @@ First, follow the instructions for [installing minikube](doc/howto/prometheus/mi
 
 ## Create a Project
 
-With GDK running, we need to go and create a project with CI/CD
-set up. The easiest way to do this, is to import from an existing project with a simplified `gitlab-ci.yml`.
+With GDK running, we need to go and create a project with CI/CD set up. The easiest way to do this, is to import from an existing project with a simplified `gitlab-ci.yml`.
 
 Import `https://gitlab.com/joshlambert/autodevops-deploy.git` as a public project, to use a very simple CI/CD pipeline with no requirements, based on AutoDevOps. It contains just the `deploy` stages and uses a static image, since the GDK does not contain a registry.
 
@@ -75,3 +74,7 @@ Likewise, creating new Merge Requests will also create new pipelines and corresp
 Go to **Operations ➔ Environments** then click on an Environment. You should see a new button appearing that looks like a chart. Click on it to view the metrics.
 
 It may take 30-60 seconds for the Prometheus server to get a few sets of data points.
+
+## Stop Minikube
+
+When you're done working with prometheus for the day, don't forget to [stop your machine](#daily-workflow), and ensure you have a [backup of your minikube machine](#backups-restoration) to protect yourself from needing to complete this process again.

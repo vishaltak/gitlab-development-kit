@@ -63,13 +63,13 @@ The following command will start minikube, running the first few containers with
 For MacOS:
 
 ```shell
-minikube start --vm-driver hyperkit --disk-size=20g --profile ce
+minikube start --vm-driver=hyperkit --disk-size=20g --profile ce
 ```
 
 For Linux:
 
 ```shell
-minikube start --vm-driver kvm2 --disk-size=20g --profile ce
+minikube start --vm-driver=kvm2 --disk-size=20g --profile ce
 ```
 
 #### Open the Minikube Dashboard
