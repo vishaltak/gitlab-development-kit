@@ -100,6 +100,12 @@ Check the [GitLab Geo instructions](./howto/geo.md).
 
 ## Post-installation
 
+Configure GitLab and its components:
+
+```sh
+make
+```
+
 Start GitLab and all required services:
 
 ```sh
