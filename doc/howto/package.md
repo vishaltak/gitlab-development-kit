@@ -1,5 +1,8 @@
 # Package
 
-If you want to enable Package registry support (e.g. NPM, Maven, etc...) a license is required with a minimum level of Silver or Premium.
+[Package registry support](https://docs.gitlab.com/ee/administration/packages.html) requires a GitLab enterprise license with a minimum of [Silver or Premium tier](https://about.gitlab.com/pricing/).
 
-A license can be generated at [license.gitlab.com](https://license.gitlab.com) or by cloning and running the [License App](https://gitlab.com/gitlab-org/license-gitlab-com) locally.
+To enable GDK for this tier, either:
+
+- Generate a license at <https://license.gitlab.com>.
+- Clone and run the [License App](https://gitlab.com/gitlab-org/license-gitlab-com) locally.
