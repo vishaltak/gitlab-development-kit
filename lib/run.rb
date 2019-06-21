@@ -1,7 +1,7 @@
 def main(argv)
   case argv[0]
   when 'db'
-    foreman_exec(%w[redis postgresql openldap influxdb webpack registry minio elasticsearch jaeger])
+    foreman_exec(%w[redis postgresql openldap influxdb webpack registry minio elasticsearch jaeger prometheus])
   when 'geo_db'
     foreman_exec(%w[postgresql-geo])
   when 'app'
