@@ -13,7 +13,7 @@ Most of the time you want to use just the UNIX sockets, if possible,
 but there are situations where sockets are not supported (for example
 when using some Java-based IDEs).
 
-### List of port files
+### List of port files (deprecated)
 
 Below is a list of all existing port configuration files and the
 service they are related to:
@@ -26,6 +26,59 @@ service they are related to:
 | `postgresql_geo_port` | postgresql server for tracking database (Geo) |
 | `registry_port`       | docker registry server                        |
 | `gitlab_pages_port`   | gitlab-pages port                             |
+
+### gdk.yml
+
+Configuring GitLab via individual files has become unwieldy, and we are
+trying to improve this by [consolidating all configuration inside
+`gdk.yml`](https://gitlab.com/gitlab-org/gitlab-development-kit/issues/413).
+
+Right now only the `Procfile` is rendered from variables inside
+`gdk.yml`. `Procfile` is built from a templated `Procfile.erb`, which
+obtains its configuration from `gdk.yml`. See `gdk.example.yml` as a
+template for this file.
+
+### Customizing Jaeger ports
+
+To run mulitple instances of the GDK, you will have to configure Jaeger
+so that multiple processes an run simultaneously. Jaeger listens on four
+different ports:
+
+1. `health_check_http_port`
+1. `jaeger_binary_port`
+1. `jaeger_compact_port`
+1. `zipkin_compact_port`
+
+Be sure to configure these ports for different instances.
+
+#### Virtual loopback interfaces
+
+You can save some port assignments by using virtual loopback interfaces
+(e.g. 127.0.0.1, 127.0.0.2, etc.) by changing the
+`tracer.jaeger.processor.host` variable. For example, on MacOS, you can
+create a loopback interface this way:
+
+```
+sudo ifconfig lo0 alias 127.0.0.2
+```
+
+Then you can save a few ports by changing your `gdk.yml`:
+
+```diff
+index f6179c3..c1d6be1 100644
+--- a/gdk.yml
++++ b/gdk.yml
+@@ -65,7 +65,7 @@ tracer:
+     version: 1.10.1
+-    health_check_http_port: 14269
+     health_check_http_port: 14270
+     processor:
+-      host: ''
++      host: '127.0.0.2'
+       jaeger_binary_port: 6832
+       jaeger_compact_port: 6831
+       zipkin_compact_port: 5775
+```
 
 ### Using custom ports
 
