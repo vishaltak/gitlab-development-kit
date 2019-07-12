@@ -100,6 +100,13 @@ module GDK
       t.jaeger do |j|
         j.enabled true
         j.version '1.10.1'
+        j.health_check_http_port 14269
+        j.processor do |p|
+          p.host ''
+          p.jaeger_binary_port 6832
+          p.jaeger_compact_port 6831
+          p.zipkin_compact_port 5775
+        end
       end
     end
 

@@ -38,7 +38,7 @@ registry: exec support/docker-registry
 #influxdb: exec influxdb/bin/influxd -config influxdb/influxdb.conf
 #grafana: exec support/wait-postgresql-ready support/exec-cd grafana bin/grafana-server -config grafana.ini
 #prometheus: exec docker run --net host -p 9090:9090 -v <%= config.gdk_root %>/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus:v2.8.1
-<%= '#' unless config.tracer.jaeger? %>jaeger: exec jaeger/jaeger-<%= config.tracer.jaeger.version %>/jaeger-all-in-one --memory.max-traces 512
+<%= '#' unless config.tracer.jaeger? %>jaeger: exec jaeger/jaeger-<%= config.tracer.jaeger.version %>/jaeger-all-in-one --memory.max-traces 512 --health-check-http-port <%= config.tracer.jaeger.health_check_http_port %> --processor.jaeger-binary.server-host-port <%= config.tracer.jaeger.processor.host %>:<%= config.tracer.jaeger.processor.jaeger_binary_port %> --processor.jaeger-compact.server-host-port <%= config.tracer.jaeger.processor.host %>:<%= config.tracer.jaeger.processor.jaeger_compact_port %> --processor.zipkin-compact.server-host-port <%= config.tracer.jaeger.processor.host %>:<%= config.tracer.jaeger.processor.zipkin_compact_port %>
 
 # Additional services
 #
