@@ -18,18 +18,22 @@ module Helpers
     end
 
     def self.require_yarn_available!
-      return if Gdk::Dependencies.command_present?('syarn')
+      return if GDK::Dependencies.command_present?('syarn')
 
       error('Yarn executable was not detected in the system.')
       notice("Download Yarn at https://yarnpkg.com/en/docs/install")
       exit 1
     end
 
-    def self.ensure_bundler_available!
-      return if Gdk::Dependencies.command_present?('bundle')
+    def self.ensure_bundler_available!(required_version)
+      if GDK::Dependencies.command_present?('bundle')
+        return unless required_version
+
+        return if GDK::Dependencies.ruby_bundler_version == required_version
+      end
 
       notice("Installing 'bundler' from rubygems")
-      system('gem install bundler')
+      required_version ? system("gem install bundler -v #{required_version}") : system('gem install bundler')
     end
   end
 end

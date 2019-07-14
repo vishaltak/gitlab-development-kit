@@ -3,18 +3,18 @@ require 'English'
 
 module GDK
   class Dependencies
-    def self.mysql_present?
-      `mysql_config --libs 2>/dev/null`
-
-      # if above command exits with 0 means mysql is available
-      $CHILD_STATUS.exitstatus.zero?
-    end
+    VERSION_REGEXP = /[0-9]+\.[0-9]+\.[0-9]+/.freeze
 
     def self.command_present?(command)
       `command -v #{command}`
 
       # if above command exits with 0 means command is available
       $CHILD_STATUS.exitstatus.zero?
+    end
+
+    def self.ruby_bundler_version
+      version_string = `bundle --versions`
+      version_string.match(VERSION_REGEXP).to_s
     end
   end
 end

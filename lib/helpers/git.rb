@@ -8,12 +8,21 @@ module Helpers
 
     # @param [String] repository
     # @param [String] dest_path
-    def clone(repository, dest_path)
+    # @param [Integer] depth number of commits to shallow clone, or nil to do a full clone
+    def clone(repository, dest_path, depth: 1)
       if File.exist?(dest_path)
         puts "Repository already exist"
+
         return
       end
-      `git clone #{repository} #{dest_path}`
+
+      `git clone #{convert_depth_arg(depth)} #{repository} #{dest_path}`
+    end
+
+    private
+
+    def convert_depth_arg(depth)
+      "--depth=#{depth}" if depth
     end
   end
 end

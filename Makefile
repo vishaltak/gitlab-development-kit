@@ -48,7 +48,6 @@ gitlab_pages_port = $(shell cat gitlab_pages_port 2>/dev/null || echo '3010')
 rails_bundle_install_cmd := bundle install --jobs 4 --without production $(if $(shell mysql_config --libs 2>/dev/null),--with,--without) mysql
 elasticsearch_version = 6.5.1
 elasticsearch_tar_gz_sha1 = 5903e1913a7c96aad96a8227517c40490825f672
-ruby_version = $(shell ruby -e 'puts RUBY_VERSION')
 workhorse_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
 gitlab_shell_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 gitaly_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
@@ -67,13 +66,8 @@ all: gitlab-setup gitlab-shell-setup gitlab-workhorse-setup gitlab-pages-setup s
 check-go-version:
 	bin/$@
 
-gitlab-setup: gitlab-rake-setup gitlab/.git gitlab-config bundler .gitlab-bundle yarn .gitlab-yarn .gettext
-
-gitlab-rake-setup:
+gitlab-setup:
 	rake gitlab:setup
-
-gitlab/.git:
-	git clone ${git_depth_param} ${gitlab_repo} gitlab
 
 gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
 
@@ -123,31 +117,6 @@ gitlab/config/resque.yml: redis/resque.yml.example
 
 gitlab/public/uploads:
 	mkdir $@
-
-.gitlab-bundle:
-	cd ${gitlab_development_root}/gitlab && $(rails_bundle_install_cmd)
-	touch $@
-
-.gitlab-yarn:
-	cd ${gitlab_development_root}/gitlab && yarn install --pure-lockfile
-	touch $@
-
-.gettext:
-	cd ${gitlab_development_root}/gitlab && bundle exec rake gettext:compile > ${gitlab_development_root}/gettext.log 2>&1
-	git -C ${gitlab_development_root}/gitlab checkout locale/*/gitlab.po
-	touch $@
-
-.PHONY: bundler
-bundler:
-	command -v $@ > /dev/null || gem install $@ -v 1.17.3
-
-.PHONY: yarn
-yarn:
-	@command -v $@ > /dev/null || {\
-		echo "Error: Yarn executable was not detected in the system.";\
-		echo "Download Yarn at https://yarnpkg.com/en/docs/install";\
-		exit 1;\
-	}
 
 # Set up gitlab-shell
 
@@ -649,10 +618,7 @@ touch-examples:
 
 unlock-dependency-installers:
 	rm -f \
-	.gitlab-bundle \
 	.gitlab-shell-bundle \
-	.gitlab-yarn \
-	.gettext \
 
 .PHONY: verify
 verify: verify-editorconfig
