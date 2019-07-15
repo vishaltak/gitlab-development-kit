@@ -65,16 +65,26 @@ sudo ifconfig lo0 alias 127.0.0.2
 Then you can save a few ports by changing your `gdk.yml`:
 
 ```diff
-index f6179c3..c1d6be1 100644
+diff --git a/gdk.yml b/gdk.yml
+index c1d6be1..23e55fe 100644
 --- a/gdk.yml
 +++ b/gdk.yml
-@@ -65,7 +65,7 @@ tracer:
+@@ -18,7 +18,7 @@ gitaly:
+ gitlab_pages:
+   enabled: true
+   port: 3034
+-hostname: localhost
++hostname: 127.0.0.2
+ https:
+   enabled: true
+ nginx:
+@@ -63,9 +63,8 @@ tracer:
+   jaeger:
+     enabled: true
      version: 1.10.1
 -    health_check_http_port: 14269
-     health_check_http_port: 14270
++    health_check_http_port: 14270
      processor:
--      host: ''
-+      host: '127.0.0.2'
        jaeger_binary_port: 6832
        jaeger_compact_port: 6831
        zipkin_compact_port: 5775

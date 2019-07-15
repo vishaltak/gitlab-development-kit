@@ -65,7 +65,6 @@ tracer:
     version: 1.10.1
     health_check_http_port: 14269
     processor:
-      host: '127.0.0.2'
       jaeger_binary_port: 6832
       jaeger_compact_port: 6831
       zipkin_compact_port: 5775
