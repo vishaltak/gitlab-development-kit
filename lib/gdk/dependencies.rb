@@ -12,9 +12,13 @@ module GDK
       $CHILD_STATUS.exitstatus.zero?
     end
 
-    def self.ruby_bundler_version
-      version_string = `bundle --versions`
+    def self.bundler_version
+      version_string = `bundle --version`
       version_string.match(VERSION_REGEXP).to_s
+    end
+
+    def self.bundler_missing_dependencies?(base_path)
+      !system 'bundle check', chdir: base_path, out: '/dev/null'
     end
   end
 end

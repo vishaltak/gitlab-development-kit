@@ -6,65 +6,69 @@ require 'pp'
 require 'lib/helpers/config'
 require 'lib/helpers/dependencies_finder'
 require 'lib/helpers/output_helpers'
+require 'lib/helpers/git'
 
 task :gdk_config do
   pp Helpers::Config.instance.config_data
 end
 
-task :bundler do
-  Helpers::DependenciesFinder.ensure_bundler_available!('1.17.3')
-end
-
-task :yarn do
-  Helpers::DependenciesFinder.require_yarn_available!
-end
-
 namespace :gitlab do
-  desc 'Install GitLab'
-  task :setup do
-    Helpers::DependenciesFinder.check_ruby_version!('2.6.3')
+  desc 'Install GitLab and its Ruby / Javascript dependencies'
+  task setup: [:prerequisites, 'gitlab', :config, :install_dependencies, 'gitlab/.gettext']
 
-    # Load GDK config
-    gdk_config = Helpers::Config.instance.config_data
-
-    # Clone GitLab repository
-    Helpers::Git.clone(gdk_config[:repositories][:gitlab], 'gitlab')
-
-    # Build GitLab config files
-    Rake::Task['gitlab:config'].invoke
-
-    # Check if bundler is available otherwise install it
-    Rake::Task['bundler'].invoke
-
-    # Run bundler
-    Rake::Task['gitlab:bundle_install'].invoke
-
-    # Check if yarn is available otherwise install it
-    Rake::Task['yarn'].invoke
-
-    # Run yarn
-    Rake::Task['gitlab:yarn_install'].invoke
-
-    # Compile GitLab I18n
-    Rake::Task['gitlab:gettext_compile']
-  end
-
+  desc 'Build GitLab config files'
   task :config do
-    system('make gitlab-config')
+    system 'make gitlab-config'
   end
+
+  desc 'Compile GitLab I18n'
+  task :gettext_compile do
+    system 'cd gitlab && bundle exec rake gettext:compile > gettext.log 2>&1'
+    system 'git -C gitlab checkout locale/*/gitlab.po'
+  end
+
+  #
+  # Private tasks (use as dependency only)
+  #
+
+  task :prerequisites do
+    Helpers::DependenciesFinder.check_ruby_version!('2.6.3')
+    Helpers::DependenciesFinder.ensure_bundler_available!('1.17.3')
+    Helpers::DependenciesFinder.require_yarn_available!
+  end
+
+  multitask install_dependencies: [:bundle_install, 'gitlab/node_modules']
 
   task :bundle_install do
-    system('bundle install --jobs 4 --without production')
+    next unless GDK::Dependencies.bundler_missing_dependencies?('gitlab')
+
+    system 'bundle install --jobs 4 --without production', chdir: 'gitlab'
   end
 
   task :yarn_install do
-    system('yarn install --pure-lockfile')
+    system 'yarn install --no-progress --pure-lockfile', chdir: 'gitlab'
   end
+end
 
-  task :gettext_compile do
-    system('cd gitlab && bundle exec rake gettext:compile > gettext.log 2>&1')
-    system('git -C gitlab checkout locale/*/gitlab.po')
-  end
+#
+# Bootstrap tasks (only run when setting up for the first time)
+#
+
+directory 'gitlab' do |t|
+  # Load GDK config
+  gdk_config = Helpers::Config.instance.config_data
+
+  Helpers::Git.clone_repo(gdk_config[:repositories][:gitlab], t.name)
+end
+
+directory 'gitlab/node_modules' do
+  Rake::Task['gitlab:yarn_install']
+end
+
+file 'gitlab/.gettext' do |t|
+  Rake::Task['gitlab:gettext_compile'].invoke
+
+  `touch #{t.name}`
 end
 
 # TODO: Cleanup below
@@ -86,7 +90,7 @@ end
 
 desc 'Generate an example config file with all the defaults'
 file 'gdk.example.yml' => 'clobber:gdk.example.yml' do |t|
-  File.open(t.name, File::CREAT|File::TRUNC|File::WRONLY) do |file|
+  File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY) do |file|
     config = Class.new(GDK::Config)
     config.define_method(:gdk_root) { '/home/git/gdk' }
     config.define_method(:username) { 'git' }

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+
 module Helpers
   class ConfigData
     def initialize(repositories = {})

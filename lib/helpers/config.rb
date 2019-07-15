@@ -3,6 +3,7 @@
 require 'erb'
 require 'yaml'
 require 'lib/helpers/output_helpers'
+require 'lib/helpers/erb_helper'
 
 module Helpers
   class Config
@@ -22,10 +23,10 @@ module Helpers
 
     def create_config!
       template_file = File.join(root_path, 'support/templates/gdk.yml.erb')
-      erb = ERB.new(File.read(template))
+      erb = ERB.new(File.read(template_file))
       erb.filename = template_file
 
-      yaml = erb.result(ConfigData.new)
+      yaml = erb.result(Helpers::ConfigData.new.get_binding)
       File.open(config_file, 'w') { |file| file.write(yaml) }
     end
 

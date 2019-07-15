@@ -14,11 +14,11 @@ module Helpers
       warn("You're using Ruby version #{RUBY_VERSION}.")
       warn("However we recommend using Ruby version #{required_version} for this repository.")
       notice("Press <ENTER> to continue installation or <CTRL-C> to abort")
-      gets
+      $stdin.gets
     end
 
     def self.require_yarn_available!
-      return if GDK::Dependencies.command_present?('syarn')
+      return if GDK::Dependencies.command_present?('yarn')
 
       error('Yarn executable was not detected in the system.')
       notice("Download Yarn at https://yarnpkg.com/en/docs/install")
@@ -29,7 +29,7 @@ module Helpers
       if GDK::Dependencies.command_present?('bundle')
         return unless required_version
 
-        return if GDK::Dependencies.ruby_bundler_version == required_version
+        return if GDK::Dependencies.bundler_version == required_version
       end
 
       notice("Installing 'bundler' from rubygems")

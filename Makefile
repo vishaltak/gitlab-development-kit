@@ -2,9 +2,6 @@
 
 -include env.mk
 
-gitlab_repo = https://gitlab.com/gitlab-org/gitlab-ce.git
-gitlab_repo_base = $(basename ${gitlab_repo})
-gitlab_repo_ruby_version = $(shell curl -s "${gitlab_repo_base}/raw/master/.ruby-version")
 gitlab_shell_repo = https://gitlab.com/gitlab-org/gitlab-shell.git
 gitlab_shell_clone_dir = go-gitlab-shell/src/gitlab.com/gitlab-org/gitlab-shell
 gitlab_workhorse_repo = https://gitlab.com/gitlab-org/gitlab-workhorse.git
