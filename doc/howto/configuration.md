@@ -41,7 +41,7 @@ template for this file.
 ### Customizing Jaeger ports
 
 To run mulitple instances of the GDK, you will have to configure Jaeger
-so that multiple processes an run simultaneously. Jaeger listens on four
+so that multiple processes can run simultaneously. Jaeger listens on four
 different ports:
 
 1. `health_check_http_port`
