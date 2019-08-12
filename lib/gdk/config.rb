@@ -180,7 +180,10 @@ module GDK
     end
 
     sshd do |s|
-      s.bin { find_executable!('sshd') || '/usr/sbin/sshd' }
+      s.enabled { read!('sshd_enabled') || false }
+      s.bin { read!('sshd_bin') || find_executable!('sshd') || '/usr/sbin/sshd' }
+      s.ip { read!('sshd_ip') || '0.0.0.0' }
+      s.port { read!('sshd_port') || 2222 }
     end
 
     git do |g|

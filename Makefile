@@ -34,7 +34,14 @@ port = $(shell (${auto_devops_enabled} && echo '443') || cat port 2>/dev/null ||
 https = $(shell (${auto_devops_enabled} && echo 'true') || cat https_enabled 2>/dev/null || echo 'false')
 relative_url_root = $(shell cat relative_url_root 2>/dev/null || echo '')
 username = $(shell whoami)
-sshd_bin = $(shell which sshd)
+sshd_bin = $(shell bin/config-read-key sshd_bin)
+sshd_ip = $(shell bin/config-read-key sshd_ip)
+sshd_port = $(shell bin/config-read-key sshd_port)
+nginx_ip = $(shell bin/config-read-key nginx_ip)
+nginx_https_port = $(shell bin/config-read-key nginx_https_port)
+nginx_workhorse_port = $(shell bin/config-read-key nginx_workhorse_port)
+nginx_ssl_certificate = $(shell bin/config-read-key nginx_ssl_certificate)
+nginx_ssl_key = $(shell bin/config-read-key nginx_ssl_key)
 registry_enabled = $(shell cat registry_enabled 2>/dev/null || echo 'false')
 registry_host = $(if $(filter true,$(auto_devops_enabled)),"$(auto_devops_registry_port).qa-tunnel.gitlab.info",$(shell cat registry_host 2>/dev/null || echo '127.0.0.1'))
 registry_external_port = $(if $(filter true,$(auto_devops_enabled)),443,$(shell cat registry_external_port 2>/dev/null || echo '5000'))
@@ -519,6 +526,8 @@ openssh/sshd_config: openssh/sshd_config.example
 	bin/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		-e "s/GDK_USERNAME/${username}/g" \
+		-e "s/GDK_SSHD_IP/${sshd_ip}/g" \
+		-e "s/GDK_SSHD_PORT/${sshd_port}/g" \
 		"$<"
 
 openssh/ssh_host_rsa_key:
