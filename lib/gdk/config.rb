@@ -96,7 +96,7 @@ module GDK
     end
 
     geo do |g|
-      g.enabled false
+      g.enabled { read_key('geo_enabled') || false }
     end
 
     elasticsearch do |e|
