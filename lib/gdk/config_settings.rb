@@ -6,6 +6,9 @@ module GDK
   class ConfigSettings
     SettingUndefined = Class.new(StandardError)
 
+    FILE = 'gdk.yml'
+    EXAMPLE_FILE = 'gdk.example.yml'
+
     attr_reader :parent, :yaml, :key
 
     def self.method_missing(name, *args, &blk)
@@ -31,7 +34,7 @@ module GDK
     def initialize(parent: nil, yaml: nil, key: nil)
       @parent = parent
       @key = key
-      @yaml = yaml || load_yaml!
+      @yaml = yaml || load_yaml!(FILE)
     end
 
     def dump!(file = nil)
@@ -91,6 +94,14 @@ module GDK
       value
     end
 
+    def read_key(key)
+      # Let's load these late, just in case we don't need them.
+      @gdk_yaml ||= flatten_hash(@yaml)
+      @gdk_example_yaml ||= flatten_hash(load_yaml!(EXAMPLE_FILE))
+
+      @gdk_yaml[key] || @gdk_example_yaml[key]
+    end
+
     def root
       parent&.root || self
     end
@@ -134,10 +145,10 @@ module GDK
       nil
     end
 
-    def load_yaml!
-      return {} unless defined?(self.class::FILE) && File.exist?(self.class::FILE)
+    def load_yaml!(file)
+      return {} unless defined?(file) && File.exist?(file)
 
-      @yaml = YAML.load_file(self.class::FILE) || {}
+      YAML.load_file(file) || {}
     end
 
     def from_yaml(key, default: nil)
@@ -145,8 +156,10 @@ module GDK
     end
 
     def sanitized_read!(filename)
-      value = File.read(filename).chomp
+      sanitize_value(File.read(filename).chomp)
+    end
 
+    def sanitize_value(value)
       return true if value == "true"
       return false if value == "false"
       return value.to_i if value == value.to_i.to_s
