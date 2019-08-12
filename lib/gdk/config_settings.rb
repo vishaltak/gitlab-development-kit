@@ -115,6 +115,16 @@ module GDK
 
     private
 
+    def flatten_hash(hash)
+      hash.each_with_object({}) do |(k, v), h|
+        next h[k] = v unless v.is_a? Hash
+
+        flatten_hash(v).map do |h_k, h_v|
+          h["#{k}_#{h_k}"] = h_v
+        end
+      end
+    end
+
     def enabled_value(method_name)
       chopped_name = method_name.to_s.chop.to_sym
 
