@@ -94,12 +94,15 @@ module GDK
       value
     end
 
-    def read_key(key)
+    def read_key(key, lookup_default: true)
       # Let's load these late, just in case we don't need them.
       @gdk_yaml ||= flatten_hash(@yaml)
       @gdk_example_yaml ||= flatten_hash(load_yaml!(EXAMPLE_FILE))
+      value = @gdk_yaml[key]
 
-      @gdk_yaml[key] || @gdk_example_yaml[key]
+      return value unless lookup_default
+
+      value || @gdk_example_yaml[key]
     end
 
     def root
