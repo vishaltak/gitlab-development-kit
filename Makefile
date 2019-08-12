@@ -42,6 +42,10 @@ nginx_https_port = $(shell bin/config-read-key nginx_https_port)
 nginx_workhorse_port = $(shell bin/config-read-key nginx_workhorse_port)
 nginx_ssl_certificate = $(shell bin/config-read-key nginx_ssl_certificate)
 nginx_ssl_key = $(shell bin/config-read-key nginx_ssl_key)
+<<<<<<< HEAD
+=======
+webpack_port = $(shell cat webpack_port 2>/dev/null || echo '3808')
+>>>>>>> b59dcac... Allow nginx to be more easily configured
 registry_enabled = $(shell cat registry_enabled 2>/dev/null || echo 'false')
 registry_host = $(if $(filter true,$(auto_devops_enabled)),"$(auto_devops_registry_port).qa-tunnel.gitlab.info",$(shell cat registry_host 2>/dev/null || echo '127.0.0.1'))
 registry_external_port = $(if $(filter true,$(auto_devops_enabled)),443,$(shell cat registry_external_port 2>/dev/null || echo '5000'))
@@ -538,6 +542,11 @@ nginx-setup: nginx/conf/nginx.conf nginx/logs nginx/tmp
 nginx/conf/nginx.conf: nginx/conf/nginx.conf.example
 	bin/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
+		-e "s|GDK_NGINX_IP|${nginx_ip}|g" \
+		-e "s|GDK_NGINX_WORKHORSE_PORT|${nginx_workhorse_port}|g" \
+		-e "s|GDK_NGINX_HTTPS_PORT|${nginx_https_port}|g" \
+		-e "s|GDK_NGINX_SSL_CERTIFICATE_FILENAME|${nginx_ssl_certificate}|g" \
+		-e "s|GDK_NGINX_SSL_CERTIFICATE_KEY_FILENAME|${nginx_ssl_key}|g" \
 		"$<"
 
 nginx/logs:

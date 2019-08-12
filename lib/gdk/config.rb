@@ -139,8 +139,11 @@ module GDK
     end
 
     nginx do |n|
-      n.enabled false
-      n.bin { find_executable!('nginx') || '/usr/sbin/nginx' }
+      n.enabled { read!('nginx_enabled') || false }
+      n.bin { read!('nginx_bin') || find_executable!('nginx') || '/usr/sbin/nginx' }
+      n.ip { read!('nginx_ip') || '0.0.0.0' }
+      n.https_port { read!('nginx_https_port') || 3443 }
+      n.workhorse_port { read!('nginx_workhorse_port') || 3333 }
       n.ssl do |s|
         s.certificate 'localhost.crt'
         s.key 'localhost.key'
