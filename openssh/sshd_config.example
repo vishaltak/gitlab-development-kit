@@ -1,7 +1,7 @@
 AllowUsers GDK_USERNAME
 AuthenticationMethods publickey
 HostKey /home/git/openssh/ssh_host_rsa_key
-ListenAddress 127.0.0.1:2222
+ListenAddress GDK_SSHD_IP:GDK_SSHD_PORT
 LogLevel VERBOSE
 PasswordAuthentication no
 PidFile none
@@ -11,5 +11,10 @@ UseLogin no
 UsePAM no
 UsePrivilegeSeparation no
 
+# Use on-disk authorized_keys file to determine key validity
 Match User GDK_USERNAME
 AuthorizedKeysFile /home/git/.ssh/authorized_keys
+
+# Use the DB to determine key validity
+#AuthorizedKeysCommand /home/git/gitlab-shell/bin/gitlab-shell-authorized-keys-check git %u %k
+#AuthorizedKeysCommandUser GDK_USERNAME
