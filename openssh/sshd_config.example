@@ -7,9 +7,9 @@ PasswordAuthentication no
 PidFile none
 Protocol 2
 StrictModes no
-UseLogin no
 UsePAM no
-UsePrivilegeSeparation no
+#UseLogin no
+#UsePrivilegeSeparation no
 
 # Use on-disk authorized_keys file to determine key validity
 Match User GDK_USERNAME
