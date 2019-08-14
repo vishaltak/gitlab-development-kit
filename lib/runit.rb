@@ -3,6 +3,8 @@ require_relative 'shellout'
 require_relative 'runit/config'
 
 module Runit
+  SV_WAIT_SECONDS = 15
+
   def self.start_runsvdir
     Dir.chdir($gdk_root)
 
@@ -39,7 +41,7 @@ module Runit
     start_runsvdir
     services = service_args(services)
     services.each { |svc| wait_runsv!(svc) }
-    exec('sv', cmd, *services)
+    exec('sv', '-w', SV_WAIT_SECONDS.to_s, cmd, *services)
   end
 
   def self.service_args(services)
