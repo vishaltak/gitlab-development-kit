@@ -41,4 +41,4 @@ to learn how to develop GitLab CE.
 - [Google OAuth2](google-oauth2.md)
 - [Unicorn](unicorn.md)
 - [Debugging with Pry](pry.md)
-- [OnBoarding Tour Setup](onboarding_tour.md)
+- [Working on Onboarding tour](onboarding_tour.md)
