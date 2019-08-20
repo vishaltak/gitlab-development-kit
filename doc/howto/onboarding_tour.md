@@ -27,15 +27,15 @@ production, there are a few steps required to get this working locally.
    end
    ```
 
-For local testing, if you want the onboarding to automatically appear for new users (that have no projects and have not previously dismissed the onboarding), the following patch needs to be made:
+For local testing, if you want the onboarding to automatically appear for new users (that have
+no projects and have not previously dismissed the onboarding), the following patch needs to be
+made to `ee/app/controllers/ee/dashboard/projects_controller.rb`:
 
-   `ee/app/controllers/ee/dashboard/projects_controller.rb`
+```diff
+def show_onboarding_welcome_page?
+- return false unless ::Gitlab.com?
+ return false if cookies['onboarding_dismissed'] == 'true'
 
-   ```diff
-   def show_onboarding_welcome_page?
-   - return false unless ::Gitlab.com?
-     return false if cookies['onboarding_dismissed'] == 'true'
-
-     ::Feature.enabled?(:user_onboarding) && !show_projects?(projects, params)
-   end
-   ```
+ ::Feature.enabled?(:user_onboarding) && !show_projects?(projects, params)
+end
+```
