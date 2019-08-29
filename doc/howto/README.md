@@ -1,6 +1,6 @@
 # How to use GitLab Development Kit
 
-See the [top level README](../../README.md#getting-started) for GDK
+Hello. See the [top level README](../../README.md#getting-started) for GDK
 installation instructions.
 
 Main purpose of GitLab Development Kit is to make GitLab development easier.
