@@ -13,6 +13,10 @@ module Runit
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
+  def self.services
+    Dir.children('./services').sort
+  end
+
   def self.start_runsvdir
     Dir.chdir($gdk_root)
 

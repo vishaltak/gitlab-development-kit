@@ -9,7 +9,7 @@ be more effective with Git. Run `rake git:configure` to set the recommendations
 for some repositories within the GDK.
 
 To set the configuration globally, run `rake git:configure[true]`. When using
-`zsh`, don't forget to escape the square brackets: `rake git:configure\[true\]`.
+`zsh`, don't forget to qoute the job name: `rake 'git:configure[true]'`.
 
 ## GDK configuration
 

@@ -5,9 +5,12 @@
 
 require_relative 'gdk/env'
 require_relative 'gdk/config'
+require_relative 'gdk/command'
 require_relative 'gdk/dependencies'
 require_relative 'gdk/erb_renderer'
 require_relative 'gdk/logo'
+require_relative 'git'
+require_relative 'git/repository'
 require_relative 'runit'
 
 module GDK

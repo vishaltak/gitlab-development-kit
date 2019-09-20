@@ -53,24 +53,11 @@ module Git
 
     def set_config(key, value)
       if @global
-        run_git(%W[config --global key value])
+        ::Git.run(%W[config --global key value])
       else
         gdk_repositories.each do |repo|
-          run_git(%W[config #{key} #{value}], repo_path: repo)
+          ::Git.run(%W[config #{key} #{value}], repo_path: repo)
         end
-      end
-    end
-
-    def run_git(args, repo_path: nil)
-      # Passing an array to IO.popen guards against sh -c.
-      # https://gitlab.com/gitlab-org/gitlab/blob/master/doc/development/shell_commands.md#bypass-the-shell-by-splitting-commands-into-separate-tokens
-      raise 'command must be an array' unless args.is_a?(Array)
-
-      args = args.unshift('git')
-      if repo_path
-        system(*args, chdir: repo_path)
-      else
-        system(*cmd)
       end
     end
   end

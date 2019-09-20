@@ -20,3 +20,7 @@ end
 def temp_path
   spec_path.parent.join('tmp')
 end
+
+def config
+  @config ||= GDK::Config.new
+end
