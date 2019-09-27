@@ -79,7 +79,7 @@ check-go-version:
 gitlab-setup: gitlab/.git check-ruby-version gitlab-config bundler .gitlab-bundle yarn .gitlab-yarn .gettext
 
 gitlab/.git:
-	git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir}
+	git clone ${git_depth_param} -b jv-increase-gitaly-timeout-during-seed-fu ${gitlab_repo} ${gitlab_clone_dir}
 
 gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
 
