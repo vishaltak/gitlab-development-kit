@@ -85,7 +85,49 @@ module Runit
     start_runsvdir
     services = service_args(services)
     services.each { |svc| wait_runsv!(svc) }
-    exec('sv', cmd, *services)
+    res = system('sv', cmd, *services)
+    display_ready_message if cmd == 'status'
+    res
+  end
+
+  def self.gdk_config
+    @gdk_config ||= GDK::Config.new
+  end
+
+  def self.display_ready_message
+    puts <<~EOS
+
+    INFO: #{rails_url} #{overall_status_message}
+    EOS
+  end
+
+  def self.overall_status_message
+    gitlab_ready? ? 'is ready!' : 'is not ready...'
+  end
+
+  def self.gitlab_ready?
+    case Net::HTTP.get_response(URI.parse(rails_sign_in_url))
+    when Net::HTTPSuccess, Net::HTTPFound
+      true
+    else
+      false
+    end
+  rescue
+    false
+  end
+
+  def self.rails_url_scheme
+    gdk_config.https? ? 'https' : 'http'
+  end
+
+  def self.rails_url
+    url = "#{rails_url_scheme}://#{gdk_config.hostname}"
+    url = "#{url}:#{gdk_config.port}" unless [80, 443].include?(gdk_config.port)
+    url
+  end
+
+  def self.rails_sign_in_url
+    "#{rails_url}/#{gdk_config.hostname}/users/sign_in"
   end
 
   def self.service_args(services)
