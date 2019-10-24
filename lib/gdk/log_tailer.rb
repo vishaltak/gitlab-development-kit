@@ -8,43 +8,46 @@ module GDK
     end
 
     def run
-      stat = File.stat(@log_path)
-      Thread.new { monitor(@log_path, stat.dev, stat.ino) }
+      # This thread will poll @log_path with stat to look for a change in file
+      # device number / inode number.
+      Thread.new { monitor(@log_path) }
 
       loop do
         return if want_shutdown?
 
-        my_pid = spawn('tail', '-f', @log_path)
-        synchronize(true) do
-          @pid = my_pid
+        current_tail_pid = nil
+        synchronize do
+          current_tail_pid = spawn('tail', '-f', @log_path)
+          @pid = current_tail_pid
         end
 
-        Process.wait(my_pid)
+        Process.wait(current_tail_pid) # Blocks until tail is terminated
       end
     end
 
     def want_shutdown?
-      synchronize(true) { @want_shutdown }
+      synchronize { @want_shutdown }
     end
 
-    # We can't use the mutex in a signal handler, so we have an option to bypass it.
-    def shutdown(use_mutex=true)
-      synchronize(use_mutex) { @want_shutdown = true }
-      stop_tail(use_mutex)
+    def shutdown
+      synchronize { @want_shutdown = true }
+      stop_tail
     end
 
     private
 
-    def synchronize(use_mutex)
-      if use_mutex
-        @mutex.synchronize { yield }
-      else
-        yield
-      end
+    def synchronize
+      @mutex.synchronize { yield }
     end
 
-    def monitor(log_path, dev, ino)
+    def monitor(log_path)
+      stat = File.stat(log_path)
+      dev = stat.dev
+      ino = stat.ino
+
       loop do
+        sleep 1
+
         stat = File.stat(log_path)
 
         if dev != stat.dev || ino != stat.ino
@@ -52,13 +55,11 @@ module GDK
           dev = stat.dev
           ino = stat.ino
         end
-
-        sleep 1
       end
     end
 
-    def stop_tail(use_mutex=true)
-      synchronize(use_mutex) do
+    def stop_tail
+      synchronize do
         return unless @pid
 
         Process.kill('TERM', @pid)

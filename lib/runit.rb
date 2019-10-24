@@ -125,12 +125,13 @@ module Runit
 
     tails = log_files(services).map { |log| GDK::LogTailer.new(log) }
 
+    wait = Thread.new { sleep }
+
     %w[INT TERM].each do |sig|
-      trap(sig) { tails.each { |t| t.shutdown(false) } }
+      trap(sig) { wait.kill }
     end
 
-    wait = Thread.new { sleep }
-    tails.each do |tail|
+    tail_threads = tails.map do |tail|
       Thread.new do
         tail.run
         wait.kill
@@ -138,7 +139,10 @@ module Runit
     end
 
     wait.join
+
     tails.each { |t| t.shutdown }
+    tail_threads.each(&:join)
+
     exit
   end
 
