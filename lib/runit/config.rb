@@ -146,7 +146,6 @@ module Runit
       log_config_template = <<~TEMPLATE
         # zip old log files
         !gzip
-        s10000
         # custom log prefix for <%= service %>
         p<%= ansi(color(index)) + log_label + ansi(0) %>
         # keep at most 1 old log file
