@@ -2,6 +2,7 @@
 
 require_relative 'shellout'
 require_relative 'runit/config'
+require_relative 'gdk/log_tailer'
 
 module Runit
   IGNORE_FOREMAN_FILE = '.ignore-foreman'
@@ -122,22 +123,22 @@ module Runit
   def self.tail(services)
     Dir.chdir($gdk_root)
 
-    tails = log_files(services).map { |log| spawn('tail', '-f', log) }
+    tails = log_files(services).map { |log| GDK::LogTailer.new(log) }
 
     %w[INT TERM].each do |sig|
-      trap(sig) { kill_processes(tails) }
+      trap(sig) { tails.each { |t| t.shutdown(false) } }
     end
 
     wait = Thread.new { sleep }
     tails.each do |tail|
       Thread.new do
-        Process.wait(tail)
+        tail.run
         wait.kill
       end
     end
 
     wait.join
-    kill_processes(tails)
+    tails.each { |t| t.shutdown }
     exit
   end
 
@@ -155,13 +156,4 @@ module Runit
       end
     end
   end
-
-  def self.kill_processes(pids)
-    pids.each do |pid|
-      begin
-        Process.kill('TERM', pid)
-      rescue Errno::ESRCH
-      end
-    end
-  end
-end
+ end
