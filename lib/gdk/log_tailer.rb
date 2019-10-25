@@ -23,10 +23,8 @@ module GDK
 
         Process.wait(current_tail_pid) # Blocks until tail is terminated
       end
-    end
-
-    def want_shutdown?
-      synchronize { @want_shutdown }
+    rescue => ex
+      print_exception(ex)
     end
 
     def shutdown
@@ -35,6 +33,14 @@ module GDK
     end
 
     private
+
+    def print_exception(ex)
+      warn "#{self.class}: fatal: #{ex}"
+    end
+
+    def want_shutdown?
+      synchronize { @want_shutdown }
+    end
 
     def synchronize
       @mutex.synchronize { yield }
@@ -50,12 +56,19 @@ module GDK
 
         stat = File.stat(log_path)
 
+        # If either of these values has changed, there is a new file at log_path
+        # now.
         if dev != stat.dev || ino != stat.ino
           stop_tail
+
           dev = stat.dev
           ino = stat.ino
         end
       end
+    rescue => ex
+      print_exception(ex)
+
+      shutdown # Make sure that #run gets unblocked and returns
     end
 
     def stop_tail
