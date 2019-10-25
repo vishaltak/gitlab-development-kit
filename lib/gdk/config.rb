@@ -29,6 +29,7 @@ module GDK
 
     gdk do |g|
       g.overwrite_changes false
+      g.pause_for_warnings true
     end
 
     repositories_root { config.gdk_root.join('repositories') }

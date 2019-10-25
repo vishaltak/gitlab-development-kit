@@ -10,6 +10,7 @@ elasticsearch:
   version: 6.5.1
 gdk:
   overwrite_changes: false
+  pause_for_warnings: true
 gdk_root: !ruby/object:Pathname
   path: "/home/git/gdk"
 geo:

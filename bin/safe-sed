@@ -4,6 +4,7 @@ set -euo pipefail
 IFS=$'\n\t'
 BACKUP_DIR=.backups
 OVERWRITE=$(ruby bin/config-read-key gdk.overwrite_changes)
+PAUSE=$(ruby bin/config-read-key gdk.pause_for_warnings)
 
 # Usage: safe-sed [dest-file-name] [sed-params]...
 # The first parameter is the destination file
@@ -46,8 +47,10 @@ if [[ -f "$dest_file" ]]; then
       echo "   touch ${dest_file}"
     fi
     echo "-------------------------------------------------------------------------------------------------------------"
+    if $PAUSE; then
     echo "... Waiting 5 seconds for previous warning to be noticed."
     sleep 5
+    fi
   fi
 else
   mv "${temp_file}" "${dest_file}"

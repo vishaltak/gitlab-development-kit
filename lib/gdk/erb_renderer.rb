@@ -37,10 +37,10 @@ module GDK
           backup!
 
           warn_overwritten!
-          wait!
+          wait! if pause_for_warnings?
         else
           warn_not_applied!
-          wait!
+          wait! if pause_for_warnings?
 
           return
         end
@@ -109,6 +109,10 @@ module GDK
       @backup_file ||=
         File.join(BACKUP_DIR,
                   target.gsub('/', '__').concat('.', Time.now.strftime('%Y%m%d%H%M%S')))
+    end
+
+    def pause_for_warnings?
+      config.gdk.pause_for_warnings
     end
 
     def config

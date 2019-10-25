@@ -16,7 +16,10 @@ describe GDK::ErbRenderer do
       foo 'foo'
       bar 'bar'
 
-      gdk { |g| g.overwrite_changes true }
+      gdk do |g|
+        g.overwrite_changes true
+        g.pause_for_warnings false
+      end
     end
   end
 
