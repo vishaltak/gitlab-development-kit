@@ -1,5 +1,7 @@
 module GDK
   class LogTailer
+    Inode = Struct.new(:dev, :ino)
+
     def initialize(log_path)
       @log_path = log_path
       @mutex = Mutex.new
@@ -47,28 +49,27 @@ module GDK
     end
 
     def monitor(log_path)
-      stat = File.stat(log_path)
-      dev = stat.dev
-      ino = stat.ino
+      previous_inode = inode(log_path)
 
       loop do
         sleep 1
 
-        stat = File.stat(log_path)
+        current_inode = inode(log_path)
 
-        # If either of these values has changed, there is a new file at log_path
-        # now.
-        if dev != stat.dev || ino != stat.ino
+        if current_inode != previous_inode
           stop_tail
-
-          dev = stat.dev
-          ino = stat.ino
+          previous_inode = current_inode
         end
       end
     rescue => ex
       print_exception(ex)
 
       shutdown # Make sure that #run gets unblocked and returns
+    end
+
+    def inode(path)
+      st = File.stat(path)
+      Inode.new(st.dev, st.ino)
     end
 
     def stop_tail
