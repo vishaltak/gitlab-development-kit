@@ -111,8 +111,8 @@ module GDK
     end
 
     object_store do |o|
-      o.enabled { read!('object_store_enabled') || false }
-      o.port { read!('object_store_port') || 9000 }
+      o.enabled { read!('object_store_enabled', deprecate_for: 'object_store.enabled') || false }
+      o.port { read!('object_store_port', deprecate_for: 'object_store.port') || 9000 }
     end
 
     gitlab_pages do |p|

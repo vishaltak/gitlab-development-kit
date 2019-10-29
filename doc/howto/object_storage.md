@@ -7,16 +7,21 @@ environment.
 In order to take advantage of the GDK integration you must first install
 [minio](https://docs.minio.io/docs/minio-quickstart-guide) binary (no docker image).
 
-You can enable the object store writing `true` in `object_store_enabled` file and
-reconfiguring your `gdk` installation.
+You can enable the object store in `gdk.yml`.
+
+```yaml
+object_store:
+  enabled: true
+```
+
+A reconfiguration is required then.
 
 ```sh
-echo true > object_store_enabled
 gdk reconfigure
 ```
 
 Object store port defaults to `9000` but it can be changed writing the desired value
-in `object_store_port`.
+with `object_store.port` in `gdk.yml`.
 
 Changing port number requires `gdk reconfigure`.
 

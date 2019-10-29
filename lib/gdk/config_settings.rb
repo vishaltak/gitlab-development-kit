@@ -84,8 +84,13 @@ module GDK
       result.empty? ? nil : result
     end
 
-    def read!(filename)
-      sanitized_read!(filename)
+    def read!(filename, deprecate_for: nil)
+      sanitized_read!(filename).tap do |value|
+        $stderr.puts <<~DEPRECATION if deprecate_for
+          WARNING: #{filename} is deprecated.
+          WARNING: Write '#{value}' as #{deprecate_for} in gdk.yml and remove #{filename} to get rid of this message
+        DEPRECATION
+      end
     rescue Errno::ENOENT
       nil
     end
