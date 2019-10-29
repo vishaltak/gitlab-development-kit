@@ -14,7 +14,7 @@ object_store:
   enabled: true
 ```
 
-A reconfiguration is required then.
+A reconfiguration is required now.
 
 ```sh
 gdk reconfigure
