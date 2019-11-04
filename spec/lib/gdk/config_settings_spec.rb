@@ -50,4 +50,61 @@ describe GDK::ConfigSettings do
       expect(config.array.first.buz).to eq('sub 0')
     end
   end
+
+  describe '#validate' do
+    class TestConfigSettings < GDK::ConfigSettings
+      FILE = 'tmp/foo.yml'
+
+      bar(type: :integer) { false }
+
+      foo do |f|
+        f.baz(type: :boolean) { false }
+      end
+    end
+
+    before do
+      File.write(temp_path.join('foo.yml'), config_values.to_yaml)
+    end
+
+    after do
+      File.unlink(temp_path.join('foo.yml'))
+    end
+
+    context 'with invalid values in foo.yml' do
+      let(:config_values) do
+        {
+          'bar' => true,
+          'foo' => {
+            'baz' => 1
+          }
+        }
+      end
+
+      it 'is not valid' do
+        config.validate
+        expect(config.error_messages).to contain_exactly('bar should be a integer', 'foo.baz should be a boolean')
+      end
+    end
+
+    context 'with valid values in foo.yml' do
+      let(:config_values) do
+        {
+          'bar' => 123,
+          'foo' => {
+            'baz' => true
+          }
+        }
+      end
+
+      it 'is valid' do
+        config.validate
+        expect(config.error_messages).to be_empty
+      end
+
+      it 'reads settings from yaml' do
+        expect(config.bar).to eq(123)
+        expect(config.foo.baz).to eq(true)
+      end
+    end
+  end
 end

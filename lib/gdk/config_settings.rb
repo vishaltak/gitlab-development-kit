@@ -6,9 +6,13 @@ module GDK
   class ConfigSettings
     SettingUndefined = Class.new(StandardError)
 
-    attr_reader :parent, :yaml, :key
+    attr_reader :parent, :yaml, :key, :invalid_types
 
-    def self.method_missing(name, *args, &blk)
+    def self.method_missing(name, *args, **opts, &blk)
+      if opts[:type]
+        expected_types[name] = opts[:type]
+      end
+
       if !args.empty?
         define_method(name) do
           yaml.fetch(name.to_s, args.first)
@@ -26,20 +30,19 @@ module GDK
       end
     end
 
+    def self.expected_types
+      @expected_types ||= Hash.new
+    end
+
     def initialize(parent: nil, yaml: nil, key: nil)
       @parent = parent
       @key = key
       @yaml = yaml || load_yaml!
+      @invalid_types = {}
     end
 
     def dump!(file = nil)
-      base_methods = ConfigSettings.new.methods
-
-      yaml = (methods - base_methods).sort.inject({}) do |hash, method|
-        # If a config starts with a double underscore,
-        # it's an internal config so don't dump it out
-        next hash if method.to_s.start_with?('__')
-
+      yaml = config_names.inject({}) do |hash, method|
         value = fetch(method)
         if value.is_a?(ConfigSettings)
           hash[method.to_s] = value.dump!
@@ -143,6 +146,24 @@ module GDK
       dump!.to_yaml
     end
 
+    def validate
+      config_names.each do |config_name|
+        value = fetch(config_name)
+
+        if value.is_a? ConfigSettings
+          validate_subconfig(config_name, value)
+        else
+          validate_value(config_name, value)
+        end
+      end
+    end
+
+    def error_messages
+      @invalid_types.map do |name, type|
+        "#{name} should be a #{type}"
+      end
+    end
+
     # Provide a shorter form for `config.setting.enabled` as `config.setting?`
     def method_missing(method_name, *args, &blk)
       enabled = enabled_value(method_name)
@@ -157,6 +178,40 @@ module GDK
     end
 
     private
+
+    def base_methods
+      ConfigSettings.new.methods
+    end
+
+    def config_names
+      (methods - base_methods).reject do |method|
+        # If a config starts with a double underscore,
+        # it's an internal config so don't include it
+        method.to_s.start_with?('__')
+      end.sort
+    end
+
+    def validate_subconfig(config_name, subconfig)
+      subconfig.validate
+      subconfig.invalid_types.each do |subconfig_name, expected_type|
+        @invalid_types["#{config_name}.#{subconfig_name}"] = expected_type
+      end
+    end
+
+    def validate_value(config_name, value)
+      expected_type = self.class.expected_types[config_name]
+
+      case expected_type
+      when :integer
+        unless value.is_a? Integer
+          @invalid_types[config_name.to_s] = expected_type
+        end
+      when :boolean
+        unless value.is_a? TrueClass or value.is_a? FalseClass
+          @invalid_types[config_name.to_s] = expected_type
+        end
+      end
+    end
 
     def enabled_value(method_name)
       chopped_name = method_name.to_s.chop.to_sym
