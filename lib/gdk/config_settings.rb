@@ -6,7 +6,7 @@ module GDK
   class ConfigSettings
     SettingUndefined = Class.new(StandardError)
 
-    attr_reader :parent, :yaml, :key, :invalid_types
+    attr_reader :parent, :yaml, :key, :invalid_configs
 
     def self.method_missing(name, *args, **opts, &blk)
       if opts[:type]
@@ -38,7 +38,7 @@ module GDK
       @parent = parent
       @key = key
       @yaml = yaml || load_yaml!
-      @invalid_types = {}
+      @invalid_configs = {}
     end
 
     def dump!(file = nil)
@@ -159,7 +159,7 @@ module GDK
     end
 
     def error_messages
-      @invalid_types.map do |name, type|
+      @invalid_configs.map do |name, type|
         "#{name} should be a #{type}"
       end
     end
@@ -193,8 +193,8 @@ module GDK
 
     def validate_subconfig(config_name, subconfig)
       subconfig.validate
-      subconfig.invalid_types.each do |subconfig_name, expected_type|
-        @invalid_types["#{config_name}.#{subconfig_name}"] = expected_type
+      subconfig.invalid_configs.each do |subconfig_name, expected_type|
+        @invalid_configs["#{config_name}.#{subconfig_name}"] = expected_type
       end
     end
 
@@ -204,11 +204,15 @@ module GDK
       case expected_type
       when :integer
         unless value.is_a? Integer
-          @invalid_types[config_name.to_s] = expected_type
+          @invalid_configs[config_name.to_s] = expected_type
+        end
+      when :string
+        unless value.is_a? String
+          @invalid_configs[config_name.to_s] = expected_type
         end
       when :boolean
         unless value.is_a? TrueClass or value.is_a? FalseClass
-          @invalid_types[config_name.to_s] = expected_type
+          @invalid_configs[config_name.to_s] = expected_type
         end
       end
     end

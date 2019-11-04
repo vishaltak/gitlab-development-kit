@@ -60,6 +60,8 @@ describe GDK::ConfigSettings do
       foo do |f|
         f.baz(type: :boolean) { false }
       end
+
+      faz('hello world', type: :string)
     end
 
     before do
@@ -76,13 +78,14 @@ describe GDK::ConfigSettings do
           'bar' => true,
           'foo' => {
             'baz' => 1
-          }
+          },
+          'faz' => 1234
         }
       end
 
       it 'is not valid' do
         config.validate
-        expect(config.error_messages).to contain_exactly('bar should be a integer', 'foo.baz should be a boolean')
+        expect(config.error_messages).to contain_exactly('bar should be a integer', 'foo.baz should be a boolean', 'faz should be a string')
       end
     end
 
@@ -104,6 +107,7 @@ describe GDK::ConfigSettings do
       it 'reads settings from yaml' do
         expect(config.bar).to eq(123)
         expect(config.foo.baz).to eq(true)
+        expect(config.faz).to eq('hello world')
       end
     end
   end
