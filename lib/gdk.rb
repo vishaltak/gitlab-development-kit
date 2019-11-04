@@ -4,7 +4,7 @@
 # part of the gitlab-development-kit gem so that we can iterate faster.
 
 require_relative 'gdk/env'
-require_relative 'gdk/config'
+require_relative 'gdk/config_command'
 require_relative 'gdk/dependencies'
 require_relative 'gdk/erb_renderer'
 require_relative 'gdk/logo'
@@ -78,15 +78,7 @@ module GDK
 
       true
     when 'config'
-      config_command = ARGV.shift
-      abort 'Usage: gdk config get path.to.the.conf.value' if config_command != 'get' || ARGV.empty?
-
-      begin
-        puts Config.new.dig(*ARGV)
-        true
-      rescue GDK::ConfigSettings::SettingUndefined
-        abort "Cannot get config for #{ARGV.join('.')}"
-      end
+      ConfigCommand.exec(ARGV.shift, ARGV)
     when 'reconfigure'
       remember!($gdk_root)
       exec(MAKE, 'touch-examples', 'unlock-dependency-installers', 'postgresql-sensible-defaults', 'all', chdir: $gdk_root)
