@@ -125,3 +125,12 @@ task 'preflight-checks' do
     exit 1
   end
 end
+
+desc 'Validate GDK configuration'
+task 'validate-config' do
+  config.validate
+
+  unless config.error_messages.empty?
+    abort "Invalid GDK configuration:\n#{config.error_messages.join("\n")}"
+  end
+end

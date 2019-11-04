@@ -45,6 +45,9 @@ module GDK
 
       puts "\n> Running `make self-update update`..\n\n"
       exec(MAKE, 'self-update', 'update', chdir: $gdk_root)
+
+      puts "\n> Running `make validate-config`..\n\n"
+      exec(MAKE, 'validate-config', chdir: $gdk_root)
     when 'diff-config'
       require_relative './config_diff.rb'
 
