@@ -58,7 +58,7 @@ module GDK
       env!('relative_url_root') || read!('relative_url_root') || '/'
     end
 
-    username(type: :string) { Etc.getlogin }
+    username(type: :string) { Etc.getpwuid.name }
 
     webpack do |w|
       w.host(type: :string) { read!('webpack_host') || '0.0.0.0' }
