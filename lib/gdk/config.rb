@@ -133,8 +133,8 @@ module GDK
     omniauth do |o|
       o.google_oauth2 do |g|
         g.enabled(type: :boolean) { !!read!('google_oauth_client_secret') }
-        g.client_id(type: :string) { read!('google_oauth_client_id') }
-        g.client_secret(type: :string) { read!('google_oauth_client_secret') }
+        g.client_id(type: :string) { read!('google_oauth_client_id') || '' }
+        g.client_secret(type: :string) { read!('google_oauth_client_secret') || '' }
       end
     end
 
