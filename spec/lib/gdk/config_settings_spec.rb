@@ -53,8 +53,6 @@ describe GDK::ConfigSettings do
 
   describe '#validate' do
     class TestConfigSettings < GDK::ConfigSettings
-      FILE = 'tmp/foo.yml'
-
       bar(type: :integer) { false }
 
       foo do |f|
@@ -64,15 +62,10 @@ describe GDK::ConfigSettings do
       faz('hello world', type: :string)
     end
 
-    before do
-      File.write(temp_path.join('foo.yml'), config_values.to_yaml)
-    end
 
-    after do
-      File.unlink(temp_path.join('foo.yml'))
-    end
+    subject(:config) { TestConfigSettings.new(yaml: config_values) }
 
-    context 'with invalid values in foo.yml' do
+    context 'with invalid config values' do
       let(:config_values) do
         {
           'bar' => true,
@@ -89,7 +82,7 @@ describe GDK::ConfigSettings do
       end
     end
 
-    context 'with valid values in foo.yml' do
+    context 'with valid config values' do
       let(:config_values) do
         {
           'bar' => 123,
