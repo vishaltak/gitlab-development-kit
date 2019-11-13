@@ -73,8 +73,13 @@ file 'nginx/conf/nginx.conf' => ['nginx/conf/nginx.conf.erb', GDK::Config::FILE]
 end
 
 desc 'Generate the gitlab.yml config file'
-file 'gitlab/config/gitlab.yml' => ['support/templates/gitlab.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
+file 'gitlab/config/gitlab.yml' => ['support/templates/gitlab.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end
+
+desc 'Generate openSSH server config file'
+file 'openssh/sshd_config' => ['support/templates/sshd_config.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
 desc "Generate gitaly config toml"

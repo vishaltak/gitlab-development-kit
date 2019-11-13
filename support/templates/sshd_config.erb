@@ -1,0 +1,20 @@
+AllowUsers <%= config.username %>
+AuthenticationMethods publickey
+HostKey <%= config.gdk_root.join('openssh', 'ssh_host_rsa_key') %>
+ListenAddress <%= config.sshd.host %>:<%= config.sshd.port %>
+LogLevel VERBOSE
+PasswordAuthentication no
+PidFile none
+Protocol 2
+StrictModes no
+UsePAM no
+#UseLogin no
+#UsePrivilegeSeparation no
+
+# Use on-disk authorized_keys file to determine key validity
+Match User <%= config.username %>
+AuthorizedKeysFile <%= config.gdk_root.join('.ssh', 'authorized_keys') %>
+
+# Use the DB to determine key validity
+AuthorizedKeysCommand <%= config.gdk_root.join('gitlab-shell', 'bin', 'gitlab-shell-authorized-keys-check') %> git %u %k
+AuthorizedKeysCommandUser <%= config.username %>

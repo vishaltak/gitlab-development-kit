@@ -219,7 +219,10 @@ module GDK
     end
 
     sshd do |s|
+      s.enabled false
       s.bin { find_executable!('sshd') || '/usr/sbin/sshd' }
+      s.port 2222
+      s.host { config.hostname }
     end
 
     git do |g|
