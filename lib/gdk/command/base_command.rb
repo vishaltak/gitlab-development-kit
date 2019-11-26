@@ -32,8 +32,7 @@ module GDK
       # Recover can have a non-zero execute and still clean up. If the recover
       # command is defined, execute it, and retry the original command
       def try_recover(error)
-        raise error unless defined?(recover_cmd)
-        raise error unless recover_cmd.count > 0
+        raise error unless recover_cmd && recover_cmd.count > 0
 
         begin
           run_cmd(recover_cmd)

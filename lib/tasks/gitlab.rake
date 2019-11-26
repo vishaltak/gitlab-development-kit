@@ -4,7 +4,6 @@ namespace :gitlab do
     task :checkout, :mr_id do |_t, args|
       mr_id = args[:mr_id].to_i
       raise 'Invalid MR ID' if mr_id < 1
-      raise 'Only works with Runit' unless Runit.enabled?
 
       gdk_root = config.gdk_root
       gitlab_dir = gdk_root.join('gitlab')
