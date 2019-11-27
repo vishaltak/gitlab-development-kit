@@ -201,7 +201,7 @@ ensure-databases-running: Procfile postgresql/data
 
 gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup
 	cd ${gitlab_development_root}/gitlab && \
-		bundle exec rake db:migrate db:test:prepare
+		bundle exec rake db:migrate
 
 gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
 
@@ -374,7 +374,7 @@ postgresql/geo-fdw/%/rebuild:
 geo-primary-migrate: ensure-databases-running
 	cd ${gitlab_development_root}/gitlab && \
 		bundle install && \
-		bundle exec rake db:migrate db:test:prepare geo:db:migrate geo:db:test:prepare && \
+		bundle exec rake db:migrate geo:db:migrate geo:db:test:prepare && \
 		git checkout -- db/schema.rb ee/db/geo/schema.rb
 	$(MAKE) postgresql/geo-fdw/test/rebuild
 
@@ -391,9 +391,7 @@ geo-secondary-migrate: ensure-databases-running
 	$(MAKE) postgresql/geo-fdw/development/rebuild
 
 .PHONY: geo-secondary-update
-geo-secondary-update:
-	-$(MAKE) update
-	$(MAKE) geo-secondary-migrate
+geo-secondary-update: update geo-secondary-migrate
 	gdk diff-config
 
 .ruby-version:

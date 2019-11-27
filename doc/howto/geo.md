@@ -233,30 +233,6 @@ Then you may delete or move that data in order to run `make geo-setup` again.
 $ mv postgresql-geo/data postgresql-geo/data.backup
 ```
 
-### GDK update command error on secondaries
-
-You will see the following error after running `gdk update` on your local Geo
-secondary. It is ok to ignore. Your local Geo secondary does not have or need a
-test DB, and this error occurs on the very last step of `gdk update`.
-
-```bash
-cd /Users/foo/Developer/gdk-geo/gitlab && \
-      bundle exec rake db:migrate db:test:prepare
-rake aborted!
-ActiveRecord::StatementInvalid: PG::ReadOnlySqlTransaction: ERROR:  cannot execute DROP DATABASE in a read-only transaction
-: DROP DATABASE IF EXISTS "gitlabhq_test"
-/Users/foo/.rbenv/versions/2.6.3/bin/bundle:23:in `load'
-/Users/foo/.rbenv/versions/2.6.3/bin/bundle:23:in `<main>'
-
-Caused by:
-PG::ReadOnlySqlTransaction: ERROR:  cannot execute DROP DATABASE in a read-only transaction
-/Users/foo/.rbenv/versions/2.6.3/bin/bundle:23:in `load'
-/Users/foo/.rbenv/versions/2.6.3/bin/bundle:23:in `<main>'
-Tasks: TOP => db:test:load => db:test:purge
-(See full trace by running task with --trace)
-make: *** [gitlab-update] Error 1
-```
-
 ### FDW is no longer working even though you have it enabled, after migrations or `gdk update`
 
 You need to rebuild FDW tables.
