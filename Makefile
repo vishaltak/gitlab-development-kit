@@ -374,9 +374,8 @@ postgresql/geo-fdw/%/rebuild:
 geo-primary-migrate: ensure-databases-running
 	cd ${gitlab_development_root}/gitlab && \
 		bundle install && \
-		bundle exec rake db:migrate geo:db:migrate geo:db:test:prepare && \
+		bundle exec rake db:migrate geo:db:migrate geo:db:test:prepare geo:db:refresh_foreign_tables && \
 		git checkout -- db/schema.rb ee/db/geo/schema.rb
-	$(MAKE) postgresql/geo-fdw/test/rebuild
 
 .PHONY: geo-primary-update
 geo-primary-update: update geo-primary-migrate
@@ -386,9 +385,8 @@ geo-primary-update: update geo-primary-migrate
 geo-secondary-migrate: ensure-databases-running
 	cd ${gitlab_development_root}/gitlab && \
 		bundle install && \
-		bundle exec rake geo:db:migrate && \
+		bundle exec rake geo:db:migrate geo:db:refresh_foreign_tables && \
 		git checkout -- db/schema.rb ee/db/geo/schema.rb
-	$(MAKE) postgresql/geo-fdw/development/rebuild
 
 .PHONY: geo-secondary-update
 geo-secondary-update: update geo-secondary-migrate

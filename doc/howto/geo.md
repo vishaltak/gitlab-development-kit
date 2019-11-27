@@ -237,23 +237,18 @@ $ mv postgresql-geo/data postgresql-geo/data.backup
 
 You need to rebuild FDW tables.
 
-If your local primary is in `~/Developer/gdk`:
+First try:
 
 ```bash
-cd ~/Developer/gdk
-gdk start
-make postgresql/geo-fdw/test/rebuild
+bundle exec rake geo:db:refresh_foreign_tables
 ```
 
-And if your local secondary is in `~/Developer/gdk-geo`:
+If that isn't enough, then recreate the foreign server. From your GDK directory:
 
 ```bash
-cd ~/Developer/gdk-geo
-gdk start
-make postgresql/geo-fdw/development/rebuild
+gdk start postgresql postgresql-geo
+make postgresql/geo-fdw/development/rebuild postgresql/geo-fdw/test/rebuild
 ```
-
-Also see [Useful aliases](#useful-aliases) above.
 
 ## Enabling Docker Registry replication
 
