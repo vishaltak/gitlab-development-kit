@@ -387,7 +387,7 @@ geo-secondary-migrate: ensure-databases-running
 	cd ${gitlab_development_root}/gitlab && \
 		bundle install && \
 		bundle exec rake geo:db:migrate && \
-		git checkout -- ee/db/geo/schema.rb
+		git checkout -- db/schema.rb ee/db/geo/schema.rb
 	$(MAKE) postgresql/geo-fdw/development/rebuild
 
 .PHONY: geo-secondary-update
