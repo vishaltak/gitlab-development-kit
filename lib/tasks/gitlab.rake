@@ -16,7 +16,7 @@ namespace :gitlab do
       commands.append(
         GDK::Command::Git.new(%w[add .], repo: gitlab_dir, desc: 'Adding changed file to the Git index'),
         GDK::Command::Git.new(%w[stash], repo: gitlab_dir, desc: 'Stashing the current changes'),
-        Rake::Task['db:rollback'],
+        GDK::Command::Rake.new('db:rollback', desc: 'Rolling back migrations'),
         GDK::Command::Git.new(%w[checkout HEAD -- db/schema.rb], repo: gitlab_dir, desc: 'Cleaning dirty db/schema.rb'),
         GDK::Command::Git.new(%W[fetch -f origin #{mr_ref}:#{mr_ref}], repo: gitlab_dir, desc: 'Fetching the merge request Git Data'),
         GDK::Command::Git.new(%W[checkout #{mr_ref}], repo: gitlab_dir, desc: 'Checking out the merge requests last commit'),
@@ -28,11 +28,12 @@ namespace :gitlab do
         GDK::Command::RestartService.new('webpack'),
         GDK::Command::Make.new('gitaly-update', recover_cmd: %w[make gitaly-setup], desc: 'Installing the required Gitaly version'),
         GDK::Command::RestartService.new('gitaly'),
-        GDK::Command::Make.new('gitlab-pages-update', recover_cmd: %w[make gitlab-pages-setup], desc: 'Installing the require GitLab Pages version'),
+        GDK::Command::Make.new('gitlab-pages-update', recover_cmd: %w[make gitlab-pages-setup], desc: 'Installing the required GitLab Pages version'),
         GDK::Command::RestartService.new('gitlab-pages'),
         GDK::Command::Make.new('gitlab-workhorse-update', recover_cmd: %w[make gitlab-workhorse-update], desc: 'Installing the required GitLab Workhorse server'),
         GDK::Command::RestartService.new('gitlab-workhorse'),
-        Rake::Task['db:migrate']
+        GDK::Command::Make.new('gitlab-shell-update', recover_cmd: %w[make gitlab-shell-update], desc: 'Installing the required GitLab Shell'),
+        GDK::Command::Rake.new('db:migrate', desc: 'Run migrations')
       )
 
       commands.each(&:invoke)
