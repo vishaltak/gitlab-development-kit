@@ -76,8 +76,6 @@ More information can be found in the [configuration documentation](configuration
 
 In the root of your GitLab Development Kit, a rake task is present that allows
 you to jump to any `gitlab-org/gitlab` merge request that's less that 2000 commits
-behind.
-
-This rake task depends on [Runit](../runit.md). When runit is enabled, run
-`rake gitlab:mr:checkout[<mr_id>]`. This task takes care of migrations, Ruby
+behind. Run `rake gitlab:mr:checkout[<mr_id>]`, when using `zsh` you'll want to
+run `rake 'gitlab:mr:checkout[<mr_id]`. This task takes care of migrations, Ruby
 and JavaScript dependencies, and reloading Rails, Sidekiq, and others.
