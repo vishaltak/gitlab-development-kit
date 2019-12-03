@@ -7,9 +7,8 @@ gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = go-gitlab-shell/src/gitlab.com/gitlab-org/gitlab-shell
 gitlab_workhorse_clone_dir = gitlab-workhorse/src/gitlab.com/gitlab-org/gitlab-workhorse
 gitaly_gopath = $(abspath ./gitaly)
-gitaly_clone_dir = ${gitaly_gopath}/src/gitlab.com/gitlab-org/gitaly
+gitaly_clone_dir = gitaly
 gitlab_pages_clone_dir = gitlab-pages/src/gitlab.com/gitlab-org/gitlab-pages
-gitaly_assembly_dir = ${gitlab_development_root}/gitaly/assembly
 gitlab_from_container = $(shell [ "$(shell uname)" = "Linux" ] && echo 'localhost' || echo 'docker.for.mac.localhost')
 postgres_dev_db = gitlabhq_development
 rails_bundle_install_cmd = bundle install --jobs 4 --without production
@@ -129,12 +128,12 @@ gitlab-shell/.gitlab_shell_secret:
 gitaly-setup: gitaly/bin/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
 
 ${gitaly_clone_dir}/.git:
+	test -e gitaly && mv gitaly $(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S)
 	git clone --quiet --branch "${gitaly_version}" ${git_depth_param} ${gitaly_repo} ${gitaly_clone_dir}
 
 .PHONY: gitaly/gitaly.config.toml
 gitaly/gitaly.config.toml:
 	rake gitaly/gitaly.config.toml
-
 
 .PHONY: gitaly/praefect.config.toml
 gitaly/praefect.config.toml:
@@ -230,16 +229,12 @@ gitaly/.git/pull: ${gitaly_clone_dir}/.git
 		git checkout "${gitaly_version}"
 
 gitaly-clean:
-	rm -rf ${gitaly_assembly_dir}
 	rm -rf gitlab/tmp/tests/gitaly
 
 .PHONY: gitaly/bin/gitaly
 gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
-	$(MAKE) -C ${gitaly_clone_dir} assemble ASSEMBLY_ROOT=${gitaly_assembly_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="${tracer_build_tags}"
-	mkdir -p ${gitlab_development_root}/gitaly/bin
-	ln -sf ${gitaly_assembly_dir}/bin/* ${gitlab_development_root}/gitaly/bin
-	rm -rf ${gitlab_development_root}/gitaly/ruby
-	ln -sf ${gitaly_assembly_dir}/ruby ${gitlab_development_root}/gitaly/ruby
+	$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="${tracer_build_tags}"
+	cd gitaly && (test -e bin || ln -s . bin) # Compatibility with Gitaly versions before bin symlink
 
 # Set up supporting services
 
