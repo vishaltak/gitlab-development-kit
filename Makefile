@@ -125,7 +125,7 @@ gitlab-shell/.gitlab_shell_secret:
 
 # Set up gitaly
 
-gitaly-setup: gitaly/bin/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
+gitaly-setup: gitaly/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
 
 ${gitaly_clone_dir}/.git:
 	test -e gitaly && mv gitaly $(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S)
@@ -219,7 +219,7 @@ gitlab-shell/.git/pull:
 		git fetch --all --tags --prune && \
 		git checkout "${gitlab_shell_version}"
 
-gitaly-update: gitaly/.git/pull gitaly-clean gitaly/bin/gitaly
+gitaly-update: gitaly/.git/pull gitaly-clean gitaly/gitaly
 
 .PHONY: gitaly/.git/pull
 gitaly/.git/pull: ${gitaly_clone_dir}/.git
@@ -231,11 +231,10 @@ gitaly/.git/pull: ${gitaly_clone_dir}/.git
 gitaly-clean:
 	rm -rf gitlab/tmp/tests/gitaly
 
-.PHONY: gitaly/bin/gitaly
-gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
+.PHONY: gitaly/gitaly
+gitaly/gitaly: ${gitaly_clone_dir}/.git
 	$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="${tracer_build_tags}"
-	cd gitaly && (test -e bin || ln -s . bin) # Compatibility with Gitaly versions before bin symlink
-
+	
 # Set up supporting services
 
 support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup
