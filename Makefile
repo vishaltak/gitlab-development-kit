@@ -232,9 +232,11 @@ gitaly-clean:
 	rm -rf gitlab/tmp/tests/gitaly
 
 .PHONY: gitaly/bin/gitaly
-gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
+gitaly/bin/gitaly: gitaly/bin
 	$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="${tracer_build_tags}"
-	cd gitaly && (test -e bin || ln -s . bin) # Compatibility with Gitaly versions before bin symlink
+
+gitaly/bin: ${gitaly_clone_dir}/.git
+	cd gitaly && ln -s . bin # Hack to avoid changing Gitaly executable paths in Procfile
 
 # Set up supporting services
 
