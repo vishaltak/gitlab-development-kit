@@ -1,3 +1,3 @@
 module GDK
-  GEM_VERSION = '0.2.5'.freeze
+  GEM_VERSION = '0.3.0'.freeze
 end

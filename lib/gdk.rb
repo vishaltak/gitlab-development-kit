@@ -3,6 +3,18 @@
 # This file is loaded by the 'gdk' command in the gem. This file is NOT
 # part of the gitlab-development-kit gem so that we can iterate faster.
 
+unless defined?(GDK::GEM_VERSION)
+  puts "Please install `gitlab-development-kit` gem"
+
+  exit(-1)
+end
+
+unless Gem::Version.new(GDK::GEM_VERSION) > Gem::Version.new('0.2.5')
+  puts "Please upgrade `gitlab-development-kit` gem"
+
+  exit(-1)
+end
+
 require_relative 'gdk/env'
 require_relative 'gdk/config'
 require_relative 'gdk/command'
