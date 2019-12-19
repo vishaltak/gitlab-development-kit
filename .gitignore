@@ -1,5 +1,6 @@
 .DS_Store
 .idea
+.known_diffs.txt
 gdk-ce/**
 gdk-ee/**
 gitlab-development-kit/**
