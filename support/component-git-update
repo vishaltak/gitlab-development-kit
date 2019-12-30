@@ -17,12 +17,11 @@ def main(component, worktree, revision)
   Dir.chdir(worktree)
 
   [
-    [%w[git stash], false],
-    [%w[git fetch --all --tags --prune], true],
-    [%W[git checkout #{revision}], true]
-  ].each do |cmd, print_stdout|
-    out = print_stdout ? $stdout : :close
-    next if system(*cmd, out: out)
+    %w[git stash --quiet],
+    %w[git fetch --all --tags --prune],
+    %W[git checkout #{revision}],
+  ].each do |cmd|
+    next if system(*cmd)
 
     abort "command failed: #{cmd.join(' ')}"
   end
