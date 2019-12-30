@@ -5,17 +5,14 @@ require_relative '../lib/gdk/config'
 
 PROGNAME = File.basename(__FILE__)
 
-def main(component, worktree, revision)
+def auto_update_component?(component)
   config = GDK::Config.new[component]
   abort "unknown component: #{component.inspect}" unless config
 
-  unless config.auto_update
-    warn "#{PROGNAME}: auto update for #{component} is disabled via gdk.yml"
-    exit
-  end
+  config.auto_update
+end
 
-  Dir.chdir(worktree)
-
+def update_component(revision)
   [
     %w[git stash --quiet],
     %w[git fetch --all --tags --prune],
@@ -25,6 +22,17 @@ def main(component, worktree, revision)
 
     abort "command failed: #{cmd.join(' ')}"
   end
+end
+
+def main(component, worktree, revision)
+  unless auto_update_component?(component)
+    warn "#{PROGNAME}: auto update for #{component} is disabled via gdk.yml"
+    exit
+  end
+
+  Dir.chdir(worktree)
+
+  update_component(revision)
 end
 
 abort "usage: #{PROGNAME} COMPONENT WORKTREE REVISION" if ARGV.count!= 3
