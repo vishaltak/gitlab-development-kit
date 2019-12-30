@@ -2,8 +2,29 @@
 # frozen_string_literal: true
 
 require_relative '../lib/gdk/config'
+require_relative '../lib/shellout.rb'
 
 PROGNAME = File.basename(__FILE__)
+
+def worktree_status
+  @worktree_status ||= Shellout.new(%w[git diff --stat]).run
+end
+
+def warn_if_git_stash
+  return if worktree_status.empty?
+
+  warn <<~EOS
+
+  ~~~~~~~~~~~~~~~~~~~~~~~ WARNING ~~~~~~~~~~~~~~~~~~~~~~~
+  We're stashing the following changes with `git stash`:
+
+  #{worktree_status}
+
+  To restore these changes, run `git stash pop`.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  EOS
+end
 
 def auto_update_component?(component)
   config = GDK::Config.new[component]
@@ -31,6 +52,7 @@ def main(component, worktree, revision)
   end
 
   Dir.chdir(worktree)
+  warn_if_git_stash
 
   update_component(revision)
 end
