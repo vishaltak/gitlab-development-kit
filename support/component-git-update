@@ -33,10 +33,12 @@ def auto_update_component?(component)
   config.auto_update
 end
 
-def update_component(revision)
+def update_component(revision, fetch_all)
+  fetch_args = fetch_all ? %w[--all --tags] : []
+
   [
     %w[git stash --quiet],
-    %w[git fetch --all --tags --prune],
+    %W[git fetch --prune] + fetch_args,
     %W[git checkout #{revision}],
   ].each do |cmd|
     next if system(*cmd)
@@ -54,7 +56,10 @@ def main(component, worktree, revision)
   Dir.chdir(worktree)
   warn_if_git_stash
 
-  update_component(revision)
+  # We don't want to perform a `git fetch --all --tags` if we're updating
+  # gitlab/
+  fetch_all = component != 'gitlab'
+  update_component(revision, fetch_all)
 end
 
 abort "usage: #{PROGNAME} COMPONENT WORKTREE REVISION" if ARGV.count!= 3

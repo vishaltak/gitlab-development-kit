@@ -202,9 +202,9 @@ gitlab/.git/pull:
 	@echo "Updating gitlab to current master.."
 	@echo "-------------------------------------------------------"
 	$(Q)cd ${gitlab_development_root}/gitlab && \
-		git checkout -- Gemfile.lock db/schema.rb ${QQ} && \
-		git stash ${QQ} && \
-		git checkout master ${QQ} && \
+		git checkout -- Gemfile.lock db/schema.rb ${QQ}
+	$(Q)support/component-git-update gitlab "${gitlab_development_root}/gitlab" master
+	$(Q)cd ${gitlab_development_root}/gitlab && \
 		git pull --ff-only ${QQ}
 
 gitlab-shell/.git/pull:

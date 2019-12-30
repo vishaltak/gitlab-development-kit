@@ -34,6 +34,10 @@ module GDK
       g.ignore_foreman { read!('.ignore-foreman') || false }
     end
 
+    gitlab do |g|
+      g.auto_update { true }
+    end
+
     repositories_root { config.gdk_root.join('repositories') }
 
     hostname do

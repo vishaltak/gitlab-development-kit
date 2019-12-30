@@ -22,6 +22,8 @@ git:
   bin: "/usr/bin/git"
 git_repositories:
 - "/home/git/gdk/."
+gitlab:
+  auto_update: true
 gitaly:
   address: !ruby/object:Pathname
     path: "/home/git/gdk/gitaly.socket"
