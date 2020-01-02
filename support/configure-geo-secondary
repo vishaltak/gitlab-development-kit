@@ -1,0 +1,108 @@
+#!/bin/bash
+
+#
+# Usage:
+#
+# Call it from the Geo secondary GDK directory, and give it the path
+# to the Geo primary GDK directory.
+#
+#   ./support/configure-geo-secondary ../gdk
+#
+
+gdk_geo_path="$(pwd)"
+
+if [[ ! -d "$gdk_geo_path/gitlab" ]]; then
+  echo "Error: There is no gitlab subdirectory in $gdk_geo_path"
+  exit 1
+fi
+
+gdk_path=$1
+
+if [[ -z "$gdk_path" ]]; then
+  echo "Error: Primary GDK path must not be empty"
+  exit 1
+fi
+if [[ ! -e "$gdk_path" ]]; then
+  echo "Error: Primary GDK path $gdk_path does not exist"
+  exit 1
+fi
+if [[ ! -d "$gdk_path/gitlab" ]]; then
+  echo "Error: Is $gdk_path a GDK directory? There is no gitlab subdirectory."
+  exit 1
+fi
+if [[ "${gdk_path:0:1}" == "." ]]; then
+  # Transform relative path to absolute
+  cd "$gdk_path"
+  gdk_path="$(pwd)"
+fi
+
+echo "Primary GDK directory: $gdk_path"
+echo "Secondary GDK directory: $gdk_geo_path"
+
+read -p "WARNING: The postgresql DB will be deleted. Also, this script is experimental and can easily break both GDKs. Proceed? [Y/n]: " -n 1 -r conf
+echo
+if [[ "$conf" != "Y" ]]; then
+  echo "Exiting."
+  exit
+fi
+
+if [[ ! -e "$gdk_geo_path/gdk.yml" ]]; then
+  echo "Creating Geo secondary default gdk.yml file"
+  cp "$gdk_geo_path/gdk.geo-example.yml" "$gdk_geo_path/gdk.yml"
+fi
+
+echo "Start databases already"
+cd "$gdk_path"
+gdk start postgresql
+cd "$gdk_geo_path"
+gdk start postgresql
+sleep 15
+
+echo "Prepare primary for replication"
+cd "$gdk_path"
+make postgresql-replication-primary
+gdk restart postgresql
+sleep 15
+make postgresql-replication-primary-create-slot
+gdk restart postgresql
+sleep 15
+
+echo "Set up replication on secondary"
+cd "$gdk_geo_path"
+rm -r postgresql
+ln -s "$gdk_path/postgresql" postgresql-primary
+make postgresql-replication-secondary
+sleep 15
+
+echo "Set up tracking database on secondary"
+cd "$gdk_geo_path"
+gdk restart postgresql
+sleep 15
+make geo-setup
+
+echo "Set up tracking database on primary to run tests"
+cd "$gdk_path"
+make geo-setup
+
+echo "Copy database encryption key to secondary"
+ruby -e "
+  require 'yaml'
+  secondary_file_path = '$gdk_geo_path/gitlab/config/secrets.yml'
+  primary = YAML.load_file('$gdk_path/gitlab/config/secrets.yml')
+  db_key_base = primary['development']['db_key_base']
+  secondary = YAML.load_file(secondary_file_path)
+  secondary['development']['db_key_base'] = db_key_base
+  File.open(secondary_file_path, 'w') { |f| YAML.dump(secondary, f) }"
+
+echo "Add primary node"
+cd "$gdk_path/gitlab"
+bin/rake geo:set_primary_node
+
+echo "Gather secondary node name and external url"
+cd "$gdk_geo_path/gitlab"
+secondary_name=$(bin/rails runner 'print GeoNode.current_node_name')
+secondary_url=$(bin/rails runner 'print Gitlab.config.gitlab.url')
+
+echo "Add secondary node with name: \"$secondary_name\" and url: \"$secondary_url\""
+cd "$gdk_path/gitlab"
+bin/rails runner "puts GeoNode.create!(name: \"$secondary_name\", url: \"$secondary_url\")"

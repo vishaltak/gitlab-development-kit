@@ -1,0 +1,13 @@
+---
+geo:
+  enabled: true
+gitlab_pages:
+  enabled: false
+  port: 3011
+tracer:
+  jaeger:
+    enabled: false
+port: 3001
+webpack:
+  port: 3809
+
