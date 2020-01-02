@@ -8,7 +8,7 @@ module GDK
       last_error = nil
 
       cmd = psql_cmd + %W[-d template1 -c #{''}]
-      10.times do
+      20.times do
         shellout = Shellout.new(cmd)
         shellout.run
         last_error = shellout.read_stderr
