@@ -8,7 +8,7 @@ found in the GitLab Team 1password vault.
 
 ## Enable EKS Integration
 
-To enable the EKS integration within your GKE instance, follow the same [steps
+To enable the EKS integration within your GDK instance, follow the same [steps
 outlined for self-managed instances](https://docs.gitlab.com/ee/user/project/clusters/add_remove_clusters.html#additional-requirements-for-self-managed-instances) and use the
 `AWS gitlab-local-user` credentials found within 1Password. You do not need
 to create your own IAM user.
