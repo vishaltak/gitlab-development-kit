@@ -13,7 +13,7 @@ outlined for self-managed instances](https://docs.gitlab.com/ee/user/project/clu
 `AWS gitlab-local-user` credentials found within 1Password. You do not need
 to create your own IAM user.
 
-## Authenticating with AWK EKS
+## Authenticating with AWS EKS
 
 To authenticate with AWS EKS, you first must create a provision role. Follow step 4 under
 [Creating the cluster on EKS](https://docs.gitlab.com/ee/user/project/clusters/add_remove_clusters.html#creating-the-cluster-on-eks)
