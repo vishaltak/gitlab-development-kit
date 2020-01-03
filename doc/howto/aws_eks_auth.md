@@ -21,4 +21,4 @@ and use the following:
 
 1. Under policy, choose `gitlab-local-role-policy`.
 1. Format your role name as follows: `[name]-local-provision-role` with `[name]` being
-your first and/or last name.
+your `gitlab.com` handle.
