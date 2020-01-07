@@ -9,6 +9,7 @@ stages:
 - build
 - test
 - verify
+- publish
 
 .docs-changes:
   only:
@@ -72,11 +73,20 @@ build:image:
     - ./bin/docker build
     - ./bin/docker store
     - test -n "$CI_BUILD_TOKEN" || exit 0
-    - ./bin/docker publish
+    - ./bin/docker push
   cache:
       key: "docker-build-cache"
       paths:
         - ./latest_image.tar
+
+publish:image:
+  stage: publish
+  image: docker:git
+  script:
+    - ./bin/docker publish
+  only:
+    refs:
+      - master
 
 test:docs_lint:
   extends: .docs-changes
