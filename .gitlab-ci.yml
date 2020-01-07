@@ -3,7 +3,7 @@ services:
 
 variables:
   DOCKER_DRIVER: overlay
-  TEST_IMAGE: registry.gitlab.com/gitlab-org/gitlab-development-kit:latest
+  TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
 stages:
 - build
@@ -73,7 +73,6 @@ build:image:
     - ./bin/docker store
     - test -n "$CI_BUILD_TOKEN" || exit 0
     - ./bin/docker publish
-  when: manual
   cache:
       key: "docker-build-cache"
       paths:
