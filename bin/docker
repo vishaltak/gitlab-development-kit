@@ -20,10 +20,22 @@ case "$1" in
     store)
         echo "Caching layers"
         # shellcheck disable=SC2046,SC2086
-        docker save "${TEST_IMAGE}" $(docker history -q ${TEST_IMAGE} | grep -v '<missing>') > "${build_cache_archive}"
+        docker save "${CI_REGISTRY_IMAGE}:fetch" $(docker history -q ${CI_REGISTRY_IMAGE}:fetch | grep -v '<missing>') \
+            "${CI_REGISTRY_IMAGE}:source-rbenv" $(docker history -q ${CI_REGISTRY_IMAGE}:source-rbenv | grep -v '<missing>') \
+            "${CI_REGISTRY_IMAGE}:source-ruby-build" $(docker history -q ${CI_REGISTRY_IMAGE}:source-ruby-build | grep -v '<missing>') \
+            "${CI_REGISTRY_IMAGE}:go" $(docker history -q ${CI_REGISTRY_IMAGE}:go | grep -v '<missing>') \
+            "${CI_REGISTRY_IMAGE}:nodejs" $(docker history -q ${CI_REGISTRY_IMAGE}:nodejs | grep -v '<missing>') \
+            "${CI_REGISTRY_IMAGE}:rbenv" $(docker history -q ${CI_REGISTRY_IMAGE}:rbenv | grep -v '<missing>') \
+            "${TEST_IMAGE}" $(docker history -q ${TEST_IMAGE} | grep -v '<missing>') > "${build_cache_archive}"
         ;;
     build)
-        docker build -t "${TEST_IMAGE}" .
+        docker build --target fetch --tag "${CI_REGISTRY_IMAGE}:fetch" .
+        docker build --target source-rbenv --tag "${CI_REGISTRY_IMAGE}:source-rbenv" .
+        docker build --target source-ruby-build --tag "${CI_REGISTRY_IMAGE}:source-ruby-build" .
+        docker build --target go --tag "${CI_REGISTRY_IMAGE}:go" .
+        docker build --target nodejs --tag "${CI_REGISTRY_IMAGE}:nodejs" .
+        docker build --target rbenv --tag "${CI_REGISTRY_IMAGE}:rbenv" .
+        docker build --tag "${TEST_IMAGE}" .
         ;;
     push)
         docker login --username gitlab-ci-token --password "${CI_BUILD_TOKEN}" registry.gitlab.com
