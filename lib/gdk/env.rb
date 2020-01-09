@@ -31,18 +31,18 @@ module GDK
       def env
         case get_project
         when 'gitaly'
-          { 'GOPATH' => File.join($gdk_root, 'gitaly') }
+          { 'GOPATH' => File.join(GDK.root, 'gitaly') }
         when 'gitlab-workhorse'
-          { 'GOPATH' => File.join($gdk_root, 'gitlab-workhorse') }
+          { 'GOPATH' => File.join(GDK.root, 'gitlab-workhorse') }
         when 'gitlab-shell', 'go-gitlab-shell'
-          { 'GOPATH' => File.join($gdk_root, 'go-gitlab-shell') }
+          { 'GOPATH' => File.join(GDK.root, 'go-gitlab-shell') }
         else
           {}
         end
       end
 
       def get_project
-        relative_path = Pathname.new(Dir.pwd).relative_path_from(Pathname.new($gdk_root)).to_s
+        relative_path = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(GDK.root)).to_s
         relative_path.split('/').first
       end
     end

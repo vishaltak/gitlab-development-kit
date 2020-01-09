@@ -49,7 +49,7 @@ module GDK
         end
 
         def file_path
-          @file_path ||= File.join($gdk_root, file)
+          @file_path ||= File.join(GDK.root, file)
         end
 
         private
@@ -73,7 +73,7 @@ module GDK
         end
 
         def run(*commands)
-          IO.popen(commands.join(' '), chdir: $gdk_root, &:read).chomp
+          IO.popen(commands.join(' '), chdir: GDK.root, &:read).chomp
         end
       end
     end
