@@ -88,7 +88,7 @@ module GDK
     def read_or_write!(filename, value)
       sanitized_read!(filename)
     rescue Errno::ENOENT
-      File.write(filename, value)
+      File.write(file_path(filename), value)
       value
     end
 
@@ -178,7 +178,7 @@ module GDK
     end
 
     def sanitized_read!(filename)
-      sanitize_value(File.read(filename).chomp)
+      sanitize_value(File.read(file_path(filename)).chomp)
     end
 
     def sanitize_value(value)
@@ -186,6 +186,11 @@ module GDK
       return false if value == "false"
       return value.to_i if value == value.to_i.to_s
       value
+    end
+
+    # @return [String] fullpath for a file on gdk root folder
+    def file_path(filename)
+      File.join(GDK.root, filename)
     end
   end
 end
