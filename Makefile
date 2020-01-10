@@ -16,7 +16,7 @@ gitaly_clone_dir = gitaly
 gitlab_pages_clone_dir = gitlab-pages/src/gitlab.com/gitlab-org/gitlab-pages
 gitlab_from_container = $(shell [ "$(shell uname)" = "Linux" ] && echo 'localhost' || echo 'docker.for.mac.localhost')
 postgres_dev_db = gitlabhq_development
-rails_bundle_install_cmd = bundle install --jobs 4 --without production
+rails_bundle_install_cmd = sh -c 'bundle install --jobs 4 --without production | grep -v ^Using'
 workhorse_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
 gitlab_shell_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 gitaly_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
