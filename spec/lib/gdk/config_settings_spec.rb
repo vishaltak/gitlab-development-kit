@@ -4,7 +4,9 @@ describe GDK::ConfigSettings do
   class TestConfigSettings < GDK::ConfigSettings
     FILE = 'tmp/foo.yml'
 
-    bar false
+    foo { nil }
+    bar { false }
+    old { 'deprecated' }
   end
 
   subject(:config) { TestConfigSettings.new }
@@ -67,6 +69,25 @@ describe GDK::ConfigSettings do
         expect(fetch_config.call).to be_nil
         expect { fetch_config.call }.to_not output.to_stdout
       end
+    end
+  end
+
+  describe '#deprecated_config!' do
+    it 'does nothing when content is nil' do
+      fetch_config = -> { config.deprecated_config!('foo', deprecation_message: 'nothing') }
+
+      expect(fetch_config.call).to be_nil
+      expect { fetch_config.call }.to_not output.to_stdout
+    end
+
+    it 'returns deprecated value when content is found' do
+      expect(config.deprecated_config!('old', deprecation_message: 'dont use')).to eq('deprecated')
+    end
+
+    it 'prints the warning message when content is found' do
+      expect do
+        config.deprecated_config!('old', deprecation_message: 'dont use')
+      end.to output(/'old' config is deprecated: dont use/).to_stdout
     end
   end
 end

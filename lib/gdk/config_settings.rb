@@ -127,6 +127,20 @@ module GDK
       value.dig(*keys)
     end
 
+    # Used to define a deprecation message for a specific value
+    #
+    # The deprecation will only trigger if value can be retrieved
+    #
+    # @param [String] keys
+    # @param [String] deprecation_message
+    def deprecated_config!(*keys, deprecation_message:)
+      config.dig(*keys).tap do |value|
+        next if value.nil?
+
+        GDK::Output.warn("'#{keys.join('.')}' config is deprecated: #{deprecation_message}") if deprecation_message
+      end
+    end
+
     def root
       parent&.root || self
     end
