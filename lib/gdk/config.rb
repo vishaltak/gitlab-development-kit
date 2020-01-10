@@ -165,7 +165,9 @@ module GDK
     end
 
     geo do |g|
-      g.enabled false
+      g.enabled false  # deprecated
+      g.primary false
+      g.secondary { !g.primary? }
       g.node_name Pathname.new(__dir__).parent.parent.basename.to_s # gdk directory
     end
 
