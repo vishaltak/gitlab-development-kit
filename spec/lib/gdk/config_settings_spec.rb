@@ -50,4 +50,23 @@ describe GDK::ConfigSettings do
       expect(config.array.first.buz).to eq('sub 0')
     end
   end
+
+  describe '#read!' do
+    before do
+      expect(GDK).to receive(:root) { fixture_path }
+    end
+
+    it 'can read a setting from a file' do
+      expect(config.read!('port_file')).to eq(1234)
+    end
+
+    context 'when a deprecation message is present' do
+      it 'does nothing when setting file is not found or empty' do
+        fetch_config = -> { config.read!('non_existent', deprecation_message: 'nothing') }
+
+        expect(fetch_config.call).to be_nil
+        expect { fetch_config.call }.to_not output.to_stdout
+      end
+    end
+  end
 end

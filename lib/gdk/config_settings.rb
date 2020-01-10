@@ -79,8 +79,10 @@ module GDK
       result.empty? ? nil : result
     end
 
-    def read!(filename)
-      sanitized_read!(filename)
+    def read!(filename, deprecation_message: nil)
+      sanitized_read!(filename).tap do |_|
+        GDK::Output.warn("'#{filename}' file is deprecated:  #{deprecation_message}") if deprecation_message
+      end
     rescue Errno::ENOENT
       nil
     end
