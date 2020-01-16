@@ -765,4 +765,8 @@ ask-to-restart:
 
 .PHONY: show-date
 show-date:
-	@echo "> Updated as of $$(date +"%Y-%m-%d %T")"
+	@echo "> Updated as of $$(date +"%Y-%m-%d %T"):"
+	@echo "- gitlab-shell ${gitlab_shell_version}"
+	@echo "- gitlab-workhorse ${workhorse_version}"
+	@echo "- gitlab-pages ${pages_version}"
+	@echo "- gitaly ${gitaly_version}"
