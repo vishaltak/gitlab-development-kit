@@ -241,6 +241,7 @@ gitlab-shell/.gitlab_shell_secret:
 ##############################################################
 
 gitaly-setup: gitaly/bin/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
+	mkdir -p tmp/gitaly-ha-1 tmp/gitaly-ha-2 tmp/gitaly-ha-3 # poorly chosen storage directories
 
 ${gitaly_clone_dir}/.git: .backups
 	if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi

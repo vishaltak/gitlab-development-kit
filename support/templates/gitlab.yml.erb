@@ -683,6 +683,18 @@ production: &base
         path: <%= config.repositories_root %>
         gitaly_address: unix:<%= config.gitaly.address %>
       <% end %>
+      virtual-1:
+        gitaly_address: unix:/garbage/should/be/ignored
+        path: /
+    virtual_storages:
+      virtual-1:
+        gitaly-ha-1:
+          gitaly_address: unix:<%= config.gitaly.address %>
+          primary: true
+        gitaly-ha-2:
+          gitaly_address: unix:<%= config.gitaly.address %>
+        gitaly-ha-3:
+          gitaly_address: unix:<%= config.gitaly.address %>
 
   ## Backup settings
   backup:

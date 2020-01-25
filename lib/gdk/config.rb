@@ -226,7 +226,7 @@ module GDK
     praefect do |p|
       p.address { config.gdk_root.join('praefect.socket') }
       p.config_file { config.gdk_root.join("gitaly", "praefect.config.toml") }
-      p.enabled { true }
+      p.enabled { false }
       p.internal_socket_dir { config.gdk_root.join('tmp', 'praefect') }
       p.database do |d|
         d.host { config.postgresql.dir }

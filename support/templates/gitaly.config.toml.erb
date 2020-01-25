@@ -28,9 +28,28 @@ internal_socket_dir = "<%= internal_socket_dir %>"
 bin_path = "<%= config.git.bin %>"
 catfile_cache_size = 10
 
+[gitlab-rails]
+url = "http://<%= config.hostname %>:<%= config.port %>"
+
 [[storage]]
 name = "<%= storage %>"
 path = "<%= path %>"
+
+[[storage]]
+name = "gitaly-ha-1"
+path = "<%= config.gdk_root %>/tmp/gitaly-ha-1"
+
+[[storage]]
+name = "virtual-1"
+path = "<%= config.gdk_root %>/tmp/gitaly-ha-1"
+
+[[storage]]
+name = "gitaly-ha-2"
+path = "<%= config.gdk_root %>/tmp/gitaly-ha-2"
+
+[[storage]]
+name = "gitaly-ha-3"
+path = "<%= config.gdk_root %>/tmp/gitaly-ha-3"
 
 <% if config.praefect? %>
 [[storage]]
