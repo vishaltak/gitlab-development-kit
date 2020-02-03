@@ -169,6 +169,8 @@ verify:install:
       - ./gitlab-development-kit/*.log
     expire_in: 2 days
     when: always
+  before_script:
+    - 'echo "max_user_watches: $(cat /proc/sys/fs/inotify/max_user_watches)"'
   script:
     - support/ci/verify_install
   retry: 1
@@ -186,6 +188,8 @@ verify:update:
       - ./gitlab-development-kit/*.log
     expire_in: 2 days
     when: always
+  before_script:
+    - 'echo "max_user_watches: $(cat /proc/sys/fs/inotify/max_user_watches)"'
   script:
     - support/ci/verify_update
   retry: 1
