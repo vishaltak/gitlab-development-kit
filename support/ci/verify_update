@@ -18,7 +18,6 @@ checkout ${CI_COMMIT_SHA}
 restart
 wait_for_boot
 ${parent_path}/test_url
-stop
 
 # test GDK components update
 update
