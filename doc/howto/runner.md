@@ -14,19 +14,12 @@ In some configurations, GitLab Runner needs access to GitLab from inside a
 Docker container, or even another machine, which isn't supported in the default
 configuration.
 
-### Simple configuration
-
-If you intend to just use the "shell" executor (fine for very
-simple jobs), you can use GDK with its default settings and skip the Advanced
-configuration below. If GDK is already running, you'll need to restart it after making
-these changes.
-
-With GDK running:
-
-1. Navigate to `http://localhost:3000/admin/runners` (log in as root)
-1. Make note of the `Registration token`.
+Check the [Default configuration](#default-configuration) if you would like to
+use a "shell" executor.
 
 ### Advanced configuration
+
+This section details how to setup a docker executor for your Runner.
 
 Ensure you have Docker installed, then set up GitLab to bind to all
 IPs on your machine by following [these instructions](local_network.md).
@@ -75,9 +68,27 @@ If it points to `localhost` instead, `gitlab/config/gitlab.yml` is incorrect.
 Finally, navigate to `http://<ip>:3000/admin/runners` (log in as root) and make
 a note of the `Registration token`.
 
-## Download GitLab Runner
+#### Download GitLab Runner
 
-### Simple configuration
+If you followed the advanced configuration and want to install the runner as a docker service, follow the steps described in <https://docs.gitlab.com/runner/install/docker.html#docker-image-installation>.
+
+#### Setting up the Runner
+
+Register your docker-based runner by following the steps described in <https://docs.gitlab.com/runner/register/index.html#docker>.
+
+### Default configuration
+
+If you intend to just use the "shell" executor (fine for very
+simple jobs), you can use GDK with its default settings and skip the Advanced
+configuration below. If GDK is already running, you'll need to restart it after making
+these changes.
+
+With GDK running:
+
+1. Navigate to `http://localhost:3000/admin/runners` (log in as root)
+1. Make note of the `Registration token`.
+
+#### Download GitLab Runner
 
 Unless you want to make changes to the Runner, it's easiest to install a binary
 package. Follow the
@@ -94,13 +105,7 @@ GDK doesn't manage it for you. The official GitLab Runner repository is
 
 All the methods should (eventually) create a `gitlab-runner` binary.
 
-### Advanced configuration
-
-If you followed the advanced configuration and want to install the runner as a docker service, follow the steps described in <https://docs.gitlab.com/runner/install/docker.html#docker-image-installation>.
-
-## Setting up the Runner
-
-### Simple configuration
+#### Setting up the Runner
 
 Run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml`
 (as your normal user), and follow the prompts. Use:
@@ -151,8 +156,3 @@ project in the GitLab web interface and add a
 [.gitlab-ci.yml](https://docs.gitlab.com/ce/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
 watch as the Runner processes the builds just as it would on a "real" install!
-
-### Advanced configuration
-
-Register your docker-based runner by following the steps described in <https://docs.gitlab.com/runner/register/index.html#docker>.
-
