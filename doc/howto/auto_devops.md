@@ -109,6 +109,41 @@ Since your GitLab instance is now internet accessible, you should secure it by c
     end
     ```
 
+### Accessing your GitLab instance locally when the tunnel is enabled (advanced)
+
+Using the tunnel URL can introduce a significant amount of latency to each
+request. To get around this, you can configure your GitLab instance to be
+accessible from both the tunnel URL and a local URL.
+
+You will need to set up HTTPS locally by following the [HTTPS setup instructions](/doc/howto/https.md).
+Note that using a custom hostname and configuring a loopback device are not required.
+
+Once you have generated a certificate, add the following to your `gdk.yml`.
+The `listen` address and the filenames of the two PEM files may differ
+depending on the hostname/IP you chose when you set up HTTPS.
+
+```yaml
+port: 3443
+nginx:
+  enabled: true
+  listen: 127.0.0.1
+  ssl:
+    certificate: 127.0.0.1.pem
+    key: 127.0.0.1-key.pem
+```
+
+Run `gdk reconfigure` to apply these changes, followed by `gdk restart`.
+
+Your GitLab instance should now be accessible via:
+
+- The tunnel URL: `https://[PORT].qa-tunnel.gitlab.info`
+- A local URL: `https://127.0.0.1:3443` (note that this URL may differ
+  depending on the hostname/IP you chose when configuring HTTPS).
+
+NOTE: When navigating locally, you may encounter some actions that
+redirect you to the tunnel URL. This is a known limitation of using
+the GDK in this way.
+
 ## Google OAuth2
 
 To be able to create a new GKE Cluster via GitLab, you need to configure
