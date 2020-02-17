@@ -56,6 +56,7 @@ We are using PostgreSQL 10 in the following example. If you want to use another 
 
 ```
 brew install git git-lfs redis postgresql@10 libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick node@12 gpg runit icu4c exiftool minio/stable/minio
+brew link git
 brew install yarn --ignore-dependencies
 brew link pkg-config
 brew pin node@12 icu4c readline
