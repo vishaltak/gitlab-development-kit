@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # GitLab Development Kit CLI parser / executor
 #
@@ -16,7 +17,7 @@ require_relative 'gdk/logo'
 require_relative 'runit'
 
 module GDK
-  PROGNAME = 'gdk'.freeze
+  PROGNAME = 'gdk'
   MAKE = RUBY_PLATFORM =~ /bsd/ ? 'gmake' : 'make'
 
   # This function is called from bin/gdk. It must return true/false or
@@ -110,17 +111,16 @@ module GDK
       GDK::Command::Help.new.run
       true
     else
-      GDK::Output.notice "gdk: #{subcommand} is not a gdk command."
-      GDK::Output.notice "See 'gdk help' for more detail."
-      false
+      GDK::Command::Help.new.run
+      true
     end
   end
 
   def self.install_root_ok?
     expected_root = File.read(File.join($gdk_root, ROOT_CHECK_FILE)).chomp
     File.realpath(expected_root) == File.realpath($gdk_root)
-  rescue => ex
-    warn ex
+  rescue StandardError => e
+    warn e
     false
   end
 end
