@@ -1,0 +1,9 @@
+bind 127.0.0.1
+port 26380
+dir <%= config.redis_dir %>
+dbfilename dump-sentinel.rdb
+
+sentinel monitor redis 127.0.0.1 6381 1
+sentinel down-after-milliseconds redis 1000
+sentinel failover-timeout redis 30000
+sentinel parallel-syncs redis 1

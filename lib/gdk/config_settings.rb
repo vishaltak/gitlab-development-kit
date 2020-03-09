@@ -169,8 +169,20 @@ module GDK
     end
     alias_method :config, :root
 
+    def redis_dir
+      gdk_root.join('redis')
+    end
+
     def redis_socket
       gdk_root.join('redis/redis.socket')
+    end
+
+    def redis_socket_indexed(i)
+      gdk_root.join("redis/redis-#{i}.socket")
+    end
+
+    def redis_socket_sentinel
+      gdk_root.join("redis/redis-sentinel.socket")
     end
 
     def inspect

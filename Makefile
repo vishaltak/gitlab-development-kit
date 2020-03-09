@@ -66,6 +66,10 @@ clean-config:
 	gitlab-shell/config.yml \
 	gitlab-shell/.gitlab_shell_secret \
 	redis/redis.conf \
+	redis/redis-01.conf \
+	redis/redis-02.conf \
+	redis/redis-03.conf \
+	redis/redis-sentinel.conf \
 	.ruby-version \
 	Procfile \
 	gitlab-workhorse/config.toml \
@@ -460,9 +464,29 @@ endif
 ##############################################################
 
 redis: redis/redis.conf
+redis-01: redis/redis-01.conf
+redis-02: redis/redis-02.conf
+redis-03: redis/redis-03.conf
+redis-sentinel: redis/redis-sentinel.conf
 
 .PHONY: redis/redis.conf
 redis/redis.conf:
+	$(Q)rake $@
+
+.PHONY: redis/redis-01.conf
+redis/redis-01.conf:
+	$(Q)rake $@
+
+.PHONY: redis/redis-02.conf
+redis/redis-02.conf:
+	$(Q)rake $@
+
+.PHONY: redis/redis-03.conf
+redis/redis-03.conf:
+	$(Q)rake $@
+
+.PHONY: redis/redis-sentinel.conf
+redis/redis-sentinel.conf:
 	$(Q)rake $@
 
 ##############################################################

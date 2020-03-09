@@ -6,6 +6,10 @@
 # Datasources
 #
 redis: exec redis-server <%= config.gdk_root.join('redis', 'redis.conf') %>
+redis-01: exec redis-server <%= config.gdk_root.join('redis', 'redis-01.conf') %>
+redis-02: exec redis-server <%= config.gdk_root.join('redis', 'redis-02.conf') %>
+redis-03: exec redis-server <%= config.gdk_root.join('redis', 'redis-03.conf') %>
+redis-sentinel: exec redis-sentinel <%= config.gdk_root.join('redis', 'redis-sentinel.conf') %>
 <%= '#' unless config.object_store? %>minio: exec env MINIO_REGION=gdk MINIO_ACCESS_KEY=minio MINIO_SECRET_KEY=gdk-minio minio server -C minio/config --address "<%= config.hostname %>:<%= config.object_store.port %>" --compat minio/data
 postgresql: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.data_dir %> -k <%= config.postgresql.dir %> -h ''
 <%= '#' unless config.postgresql.replica? %>postgresql-replica: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.replica_dir.join('data') %> -k <%= config.postgresql.replica_dir %> -h ''

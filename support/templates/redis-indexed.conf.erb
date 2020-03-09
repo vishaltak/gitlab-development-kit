@@ -1,0 +1,8 @@
+bind 127.0.0.1
+port <%= port %>
+dir <%= config.redis_dir %>
+dbfilename dump-<%= i %>.rdb
+
+<% if port != 6381 %>
+replicaof 127.0.0.1 6381
+<% end %>
