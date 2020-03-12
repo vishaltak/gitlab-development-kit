@@ -19,8 +19,9 @@ depends on our infrastructure. For non-GitLab team members you can see
       - The `GitLab - ASA - QA Tunnel` group in Okta to provision your account on the
         server for SSH access.
 1. Install the [Okta ASA client](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/client.htm)
-   on your workstation. After software installation, it will ask you to "enroll"
-   your client (which will open a browser):
+   on your workstation.
+   Check installation insctructions for [macOS](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-osx.htm) and [Ubuntu/Debian](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-ubuntu.htm).
+   After software installation, it will ask you to "enroll" your client (which will open a browser):
    1. To enroll your client, either:
       - Run `sft enroll --team gitlab-poc` on the command line.
       - Run `sft enroll` and enter the team name yourself (enter `gitlab-poc`).
