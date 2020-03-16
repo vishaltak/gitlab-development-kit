@@ -69,6 +69,7 @@ module GDK
     string(:username) { Etc.getpwuid.name }
 
     settings :webpack do
+      bool(:enabled) { true }
       string :host do
         next '0.0.0.0' if config.auto_devops.enabled
 

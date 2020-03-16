@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+Dir.chdir('gitlab')
+
+warn 'INFO: Compiling JS assets because webpack.enabled is not set to true in gdk.yml'
+
+system('yarn webpack')
+
+loop do
+  sleep(5)
+end

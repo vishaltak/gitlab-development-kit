@@ -751,7 +751,7 @@ production: &base
   ## Webpack settings
   webpack:
     dev_server:
-      enabled: true
+      enabled: <%= config.webpack? %>
       host: <%= config.webpack.host %>
       port: <%= config.webpack.port %>
 
