@@ -43,7 +43,7 @@ module GDK
     end
 
     class Checker
-      EXPECTED_GIT_VERSION = '2.22'
+      EXPECTED_GIT_VERSION = '2.26'
       EXPECTED_GO_VERSION = '1.12'
       EXPECTED_YARN_VERSION = '1.12'
       EXPECTED_NODEJS_VERSION = '12.10'
