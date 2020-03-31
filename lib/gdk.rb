@@ -14,6 +14,7 @@ require_relative 'gdk/diagnostic'
 require_relative 'gdk/erb_renderer'
 require_relative 'gdk/logo'
 require_relative 'runit'
+require_relative 'sem_ver'
 
 module GDK
   PROGNAME = 'gdk'.freeze
