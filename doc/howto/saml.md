@@ -15,6 +15,12 @@ omniauth:
       - { name: 'group_saml' }
 ```
 
+Alternatively, if you are running Docker, you can also enable Group SAML in `/etc/gitlab/gitlab.rb` by adding this line
+
+```rb
+gitlab_rails['omniauth_providers'] = [{"name"=>"group_saml"}]
+```
+
 ### Docker
 
 The docker identity provider needs to be configured using your group's callback URL and entity ID.
