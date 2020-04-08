@@ -138,4 +138,18 @@ describe GDK::ConfigSettings do
       expect(config.arrrr.map(&:buz)).to eq(['sub 0', 'sub 1', 'sub 2'])
     end
   end
+
+  describe '#dump_run_env!', :aggregate_failures do
+    it 'exports GITLAB_TRACING related env variables when jaeger is enabled' do
+      expect(config.dump_run_env!).to include(/GITLAB_TRACING=/)
+      expect(config.dump_run_env!).to include(/GITLAB_TRACING_URL=/)
+    end
+
+    it 'doesnt include GITLAB_TRACING related env variables when jaeger is disabled' do
+      allow(config.tracer).to receive(:jaeger?) { false }
+
+      expect(config.dump_run_env!).to_not include(/GITLAB_TRACING=/)
+      expect(config.dump_run_env!).to_not include(/GITLAB_TRACING_URL=/)
+    end
+  end
 end
