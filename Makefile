@@ -9,7 +9,7 @@ export GOPROXY ?= https://proxy.golang.org
 include $(shell rake gdk-config.mk)
 
 gitlab_clone_dir = gitlab
-gitlab_shell_clone_dir = go-gitlab-shell/src/gitlab.com/gitlab-org/gitlab-shell
+gitlab_shell_clone_dir = gitlab-shell
 gitlab_workhorse_clone_dir = gitlab-workhorse
 gitaly_gopath = $(abspath ./gitaly)
 gitaly_clone_dir = gitaly
@@ -61,6 +61,7 @@ clean-config:
 	gitlab/config/database.yml \
 	gitlab/config/unicorn.rb \
 	gitlab/config/puma.rb \
+	gitlab/config/puma_actioncable.rb \
 	gitlab/config/cable.yml \
 	gitlab/config/resque.yml \
 	gitlab-shell/config.yml \
@@ -85,6 +86,7 @@ touch-examples:
 	gitlab-shell/config.yml.example \
 	gitlab-workhorse/config.toml.example \
 	gitlab/config/puma.example.development.rb \
+	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
 	grafana/grafana.ini.example \
 	influxdb/influxdb.conf.example \
@@ -134,7 +136,7 @@ gitlab/.git/pull:
 	@echo "Updating gitlab to current master"
 	@echo "-------------------------------------------------------"
 	$(Q)cd ${gitlab_development_root}/gitlab && \
-		git checkout -- Gemfile.lock db/schema.rb ${QQ} && \
+		git checkout -- Gemfile.lock $$(git ls-tree HEAD --name-only db/structure.sql db/schema.rb) ${QQ} && \
 		git stash ${QQ} && \
 		git checkout master ${QQ} && \
 		git pull --ff-only ${QQ}
@@ -145,7 +147,7 @@ gitlab/.git/pull:
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
+gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
@@ -160,6 +162,15 @@ gitlab/config/puma.example.development.rb:
 	$(Q)touch $@
 
 gitlab/config/puma.rb: gitlab/config/puma.example.development.rb
+	$(Q)bin/safe-sed "$@" \
+		-e "s|/home/git|${gitlab_development_root}|g" \
+		"$<"
+
+# Versions older than GitLab 12.9 won't have this file
+gitlab/config/puma_actioncable.example.development.rb:
+	$(Q)touch $@
+
+gitlab/config/puma_actioncable.rb: gitlab/config/puma_actioncable.example.development.rb
 	$(Q)bin/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		"$<"
@@ -205,7 +216,7 @@ gitlab/public/uploads:
 # gitlab-shell
 ##############################################################
 
-gitlab-shell-setup: symlink-gitlab-shell ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret
+gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret
 	$(Q)make -C gitlab-shell build ${QQ}
 
 gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
@@ -217,11 +228,12 @@ gitlab-shell/.git/pull:
 	@echo "-------------------------------------------------------"
 	$(Q)support/component-git-update gitlab_shell "${gitlab_development_root}/gitlab-shell" "${gitlab_shell_version}"
 
-symlink-gitlab-shell:
-	$(Q)support/symlink gitlab-shell ${gitlab_shell_clone_dir}
-
+# This task is phony to allow
+# support/move-existing-gitlab-shell-directory to remove the legacy
+# symlink, if necessary. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/1086
+.PHONY: ${gitlab_shell_clone_dir}/.git
 ${gitlab_shell_clone_dir}/.git:
-	$(Q)git clone --quiet --branch "${gitlab_shell_version}" ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
+	$(Q)support/move-existing-gitlab-shell-directory || git clone --quiet --branch "${gitlab_shell_version}" ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 .PHONY: gitlab-shell/config.yml
 gitlab-shell/config.yml: ${gitlab_shell_clone_dir}/.git
@@ -313,7 +325,15 @@ gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.y
 ##############################################################
 
 .PHONY: geo-setup geo-cursor
-geo-setup: Procfile geo-cursor gitlab/config/database_geo.yml postgresql/geo
+geo-setup: geo-setup-check Procfile geo-cursor gitlab/config/database_geo.yml postgresql/geo
+
+geo-setup-check:
+ifneq ($(geo_enabled),true)
+	$(Q)echo 'ERROR: geo.enabled is not set to true in your gdk.yml'
+	@exit 1
+else
+	@true
+endif
 
 geo-cursor:
 	$(Q)grep '^geo-cursor:' Procfile || (printf ',s/^#geo-cursor/geo-cursor/\nwq\n' | ed -s Procfile)
@@ -328,7 +348,7 @@ geo-primary-migrate: ensure-databases-running
 	$(Q)cd ${gitlab_development_root}/gitlab && \
 		bundle install && \
 		bundle exec rake db:migrate db:test:prepare geo:db:migrate geo:db:test:prepare && \
-		git checkout -- db/schema.rb ee/db/geo/schema.rb
+		git checkout -- $$(git ls-tree HEAD --name-only db/structure.sql db/schema.rb) ee/db/geo/schema.rb
 	$(Q)$(MAKE) postgresql/geo-fdw/test/rebuild ${QQ}
 
 .PHONY: geo-primary-update

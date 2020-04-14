@@ -34,7 +34,7 @@ Without this step, builds will fail with a 'connection refused' error.
 
 The `gitlab/config/gitlab.yml` configuration file also needs tweaking in the following sections:
 
- - GitLab host:
+- GitLab host:
 
 ```yaml
 production: &base
@@ -48,7 +48,7 @@ production: &base
     host: localhost
 ```
 
- - Webpack dev server host:
+- Webpack dev server host:
 
 ```yaml
   ## Webpack settings
@@ -115,13 +115,16 @@ Run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-
   - `http://localhost:3000/`
   - `http://<custom_IP_address>:3000/`, if you customized your IP address using
     [Advanced Configuration](#advanced-configuration).
-- **gitlab-ci token**
+
+- **token**
 
   `Registration token` (copied from `admin/runners`)
-- **gitlab-ci description** (optional)
+
+- **description** (optional)
 
   A description of the Runner. Defaults to the hostname of the machine.
-- **gitlab-ci tags** (optional)
+
+- **tags** (optional)
 
   Comma-separated tags. Jobs can be set up to use only Runners with specific tags.
 
@@ -151,7 +154,7 @@ builds, so run it in its own terminal session.
 
 The Runners pane in the administration panel will now list the Runners. Create a
 project in the GitLab web interface and add a
-[.gitlab-ci.yml](https://docs.gitlab.com/ce/ci/examples/) file,
+[`.gitlab-ci.yml`](https://docs.gitlab.com/ce/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
 watch as the Runner processes the builds just as it would on a "real" install!
 
@@ -175,15 +178,15 @@ different configuration files:
 1. In `config/gitlab.yml`, set the `host` parameter to `host.docker.internal`.
 1. In `/etc/hosts`, add an entry:
 
-   ```
+   ```plaintext
    127.0.0.1   host.docker.internal
    ```
 
-1. In the GitLab runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
-   URL with this hostname:
+1. In the GitLab Runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
+   URL with this hostname and the port used by GDK (`3001` if `EE`):
 
    ```toml
-    url = "http://host.docker.internal:3001/"
+    url = "http://host.docker.internal:3000/"
    ```
 
 Note that all three settings must be set to ensure a number of items
@@ -204,25 +207,25 @@ for the fourth item.
 The trick described above is a bit of a hack and only works for Docker
 for Mac, but the "proper" way to support a Docker executor is to use an
 internal, dummy interface that can be used by both the host and the
-container.  Here's how:
+container. Here's how:
 
 1. Create an internal interface. On macOS, this will add an alias IP
    172.16.123.1 to the loopback adapter:
 
-    ```sh
-    sudo ifconfig lo0 alias 172.16.123.1
-    ```
+   ```sh
+   sudo ifconfig lo0 alias 172.16.123.1
+   ```
 
-    On Linux, you can create a dummy interface:
+   On Linux, you can create a dummy interface:
 
-    ```sh
-    sudo ip link add dummy0 type dummy
-    ifconfig dummy0 172.16.123.1
-    ```
+   ```sh
+   sudo ip link add dummy0 type dummy
+   ifconfig dummy0 172.16.123.1
+   ```
 
 1. In `config/gitlab.yml`, set the `host` parameter to `172.16.123.1`.
 
-1. In the GitLab runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
+1. In the GitLab Runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
    URL with this hostname:
 
    ```toml

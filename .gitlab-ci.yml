@@ -81,11 +81,12 @@ build:image:
 
 test:docs_lint:
   extends: .docs-changes
-  image: ruby:2.6
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
   stage: test
   services: []
   script:
-    - echo "Coming soon..."
+    - vale --minAlertLevel error doc
+    - markdownlint --config .markdownlint.json 'doc/**/*.md'
 
 test:static-analysis:
   extends: .docs-or-code-changes
@@ -103,8 +104,13 @@ test:rspec:
   stage: test
   services: []
   script:
-    - gem install rspec
-    - rspec
+    - gem install rspec rspec_junit_formatter
+    - rspec --format progress --format RspecJunitFormatter --out rspec.xml
+  artifacts:
+    paths:
+      - rspec.xml
+    reports:
+      junit: rspec.xml
 
 test:code_quality:
   extends: .code-changes

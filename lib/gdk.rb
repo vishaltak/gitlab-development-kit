@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # GitLab Development Kit CLI parser / executor
 #
 # This file is loaded by the 'gdk' command in the gem. This file is NOT
@@ -12,6 +14,7 @@ require_relative 'gdk/diagnostic'
 require_relative 'gdk/erb_renderer'
 require_relative 'gdk/logo'
 require_relative 'runit'
+require_relative 'shellout'
 
 module GDK
   PROGNAME = 'gdk'.freeze
@@ -69,8 +72,9 @@ module GDK
       exec(MAKE, 'touch-examples', 'unlock-dependency-installers', 'postgresql-sensible-defaults', 'all', chdir: $gdk_root)
     when 'psql'
       pg_port = Config.new.postgresql.port
+      args = ARGV.empty? ? ['-d', 'gitlabhq_development'] : ARGV
 
-      exec('psql', '-h', File.join($gdk_root, 'postgresql'), '-p', pg_port.to_s, *ARGV, chdir: $gdk_root)
+      exec('psql', '-h', File.join($gdk_root, 'postgresql'), '-p', pg_port.to_s, *args, chdir: $gdk_root)
     when 'redis-cli'
       exec('redis-cli', '-s', GDK::Config.new.redis_socket.to_s, *ARGV, chdir: $gdk_root)
     when 'env'

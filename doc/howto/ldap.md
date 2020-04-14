@@ -4,19 +4,25 @@ You can run an OpenLDAP daemon inside GDK if you want to work on GitLab LDAP int
 
 To run the OpenLDAP installation included in the GitLab development kit do the following:
 
-```
+```shell
 cd gitlab-openldap
 make # will setup the databases
 ```
 
-Then edit `gdk.yml` (in the GDK top level directory) and add:
+Then run the daemon:
+
+```bash
+./run-slapd # stays attached in the current terminal
+```
+
+In `gdk.yml` (in the GDK top level directory) add:
 
 ```yaml
 openldap:
   enabled: true
 ```
 
-in the gitlab repository edit config/gitlab.yml;
+In the `gitlab` repository edit `config/gitlab.yml`:
 
 ```yaml
 ldap:
@@ -45,7 +51,7 @@ ldap:
     #   admin_group: ''
 ```
 
-The second database is optional, and will only work with Gitlab-EE.
+The second database is optional, and will only work with GitLab EE.
 
 The following users are added to the LDAP server:
 
@@ -70,3 +76,13 @@ For testing of GitLab Enterprise Edition the following groups are created.
 | group-10000-0 | `cn=group-10000-0,ou=groups,dc=example,dc=com`  | 10,000  | group-10000-1 |
 | group-a       | `cn=group-a,ou=groups,dc=example-alt,dc=com`    | 2       |               |
 | group-b       | `cn=group-b,ou=groups,dc=example-alt,dc=com`    | 1       |               |
+
+## macOS Setup
+
+On macOS run the daemon with the alt script:
+
+```bash
+./run-slapd-alt
+```
+
+and use port `3891` in `gitlab.yml` for the LDAP server.

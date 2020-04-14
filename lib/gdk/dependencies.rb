@@ -43,8 +43,7 @@ module GDK
     end
 
     class Checker
-      EXPECTED_GIT_VERSION = '2.22'
-      EXPECTED_GO_VERSION = '1.12'
+      EXPECTED_GO_VERSION = '1.14'
       EXPECTED_YARN_VERSION = '1.12'
       EXPECTED_NODEJS_VERSION = '12.10'
       EXPECTED_POSTGRESQL_VERSION = '9.6.x'
@@ -56,7 +55,6 @@ module GDK
       end
 
       def check_all
-        check_git_version
         check_ruby_version
         check_bundler_version
         check_go_version
@@ -78,19 +76,6 @@ module GDK
         end
       end
 
-      def check_git_version
-        return unless check_binary('git')
-
-        current_git_version = `git version`[/git version (\d+\.\d+.\d+)/, 1]
-
-        actual = Gem::Version.new(current_git_version)
-        expected = Gem::Version.new(EXPECTED_GIT_VERSION)
-
-        if actual < expected
-          @error_messages << require_minimum_version('Git', actual, expected)
-        end
-      end
-
       def check_ruby_version
         return unless check_binary('ruby')
 
@@ -103,12 +88,27 @@ module GDK
       end
 
       def check_bundler_version
-        unless system("bundle _#{expected_bundler_version}_ --version >/dev/null 2>&1")
-          @error_messages << <<~BUNDLER_VERSION_NOT_MET
-            Please install Bundler version #{expected_bundler_version}.
-            gem install bundler -v '= #{expected_bundler_version}'
-          BUNDLER_VERSION_NOT_MET
-        end
+        return if bundler_version_ok? || alt_bundler_version_ok?
+
+        @error_messages << <<~BUNDLER_VERSION_NOT_MET
+          Please install Bundler version #{expected_bundler_version}.
+          gem install bundler -v '= #{expected_bundler_version}'
+        BUNDLER_VERSION_NOT_MET
+      end
+
+      def bundler_version_ok?
+        return system("bundle _#{expected_bundler_version}_ --version >/dev/null 2>&1")
+      end
+
+      def alt_bundler_version_ok?
+        # On some systems, most notably Gentoo, Ruby Gems get patched to use a
+        # custom wrapper. Because of this, we cannot use the `bundle
+        # _$VERSION_` syntax and need to fall back to using `bundle --version`
+        # on a best effort basis.
+        actual = Shellout.new('bundle --version').try_run
+        actual = actual[/Bundler version (\d+\.\d+.\d+)/, 1]
+
+        Gem::Version.new(actual) == Gem::Version.new(expected_bundler_version)
       end
 
       def check_go_version

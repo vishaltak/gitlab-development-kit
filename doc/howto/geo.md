@@ -17,7 +17,7 @@ You can use an existing `gdk` instance based on the [Set up GDK](../set-up-gdk.m
 
 Add the following to `gdk.yml` file on the primary node:
 
-```yml
+```yaml
 ---
 geo:
   enabled: true
@@ -47,7 +47,7 @@ geo:
   enabled: true
   node_name: gdk-geo
 gitlab_pages:
-  enabled: enabled
+  enabled: true
   port: 3011
 tracer:
   jaeger:
@@ -196,7 +196,7 @@ to set up [SSH](ssh.md), including [SSH key lookup from database](ssh.md#ssh-key
 
 ### Add primary node
 
-There is a rake task that can add the primary node:
+There is a Rake task that can add the primary node:
 
 ```bash
 cd gdk/gitlab
@@ -206,20 +206,22 @@ bundle exec rake geo:set_primary_node
 
 ### Add secondary node
 
-There isn't a convenient rake task to add the secondary node because the relevant
+There isn't a convenient Rake task to add the secondary node because the relevant
 data is on the secondary, but we can only write to the primary database. So we
 must get the values from the secondary, and then manually add the node.
 
-1. In a terminal, change to the gitlab directory of the secondary node:
+1. In a terminal, change to the `gitlab` directory of the secondary node:
 
    ```bash
    cd gdk-geo/gitlab
    ```
+
 1. Output the secondary node's **Name** and **URL**:
 
    ```bash
    bundle exec rails runner 'puts "Name: #{GeoNode.current_node_name}"; puts "URL: #{GeoNode.current_node_url}"'
    ```
+
 1. Visit the **primary** node's **Admin Area > Geo > Nodes** (`/admin/geo/nodes`)
    in your browser.
 1. Click the **New node** button.
@@ -238,7 +240,7 @@ Use the following commands to keep Geo-enabled GDK installations up to date.
 
 ## Troubleshooting
 
-### postgresql-geo/data exists but is not empty
+### `postgresql-geo/data` exists but is not empty
 
 If you see this error during setup because you have already run `make geo-setup` once:
 
