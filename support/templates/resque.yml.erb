@@ -1,5 +1,6 @@
 development:
-  url: redis://redis
-  sentinels:
-  - { host: 127.0.0.1, port: 26380 }
-test: unix:<%= config.redis_socket %>
+  cluster:
+  - { host: 127.0.0.1, port: 6381 }
+test:
+  cluster:
+  - { host: 127.0.0.1, port: 6381 }

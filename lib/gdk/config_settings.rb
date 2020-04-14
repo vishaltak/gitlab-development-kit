@@ -177,14 +177,6 @@ module GDK
       gdk_root.join('redis/redis.socket')
     end
 
-    def redis_socket_indexed(i)
-      gdk_root.join("redis/redis-#{i}.socket")
-    end
-
-    def redis_socket_sentinel
-      gdk_root.join("redis/redis-sentinel.socket")
-    end
-
     def inspect
       "#<GDK::ConfigSettings slug:#{slug}>"
     end

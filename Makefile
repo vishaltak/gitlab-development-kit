@@ -70,7 +70,9 @@ clean-config:
 	redis/redis-01.conf \
 	redis/redis-02.conf \
 	redis/redis-03.conf \
-	redis/redis-sentinel.conf \
+	redis/redis-04.conf \
+	redis/redis-05.conf \
+	redis/redis-06.conf \
 	.ruby-version \
 	Procfile \
 	gitlab-workhorse/config.toml \
@@ -487,7 +489,9 @@ redis: redis/redis.conf
 redis-01: redis/redis-01.conf
 redis-02: redis/redis-02.conf
 redis-03: redis/redis-03.conf
-redis-sentinel: redis/redis-sentinel.conf
+redis-04: redis/redis-04.conf
+redis-05: redis/redis-05.conf
+redis-06: redis/redis-06.conf
 
 .PHONY: redis/redis.conf
 redis/redis.conf:
@@ -505,8 +509,16 @@ redis/redis-02.conf:
 redis/redis-03.conf:
 	$(Q)rake $@
 
-.PHONY: redis/redis-sentinel.conf
-redis/redis-sentinel.conf:
+.PHONY: redis/redis-04.conf
+redis/redis-04.conf:
+	$(Q)rake $@
+
+.PHONY: redis/redis-05.conf
+redis/redis-05.conf:
+	$(Q)rake $@
+
+.PHONY: redis/redis-06.conf
+redis/redis-06.conf:
 	$(Q)rake $@
 
 ##############################################################

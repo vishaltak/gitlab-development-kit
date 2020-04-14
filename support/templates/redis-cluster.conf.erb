@@ -1,0 +1,10 @@
+bind 127.0.0.1
+port <%= port %>
+dir <%= config.redis_dir %>
+dbfilename dump-<%= i %>.rdb
+appendfilename appendonly-<%= i %>.aof
+
+cluster-enabled yes
+cluster-config-file nodes-<%= i %>.conf
+cluster-node-timeout 5000
+appendonly yes

@@ -66,16 +66,15 @@ redises = {
   '01' => 6381,
   '02' => 6382,
   '03' => 6383,
+  '04' => 6384,
+  '05' => 6385,
+  '06' => 6386,
 }
 
 redises.each do |i, port|
-  file "redis/redis-#{i}.conf" => ['support/templates/redis-indexed.conf.erb', GDK::Config::FILE] do |t|
+  file "redis/redis-#{i}.conf" => ['support/templates/redis-cluster.conf.erb', GDK::Config::FILE] do |t|
     GDK::ErbRenderer.new(t.source, t.name, config: config, i: i, port: port).safe_render!
   end
-end
-
-file 'redis/redis-sentinel.conf' => ['support/templates/redis-sentinel.conf.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
 desc 'Generate the database.yml config file'
