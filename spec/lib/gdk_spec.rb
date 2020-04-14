@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'fileutils'
 
 RSpec.describe GDK do
   let(:hooks) { %w[date] }
@@ -195,6 +196,53 @@ RSpec.describe GDK do
       expect(described_class).to receive(:execute_hooks).with(after_hooks, "#{name}: after").and_return(true)
 
       expect(described_class.with_hooks(hooks, name) { true }).to be(true)
+    end
+  end
+
+  describe '.reset_data' do
+    let(:root) { described_class.root }
+    let(:pg_data_path) { root.join('postgresql', 'data') }
+    let(:uploads_path) { root.join('gitlab', 'public', 'uploads') }
+    let(:repo_path) { root.join('repositories') }
+    let!(:data_dirs) { [pg_data_path, uploads_path, repo_path] }
+    let(:content) { 'Foo' }
+
+    before do
+      allow(described_class).to receive(:system).and_call_original
+      allow(described_class).to receive(:remember!)
+
+      FileUtils.mkdir_p(repo_path)
+      FileUtils.touch(repo_path.join('.gitkeep'))
+    end
+
+    it 'resets data' do
+      expect(described_class).to receive(:system).with(
+        described_class::MAKE,
+        chdir: root
+      )
+
+      data_dirs.each do |dir|
+        ensure_directory_with_content(dir)
+      end
+
+      described_class.reset_data
+
+      # We already checks MAKE is called,
+      # therefore we don't check new data directory are created.
+      # Instead we focus on old directory are moved
+      data_dirs.each do |dir|
+        new_dir = dir.to_s + '.old'
+
+        expect(Dir.entries(new_dir)).to contain_exactly('.', '..', 'foo.txt')
+        expect(File.read(Pathname.new(new_dir).join('foo.txt'))).to eq(content)
+      end
+
+      expect(File.exist?(repo_path.join('.gitkeep'))).to eq(true)
+    end
+
+    def ensure_directory_with_content(dir)
+      FileUtils.mkdir_p(dir)
+      File.write(dir.join('foo.txt'), content)
     end
   end
 end

@@ -65,6 +65,8 @@ module GDK
       GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
       GDK::Command::Reconfigure.new.run
+    when 'reset_data'
+      reset_data
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'psql-geo'
@@ -209,6 +211,26 @@ module GDK
   def self.restart(argv)
     stop(argv)
     start(argv)
+  end
+
+  # Called when running `gdk reset_data`
+  def self.reset_data
+    Runit.stop
+
+    remember!(GDK.root)
+
+    system('rm', '-rf', 'postgresql/data.old', chdir: GDK.root)
+    system('mv', 'postgresql/data', 'postgresql/data.old', chdir: GDK.root)
+
+    system('rm', '-rf', 'gitlab/public/uploads.old', chdir: GDK.root)
+    system('mv', 'gitlab/public/uploads', 'gitlab/public/uploads.old', chdir: GDK.root)
+
+    system('rm', '-rf', 'repositories.old', chdir: GDK.root)
+    system('mv', 'repositories', 'repositories.old', chdir: GDK.root)
+    system('mkdir', 'repositories', chdir: GDK.root)
+    system('mv', 'repositories.old/.gitkeep', 'repositories/', chdir: GDK.root)
+
+    system(MAKE, chdir: GDK.root)
   end
 
   def self.print_url_ready_message
