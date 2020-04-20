@@ -101,7 +101,10 @@ $user_setup = <<EOT
   sudo -u $DEV_USER -i bash -c "gdk trust /vagrant"
 EOT
 
+$console_log = File.join(Dir.pwd, "log/vagrant-console.log")
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.provision "shell", inline: %Q{echo "Console output logged to #{$console_log}"}
   config.vm.provision "shell", inline: $apt_reqs
   config.vm.provision "shell", inline: $user_setup
   unless Vagrant::Util::Platform.windows?
@@ -165,6 +168,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--nestedpaging", "on"]
     vb.customize ["modifyvm", :id, "--largepages", "on"]
     vb.customize ["modifyvm", :id, "--ioapic", "on"] if cpus > 1
+
+    # Ensure console logging goes into ${console_log}
+    vb.customize ["modifyvm", :id, "--uartmode1", "file", $console_log]
 
     # uncomment if you don't want to use all of host machines CPU
     # vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
