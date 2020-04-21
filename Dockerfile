@@ -59,6 +59,13 @@ COPY --from=source-ruby-build --chown=gdk /ruby-build .rbenv/plugins/ruby-build
 USER gdk
 RUN bash -l -c "rbenv install 2.6.5 && rbenv global 2.6.5"
 
+# Install shellcheck
+FROM base AS shellcheck
+WORKDIR /tmp
+RUN curl --silent --location --output - https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz | tar xJf -
+RUN mv -f shellcheck-v0.7.1/shellcheck /usr/local/bin
+RUN rm -rf shellcheck-v0.7.1/
+
 # build final image
 FROM base AS release
 
@@ -68,6 +75,7 @@ ENV PATH $PATH:/usr/local/go/bin
 COPY --from=go /usr/local/ /usr/local/
 COPY --from=nodejs /stage/ /
 COPY --from=rbenv --chown=gdk /home/gdk/ .
+COPY --from=shellcheck /usr/local/ /usr/local/
 
 USER gdk
 

@@ -33,3 +33,4 @@ net-tools
 psmisc
 rsync
 runit
+xz-utils
