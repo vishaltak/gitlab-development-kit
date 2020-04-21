@@ -22,14 +22,17 @@ RUN curl https://dl.min.io/server/minio/release/linux-amd64/minio > /usr/local/b
 FROM alpine AS fetch
 RUN apk add --no-cache coreutils curl tar git
 
+# Install rbenv
 FROM fetch AS source-rbenv
 ARG RBENV_REVISION=v1.1.1
 RUN git clone --branch $RBENV_REVISION --depth 1 https://github.com/rbenv/rbenv
 
+# Install ruby-build for rbenv
 FROM fetch AS source-ruby-build
 ARG RUBY_BUILD_REVISION=v20191225
 RUN git clone --branch $RUBY_BUILD_REVISION --depth 1 https://github.com/rbenv/ruby-build
 
+# Install Golang
 FROM fetch AS go
 ARG GO_SHA256=2f49eb17ce8b48c680cdb166ffd7389702c0dec6effa090c324804a5cac8a7f8
 ARG GO_VERSION=1.14.1
@@ -37,6 +40,7 @@ RUN curl --silent --location --output go.tar.gz https://dl.google.com/go/go$GO_V
 RUN echo "$GO_SHA256  go.tar.gz" | sha256sum -c -
 RUN tar -C /usr/local -xzf go.tar.gz
 
+# Install Node.js
 FROM node:12-stretch AS nodejs
 # contains nodejs and yarn in /usr/local
 # https://github.com/nodejs/docker-node/blob/77f1baaa55acc71c9eda1866f0c162b434a63be5/10/jessie/Dockerfile
@@ -45,6 +49,7 @@ RUN install -d usr opt
 RUN cp -al /usr/local usr
 RUN cp -al /opt/yarn* opt
 
+# Install rbenv
 FROM base AS rbenv
 WORKDIR /home/gdk
 RUN echo 'export PATH="/home/gdk/.rbenv/bin:$PATH"' >> .bash_profile
