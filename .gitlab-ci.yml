@@ -137,6 +137,15 @@ test:rspec:
     reports:
       junit: rspec.xml
 
+test:rubocop:
+  extends: .rules:code-changes
+  image: ruby:2.6
+  stage: test
+  script:
+    - gem update bundler
+    - bundle install --jobs 4
+    - bundle exec rubocop --parallel
+
 test:code_quality:
   extends:
     - .rules:code-changes
