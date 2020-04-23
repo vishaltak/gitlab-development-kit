@@ -1,0 +1,18 @@
+inherit_gem:
+  gitlab-styles:
+    - rubocop-default.yml
+
+AllCops:
+  TargetRubyVersion: 2.6.5
+  Exclude:
+    - 'bin/**/*'
+    - 'gitlab-elasticsearch-indexer/**/*'
+    - 'go-gitlab-shell/**/*'
+    - 'gitaly/**/*'
+    - 'gitlab/**/*'
+    - 'gitlab-runner/**/*'
+    - 'gitlab-shell/**/*'
+    - 'gitlab-workhorse/**/*'
+    - 'grafana/**/*'
+    - 'influxdb/**/*'
+    - 'tmp/**/*'
