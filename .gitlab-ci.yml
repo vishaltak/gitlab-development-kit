@@ -116,11 +116,9 @@ test:docs_lint:
 
 test:static-analysis:
   extends: .rules:docs-code-changes
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:node-10
+  image: registry.gitlab.com/gitlab-org/gitlab-docs:lint
   stage: test
   script:
-    - apt-get update && apt-get install -y rake
-    - npm config set unsafe-perm true # enable run npm as root
     - make static-analysis
 
 test:rspec:
