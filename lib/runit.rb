@@ -139,7 +139,7 @@ module Runit
     return unless glob
 
     if glob.include?('/')
-      GDK::Output.error  "invalid service shortcut: #{svc} -> #{glob}"
+      GDK::Output.error "invalid service shortcut: #{svc} -> #{glob}"
 
       abort
     end
@@ -156,8 +156,8 @@ module Runit
 
     50.times do
       begin
-        open(File.join(dir, 'supervise/ok'), File::WRONLY|File::NONBLOCK).close
-      rescue
+        open(File.join(dir, 'supervise/ok'), File::WRONLY | File::NONBLOCK).close
+      rescue StandardError
         sleep 0.1
         next
       end
@@ -223,10 +223,8 @@ module Runit
 
   def self.kill_processes(pids)
     pids.each do |pid|
-      begin
-        Process.kill('TERM', pid)
-      rescue Errno::ESRCH
-      end
+      Process.kill('TERM', pid)
+    rescue Errno::ESRCH
     end
   end
 end

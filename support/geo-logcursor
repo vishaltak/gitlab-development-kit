@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-EXEC = 'geo_log_cursor'
+EXEC = 'geo_log_cursor'.freeze
 
 bin_dir = 'gitlab/ee/bin/'
 bin_dir = 'gitlab/bin' unless File.exist?(File.join(bin_dir, EXEC))

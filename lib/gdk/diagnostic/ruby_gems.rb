@@ -41,8 +41,8 @@ module GDK
         @ffi_load_error ||= begin
           require 'ffi'
           nil
-        rescue LoadError => e
-          e.message
+                            rescue LoadError => e
+                              e.message
         end
       end
     end
