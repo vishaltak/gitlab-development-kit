@@ -186,6 +186,7 @@ test:container_scanning:
 .verify_job:
   stage: verify
   extends: .rules:code-changes
+  image: $TEST_IMAGE
   artifacts:
     paths:
       - ./gitlab-development-kit/gitlab/log/*.log
