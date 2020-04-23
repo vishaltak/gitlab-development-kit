@@ -29,6 +29,7 @@ module GDK
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
+  # rubocop:disable Metrics/AbcSize
   def self.main # rubocop:disable Metrics/CyclomaticComplexity
     if !install_root_ok? && ARGV.first != 'reconfigure'
       puts <<-GDK_MOVED.gsub(/^\s+\|/, '')
@@ -123,6 +124,7 @@ module GDK
       false
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def self.install_root_ok?
     expected_root = GDK.root.join(ROOT_CHECK_FILE).read.chomp

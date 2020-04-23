@@ -8,7 +8,7 @@ module GDK
     def ready?
       last_error = nil
 
-      cmd = psql_cmd + %W[-d template1 -c #{''}]
+      cmd = psql_cmd + %W[-d template1 -c #{''}] # rubocop:disable Lint/LiteralInInterpolation
       10.times do
         shellout = Shellout.new(cmd)
         shellout.run
