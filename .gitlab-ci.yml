@@ -138,6 +138,7 @@ test:rspec:
 test:rubocop:
   extends: .rules:code-changes
   stage: test
+  allow_failure: true
   script:
     - gem update bundler
     - bundle install --jobs 4
