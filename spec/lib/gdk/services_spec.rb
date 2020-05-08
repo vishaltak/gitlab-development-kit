@@ -11,6 +11,7 @@ describe GDK::Services do
         Minio
         OpenLDAP
         PostgreSQL
+        PostgreSQLReplica
         Redis
       ]
 
