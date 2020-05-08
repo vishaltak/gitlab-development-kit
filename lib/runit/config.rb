@@ -90,6 +90,9 @@ module Runit
       run_env
     end
 
+    # Load a list of services from Procfile
+    #
+    # @deprecated This will be removed when all services have been converted to GDK::Services
     def services_from_procfile
       abort 'fatal: need Procfile to continue, make it with `make Procfile`?' unless procfile_path.exist?
 

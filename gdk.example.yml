@@ -22,6 +22,7 @@ gdk:
   experimental:
     auto_reconfigure: true
     quiet: true
+    ruby_services: false
   overwrite_changes: false
   protected_config_files: []
   quiet: true
