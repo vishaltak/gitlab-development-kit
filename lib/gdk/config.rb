@@ -33,6 +33,7 @@ module GDK
       bool(:debug) { false }
       settings :experimental do
         bool(:ruby_services) { false }
+        bool(:auto_restart) { false }
       end
       bool(:overwrite_changes) { false }
       array(:protected_config_files) { [] }
