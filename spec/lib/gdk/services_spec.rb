@@ -7,6 +7,7 @@ describe GDK::Services do
     it 'contains Service classes' do
       service_classes = %i[
         Redis
+        PostgreSQL
       ]
 
       expect(described_class::ALL).to eq(service_classes)
@@ -16,7 +17,8 @@ describe GDK::Services do
   describe '.enabled' do
     it 'contains enabled Service classes' do
       service_classes = [
-        GDK::Services::Redis
+        GDK::Services::Redis,
+        GDK::Services::PostgreSQL
       ]
 
       expect(described_class.enabled.map(&:class)).to eq(service_classes)
