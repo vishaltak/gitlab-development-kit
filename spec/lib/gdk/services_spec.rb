@@ -8,6 +8,7 @@ describe GDK::Services do
       service_classes = %i[
         Redis
         PostgreSQL
+        PostgreSQLReplica
       ]
 
       expect(described_class::ALL).to eq(service_classes)

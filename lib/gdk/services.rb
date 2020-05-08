@@ -4,6 +4,7 @@ require_relative 'services/base'
 require_relative 'services/required'
 require_relative 'services/redis'
 require_relative 'services/postgresql'
+require_relative 'services/postgresql_replica'
 
 module GDK
   # Services module contains individual service classes (e.g. Redis) that
@@ -14,6 +15,7 @@ module GDK
     ALL = %i[
       Redis
       PostgreSQL
+      PostgreSQLReplica
     ].freeze
 
     # Returns an Array of enabled services only.
