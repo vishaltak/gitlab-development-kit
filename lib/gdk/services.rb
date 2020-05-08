@@ -2,6 +2,7 @@
 
 require_relative 'services/base'
 require_relative 'services/required'
+require_relative 'services/redis'
 
 module GDK
   # Services module contains individual service classes (e.g. Redis) that
@@ -9,7 +10,9 @@ module GDK
   # if the service should in fact be executed.
   #
   module Services
-    ALL = %i[].freeze
+    ALL = %i[
+      Redis
+    ].freeze
 
     # Returns an Array of enabled services only.
     #

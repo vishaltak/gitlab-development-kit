@@ -815,5 +815,9 @@ module GDK
         end
       end
     end
+
+    settings :redis do
+      path(:dir) { config.gdk_root.join('redis') }
+    end
   end
 end
