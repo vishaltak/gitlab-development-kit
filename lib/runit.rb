@@ -3,6 +3,7 @@
 require_relative 'shellout'
 require_relative 'runit/config'
 require_relative 'gdk/output'
+require_relative 'gdk/services'
 
 module Runit
   SERVICE_SHORTCUTS = {
@@ -19,8 +20,14 @@ module Runit
 
     runit_installed!
 
+    config = GDK::Config.new
     runit_config = Runit::Config.new(GDK.root)
-    runit_config.render
+
+    if config.gdk.experimental.ruby_services?
+      runit_config.render(services: GDK::Services.enabled)
+    else
+      runit_config.render
+    end
 
     # It is important that we use an absolute path with `runsvdir`: this
     # allows us to distinguish processes belonging to different GDK

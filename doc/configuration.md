@@ -82,8 +82,9 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `gdk.experimental.quiet` | `false` | Set this to `true` to reduce the level of output when updating the GDK. |
 | `gdk.experimental.auto_reconfigure` | `false` | Set this to `true` to automatically run a `gdk reconfigure` after a successful `gdk update`. |
+| `gdk.experimental.quiet` | `false` | Set this to `true` to reduce the level of output when updating the GDK. |
+| `gdk.experimental.ruby_services` | `false` | Set this to `true` to use pure Ruby services instead of relying upon the `Procfile`. |
 
 ### Loose files (deprecated)
 
