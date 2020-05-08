@@ -342,5 +342,9 @@ module GDK
         path(:__socket_file) { config.gdk_root.join('gitlab.actioncable.socket') }
       end
     end
+
+    settings :redis do
+      path(:dir) { config.gdk_root.join('redis') }
+    end
   end
 end

@@ -111,6 +111,8 @@ praefect:
       storage_dir: "/home/git/gdk/repositories"
 prometheus:
   enabled: false
+redis:
+  dir: "/home/git/gdk/redis"
 registry:
   enabled: false
   external_port: 5000

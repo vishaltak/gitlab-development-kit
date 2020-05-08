@@ -394,4 +394,12 @@ describe GDK::Config do
       end
     end
   end
+
+  describe 'redis' do
+    describe '#dir' do
+      it 'returns the redis directory' do
+        expect(config.redis.dir).to eq(Pathname.new('/home/git/gdk/redis'))
+      end
+    end
+  end
 end
