@@ -10,6 +10,7 @@ describe GDK::Services do
         PostgreSQL
         PostgreSQLReplica
         Minio
+        OpenLDAP
       ]
 
       expect(described_class::ALL).to eq(service_classes)
