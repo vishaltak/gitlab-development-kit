@@ -8,12 +8,14 @@ module GDK
   module Services
     autoload :Base, 'gdk/services/base'
     autoload :Clickhouse, 'gdk/services/clickhouse'
+    autoload :GitLabWorkhorse, 'gdk/services/gitlab_workhorse'
     autoload :Minio, 'gdk/services/minio'
     autoload :Redis, 'gdk/services/redis'
     autoload :Required, 'gdk/services/required'
 
     ALL = %i[
       Clickhouse
+      GitLabWorkhorse
       Minio
       Redis
     ].freeze
