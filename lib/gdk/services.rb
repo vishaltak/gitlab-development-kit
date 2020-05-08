@@ -10,6 +10,7 @@ module GDK
     autoload :Clickhouse, 'gdk/services/clickhouse'
     autoload :GitLabWorkhorse, 'gdk/services/gitlab_workhorse'
     autoload :Minio, 'gdk/services/minio'
+    autoload :OpenLDAP, 'gdk/services/openldap'
     autoload :Redis, 'gdk/services/redis'
     autoload :Required, 'gdk/services/required'
 
@@ -17,6 +18,7 @@ module GDK
       Clickhouse
       GitLabWorkhorse
       Minio
+      OpenLDAP
       Redis
     ].freeze
 
