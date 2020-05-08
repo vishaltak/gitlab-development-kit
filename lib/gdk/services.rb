@@ -8,11 +8,13 @@ module GDK
   module Services
     autoload :Base, 'gdk/services/base'
     autoload :Clickhouse, 'gdk/services/clickhouse'
+    autoload :Minio, 'gdk/services/minio'
     autoload :Redis, 'gdk/services/redis'
     autoload :Required, 'gdk/services/required'
 
     ALL = %i[
       Clickhouse
+      Minio
       Redis
     ].freeze
 
