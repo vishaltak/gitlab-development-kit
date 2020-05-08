@@ -14,19 +14,24 @@ RSpec.describe Runit::Config do
   end
 
   describe '#stale_service_links' do
-    let(:services) { [described_class::Service.new('svc1', nil), described_class::Service.new('svc2', nil)] }
-    let(:services_dir) { File.join(gdk_root, 'services') }
-
     it 'removes unknown symlinks from the services directory' do
+      services_dir = File.join(gdk_root, 'services')
+
+      enabled_service_names = %w[svc1 svc2]
+      all_services = %w[svc1 svc2 stale]
+
+      enabled_services = enabled_service_names.map { |name| Runit::Config::Service.new(name, '/usr/bin/false') }
+
       FileUtils.mkdir_p(services_dir)
 
-      %w[svc1 svc2 stale].each do |entry|
-        File.symlink('/', File.join(services_dir, entry))
+      all_services.each do |entry|
+        File.symlink('/tmp', File.join(services_dir, entry))
       end
 
       FileUtils.touch(File.join(services_dir, 'should-be-ignored'))
 
-      expect(subject.stale_service_links(services)).to eq([File.join(services_dir, 'stale')])
+      stale_collection = [File.join(services_dir, 'stale')]
+      expect(subject.stale_service_links(enabled_services)).to eq(stale_collection)
     end
   end
 
