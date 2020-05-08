@@ -9,6 +9,7 @@ describe GDK::Services do
         Redis
         PostgreSQL
         PostgreSQLReplica
+        Minio
       ]
 
       expect(described_class::ALL).to eq(service_classes)
