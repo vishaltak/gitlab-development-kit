@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'services/base'
+require_relative 'services/required'
 
 module GDK
   # Services module contains individual service classes (e.g. Redis) that
