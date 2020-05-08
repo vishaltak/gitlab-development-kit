@@ -93,6 +93,18 @@ describe GDK::Config do
   end
 
   describe 'workhorse' do
+    describe '#dir' do
+      it 'returns the GitLab Workhorse directory' do
+        expect(config.workhorse.dir).to eq('/home/git/gdk/gitlab-workhorse')
+      end
+    end
+
+    describe '#config_file' do
+      it 'returns the GitLab Workhorse config file' do
+        expect(config.workhorse.config_file).to eq('/home/git/gdk/gitlab-workhorse/config.toml')
+      end
+    end
+
     describe '#__active_host' do
       context 'when AutoDevOps is not enabled' do
         it 'returns the configured hostname' do

@@ -7,6 +7,7 @@ require_relative 'services/postgresql'
 require_relative 'services/postgresql_replica'
 require_relative 'services/minio'
 require_relative 'services/openldap'
+require_relative 'services/gitlab_workhorse'
 
 module GDK
   # Services module contains individual service classes (e.g. Redis) that
@@ -20,6 +21,7 @@ module GDK
       PostgreSQLReplica
       Minio
       OpenLDAP
+      GitLabWorkhorse
     ].freeze
 
     # Returns an Array of enabled services only.

@@ -91,6 +91,8 @@ module GDK
     end
 
     settings :workhorse do
+      string(:dir) { config.gdk_root.join('gitlab-workhorse') }
+      string(:config_file) { File.join(config.workhorse.dir, 'config.toml') }
       integer(:configured_port) { 3333 }
 
       string :__active_host do

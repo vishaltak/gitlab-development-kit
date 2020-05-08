@@ -161,5 +161,7 @@ webpack:
   static: false
   sourcemaps: true
 workhorse:
+  dir: '/home/git/gdk/gitlab-workhorse'
+  config_file: '/home/git/gdk/gitlab-workhorse/config.toml'
   auto_update: true
   configured_port: 3333

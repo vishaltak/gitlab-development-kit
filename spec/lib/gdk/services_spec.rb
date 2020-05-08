@@ -11,6 +11,7 @@ describe GDK::Services do
         PostgreSQLReplica
         Minio
         OpenLDAP
+        GitLabWorkhorse
       ]
 
       expect(described_class::ALL).to eq(service_classes)
@@ -21,7 +22,8 @@ describe GDK::Services do
     it 'contains enabled Service classes' do
       service_classes = [
         GDK::Services::Redis,
-        GDK::Services::PostgreSQL
+        GDK::Services::PostgreSQL,
+        GDK::Services::GitLabWorkhorse
       ]
 
       expect(described_class.enabled.map(&:class)).to eq(service_classes)
