@@ -226,6 +226,17 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.auto_reconfigure`            | `true`  | Set this to `false` to not run a `gdk reconfigure` after a successful `gdk update`. |
 | `gdk.auto_rebase_projects`        | `false` | Set this to `true` to automatically rebase projects as part of a `gdk update`. |
 
+##### Experimental GDK settings
+
+Experimental settings may be promoted to stable settings or they may be deprecated.
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `gdk.experimental.auto_reconfigure` | `false` | Set this to `true` to automatically run a `gdk reconfigure` after a successful `gdk update`. |
+| `gdk.experimental.quiet` | `false` | Set this to `true` to reduce the level of output when updating the GDK. |
+| `gdk.experimental.ruby_services` | `false` | Set this to `true` to use pure Ruby services instead of relying upon the `Procfile`. |
+
+
 ##### Hooks
 
 Before and after hooks are supported for `gdk start`, `gdk stop`, and `gdk update`.
