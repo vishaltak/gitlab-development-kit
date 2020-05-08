@@ -8,15 +8,17 @@ module GDK
   # if the service should in fact be executed.
   #
   module Services
-    # Returns an Array of all services, including enabled and not
-    # enabled.
-    #
-    # @return [Array<Class>] all services
-    def self.all
-      klasses = []
+    ALL = %i[].freeze
 
-      klasses.map do |const|
-        const_get(const).new
+    # Returns an Array of enabled services only.
+    #
+    # @return [Array<Class>] enabled services
+    def self.enabled
+      ALL.each_with_object([]) do |const, all|
+        instance = const_get(const).new
+        next unless instance.enabled?
+
+        all << instance
       end
     end
   end

@@ -3,11 +3,19 @@
 require 'spec_helper'
 
 describe GDK::Services do
-  describe '.all' do
+  describe 'ALL' do
     it 'contains Service classes' do
+      service_classes = %i[]
+
+      expect(described_class::ALL).to eq(service_classes)
+    end
+  end
+
+  describe '.enabled' do
+    it 'contains enabled Service classes' do
       service_classes = []
 
-      expect(described_class.all.map(&:class)).to eq(service_classes)
+      expect(described_class.enabled.map(&:class)).to eq(service_classes)
     end
   end
 end
