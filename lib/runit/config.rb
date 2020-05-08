@@ -45,14 +45,13 @@ module Runit
         enable_runit_service(service)
       end
 
-      FileUtils.rm(stale_service_links(services))
+      enabled_service_names = services.map(&:name)
+      FileUtils.rm(stale_service_links(enabled_service_names))
     end
 
-    def stale_service_links(services)
-      service_names = services.map(&:name)
-
+    def stale_service_links(enabled_service_names)
       stale_entries = Dir.entries(services_dir).reject do |svc|
-        service_names.include?(svc) || %w[. ..].include?(svc)
+        enabled_service_names.include?(svc) || %w[. ..].include?(svc)
       end
 
       stale_entries.map do |entry|
