@@ -92,14 +92,26 @@ module GDK
       true
     when 'config'
       config_command = ARGV.shift
-      abort 'Usage: gdk config get slug.of.the.conf.value' if config_command != 'get' || ARGV.empty?
 
-      begin
-        puts Config.new.dig(*ARGV)
-        true
-      rescue GDK::ConfigSettings::SettingUndefined
-        abort "Cannot get config for #{ARGV.join('.')}"
+      case config_command
+      when 'dump'
+        puts Config.new.dump!.to_yaml
+      when 'get'
+        begin
+          puts Config.new.dig(*ARGV)
+        rescue GDK::ConfigSettings::SettingUndefined
+          abort "Cannot get config for #{ARGV.join('.')}"
+        end
+      else
+        abort <<~GDK_CONFIG_USAGE
+          Usage: Supported gdk config sub commands are:
+
+          - dump        # Print entire config as YAML
+          - get <slug>  # Print config <slug> value
+        GDK_CONFIG_USAGE
       end
+
+      true
     when 'reconfigure'
       remember!(GDK.root)
       exec(MAKE, 'touch-examples', 'unlock-dependency-installers', 'postgresql-sensible-defaults', 'all', chdir: GDK.root)
