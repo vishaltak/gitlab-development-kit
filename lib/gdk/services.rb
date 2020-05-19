@@ -9,6 +9,7 @@ require_relative 'services/minio'
 require_relative 'services/openldap'
 require_relative 'services/gitlab_workhorse'
 require_relative 'services/rails_background_jobs'
+require_relative 'services/rails_web'
 
 module GDK
   # Services module contains individual service classes (e.g. Redis) that
@@ -24,6 +25,7 @@ module GDK
       OpenLDAP
       GitLabWorkhorse
       RailsBackgroundJobs
+      RailsWeb
     ].freeze
 
     # Returns an Array of enabled services only.
