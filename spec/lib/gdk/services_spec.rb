@@ -12,6 +12,7 @@ describe GDK::Services do
         Minio
         OpenLDAP
         GitLabWorkhorse
+        RailsBackgroundJobs
       ]
 
       expect(described_class::ALL).to eq(service_classes)
@@ -23,7 +24,8 @@ describe GDK::Services do
       service_classes = [
         GDK::Services::Redis,
         GDK::Services::PostgreSQL,
-        GDK::Services::GitLabWorkhorse
+        GDK::Services::GitLabWorkhorse,
+        GDK::Services::RailsBackgroundJobs
       ]
 
       expect(described_class.enabled.map(&:class)).to eq(service_classes)
