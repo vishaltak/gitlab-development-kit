@@ -75,6 +75,9 @@ gitlab_pages:
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
+gitlab_ui:
+  auto_update: true
+  enabled: false
 grafana:
   enabled: false
   port: 4000
@@ -194,6 +197,7 @@ repositories:
   gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
+  gitlab_ui: https://gitlab.com/gitlab-org/gitlab-ui.git
   gitlab_workhorse: https://gitlab.com/gitlab-org/gitlab-workhorse.git
 repositories_root: "/home/git/gdk/repositories"
 repository_storages: "/home/git/gdk/repository_storages"

@@ -35,6 +35,7 @@ module GDK
       string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-com/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
+      string(:gitlab_ui) { 'https://gitlab.com/gitlab-org/gitlab-ui.git' }
     end
 
     array(:git_repositories) do
@@ -155,6 +156,11 @@ module GDK
     settings :gitlab_shell do
       bool(:auto_update) { true }
       string(:dir) { config.gdk_root.join('gitlab-shell') }
+    end
+
+    settings :gitlab_ui do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
     end
 
     settings :gitlab_elasticsearch_indexer do

@@ -185,6 +185,14 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'repositories' do
+    describe 'gitlab_ui' do
+      it 'returns the gitlab-ui repository URL' do
+        expect(config.repositories.gitlab_ui).to eq('https://gitlab.com/gitlab-org/gitlab-ui.git')
+      end
+    end
+  end
+
   describe 'workhorse' do
     describe '#__active_host' do
       it 'returns the configured hostname' do
@@ -779,6 +787,20 @@ RSpec.describe GDK::Config do
   describe 'load_balancing' do
     it 'disabled by default' do
       expect(config.load_balancing.enabled).to be false
+    end
+  end
+
+  describe 'gitlab_ui' do
+    describe 'enabled' do
+      it 'is disabled by default' do
+        expect(config.gitlab_ui.enabled).to be(false)
+      end
+    end
+
+    describe 'auto_update' do
+      it 'is enabled by default' do
+        expect(config.gitlab_ui.auto_update).to be(true)
+      end
     end
   end
 
