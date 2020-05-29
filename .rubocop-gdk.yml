@@ -15,6 +15,7 @@ AllCops:
     - 'gitlab-k8s-agent/**/*'
     - 'gitlab-runner/**/*'
     - 'gitlab-shell/**/*'
+    - 'gitlab-ui/**/*'
     - 'gitlab-workhorse/**/*'
     - 'gitlab/**/*'
     - 'go-gitlab-shell/**/*'
