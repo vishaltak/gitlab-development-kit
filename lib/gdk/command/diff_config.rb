@@ -5,26 +5,28 @@ require 'fileutils'
 module GDK
   module Command
     class DiffConfig
-      def run(stdout: $stdout, stderr: $stderr)
-        files = %w[
-          gitlab/config/gitlab.yml
-          gitlab/config/database.yml
-          gitlab/config/unicorn.rb
-          gitlab/config/puma.rb
-          gitlab/config/cable.yml
-          gitlab/config/resque.yml
-          gitlab-shell/config.yml
-          gitlab-shell/.gitlab_shell_secret
-          redis/redis.conf
-          .ruby-version
-          Procfile
-          gitlab-workhorse/config.toml
+        FILES = %w[
           gitaly/gitaly.config.toml
-          gitaly/praefect.config.toml
-          nginx/conf/nginx.conf
         ]
+        #   gitlab/config/gitlab.yml
+        #   gitlab/config/database.yml
+        #   gitlab/config/unicorn.rb
+        #   gitlab/config/puma.rb
+        #   gitlab/config/cable.yml
+        #   gitlab/config/resque.yml
+        #   gitlab-shell/config.yml
+        #   gitlab-shell/.gitlab_shell_secret
+        #   redis/redis.conf
+        #   .ruby-version
+        #   Procfile
+        #   gitlab-workhorse/config.toml
+        #   gitaly/gitaly.config.toml
+        #   gitaly/praefect.config.toml
+        #   nginx/conf/nginx.conf
+        # ]
 
-        file_diffs = files.map do |file|
+      def run(stdout: $stdout, stderr: $stderr)
+        file_diffs = FILES.map do |file|
           ConfigDiff.new(file)
         end
 
@@ -34,7 +36,7 @@ module GDK
         end
 
         file_diffs.each do |diff|
-          stdout.puts diff.output unless diff.output == ""
+          stdout.puts(diff.output) unless diff.output == ''
         end
       end
 
@@ -49,6 +51,9 @@ module GDK
 
         def file_path
           @file_path ||= GDK.root.join(file)
+        end
+
+        def success?
         end
 
         private
@@ -72,7 +77,9 @@ module GDK
         end
 
         def run(*commands)
-          IO.popen(commands.join(' '), chdir: GDK.root, &:read).chomp
+          # IO.popen(commands.join(' '), chdir: GDK.root, &:read).chomp
+          sh = Shellout.new(commands, chdir: GDK.root)
+          #%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).run
         end
       end
     end

@@ -83,6 +83,9 @@ dir = "<%= config.gdk_root.join('gitaly', 'ruby') %>"
 # The directory where gitlab-shell is installed
 dir = "<%= config.gitlab_shell.dir %>"
 
+[gitlab]
+url = "unix://<%= config.gitlab.socket %>"
+
 # # You can adjust the concurrency of each RPC endpoint
 # [[concurrency]]
 # rpc = "/gitaly.RepositoryService/GarbageCollect"

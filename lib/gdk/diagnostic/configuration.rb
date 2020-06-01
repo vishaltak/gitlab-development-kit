@@ -20,6 +20,7 @@ module GDK
       end
 
       def success?
+        require 'pry-byebug' ; binding.pry
         @config_diff.empty?
       end
 
