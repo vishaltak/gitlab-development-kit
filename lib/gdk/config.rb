@@ -103,6 +103,11 @@ module GDK
       integer(:port) { read!('webpack_port') || 3808 }
     end
 
+    settings :action_cable do
+      bool(:in_app) { true }
+      integer(:worker_pool_size) { 4 }
+    end
+
     settings :workhorse do
       integer(:configured_port) { 3333 }
 
@@ -361,7 +366,13 @@ module GDK
       string(:__socket_file_escaped) { CGI.escape(config.gitlab.__socket_file.to_s) }
 
       settings :actioncable do
-        path(:__socket_file) { config.gdk_root.join('gitlab.actioncable.socket') }
+        path(:__socket_file) do
+          if config.action_cable.in_app?
+            config.gdk_root.join('gitlab.socket')
+          else
+            config.gdk_root.join('gitlab.actioncable.socket')
+          end
+        end
       end
     end
   end
