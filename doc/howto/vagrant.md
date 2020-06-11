@@ -88,6 +88,10 @@ OSes like Windows/OSX you will have to run the entire Docker hypervisor in a VM
 - If you have problems running `support/edit-gitlab.yml` (bash script despite
   file extension), see <https://stackoverflow.com/a/5514351/1233435>.
 - If you have errors with symlinks or Ruby during initialization, make sure you ran `vagrant up` from an elevated command prompt (Windows users).
+- If you see an error like `Incompatible loader version. This protected script has been encoded with a newer version of RubyEncoder`
+  this can be solved by downloading a new version of RubyEncoder Loader for your
+  OS and adding the different `rgloaderXX` files to the appropriate folder,
+  eg `/opt/vagrant/embedded/rgloader/` (example for linux)
 
 ## Next step
 
