@@ -148,6 +148,36 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 	$(Q)gdk start rails-migration-dependencies
 
 ##############################################################
+# bootstrap
+##############################################################
+
+bootstrap: asdf-setup
+	${Q}source .envrc && gem install bundler -v '= 1.17.3'
+	${Q}source .envrc && gem install gitlab-development-kit
+
+##############################################################
+# asdf
+##############################################################
+
+.PHONY: asdf-setup
+asdf-setup: .asdf/.git
+	@# Install asdf plugins
+	${Q}source .envrc && cut -d ' ' -f 1 .tool-versions | xargs -n1 asdf plugin add || true
+
+	@# Trust this dir with direnv
+	${Q}source .envrc && direnv allow .envrc
+
+	@# Install needed software
+	${Q}source .envrc && MAKELEVEL=0 asdf install
+
+.PHONY: asdf-update
+asdf-update: asdf-setup
+
+.asdf/.git:
+	@# Install asdf
+	${Q}git clone https://github.com/asdf-vm/asdf.git .asdf --branch v0.7.8
+
+##############################################################
 # GitLab
 ##############################################################
 
