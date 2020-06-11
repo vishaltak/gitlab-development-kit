@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+bootstrap_asdf() {
+  # Install asdf plugins, e.g. `asdf plugin add ruby`
+  comm -23 <(cut -d ' ' -f 1 .tool-versions | sort) <(asdf plugin list | sort) | xargs -tn1 asdf plugin add
+
+  # Install all packages specified in .tool-versions
+  MAKELEVEL=0 asdf install
+}
+
+bootstrap_gdk() {
+  gem install bundler -v '= 1.17.3'
+  gem install gitlab-development-kit
+}
+
+bootstrap_asdf
+bootstrap_gdk
