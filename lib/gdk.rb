@@ -113,6 +113,9 @@ module GDK
     when 'doctor'
       GDK::Command::Doctor.new.run
       true
+    when 'pristine'
+      GDK::Command::Pristine.new.run
+      true
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run
       true

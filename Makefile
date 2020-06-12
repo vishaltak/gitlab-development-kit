@@ -73,6 +73,26 @@ postgresql-sensible-defaults \
 all \
 show-reconfigured-at
 
+# This is used by `gdk pristine`
+#
+pristine: pristine-gdk-stop pristine-dir-cleanup unlock-dependency-installers bootstrap all
+
+pristine-gdk-stop:
+	gdk stop
+
+pristine-dir-cleanup:
+	rm -rf \
+.asdf \
+postgresql \
+respositories \
+elasticsearch \
+tmp/gitaly/* \
+tmp/praefect/*
+
+	mkdir -p \
+tmp/gitaly \
+tmp/praefect/gitaly-0
+
 self-update: unlock-dependency-installers
 	@echo
 	@echo "------------------------------------------------------------"
