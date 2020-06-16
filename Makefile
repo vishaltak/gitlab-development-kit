@@ -28,6 +28,7 @@ gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
 psql := $(postgresql_bin_dir)/psql
 
+postgresql_in_recovery = $(strip $(shell $(psql) -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc 'SELECT pg_is_in_recovery();' $(QQerr)))
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
@@ -160,7 +161,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 
 gitlab-setup: gitlab/.git .ruby-version gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
-gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate
+gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab-geo-db-migrate
 
 gitlab/.git/pull:
 	@echo
@@ -173,12 +174,26 @@ gitlab/.git/pull:
 	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
 
 gitlab-db-migrate:
+ifeq ($(postgresql_in_recovery),f)
 	@echo
 	@echo "------------------------------------------------------------"
 	@echo "Processing gitlab-org/gitlab Rails DB migrations"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		bundle exec rake db:migrate db:test:prepare
+	$(Q)$(gitlab_rake_cmd) db:migrate db:test:prepare
+else
+	@true
+endif
+
+gitlab-geo-db-migrate:
+ifeq ($(geo_enabled),true)
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Processing gitlab-org/gitlab Rails Geo DB migrations"
+	@echo "------------------------------------------------------------"
+	$(Q)$(gitlab_rake_cmd) geo:db:migrate geo:db:test:prepare
+else
+	@true
+endif
 
 .ruby-version:
 	$(Q)ln -s ${gitlab_development_root}/gitlab/.ruby-version ${gitlab_development_root}/$@
