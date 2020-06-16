@@ -163,12 +163,15 @@ gitlab-setup: gitlab/.git .ruby-version gitlab-config .gitlab-bundle .gitlab-yar
 
 gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab-geo-db-migrate
 
-gitlab/.git/pull:
+.PHONY: gitlab/git-restore
+gitlab/git-restore:
+	$(Q)$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --
+
+gitlab/.git/pull: gitlab/git-restore
 	@echo
 	@echo "------------------------------------------------------------"
 	@echo "Updating gitlab-org/gitlab to current master"
 	@echo "------------------------------------------------------------"
-	$(Q)$(gitlab_git_cmd) checkout -- Gemfile.lock $$(git ls-tree HEAD --name-only db/structure.sql db/schema.rb) ${QQ}
 	$(Q)$(gitlab_git_cmd) stash ${QQ}
 	$(Q)$(gitlab_git_cmd) checkout master ${QQ}
 	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
@@ -408,29 +411,21 @@ else
 endif
 
 .PHONY: geo-primary-migrate
-geo-primary-migrate: ensure-databases-running
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		$(bundle_install_cmd) && \
-		bundle exec rake db:migrate db:test:prepare geo:db:migrate geo:db:test:prepare && \
-		git checkout -- $$(git ls-tree HEAD --name-only db/structure.sql db/schema.rb) ee/db/geo/schema.rb
-	$(Q)$(MAKE) postgresql/geo-fdw/test/rebuild ${QQ}
+# Geo primary is generally used for unit testing, so refresh the test FDW schema
+geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab-geo-db-migrate gitlab/git-restore postgresql/geo-fdw/test/rebuild diff-config
 
 .PHONY: geo-primary-update
-geo-primary-update: update geo-primary-migrate
-	$(Q)gdk diff-config
+geo-primary-update: update geo-primary-migrate diff-config
 
 .PHONY: geo-secondary-migrate
-geo-secondary-migrate: ensure-databases-running
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		${bundle_install_cmd} && \
-		bundle exec rake geo:db:migrate && \
-		git checkout -- ee/db/geo/schema.rb
-	$(Q)$(MAKE) postgresql/geo-fdw/development/rebuild ${QQ}
+# Geo secondary needs an up-to-date development FDW schema
+geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-geo-db-migrate gitlab/git-restore postgresql/geo-fdw/development/rebuild
 
 .PHONY: geo-secondary-update
-geo-secondary-update:
-	$(Q)-$(MAKE) update ${QQ}
-	$(Q)$(MAKE) geo-secondary-migrate ${QQ}
+geo-secondary-update: update geo-secondary-migrate diff-config
+
+.PHONY: diff-config
+diff-config:
 	$(Q)gdk diff-config
 
 ##############################################################
