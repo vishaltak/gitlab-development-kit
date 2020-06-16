@@ -772,7 +772,7 @@ production: &base
     receive_pack: true
 
     ssh_port: <%= config.sshd.listen_port %>
-    ssh_host: <%= config.sshd.listen_address %>
+    ssh_host: <%= config.hostname %>
 
   workhorse:
     # File that contains the secret key for verifying access for gitlab-workhorse.

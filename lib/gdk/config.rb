@@ -100,7 +100,7 @@ module GDK
       string :host do
         next config.auto_devops.listen_address if config.auto_devops?
 
-        read!('webpack_host') || config.hostname
+        read!('webpack_host') || config.listen_address
       end
       bool(:static) { false }
       bool(:vendor_dll) { false }
@@ -121,7 +121,7 @@ module GDK
       string :__active_host do
         next config.auto_devops.listen_address if config.auto_devops?
 
-        config.hostname
+        config.listen_address
       end
 
       integer :__active_port do
@@ -296,7 +296,7 @@ module GDK
 
     settings :nginx do
       bool(:enabled) { false }
-      string(:listen) { config.hostname }
+      string(:listen) { config.listen_address }
       string(:bin) { find_executable!('nginx') || '/usr/local/bin/nginx' }
       settings :ssl do
         string(:certificate) { 'localhost.crt' }
@@ -394,7 +394,7 @@ module GDK
     settings :sshd do
       bool(:enabled) { false }
       path(:bin) { find_executable!('sshd') || '/usr/local/sbin/sshd' }
-      string(:listen_address) { config.hostname }
+      string(:listen_address) { config.listen_address }
       integer(:listen_port) { 2222 }
       string(:user) { config.username }
       path(:authorized_keys_file) { config.gdk_root.join('.ssh', 'authorized_keys') }

@@ -7,7 +7,7 @@ application then:
 - In your `gdk.yml` write:
 
   ```yaml
-  hostname: 0.0.0.0
+  listen_address: 0.0.0.0
   ```
 
 - Reconfigure and restart

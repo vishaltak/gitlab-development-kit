@@ -28,7 +28,7 @@ sudo docker run localhost:3000/gitlab-org/dependency_proxy/containers/hello-worl
 
 Docker should succeed and you should see
 
-```shell
+```plaintext
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
 ```
@@ -44,8 +44,8 @@ creating or updating the `gdk.yml` file in the root of your GDK directory.
 
 The file should contain the intended host, such as `127.0.0.1` or `0.0.0.0`:
 
-```ini
-host: 0.0.0.0
+```yaml
+hostname: 0.0.0.0
 ```
 
 Run `gdk reconfigure` and `gdk restart` to invoke the changes and visit the IP

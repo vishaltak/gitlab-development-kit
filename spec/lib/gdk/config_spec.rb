@@ -178,8 +178,8 @@ RSpec.describe GDK::Config do
   describe 'workhorse' do
     describe '#__active_host' do
       context 'when AutoDevOps is not enabled' do
-        it 'returns the configured hostname' do
-          expect(config.workhorse.__active_host).to eq(config.hostname)
+        it 'returns the configured listen_address' do
+          expect(config.workhorse.__active_host).to eq(config.listen_address)
         end
       end
 
