@@ -1,6 +1,7 @@
 # Pages
 
 ## Port
+
 GDK features an HTTP-only GitLab Pages daemon on port `3010`.
 Port number can be customized editing `gdk.yml` as explained in
 [GDK configuration](../configuration.md#gdkyml).
