@@ -178,7 +178,7 @@ module GDK
 
     settings :gitlab_pages do
       bool(:enabled) { true }
-      string(:domain) { read!('gitlab_pages_domain') || '127.0.0.1.xip.io' }
+      string(:hostname) { read!('gitlab_pages_hostname') || '127.0.0.1.xip.io' }
       integer(:port) { read!('gitlab_pages_port') || 3010 }
       bool(:auto_update) { true }
     end
@@ -187,7 +187,7 @@ module GDK
       bool(:enabled) { read!('auto_devops_enabled') || false }
       string(:listen_address) { '0.0.0.0' }
       settings :gitlab do
-        integer(:port) { read_or_write!('auto_devops_gitlab_port', rand(20_000..24_999)) }
+        integer(:port) { read_or_write!('auto_devops_gitlab_port', rand(20000..24999)) }
       end
       settings :registry do
         integer(:port) { read!('auto_devops_registry_port') || (config.auto_devops.gitlab.port + 5000) }
@@ -273,7 +273,7 @@ module GDK
 
     settings :praefect do
       path(:address) { config.gdk_root.join('praefect.socket') }
-      path(:config_file) { config.gdk_root.join('gitaly', 'praefect.config.toml') }
+      path(:config_file) { config.gdk_root.join('gitaly', "praefect.config.toml") }
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       settings :database do
@@ -286,7 +286,7 @@ module GDK
         settings_array!(config.praefect.node_count) do |i|
           path(:address) { config.gdk_root.join("gitaly-praefect-#{i}.socket") }
           string(:config_file) { "gitaly/gitaly-#{i}.praefect.toml" }
-          path(:log_dir) { config.gdk_root.join('log', "praefect-gitaly-#{i}") }
+          path(:log_dir) { config.gdk_root.join("log", "praefect-gitaly-#{i}") }
           bool(:primary) { i.zero? }
           string(:service_name) { "praefect-gitaly-#{i}" }
           string(:storage) { "praefect-internal-#{i}" }
