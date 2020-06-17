@@ -13,13 +13,14 @@ In order to handle wildcard hostnames, pages integration relies on
 This is the preferred configuration and the default value for the
 GitLab Pages hostname is `127.0.0.1.nip.io`.
 
-To use a custom hostname, you must [set up `gdk.test` hostname](../index.md#set-up-gdktest-hostname)
-and add an entry to your `/etc/hosts` file.
-For example, to use GitLab Pages with the hostname `pages.gdk.test`, add:
+You can configure a custom host name. For example, to set up `pages.gdk.test`:
 
-```plaintext
-127.0.0.1 pages.gdk.test
-```
+1. Set up the [`gdk.test` hostname](../index.md#set-up-gdktest-hostname).
+1. Also add `pages.gdk.test` as a hostname. For example, add the following to `/etc/hosts`:
+
+   ```plaintext
+   127.0.0.1 pages.gdk.test
+   ```
 
 However, to load your Pages domains, you must add an entry to the `/etc/hosts` file for
 each domain you want to access. For example, to access `root.pages.gdk.test`, add the
