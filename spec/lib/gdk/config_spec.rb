@@ -491,7 +491,7 @@ describe GDK::Config do
     describe '#host' do
       context 'when host is not specified' do
         it 'returns the default hostname' do
-          expect(config.gitlab_pages.hostname).to eq('127.0.0.1.xip.io')
+          expect(config.gitlab_pages.hostname).to eq('127.0.0.1.nip.io')
         end
       end
 

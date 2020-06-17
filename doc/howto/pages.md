@@ -9,13 +9,13 @@ Port number can be customized editing `gdk.yml` as explained in
 ## Hostname
 
 In order to handle wildcard hostnames, pages integration relies on
-[xip.io](https://xip.io) and will not work on a disconnected system.
+[nip.io](https://nip.io) and will not work on a disconnected system.
 This is the preferred configuration and the default value for the
-GitLab Pages hostname will be `127.0.0.1.xip.io`.
+GitLab Pages hostname will be `127.0.0.1.nip.io`.
 
 To use a custom hostname, you will need to add an entry to your
 `/etc/hosts` file. For example, if you'd like to use GitLab Pages with
-the hostname `pages.localhost`.
+the hostname `pages.localhost`:
 
 ```plaintext
 127.0.0.1 pages.localhost
@@ -23,7 +23,7 @@ the hostname `pages.localhost`.
 
 However, to load your Pages domains, you will need to add an entry to
 the `/etc/hosts` files per domain you want to acces. For example, to
-access `root.pages.localhost` add the following to `/etc/hosts`
+access `root.pages.localhost`, add the following to `/etc/hosts`
 
 ```plaintext
 127.0.0.1 root.pages.localhost

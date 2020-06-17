@@ -178,7 +178,7 @@ module GDK
 
     settings :gitlab_pages do
       bool(:enabled) { true }
-      string(:hostname) { read!('gitlab_pages_hostname') || '127.0.0.1.xip.io' }
+      string(:hostname) { read!('gitlab_pages_hostname') || '127.0.0.1.nip.io' }
       integer(:port) { read!('gitlab_pages_port') || 3010 }
       bool(:auto_update) { true }
     end
