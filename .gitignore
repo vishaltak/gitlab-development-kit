@@ -82,6 +82,7 @@
 /postgresql/data
 /postgresql_geo_port
 /postgresql_port
+/prometheus/prometheus.yml
 /redis/*.conf
 /registry/config.yml
 /registry/storage/

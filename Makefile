@@ -112,6 +112,7 @@ clean-config:
 	localhost.crt \
 	localhost.key \
 	nginx/conf/nginx.conf \
+	prometheus/prometheus.yml \
 	redis/redis.conf \
 	registry/config.yml \
 	registry_host.crt \
@@ -693,8 +694,12 @@ minio/data/%:
 # prometheus
 ##############################################################
 
-prom-setup:
+prom-setup: prometheus/prometheus.yml
 	$(Q)[ "$(uname -s)" = "Linux" ] && sed -i -e 's/docker\.for\.mac\.localhost/localhost/g' ${gitlab_development_root}/prometheus/prometheus.yml || true
+
+.PHONY: prometheus/prometheus.yml
+prometheus/prometheus.yml:
+	$(Q)rake $@
 
 ##############################################################
 # grafana
