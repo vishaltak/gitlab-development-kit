@@ -94,28 +94,28 @@ self-update: unlock-dependency-installers
 
 clean-config:
 	$(Q)rm -rf \
-	gitlab/config/gitlab.yml \
+	Procfile \
+	gitaly/gitaly.config.toml \
+	gitlab-runner-config.toml \
+	gitlab-shell/.gitlab_shell_secret \
+	gitlab-shell/config.yml \
+	gitlab-workhorse/config.toml \
+	gitlab/config/cable.yml \
 	gitlab/config/database.yml \
 	gitlab/config/database_geo.yml \
-	gitlab/config/unicorn.rb \
+	gitlab/config/gitlab.yml \
 	gitlab/config/puma.rb \
 	gitlab/config/puma_actioncable.rb \
-	gitlab/config/cable.yml \
 	gitlab/config/resque.yml \
-	gitlab-shell/config.yml \
-	gitlab-shell/.gitlab_shell_secret \
-	redis/redis.conf \
-	Procfile \
-	gitlab-runner-config.toml \
-	gitlab-workhorse/config.toml \
-	gitaly/gitaly.config.toml \
-	nginx/conf/nginx.conf \
-	registry_host.crt \
-	registry_host.key \
+	gitlab/config/unicorn.rb \
+	jaeger \
 	localhost.crt \
 	localhost.key \
+	nginx/conf/nginx.conf \
+	redis/redis.conf \
 	registry/config.yml \
-	jaeger
+	registry_host.crt \
+	registry_host.key
 
 touch-examples:
 	$(Q)touch \
