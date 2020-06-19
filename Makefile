@@ -22,6 +22,13 @@ gitlab_elasticsearch_indexer_version = $(shell bin/resolve-dependency-commitish 
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")
 bundle_install_cmd = bundle install --jobs 4 --without production ${quiet_bundle_flag}
+in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
+gitlab_rake_cmd = $(in_gitlab) bundle exec rake
+gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
+
+psql := $(postgresql_bin_dir)/psql
+
+postgresql_in_recovery = $(strip $(shell $(psql) -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc 'SELECT pg_is_in_recovery();' $(QQerr)))
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
@@ -32,6 +39,8 @@ else
 	Q = @
 	QQ = > /dev/null
 endif
+
+QQerr = 2> /dev/null
 
 ifeq ($(shallow_clone),true)
 git_depth_param = --depth=1
@@ -78,11 +87,10 @@ self-update: unlock-dependency-installers
 	@echo "------------------------------------------------------------"
 	@echo "Running self-update on GDK"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root} && \
-		git stash ${QQ} && \
-		git checkout master ${QQ} && \
-		git fetch ${QQ} && \
-		support/self-update-git-worktree ${QQ}
+	$(Q)git stash ${QQ}
+	$(Q)git checkout master ${QQ}
+	$(Q)git fetch ${QQ}
+	$(Q)support/self-update-git-worktree ${QQ}
 
 clean-config:
 	$(Q)rm -rf \
@@ -153,26 +161,42 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 
 gitlab-setup: gitlab/.git .ruby-version gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
-gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate
+gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab-geo-db-migrate
 
-gitlab/.git/pull:
+.PHONY: gitlab/git-restore
+gitlab/git-restore:
+	$(Q)$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --
+
+gitlab/.git/pull: gitlab/git-restore
 	@echo
 	@echo "------------------------------------------------------------"
 	@echo "Updating gitlab-org/gitlab to current master"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		git checkout -- Gemfile.lock $$(git ls-tree HEAD --name-only db/structure.sql db/schema.rb) ${QQ} && \
-		git stash ${QQ} && \
-		git checkout master ${QQ} && \
-		git pull --ff-only ${QQ}
+	$(Q)$(gitlab_git_cmd) stash ${QQ}
+	$(Q)$(gitlab_git_cmd) checkout master ${QQ}
+	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
 
 gitlab-db-migrate:
+ifeq ($(postgresql_in_recovery),f)
 	@echo
 	@echo "------------------------------------------------------------"
 	@echo "Processing gitlab-org/gitlab Rails DB migrations"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		bundle exec rake db:migrate db:test:prepare
+	$(Q)$(gitlab_rake_cmd) db:migrate db:test:prepare
+else
+	@true
+endif
+
+gitlab-geo-db-migrate:
+ifeq ($(geo_enabled),true)
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Processing gitlab-org/gitlab Rails Geo DB migrations"
+	@echo "------------------------------------------------------------"
+	$(Q)$(gitlab_rake_cmd) geo:db:migrate geo:db:test:prepare
+else
+	@true
+endif
 
 .ruby-version:
 	$(Q)ln -s ${gitlab_development_root}/gitlab/.ruby-version ${gitlab_development_root}/$@
@@ -229,7 +253,7 @@ gitlab/public/uploads:
 	@echo "------------------------------------------------------------"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root}/gitlab && $(bundle_install_cmd)
+	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
 .gitlab-yarn:
@@ -237,7 +261,7 @@ gitlab/public/uploads:
 	@echo "------------------------------------------------------------"
 	@echo "Installing gitlab-org/gitlab Node.js packages"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root}/gitlab && yarn install --pure-lockfile ${QQ}
+	$(Q)$(in_gitlab) yarn install --pure-lockfile ${QQ}
 	$(Q)touch $@
 
 .gettext:
@@ -245,8 +269,8 @@ gitlab/public/uploads:
 	@echo "------------------------------------------------------------"
 	@echo "Generating gitlab-org/gitlab Rails translations"
 	@echo "------------------------------------------------------------"
-	$(Q)cd ${gitlab_development_root}/gitlab && bundle exec rake gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
-	$(Q)git -C ${gitlab_development_root}/gitlab checkout locale/*/gitlab.po
+	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
+	$(Q)$(gitlab_git_cmd) checkout locale/*/gitlab.po
 	$(Q)touch $@
 
 ##############################################################
@@ -387,29 +411,21 @@ else
 endif
 
 .PHONY: geo-primary-migrate
-geo-primary-migrate: ensure-databases-running
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		$(bundle_install_cmd) && \
-		bundle exec rake db:migrate db:test:prepare geo:db:migrate geo:db:test:prepare && \
-		git checkout -- $$(git ls-tree HEAD --name-only db/structure.sql db/schema.rb) ee/db/geo/schema.rb
-	$(Q)$(MAKE) postgresql/geo-fdw/test/rebuild ${QQ}
+# Geo primary is generally used for unit testing, so refresh the test FDW schema
+geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab-geo-db-migrate gitlab/git-restore postgresql/geo-fdw/test/rebuild diff-config
 
 .PHONY: geo-primary-update
-geo-primary-update: update geo-primary-migrate
-	$(Q)gdk diff-config
+geo-primary-update: update geo-primary-migrate diff-config
 
 .PHONY: geo-secondary-migrate
-geo-secondary-migrate: ensure-databases-running
-	$(Q)cd ${gitlab_development_root}/gitlab && \
-		${bundle_install_cmd} && \
-		bundle exec rake geo:db:migrate && \
-		git checkout -- ee/db/geo/schema.rb
-	$(Q)$(MAKE) postgresql/geo-fdw/development/rebuild ${QQ}
+# Geo secondary needs an up-to-date development FDW schema
+geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-geo-db-migrate gitlab/git-restore postgresql/geo-fdw/development/rebuild
 
 .PHONY: geo-secondary-update
-geo-secondary-update:
-	$(Q)-$(MAKE) update ${QQ}
-	$(Q)$(MAKE) geo-secondary-migrate ${QQ}
+geo-secondary-update: update geo-secondary-migrate diff-config
+
+.PHONY: diff-config
+diff-config:
 	$(Q)gdk diff-config
 
 ##############################################################
@@ -567,27 +583,27 @@ postgresql-replication/access:
 	$(Q)cat support/pg_hba.conf.add >> ${postgresql_data_dir}/pg_hba.conf
 
 postgresql-replication/role:
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"
+	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"
 
 postgresql-replication/backup:
 	$(Q)$(eval postgresql_primary_dir := $(realpath postgresql-primary))
-	$(Q)$(eval postgresql_primary_host := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.host 2>/dev/null))
-	$(Q)$(eval postgresql_primary_port := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.port 2>/dev/null))
+	$(Q)$(eval postgresql_primary_host := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.host $(QQerr))
+	$(Q)$(eval postgresql_primary_port := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.port $(QQerr))
 
-	$(Q)psql -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
+	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
 	$(Q)rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgresql_primary_dir}/data postgresql
-	$(Q)psql -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
+	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
 	$(Q)./support/recovery.conf ${postgresql_primary_host} ${postgresql_primary_port} > ${postgresql_data_dir}/recovery.conf
 	$(Q)$(MAKE) postgresql/port ${QQ}
 
 postgresql-replication/slot:
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_create_physical_replication_slot('gitlab_gdk_replication_slot');"
+	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_create_physical_replication_slot('gitlab_gdk_replication_slot');"
 
 postgresql-replication/list-slots:
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_replication_slots;"
+	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_replication_slots;"
 
 postgresql-replication/drop-slot:
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_drop_replication_slot('gitlab_gdk_replication_slot');"
+	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_drop_replication_slot('gitlab_gdk_replication_slot');"
 
 postgresql-replication/config:
 	$(Q)./support/postgres-replication ${postgresql_dir}
@@ -631,16 +647,16 @@ postgresql/geo-fdw/%: fdw_port = $(call from_db_config,database,$*,port)
 postgresql/geo-fdw/test/%: rake_namespace = test:
 
 postgresql/geo-fdw/%/create:
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE EXTENSION IF NOT EXISTS postgres_fdw;"
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SERVER gitlab_secondary FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$(fdw_host)', dbname '${fdw_dbname}', port '$(fdw_port)' );"
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE USER MAPPING FOR current_user SERVER gitlab_secondary OPTIONS (user '$(USER)');"
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SCHEMA IF NOT EXISTS gitlab_secondary;"
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "GRANT USAGE ON FOREIGN SERVER gitlab_secondary TO current_user;"
-	$(Q)cd ${gitlab_development_root}/gitlab && bundle exec rake geo:db:${rake_namespace}refresh_foreign_tables
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE EXTENSION IF NOT EXISTS postgres_fdw;"
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SERVER gitlab_secondary FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$(fdw_host)', dbname '${fdw_dbname}', port '$(fdw_port)' );"
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE USER MAPPING FOR current_user SERVER gitlab_secondary OPTIONS (user '$(USER)');"
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SCHEMA IF NOT EXISTS gitlab_secondary;"
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "GRANT USAGE ON FOREIGN SERVER gitlab_secondary TO current_user;"
+	$(Q)$(gitlab_rake_cmd) geo:db:${rake_namespace}refresh_foreign_tables
 
 postgresql/geo-fdw/%/drop:
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SERVER gitlab_secondary CASCADE;"
-	$(Q)${postgresql_bin_dir}/psql -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SCHEMA gitlab_secondary;"
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SERVER gitlab_secondary CASCADE;"
+	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SCHEMA gitlab_secondary;"
 
 postgresql/geo-fdw/%/rebuild:
 	$(Q)$(MAKE) postgresql/geo-fdw/$*/drop || true ${QQ}
