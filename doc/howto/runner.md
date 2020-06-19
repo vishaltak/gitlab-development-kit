@@ -32,44 +32,31 @@ Ensure you have Docker installed, then set up GitLab to bind to all
 IPs on your machine by following [these instructions](local_network.md).
 Without this step, builds will fail with a 'connection refused' error.
 
-The `gitlab/config/gitlab.yml` configuration file also needs tweaking in the following sections:
+The configured `hostname` needs to be set to an IP address that
+*actually exists on the computer*.
 
-- GitLab host:
+1. Run `ipconfig` (Windows), `ifconfig` (Mac, BSD) or `ip addr show` (Linux) to find
+   your machine's network IP address. The IP address to use depends on your network,
+   and may change from time to time (via DHCP). An address like `10.x.x.x`,
+   `172.16.x.x`, or `192.168.x.x` is normally correct.
 
-```yaml
-production: &base
-  #
-  # 1. GitLab app settings
-  # ==========================
+   **Note**: If you are comfortable configuring your network, set a static IP for your
+   machine so it never changes.
 
-  ## GitLab settings
-  gitlab:
-    ## Web server settings (note: host is the FQDN, do not include http://)
-    host: localhost
-```
+1. In your `gdk.yml` add:
 
-- Webpack dev server host:
+   ```yaml
+   hostname: <IP address from previous step>
+   ```
 
-```yaml
-  ## Webpack settings
-  webpack:
-    dev_server:
-      enabled: true
-      host: 127.0.0.1
-      port: 3808
-```
+1. Reconfigure and restart GDK:
 
-The `host` parameter needs to be changed from `localhost`/ `127.0.0.1` to an IP address that
-*actually exists on the computer*. `0.0.0.0` is not valid - run `ipconfig`
-(Windows), `ifconfig` (Mac, BSD) or `ip addr show` (Linux) to get a list of IPs.
-The right one to use depends on your network, and may change from time to time,
-but an address like `10.x.x.x`, `172.16.x.x` or `192.168.x.x` is normally the
-right one.
+   ```shell
+   gdk reconfigure
+   gdk restart
+   ```
 
-NOTE: If you want to use a Docker executor, see [the section
-below](#docker-executor).
-
-Now run GDK: `gdk start`. Navigate to `http://<ip>:3000/gitlab-org/gitlab-test`.
+Navigate to `http://<IP address>:3000/gitlab-org/gitlab-test`.
 If the URL doesn't work, repeat the last step and pick a different IP.
 
 Once there, ensure that the HTTP clone URL is `http://<ip>:3000/gitlab-org/gitlab-test.git`.
