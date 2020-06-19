@@ -29,7 +29,7 @@ module Runit
     end
 
     def run_env
-      @run_env ||= GDK::Config.new.dump_run_env!
+      @run_env ||= generate_run_env
     end
 
     def render(services: services_from_procfile)
@@ -64,6 +64,23 @@ module Runit
     end
 
     private
+
+    def generate_run_env
+      run_env = <<~RUN_ENV
+        export host=#{GDK.config.hostname}
+        export port=#{GDK.config.port}
+        export relative_url_root=#{GDK.config.relative_url_root}
+      RUN_ENV
+
+      if GDK.config.tracer.jaeger?
+        run_env += <<~RUN_ENV
+          export GITLAB_TRACING='opentracing://jaeger?http_endpoint=http%3A%2F%2Flocalhost%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1'
+          export GITLAB_TRACING_URL='http://localhost:16686/search?service={{ service }}&tags=%7B"correlation_id"%3A"{{ correlation_id }}"%7D'
+        RUN_ENV
+      end
+
+      run_env
+    end
 
     def services_from_procfile
       File.read('Procfile').lines.map do |line|
