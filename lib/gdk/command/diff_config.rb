@@ -23,6 +23,7 @@ module GDK
           gitlab/config/resque.yml
           gitlab/config/unicorn.rb
           nginx/conf/nginx.conf
+          openssh/sshd_config
           redis/redis.conf
           registry/config.yml
         ]
