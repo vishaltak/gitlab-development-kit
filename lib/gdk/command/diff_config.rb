@@ -7,7 +7,6 @@ module GDK
     class DiffConfig
       def run(stdout: $stdout, stderr: $stderr)
         files = %w[
-          .ruby-version
           Procfile
           gitaly/gitaly.config.toml
           gitaly/praefect.config.toml
