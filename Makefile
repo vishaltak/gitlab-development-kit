@@ -120,14 +120,13 @@ clean-config:
 
 touch-examples:
 	$(Q)touch \
-	Procfile.erb \
 	gitlab-shell/config.yml.example \
 	gitlab-workhorse/config.toml.example \
 	gitlab/config/puma.example.development.rb \
 	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
 	grafana/grafana.ini.example \
-	support/templates/*.erb
+	support/templates/**/*.erb
 
 unlock-dependency-installers:
 	$(Q)rm -f \
