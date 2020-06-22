@@ -276,7 +276,8 @@ module GDK
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       settings :database do
-        path(:host) { config.postgresql.dir }
+        string(:host) { config.postgresql.host }
+        integer(:port) { config.postgresql.port }
         string(:dbname) { 'praefect_development' }
         string(:sslmode) { 'disable' }
       end
