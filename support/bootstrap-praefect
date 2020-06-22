@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/gdk'
-require_relative '../lib/gdk/postgresql'
 
 def main
   postgresql = GDK::PostgreSQL.new
