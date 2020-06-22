@@ -105,7 +105,6 @@ clean-config:
 	gitlab-shell/config.yml \
 	gitlab-shell/.gitlab_shell_secret \
 	redis/redis.conf \
-	.ruby-version \
 	Procfile \
 	gitlab-runner-config.toml \
 	gitlab-workhorse/config.toml \
@@ -158,7 +157,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 # GitLab
 ##############################################################
 
-gitlab-setup: gitlab/.git .ruby-version gitlab-config .gitlab-bundle .gitlab-yarn .gettext
+gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
 gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab-geo-db-migrate
 
@@ -196,9 +195,6 @@ ifeq ($(geo_enabled),true)
 else
 	@true
 endif
-
-.ruby-version:
-	$(Q)ln -s ${gitlab_development_root}/gitlab/.ruby-version ${gitlab_development_root}/$@
 
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)

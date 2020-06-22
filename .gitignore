@@ -17,7 +17,6 @@
 /.gitlab-yarn
 /.node-version
 /.ruby-gemset
-/.ruby-version
 /.ssh/
 /.vagrant/
 /Procfile
