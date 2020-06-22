@@ -34,23 +34,23 @@ file GDK::Config::FILE do |t|
 end
 
 desc 'Generate Procfile that defines the list of services to start'
-file 'Procfile' => ['Procfile.erb', GDK::Config::FILE] do |t|
+file 'Procfile' => ['support/templates/Procfile.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
 end
 
 # Define as a task instead of a file, so it's built unconditionally
-task 'gdk-config.mk' => 'gdk-config.mk.erb' do |t|
+task 'gdk-config.mk' => 'support/templates/gdk-config.mk.erb' do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
   puts t.name # Print the filename, so make can include it
 end
 
 desc 'Generate nginx configuration'
-file 'nginx/conf/nginx.conf' => ['nginx/conf/nginx.conf.erb', GDK::Config::FILE] do |t|
+file 'nginx/conf/nginx.conf' => ['support/templates/nginx/conf/nginx.conf.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
 desc 'Generate sshd configuration'
-file 'openssh/sshd_config' => ['openssh/sshd_config.erb', GDK::Config::FILE] do |t|
+file 'openssh/sshd_config' => ['support/templates/openssh/sshd_config.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
