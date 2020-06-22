@@ -27,4 +27,32 @@ describe Runit::Config do
       expect(subject.stale_service_links(services)).to eq([File.join(services_dir, 'stale')])
     end
   end
+
+  describe '#run_env', :aggregate_failures do
+    it 'memoize output from generate_run_env' do
+      expect(subject).to receive(:generate_run_env).once.and_call_original
+
+      2.times { subject.run_env }
+    end
+
+    it 'exports GITLAB_TRACING related env variables when jaeger is enabled' do
+      expect(subject.run_env).to match(/GITLAB_TRACING=/)
+      expect(subject.run_env).to match(/GITLAB_TRACING_URL=/)
+    end
+
+    it 'doesnt include GITLAB_TRACING related env variables when jaeger is disabled' do
+      yaml = {
+        'tracer' => {
+          'jaeger' => {
+            'enabled' => false
+          }
+
+        }
+      }
+      expect(GDK).to receive(:config) { GDK::Config.new(yaml: yaml) }.at_least(:once)
+
+      expect(subject.run_env).not_to match(/GITLAB_TRACING=/)
+      expect(subject.run_env).not_to match(/GITLAB_TRACING_URL=/)
+    end
+  end
 end
