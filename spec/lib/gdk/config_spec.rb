@@ -91,7 +91,7 @@ describe GDK::Config do
       end
 
       context 'when specified in config file' do
-        let(:version) { '6.5.1' }
+        let(:version) { '7.8.0' }
         let(:yaml) do
           { 'elasticsearch' => { 'version' => version } }
         end

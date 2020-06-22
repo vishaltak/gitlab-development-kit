@@ -49,7 +49,7 @@ For example, to use 7.5.2:
 While GDK does not support installing Elasticsearch version 6.x, it can be easily run with Docker:
 
 ```shell
-docker run -p 9200:9200 -d docker.elastic.co/elasticsearch/elasticsearch:6.5.1
+docker run -p 9200:9200 -d docker.elastic.co/elasticsearch/elasticsearch:6.8.9
 ```
 
 ## Setup
