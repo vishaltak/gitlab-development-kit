@@ -3,7 +3,7 @@
 require_relative '../lib/gdk'
 
 def main
-  postgresql = GDK::PostgreSQL.new
+  postgresql = GDK::Postgresql.new
   abort 'postgres not ready' unless postgresql.ready?
 
   config = GDK::Config.new

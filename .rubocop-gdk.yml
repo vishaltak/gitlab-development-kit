@@ -32,8 +32,3 @@ Rails:
 
 RSpec/ContextWording:
   Enabled: false
-
-RSpec/FilePath:
-  Exclude:
-    - 'spec/lib/gdk/postgresql_spec.rb'
-    - 'spec/lib/gdk/geo_postgresql_spec.rb'

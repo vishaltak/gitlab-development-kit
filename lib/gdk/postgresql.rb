@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GDK
-  class PostgreSQL
+  class Postgresql
     def ready?
       last_error = nil
       cmd = psql_cmd + ['-d', 'template1', '-c', '']
@@ -21,7 +21,7 @@ module GDK
     end
 
     def use_tcp?
-      config.start_with?('/')
+      !config.host.start_with?('/')
     end
 
     def db_exists?(dbname)

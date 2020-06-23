@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::PostgreSQL do
+describe GDK::Postgresql do
   let(:config) { GDK::Config.new(yaml: yaml) }
 
   before do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GDK
-  class GeoPostgreSQL < PostgreSQL
+  class PostgresqlGeo < Postgresql
     private
 
     def config

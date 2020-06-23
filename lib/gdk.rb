@@ -28,8 +28,8 @@ module GDK
   autoload :Services, 'gdk/services'
   autoload :ErbRenderer, 'gdk/erb_renderer'
   autoload :Logo, 'gdk/logo'
-  autoload :PostgreSQL, 'gdk/postgresql'
-  autoload :GeoPostgreSQL, 'gdk/geo_postgresql'
+  autoload :Postgresql, 'gdk/postgresql'
+  autoload :PostgresqlGeo, 'gdk/postgresql_geo'
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
