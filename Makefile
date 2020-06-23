@@ -204,7 +204,7 @@ gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
-	$(Q)rake gitlab/config/gitlab.yml
+	$(Q)rake $@
 
 .PHONY: gitlab/config/database.yml
 gitlab/config/database.yml:
@@ -333,11 +333,11 @@ gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
 
 .PHONY: gitaly/gitaly.config.toml
 gitaly/gitaly.config.toml:
-	$(Q)rake gitaly/gitaly.config.toml
+	$(Q)rake $@
 
 .PHONY: gitaly/praefect.config.toml
 gitaly/praefect.config.toml:
-	$(Q)rake gitaly/praefect.config.toml
+	$(Q)rake $@
 
 .PHONY: praefect-migrate
 praefect-migrate: postgresql-seed-praefect
@@ -422,7 +422,7 @@ geo-secondary-update: update geo-secondary-migrate diff-config
 
 .PHONY: diff-config
 diff-config:
-	$(Q)gdk diff-config
+	$(Q)gdk $@
 
 ##############################################################
 # gitlab-workhorse
@@ -838,7 +838,7 @@ rubocop:
 
 .PHONY: rspec
 rspec:
-	$(Q)bundle exec rspec
+	$(Q)bundle exec $@
 
 .PHONY: eclint
 eclint: install-eclint
