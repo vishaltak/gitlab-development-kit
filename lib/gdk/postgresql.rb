@@ -21,7 +21,7 @@ module GDK
     end
 
     def use_tcp?
-      config.host[0] != '/'
+      config.start_with?('/')
     end
 
     def db_exists?(dbname)
