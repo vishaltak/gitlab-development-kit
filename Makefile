@@ -125,7 +125,8 @@ touch-examples:
 	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
 	grafana/grafana.ini.example \
-	support/templates/**/*.erb
+	support/templates/**/*.erb \
+	support/templates/*.erb
 
 unlock-dependency-installers:
 	$(Q)rm -f \
