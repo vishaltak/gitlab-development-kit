@@ -270,7 +270,7 @@ production: &base
   pages:
     enabled: true
     access_control: false
-    hostname: <% config.gitlab_pages.hostname %>
+    hostname: <%= config.gitlab_pages.hostname %>
     port: <%= config.gitlab_pages.port %>
     https: false # Set to true if you serve the pages with HTTPS
     artifacts_server: true

@@ -273,7 +273,7 @@ module GDK
 
     settings :praefect do
       path(:address) { config.gdk_root.join('praefect.socket') }
-      path(:config_file) { config.gdk_root.join('gitaly', "praefect.config.toml") }
+      path(:config_file) { config.gdk_root.join("gitaly", "praefect.config.toml") }
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       settings :database do
