@@ -215,6 +215,37 @@ describe GDK::Config do
     end
   end
 
+  describe '#praefect' do
+    describe '#database' do
+      let(:yaml) do
+        {
+          'praefect' => {
+            'database' => {
+              'host' => 'localhost',
+              'port' => 1234
+            }
+          }
+        }
+      end
+
+      describe '#host' do
+        it { expect(default_config.praefect.database.host).to eq(default_config.postgresql.dir.to_s) }
+
+        it 'returns configured value' do
+          expect(config.praefect.database.host).to eq('localhost')
+        end
+      end
+
+      describe '#port' do
+        it { expect(default_config.praefect.database.port).to eq(5432) }
+
+        it 'returns configured value' do
+          expect(config.praefect.database.port).to eq(1234)
+        end
+      end
+    end
+  end
+
   describe '#postgresql' do
     let(:yaml) do
       {
@@ -338,30 +369,30 @@ describe GDK::Config do
     context 'when config_file exists' do
       let(:file_contents) do
         <<~CONTENTS
-        concurrent = 1
-        check_interval = 0
+          concurrent = 1
+          check_interval = 0
 
-        [session_server]
-          session_timeout = 1800
+          [session_server]
+            session_timeout = 1800
 
-        [[runners]]
-          name = "MyRunner"
-          url = "http://example.com"
-          token = "XXXXXXXXXX"
-          executor = "docker"
-          [runners.custom_build_dir]
-          [runners.docker]
-            tls_verify = false
-            image = "ruby:2.6"
-            privileged = false
-            disable_entrypoint_overwrite = false
-            oom_kill_disable = false
-            disable_cache = false
-            volumes = ["/cache"]
-            shm_size = 0
-          [runners.cache]
-            [runners.cache.s3]
-            [runners.cache.gcs]
+          [[runners]]
+            name = "MyRunner"
+            url = "http://example.com"
+            token = "XXXXXXXXXX"
+            executor = "docker"
+            [runners.custom_build_dir]
+            [runners.docker]
+              tls_verify = false
+              image = "ruby:2.6"
+              privileged = false
+              disable_entrypoint_overwrite = false
+              oom_kill_disable = false
+              disable_cache = false
+              volumes = ["/cache"]
+              shm_size = 0
+            [runners.cache]
+              [runners.cache.s3]
+              [runners.cache.gcs]
         CONTENTS
       end
 
