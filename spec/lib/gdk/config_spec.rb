@@ -491,19 +491,19 @@ describe GDK::Config do
     describe '#host' do
       context 'when host is not specified' do
         it 'returns the default hostname' do
-          expect(config.gitlab_pages.hostname).to eq('127.0.0.1.nip.io')
+          expect(config.gitlab_pages.host).to eq('127.0.0.1.nip.io')
         end
       end
 
       context 'when host is specified' do
         let(:yaml) do
           {
-            'gitlab_pages' => { 'hostname' => 'pages.localhost' }
+            'gitlab_pages' => { 'host' => 'pages.localhost' }
           }
         end
 
         it 'returns the configured hostname' do
-          expect(config.gitlab_pages.hostname).to eq('pages.localhost')
+          expect(config.gitlab_pages.host).to eq('pages.localhost')
         end
       end
     end
