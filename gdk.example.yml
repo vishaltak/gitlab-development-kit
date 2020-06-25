@@ -44,6 +44,7 @@ gitlab_elasticsearch_indexer:
 gitlab_pages:
   auto_update: true
   enabled: true
+  host: 127.0.0.1.nip.io
   port: 3010
 gitlab_shell:
   auto_update: true

@@ -539,4 +539,46 @@ describe GDK::Config do
       end
     end
   end
+
+  describe 'pages' do
+    describe '#host' do
+      context 'when host is not specified' do
+        it 'returns the default hostname' do
+          expect(config.gitlab_pages.host).to eq('127.0.0.1.nip.io')
+        end
+      end
+
+      context 'when host is specified' do
+        let(:yaml) do
+          {
+            'gitlab_pages' => { 'host' => 'pages.localhost' }
+          }
+        end
+
+        it 'returns the configured hostname' do
+          expect(config.gitlab_pages.host).to eq('pages.localhost')
+        end
+      end
+    end
+
+    describe '#port' do
+      context 'when port is not specified' do
+        it 'returns the default port' do
+          expect(config.gitlab_pages.port).to eq(3010)
+        end
+      end
+
+      context 'when port is specified' do
+        let(:yaml) do
+          {
+            'gitlab_pages' => { 'port' => 5555 }
+          }
+        end
+
+        it 'returns the configured port' do
+          expect(config.gitlab_pages.port).to eq(5555)
+        end
+      end
+    end
+  end
 end
