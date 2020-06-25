@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/gdk'
-require_relative '../lib/gdk/postgresql'
 
 def main
-  postgresql = GDK::PostgreSQL.new
+  postgresql = GDK::Postgresql.new
   abort 'postgres not ready' unless postgresql.ready?
 
   config = GDK::Config.new

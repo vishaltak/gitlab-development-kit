@@ -3,12 +3,11 @@ require 'socket'
 require 'fileutils'
 
 require_relative '../lib/gdk'
-require_relative '../lib/gdk/postgresql'
 
 LOG_FILE = 'bootstrap-rails.log'.freeze
 
 def main
-  postgresql = GDK::PostgreSQL.new
+  postgresql = GDK::Postgresql.new
   abort 'Cannot connect to postgres' unless postgresql.ready?
 
   exit if postgresql.db_exists?('gitlabhq_development')

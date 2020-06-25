@@ -252,6 +252,7 @@ module GDK
       path(:dir) { config.gdk_root.join('postgresql') }
       path(:data_dir) { config.postgresql.dir.join('data') }
       string(:host) { config.postgresql.dir.to_s }
+      string(:__active_host) { GDK::Postgresql.new.use_tcp? ? config.postgresql.host : '' }
       path(:replica_dir) { config.gdk_root.join('postgresql-replica') }
       settings :replica do
         bool(:enabled) { false }
@@ -260,6 +261,7 @@ module GDK
         integer(:port) { 5431 }
         path(:dir) { config.gdk_root.join('postgresql-geo') }
         string(:host) { config.postgresql.geo.dir.to_s }
+        string(:__active_host) { GDK::PostgresqlGeo.new.use_tcp? ? config.postgresql.geo.host : '' }
       end
     end
 

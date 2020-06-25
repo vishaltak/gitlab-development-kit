@@ -1,15 +1,11 @@
-require 'open3'
-require_relative 'config'
-require_relative '../shellout'
-require_relative 'output'
+# frozen_string_literal: true
 
 module GDK
-  class PostgreSQL
+  class Postgresql
     def ready?
       last_error = nil
+      cmd = psql_cmd + ['-d', 'template1', '-c', '']
 
-      # The '' is very important here so need to keep this cop disabled
-      cmd = psql_cmd + %W[-d template1 -c #{''}] # rubocop:disable Lint/LiteralInInterpolation
       10.times do
         shellout = Shellout.new(cmd)
         shellout.run
@@ -24,6 +20,10 @@ module GDK
       false
     end
 
+    def use_tcp?
+      !config.host.start_with?('/')
+    end
+
     def db_exists?(dbname)
       system(*(psql_cmd + ['-d', dbname, '-c', '']), err: '/dev/null')
     end
@@ -36,7 +36,7 @@ module GDK
     private
 
     def config
-      @config ||= GDK::Config.new.postgresql
+      @config ||= GDK.config.postgresql
     end
 
     def host
