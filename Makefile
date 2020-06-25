@@ -340,8 +340,13 @@ gitaly/praefect.config.toml:
 	$(Q)rake $@
 
 .PHONY: praefect-migrate
+ifeq ($(postgresql_in_recovery),PG_IS_IN_RECOVERY_false)
 praefect-migrate: postgresql-seed-praefect
 	$(Q)support/migrate-praefect
+else
+praefect-migrate:
+	@true
+endif
 
 ##############################################################
 # gitlab-docs
