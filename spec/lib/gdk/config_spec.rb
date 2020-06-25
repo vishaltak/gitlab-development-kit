@@ -470,6 +470,28 @@ describe GDK::Config do
         expect(config.webpack.sourcemaps).to be true
       end
     end
+
+    describe '#live_reload' do
+      context 'when https is disabled' do
+        before do
+          yaml['https'] = { 'enabled' => false }
+        end
+
+        it 'is true' do
+          expect(config.webpack.live_reload).to be true
+        end
+      end
+
+      context 'when https is enabled' do
+        before do
+          yaml['https'] = { 'enabled' => true }
+        end
+
+        it 'is false' do
+          expect(config.webpack.live_reload).to be false
+        end
+      end
+    end
   end
 
   describe 'registry' do

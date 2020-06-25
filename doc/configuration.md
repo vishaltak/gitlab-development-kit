@@ -236,6 +236,7 @@ webpack:
 | `static` | `false` | Setting this to `true` will replace the webpack dev server with a lightweight Ruby server. See below for more information |
 | `vendor_dll` | `false` | Setting this to `true` will move certain dependencies to a webpack DLL. See below for more information |
 | `sourcemaps` | `true` | Setting this to `false` will disable sourcemaps. This will reduce memory consumption for those who do not need to debug frontend code. |
+| `live_reload` | `true` | Setting this to `false` will disable hot module replacement when changes are detected. This feature uses sockets and is currently incompatible with SSL, so it is disabled by default when SSL is enabled. |
 
 #### Saving memory on the webpack dev server
 
