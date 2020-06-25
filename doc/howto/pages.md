@@ -16,6 +16,13 @@ GitLab Pages hostname is `127.0.0.1.nip.io`.
 You can configure a custom host name. For example, to set up `pages.gdk.test`:
 
 1. Set up the [`gdk.test` hostname](../index.md#set-up-gdktest-hostname).
+1. Add the following to `gdk.yml`:
+
+   ```yaml
+   gitlab_pages:
+     host: pages.gdk.test
+   ```
+
 1. Also add `pages.gdk.test` as a hostname. For example, add the following to `/etc/hosts`:
 
    ```plaintext
