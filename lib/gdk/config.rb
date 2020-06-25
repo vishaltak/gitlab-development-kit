@@ -87,6 +87,7 @@ module GDK
       bool(:static) { false }
       bool(:vendor_dll) { false }
       bool(:sourcemaps) { true }
+      bool(:live_reload) { !config.https? }
 
       integer(:port) { read!('webpack_port') || 3808 }
     end
