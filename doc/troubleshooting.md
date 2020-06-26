@@ -188,6 +188,9 @@ node-gyp may fail to build on macOS Catalina installations. Follow [the node-gyp
 
 ## Upgrading PostgreSQL
 
+To upgrade the PostgreSQL installation that GDK uses, please follow the steps described
+in [upgrading PostgreSQL](howto/postgresql.md#upgrading-postgresql).
+
 In case you are hit by `FATAL: database files are incompatible with server`,
 you need to upgrade PostgreSQL.
 
