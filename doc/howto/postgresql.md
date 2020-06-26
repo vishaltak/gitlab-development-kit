@@ -1,4 +1,6 @@
-# Accessing PostgreSQL
+# PostgreSQL
+
+## Accessing PostgreSQL
 
 GDK uses the PostgreSQL binaries installed on your system (see [install](../prepare.md) section),
 but keeps the datafiles within the GDK directory structure, under `<path to GDK>/gitlab-development-kit/postgresql/data`.
@@ -39,3 +41,68 @@ To access the database using an external SQL editor, such as [pgAdmin](https://w
 - Database name - e.g. `gitlabhq_development` or `gitlabhq_test`
 
 ![PostgreSQL connect example](img/postgres_connect_example.png)
+
+## Upgrading PostgreSQL
+
+1. (Optional) To retain the current database contents, create a backup of the database:
+
+   ```shell
+   # cd into your gitlab-development-kit directory
+   cd gdk
+
+   # Start the GDK database
+   gdk start db
+
+   # Create a backup of the current contents of the GDK database.
+   pg_dumpall -l gitlabhq_development -h "$PWD/postgresql"  -p 5432 > db_backup
+
+   gdk stop db
+   ```
+
+1. Remove the current PostgreSQL `data` folder:
+
+   ```shell
+   # Backup the current data folder
+   mv postgresql/data postgresql/data.bkp
+   ```
+
+1. Upgrade your PostgreSQL installation to a newer version. For example, to upgrade to
+   PostgreSQL 11 on macOS:
+
+   ```shell
+   brew install postgresql@11
+   ```
+
+   Or, if you use [asdf](https://github.com/asdf-vm/asdf), upgrade to PostgreSQL 11.7 by executing:
+
+   ```shell
+   # Install PostgreSQL 11.7
+   asdf install postgres 11.7
+
+   # Set the GDK folder to use PostgreSQL 11.7
+   echo "postgres 11.7" >> .tool-versions
+   ```
+
+1. Initialize a new data folder with the new version of PostgreSQL by running `make`:
+
+   ```shell
+   make postgresql/data
+   ```
+
+1. Execute the following so that GDK is configured to use the new PostgreSQL installation:
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. If required, restore the backup:
+
+   ```shell
+   # Start the database.
+   gdk start db
+
+   # Restore the contents of the backup into the new database.
+   gdk psql -d postgres -f "$PWD/db_backup"
+   ```
+
+   Your GDK should now be ready to use.
