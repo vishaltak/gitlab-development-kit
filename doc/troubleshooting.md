@@ -653,22 +653,6 @@ cd gitlab
 bundle exec rake db:test:prepare
 ```
 
-## Homebrew: PostgreSQL 10.0: "database files are incompatible with server"
-
-```plaintext
-FATAL:  database files are incompatible with server
-DETAIL:  The data directory was initialized by PostgreSQL version 9.6, which is not compatible with this version 10.0.
-```
-
-GitLab is not compatible with PostgreSQL 10.0. The following workaround
-lets you get back PostgreSQL 9.6. TODO: find a good way to co-exist with
-PostgreSQL 10.0 in Homebrew.
-
-```shell
-brew install postgresql@9.6
-brew link --force postgresql@9.6
-```
-
 ## Puma/Unicorn timeout
 
 Browser shows `EOF`. Logs show a timeout:
