@@ -71,9 +71,7 @@ class PostgresUpgrader
   end
 
   def bin_path(version)
-    unless available_versions.key?(version)
-      raise "Invalid PostgreSQL version #{version}"
-    end
+    raise "Invalid PostgreSQL version #{version}" unless available_versions.key?(version)
 
     available_versions[version]
   end
@@ -105,9 +103,7 @@ class PostgresUpgrader
     @current_version ||= begin
       path = File.join(current_data_dir, 'PG_VERSION')
 
-      unless File.exist?(path)
-        raise "PG_VERSION not found in #{path}. Is PostgreSQL initialized?"
-      end
+      raise "PG_VERSION not found in #{path}. Is PostgreSQL initialized?" unless File.exist?(path)
 
       File.read(path).to_i
     end
