@@ -186,26 +186,12 @@ Once the operation is complete, refresh the page.
 
 node-gyp may fail to build on macOS Catalina installations. Follow [the node-gyp troubleshooting guide](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md).
 
-## Upgrading PostgreSQL
+## Database files incompatible with server
 
-To upgrade the PostgreSQL installation that GDK uses, please follow the steps described
-in [upgrading PostgreSQL](howto/postgresql.md#upgrading-postgresql).
+If you see `FATAL: database files are incompatible with server` errors, you need to upgrade
+PostgreSQL.
 
-In case you are hit by `FATAL: database files are incompatible with server`,
-you need to upgrade PostgreSQL.
-
-This is what to do when your OS/packaging system decides to install a new minor
-version of PostgreSQL:
-
-1. (optional) Downgrade PostgreSQL
-1. (optional) Make a sql-only GitLab backup
-1. Rename/remove the `gdk/postgresql/data` directory: `mv postgresql/data{,.old}`
-1. Run `make`
-1. Build `pg` gem native extensions: `gem pristine pg`
-1. (optional) Restore your GitLab backup
-
-If things are working, you may remove the `postgresql/data.old` directory
-completely.
+Follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql).
 
 ## Rails cannot connect to PostgreSQL
 

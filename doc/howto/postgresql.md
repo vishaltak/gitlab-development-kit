@@ -1,12 +1,14 @@
 # PostgreSQL
 
-## Accessing PostgreSQL
+GDK users often need to interact with PostgreSQL.
+
+## Access PostgreSQL
 
 GDK uses the PostgreSQL binaries installed on your system (see [install](../prepare.md) section),
-but keeps the datafiles within the GDK directory structure, under `<path to GDK>/gitlab-development-kit/postgresql/data`.
+but keeps the data files within the GDK directory structure, under `gitlab-development-kit/postgresql/data`.
 
-This means that the databases cannot be seen with `psql -l`, but you can use the `gdk psql` wrapper to
-access the GDK databases:
+This means that the databases cannot be seen with `psql -l`, but you can use the `gdk psql` wrapper
+to access the GDK databases:
 
 ```shell
 # Connect to the default gitlabhq_development database
@@ -25,7 +27,7 @@ gdk psql --help
 You can also use the Rails `dbconsole` command, but it's much slower to start up:
 
 ```shell
-cd <path to GDK>/gitlab
+cd gitlab-development-kit/gitlab
 
 # Use default development environment
 bundle exec rails dbconsole
@@ -34,15 +36,14 @@ bundle exec rails dbconsole
 bundle exec rails dbconsole -e test
 ```
 
-To access the database using an external SQL editor, such as [pgAdmin](https://www.pgadmin.org/), pass in the:
+To access the database using an external SQL editor, such as [pgAdmin](https://www.pgadmin.org/),
+provide the following:
 
-- Datafile path - e.g. `<path to GDK>/gitlab-development-kit/postgresql`
-- Database port - e.g. `5432`
-- Database name - e.g. `gitlabhq_development` or `gitlabhq_test`
+- Data file path: for example, `gitlab-development-kit/postgresql`.
+- Database port: for example, `5432`.
+- Database name: for example, `gitlabhq_development` or `gitlabhq_test`.
 
-![PostgreSQL connect example](img/postgres_connect_example.png)
-
-## Upgrading PostgreSQL
+## Upgrade PostgreSQL
 
 1. (Optional) To retain the current database contents, create a backup of the database:
 
@@ -53,7 +54,7 @@ To access the database using an external SQL editor, such as [pgAdmin](https://w
    # Start the GDK database
    gdk start db
 
-   # Create a backup of the current contents of the GDK database.
+   # Create a backup of the current contents of the GDK database
    pg_dumpall -l gitlabhq_development -h "$PWD/postgresql"  -p 5432 > db_backup
 
    gdk stop db
@@ -67,13 +68,14 @@ To access the database using an external SQL editor, such as [pgAdmin](https://w
    ```
 
 1. Upgrade your PostgreSQL installation to a newer version. For example, to upgrade to
-   PostgreSQL 11 on macOS:
+   PostgreSQL 11 on macOS using Homebrew:
 
    ```shell
    brew install postgresql@11
    ```
 
-   Or, if you use [asdf](https://github.com/asdf-vm/asdf), upgrade to PostgreSQL 11.7 by executing:
+   Or, if you use [`asdf`](https://github.com/asdf-vm/asdf), upgrade to PostgreSQL 11.7 by
+   executing:
 
    ```shell
    # Install PostgreSQL 11.7
@@ -105,4 +107,4 @@ To access the database using an external SQL editor, such as [pgAdmin](https://w
    gdk psql -d postgres -f "$PWD/db_backup"
    ```
 
-   Your GDK should now be ready to use.
+Your GDK should now be ready to use.
