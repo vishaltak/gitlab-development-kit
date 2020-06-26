@@ -695,7 +695,6 @@ minio/data/%:
 ##############################################################
 
 prom-setup: prometheus/prometheus.yml
-	$(Q)[ "$(uname -s)" = "Linux" ] && sed -i -e 's/docker\.for\.mac\.localhost/localhost/g' ${gitlab_development_root}/prometheus/prometheus.yml || true
 
 .PHONY: prometheus/prometheus.yml
 prometheus/prometheus.yml:
