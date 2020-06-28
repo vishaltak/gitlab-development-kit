@@ -107,7 +107,7 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
 
 1. Install **Node.js 12.10** from the [official Node.js binary distribution](https://github.com/nodesource/distributions/blob/master/README.md#debinstall).
 1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
-1. Install remaining dependencies; modify the `GDK_GO_VERSION` with the major.minor version number (currently 1.12) as needed:
+1. Install remaining dependencies; modify the `GDK_GO_VERSION` with the major.minor version number (currently 1.14) as needed:
 
    ```shell
    # Add apt-add-repository helper script
