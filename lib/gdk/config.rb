@@ -286,10 +286,23 @@ module GDK
       path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
       path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
       path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
-      string(:storage) { 'default' }
       path(:storage_dir) { config.repositories_root }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
       bool(:auto_update) { true }
+      integer(:storage_count) { 1 }
+      array(:storages) do
+        settings_array!(storage_count) do |i|
+          string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
+          path(:path) do
+            if i.zero?
+              parent.storage_dir
+            else
+              dirname, basename = File.split(parent.storage_dir)
+              File.join(dirname, "#{basename}_#{name}")
+            end
+          end
+        end
+      end
     end
 
     settings :praefect do
@@ -314,6 +327,12 @@ module GDK
           string(:storage) { "praefect-internal-#{i}" }
           path(:storage_dir) { i.zero? ? config.repositories_root : File.join(config.repositories_root, storage) }
           path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
+          array(:storages) do
+            settings_array!(1) do |i|
+              string(:name) { parent.storage }
+              path(:path) { parent.storage_dir }
+            end
+          end
         end
       end
     end

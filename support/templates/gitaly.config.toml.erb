@@ -28,11 +28,13 @@ internal_socket_dir = "<%= node.internal_socket_dir %>"
 bin_path = "<%= config.git.bin %>"
 catfile_cache_size = 10
 
+<%- node.storages.each do |storage| -%>
 [[storage]]
-name = "<%= node.storage %>"
-path = "<%= node.storage_dir %>"
+name = "<%= storage.name %>"
+path = "<%= storage.path %>"
 
-<% if config.praefect? %>
+<%- end -%>
+<%- if config.praefect? -%>
 [[storage]]
 name = "praefect"
 path = "<%= node.storage_dir %>"

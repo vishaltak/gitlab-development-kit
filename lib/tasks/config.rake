@@ -102,7 +102,9 @@ file "gitaly/gitaly.config.toml" => ['support/templates/gitaly.config.toml.erb']
     config: config,
     node: config.gitaly
   ).safe_render!
-  FileUtils.mkdir_p(config.repositories_root)
+  config.gitaly.storages.each do |storage|
+    FileUtils.mkdir_p(storage.path)
+  end
   FileUtils.mkdir_p(config.gitaly.log_dir)
 end
 
@@ -125,7 +127,9 @@ config.praefect.nodes.each do |node|
       config: config,
       node: node
     ).safe_render!
-    FileUtils.mkdir_p(node['storage_dir'])
+    node.storages.each do |storage|
+      FileUtils.mkdir_p(storage.path)
+    end
     FileUtils.mkdir_p(node['log_dir'])
     FileUtils.mkdir_p(node['internal_socket_dir'])
   end
