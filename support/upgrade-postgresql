@@ -48,7 +48,7 @@ class PostgresUpgrader
   end
 
   def pg_upgrade(old_path, new_path)
-    cmd = "#{pg_upgrade_bin(@target_version)} -b #{bin_path(current_version)} -B #{bin_path(@target_version)} -d #{old_path} -D #{new_path} -p 5432 -P 5432"
+    cmd = "#{pg_upgrade_bin(@target_version)} -b #{bin_path(current_version)} -B #{bin_path(@target_version)} -d #{old_path} -D #{new_path}"
     puts 'Upgrading PostgreSQL data...'
     run!(cmd)
   end
