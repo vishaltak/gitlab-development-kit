@@ -28,7 +28,7 @@ gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
 psql := $(postgresql_bin_dir)/psql
 
-postgresql_in_recovery = $(strip $(shell $(psql) -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc "SELECT 'PG_IS_IN_RECOVERY_' || pg_is_in_recovery();" | grep PG_IS_IN_RECOVERY_ $(QQerr)))
+postgresql_in_recovery = $(strip $(shell $(psql) -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc "SELECT 'PG_IS_IN_RECOVERY_' || pg_is_in_recovery();" 2>&1 | grep '^ PG_IS_IN_RECOVERY_' $(QQerr)))
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
