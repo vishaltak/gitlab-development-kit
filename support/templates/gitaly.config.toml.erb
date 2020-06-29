@@ -15,8 +15,12 @@ internal_socket_dir = "<%= node.internal_socket_dir %>"
 <%= '#' unless config.prometheus.enabled? %>prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.gitaly_exporter_port %>"
 
 # # Optional: authenticate Gitaly requests using a shared secret
-# [auth]
+[auth]
+<% if config.gitaly.auth_token != '' %>
+token = "<%= config.gitaly.auth_token %>"
+<% else %>
 # token = 'abc123secret'
+<% end %>
 # transitioning = false # Set `transitioning` to true to temporarily allow unauthenticated while rolling out authentication.
 
 # [tls]

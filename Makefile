@@ -13,11 +13,14 @@ gitlab_shell_clone_dir = gitlab-shell
 gitlab_workhorse_clone_dir = gitlab-workhorse
 gitaly_clone_dir = gitaly
 gitlab_pages_clone_dir = gitlab-pages/src/gitlab.com/gitlab-org/gitlab-pages
+gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 
 workhorse_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
 gitlab_shell_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 gitaly_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
 pages_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
+# $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_K8S_AGENT_VERSION")
+gitlab_k8s_agent_version = "ash2k/gdk"
 gitlab_elasticsearch_indexer_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")
@@ -54,6 +57,7 @@ gitlab-setup \
 gitlab-shell-setup \
 gitlab-workhorse-setup \
 gitlab-pages-setup \
+gitlab-k8s-agent-setup \
 support-setup \
 gitaly-setup \
 geo-config \
@@ -70,6 +74,7 @@ gitlab/.git/pull \
 gitlab-shell-update \
 gitlab-workhorse-update \
 gitlab-pages-update \
+gitlab-k8s-agent-update \
 gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
@@ -506,6 +511,42 @@ gitlab-pages/.git/pull:
 	@echo "Updating gitlab-org/gitlab-pages to ${pages_version}"
 	@echo "------------------------------------------------------------"
 	$(Q)support/component-git-update gitlab_pages "${gitlab_pages_clone_dir}" "${pages_version}"
+
+##############################################################
+# gitlab Kubernetes agent
+##############################################################
+
+ifeq ($(gitlab_k8s_agent_enabled),true)
+gitlab-k8s-agent-setup: gitlab-k8s-agent/bin/k8s-agent
+else
+gitlab-k8s-agent-setup:
+	@true
+endif
+
+ifeq ($(gitlab_k8s_agent_enabled),true)
+gitlab-k8s-agent-update: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/.git/pull gitlab-k8s-agent-clean-bin gitlab-k8s-agent/bin/k8s-agent
+else
+gitlab-k8s-agent-update:
+	@true
+endif
+
+gitlab-k8s-agent-clean-bin:
+	$(Q)rm -rf "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
+
+.PHONY: gitlab-k8s-agent/bin/k8s-agent
+gitlab-k8s-agent/bin/k8s-agent: ${gitlab_k8s_agent_clone_dir}/.git
+	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
+	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
+
+${gitlab_k8s_agent_clone_dir}/.git:
+	$(Q)git clone --quiet --branch "${gitlab_k8s_agent_version}" ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} ${QQ}
+
+gitlab-k8s-agent/.git/pull:
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Updating gitlab-org/cluster-integration/gitlab-agent to ${gitlab_k8s_agent_version}"
+	@echo "------------------------------------------------------------"
+	$(Q)support/component-git-update gitlab_k8s_agent "${gitlab_k8s_agent_clone_dir}" "${gitlab_k8s_agent_version}"
 
 ##############################################################
 # gitlab performance metrics

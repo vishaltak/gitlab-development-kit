@@ -3,7 +3,7 @@
 # listen_addr = "<%= config.hostname %>:2305"
 
 # # Praefect can listen on a socket when placed on the same machine as all clients
-socket_path = "<%= config.gdk_root.join('praefect.socket') %>"
+socket_path = "<%= config.praefect.address %>"
 # # Praefect will only replicate whitelisted repositories
 # # Optional: export metrics via Prometheus
 <%= '#' unless config.prometheus.enabled? %>prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.praefect_exporter_port %>"

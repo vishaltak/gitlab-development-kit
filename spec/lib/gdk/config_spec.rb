@@ -542,6 +542,28 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'k8s_agent' do
+    describe 'enabled' do
+      it 'is disabled by default' do
+        expect(config.gitlab_k8s_agent.enabled).to be(false)
+      end
+    end
+
+    describe 'auto_update' do
+      it 'is enabled by default' do
+        expect(config.gitlab_k8s_agent.auto_update).to be(true)
+      end
+    end
+  end
+
+  describe 'gitaly' do
+    describe 'auth_token' do
+      it 'is not set by default' do
+        expect(config.gitaly.auth_token).to be('')
+      end
+    end
+  end
+
   describe 'gitlab_elasticsearch_indexer' do
     describe '#__dir' do
       it 'returns the GitLab directory' do

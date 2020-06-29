@@ -26,6 +26,7 @@ module GDK
       string(:gitlab_workhorse) { 'https://gitlab.com/gitlab-org/gitlab-workhorse.git' }
       string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }
       string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
+      string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-com/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
     end
@@ -128,6 +129,10 @@ module GDK
         end
       end
 
+      string :__listen_address do
+        "#{config.workhorse.__active_host}:#{config.workhorse.__active_port}"
+      end
+
       bool(:auto_update) { true }
     end
 
@@ -201,6 +206,46 @@ module GDK
       bool(:auto_update) { true }
     end
 
+    settings :gitlab_k8s_agent do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      string(:listen_network) { 'tcp' }
+      string(:listen_address) { '127.0.0.1:5005' }
+      string(:__listen_url_path) { '/-/kubernetes-agent' }
+      string :__url_for_agentk do
+        if config.nginx?
+          # kgb is behind nginx
+          if config.https?
+            "wss://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__listen_url_path}"
+          else
+            "ws://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__listen_url_path}"
+          end
+        elsif config.gitlab_k8s_agent.listen_network == 'unix'
+          # this is not supported by agentk at the moment
+          "unix:#{config.gitlab_k8s_agent.listen_address}"
+        else
+          "#{config.gitlab_k8s_agent.listen_network}://#{config.gitlab_k8s_agent.listen_address}"
+        end
+      end
+      bool :__listen_websocket do
+        if config.nginx?
+          # nginx's grpc_pass requires HTTP/2 enabled which requires TLS.
+          # It's easier to use WebSockets than ask the user to generate
+          # TLS certificates.
+          true
+        else
+          false
+        end
+      end
+      string :__gitaly_address do
+        if config.praefect?
+          config.praefect.address
+        else
+          config.gitaly.address
+        end
+      end
+    end
+
     settings :auto_devops do
       bool(:enabled) { read!('auto_devops_enabled') || false }
       string(:listen_address) { '0.0.0.0' }
@@ -259,6 +304,7 @@ module GDK
       settings :http2 do
         bool(:enabled) { false }
       end
+      string(:__listen_address) { "#{config.nginx.listen}:#{config.port}" }
     end
 
     settings :postgresql do
@@ -290,6 +336,7 @@ module GDK
       path(:storage_dir) { config.repositories_root }
       path(:repository_storages) { config.repository_storages }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
+      string(:auth_token) { '' }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
       array(:__storages) do
