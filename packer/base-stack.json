@@ -1,0 +1,56 @@
+{
+  "variables": {
+    "sha": "master",
+    "zone": "australia-southeast1-b",
+    "project_id": ""
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "account.json",
+      "project_id": "{{user `project_id`}}",
+      "source_image": "ubuntu-2004-focal-v20200625",
+      "ssh_username": "ubuntu",
+      "disk_size": "40",
+      "zone": "{{user `zone`}}",
+      "image_name": "gitlab-gdk-{{user `sha`}}-{{timestamp}}",
+      "machine_type": "n1-standard-2"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "provisioners/base.sh",
+      "execute_command": "echo 'ubuntu' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "provisioners/zsh.sh",
+      "execute_command": "echo 'ubuntu' | sudo -u gdk -S bash -l -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "provisioners/ruby.sh",
+      "execute_command": "echo 'ubuntu' | sudo -u gdk -S bash -l -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "provisioners/node.sh",
+      "execute_command": "echo 'ubuntu' | sudo -u gdk -S bash -l -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "provisioners/gdk.sh",
+      "execute_command": "sudo su -l gdk -c '{{ .Vars }} {{ .Path }}'"
+    },
+    {
+      "type": "file",
+      "source": "files/nginx.conf",
+      "destination": "/home/ubuntu/nginx.conf"
+    },
+    {
+      "type": "shell",
+      "inline": ["sudo cp nginx.conf /etc/nginx/sites-enabled/default"]
+    }
+  ]
+}

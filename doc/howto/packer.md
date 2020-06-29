@@ -1,0 +1,40 @@
+# Using Google Cloud images to developer with GDK
+
+## Building the image
+
+1. Make sure you have a google cloud account
+1. Create and new project in gcloud and take note of the project id for later steps
+1. Download your `account.json` credentials from your gcloud account and put it inside the gdk packer folder.
+1. [Install Packer](https://learn.hashicorp.com/tutorials/packer/getting-started-install)
+1. Find out which gcloud zone is best for you with [gcping](http://www.gcping.com/)
+1. `cd` into your gdk packer directory and run:
+   ```shell
+      cd gdk/packer
+      packer build -var zone=<zone_id> project_id=<gcloud_project_id> base-stack.json
+   ```
+
+This should take a while to build (10-30 min). If successfull, you should see an output indicating the created image name.
+
+
+### Using the image
+
+To use the image, you need the following steps:
+
+1. Go to your Google Cloud project settings and select the option to run a new VM instance.
+1. Select the machine type. Recommended for running everything including specs is n1-standard-4 with 15GB memory.
+1. Select the newly created image as you base image.
+1. Tick "allow http and https" option if you want HTTP access.
+1. Again, select the zone closest to you for speedy access.
+
+Boot the image and you should be able to log in via SSH with your user.
+
+### Caveats
+
+GDK is hosted under the `gdk` user. You're tipically loging in into the machine with your personal user so it's recommended that you install
+your ssh keys under the gdk user and ssh into the box directly as the `gdk` user.
+
+```shell
+sudo su - gdk
+echo YOUR_SSH_PUB_KEY >> ~/.ssh/authorized_keys
+chmod 644 ~/.ssh/authorized_keys
+```
