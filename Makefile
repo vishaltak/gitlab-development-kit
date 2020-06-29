@@ -383,7 +383,7 @@ gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.y
 ##############################################################
 
 .PHONY: geo-setup geo-cursor
-geo-setup: geo-setup-check Procfile geo-cursor geo-config postgresql/geo
+geo-setup: geo-setup-check Procfile postgresql/geo geo-config geo-cursor
 
 geo-setup-check:
 ifneq ($(geo_enabled),true)
