@@ -1,7 +1,6 @@
 .verify_job:
   stage: verify
   extends: .rules:code-changes
-  image: ${VERIFY_IMAGE}
   artifacts:
     paths:
       - ./gitlab-development-kit/gitlab/log/*.log
