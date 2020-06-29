@@ -285,8 +285,10 @@ module GDK
       path(:address) { config.gdk_root.join('gitaly.socket') }
       path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
       path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
-      path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
       path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
+      string(:storage) { 'default' }
+      path(:storage_dir) { config.repositories_root }
+      path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
       bool(:auto_update) { true }
     end
 
