@@ -581,4 +581,30 @@ describe GDK::Config do
       end
     end
   end
+
+  describe 'prometheus' do
+    describe '#enabled' do
+      it 'defaults to false' do
+        expect(config.prometheus.enabled).to eq(false)
+      end
+    end
+
+    describe '#port' do
+      it 'defaults to 9090' do
+        expect(config.prometheus.port).to eq(9090)
+      end
+    end
+
+    describe '#gitaly_exporter_port' do
+      it 'defaults to 9236' do
+        expect(config.prometheus.gitaly_exporter_port).to eq(9236)
+      end
+    end
+
+    describe '#praefect_exporter_port' do
+      it 'defaults to 10101' do
+        expect(config.prometheus.praefect_exporter_port).to eq(10101)
+      end
+    end
+  end
 end

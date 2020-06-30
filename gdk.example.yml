@@ -121,6 +121,9 @@ praefect:
     storage_dir: "/home/git/gdk/repositories"
 prometheus:
   enabled: false
+  gitaly_exporter_port: 9236
+  port: 9090
+  praefect_exporter_port: 10101
 registry:
   api_host: 127.0.0.1
   auth_enabled: true
