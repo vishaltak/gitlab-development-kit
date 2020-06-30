@@ -13,6 +13,12 @@ RUN apt-get update && apt-get install -y software-properties-common \
     && add-apt-repository ppa:git-core/ppa -y \
     && apt-get install -y $(sed -e 's/#.*//' /packages.txt)
 
+# Install PostgreSQL
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt-get update \
+    && apt-get install -y postgresql-11 postgresql-contrib-11
+
 # Install minio
 RUN curl https://dl.min.io/server/minio/release/linux-amd64/minio > /usr/local/bin/minio \
   && chmod +x /usr/local/bin/minio
