@@ -60,7 +60,7 @@ or lack of internet access, then you can use a local registry:
 
 1. If you set either `registry.self_signed` or `registry.auth_enabled` to `false`, your
    registry will be considered *insecure* by Docker and you must
-   [explicitly whitelist it](https://docs.docker.com/registry/insecure/). For information
+   [explicitly allow it](https://docs.docker.com/registry/insecure/). For information
    on [using an insecure registry](#using-an-insecure-registry-from-gitlab-ci) using
    Docker-in-Docker, see the documentation.
 
