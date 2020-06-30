@@ -49,7 +49,7 @@ provide the following:
 
    ```shell
    # cd into your gitlab-development-kit directory
-   cd gdk
+   cd gitlab-development-kit
 
    # Start the GDK database
    gdk start db

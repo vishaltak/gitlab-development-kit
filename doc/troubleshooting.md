@@ -188,10 +188,56 @@ node-gyp may fail to build on macOS Catalina installations. Follow [the node-gyp
 
 ## Database files incompatible with server
 
-If you see `FATAL: database files are incompatible with server` errors, you need to upgrade
-PostgreSQL.
+If you see `FATAL: database files are incompatible with server` errors, it means
+the PostgreSQL data directory was initialized by an old PostgreSQL version, which
+is not compatible with your current PostgreSQL version.
 
-Follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql).
+You can solve it in one of two ways, depending if you would like to retain your data or not:
+
+### If you do not need to retain your data
+
+Note that this will wipe out the existing contents of your database.
+
+```shell
+# cd into your GDK folder
+cd gitlab-development-kit
+
+# Remove your existing data
+mv postgresql/data postgresql/data.bkp
+
+# Initialize a new data folder
+make postgresql/data
+
+# Start your database.
+gdk start db
+```
+
+You may remove the `data.bkp` folder if your database is working well.
+
+### If you would like to retain your data
+
+Check the version of PostgreSQL that your data is compatible with:
+
+```shell
+# cd into your GDK folder
+cd gitlab-development-kit
+
+cat postgresql/data/PG_VERSION
+```
+
+If the content of the `PG_VERSION` file is `9`, your data folder is compatible
+with PostgreSQL 9.x.
+
+Downgrade your PostgreSQL to the compatible version. For example, to downgrade to
+PostgreSQL 9.6 on macOS using Homebrew:
+
+```shell
+brew install postgresql@9.6
+brew link --force postgresql@9.6
+```
+
+You can now follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql)
+to upgrade your PostgreSQL version while retaining your current data.
 
 ## Rails cannot connect to PostgreSQL
 
