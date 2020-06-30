@@ -95,7 +95,7 @@ self-update: unlock-dependency-installers
 clean-config:
 	$(Q)rm -rf \
 	Procfile \
-	gitaly/gitaly-0.praefect.toml \
+	gitaly/gitaly-*.praefect.toml \
 	gitaly/gitaly.config.toml \
 	gitaly/praefect.config.toml \
 	gitlab-runner-config.toml \
