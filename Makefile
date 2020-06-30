@@ -583,8 +583,8 @@ postgresql-replication/role:
 
 postgresql-replication/backup:
 	$(Q)$(eval postgresql_primary_dir := $(realpath postgresql-primary))
-	$(Q)$(eval postgresql_primary_host := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.host $(QQerr))
-	$(Q)$(eval postgresql_primary_port := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.port $(QQerr))
+	$(Q)$(eval postgresql_primary_host := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.host $(QQerr)))
+	$(Q)$(eval postgresql_primary_port := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.port $(QQerr)))
 
 	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
 	$(Q)rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgresql_primary_dir}/data postgresql
@@ -613,7 +613,7 @@ postgresql/geo: postgresql/geo/data postgresql/geo/port postgresql/geo/seed-data
 postgresql/geo/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 postgresql-geo/data
 
-postgresql/geo/port:
+postgresql/geo/port: postgresql/geo/data
 ifeq ($(geo_enabled),true)
 	$(Q)support/postgres-port ${postgresql_geo_dir} ${postgresql_geo_port}
 else
