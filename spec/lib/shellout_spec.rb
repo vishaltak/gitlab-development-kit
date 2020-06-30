@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Shellout do
+RSpec.describe Shellout do
   let(:command) { 'echo foo' }
   let(:opts) { {} }
   let(:tmp_directory) { File.realpath('/tmp') }

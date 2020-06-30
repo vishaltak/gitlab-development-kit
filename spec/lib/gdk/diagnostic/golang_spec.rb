@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic::Golang do
+RSpec.describe GDK::Diagnostic::Golang do
   describe '#diagnose' do
     it 'returns nil' do
       expect(subject.diagnose).to be_nil

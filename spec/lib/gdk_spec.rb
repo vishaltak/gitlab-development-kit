@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK do
+RSpec.describe GDK do
   before do
     allow(described_class).to receive(:install_root_ok?).and_return(true)
   end

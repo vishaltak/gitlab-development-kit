@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'stringio'
 
-describe GDK::Command::Doctor do
+RSpec.describe GDK::Command::Doctor do
   let(:mock_stdout) { double(:stdout, puts: nil) }
   let(:mock_stderr) { double(:stderr, puts: nil) }
   let(:successful_diagnostic) { double(GDK::Diagnostic, success?: true, diagnose: nil, message: nil) }

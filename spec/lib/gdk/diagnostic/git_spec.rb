@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic::Git do
+RSpec.describe GDK::Diagnostic::Git do
   describe '#diagnose' do
     context 'when git is not installed' do
       it 'returns nil' do

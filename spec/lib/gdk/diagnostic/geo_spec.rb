@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic::Geo do
+RSpec.describe GDK::Diagnostic::Geo do
   let(:database_geo_yml_file) { '/home/git/gdk/gitlab/config/database_geo.yml' }
 
   describe '#diagnose' do

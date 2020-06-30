@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic::Re2 do
+RSpec.describe GDK::Diagnostic::Re2 do
   describe '#diagnose' do
     context 'when re2 is not installed or bad' do
       it 'returns error' do
