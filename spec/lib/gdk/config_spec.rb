@@ -7,12 +7,13 @@ RSpec.describe GDK::Config do
   let(:nginx_enabled) { false }
   let(:protected_config_files) { [] }
   let(:overwrite_changes) { false }
+  let(:hostname) { 'localhost' }
   let(:yaml) do
     {
       'auto_devops' => { 'enabled' => auto_devops_enabled },
       'gdk' => { 'protected_config_files' => protected_config_files, 'overwrite_changes' => overwrite_changes },
       'nginx' => { 'enabled' => nginx_enabled },
-      'hostname' => 'gdk.example.com'
+      'hostname' => hostname
     }
   end
   let(:default_config) { described_class.new }
@@ -65,6 +66,8 @@ RSpec.describe GDK::Config do
   end
 
   describe '__uri' do
+    let(:hostname) { 'gdk.example.com' }
+
     context 'for defaults' do
       it 'returns http://gdk.example.com:3000' do
         expect(config.__uri.to_s).to eq('http://gdk.example.com:3000')
@@ -632,6 +635,27 @@ RSpec.describe GDK::Config do
     it 'returns 127.0.0.1 by default' do
       expect(config.listen_address).to eq('127.0.0.1')
     end
+
+    context 'hostname set to gdk.example.com' do
+      let(:yaml) { { 'hostname' => 'gdk.example' } }
+
+      it 'returns the public IP of the hostname' do
+        ip_address = '192.0.2.0' # From RFC 5737
+        addr = double('Addrinfo', ipv4?: true, ip_address: ip_address)
+
+        allow(Addrinfo).to receive(:getaddrinfo).with(config.hostname, config.port, nil, :STREAM).and_return([addr])
+
+        expect(IPAddr.new(config.listen_address)).to eq(ip_address)
+      end
+    end
+
+    context 'hostname set to something non-existing' do
+      let(:yaml) { { 'hostname' => 'this.domain.is.invalid' } }
+
+      it 'raises an error' do
+        expect { config.listen_address }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe 'gitlab' do
@@ -799,6 +823,7 @@ RSpec.describe GDK::Config do
     describe '#api_host' do
       context 'when AutoDevOps is not enabled' do
         let(:auto_devops_enabled) { false }
+        let(:hostname) { 'gdk.example.com' }
 
         it 'returns the default hostname' do
           expect(config.registry.api_host).to eq('gdk.example.com')
@@ -815,6 +840,8 @@ RSpec.describe GDK::Config do
     end
 
     describe '#tunnel_host' do
+      let(:hostname) { 'gdk.example.com' }
+
       it 'returns the default hostname' do
         expect(config.registry.tunnel_host).to eq('gdk.example.com')
       end

@@ -2,12 +2,14 @@
 
 require 'etc'
 require 'cgi'
+require 'socket'
 require_relative 'config_settings'
 
 module GDK
   class Config < ConfigSettings
     GDK_ROOT = Pathname.new(__dir__).parent.parent
     FILE = File.join(GDK_ROOT, 'gdk.yml')
+    LOOPBACK_IP = '127.0.0.1'
 
     string(:__architecture) { RbConfig::CONFIG['target_cpu'] }
     string(:__platform) do
@@ -56,12 +58,20 @@ module GDK
     path(:repositories_root) { config.gdk_root.join('repositories') }
     path(:repository_storages) { config.gdk_root.join('repository_storages') }
 
-    string(:listen_address) { '127.0.0.1' }
+    string :listen_address do
+      Addrinfo.getaddrinfo(config.hostname, config.port, nil, :STREAM)
+              .select(&:ipv4?).first&.ip_address || LOOPBACK_IP
+    rescue SocketError
+      raise(ArgumentError, <<~ERR)
+        Could not resolve IP address for #{config.hostname}.
+        Please verify the value for `hostname` or set `listen_address` in your gdk.yml."
+      ERR
+    end
 
     string :hostname do
       next "#{config.auto_devops.gitlab.port}.qa-tunnel.gitlab.info" if config.auto_devops?
 
-      read!('hostname') || read!('host') || config.listen_address
+      read!('hostname') || read!('host') || LOOPBACK_IP
     end
 
     integer :port do
