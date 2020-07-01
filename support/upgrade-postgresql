@@ -16,6 +16,8 @@ class PostgresUpgrader
   end
 
   def check!
+    puts "Available PostgreSQL versions: #{available_versions}"
+
     raise "Unable to find target PostgreSQL version #{@target_version}" unless available_versions.include?(@target_version)
     raise "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
   end
@@ -30,6 +32,7 @@ class PostgresUpgrader
       return
     end
 
+    gdk_stop
     init_db(target_path)
     pg_upgrade(current_data_dir, target_path)
     promote_new_db(current_data_dir, target_path)
@@ -39,6 +42,10 @@ class PostgresUpgrader
 
   def target_path
     @target_path ||= File.join(current_data_dir + ".#{@target_version}.#{Time.now.to_i}")
+  end
+
+  def gdk_stop
+    run!('gdk stop')
   end
 
   def init_db(target_path)
