@@ -811,7 +811,9 @@ production: &base
     #  enabled: true
     #  address: localhost
     #  port: 3807
-
+  prometheus:
+    enable: <%= config.prometheus.enabled? %>
+    listen_address: '<%= config.hostname %>:<%= config.prometheus.port %>'
   #
   # 5. Extra customization
   # ==========================
