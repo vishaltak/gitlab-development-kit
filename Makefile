@@ -614,7 +614,11 @@ postgresql-replication/config:
 postgresql/geo: postgresql/geo/data postgresql/geo/port postgresql/geo/seed-data
 
 postgresql/geo/data:
+ifeq ($(geo_enabled),true)
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 postgresql-geo/data
+else
+	@true
+endif
 
 postgresql/geo/port: postgresql/geo/data
 ifeq ($(geo_enabled),true)
