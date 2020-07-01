@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'gdk/config_example'
 
-describe GDK::ConfigExample do
+RSpec.describe GDK::ConfigExample do
   subject(:config) { described_class.new }
 
   describe '#gdk_root' do

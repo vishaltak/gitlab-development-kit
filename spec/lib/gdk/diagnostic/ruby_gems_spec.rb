@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic::RubyGems do
+RSpec.describe GDK::Diagnostic::RubyGems do
   before do
     stub_const('GDK::Diagnostic::RubyGems::GEMS_TO_CHECK', %w[bad_gem])
   end

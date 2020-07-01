@@ -12,6 +12,8 @@ RSpec.configure do |config|
     stub_const('GDK::Config::GDK_ROOT', '/home/git/gdk')
     stub_const('GDK::Config::FILE', 'gdk.example.yml')
   end
+
+  config.disable_monkey_patching
 end
 
 def spec_path

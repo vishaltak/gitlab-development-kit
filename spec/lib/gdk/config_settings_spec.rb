@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::ConfigSettings do
+RSpec.describe GDK::ConfigSettings do
   subject(:config) { described_class.new }
 
   describe '.array' do

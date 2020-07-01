@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Output do
+RSpec.describe GDK::Output do
   describe '.puts' do
     it 'puts to stdout' do
       expect { described_class.puts('test') }.to output("test\n").to_stdout

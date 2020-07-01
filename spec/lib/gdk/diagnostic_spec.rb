@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic do
+RSpec.describe GDK::Diagnostic do
   describe '.all' do
     it 'creates instances of all GDK::Diagnostic classes' do
       expect { described_class.all }.not_to raise_error

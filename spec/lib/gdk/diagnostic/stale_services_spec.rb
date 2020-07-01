@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Diagnostic::StaleServices do
+RSpec.describe GDK::Diagnostic::StaleServices do
   let(:stale_processes) do
     <<~STALE_PROCESSES
       95010 runsv rails-web
