@@ -85,6 +85,10 @@ source ${shell_file}
 brew cask install google-chrome chromedriver
 ```
 
+If ChromeDriver fails to open with an error message because the developer "cannot
+be verified", create an exception for it as documented in
+[macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
+
 #### Install macOS prerequisites using MacPorts
 
 [MacPorts](https://www.macports.org/) is another package manager for macOS. Visit their website for installation details.
