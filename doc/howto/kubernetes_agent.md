@@ -62,6 +62,8 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
 1. Run `gdk update` to get `kgb` installed as part of GDK.
 
+1. Run `gdk reconfigure` to update various configuration files.
+
 1. You can start GDK with `gdk start`. It will print the URL for `agentk` to use:
 
     ```plaintext
@@ -70,3 +72,23 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
     ```
 
 1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
+
+1. To verify that `kgb` is running you can:
+    - Run `gdk tail gitlab-k8s-agent` to check the logs. You should see no errors in the logs. Empty logs are normal too.
+    - Run `curl 127.0.0.1:5005`. It should print
+
+        ```plaintext
+        Warning: Binary output can mess up your terminal. Use "--output -" to tell
+        Warning: curl to output it to your terminal anyway, or consider "--output
+        Warning: <FILE>" to save to a file.
+        ```
+
+        This is normal because gRPC is a binary protocol.
+
+    - If running with NGINX enabled, run `curl gdk.test:3000/-/kubernetes-agent`. It should print
+
+        ```plaintext
+        WebSocket protocol violation: Connection header "close" does not contain Upgrade
+        ```
+
+        This is a normal response from `kgb` for such a request because it's expecting a WebSocket connection upgrade.
