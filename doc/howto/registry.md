@@ -208,7 +208,7 @@ docker push gdk.test:5000/custom-docker-image
   - `registry:catalog:*` to interact with the catalog
   - `repository:your/project/path:*` to interact with the images associated with a particular project
 
-  Alternatively, you can obtain the token via Rails' console:
+  Alternatively, you can obtain the token via the Rails console:
 
   ```ruby
   ::Auth::ContainerRegistryAuthenticationService.pull_access_token('your/project/path')
