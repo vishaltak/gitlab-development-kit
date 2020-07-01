@@ -94,6 +94,7 @@ provide the following:
 1. Execute the following so that GDK is configured to use the new PostgreSQL installation:
 
    ```shell
+   # Update Procfile to use new PostgreSQL binaries
    gdk reconfigure
    ```
 

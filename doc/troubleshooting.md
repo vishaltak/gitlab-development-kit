@@ -208,6 +208,9 @@ mv postgresql/data postgresql/data.bkp
 # Initialize a new data folder
 make postgresql/data
 
+# Initialize the gitlabhq_development database
+gdk reconfigure
+
 # Start your database.
 gdk start db
 ```
@@ -234,6 +237,13 @@ PostgreSQL 9.6 on macOS using Homebrew:
 ```shell
 brew install postgresql@9.6
 brew link --force postgresql@9.6
+```
+
+You also need to update your `Procfile` to use the downgraded PostgreSQL binaries:
+
+```shell
+# Change Procfile to use downgraded PostgreSQL binaries
+gdk reconfigure
 ```
 
 You can now follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql)
