@@ -9,6 +9,17 @@ module GDK
     GDK_ROOT = Pathname.new(__dir__).parent.parent
     FILE = File.join(GDK_ROOT, 'gdk.yml')
 
+    string(:__platform) do
+      case RbConfig::CONFIG['host_os']
+      when /darwin/i
+        'macos'
+      when /linux/i
+        'linux'
+      else
+        'unknown'
+      end
+    end
+
     settings :repositories do
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
