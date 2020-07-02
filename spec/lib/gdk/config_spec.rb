@@ -354,12 +354,39 @@ RSpec.describe GDK::Config do
   end
 
   describe '#gitaly' do
+    let(:praefect_enabled) { false }
+    let(:storage_count) { 3 }
     let(:yaml) do
       {
         'gitaly' => {
-          'storage_count' => 3
+          'storage_count' => storage_count
+        },
+        'praefect' => {
+          'enabled' => praefect_enabled
         }
       }
+    end
+
+    describe '#enabled' do
+      context 'when praefect is disabled' do
+        let(:storage_count) { 1 }
+
+        it { expect(config.gitaly).to be_enabled }
+      end
+
+      context 'when praefect is enabled' do
+        let(:praefect_enabled) { true }
+
+        context 'when there is 1 storage' do
+          let(:storage_count) { 1 }
+
+          it { expect(config.gitaly).not_to be_enabled }
+        end
+
+        context 'when there is more than 1 storage' do
+          it { expect(config.gitaly).to be_enabled }
+        end
+      end
     end
 
     describe '#__storages' do

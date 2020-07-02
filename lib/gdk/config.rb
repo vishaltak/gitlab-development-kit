@@ -283,6 +283,7 @@ module GDK
     end
 
     settings :gitaly do
+      bool(:enabled) { !config.praefect? || __storages.length > 1 }
       path(:address) { config.gdk_root.join('gitaly.socket') }
       path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
       path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
