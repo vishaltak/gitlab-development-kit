@@ -24,6 +24,38 @@ RSpec.describe GDK::Config do
     allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).and_return(nil)
   end
 
+  describe '__platform' do
+    let(:host_os) { nil }
+
+    before do
+      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+    end
+
+    context 'when macOS' do
+      let(:host_os) { 'Darwin' }
+
+      it 'returns macos' do
+        expect(config.__platform).to eq('macos')
+      end
+    end
+
+    context 'when Linux' do
+      let(:host_os) { 'Linux' }
+
+      it 'returns linux' do
+        expect(config.__platform).to eq('linux')
+      end
+    end
+
+    context 'when neither macOS of Linux' do
+      let(:host_os) { 'NotSure' }
+
+      it 'returns unknown' do
+        expect(config.__platform).to eq('unknown')
+      end
+    end
+  end
+
   describe '__uri' do
     context 'for defaults' do
       it 'returns http://gdk.example.com:3000' do
