@@ -20,7 +20,7 @@ gitlab_shell_version = $(shell bin/resolve-dependency-commitish "${gitlab_develo
 gitaly_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
 pages_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
 # $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_K8S_AGENT_VERSION")
-gitlab_k8s_agent_version = "ash2k/gdk"
+gitlab_k8s_agent_version = "master"
 gitlab_elasticsearch_indexer_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")

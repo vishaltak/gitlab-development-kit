@@ -183,6 +183,12 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#__listen_address' do
+      it 'is set to ip and port' do
+        expect(config.workhorse.__listen_address).to eq('gdk.example.com:3000')
+      end
+    end
   end
 
   describe 'container registry' do
@@ -560,6 +566,21 @@ RSpec.describe GDK::Config do
     describe 'auth_token' do
       it 'is not set by default' do
         expect(config.gitaly.auth_token).to be('')
+      end
+    end
+  end
+
+  describe 'nginx' do
+    describe '#__listen_address' do
+      let(:yaml) do
+        {
+          'port' => 1234,
+          'nginx' => { 'listen' => 'localhost' }
+        }
+      end
+
+      it 'is set to ip and port' do
+        expect(config.nginx.__listen_address).to eq('localhost:1234')
       end
     end
   end
