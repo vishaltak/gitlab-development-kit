@@ -32,8 +32,8 @@ gitaly: exec gitaly/gitaly <%= config.gitaly.config_file %>
 # Frontend services
 #
 webpack: exec /usr/bin/env NODE_ENV=development DEV_SERVER_STATIC=<%= config.webpack.static?%> WEBPACK_VENDOR_DLL=<%= config.webpack.vendor_dll? %> DEV_SERVER_LIVERELOAD=<%= config.webpack.live_reload? %> NO_SOURCEMAPS=<%= !config.webpack.sourcemaps? %> DEV_SERVER_PORT=<%= config.webpack.port %> DEV_SERVER_HOST=<%= config.webpack.host %> support/exec-cd gitlab yarn dev-server
-rails-web: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$relative_url_root support/exec-cd gitlab bin/web start_foreground
-<%= '#' if config.action_cable.in_app? %>rails-actioncable: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$relative_url_root support/exec-cd gitlab bin/actioncable start_foreground
+rails-web: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$relative_url_root ACTION_CABLE_IN_APP=<%= config.action_cable.in_app? %> ACTION_CABLE_WORKER_POOL_SIZE=<%= config.action_cable.worker_pool_size %> support/exec-cd gitlab bin/web start_foreground
+<%= '#' if config.action_cable.in_app? %>rails-actioncable: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$relative_url_root ACTION_CABLE_WORKER_POOL_SIZE=<%= config.action_cable.worker_pool_size %> support/exec-cd gitlab bin/actioncable start_foreground
 <%= '#' unless config.gitlab_pages? %>gitlab-pages: exec gitlab-pages/bin/gitlab-pages -listen-http ":<%= config.gitlab_pages.port %>" -artifacts-server <%= config.__uri.merge('api/v4') %> -pages-root <%= config.gdk_root.join('gitlab', 'shared', 'pages') %> -pages-domain "<%= config.gitlab_pages.host %>"
 
 # Docker
