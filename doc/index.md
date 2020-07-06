@@ -45,10 +45,10 @@ rbenv rehash
 
 ## Install GDK components
 
-1. Change into the newly created GDK directory. For example:
+1. Change into the newly created `gitlab-development-kit` or custom directory created above. For example:
 
    ```shell
-   cd gdk
+   cd gitlab-development-kit
    ```
 
 1. Install the necessary components (repositories, Ruby gem bundles, and
