@@ -67,8 +67,8 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 1. You can start GDK with `gdk start`. It will print the URL for `agentk` to use:
 
     ```plaintext
-    => http://127.0.0.1:3000 should be ready shortly.
-    => kgb is available at tcp://127.0.0.1:5005.
+    => GitLab available at http://127.0.0.1:3000 shortly.
+    => kgb available at tcp://127.0.0.1:5005.
     ```
 
 1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
