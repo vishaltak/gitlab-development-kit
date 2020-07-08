@@ -49,9 +49,9 @@ To start preparing the GDK installation, pick your platform of choice:
 
 ### macOS
 
-Supported versions: OS X 10.9 (Mavericks) and up.
+Supported versions: macOS 10.13 (High Sierra) and up.
 
-In OS X 10.15 the default shell changed from Bash to Zsh. The instructions below for Homebrew and
+In macOS 10.15 (Catalina) the default shell changed from Bash to Zsh. The instructions below for Homebrew and
 MacPorts handle Bash or Zsh slightly differently by setting a `shell_file` variable based on your current shell.
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
