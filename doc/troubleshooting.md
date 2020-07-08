@@ -60,44 +60,6 @@ Check if you have `gawk` installed >= 5.0.0 and uninstall it.
 
 Re-run the `gdk install` again and follow any on-screen instructions related to installing `gpgme`.
 
-## `charlock_holmes` `0.7.x` cannot be installed on macOS Sierra
-
-The installation of the `charlock_holmes` gem (`0.7.3` or greater) during
-`bundle install` may fail on macOS Sierra with the following error:
-
-```plaintext
-[SNIPPED]
-
-/usr/local/Cellar/icu4c/59.1/include/unicode/unistr.h:3025:7: error: delegating constructors are permitted only in C++11
-    UnicodeString(ConstChar16Ptr(text)) {}
-    ^~~~~~~~~~~~~
-/usr/local/Cellar/icu4c/59.1/include/unicode/unistr.h:3087:7: error: delegating constructors are permitted only in C++11
-    UnicodeString(ConstChar16Ptr(text), length) {}
-    ^~~~~~~~~~~~~
-/usr/local/Cellar/icu4c/59.1/include/unicode/unistr.h:3180:7: error: delegating constructors are permitted only in C++11
-    UnicodeString(Char16Ptr(buffer), buffLength, buffCapacity) {}
-
-[SNIPPED]
-```
-
-A working solution is to configure the `--with-cxxflags=-std=c++11` flag
-in the Ruby gems global build options for this gem:
-
-```shell
-bundle config --global build.charlock_holmes "--with-cxxflags=-std=c++11"
-bundle install
-```
-
-The solution can be found at
-<https://github.com/brianmario/charlock_holmes/issues/117#issuecomment-329798280>.
-
-**Note:** If you get installation problems related to `icu4c`, make sure to also
-set the `--with-icu-dir=/usr/local/opt/icu4c` option:
-
-```shell
-bundle config --global build.charlock_holmes "--with-icu-dir=/usr/local/opt/icu4c --with-cxxflags=-std=c++11"
-```
-
 ## `charlock_holmes` `0.7.5` cannot be installed with icu4c 61.1
 
 The installation of the `charlock_holmes` v0.7.5 gem during `bundle install`
