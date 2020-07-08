@@ -128,7 +128,9 @@ gem install charlock_holmes -v '0.7.5' -- --with-cppflags=-DU_USING_ICU_NAMESPAC
 
 0.7.6 fixes this issue. See [this issue](https://github.com/brianmario/charlock_holmes/issues/126) for more details.
 
-## Unable to build and install `pg` gem on GDK install
+## PostgreSQL
+
+### Unable to build and install `pg` gem on GDK install
 
 After installing PostgreSQL with brew you will have to set the proper path to PostgreSQL.
 You may run into the following errors on running `gdk install`
@@ -160,7 +162,7 @@ If you need to have this software first in your PATH run:
 
 Once this is set, run the `gdk install` command again.
 
-## Error in database migrations when pg_trgm extension is missing
+### Error in database migrations when pg_trgm extension is missing
 
 Since GitLab 8.6+ the PostgreSQL extension `pg_trgm` must be installed. If you
 are installing GDK for the first time this is handled automatically from the
@@ -169,6 +171,27 @@ error, make sure you pull the latest changes from the GDK repository and run:
 
 ```shell
 ./support/enable-postgres-extensions
+```
+
+### PostgreSQL is looking for wrong version of icu4c
+
+If the Rails server cannot connect to PostgreSQL and you see the following when running `gdk tail postgresql`:
+
+```plaintext
+2020-07-06_00:26:20.51557 postgresql            : support/postgresql-signal-wrapper:16:in `<main>': undefined method `exitstatus' for nil:NilClass (NoMethodError)
+2020-07-06_00:26:21.62892 postgresql            : dyld: Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.66.dylib
+2020-07-06_00:26:21.62896 postgresql            :   Referenced from: /usr/local/opt/postgresql@11/bin/postgres
+2020-07-06_00:26:21.62897 postgresql            :   Reason: image not found
+```
+
+This means the PostgreSQL is trying to load an older version of `icu4c` (`66` in the example), and failing.
+This can happen when `icu4c` is not pinned and is upgraded beyond the version supported
+by PostgreSQL.
+
+To resolve this, reinstall PostgreSQL with:
+
+```shell
+brew reinstall postgresql@11
 ```
 
 ## ActiveRecord::PendingMigrationError at /
