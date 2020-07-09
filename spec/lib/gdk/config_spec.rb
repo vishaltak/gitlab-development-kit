@@ -336,7 +336,7 @@ RSpec.describe GDK::Config do
       }
     end
 
-    describe '#storages' do
+    describe '#__storages' do
       it 'has defaults' do
         expect(default_config.gitaly.__storages.length).to eq(1)
         expect(default_config.gitaly.__storages[0].name).to eq('default')
