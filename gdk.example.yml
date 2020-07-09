@@ -1,4 +1,7 @@
 ---
+action_cable:
+  in_app: true
+  worker_pool_size: 4
 auto_devops:
   enabled: false
   gitlab:
@@ -36,6 +39,11 @@ gitaly:
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   internal_socket_dir: "/home/git/gdk/tmp/gitaly"
   log_dir: "/home/git/gdk/log/gitaly"
+  storage_count: 1
+  storage_dir: "/home/git/gdk/repositories"
+  storages:
+  - name: default
+    path: "/home/git/gdk/repositories"
 gitlab:
   actioncable: {}
   dir: "/home/git/gdk/gitlab"
@@ -119,6 +127,9 @@ praefect:
     service_name: praefect-gitaly-0
     storage: praefect-internal-0
     storage_dir: "/home/git/gdk/repositories"
+    storages:
+    - name: praefect-internal-0
+      path: "/home/git/gdk/repositories"
 prometheus:
   enabled: false
   gitaly_exporter_port: 9236
@@ -167,13 +178,11 @@ tracer:
 username: git
 webpack:
   host: 127.0.0.1
+  live_reload: true
   port: 3808
   sourcemaps: true
   static: false
   vendor_dll: false
-action_cable:
-  in_app: true
-  worker_pool_size: 4
 workhorse:
   auto_update: true
   configured_port: 3333
