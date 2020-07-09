@@ -1,88 +1,66 @@
 # Install, set up, and update GDK
 
-> 🚨**Note:** Before undertaking these steps, be sure you have [prepared your system](prepare.md).🚨
+> 🚨**Note:** Before undertaking these steps, be sure you have [prepared your system](prepare.md). 🚨
 
 To get GDK up and running:
 
-1. [Install the `gitlab-development-kit` gem](#install-the-gitlab-development-kit-gem)
-1. [Initialize a new GDK directory](#initialize-a-new-gdk-directory)
-1. [Install GDK components](#install-gdk-components)
+1. Install the `gitlab-development-kit` gem:
 
-## Install the `gitlab-development-kit` gem
+   ```shell
+   gem install gitlab-development-kit
+   ```
 
-Execute the following with the Ruby version manager of your choice (`rvm`, `rbenv`, `chruby`, etc.)
-with the current [`gitlab` Ruby version](https://gitlab.com/gitlab-org/gitlab/blob/master/.ruby-version):
+   This is required the first time you install GDK, and any time you upgrade Ruby.
 
-```shell
-gem install gitlab-development-kit
-```
+1. Initialize a new GDK directory. You can initialize either:
 
-When using `rbenv`, you'll need the following to make the `gdk` command accessible:
-
-```shell
-rbenv rehash
-```
-
-## Initialize a new GDK directory
-
-1. Change into the directory where you want to store your source code for GitLab projects (e.g. `~/workspace`). The path used for
-   GDK must contain only alphanumeric characters.
-
-1. To initialize GDK into:
-
-   - The default directory (`./gitlab-development-kit`), run:
+   - The default directory (`gitlab-development-kit`), with:
 
      ```shell
      gdk init
      ```
 
-   - A custom directory, pass a directory name. For example, to initialize into
-     the `gdk` directory, run:
+   - A custom directory. For example, to initialize `gdk`, run:
 
      ```shell
      gdk init gdk
      ```
 
-## Install GDK components
+1. Install GDK components within the GDK directory:
 
-1. Change into the newly created `gitlab-development-kit` or custom directory created above. For example:
+   1. Change into the newly-created GDK directory.
+   1. Install the necessary components (repositories, Ruby gem bundles, and configuration) using
+      `gdk install`. Use one of the following methods:
 
-   ```shell
-   cd gitlab-development-kit
-   ```
+      - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
+        recommend developing against the GitLab project (the default). For:
 
-1. Install the necessary components (repositories, Ruby gem bundles, and
-   configuration) using `gdk install`.
+        - HTTP, run:
 
-   - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org)
-     we recommend [Develop against the GitLab project](#develop-against-the-gitlab-project-default) (default)
+          ```shell
+          gdk install
+          ```
 
-   - Other options in order of recommendation:
+        - SSH, run:
 
-     1. [Develop in your own GitLab fork](#develop-in-your-own-gitlab-fork)
-     1. [Develop against the GitLab FOSS project](#develop-against-the-gitlab-foss-project)
+          ```shell
+          gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
+          ```
 
-### Develop against the GitLab project (default)
+        Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
+        The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
-- HTTP, run:
+      - Other options, in order of recommendation:
 
-  ```shell
-  gdk install
-  ```
+        - [Develop in your own GitLab fork](#develop-in-your-own-gitlab-fork)
+        - [Develop against the GitLab FOSS project](#develop-against-the-gitlab-foss-project)
 
-- SSH, run:
-
-  ```shell
-  gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
-  ```
-
-Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
-
-### Develop against the GitLab FOSS project
+## Develop against the GitLab FOSS project
 
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
+
+After installing the `gitlab-development-kit` gem and initializing a GDK directory, for:
 
 - HTTP, run:
 
@@ -99,10 +77,12 @@ The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/doc
 Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
 The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
-### Develop in your own GitLab fork
+## Develop in your own GitLab fork
 
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab](https://gitlab.com/gitlab-org/gitlab).
+
+After installing the `gitlab-development-kit` gem and initializing a GDK directory, for:
 
 - HTTP, run:
 
