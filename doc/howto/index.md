@@ -47,3 +47,4 @@ to learn how to contribute to GitLab.
 - [Asset Proxy / Camo Server](asset_proxy.md)
 - [Email](email.md)
 - [Dependency Proxy](dependency_proxy.md)
+- [End to End Test Configuration](end_to_end_test_configuration.md)
