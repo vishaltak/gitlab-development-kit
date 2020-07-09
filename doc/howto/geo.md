@@ -207,15 +207,26 @@ to set up [SSH](ssh.md), including [SSH key lookup from database](ssh.md#ssh-key
 
 ## Configure Geo nodes
 
+### Add a license that includes the Geo feature
+
+1. Get a [test license](https://about.gitlab.com/handbook/support/workflows/test_env.html#testing-environment-license)
+1. Upload the license on your local Geo primary at <http://gdk.test:3000/admin/license>
+
 ### Add primary node
 
-There is a Rake task that can add the primary node:
+1. Add the primary node:
 
-```shell
-cd gdk/gitlab
+   ```shell
+   cd gdk/gitlab
 
-bundle exec rake geo:set_primary_node
-```
+   bundle exec rake geo:set_primary_node
+   ```
+
+1. Restart Rails processes:
+
+   ```shell
+   gdk restart rails
+   ```
 
 ### Add secondary node
 
