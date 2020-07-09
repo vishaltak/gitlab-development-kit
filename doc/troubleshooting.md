@@ -911,6 +911,23 @@ serves the assets from the `public/assets/` directory, which means that changing
 have any effect in development until you re-compile the assets manually. To re-enable live-reloading
 of CSS in development, remove the `public/assets/` directory and restart the GDK.
 
+## Bootsnap related problems
+
+If your local instance does not start up and you see `bootsnap` errors like this:
+
+```plaintext
+2020-07-09_07:29:27.20103 rails-web             : .rvm/gems/ruby-2.6.6/gems/bootsnap-1.4.6/lib/bootsnap/load_path_cache/core_ext/active_support.rb:61:in `block in load_missing_constant': uninitialized constant EE::OperationsHelper (NameError)
+2020-07-09_07:29:27.20104 rails-web             : .rvm/gems/ruby-2.6.6/gems/bootsnap-1.4.6/lib/bootsnap/load_path_cache/core_ext/active_support.rb:17:in `allow_bootsnap_retry'
+```
+
+You should try to remove the `bootsnap` cache:
+
+```shell
+gdk stop
+rm -rf gitlab/tmp/cache/bootsnap-*
+gdk start
+```
+
 ## Other problems
 
 Please open an issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
