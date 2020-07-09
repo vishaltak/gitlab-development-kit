@@ -102,7 +102,7 @@ file "gitaly/gitaly.config.toml" => ['support/templates/gitaly.config.toml.erb']
     config: config,
     node: config.gitaly
   ).safe_render!
-  config.gitaly.storages.each do |storage|
+  config.gitaly.__storages.each do |storage|
     FileUtils.mkdir_p(storage.path)
   end
   FileUtils.mkdir_p(config.gitaly.log_dir)
@@ -111,14 +111,14 @@ end
 file 'gitaly/praefect.config.toml' => ['support/templates/praefect.config.toml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
 
-  config.praefect.nodes.each_with_index do |node, index|
+  config.praefect.__nodes.each_with_index do |node, index|
     Rake::Task[node['config_file']].invoke
   end
 
   FileUtils.mkdir_p(config.praefect.internal_socket_dir)
 end
 
-config.praefect.nodes.each do |node|
+config.praefect.__nodes.each do |node|
   desc "Generate gitaly config for #{node['storage']}"
   file node['config_file'] => ['support/templates/gitaly.config.toml.erb'] do |t|
     GDK::ErbRenderer.new(
@@ -127,7 +127,7 @@ config.praefect.nodes.each do |node|
       config: config,
       node: node
     ).safe_render!
-    node.storages.each do |storage|
+    node.__storages.each do |storage|
       FileUtils.mkdir_p(storage.path)
     end
     FileUtils.mkdir_p(node['log_dir'])

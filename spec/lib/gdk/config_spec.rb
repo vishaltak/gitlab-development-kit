@@ -336,21 +336,21 @@ RSpec.describe GDK::Config do
       }
     end
 
-    describe '#storages' do
+    describe '#__storages' do
       it 'has defaults' do
-        expect(default_config.gitaly.storages.length).to eq(1)
-        expect(default_config.gitaly.storages[0].name).to eq('default')
-        expect(default_config.gitaly.storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
+        expect(default_config.gitaly.__storages.length).to eq(1)
+        expect(default_config.gitaly.__storages[0].name).to eq('default')
+        expect(default_config.gitaly.__storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
       end
 
       it 'returns the configured value' do
-        expect(config.gitaly.storages.length).to eq(3)
-        expect(config.gitaly.storages[0].name).to eq('default')
-        expect(config.gitaly.storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
-        expect(config.gitaly.storages[1].name).to eq('gitaly-1')
-        expect(config.gitaly.storages[1].path).to eq(Pathname.new('/home/git/gdk/repositories_gitaly-1'))
-        expect(config.gitaly.storages[2].name).to eq('gitaly-2')
-        expect(config.gitaly.storages[2].path).to eq(Pathname.new('/home/git/gdk/repositories_gitaly-2'))
+        expect(config.gitaly.__storages.length).to eq(3)
+        expect(config.gitaly.__storages[0].name).to eq('default')
+        expect(config.gitaly.__storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
+        expect(config.gitaly.__storages[1].name).to eq('gitaly-1')
+        expect(config.gitaly.__storages[1].path).to eq(Pathname.new('/home/git/gdk/repositories_gitaly-1'))
+        expect(config.gitaly.__storages[2].name).to eq('gitaly-2')
+        expect(config.gitaly.__storages[2].path).to eq(Pathname.new('/home/git/gdk/repositories_gitaly-2'))
       end
     end
   end

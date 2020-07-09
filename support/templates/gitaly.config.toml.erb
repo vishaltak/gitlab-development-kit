@@ -28,7 +28,7 @@ internal_socket_dir = "<%= node.internal_socket_dir %>"
 bin_path = "<%= config.git.bin %>"
 catfile_cache_size = 10
 
-<%- node.storages.each do |storage| -%>
+<%- node.__storages.each do |storage| -%>
 [[storage]]
 name = "<%= storage.name %>"
 path = "<%= storage.path %>"

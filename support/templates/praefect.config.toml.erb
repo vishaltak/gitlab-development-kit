@@ -24,7 +24,7 @@ name = 'default'
 # as shard. listen_addr should be unique for all nodes.
 # Requires the protocol to be defined, e.g. tcp://host.tld:1234
 
-<% config.praefect.nodes.each do |praefect_node| %>
+<% config.praefect.__nodes.each do |praefect_node| %>
 [[virtual_storage.node]]
   storage = "<%= praefect_node[:storage] %>"
   address = "unix:<%= praefect_node[:address] %>"

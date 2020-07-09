@@ -290,7 +290,7 @@ module GDK
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
-      array(:storages) do
+      array(:__storages) do
         settings_array!(storage_count) do |i|
           string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
           path(:path) do
@@ -317,7 +317,7 @@ module GDK
         string(:sslmode) { 'disable' }
       end
       integer(:node_count) { 1 }
-      array(:nodes) do
+      array(:__nodes) do
         settings_array!(config.praefect.node_count) do |i|
           path(:address) { config.gdk_root.join("gitaly-praefect-#{i}.socket") }
           string(:config_file) { "gitaly/gitaly-#{i}.praefect.toml" }
@@ -327,7 +327,7 @@ module GDK
           string(:storage) { "praefect-internal-#{i}" }
           path(:storage_dir) { i.zero? ? config.repositories_root : File.join(config.repositories_root, storage) }
           path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
-          array(:storages) do
+          array(:__storages) do
             settings_array!(1) do |i|
               string(:name) { parent.storage }
               path(:path) { parent.storage_dir }
