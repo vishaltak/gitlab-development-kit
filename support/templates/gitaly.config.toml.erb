@@ -1,11 +1,11 @@
 # Example Gitaly configuration file
 
-socket_path = "<%= socket_path %>"
+socket_path = "<%= node.address %>"
 
 # The directory where Gitaly's executables are stored
 bin_dir = "<%= config.gdk_root.join('gitaly') %>"
 
-internal_socket_dir = "<%= internal_socket_dir %>"
+internal_socket_dir = "<%= node.internal_socket_dir %>"
 
 # # Optional: listen on a TCP socket. This is insecure (no authentication)
 # listen_addr = "<%= config.hostname %>:9999"
@@ -28,14 +28,16 @@ internal_socket_dir = "<%= internal_socket_dir %>"
 bin_path = "<%= config.git.bin %>"
 catfile_cache_size = 10
 
+<%- node.storages.each do |storage| -%>
 [[storage]]
-name = "<%= storage %>"
-path = "<%= path %>"
+name = "<%= storage.name %>"
+path = "<%= storage.path %>"
 
-<% if config.praefect? %>
+<%- end -%>
+<%- if config.praefect? -%>
 [[storage]]
 name = "praefect"
-path = "<%= path %>"
+path = "<%= node.storage_dir %>"
 <% end %>
 
 # # You can optionally configure more storages for this Gitaly instance to serve up
@@ -52,7 +54,7 @@ path = "<%= path %>"
 # # Defaults to "info"
 level = "info"
 format = "json"
-dir = "<%= log_dir %>"
+dir = "<%= node.log_dir %>"
 
 # # Additionally exceptions from the Go server can be reported to Sentry
 # sentry_dsn = "https://<key>:<secret>@sentry.io/<project>"
