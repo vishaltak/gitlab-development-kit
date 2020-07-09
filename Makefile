@@ -534,9 +534,21 @@ gitlab-k8s-agent-clean-bin:
 	$(Q)rm -rf "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 
 .PHONY: gitlab-k8s-agent/bin/k8s-agent
-gitlab-k8s-agent/bin/k8s-agent: ${gitlab_k8s_agent_clone_dir}/.git
+gitlab-k8s-agent/bin/k8s-agent: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/bazel
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
+
+.PHONY: gitlab-k8s-agent/bazel
+ifeq ($(platform),macos)
+gitlab-k8s-agent/bazel: /usr/local/bin/bazel
+else
+gitlab-k8s-agent/bazel:
+	@echo "INFO: To install bazel, please consult the docs at https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/howto/kubernetes_agent.md"
+endif
+
+/usr/local/bin/bazel:
+	$(Q)brew install bazelisk
+	$(Q)ln -s /usr/local/bin/bazelisk /usr/local/bin/bazel
 
 ${gitlab_k8s_agent_clone_dir}/.git:
 	$(Q)git clone --quiet --branch "${gitlab_k8s_agent_version}" ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} ${QQ}
