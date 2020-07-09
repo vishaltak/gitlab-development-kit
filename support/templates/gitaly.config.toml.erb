@@ -12,7 +12,7 @@ internal_socket_dir = "<%= node.internal_socket_dir %>"
 # tls_listen_addr = "<%= config.hostname %>:8888
 
 # # Optional: export metrics via Prometheus
-# prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.gitaly_exporter_port %>"
+<%= '#' unless config.prometheus.enabled? %>prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.gitaly_exporter_port %>"
 
 # # Optional: authenticate Gitaly requests using a shared secret
 # [auth]
