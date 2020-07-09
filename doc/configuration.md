@@ -282,3 +282,24 @@ These settings can be configured using [`env.runit`](runit.md#modifying-environm
 | WEBPACK_CACHE_PATH    | `./tmp/cache` | Path string to temporary dir     |
 | WEBPACK_REPORT        | false       | Generates bundle analysis report |
 | WEBPACK_VENDOR_DLL    | false       | Reduce webpack-dev-server memory requirements when vendor bundle has been precompiled with `yarn webpack-vendor` |
+
+## ActionCable settings
+
+Under the `action_cable` key you can define the following settings with their defaults:
+
+```yaml
+action_cable:
+  in_app: true
+  worker_pool_size: 4
+```
+
+| Setting            | Default | Description |
+|--------------------|---------|-------------|
+| `in_app`           | `true`  | Set this to `false` to run ActionCable as a separate service. |
+| `worker_pool_size` | `4`     | Adjust this to control the number of ActionCable threads. This usually doesn't need to be changed. |
+
+By default, ActionCable will run in-app using the same Puma workers used to serve web requests. This results in memory
+savings since we don't need to start another process that boots the whole GitLab Rails app.
+
+When this is set to `false`, a separate Puma process will be started to handle ActionCable requests and workhorse will
+be automatically configured to proxy to this process.

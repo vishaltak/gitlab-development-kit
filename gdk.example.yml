@@ -171,6 +171,9 @@ webpack:
   sourcemaps: true
   static: false
   vendor_dll: false
+action_cable:
+  in_app: true
+  worker_pool_size: 4
 workhorse:
   auto_update: true
   configured_port: 3333
