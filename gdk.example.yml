@@ -120,6 +120,7 @@ prometheus:
   gitaly_exporter_port: 9236
   port: 9090
   praefect_exporter_port: 10101
+  sidekiq_exporter_port: 3807
 registry:
   api_host: 127.0.0.1
   auth_enabled: true

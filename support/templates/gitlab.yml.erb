@@ -803,9 +803,9 @@ production: &base
 
     # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
-    #  enabled: true
-    #  address: localhost
-    #  port: 3807
+      enabled: <%= config.prometheus.enabled? %>
+      address: <%= config.hostname %>
+      port: <%= config.prometheus.sidekiq_exporter_port %>
   prometheus:
     enable: <%= config.prometheus.enabled? %>
     listen_address: '<%= config.hostname %>:<%= config.prometheus.port %>'

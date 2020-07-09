@@ -368,6 +368,7 @@ module GDK
       integer(:port) { 9090 }
       integer(:gitaly_exporter_port) { 9236 }
       integer(:praefect_exporter_port) { 10101 }
+      integer(:sidekiq_exporter_port) { 3807 }
     end
 
     settings :openldap do
