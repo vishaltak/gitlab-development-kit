@@ -716,4 +716,46 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'docker' do
+    describe '#host_networking' do
+      it 'defaults to false' do
+        expect(config.docker.host_networking).to eq(false)
+      end
+    end
+
+    describe '#__host_networking' do
+      context 'when host_networking disabled' do
+        it 'returns false' do
+          expect(config.docker.__host_networking).to eq(false)
+        end
+      end
+
+      context 'when host_networking enabled' do
+        let(:yaml) do
+          { 'docker' => { 'host_networking' => true } }.merge(extra_yaml)
+        end
+
+        context 'and platform is macos' do
+          let(:extra_yaml) do
+            { '__platform' => 'macos' }
+          end
+
+          it 'returns false' do
+            expect(config.docker.__host_networking).to eq(false)
+          end
+        end
+
+        context 'and platform is linux' do
+          let(:extra_yaml) do
+            { '__platform' => 'linux' }
+          end
+
+          it 'returns true' do
+            expect(config.docker.__host_networking).to eq(true)
+          end
+        end
+      end
+    end
+  end
 end

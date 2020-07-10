@@ -99,6 +99,12 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 
 See [configuring NGINX](howto/nginx.md) for a comprehensive guide.
 
+### Docker settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `docker.host_networking` | `false` | Set this to `true` to enable `--net="host"` for Docker containers. Only supported on Linux. |
+
 ### Loose files (deprecated)
 
 Before `gdk.yml` was introduced, GDK could be configured through a

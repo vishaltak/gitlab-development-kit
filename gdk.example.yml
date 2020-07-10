@@ -9,6 +9,8 @@ auto_devops:
   listen_address: 0.0.0.0
   registry:
     port: 25000
+docker:
+  host_networking: false
 elasticsearch:
   enabled: false
   linux_checksum: f4ac248f225470ce498635897ed1d6ba700167fcad4c6aaf38b3e7b16c145170fa3874fe8a1e1954d939c8401fbae20cca21146c20760259294d3af6de05eaea

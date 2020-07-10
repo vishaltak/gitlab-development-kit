@@ -399,5 +399,12 @@ module GDK
         end
       end
     end
+
+    settings :docker do
+      bool(:host_networking) { false }
+      bool(:__host_networking) do
+        config.__platform == 'linux' && config.docker.host_networking
+      end
+    end
   end
 end
