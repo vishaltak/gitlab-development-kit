@@ -449,8 +449,25 @@ RSpec.describe GDK::Config do
     end
   end
 
-  context 'Geo section' do
-    describe 'Registry replication' do
+  context 'geo' do
+    describe '#enabled' do
+      it 'returns false be default' do
+        expect(config.geo.enabled?).to be false
+      end
+
+      context 'when enabled in config file' do
+        let(:yaml) do
+          { 'geo' => { 'enabled' => true } }
+        end
+
+        it 'returns true' do
+          expect(config.geo.enabled?).to be true
+        end
+      end
+    end
+
+
+    describe '#registry_replication' do
       describe '#enabled' do
         it 'returns false be default' do
           expect(config.geo.registry_replication.enabled).to be false
