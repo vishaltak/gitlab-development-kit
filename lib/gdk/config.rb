@@ -327,6 +327,7 @@ module GDK
           string(:storage) { "praefect-internal-#{i}" }
           path(:storage_dir) { i.zero? ? config.repositories_root : File.join(config.repositories_root, storage) }
           path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
+          string(:prometheus_target) { "#{config.prometheus.scrape_host}:#{config.prometheus.gitaly_exporter_port + i}" }
           array(:__storages) do
             settings_array!(1) do |i|
               string(:name) { parent.storage }

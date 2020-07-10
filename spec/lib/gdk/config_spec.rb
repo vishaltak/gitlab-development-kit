@@ -255,7 +255,8 @@ RSpec.describe GDK::Config do
             'database' => {
               'host' => 'localhost',
               'port' => 1234
-            }
+            },
+            'node_count' => 2
           }
         }
       end
@@ -273,6 +274,16 @@ RSpec.describe GDK::Config do
 
         it 'returns configured value' do
           expect(config.praefect.database.port).to eq(1234)
+        end
+      end
+
+      describe '#__nodes' do
+        it 'returns configured value' do
+          expect(config.praefect.__nodes.length).to eq(2)
+          expect(config.praefect.__nodes[0].service_name).to eq('praefect-gitaly-0')
+          expect(config.praefect.__nodes[0].prometheus_target).to eq('host.docker.internal:9236')
+          expect(config.praefect.__nodes[1].service_name).to eq('praefect-gitaly-1')
+          expect(config.praefect.__nodes[1].prometheus_target).to eq('host.docker.internal:9237')
         end
       end
     end
