@@ -365,6 +365,7 @@ module GDK
 
     settings :prometheus do
       bool(:enabled) { false }
+      string(:scrape_host) { 'host.docker.internal' }
       integer(:port) { 9090 }
       integer(:gitaly_exporter_port) { 9236 }
       integer(:praefect_exporter_port) { 10101 }

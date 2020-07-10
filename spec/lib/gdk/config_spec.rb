@@ -675,6 +675,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#scrape_host' do
+      it 'defaults to host.docker.internal' do
+        expect(config.prometheus.scrape_host).to eq('host.docker.internal')
+      end
+    end
+
     describe '#port' do
       it 'defaults to 9090' do
         expect(config.prometheus.port).to eq(9090)
