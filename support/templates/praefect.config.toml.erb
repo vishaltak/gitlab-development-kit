@@ -6,7 +6,7 @@
 socket_path = "<%= config.gdk_root.join('praefect.socket') %>"
 # # Praefect will only replicate whitelisted repositories
 # # Optional: export metrics via Prometheus
-# prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.praefect_exporter_port %>"
+<%= '#' unless config.prometheus.enabled? %>prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.praefect_exporter_port %>"
 
 # # You can optionally configure Praefect to output JSON-formatted log messages to stdout
 # [logging]

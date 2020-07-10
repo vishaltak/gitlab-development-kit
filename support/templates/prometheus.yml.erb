@@ -21,14 +21,10 @@ scrape_configs:
     metrics_path: '/-/metrics'
     static_configs:
       - targets: ['<%= config.hostname %>:<%= config.port %>']
-  # Requires that `prometheus_listen_addr` in `gitaly/gitaly-0.praefect.toml` is
-  # uncommented.
   - job_name: 'gitaly'
     scrape_interval: 5s
     static_configs:
       - targets: ['<%= config.hostname %>:<%= config.prometheus.gitaly_exporter_port %>']
-  # Requires that `prometheus_listen_addr` in `gitaly/praefect.config.toml` is
-  # uncommented.
   - job_name: 'praefect'
     scrape_interval: 5s
     static_configs:
