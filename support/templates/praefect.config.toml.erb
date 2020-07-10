@@ -16,6 +16,9 @@ socket_path = "<%= config.gdk_root.join('praefect.socket') %>"
 # # Defaults to "info"
 #   level = "warn"
 
+[failover]
+read_only_after_failover = false # favors availability over consistency
+
 [[virtual_storage]]
 name = 'default'
 
