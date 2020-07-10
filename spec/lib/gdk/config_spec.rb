@@ -757,5 +757,39 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#__run_command' do
+      context 'when host_networking disabled' do
+        it "returns 'docker run'" do
+          expect(config.docker.__run_command).to eq('docker run')
+        end
+      end
+
+      context 'when host_networking enabled' do
+        let(:yaml) do
+          { 'docker' => { 'host_networking' => true } }.merge(extra_yaml)
+        end
+
+        context 'and platform is macos' do
+          let(:extra_yaml) do
+            { '__platform' => 'macos' }
+          end
+
+          it "returns 'docker run'" do
+            expect(config.docker.__run_command).to eq('docker run')
+          end
+        end
+
+        context 'and platform is linux' do
+          let(:extra_yaml) do
+            { '__platform' => 'linux' }
+          end
+
+          it %(returns 'docker run --net="host"') do
+            expect(config.docker.__run_command).to eq('docker run --net="host"')
+          end
+        end
+      end
+    end
   end
 end

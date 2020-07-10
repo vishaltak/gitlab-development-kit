@@ -405,6 +405,11 @@ module GDK
       bool(:__host_networking) do
         config.__platform == 'linux' && config.docker.host_networking
       end
+      string(:__run_command) do
+        pieces = %w[docker run]
+        pieces << '--net="host"' if config.docker.__host_networking
+        pieces.join(' ')
+      end
     end
   end
 end
