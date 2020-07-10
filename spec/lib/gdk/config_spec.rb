@@ -687,8 +687,20 @@ RSpec.describe GDK::Config do
     end
 
     describe '#scrape_host' do
-      it 'defaults to host.docker.internal' do
-        expect(config.prometheus.scrape_host).to eq('host.docker.internal')
+      context 'when Docker host_networking disabled' do
+        it 'defaults to host.docker.internal' do
+          expect(config.prometheus.scrape_host).to eq('host.docker.internal')
+        end
+      end
+
+      context 'when Docker host_networking enabled' do
+        let(:yaml) do
+          { 'docker' => { '__host_networking' => true } }
+        end
+
+        it 'returns localhost' do
+          expect(config.prometheus.scrape_host).to eq('127.0.0.1')
+        end
       end
     end
 
