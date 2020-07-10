@@ -466,6 +466,21 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#secondary?' do
+      it 'returns false be default' do
+        expect(config.geo.secondary?).to be false
+      end
+
+      context 'when enabled in config file' do
+        let(:yaml) do
+          { 'geo' => { 'secondary' => true } }
+        end
+
+        it 'returns true' do
+          expect(config.geo.secondary?).to be true
+        end
+      end
+    end
 
     describe '#registry_replication' do
       describe '#enabled' do

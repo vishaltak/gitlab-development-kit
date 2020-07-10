@@ -49,6 +49,7 @@ Add the following to `gdk.yml` file:
 ---
 geo:
   enabled: true
+  secondary: true
   node_name: gdk-geo
 gitlab_pages:
   enabled: true
