@@ -28,7 +28,8 @@ gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
 psql := $(postgresql_bin_dir)/psql
 
-postgresql_in_recovery = $(strip $(shell $(psql) -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc "SELECT 'PG_IS_IN_RECOVERY_' || pg_is_in_recovery();" 2>&1 | grep '^ PG_IS_IN_RECOVERY_' $(QQerr)))
+postgresql_in_recovery_cmd = $(psql) -X -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc 'SELECT pg_is_in_recovery();' $(QQerr)
+when_postgresql_not_in_recovery = [[ "$$($(postgresql_in_recovery_cmd) | tr -d '[:space:]')" == "t" ]] ||
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
@@ -179,15 +180,10 @@ gitlab/.git/pull: gitlab/git-restore
 	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
 
 gitlab-db-migrate:
-ifeq ($(postgresql_in_recovery),PG_IS_IN_RECOVERY_false)
-	@echo
-	@echo "------------------------------------------------------------"
-	@echo "Processing gitlab-org/gitlab Rails DB migrations"
-	@echo "------------------------------------------------------------"
-	$(Q)$(gitlab_rake_cmd) db:migrate db:test:prepare
-else
-	@true
-endif
+	@$(when_postgresql_not_in_recovery)echo "------------------------------------------------------------"
+	@$(when_postgresql_not_in_recovery)echo "Processing gitlab-org/gitlab Rails DB migrations"
+	@$(when_postgresql_not_in_recovery)echo "------------------------------------------------------------"
+	$(Q)$(when_postgresql_not_in_recovery)($(gitlab_rake_cmd) db:migrate db:test:prepare)
 
 gitlab-geo-db-migrate:
 ifeq ($(geo_enabled),true)
