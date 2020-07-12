@@ -214,3 +214,13 @@ cd <gdk-dir>
 gdk update
 gdk reconfigure
 ```
+
+## Create new GDK
+
+After you have set up GDK initially, it's very easy to create new "fresh installations".
+You might do this if you have problems with existing installation that are complicated to fix, and
+you just need to get up and running quickly. To create a fresh installation:
+
+1. In the parent folder for GDK, run
+   [`gdk init <new directory>`](#initialize-a-new-gdk-directory).
+1. In the new directory, run [`gdk install`](#install-gdk-components).
