@@ -252,6 +252,7 @@ RSpec.describe GDK::Config do
       let(:yaml) do
         {
           'praefect' => {
+            'node_count' => 3,
             'database' => {
               'host' => 'localhost',
               'port' => 1234
@@ -273,6 +274,31 @@ RSpec.describe GDK::Config do
 
         it 'returns configured value' do
           expect(config.praefect.database.port).to eq(1234)
+        end
+      end
+
+      describe '#__storages' do
+        it 'has defaults' do
+          expect(default_config.praefect.__nodes.length).to eq(1)
+          expect(default_config.praefect.__nodes[0].__storages.length).to eq(1)
+          expect(default_config.praefect.__nodes[0].__storages[0].name).to eq('praefect-internal-0')
+          expect(default_config.praefect.__nodes[0].__storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
+        end
+
+        it 'returns the configured value' do
+          expect(config.praefect.__nodes.length).to eq(3)
+
+          expect(config.praefect.__nodes[0].__storages.length).to eq(1)
+          expect(config.praefect.__nodes[0].__storages[0].name).to eq('praefect-internal-0')
+          expect(config.praefect.__nodes[0].__storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
+
+          expect(config.praefect.__nodes[1].__storages.length).to eq(1)
+          expect(config.praefect.__nodes[1].__storages[0].name).to eq('praefect-internal-1')
+          expect(config.praefect.__nodes[1].__storages[0].path).to eq(Pathname.new('/home/git/gdk/repository_storages/praefect-gitaly-1/praefect-internal-1'))
+
+          expect(config.praefect.__nodes[2].__storages.length).to eq(1)
+          expect(config.praefect.__nodes[2].__storages[0].name).to eq('praefect-internal-2')
+          expect(config.praefect.__nodes[2].__storages[0].path).to eq(Pathname.new('/home/git/gdk/repository_storages/praefect-gitaly-2/praefect-internal-2'))
         end
       end
     end
@@ -348,9 +374,9 @@ RSpec.describe GDK::Config do
         expect(config.gitaly.__storages[0].name).to eq('default')
         expect(config.gitaly.__storages[0].path).to eq(Pathname.new('/home/git/gdk/repositories'))
         expect(config.gitaly.__storages[1].name).to eq('gitaly-1')
-        expect(config.gitaly.__storages[1].path).to eq(Pathname.new('/home/git/gdk/repositories_gitaly-1'))
+        expect(config.gitaly.__storages[1].path).to eq(Pathname.new('/home/git/gdk/repository_storages/gitaly/gitaly-1'))
         expect(config.gitaly.__storages[2].name).to eq('gitaly-2')
-        expect(config.gitaly.__storages[2].path).to eq(Pathname.new('/home/git/gdk/repositories_gitaly-2'))
+        expect(config.gitaly.__storages[2].path).to eq(Pathname.new('/home/git/gdk/repository_storages/gitaly/gitaly-2'))
       end
     end
   end

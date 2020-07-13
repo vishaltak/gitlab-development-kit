@@ -142,6 +142,7 @@ repositories:
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
   gitlab_workhorse: https://gitlab.com/gitlab-org/gitlab-workhorse.git
 repositories_root: "/home/git/gdk/repositories"
+repository_storages: "/home/git/gdk/repository_storages"
 runner:
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
   enabled: false

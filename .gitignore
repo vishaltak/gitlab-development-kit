@@ -92,7 +92,8 @@
 /registry_image
 /registry_port
 /relative_url_root
-/repositories*
+/repositories/
+/repository_storages/
 /services/
 /sv/
 /webpack_port
