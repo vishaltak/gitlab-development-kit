@@ -1,16 +1,13 @@
 # Web IDE Terminal
 
-[Web IDE terminal](https://docs.gitlab.com/ee/user/project/web_ide/index.html#interactive-web-terminals-for-the-web-ide-ultimate-only)
-can be tested using the GDK. Currently, this requires an Ultimate license, but this
-won't be needed once [this feature is moved to Core](https://gitlab.com/gitlab-org/gitlab/-/issues/211685).
+[Web IDE terminal](https://docs.gitlab.com/ee/user/project/web_ide/index.html#interactive-web-terminals-for-the-web-ide)
+can be tested using the GDK.
 
 ## Pre-requisites
 
 To run Web IDE terminals on GDK, the following are required:
 
 - [GDK up and running](../index.md).
-- An [Ultimate license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee).
-  Note that the license key generator is only available for GitLab team members.
 - CI/CD enabled on a local project. To check this:
   1. Navigate to the project's **Settings > General**.
   1. Expand **Visibility, project features, permissions**.
