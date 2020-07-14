@@ -132,6 +132,24 @@ module Runit
     end
 
     def create_runit_control_t(service)
+      return create_runit_control_t_non_docker(service) unless config.respond_to?(service.name) && config.fetch(service.name).respond_to?(:__docker_based)
+
+      create_runit_control_t_docker(service)
+    end
+
+    def create_runit_control_t_docker(service)
+      docker_container_name = "gdk_#{service.name}"
+      control_t_template = <<~'TEMPLATE'
+        #!/usr/bin/env ruby
+
+        puts "runit control/t: Running 'docker stop <%= docker_container_name %>'"
+        %x{docker stop <%= docker_container_name %>}
+      TEMPLATE
+      control_t_path = File.join(dir(service), 'control/t')
+      write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
+    end
+
+    def create_runit_control_t_non_docker(service)
       term_signal = TERM_SIGNAL.fetch(service.name, 'TERM')
       control_t_template = <<~'TEMPLATE'
         #!/usr/bin/env ruby
