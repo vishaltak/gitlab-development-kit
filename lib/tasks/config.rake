@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 CONFIGS = FileList['Procfile', 'nginx/conf/nginx.conf', 'gitlab/config/gitlab.yml', 'prometheus/prometheus.yml']
 CLOBBER.include(*CONFIGS, 'gdk.example.yml')
 
