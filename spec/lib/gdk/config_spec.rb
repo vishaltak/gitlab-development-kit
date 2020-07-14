@@ -227,9 +227,7 @@ RSpec.describe GDK::Config do
 
   describe '#dump!' do
     before do
-      fake_io = double('IO', read: '/usr/local/bin')
-      allow(IO).to receive(:popen).and_call_original
-      allow(IO).to receive(:popen).with(%w[support/pg_bindir], chdir: GDK.root).and_yield(fake_io)
+      stub_pg_bindir
     end
 
     it 'successfully dumps the config' do

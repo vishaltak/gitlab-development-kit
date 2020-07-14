@@ -49,7 +49,7 @@ RSpec.describe Runit::Config do
 
         }
       }
-      expect(GDK).to receive(:config) { GDK::Config.new(yaml: yaml) }.at_least(:once)
+      stub_gdk_yaml(yaml)
 
       expect(subject.run_env).not_to match(/GITLAB_TRACING=/)
       expect(subject.run_env).not_to match(/GITLAB_TRACING_URL=/)

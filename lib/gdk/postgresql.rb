@@ -4,7 +4,7 @@ module GDK
   class Postgresql
     def ready?
       last_error = nil
-      cmd = psql_cmd + ['-d', 'template1', '-c', '']
+      cmd = pg_cmd(database: 'template1', command: '')
 
       10.times do
         shellout = Shellout.new(cmd)
@@ -16,7 +16,7 @@ module GDK
         sleep 1
       end
 
-      GDK::Output.error last_error
+      GDK::Output.error(last_error)
       false
     end
 
@@ -25,12 +25,21 @@ module GDK
     end
 
     def db_exists?(dbname)
-      system(*(psql_cmd + ['-d', dbname, '-c', '']), err: '/dev/null')
+      Shellout.new(pg_cmd(database: dbname, command: '')).tap(&:try_run).success?
     end
 
-    def createdb(args)
-      cmd = [File.join(config.bin_dir, 'createdb'), '-h', host, '-p', port] + args
-      system(*cmd)
+    def createdb(*args)
+      cmd = pg_cmd(*args, program: 'createdb')
+
+      Shellout.new(cmd).run
+    end
+
+    def in_recovery?
+      cmd = pg_cmd('--no-psqlrc', '--tuples-only',
+                   database: 'postgres',
+                   command: 'SELECT pg_is_in_recovery();')
+
+      Shellout.new(cmd).try_run == 't'
     end
 
     private
@@ -47,8 +56,14 @@ module GDK
       config.port.to_s
     end
 
-    def psql_cmd
-      [File.join(config.bin_dir, 'psql'), '-h', host, '-p', port]
+    def pg_cmd(*args, program: 'psql', database: nil, command: nil)
+      cmd = [config.bin_dir.join(program).to_s]
+      cmd << "--host=#{host}"
+      cmd << "--port=#{port}"
+      cmd << "--dbname=#{database}" if database
+      cmd << "--command=#{command}" if command
+
+      cmd + args
     end
   end
 end

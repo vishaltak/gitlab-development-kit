@@ -6,4 +6,4 @@ system(*%w[gdk start postgresql])
 postgresql = GDK::Postgresql.new
 abort 'postgres not ready' unless postgresql.ready?
 
-abort 'createdb failed' unless postgresql.createdb(['grafana'])
+abort 'createdb failed' unless postgresql.createdb('grafana')
