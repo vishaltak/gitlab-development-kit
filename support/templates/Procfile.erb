@@ -45,7 +45,7 @@ rails-web: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$rela
 # Monitoring and tracing
 #
 <%= '#' unless config.grafana? %>grafana: exec support/exec-cd grafana bin/grafana-server -config grafana.ini
-<%= '#' unless config.prometheus? %>prometheus: exec docker run -p <%= config.prometheus.port %>:<%= config.prometheus.port %> -v <%= config.gdk_root.join('prometheus', 'prometheus.yml') %>:/etc/prometheus/prometheus.yml prom/prometheus:v2.8.1
+<%= '#' unless config.prometheus? %>prometheus: exec docker run --rm --sig-proxy=true --name gdk_prometheus  -p <%= config.prometheus.port %>:<%= config.prometheus.port %> -v <%= config.gdk_root.join('prometheus', 'prometheus.yml') %>:/etc/prometheus/prometheus.yml prom/prometheus:v2.8.1
 <%= '#' unless config.tracer.jaeger? %>jaeger: exec jaeger/jaeger-<%= config.tracer.jaeger.version %>/jaeger-all-in-one --memory.max-traces 512
 
 # Additional services
@@ -66,4 +66,4 @@ rails-web: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$rela
 
 # Mattermost
 #
-<%= '#' unless config.mattermost? %>mattermost: exec docker run --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.local_port %>:8065 <%= config.mattermost.image %>
+<%= '#' unless config.mattermost? %>mattermost: exec docker run --rm --sig-proxy=true --name gdk_mattermost -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.local_port %>:8065 <%= config.mattermost.image %>
