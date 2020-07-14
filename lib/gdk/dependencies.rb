@@ -19,7 +19,7 @@ module GDK
       end
 
       def bundler_version
-        read_gitlab_file('Gemfile.lock')[/BUNDLED WITH\n +(\d+.\d+.\d+)/, 1] || raise(VersionNotDetected, "Failed to determine GitLab's Bundler version")
+        Checker.parse_version(read_gitlab_file('Gemfile.lock'), prefix: 'BUNDLED WITH\n +') || raise(VersionNotDetected, "Failed to determine GitLab's Bundler version")
       end
 
       private
@@ -49,6 +49,10 @@ module GDK
       EXPECTED_POSTGRESQL_VERSION = '11.7.x'
 
       attr_reader :error_messages
+
+      def self.parse_version(string, prefix: '')
+        string[/#{prefix}((\d+.\d+)(.\d+)*)/, 1]
+      end
 
       def initialize
         @error_messages = []
@@ -104,7 +108,7 @@ module GDK
         # _$VERSION_` syntax and need to fall back to using `bundle --version`
         # on a best effort basis.
         actual = Shellout.new('bundle --version').try_run
-        actual = actual[/Bundler version (\d+\.\d+.\d+)/, 1]
+        actual = Checker.parse_version(actual, prefix: 'Bundler version ')
 
         Gem::Version.new(actual) == Gem::Version.new(expected_bundler_version)
       end
@@ -112,7 +116,7 @@ module GDK
       def check_go_version
         return unless check_binary('go')
 
-        current_version = `go version`[/go((\d+.\d+)(.\d+)?)/, 1]
+        current_version = Checker.parse_version(`go version`, prefix: 'go')
 
         actual = Gem::Version.new(current_version)
         expected = Gem::Version.new(EXPECTED_GO_VERSION)
@@ -125,7 +129,7 @@ module GDK
       def check_nodejs_version
         return unless check_binary('node')
 
-        current_version = `node --version`[/v(\d+\.\d+\.\d+)/, 1]
+        current_version = Checker.parse_version(`node --version`, prefix: 'v')
 
         actual = Gem::Version.new(current_version)
         expected = Gem::Version.new(EXPECTED_NODEJS_VERSION)
@@ -139,7 +143,7 @@ module GDK
       def check_yarn_version
         return unless check_binary('yarn')
 
-        current_version = `yarn --version`
+        current_version = Checker.parse_version(`yarn --version`)
 
         actual = Gem::Version.new(current_version)
         expected = Gem::Version.new(EXPECTED_YARN_VERSION)
@@ -153,7 +157,7 @@ module GDK
       def check_postgresql_version
         return unless check_binary('psql')
 
-        current_postgresql_version = `psql --version`[/psql \(PostgreSQL\) (\d+\.\d+)/, 1]
+        current_postgresql_version = Checker.parse_version(`psql --version`, prefix: 'psql \(PostgreSQL\) ')
 
         actual = Gem::Version.new(current_postgresql_version)
         expected = Gem::Version.new(EXPECTED_POSTGRESQL_VERSION)
