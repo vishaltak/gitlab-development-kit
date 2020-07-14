@@ -421,6 +421,7 @@ module GDK
 
     settings :prometheus do
       bool(:enabled) { false }
+      bool(:__docker_based) { true }
       integer(:port) { 9090 }
       integer(:gitaly_exporter_port) { 9236 }
       integer(:praefect_exporter_port) { 10101 }
@@ -433,6 +434,7 @@ module GDK
 
     settings :mattermost do
       bool(:enabled) { false }
+      bool(:__docker_based) { true }
       integer(:port) { config.auto_devops.gitlab.port + 7000 }
       string(:image) { 'mattermost/mattermost-preview' }
       integer(:local_port) { 8065 }
