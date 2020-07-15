@@ -147,9 +147,11 @@ module GDK
     puts_separator <<~HELP_MESSAGE
       You can try the following that may be of assistance:
 
-      - Run 'gdk doctor'
-      - Visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues
-        to see if there are known issues
+      - Run 'gdk doctor'.
+      - Visit the troubleshooting documentation:
+        https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/troubleshooting.md.
+      - Visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues to
+        see if there are known issues.
     HELP_MESSAGE
   end
 
