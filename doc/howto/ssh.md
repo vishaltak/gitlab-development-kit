@@ -6,7 +6,12 @@ you will get an unprivileged SSH daemon process running on
 `localhost:2222`, integrated with `gitlab-shell`.
 
 To change the host/port you need to edit `<gdk-root>/openssh/sshd_config` and
-`<gdk-root>/gitlab/config/gitlab.yml`. If you are not working on GitLab SSH
+`<gdk-root>/gitlab/config/gitlab.yml`.
+
+If you are aiming to SSH from a local VM, change the `ListenAddress` line to:
+`ListenAddress 0.0.0.0:2222` (or write instead your host's private IP address).
+
+If you are not working on GitLab SSH
 integration we recommend that you leave the 'sshd:' line in the
 Procfile commented out.
 
