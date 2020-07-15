@@ -52,6 +52,7 @@ module GDK
     end
 
     path(:repositories_root) { config.gdk_root.join('repositories') }
+    path(:repository_storages) { config.gdk_root.join('repository_storages') }
 
     string(:listen_address) { '127.0.0.1' }
 
@@ -287,6 +288,7 @@ module GDK
       path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
       path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
       path(:storage_dir) { config.repositories_root }
+      path(:repository_storages) { config.repository_storages }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
@@ -297,8 +299,7 @@ module GDK
             if i.zero?
               parent.storage_dir
             else
-              dirname, basename = File.split(parent.storage_dir)
-              File.join(dirname, "#{basename}_#{name}")
+              File.join(config.repository_storages, "gitaly", name)
             end
           end
         end
@@ -325,12 +326,13 @@ module GDK
           bool(:primary) { i.zero? }
           string(:service_name) { "praefect-gitaly-#{i}" }
           string(:storage) { "praefect-internal-#{i}" }
-          path(:storage_dir) { i.zero? ? config.repositories_root : File.join(config.repositories_root, storage) }
+          path(:storage_dir) { config.repositories_root }
+          path(:repository_storages) { config.repository_storages }
           path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
           array(:__storages) do
-            settings_array!(1) do |i|
+            settings_array!(1) do |j|
               string(:name) { parent.storage }
-              path(:path) { parent.storage_dir }
+              path(:path) { i.zero? && j.zero? ? parent.storage_dir : File.join(parent.repository_storages, parent.service_name, name) }
             end
           end
         end
