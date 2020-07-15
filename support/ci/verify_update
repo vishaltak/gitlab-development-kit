@@ -8,7 +8,7 @@ source "${parent_path}"/functions.sh
 init
 
 # test GDK install
-checkout "master"
+checkout "${1:-master}"
 install
 start
 wait_for_boot
