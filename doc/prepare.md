@@ -328,6 +328,27 @@ Install your Linux Distribution of Choice via the Windows Store. Currently the d
 
 Launch the distro of choice.
 
+You must ensure that your Linux distribution uses WSL version 2. Open PowerShell with
+administrator privileges and run the following:
+
+```shell
+# If the command below does not return a list of your installed distributions,
+# you have WS1.
+wsl -l
+```
+
+You can [upgrade](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel) your WSL.
+
+If you noticed your distribution of choice is an older subsystem, you can upgrade it by
+running:
+
+```shell
+# Get the name of your subsystem
+wsl -l
+# Run the following command
+wsl --set-version <your subsystem name here>
+```
+
 Return to the prerequisite installation steps.
 
 ## Documentation tools
