@@ -21,7 +21,12 @@ install:
   script:
     - support/ci/verify_install
 
-update:
+update_from_master:
   extends: .verify_job
   script:
-    - support/ci/verify_update
+    - support/ci/verify_update master
+
+update_from_mr_branch:
+  extends: .verify_job
+  script:
+    - support/ci/verify_update ${CI_COMMIT_SHA}
