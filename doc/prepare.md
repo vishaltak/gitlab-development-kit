@@ -40,6 +40,25 @@ of use, we recommend using a Ruby version manager such as:
 **Note:** you may have to close and reopen the terminal after installing a Ruby
 version manager to read new `PATH` variables added for Ruby executable files.
 
+### Install Ruby on Ubuntu
+
+1. Remove the default version of Ruby:
+
+   ```shell
+   sudo apt-get purge ruby
+   ```
+
+1. Install rbenv. See rbenv
+   [installation](https://github.com/rbenv/rbenv#installation) documentation
+   for details.
+1. Install the version of Ruby used by GitLab. This can be found in the
+   [`.ruby-version`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/.ruby-version)
+   file in the project.
+
+   ```shell
+   rbenv install <ruby_version>
+   ```
+
 ## Platform-specific setup
 
 To start preparing the GDK installation, pick your platform of choice:
