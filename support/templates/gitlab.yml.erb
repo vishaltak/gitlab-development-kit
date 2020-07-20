@@ -727,11 +727,12 @@ production: &base
     storages: # You must have at least a `default` storage path.
       default:
         path: <%= config.repositories_root %>
-      <% if config.praefect? %>
-        gitaly_address: unix:<%= config.praefect.address %>
-      <% else %>
+        gitaly_address: unix:<%= config.praefect? ? config.praefect.address : config.gitaly.address %>
+    <%- config.gitaly.__storages.select { |s| s.name != 'default' }.each do |storage| -%>
+      <%= storage.name %>:
+        path: <%= storage.path %>
         gitaly_address: unix:<%= config.gitaly.address %>
-      <% end %>
+    <%- end -%>
 
   ## Backup settings
   backup:
