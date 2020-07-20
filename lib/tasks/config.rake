@@ -94,6 +94,11 @@ file 'gitlab-workhorse/config.toml' => ['support/templates/gitlab-workhorse.conf
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
+desc 'Generate the gitlab-pages config file'
+file 'gitlab-pages.conf' => ['support/templates/gitlab-pages.conf.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end
+
 desc "Generate gitaly config toml"
 file "gitaly/gitaly.config.toml" => ['support/templates/gitaly.config.toml.erb'] do |t|
   GDK::ErbRenderer.new(
