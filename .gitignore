@@ -41,6 +41,7 @@
 /gitlab-pages/pkg
 /gitlab-pages/src
 /gitlab-k8s-agent/
+/gitlab-pages.conf
 /gitlab-runner-config.toml
 /gitlab-shell
 /gitlab-shell/
