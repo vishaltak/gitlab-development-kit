@@ -71,9 +71,7 @@ endif
 
 QQerr = 2> /dev/null
 
-ifeq ($(shallow_clone),true)
-git_depth_param = --depth=1
-endif
+git_filter_spec = --filter=blob:limit=512k
 
 # This is used by `gdk install` and `gdk reconfigure`
 #
@@ -259,7 +257,7 @@ gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab_rails:db:migrate
 
 gitlab/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
+	$(Q)git clone ${git_filter_spec} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
 gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb
 
@@ -356,7 +354,7 @@ gitlab-shell/.git/pull:
 # symlink, if necessary. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/1086
 .PHONY: ${gitlab_shell_clone_dir}/.git
 ${gitlab_shell_clone_dir}/.git:
-	$(Q)support/move-existing-gitlab-shell-directory || git clone --quiet --branch "${gitlab_shell_version}" ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
+	$(Q)support/move-existing-gitlab-shell-directory || git clone --quiet --branch "${gitlab_shell_version}" ${git_filter_spec} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 .PHONY: gitlab-shell/config.yml
 gitlab-shell/config.yml: ${gitlab_shell_clone_dir}/.git
@@ -377,7 +375,7 @@ gitaly-setup: gitaly/bin/gitaly gitaly/gitaly.config.toml gitaly/praefect.config
 
 ${gitaly_clone_dir}/.git:
 	$(Q)if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi
-	$(Q)git clone --quiet ${gitaly_repo} ${gitaly_clone_dir}
+	$(Q)git clone --quiet ${git_filter_spec} ${gitaly_repo} ${gitaly_clone_dir}
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" ${QQ}
 
 gitaly-update: gitaly/.git/pull gitaly-clean gitaly-setup praefect-migrate
@@ -421,7 +419,7 @@ praefect-migrate: postgresql-seed-praefect
 gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs
 
 gitlab-docs/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
+	$(Q)git clone ${git_filter_spec} ${gitlab_docs_repo} gitlab-docs
 
 gitlab-docs/.git/pull:
 	@echo
@@ -517,7 +515,7 @@ gitlab-workhorse/gitlab-workhorse: ${gitlab_workhorse_clone_dir}/.git
 	$(Q)$(MAKE) -C ${gitlab_workhorse_clone_dir} ${QQ}
 
 ${gitlab_workhorse_clone_dir}/.git:
-	$(Q)support/move-existing-workhorse-directory || git clone --quiet --branch "${workhorse_version}" ${git_depth_param} ${gitlab_workhorse_repo} ${gitlab_workhorse_clone_dir}
+	$(Q)support/move-existing-workhorse-directory || git clone --quiet --branch "${workhorse_version}" ${git_filter_spec} ${gitlab_workhorse_repo} ${gitlab_workhorse_clone_dir}
 
 gitlab-workhorse/.git/pull:
 	@echo
@@ -539,7 +537,7 @@ gitlab-elasticsearch-indexer-clean-bin:
 	$(Q)rm -rf gitlab-elasticsearch-indexer/bin
 
 gitlab-elasticsearch-indexer/.git:
-	$(Q)git clone --quiet --branch "${gitlab_elasticsearch_indexer_version}" ${git_depth_param} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
+	$(Q)git clone --quiet --branch "${gitlab_elasticsearch_indexer_version}" ${git_filter_spec} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
 
 .PHONY: gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
 gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git
@@ -576,7 +574,7 @@ gitlab-pages/bin/gitlab-pages: ${gitlab_pages_clone_dir}/.git
 	$(Q)$(MAKE) -C ${gitlab_pages_clone_dir} ${QQ}
 
 ${gitlab_pages_clone_dir}/.git:
-	$(Q)support/move-existing-gitlab-pages-directory || git clone --quiet --branch "${pages_version}" ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
+	$(Q)support/move-existing-gitlab-pages-directory || $(Q)git clone --quiet --branch "${pages_version}" ${git_filter_spec} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
 
 gitlab-pages/.git/pull:
 	@echo
