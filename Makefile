@@ -488,7 +488,11 @@ gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 # gitlab-pages
 ##############################################################
 
-gitlab-pages-setup: gitlab-pages/bin/gitlab-pages
+gitlab-pages-setup: gitlab-pages.conf gitlab-pages/bin/gitlab-pages
+
+.PHONY: gitlab-pages.conf
+gitlab-pages.conf:
+	$(Q)rake $@
 
 gitlab-pages-update: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages
 
