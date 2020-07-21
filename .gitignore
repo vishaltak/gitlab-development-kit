@@ -40,8 +40,8 @@
 /gitlab-pages/bin
 /gitlab-pages/pkg
 /gitlab-pages/src
+/gitlab-pages/gitlab-pages.conf
 /gitlab-k8s-agent/
-/gitlab-pages.conf
 /gitlab-runner-config.toml
 /gitlab-shell
 /gitlab-shell/

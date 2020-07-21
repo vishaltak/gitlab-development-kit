@@ -95,7 +95,7 @@ file 'gitlab-workhorse/config.toml' => ['support/templates/gitlab-workhorse.conf
 end
 
 desc 'Generate the gitlab-pages config file'
-file 'gitlab-pages.conf' => ['support/templates/gitlab-pages.conf.erb', GDK::Config::FILE] do |t|
+file 'gitlab-pages/gitlab-pages.conf' => ['support/templates/gitlab-pages.conf.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
