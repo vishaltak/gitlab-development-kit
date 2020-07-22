@@ -10,6 +10,7 @@ AllCops:
     - 'gitlab-docs/**/*'
     - 'gitlab-elasticsearch-indexer/**/*'
     - 'gitlab-pages/**/*'
+    - 'gitlab-k8s-agent/**/*'
     - 'gitlab-runner/**/*'
     - 'gitlab-shell/**/*'
     - 'gitlab-workhorse/**/*'

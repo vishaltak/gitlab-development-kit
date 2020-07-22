@@ -183,6 +183,12 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#__listen_address' do
+      it 'is set to ip and port' do
+        expect(config.workhorse.__listen_address).to eq('gdk.example.com:3000')
+      end
+    end
   end
 
   describe 'container registry' do
@@ -565,6 +571,43 @@ RSpec.describe GDK::Config do
             expect(config.gitlab.actioncable.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.actioncable.socket'))
           end
         end
+      end
+    end
+  end
+
+  describe 'k8s_agent' do
+    describe 'enabled' do
+      it 'is disabled by default' do
+        expect(config.gitlab_k8s_agent.enabled).to be(false)
+      end
+    end
+
+    describe 'auto_update' do
+      it 'is enabled by default' do
+        expect(config.gitlab_k8s_agent.auto_update).to be(true)
+      end
+    end
+  end
+
+  describe 'gitaly' do
+    describe 'auth_token' do
+      it 'is not set by default' do
+        expect(config.gitaly.auth_token).to be('')
+      end
+    end
+  end
+
+  describe 'nginx' do
+    describe '#__listen_address' do
+      let(:yaml) do
+        {
+          'port' => 1234,
+          'nginx' => { 'listen' => 'localhost' }
+        }
+      end
+
+      it 'is set to ip and port' do
+        expect(config.nginx.__listen_address).to eq('localhost:1234')
       end
     end
   end

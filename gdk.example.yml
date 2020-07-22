@@ -35,6 +35,7 @@ git_repositories: []
 gitaly:
   address: "/home/git/gdk/gitaly.socket"
   assembly_dir: "/home/git/gdk/gitaly/assembly"
+  auth_token: ''
   auto_update: true
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   internal_socket_dir: "/home/git/gdk/tmp/gitaly"
@@ -46,6 +47,11 @@ gitlab:
   dir: "/home/git/gdk/gitlab"
 gitlab_elasticsearch_indexer:
   auto_update: true
+gitlab_k8s_agent:
+  auto_update: true
+  enabled: false
+  listen_address: 127.0.0.1:5005
+  listen_network: tcp
 gitlab_pages:
   auto_update: true
   enabled: true
@@ -138,6 +144,7 @@ repositories:
   gitlab: https://gitlab.com/gitlab-org/gitlab.git
   gitlab_docs: https://gitlab.com/gitlab-com/gitlab-docs.git
   gitlab_elasticsearch_indexer: https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git
+  gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
   gitlab_workhorse: https://gitlab.com/gitlab-org/gitlab-workhorse.git
