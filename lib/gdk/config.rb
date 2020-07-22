@@ -90,6 +90,10 @@ module GDK
 
     string(:username) { Etc.getpwuid.name }
 
+    settings :load_balancing do
+      bool(:enabled) { false }
+    end
+
     settings :webpack do
       string :host do
         next config.auto_devops.listen_address if config.auto_devops?

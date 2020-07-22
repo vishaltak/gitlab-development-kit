@@ -577,6 +577,12 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'load_balancing' do
+    it 'disabled by default' do
+      expect(config.load_balancing.enabled).to be false
+    end
+  end
+
   describe 'webpack' do
     describe '#vendor_dll' do
       it 'is false by default' do
