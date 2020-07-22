@@ -5,10 +5,12 @@ development:
   host: <%= config.postgresql.host %>
   port: <%= config.postgresql.port %>
   pool: 10
-<%- unless config.geo? -%>
+<%- if config.load_balancing.enabled -%>
+  <%- unless config.geo? -%>
   load_balancing:
     hosts:
       - <%= config.postgresql.host %>
+  <%- end -%>
 <%- end -%>
 
 test: &test
