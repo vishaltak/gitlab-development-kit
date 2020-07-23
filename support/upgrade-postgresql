@@ -112,7 +112,10 @@ class PostgresUpgrader
 
       raise "PG_VERSION not found in #{path}. Is PostgreSQL initialized?" unless File.exist?(path)
 
-      File.read(path).to_i
+      version = File.read(path).to_f
+
+      # After PostgreSQL 9.6, PG_VERSION uses a single integer (10, 11, 12, etc.)
+      version >= 10 ? version.to_i : version
     end
   end
 
