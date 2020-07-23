@@ -103,6 +103,7 @@ clean-config:
 	gitaly/gitaly-*.praefect.toml \
 	gitaly/gitaly.config.toml \
 	gitaly/praefect.config.toml \
+	gitlab-pages/gitlab-pages.conf \
 	gitlab-runner-config.toml \
 	gitlab-shell/.gitlab_shell_secret \
 	gitlab-shell/config.yml \
@@ -488,7 +489,12 @@ gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 # gitlab-pages
 ##############################################################
 
-gitlab-pages-setup: gitlab-pages/bin/gitlab-pages
+gitlab-pages-setup: gitlab-pages/gitlab-pages.conf gitlab-pages/bin/gitlab-pages
+
+.PHONY: gitlab-pages/gitlab-pages.conf
+gitlab-pages/gitlab-pages.conf:
+	$(Q)mkdir -p gitlab-pages
+	$(Q)rake $@
 
 gitlab-pages-update: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages
 
