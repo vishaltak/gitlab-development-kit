@@ -45,6 +45,40 @@ provide the following:
 
 ## Upgrade PostgreSQL
 
+There are two ways to upgrade PostgreSQL:
+
+1. [Run the upgrade script](#run-the-upgrade-script)
+1. [Dump and restore](#using-pg-dump-and-restore)
+
+macOS users with Homebrew may find it easiest to use the first approach
+since there is a convenient script that makes upgrading a single-line
+command. Use the second approach if you are not using macOS or the
+script fails for some reason.
+
+## Run the upgrade script
+
+For macOS users with Homebrew, there is a convenient script that will
+automatically run `pg_upgrade` with the right parameters:
+
+```shell
+support/upgrade-postgresql
+```
+
+This script will attempt to:
+
+1. Find both the current and target PostgreSQL binaries.
+1. Initialize a new `data` directory for the target PostgreSQL version.
+1. Upgrade the current `postgresql/data` directory.
+1. Back up the original `postgresql/data` directory.
+1. Promote the newly-upgraded `data` for the target PostgreSQL version by
+   renaming this directory to `postgresql/data`.
+
+## Dump and restore
+
+If the upgrade script does not work, you can also dump the current
+contents of the PostgreSQL database and restore it to the new database
+verson:
+
 1. (Optional) To retain the current database contents, create a backup of the database:
 
    ```shell
