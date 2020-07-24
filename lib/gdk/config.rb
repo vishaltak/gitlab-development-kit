@@ -208,6 +208,7 @@ module GDK
       string(:host) { '127.0.0.1.nip.io' }
       integer(:port) { read!('gitlab_pages_port') || 3010 }
       bool(:auto_update) { true }
+      string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
     end
 
     settings :gitlab_k8s_agent do

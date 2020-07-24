@@ -8,6 +8,7 @@
 $LOAD_PATH.unshift(__dir__)
 
 require 'pathname'
+require 'securerandom'
 require_relative 'runit'
 autoload :Shellout, 'shellout'
 
