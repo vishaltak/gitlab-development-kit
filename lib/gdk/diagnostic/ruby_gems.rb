@@ -31,7 +31,8 @@ module GDK
       def gem_ok?(name)
         require name
         true
-      rescue LoadError
+      rescue LoadError, StandardError => e
+        puts "ERROR: e=[#{e}]"
         false
       end
 
