@@ -274,43 +274,98 @@ You may need to install Redis 2.8 or newer manually.
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
-This was tested on OpenSUSE LEAP 42.1, and Tumbleweed (20161109)
+This was tested on `openSUSE Tumbleweed (20200628)`.
+
+> NOTE: OpenSUSE LEAP is currently not supported, because since a8e2f74d PostgreSQL 11+
+> is required, but `LEAP 15.1` includes PostgreSQL 10 only.
 
 ```shell
 sudo zypper dup
+# now reboot with "sudo init 6" if zypper reports:
+# There are running programs which still use files and libraries deleted or updated by recent upgrades.
 sudo zypper install libxslt-devel  postgresql postgresql-devel libpqxx-devel redis libicu-devel nodejs git git-lfs ed cmake \
         rpm-build gcc-c++ krb5-devel postgresql-server postgresql-contrib \
-        libxml2-devel libxml2-devel-32bit findutils-locate re2 GraphicsMagick \
-        runit exiftool rsync sqlite3-devel
+        libxml2-devel libxml2-devel-32bit findutils-locate GraphicsMagick \
+        exiftool rsync sqlite3-devel postgresql-server-devel \
+        libgpg-error-devel libqgpgme-devel yarn curl wget re2-devel
 sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 ```
 
-On leap 42.1 you also need:
+Install `go` manually using [Go](https://golang.org/doc/install) official installation instructions, for example:
 
 ```shell
-sudo zypper install ld.charlock_holmes "--with-icu-dir=/usr/local" --globalnpm4
+curl -O https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
+sudo tar xpzf go1.14.4.linux-amd64.tar.gz -C /usr/local
 ```
 
-Install `go` manually using [go] official installation instructions.
+Ensure that `node` has write permissions to install packages using:
 
-The following `bundle config` options are recommended before you run `gdk install` in order to avoid problems with the embedded libraries inside nokogiri:
+```shell
+mkdir -p ~/mynode/bin ~/mynode/lib
+npm config set prefix ~/mynode
+```
+
+Install `runit` (it is no longer included in OpenSUSE):
+
+```shell
+wget http://smarden.org/runit/runit-2.1.2.tar.gz
+tar xzf runit-2.1.2.tar.gz
+cd admin/runit-2.1.2
+sed -i -E 's/ -static$//g' src/Makefile
+./package/compile
+./package/check
+sudo ./package/install
+```
+
+Setup local Ruby 2.6 environment (see [Ruby](#ruby) for details), for example using [RVM](https://rvm.io/):
+
+```shell
+curl -sSL -o setup_rvm.sh https://get.rvm.io
+chmod a+rx setup_rvm.sh
+./setup_rvm.sh
+source  /home/ansible/.rvm/scripts/rvm
+rvm install 2.6
+```
+
+Append these lines to your `~/.bashrc`:
+
+```shell
+# to find binaries installed by yarn command
+export PATH="$HOME/.yarn/bin:$PATH"
+# to find sshd and redis-server in default path
+export PATH="$PATH:/usr/sbin"
+# to find go
+export PATH="$HOME/go/bin:/usr/local/go/bin:$PATH"
+# local node packages
+export PATH="$HOME/mynode/bin:$PATH"
+# GDK is confused with OSTYPE=linux (suse default)
+export OSTYPE=linux-gnu
+```
+
+And reload it using:
+
+```shell
+source ~/.bashrc
+```
+
+Now check that currenty Ruby version is 2.6.x:
+
+```shell
+ruby --version
+ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux]
+```
+
+If it is different (for example Ruby 2.7 - system default in Tumbleweed) you need to relogin.
+
+The following `bundle config` options are recommended before you run `gdk install` in order to avoid problems with the embedded libraries inside `nokogiri` and `gpgme`:
 
 ```shell
 bundle config build.nokogiri "--use-system-libraries" --global
+bundle config build.gpgme --use-system-libraries
 ```
 
-for tumbleweed only:
-
-```shell
-bundle config build.charlock_holmes "--with-icu-dir=/usr/local" --global
-```
-
-Manual fix required on OpenSUSE LEAP to place `redis-server` in the path for non-root users:
-
-```shell
-sudo ln -s /usr/sbin/redis-server /usr/bin/redis-server
-```
+Now you can proceed to [set up GDK](index.md).
 
 #### FreeBSD
 
