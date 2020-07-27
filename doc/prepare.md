@@ -9,21 +9,21 @@ _TLDR: see sample package manager commands (`brew`, `apt`, and so on) listed in 
 
 Make sure you follow all the guidelines and resolve all the dependencies listed below before installing GDK. Otherwise, you will experience strange errors during installation.
 
-| Prerequisite      | Description                                                                                                                                                                                                                                                                                                                                                                 |
-| -------------- | -----------                                                                                                                                                                                                                                                                                                                                                                 |
-| User account   | Use a **non-root** Unix user to install GDK. This can be your normal user, but **DO NOT** run the installation as a root user.                                                                                                                                                                                                                                              |
-| [Ruby](#ruby) | The current [`gitlab` Ruby version](https://gitlab.com/gitlab-org/gitlab/blob/master/.ruby-version).                                                |
-| Bundler        | <p>Install the version of Bundler specified in this [Gemfile.lock](https://gitlab.com/gitlab-org/gitlab/blob/master/Gemfile.lock), as noted with the `BUNDLED WITH` text at the end of the file.</p><p> To install Bundler, use the following command: `gem install bundler -v <version>`. Replace `<version>` with the `BUNDLED WITH` version.</p>                                            |
-| Git            | <p>We recommend using Git version 2.27 or higher (minimal supported version is 2.25).</p><p>Git installation is covered in the instructions in the [Platform-specific setup](#platform-specific-setup).</p><p>For checking out test fixtures, you will also need Git LFS.</p> |
-| Git LFS        | <p>We recommend using Git LFS version 2.10 or higher (minimal supported version is 1.0.1).</p><p>Git LFS installation is covered in the instructions in the [Platform-specific setup](#platform-specific-setup).</p> |
-| Node.js        | <p>Node.js **12.10** and Yarn 1.12 or newer.</p><p>Node.js and Yarn installation is covered in the instructions below. If your package manager does not have Node.js 12.10 or yarn available, visit the official websites for [Node](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/en/docs/install/) for installation instructions.</p> |
-| Go             | <p>Go 1.14.</p><p>Go installation is covered in the instructions below. If your package manager does not have up-to-date versions of Go available, visit the official [Go](https://golang.org/doc/install) website for installation instructions.</p>                                                                                                              |
-| Google Chrome  | [Google Chrome](https://www.google.com/chrome/) 60 or greater with [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) version 2.33 or greater. Visit the Chrome Driver [Getting started](https://sites.google.com/a/chromium.org/chromedriver/getting-started) page for more details.                                                           |
-| PostgreSQL     | <p>PostgreSQL version 11.x.</p><p>PostgreSQL installation is covered in the instructions [below](#platform-specific-setup). Some instructions still pin the version of PostgreSQL to version 10. Please update the documentation steps to version 11 as you successfully install PostreSQL 11 on your platform.</p> |
-| GraphicsMagick | GraphicsMagick installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                                                           |
-| Exiftool       | Exiftool installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                                                           |
-| runit          | runit installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                                                           |
-| MinIO          | MinIO installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                                                           |
+| Prerequisite       | Description                                                                                                                                                                                                                                                                                                                                         |
+|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| User account       | Use a **non-root** Unix user to install GDK. This can be your normal user, but **DO NOT** run the installation as a root user.                                                                                                                                                                                                                      |
+| [Ruby](#ruby)      | The current [`gitlab` Ruby version](https://gitlab.com/gitlab-org/gitlab/blob/master/.ruby-version).                                                                                                                                                                                                                                                |
+| Bundler            | <p>Install the version of Bundler specified in this [Gemfile.lock](https://gitlab.com/gitlab-org/gitlab/blob/master/Gemfile.lock), as noted with the `BUNDLED WITH` text at the end of the file.</p><p> To install Bundler, use the following command: `gem install bundler -v <version>`. Replace `<version>` with the `BUNDLED WITH` version.</p> |
+| Git                | <p>We recommend using Git version 2.27 or higher (minimal supported version is 2.25).</p><p>Git installation is covered in the instructions in the [Platform-specific setup](#platform-specific-setup).</p><p>For checking out test fixtures, you will also need Git LFS.</p>                                                                       |
+| Git LFS            | <p>We recommend using Git LFS version 2.10 or higher (minimal supported version is 1.0.1).</p><p>Git LFS installation is covered in the instructions in the [Platform-specific setup](#platform-specific-setup).</p>                                                                                                                                |
+| [Node.js](#nodejs) | <p>Node.js **LTS** and Yarn 1.12 or newer.</p><p>Node.js and Yarn installation is covered in the instructions below.                                                                                                                                                                                                                                |
+| Go                 | <p>Go 1.14.</p><p>Go installation is covered in the instructions below. If your package manager does not have up-to-date versions of Go available, visit the official [Go](https://golang.org/doc/install) website for installation instructions.</p>                                                                                               |
+| Google Chrome      | [Google Chrome](https://www.google.com/chrome/) 60 or greater with [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) version 2.33 or greater. Visit the Chrome Driver [Getting started](https://sites.google.com/a/chromium.org/chromedriver/getting-started) page for more details.                                   |
+| PostgreSQL         | <p>PostgreSQL version 11.x.</p><p>PostgreSQL installation is covered in the instructions [below](#platform-specific-setup). Some instructions still pin the version of PostgreSQL to version 10. Please update the documentation steps to version 11 as you successfully install PostreSQL 11 on your platform.</p>                                 |
+| GraphicsMagick     | GraphicsMagick installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                       |
+| Exiftool           | Exiftool installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                             |
+| runit              | runit installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                |
+| MinIO              | MinIO installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                |
 
 ## Ruby
 
@@ -59,6 +59,35 @@ version manager to read new `PATH` variables added for Ruby executable files.
    rbenv install <ruby_version>
    ```
 
+## Node.js
+
+Confirm you have Node.js installed with the following command:
+
+```shell
+which node
+```
+
+If you don't have [Node.js](https://nodejs.org/en/) installed, or if `.nvm` wasn't in the path
+containing `node` from the command above:
+
+1. Install [NVM](https://github.com/nvm-sh/nvm) to manage Node.js.
+1. Install the [LTS](https://nodejs.org/en/about/releases/) version of Node.js.
+
+To install NVM and Node.js LTS:
+
+1. [Install NVM](https://github.com/nvm-sh/nvm#installing-and-updating).
+1. Install the latest LTS version of Node.js:
+
+   ```shell
+   nvm install --lts
+   ```
+
+1. Set the LTS version as the default:
+
+   ```shell
+   nvm use --lts --default
+   ```
+
 ## Platform-specific setup
 
 To start preparing the GDK installation, pick your platform of choice:
@@ -86,19 +115,14 @@ and tools through the Terminal. Visit their website for installation details.
 | ------ |
 | We strongly recommend using the default installation directory for Homebrew `/usr/local`. This makes it a lot easier to install Ruby gems with C extensions. If you use a custom directory, you will have to do a lot of extra work when installing Ruby gems. For more information, see [Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal). |
 
-| **Note on Node.js** |
-| ------------------- |
-| We recommend manual installation of Node.js 12.10 instead of using Homebrew to avoid breaking your development setup when you run `brew upgrade`. Install Node.js 12.10 [manually](https://nodejs.org/en/download/) or use a tool like [NVM](https://github.com/creationix/nvm). If you want to use Homebrew, you can prevent it from upgrading the current Node.js formula by pinning it with `brew pin node@12`. |
-
 ```shell
-brew install git git-lfs redis postgresql@11 libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick node@12 gpg runit icu4c exiftool sqlite minio/stable/minio
-ln -ns /usr/local/opt/node@12 /usr/local/opt/node || true # otherwise yarn installation cannot find node
-brew install yarn --ignore-dependencies
+brew install git git-lfs redis postgresql@11 libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick gpg runit icu4c exiftool sqlite minio/stable/minio
+brew install yarn
 brew link pkg-config
-brew pin node@12 icu4c readline
+brew pin icu4c readline
 bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
 if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
-echo 'export PATH="/usr/local/opt/postgresql@11/bin:/usr/local/opt/node@12/bin:$PATH"' >> ${shell_file}
+echo 'export PATH="/usr/local/opt/postgresql@11/bin:$PATH"' >> ${shell_file}
 echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
 source ${shell_file}
 brew cask install google-chrome chromedriver
@@ -113,7 +137,7 @@ be verified", create an exception for it as documented in
 [MacPorts](https://www.macports.org/) is another package manager for macOS. Visit their website for installation details.
 
 ```shell
-sudo port install git git-lfs redis libiconv postgresql11-server icu pkgconfig cmake nodejs12 go openssl npm5 yarn coreutils re2 GraphicsMagick runit exiftool minio sqlite3
+sudo port install git git-lfs redis libiconv postgresql11-server icu pkgconfig cmake go openssl npm5 yarn coreutils re2 GraphicsMagick runit exiftool minio sqlite3
 bundle config build.eventmachine --with-cppflags=-I/opt/local/include/openssl
 if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
 echo 'export PATH=/opt/local/lib/postgresql11/bin/:$PATH' >> ${shell_file}
@@ -128,7 +152,6 @@ source ${shell_file}
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
-1. Install **Node.js 12.10** from the [official Node.js binary distribution](https://github.com/nodesource/distributions/blob/master/README.md#debinstall).
 1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
 1. Install remaining dependencies; modify the `GDK_GO_VERSION` with the major.minor version number (currently 1.14) as needed:
 
@@ -208,7 +231,7 @@ sudo dnf module enable postgresql:10
 
 ```shell
 sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel \
-  nodejs git git-lfs ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
+  git git-lfs ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
   postgresql-contrib re2 GraphicsMagick re2-devel sqlite-devel perl-Digest-SHA \
   perl-Image-ExifTool rsync
 sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
@@ -247,7 +270,7 @@ sudo yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-6-
 sudo yum install https://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 sudo yum install postgresql10-server postgresql10-devel libicu-devel git git-lfs cmake \
   gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
-  libstdc++.so.6 nodejs npm re2 re2-devel GraphicsMagick runit perl-Image-ExifTool \
+  libstdc++.so.6 npm re2 re2-devel GraphicsMagick runit perl-Image-ExifTool \
   rsync sqlite-devel
 sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
@@ -283,7 +306,7 @@ This was tested on `openSUSE Tumbleweed (20200628)`.
 sudo zypper dup
 # now reboot with "sudo init 6" if zypper reports:
 # There are running programs which still use files and libraries deleted or updated by recent upgrades.
-sudo zypper install libxslt-devel  postgresql postgresql-devel libpqxx-devel redis libicu-devel nodejs git git-lfs ed cmake \
+sudo zypper install libxslt-devel postgresql postgresql-devel libpqxx-devel redis libicu-devel git git-lfs ed cmake \
         rpm-build gcc-c++ krb5-devel postgresql-server postgresql-contrib \
         libxml2-devel libxml2-devel-32bit findutils-locate GraphicsMagick \
         exiftool rsync sqlite3-devel postgresql-server-devel \
