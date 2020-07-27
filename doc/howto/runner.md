@@ -124,6 +124,7 @@ the token to your `gdk.yml` file:
 
 ```yaml
 runner:
+  enabled: true
   token: <runner-token>
 ```
 
