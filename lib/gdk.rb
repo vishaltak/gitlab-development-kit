@@ -219,6 +219,6 @@ module GDK
   def self.print_url_ready_message
     GDK::Output.puts
     GDK::Output.notice("GitLab available at #{config.__uri} shortly.")
-    GDK::Output.notice("kgb available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
+    GDK::Output.notice("GitLab Kubernetes Agent Server available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
   end
 end

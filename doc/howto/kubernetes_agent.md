@@ -41,7 +41,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
         bundle exec rails console
         ```
 
-    1. The internal API that `kgb` (Kubernetes Agent's part that runs alongside GitLab) uses is disabled by default. To enable it run the following in the Rails console:
+    1. The internal API that `kas` (GitLab Kubernetes Agent Server) uses is disabled by default. To enable it run the following in the Rails console:
 
         ```ruby
         Feature.enable(:kubernetes_agent_internal_api)
@@ -58,9 +58,9 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
         puts token.token # this will print the token for the agent
         ```
 
-1. The token from the previous step can be used by the `agentk` to authenticate itself with GitLab (`kgb`).
+1. The token from the previous step can be used by the `agentk` to authenticate itself with GitLab (`kas`).
 
-1. Run `gdk update` to get `kgb` installed as part of GDK.
+1. Run `gdk update` to get `kas` installed as part of GDK.
 
 1. Run `gdk reconfigure` to update various configuration files.
 
@@ -68,12 +68,12 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
     ```plaintext
     => GitLab available at http://127.0.0.1:3000 shortly.
-    => kgb available at tcp://127.0.0.1:5005.
+    => GitLab Kubernetes Agent Server available at tcp://127.0.0.1:5005.
     ```
 
 1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
 
-1. To verify that `kgb` is running you can:
+1. To verify that `kas` is running you can:
     - Run `gdk tail gitlab-k8s-agent` to check the logs. You should see no errors in the logs. Empty logs are normal too.
     - Run `curl 127.0.0.1:5005`. It should print
 
@@ -91,4 +91,4 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
         WebSocket protocol violation: Connection header "close" does not contain Upgrade
         ```
 
-        This is a normal response from `kgb` for such a request because it's expecting a WebSocket connection upgrade.
+        This is a normal response from `kas` for such a request because it's expecting a WebSocket connection upgrade.

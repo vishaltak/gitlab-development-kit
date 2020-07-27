@@ -218,7 +218,7 @@ module GDK
       string(:__listen_url_path) { '/-/kubernetes-agent' }
       string :__url_for_agentk do
         if config.nginx?
-          # kgb is behind nginx
+          # kas is behind nginx
           if config.https?
             "wss://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__listen_url_path}"
           else
