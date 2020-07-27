@@ -57,13 +57,17 @@ module GDK
     end
 
     def pg_cmd(*args, program: 'psql', database: nil, command: nil)
-      cmd = [config.bin_dir.join(program).to_s]
+      cmd = [bin_dir.join(program).to_s]
       cmd << "--host=#{host}"
       cmd << "--port=#{port}"
       cmd << "--dbname=#{database}" if database
       cmd << "--command=#{command}" if command
 
       cmd + args
+    end
+
+    def bin_dir
+      config.bin_dir
     end
   end
 end

@@ -2,11 +2,17 @@
 
 require_relative '../lib/gdk'
 
+def postgresql
+  @postgresql ||= config.geo.enabled? ? GDK::PostgresqlGeo.new : GDK::Postgresql.new
+end
+
+def config
+  @config ||= GDK::Config.new
+end
+
 def main
-  postgresql = GDK::Postgresql.new
   abort 'postgres not ready' unless postgresql.ready?
 
-  config = GDK::Config.new
   dbname = config.praefect.database.dbname
 
   exit if postgresql.db_exists?(dbname)
