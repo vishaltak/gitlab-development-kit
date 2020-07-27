@@ -57,6 +57,7 @@ gitlab_pages:
   enabled: true
   host: 127.0.0.1.nip.io
   port: 3010
+  secret_file: "/home/git/gdk/gitlab-pages-secret"
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"

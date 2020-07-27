@@ -489,7 +489,10 @@ gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 # gitlab-pages
 ##############################################################
 
-gitlab-pages-setup: gitlab-pages/gitlab-pages.conf gitlab-pages/bin/gitlab-pages
+gitlab-pages-setup: gitlab-pages-secret gitlab-pages/gitlab-pages.conf gitlab-pages/bin/gitlab-pages
+
+gitlab-pages-secret:
+	$(Q)rake $@
 
 .PHONY: gitlab-pages/gitlab-pages.conf
 gitlab-pages/gitlab-pages.conf:

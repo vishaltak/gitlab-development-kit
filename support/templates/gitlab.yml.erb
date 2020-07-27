@@ -278,6 +278,7 @@ production: &base
     # external_https: ["1.1.1.1:443", "[2001::1]:443"] # If defined, enables custom domain and certificate support in GitLab Pages
     admin:
       address: unix:<%= config.gdk_root %>/gitlab/tmp/sockets/private/pages-admin.socket # TCP connections are supported too (e.g. tcp://host:port)
+    secret_file: <%= config.gitlab_pages.secret_file %>
 
   ## Mattermost
   ## For enabling Add to Mattermost button
