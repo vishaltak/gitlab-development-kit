@@ -29,11 +29,15 @@ module GDK
           'registry/config.yml' => -> { true }
         }
 
-        file_diffs = files.each_with_object([]) do |(file, to_process), all|
+        jobs = files.each_with_object([]) do |(file, to_process), all|
           next unless to_process.call
 
-          all << ConfigDiff.new(file)
+          all << Thread.new do
+            Thread.current[:results] = ConfigDiff.new(file)
+          end
         end
+
+        file_diffs = jobs.map { |x| x.join[:results] }.compact
 
         # Iterate over each file from files Array and print any output to
         # stderr that may have come from running `make <file>`.
