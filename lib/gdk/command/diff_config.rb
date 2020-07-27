@@ -6,31 +6,33 @@ module GDK
   module Command
     class DiffConfig
       def run(stdout: $stdout, stderr: $stderr)
-        files = %w[
-          Procfile
-          gitaly/gitaly.config.toml
-          gitaly/praefect.config.toml
-          gitlab-pages/gitlab-pages.conf
-          gitlab-runner-config.toml
-          gitlab-shell/.gitlab_shell_secret
-          gitlab-shell/config.yml
-          gitlab-workhorse/config.toml
-          gitlab/config/cable.yml
-          gitlab/config/database.yml
-          gitlab/config/database_geo.yml
-          gitlab/config/gitlab.yml
-          gitlab/config/puma.rb
-          gitlab/config/resque.yml
-          gitlab/config/unicorn.rb
-          nginx/conf/nginx.conf
-          openssh/sshd_config
-          prometheus/prometheus.yml
-          redis/redis.conf
-          registry/config.yml
-        ]
+        files = {
+          'Procfile' => -> { true },
+          'gitaly/gitaly.config.toml' => -> { true },
+          'gitaly/praefect.config.toml' => -> { true },
+          'gitlab-pages/gitlab-pages.conf' => -> { true },
+          'gitlab-runner-config.toml' => -> { GDK.config.runner? },
+          'gitlab-shell/.gitlab_shell_secret' => -> { true },
+          'gitlab-shell/config.yml' => -> { true },
+          'gitlab-workhorse/config.toml' => -> { true },
+          'gitlab/config/cable.yml' => -> { true },
+          'gitlab/config/database.yml' => -> { true },
+          'gitlab/config/database_geo.yml' => -> { true },
+          'gitlab/config/gitlab.yml' => -> { true },
+          'gitlab/config/puma.rb' => -> { true },
+          'gitlab/config/resque.yml' => -> { true },
+          'gitlab/config/unicorn.rb' => -> { true },
+          'nginx/conf/nginx.conf' => -> { true },
+          'openssh/sshd_config' => -> { true },
+          'prometheus/prometheus.yml' => -> { true },
+          'redis/redis.conf' => -> { true },
+          'registry/config.yml' => -> { true }
+        }
 
-        file_diffs = files.map do |file|
-          ConfigDiff.new(file)
+        file_diffs = files.each_with_object([]) do |(file, to_process), all|
+          next unless to_process.call
+
+          all << ConfigDiff.new(file)
         end
 
         # Iterate over each file from files Array and print any output to
