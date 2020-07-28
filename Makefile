@@ -542,6 +542,10 @@ gitlab-k8s-agent-clean-bin:
 	$(Q)rm -rf "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 
 gitlab-k8s-agent/build/gdk/bin/kas_race: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/bazel
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Installing gitlab-org/cluster-integration/gitlab-agent"
+	@echo "------------------------------------------------------------"
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
 
