@@ -534,7 +534,7 @@ gitlab-pages/.git/pull:
 ##############################################################
 
 ifeq ($(gitlab_k8s_agent_enabled),true)
-gitlab-k8s-agent-setup: gitlab-k8s-agent/bin/k8s-agent
+gitlab-k8s-agent-setup: gitlab-k8s-agent/build/gdk/bin/kas_race
 else
 gitlab-k8s-agent-setup:
 	@true
@@ -550,20 +550,24 @@ endif
 gitlab-k8s-agent-clean-bin:
 	$(Q)rm -rf "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 
-.PHONY: gitlab-k8s-agent/bin/k8s-agent
-gitlab-k8s-agent/bin/k8s-agent: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/bazel
+gitlab-k8s-agent/build/gdk/bin/kas_race: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/bazel
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Installing gitlab-org/cluster-integration/gitlab-agent"
+	@echo "------------------------------------------------------------"
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
 
-.PHONY: gitlab-k8s-agent/bazel
 ifeq ($(platform),macos)
-gitlab-k8s-agent/bazel: /usr/local/bin/bazel
+gitlab-k8s-agent/bazel: /usr/local/bin/bazelisk
+	$(Q)touch $@
 else
+.PHONY: gitlab-k8s-agent/bazel
 gitlab-k8s-agent/bazel:
 	@echo "INFO: To install bazel, please consult the docs at https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/howto/kubernetes_agent.md"
 endif
 
-/usr/local/bin/bazel:
+/usr/local/bin/bazelisk:
 	$(Q)brew install bazelisk
 	$(Q)ln -s /usr/local/bin/bazelisk /usr/local/bin/bazel
 
