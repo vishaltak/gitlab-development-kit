@@ -53,7 +53,7 @@ module GDK
         Use 'gdk start', 'gdk stop', and 'gdk tail' instead.
       GDK_RUN_NO_MORE
     when 'install'
-      exec(MAKE, *ARGV, chdir: GDK.root)
+      install
     when 'update'
       update_result = update
       return false unless update_result
@@ -183,6 +183,19 @@ module GDK
     result = Runit.sv(subcommand, argv)
     # Only print if run like `gdk start`, not e.g. `gdk start rails-web`
     print_url_ready_message if argv.empty?
+
+    result
+  end
+
+  # Installs GDK
+  #
+  def self.install
+    result = make('install', *ARGV)
+
+    unless result
+      GDK::Output.error('Failed to install.')
+      display_help_message
+    end
 
     result
   end
