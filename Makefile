@@ -164,6 +164,15 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 	$(Q)gdk start rails-migration-dependencies
 
 ##############################################################
+# bootstrap
+##############################################################
+
+bootstrap: install-prerequisites
+
+install-prerequisites:
+	${Q}support/bootstrap/install_prerequisites
+
+##############################################################
 # GitLab
 ##############################################################
 
