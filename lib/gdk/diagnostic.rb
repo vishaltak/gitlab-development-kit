@@ -18,16 +18,6 @@ module GDK
     def self.all
       klasses = %i[
         RubyGems
-        Version
-        Configuration
-        Git
-        Dependencies
-        PendingMigrations
-        Geo
-        Status
-        Re2
-        Golang
-        StaleServices
       ]
 
       klasses.map do |const|
