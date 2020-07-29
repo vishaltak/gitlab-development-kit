@@ -51,7 +51,7 @@ Reference documentation:
 
 ## How to connect Grafana to GitLab
 
-Refer to the documentation on [Embedding Grafana charts](https://docs.gitlab.com/ee/user/project/integrations/prometheus.html#embedding-grafana-charts)
+Refer to the documentation on [Embedding Grafana charts](https://docs.gitlab.com/ee/operations/metrics/embed_grafana.html#embedding-grafana-charts-core)
 for details on configuring GitLab to integrate with Grafana.
 
 ## Configuring a hosted Grafana instance
