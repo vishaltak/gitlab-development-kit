@@ -288,6 +288,6 @@ the GDK, the process is simpler:
 
 ## Third-party integrations
 
-We support metric integrations from third-parties, such as Grafana. [Product documentation](https://docs.gitlab.com/ee/user/project/integrations/prometheus.html#embedding-grafana-charts).
+We support metric integrations from third-parties, such as Grafana. [Product documentation](https://docs.gitlab.com/ee/operations/metrics/embed_grafana.html#embedding-grafana-charts-core).
 
 For instructions of how to use this functionality in GDK, see [Accessing Prometheus via external services](third_party_access.md).
