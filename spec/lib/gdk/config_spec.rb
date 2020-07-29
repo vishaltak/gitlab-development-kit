@@ -485,6 +485,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#executor_type' do
+      it 'is shell by default' do
+        expect(config.runner.executor_type).to be('shell')
+      end
+    end
+
     context 'when config_file exists' do
       let(:file_contents) do
         <<~CONTENTS

@@ -159,6 +159,7 @@ repository_storages: "/home/git/gdk/repository_storages"
 runner:
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
   enabled: false
+  executor_type: shell
   extra_hosts: []
   token: 'DEFAULT TOKEN: Register your runner to get a valid token'
 sshd:
