@@ -937,3 +937,10 @@ show-updated-at:
 show-reconfigured-at:
 	@echo
 	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T")"
+
+.PHONY: docker-build
+docker-build:
+
+.PHONY: docker-run
+docker-run: docker-build
+	@docker run --rm -ti -w /gitlab-development-kit ubuntu:latest
