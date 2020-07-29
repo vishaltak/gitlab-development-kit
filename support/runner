@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+
+require 'uri'
+require 'net/http'
+require_relative '../lib/gdk'
+
+# TODO: This will eventually be a part of https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/1197
+class GitlabHTTP
+  def uri
+    GDK.config.__uri
+  end
+
+  def full_uri
+    URI.parse("#{uri}/users/sign_in")
+  end
+
+  def up?
+    case Net::HTTP.get_response(full_uri)
+    when Net::HTTPOK
+      true
+    else
+      false
+    end
+  end
+end
+
+class Runner
+  def enabled?
+    config.runner.enabled
+  end
+
+  def new_runner_needed?
+    !execute_command(%(gitlab-runner verify --config "#{config_file}" --name "#{name}"))
+  end
+
+  def unregister_all
+    execute_command(%(gitlab-runner unregister --config "#{config_file}" --all-runners))
+  end
+
+  def register
+    execute_command(%(gitlab-runner register \
+    --run-untagged \
+    --non-interactive \
+    --executor "#{executor_type}" \
+    --config "#{config_file}" \
+    --url "#{config.__uri}" \
+    --registration-token "#{config.runner.token}" \
+    --name "#{name}" \
+    #{register_opts}))
+  end
+
+  def run
+    exec(%(gitlab-runner --log-level debug run --config "#{config_file}"))
+  end
+
+  private
+
+  def execute_command(str)
+    cmd = Shellout.new(str)
+    cmd.try_run
+    cmd.success?
+  end
+
+  def config
+    @config ||= GDK.config
+  end
+
+  def config_file
+    @config_file ||= config.runner.config_file
+  end
+
+  def name
+    "gdk_#{executor_type}"
+  end
+
+  def executor_type
+    config.runner.executor_type
+  end
+
+  def register_opts
+    if executor_type == 'docker'
+      opts = '--docker-image alpine:latest'
+      config.runner.extra_hosts.each do |host|
+        opts += %( --docker-extra-hosts "#{host}")
+      end
+      opts
+    else
+      ''
+    end
+  end
+end
+
+runner = Runner.new
+
+abort('WARNING: runner.enabled is false. Please see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/howto/runner.md.') unless runner.enabled?
+
+gitlab_http = GitlabHTTP.new
+abort("INFO: Waiting for #{gitlab_http.uri} to be ready..") unless gitlab_http.up?
+
+if runner.new_runner_needed?
+  runner.unregister_all
+
+  abort('ERROR: Failed to register runner :(') unless runner.register
+end
+
+runner.run
