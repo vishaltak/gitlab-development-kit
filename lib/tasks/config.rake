@@ -149,10 +149,6 @@ file 'registry/config.yml' => ['support/templates/registry.config.yml.erb'] do |
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
-file 'gitlab-runner-config.toml' => ['support/templates/gitlab-runner-config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
 file 'prometheus/prometheus.yml' => ['support/templates/prometheus.yml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end

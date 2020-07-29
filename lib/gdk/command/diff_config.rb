@@ -11,7 +11,6 @@ module GDK
           gitaly/gitaly.config.toml
           gitaly/praefect.config.toml
           gitlab-pages/gitlab-pages.conf
-          gitlab-runner-config.toml
           gitlab-shell/.gitlab_shell_secret
           gitlab-shell/config.yml
           gitlab-workhorse/config.toml

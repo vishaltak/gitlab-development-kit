@@ -108,7 +108,6 @@ clean-config:
 	gitaly/gitaly.config.toml \
 	gitaly/praefect.config.toml \
 	gitlab-pages/gitlab-pages.conf \
-	gitlab-runner-config.toml \
 	gitlab-shell/.gitlab_shell_secret \
 	gitlab-shell/config.yml \
 	gitlab-workhorse/config.toml \
@@ -592,7 +591,7 @@ performance-metrics-setup: Procfile grafana-setup
 # gitlab support setup
 ##############################################################
 
-support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
+support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup
 ifeq ($(auto_devops_enabled),true)
 	@echo
 	@echo "------------------------------------------------------------"
@@ -862,21 +861,6 @@ trust-docker-registry: registry_host.crt
 	$(Q)cp registry_host.crt "${HOME}/.docker/certs.d/${registry_host}:${registry_port}/ca.crt"
 	$(Q)echo "Certificates have been copied to ~/.docker/certs.d/"
 	$(Q)echo "Don't forget to restart Docker!"
-
-##############################################################
-# runner
-##############################################################
-
-runner-setup: gitlab-runner-config.toml
-
-.PHONY: gitlab-runner-config.toml
-ifeq ($(runner_enabled),true)
-gitlab-runner-config.toml:
-	$(Q)rake $@
-else
-gitlab-runner-config.toml:
-	@true
-endif
 
 ##############################################################
 # jaeger
