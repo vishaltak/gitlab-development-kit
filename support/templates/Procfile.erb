@@ -62,7 +62,7 @@ rails-web: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$rela
 
 # Gitlab Runner
 #
-<%= '#' unless config.runner? %>runner: exec gitlab-runner --log-level debug run --config <%= config.runner.config_file %>
+<%= '#' unless config.runner? %>runner: exec support/runner
 
 # Mattermost
 #
