@@ -229,7 +229,8 @@ module GDK
     def load_yaml!
       return {} unless defined?(self.class::FILE) && File.exist?(self.class::FILE)
 
-      YAML.load_file(self.class::FILE) || {}
+      raw_yaml = File.read(self.class::FILE)
+      YAML.safe_load(raw_yaml) || {}
     end
 
     def from_yaml(slug, default: nil)
