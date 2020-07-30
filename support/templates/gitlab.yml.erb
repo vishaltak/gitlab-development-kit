@@ -257,7 +257,7 @@ production: &base
     enabled: true
     object_store:
       enabled: <%= config.object_store? %>
-      remote_directory: terraform_state
+      remote_directory: terraform
       connection:
         provider: AWS
         aws_access_key_id: minio
@@ -914,7 +914,7 @@ test:
     storage_path: tmp/tests/terraform_state
     object_store:
       enabled: false
-      remote_directory: terraform_state
+      remote_directory: terraform
       connection:
         provider: AWS # Only AWS supported at the moment
         aws_access_key_id: AWS_ACCESS_KEY_ID
