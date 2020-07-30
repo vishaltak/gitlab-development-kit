@@ -64,6 +64,10 @@ prom-setup \
 object-storage-setup \
 gitlab-elasticsearch-indexer-setup
 
+# This is used by `gdk install`
+#
+install: all show-installed-at
+
 # This is used by `gdk update`
 #
 # Pull gitlab directory first since dependencies are linked from there.
@@ -968,6 +972,11 @@ ask-to-restart:
 	@echo
 	$(Q)support/ask-to-restart
 	@echo
+
+.PHONY: show-installed-at
+show-installed-at:
+	@echo
+	@echo "> Installed as of $$(date +"%Y-%m-%d %T")"
 
 .PHONY: show-updated-at
 show-updated-at:
