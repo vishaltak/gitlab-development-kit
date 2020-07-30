@@ -541,7 +541,7 @@ gitlab-k8s-agent-setup:
 endif
 
 ifeq ($(gitlab_k8s_agent_enabled),true)
-gitlab-k8s-agent-update: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/.git/pull gitlab-k8s-agent-clean-bin gitlab-k8s-agent/bin/k8s-agent
+gitlab-k8s-agent-update: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/.git/pull gitlab-k8s-agent-clean-bin gitlab-k8s-agent/build/gdk/bin/kas_race
 else
 gitlab-k8s-agent-update:
 	@true
