@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'pathname'
-
 require_relative '../lib/shellout.rb'
 
 POSTGRESQL_VERSIONS = [11, 10, 9.6].freeze
@@ -21,8 +20,10 @@ def brew_symlink_discover
 end
 
 def brew_cellar_discover
+  brew_cellar_prefix = Shellout.new('brew --cellar').try_run
+
   POSTGRESQL_VERSIONS.each do |version|
-    brew_cellar_pg = Shellout.new(%W[brew --cellar postgresql@#{version}]).try_run
+    brew_cellar_pg = "#{brew_cellar_prefix}/postgresql@#{version}"
 
     next if brew_cellar_pg.empty?
 
