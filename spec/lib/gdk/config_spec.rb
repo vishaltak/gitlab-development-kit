@@ -243,6 +243,37 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe '#validate!' do
+    before do
+      allow(File).to receive(:read).and_call_original
+      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+    end
+
+    context 'when gdk.yml is valid' do
+      let(:raw_yaml) { "---\ngdk:\n  debug: true" }
+
+      it 'returns nil' do
+        expect(described_class.new.gdk.validate!).to be_nil
+      end
+    end
+
+    context 'with invalid YAML' do
+      let(:raw_yaml) { "---\ngdk:\n  debug" }
+
+      it 'raises an exception' do
+        expect { described_class.new.gdk.validate! }.to raise_error(/undefined method `fetch' for "debug":String/)
+      end
+    end
+
+    context 'with partially invalid YAML' do
+      let(:raw_yaml) { "---\ngdk:\n  debug: fals" }
+
+      it 'raises an exception' do
+        expect { described_class.new.gdk.validate! }.to raise_error(/Value 'fals' for gdk.debug is not a valid bool/)
+      end
+    end
+  end
+
   describe '#username' do
     before do
       allow(Etc).to receive_message_chain(:getpwuid, :name) { 'iamfoo' }

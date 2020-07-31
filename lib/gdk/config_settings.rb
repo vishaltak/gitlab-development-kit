@@ -61,6 +61,21 @@ module GDK
       @yaml = yaml || load_yaml!
     end
 
+    def validate!
+      our_methods.each do |method|
+        next if ignore_method?(method.to_s)
+
+        value = fetch(method)
+        if value.is_a?(ConfigSettings)
+          value.validate!
+        elsif value.is_a?(Enumerable) && value.first.is_a?(ConfigSettings)
+          value.each(&:validate!)
+        end
+      end
+
+      nil
+    end
+
     def dump!(file = nil)
       yaml = our_methods.each_with_object({}) do |method, hash|
         method_name = method.to_s
