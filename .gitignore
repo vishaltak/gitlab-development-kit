@@ -37,10 +37,7 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
-/gitlab-pages/bin
-/gitlab-pages/pkg
-/gitlab-pages/src
-/gitlab-pages/gitlab-pages.conf
+/gitlab-pages
 /gitlab-pages-secret
 /gitlab-k8s-agent/
 /gitlab-runner-config.toml

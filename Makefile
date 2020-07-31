@@ -12,7 +12,7 @@ gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
 gitlab_workhorse_clone_dir = gitlab-workhorse
 gitaly_clone_dir = gitaly
-gitlab_pages_clone_dir = gitlab-pages/src/gitlab.com/gitlab-org/gitlab-pages
+gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 
 workhorse_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
@@ -508,23 +508,20 @@ gitlab-pages-secret:
 	$(Q)rake $@
 
 .PHONY: gitlab-pages/gitlab-pages.conf
-gitlab-pages/gitlab-pages.conf:
-	$(Q)mkdir -p gitlab-pages
+gitlab-pages/gitlab-pages.conf: ${gitlab_pages_clone_dir}/.git
 	$(Q)rake $@
 
-gitlab-pages-update: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages
+gitlab-pages-update: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages gitlab-pages/gitlab-pages.conf
 
 gitlab-pages-clean-bin:
-	$(Q)rm -rf gitlab-pages/bin
+	$(Q)rm -f gitlab-pages/bin/gitlab-pages
 
 .PHONY: gitlab-pages/bin/gitlab-pages
 gitlab-pages/bin/gitlab-pages: ${gitlab_pages_clone_dir}/.git
-	$(Q)mkdir -p gitlab-pages/bin
 	$(Q)$(MAKE) -C ${gitlab_pages_clone_dir} ${QQ}
-	$(Q)install -m755 ${gitlab_pages_clone_dir}/gitlab-pages gitlab-pages/bin
 
 ${gitlab_pages_clone_dir}/.git:
-	$(Q)git clone --quiet --branch "${pages_version}" ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
+	$(Q)support/move-existing-gitlab-pages-directory || git clone --quiet --branch "${pages_version}" ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
 
 gitlab-pages/.git/pull:
 	@echo
