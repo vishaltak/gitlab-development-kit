@@ -225,7 +225,7 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe '#dump_config!' do
+  describe '#dump!' do
     it 'successfully dumps the config' do
       expect do
         expect(config.dump!).to be_a_kind_of(Hash)
