@@ -62,9 +62,7 @@ module GDK
     end
 
     def dump!(file = nil)
-      base_methods = settings_klass.new.methods
-
-      yaml = (methods - base_methods).sort.each_with_object({}) do |method, hash|
+      yaml = our_methods.each_with_object({}) do |method, hash|
         method_name = method.to_s
 
         # We don't dump a config if it:
@@ -187,6 +185,10 @@ module GDK
     end
 
     private
+
+    def our_methods
+      @our_methods ||= (methods - settings_klass.new.methods).sort
+    end
 
     def slug_for(name)
       [slug, name].compact.join('.')
