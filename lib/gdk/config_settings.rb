@@ -68,7 +68,7 @@ module GDK
         # We don't dump a config if it:
         #  - starts with a double underscore (intended for internal use)
         #  - is a ? method (always has a non-? counterpart)
-        next if method_name.start_with?('__') || method_name.end_with?('?')
+        next if ignore_method?(method_name)
 
         value = fetch(method)
         hash[method_name] = if value.is_a?(ConfigSettings)
@@ -185,6 +185,10 @@ module GDK
     end
 
     private
+
+    def ignore_method?(method_name)
+      method_name.start_with?('__') || method_name.end_with?('?')
+    end
 
     def our_methods
       @our_methods ||= (methods - settings_klass.new.methods).sort
