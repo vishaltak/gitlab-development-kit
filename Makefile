@@ -570,7 +570,6 @@ endif
 
 /usr/local/bin/bazelisk:
 	$(Q)brew install bazelisk
-	$(Q)ln -s /usr/local/bin/bazelisk /usr/local/bin/bazel
 
 ${gitlab_k8s_agent_clone_dir}/.git:
 	$(Q)git clone --quiet --branch "${gitlab_k8s_agent_version}" ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} ${QQ}
