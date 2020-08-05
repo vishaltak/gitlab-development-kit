@@ -4,15 +4,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
 1. Install [Bazel](https://www.bazel.build/)
 
-    The recommended way to install Bazel is to use [Bazelisk](https://github.com/bazelbuild/bazelisk). Bazelisk is a version manager for Bazel, much like rbenv for Ruby.
-
-    See the [installation instructions](https://docs.bazel.build/versions/master/install-bazelisk.html) for Bazelisk. If you are on Mac, Homebrew keg for Bazelisk currently [does not link it as `bazel`](https://github.com/Homebrew/homebrew-core/pull/55403) so you may need to create the symlink manually like so:
-
-    ```shell
-    ln -s ../Cellar/bazelisk/<version>/bin/bazelisk /usr/local/bin/bazel
-    ```
-
-   Run `brew info bazelisk` to get the installed version.
+    The recommended way to install Bazel is to use [Bazelisk](https://github.com/bazelbuild/bazelisk). Bazelisk is a version manager for Bazel, much like rbenv for Ruby. See the [installation instructions](https://docs.bazel.build/versions/master/install-bazelisk.html) for Bazelisk.
 
 1. Add the following settings in your `gdk.yml`:
 
