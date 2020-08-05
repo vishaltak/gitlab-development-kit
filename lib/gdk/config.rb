@@ -209,6 +209,7 @@ module GDK
       integer(:port) { read!('gitlab_pages_port') || 3010 }
       bool(:auto_update) { true }
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
+      bool(:verbose) { false }
     end
 
     settings :gitlab_k8s_agent do
