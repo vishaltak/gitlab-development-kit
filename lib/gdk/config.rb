@@ -226,11 +226,10 @@ module GDK
           else
             "ws://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__listen_url_path}"
           end
-        elsif config.gitlab_k8s_agent.listen_network == 'unix'
-          # this is not supported by agentk at the moment
-          "unix:#{config.gitlab_k8s_agent.listen_address}"
+        elsif config.gitlab_k8s_agent.listen_network == 'tcp'
+          "grpc://#{config.gitlab_k8s_agent.listen_address}"
         else
-          "#{config.gitlab_k8s_agent.listen_network}://#{config.gitlab_k8s_agent.listen_address}"
+          raise "Unsupported listen network #{config.gitlab_k8s_agent.listen_network}"
         end
       end
       bool :__listen_websocket do
