@@ -180,7 +180,6 @@ module GDK
   end
 
   # Called when running `gdk start`
-  #
   def self.start(subcommand, argv)
     result = Runit.sv(subcommand, argv)
     # Only print if run like `gdk start`, not e.g. `gdk start rails-web`
@@ -191,6 +190,7 @@ module GDK
 
   # Installs GDK
   #
+  # Called when running `gdk install`
   def self.install
     result = make('install', *ARGV)
 
@@ -202,8 +202,7 @@ module GDK
     result
   end
 
-  # Updates GDK
-  #
+  # Called when running `gdk update`
   def self.update
     make('self-update')
 
@@ -217,8 +216,7 @@ module GDK
     result
   end
 
-  # Reconfigures GDK
-  #
+  # Called when running `gdk reconfigure`
   def self.reconfigure
     remember!(GDK.root)
 
