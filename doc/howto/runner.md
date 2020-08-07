@@ -230,4 +230,26 @@ container. Here's how:
    ```
 
 Note that for this to work across reboots, the aliased IP in step 1 needs to be run
-at startup.
+at startup. To do this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/` containing:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.gitlab1.ifconfig</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>Nice</key>
+    <integer>10</integer>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/sbin/ifconfig</string>
+      <string>lo0</string>
+      <string>alias</string>
+      <string>172.16.123.1</string>
+    </array>
+</dict>
+</plist>
+```
