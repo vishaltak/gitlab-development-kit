@@ -95,10 +95,7 @@ module GDK
     when 'start'
       exit(start(subcommand, ARGV))
     when 'restart'
-      result = Runit.sv('force-restart', ARGV)
-      print_url_ready_message
-
-      exit(result)
+      exit(restart(ARGV))
     when 'stop'
       if ARGV.empty?
         # Runit.stop will stop all services and stop Runit (runsvdir) itself.
@@ -188,8 +185,15 @@ module GDK
     result
   end
 
-  # Installs GDK
-  #
+  # Called when running `gdk restart`
+  def self.restart(argv)
+    result = Runit.sv('force-restart', argv)
+    # Only print if run like `gdk restart`, not e.g. `gdk restart rails-web`
+    print_url_ready_message if argv.empty?
+
+    result
+  end
+
   # Called when running `gdk install`
   def self.install
     result = make('install', *ARGV)
