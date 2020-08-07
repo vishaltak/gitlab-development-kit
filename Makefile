@@ -8,7 +8,9 @@ export GOPROXY ?= https://proxy.golang.org
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
+ifneq ($(MAKECMDGOALS),bootstrap)
 include $(shell rake gdk-config.mk)
+endif
 endif
 
 gitlab_clone_dir = gitlab
