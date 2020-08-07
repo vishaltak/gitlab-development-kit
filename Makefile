@@ -1,12 +1,15 @@
 .NOTPARALLEL:
 
 SHELL = /bin/bash
+RAKE := $(shell command -v rake 2> /dev/null)
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
 
 # Generate a Makefile from Ruby and include it
+ifdef RAKE
 include $(shell rake gdk-config.mk)
+endif
 
 gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
