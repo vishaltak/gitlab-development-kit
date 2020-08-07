@@ -60,7 +60,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
     ```plaintext
     => GitLab available at http://127.0.0.1:3000 shortly.
-    => GitLab Kubernetes Agent Server available at tcp://127.0.0.1:5005.
+    => GitLab Kubernetes Agent Server available at grpc://127.0.0.1:5005.
     ```
 
 1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
