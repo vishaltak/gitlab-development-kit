@@ -181,16 +181,6 @@ test: &test
   pool: 10
 ```
 
-Now run the following to ensure the database and FDW schema are setup:
-
-```shell
-# Within the <secondary-gdk-root>/gitlab folder:
-bin/rake db:test:prepare
-
-# Within the <secondary-gdk-root> folder:
-make postgresql/geo-fdw/test/rebuild
-```
-
 ## Copy database encryption key
 
 The primary and the secondary nodes will be using the same secret key
@@ -304,26 +294,6 @@ PG::ReadOnlySqlTransaction: ERROR:  cannot execute DROP DATABASE in a read-only 
 Tasks: TOP => db:test:load => db:test:purge
 (See full trace by running task with --trace)
 make: *** [gitlab-update] Error 1
-```
-
-### FDW is no longer working even though you have it enabled, after migrations or `gdk update`
-
-You need to rebuild FDW tables.
-
-If your local primary is in `~/Developer/gdk`:
-
-```shell
-cd ~/Developer/gdk
-gdk start
-make postgresql/geo-fdw/test/rebuild
-```
-
-And if your local secondary is in `~/Developer/gdk-geo`:
-
-```shell
-cd ~/Developer/gdk-geo
-gdk start
-make postgresql/geo-fdw/development/rebuild
 ```
 
 ## Enabling Docker Registry replication
