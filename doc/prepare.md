@@ -37,7 +37,8 @@ of use, we recommend using a Ruby version manager such as:
 1. [RVM](https://rvm.io/)
 1. [chruby](https://github.com/postmodern/chruby#install)
 
-**Note:** you may have to close and reopen the terminal after installing a Ruby
+NOTE: **Note:**
+You may have to close and reopen the terminal after installing a Ruby
 version manager to read new `PATH` variables added for Ruby executable files.
 
 ### Install Ruby on Ubuntu
@@ -146,7 +147,8 @@ source ${shell_file}
 
 ### Linux
 
-**Note:** Unless already set, you will likely have to increase the watches limit of `inotify` in order for frontend development tools such as `webpack` and `karma` to effectively track file changes. [See here](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit) for details and instructions on how to apply this change.
+NOTE: **Note:**
+Unless already set, you will likely have to increase the watches limit of `inotify` in order for frontend development tools such as `webpack` and `karma` to effectively track file changes. [See here](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit) for details and instructions on how to apply this change.
 
 #### Ubuntu
 
@@ -190,7 +192,8 @@ pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs 
   unzip graphicsmagick perl-image-exiftool rsync yarn minio sqlite python2
 ```
 
->**Note:** The Arch Linux core repository does not contain anymore the `runit` package. It is required to install `runit-systemd` from the Arch User Repository (AUR) with an AUR package manager like `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur)) or `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)). See [Arch Linux Wiki page AUR_helpers](https://wiki.archlinux.org/index.php/AUR_helpers) for more information.
+NOTE: **Note:**
+The Arch Linux core repository does not contain anymore the `runit` package. It is required to install `runit-systemd` from the Arch User Repository (AUR) with an AUR package manager like `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur)) or `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)). See [Arch Linux Wiki page AUR_helpers](https://wiki.archlinux.org/index.php/AUR_helpers) for more information.
 
 ```shell
 pikaur -S runit-systemd
@@ -221,7 +224,8 @@ We assume you are using Fedora >= 22.
 
 If you are running Fedora < 27 you'll need to install `go` manually using [go] official installation instructions.
 
->**Note:** Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use `postgresql:10` module to install PostgreSQL 10.
+NOTE: **Note:**
+Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use `postgresql:10` module to install PostgreSQL 10.
 But keep in mind that will replace the PostgreSQL 11.x package, so you cannot use both versions at once.
 
 ```shell

@@ -254,7 +254,7 @@ rvm reinstall --disable-binary 2.3
 
 ## Fix conflicts in database migrations if you use the same db for CE and EE
 
->**Note:**
+NOTE: **Note:**
 The recommended way to fix the problem is to rebuild your database and move
 your EE development into a new directory.
 
