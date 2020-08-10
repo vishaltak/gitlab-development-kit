@@ -94,31 +94,66 @@ brew install watch
 
 ## Helm/Tiller Commands
 
-[Helm](https://docs.helm.sh/) is the package manager for Kubernetes. When running `helm` commands on your local machine, [Helm](https://docs.helm.sh/) will then communicate remotely with [Tiller](https://docs.helm.sh/glossary/#tiller), its in-cluster component. [Tiller](https://docs.helm.sh/glossary/#tiller) interacts directly with the Kubernetes API server to install, upgrade, query, and remove Kubernetes resources. It also stores the objects that represent releases.
+[Helm 2](https://v2.helm.sh/docs) is the package manager for Kubernetes. When
+running `helm` commands on your local machine, Helm
+communicates with a [Tiller](https://v2.helm.sh/docs/glossary/#tiller) server
+(usually an in-cluster component). Tiller interacts directly with the
+Kubernetes API server to install, upgrade, query, and remove Kubernetes
+resources. It also stores the objects that represent releases.
 
-If you are only interested about running `helm` commands locally, you can use the `--client-only` flag:
-
-```shell
-helm version --client-only
-```
-
-To initialize [Helm](https://docs.helm.sh/) in your machine and create your `~/.helm` configuration directory, run:
+To initialize [Helm](https://docs.helm.sh/) on your machine run:
 
 ```shell
 helm init --client-only
 ```
 
-### Talking to Tiller
+(without the `--client-only` flag, `helm init` attempts to install a Tiller server).
 
-In our Auto DevOps scenario, we need to consider 3 things before setting up the Helm/Tiller communication:
+### Interacting with Helm releases
 
-  1 - Make sure your `kubectl config current-context` is pointing to the correct cluster. If it isn't, then [change your current-context](#change-your-current-context)
+Before you start:
 
-  2 - When we install Helm/Tiller through [GitLab Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops), Tiller is configured with SSL communication enabled. Therefore, Helm can only talk to it if it has the proper certificates used during the Tiller installation.
+1. Make sure your `kubectl config current-context` [points to the correct cluster](#change-your-current-context).
+1. Find the namespace that contains your Helm release data:
+    - All [GitLab-managed apps](https://docs.gitlab.com/ee/user/clusters/applications.html) are
+      installed using Helm under the `gitlab-managed-apps` namespace.
+    - [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/index.html) also
+      uses Helm for its deployments. Generally, each environment gets its own
+      namespace, and each namespace has its own release data.
 
-  3 - All our [GitLab Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops) Kubernetes apps are installed under the `gitlab-managed-apps` namespace.
+#### Local Tiller
 
-So, considering *1 - current-context* is correct, we now need to create the SSL certificate files on our local environment. Luckily, we do save those certificates on our database when we created this Helm/Tiller on our cluster. So, go ahead to your GitLab repository and run the below script on your `bundle exec rails c`:
+You can always interact with the in-cluster metadata using a local Tiller (even
+if a remote Tiller is present).
+
+In this example, we assume the environment variable `KUBE_NAMESPACE` is the
+namespace containing your releases (for example, `gitlab-managed-apps`). To
+start a local Tiller and prepare Helm,
+run:
+
+```shell
+export TILLER_NAMESPACE=$KUBE_NAMESPACE
+export HELM_HOST="localhost:44134"
+tiller -listen "$HELM_HOST" &
+helm init --client-only
+```
+
+To confirm the commands worked properly, run:
+
+```shell
+helm version # should output client and server versions
+helm list    # should output the releases stored in the given namespace
+```
+
+#### Remote Tiller (for GitLab-managed apps)
+
+Prior to GitLab 13.2, GitLab used a remote Tiller server in the
+`gitlab-managed-apps` namespace for the GitLab-managed apps.
+(Not Auto DevOps, which has used a local Tiller for a long time.) This Tiller
+is configured with SSL communication enabled, so we need to retrieve
+certificates from the backend to talk to it.
+
+Run the following in a rails console (`bundle exec rails c`):
 
 ```ruby
 helm = Clusters::Applications::Helm.last; nil
@@ -131,7 +166,7 @@ File.open('/tmp/key.pem', 'w') { |f| f.write(client_cert.key_string) }; nil
 File.open('/tmp/cert.pem', 'w') { |f| f.write(client_cert.cert_string) }; nil
 ```
 
-Now we already have proper SSL files: `/tmp/ca_cert.pem`, `/tmp/key.pem` and `/tmp/cert.pem`. So let's finally run Helm commands that will be executed also on our server via Tiller communication:
+Now we already have proper SSL files, `/tmp/ca_cert.pem`, `/tmp/key.pem` and `/tmp/cert.pem`, and can use them to talk to Tiller:
 
 ```shell
 helm version --tls \
@@ -141,16 +176,9 @@ helm version --tls \
   --tiller-namespace=gitlab-managed-apps
 ```
 
-Note that we stopped using `--client-only`, but instead we added the tls flags:
-
-- `--tls`
-- `--tls-ca-cert /tmp/ca_cert.pem`
-- `--tls-cert /tmp/cert.pem`
-- `--tls-key /tmp/key.pem`
-
-and the `--tiller-namespace=gitlab-managed-apps` flag.
-
-To make this process less verbose, we can use a simple bash function to fetch and use our certs:
+Note that we stopped using `--client-only`, but instead we added the TLS flags
+and the `--tiller-namespace=gitlab-managed-apps` flag. To make this process
+less verbose, we can use a simple bash function to fetch and use our certs:
 
 ```shell
 function gitlab-helm() {
@@ -166,9 +194,8 @@ function gitlab-helm() {
 }
 ```
 
-This can be problematic, however, if we are frequently switching clusters or projects since
-we are not purging our previous credentials. To avoid this, when switching `kubectl`
-contexts, it can be useful to purge any previous certs:
+**Warning:** *The credentials should be cleared when switching `kubectl`
+contexts*, to avoid performing Helm operations on the wrong cluster:
 
 ```shell
 function gitlab-helm-purge-credentials() {
