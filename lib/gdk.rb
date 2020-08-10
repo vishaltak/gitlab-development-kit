@@ -93,7 +93,7 @@ module GDK
     when 'status'
       exit(Runit.sv(subcommand, ARGV))
     when 'start'
-      exit(start(subcommand, ARGV))
+      exit(start(ARGV))
     when 'restart'
       exit(restart(ARGV))
     when 'stop'
@@ -177,8 +177,8 @@ module GDK
   end
 
   # Called when running `gdk start`
-  def self.start(subcommand, argv)
-    result = Runit.sv(subcommand, argv)
+  def self.start(argv)
+    result = Runit.sv('start', argv)
     # Only print if run like `gdk start`, not e.g. `gdk start rails-web`
     print_url_ready_message if argv.empty?
 
