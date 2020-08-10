@@ -64,7 +64,9 @@ or lack of internet access, then you can use a local registry:
    on [using an insecure registry](#using-an-insecure-registry-from-gitlab-ci) using
    Docker-in-Docker, see the documentation.
 
-**Note:** When changing the hostname for a self-signed registry, you must run `gdk reconfigure` and [update the trusted certificates in Docker](#trusting-the-registrys-self-signed-certificate).
+NOTE: **Note:**
+When changing the hostname for a self-signed registry, you must run `gdk reconfigure` and
+[update the trusted certificates in Docker](#trusting-the-registrys-self-signed-certificate).
 
 After completing these instructions, you should be ready to work with the registry locally. See the
 [Interacting with the local container registry](#interacting-with-the-local-container-registry)
@@ -85,16 +87,14 @@ The simplest solution is to alias your local IP address (*not* `127.0.0.1`) to
 your.ip.address gdk.test
 ```
 
-**Notes:**
+Note the following:
 
-1. `gdk.test` is arbitrary. You can set it to anything, but the documentation
-   assumes `gdk.test`.
-1. You can also use the IP address directly, but it is easier to only edit `/etc/hosts`
-   instead of reconfiguring GDK when the IP address changes.
-1. If you're using `docker-machine`, you must replace this IP address with
-   the one returned from `docker-machine ip default`. See the
-   [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)
-   for details).
+- `gdk.test` is arbitrary. You can set it to anything, but the documentation assumes `gdk.test`.
+- You can also use the IP address directly, but it is easier to only edit `/etc/hosts` instead of
+  reconfiguring GDK when the IP address changes.
+- If you're using `docker-machine`, you must replace this IP address with the one returned from
+  `docker-machine ip default`. See the [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)
+  for details.
 
 ### Trusting the registry's self-signed certificate
 
@@ -102,13 +102,13 @@ Since the registry is self-signed, Docker treats it as *insecure*. The certifica
 GDK root, called `registry_host.crt`, and must be copied as `ca.crt` to the
 [appropriate Docker configuration location](https://docs.docker.com/registry/insecure/#use-self-signed-certificates).
 
-If you are using Docker Desktop for Mac, GDK includes the shorthand
+If you are using Docker Desktop for Mac, GDK includes the shorthand:
 
 ```shell
 make trust-docker-registry
 ```
 
-which will place the certificate under `~/.docker/certs.d/$REGISTRY_HOST:$REGISRY_PORT/ca.crt`, *overwriting any existing certificate* at that path.
+This will place the certificate under `~/.docker/certs.d/$REGISTRY_HOST:$REGISRY_PORT/ca.crt`, *overwriting any existing certificate* at that path.
 
 Afterwards, you **must restart Docker** to apply the changes.
 
@@ -459,7 +459,8 @@ container_scanning:
     REGISTRY_INSECURE: "true" # see note below for discussion
 ```
 
-**Note:** The contents of the above `.gitlab-ci.yml` file will differ depending on how the container registry has been configured:
+NOTE: **Note:**
+The contents of the above `.gitlab-ci.yml` file will differ depending on how the container registry has been configured:
 
 1. When the local container registry is insecure because `registry.self_signed: false` has been [configured](#configuring-a-local-only-registry), the above `.gitlab-ci.yml` file can be used.
 
