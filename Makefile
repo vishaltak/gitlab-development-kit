@@ -430,15 +430,13 @@ else
 endif
 
 .PHONY: geo-primary-migrate
-# Geo primary is generally used for unit testing, so refresh the test FDW schema
-geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab-geo-db-migrate gitlab/git-restore postgresql/geo-fdw/test/rebuild diff-config
+geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab-geo-db-migrate gitlab/git-restore diff-config
 
 .PHONY: geo-primary-update
 geo-primary-update: update geo-primary-migrate diff-config
 
 .PHONY: geo-secondary-migrate
-# Geo secondary needs an up-to-date development FDW schema
-geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-geo-db-migrate gitlab/git-restore postgresql/geo-fdw/development/rebuild
+geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-geo-db-migrate gitlab/git-restore
 
 .PHONY: geo-secondary-update
 geo-secondary-update: update geo-secondary-migrate diff-config
@@ -708,38 +706,6 @@ postgresql/geo/Procfile:
 
 postgresql/geo/seed-data:
 	$(Q)support/bootstrap-geo
-
-postgresql/geo-fdw: postgresql/geo-fdw/development/create postgresql/geo-fdw/test/create
-
-postgresql/geo-fdw/rebuild: postgresql/geo-fdw/development/rebuild postgresql/geo-fdw/test/rebuild
-
-# Function to read values from database.yml, parameters:
-#   - file: e.g. database, database_geo
-#   - environment: e.g. development, test
-#   - value: e.g. host, port
-from_db_config = $(shell grep -A6 "$(2):" ${gitlab_development_root}/gitlab/config/$(1).yml | grep -m1 "$(3):" | cut -d ':' -f 2 | tr -d ' ')
-
-postgresql/geo-fdw/%: dbname = $(call from_db_config,database_geo,$*,database)
-postgresql/geo-fdw/%: fdw_dbname = $(call from_db_config,database,$*,database)
-postgresql/geo-fdw/%: fdw_host = $(call from_db_config,database,$*,host)
-postgresql/geo-fdw/%: fdw_port = $(call from_db_config,database,$*,port)
-postgresql/geo-fdw/test/%: rake_namespace = test:
-
-postgresql/geo-fdw/%/create:
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE EXTENSION IF NOT EXISTS postgres_fdw;"
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SERVER gitlab_secondary FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '$(fdw_host)', dbname '${fdw_dbname}', port '$(fdw_port)' );"
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE USER MAPPING FOR current_user SERVER gitlab_secondary OPTIONS (user '$(USER)');"
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "CREATE SCHEMA IF NOT EXISTS gitlab_secondary;"
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "GRANT USAGE ON FOREIGN SERVER gitlab_secondary TO current_user;"
-	$(Q)$(gitlab_rake_cmd) geo:db:${rake_namespace}refresh_foreign_tables
-
-postgresql/geo-fdw/%/drop:
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SERVER gitlab_secondary CASCADE;"
-	$(Q)$(psql) -h ${postgresql_geo_host} -p ${postgresql_geo_port} -d ${dbname} -c "DROP SCHEMA gitlab_secondary;"
-
-postgresql/geo-fdw/%/rebuild:
-	$(Q)$(MAKE) postgresql/geo-fdw/$*/drop || true ${QQ}
-	$(Q)$(MAKE) postgresql/geo-fdw/$*/create ${QQ}
 
 ##############################################################
 # influxdb
