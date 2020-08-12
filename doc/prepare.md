@@ -216,7 +216,7 @@ compiler via your package manager: `sudo apt-get install golang`.
 Otherwise you need to install it manually. See [Go](https://golang.org/doc/install#install) official installation
 instructions.
 
-You may need to install Redis 2.8 or newer manually.
+You may need to install Redis 5.0 or newer manually.
 
 #### Fedora
 
@@ -242,7 +242,7 @@ sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr
 sudo chmod +x /usr/local/bin/minio
 ```
 
-You may need to install Redis 2.8 or newer manually.
+You may need to install Redis 5.0 or newer manually.
 
 ##### runit
 
@@ -295,7 +295,7 @@ will fail due to a higher version requirement by GitLab. You can follow the
 instructions found [in the GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos#add-puias-computational-repository) to install a newer
 binary version of Git.
 
-You may need to install Redis 2.8 or newer manually.
+You may need to install Redis 5.0 or newer manually.
 
 #### OpenSUSE
 
