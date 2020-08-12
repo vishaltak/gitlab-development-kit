@@ -170,8 +170,9 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
    # This PPA contains an up-to-date version of git
    sudo add-apt-repository ppa:git-core/ppa
    sudo apt-get install git git-lfs postgresql postgresql-contrib libpq-dev redis-server \
-     libicu-dev cmake g++ g++-8 libre2-dev libkrb5-dev libsqlite3-dev golang-${GDK_GO_VERSION}-go ed \
+     libicu-dev cmake g++ libre2-dev libkrb5-dev libsqlite3-dev golang-${GDK_GO_VERSION}-go ed \
      pkg-config graphicsmagick runit libimage-exiftool-perl rsync libssl-dev
+   [[ $(lsb_release -sr) < "18.10" ]] && sudo apt-get install g++-8
    sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
    sudo chmod +x /usr/local/bin/minio
    ```
