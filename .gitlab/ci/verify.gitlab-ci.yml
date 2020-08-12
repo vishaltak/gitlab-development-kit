@@ -2,6 +2,8 @@
   stage: verify
   extends: .rules:code-changes
   image: ${VERIFY_IMAGE}
+  needs:
+    - release-image
   artifacts:
     paths:
       - ./gitlab-development-kit/gitlab/log/*.log
@@ -12,7 +14,10 @@
   variables:
     BUNDLE_PATH: '$CI_PROJECT_DIR/.bundle'
   cache:
-    key: "gitlab-verify-bundle-$CI_SERVER_VERSION_MAJOR-$CI_SERVER_VERSION_MINOR"
+    key:
+      prefix: "gdk-verify"
+      files:
+        - .tools-versions
     paths:
       - .bundle
 

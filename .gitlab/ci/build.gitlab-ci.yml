@@ -1,17 +1,13 @@
 release-image:
   extends:
-    - .rules:docs-code-changes-manual
+    - .rules:code-changes
     - .docker:use-docker-in-docker
   image: docker:git
   stage: build
+  before_script:
+    - apk add --no-cache jq curl
   script:
-    # taken from https://gitlab.com/gitlab-org/gitlab-qa/blob/master/.gitlab-ci.yml
-    - ./bin/docker load
-    - ./bin/docker build
-    - ./bin/docker store
-    - test -n "$CI_BUILD_TOKEN" || exit 0
-    - ./bin/docker publish
-  cache:
-      key: "docker-build-cache"
-      paths:
-        - ./latest_image.tar
+    - ./bin/docker ci-login
+    - ./bin/docker ci-build-if-necessary
+  after_script:
+    - ./bin/docker ci-logout

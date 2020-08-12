@@ -2,3 +2,4 @@
 # Clear build context, and include only paths used by Dockerfile
 /*
 !/packages.txt
+!/.tool-versions

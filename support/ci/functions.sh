@@ -3,8 +3,6 @@
 GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
 
 init() {
-  # shellcheck disable=SC1090
-  source "${HOME}"/.bash_profile
   gem install -N bundler:1.17.3
   cd gem || exit
   gem build gitlab-development-kit.gemspec
