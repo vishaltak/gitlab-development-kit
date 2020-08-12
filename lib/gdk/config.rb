@@ -242,13 +242,6 @@ module GDK
           false
         end
       end
-      string :__gitaly_address do
-        if config.praefect?
-          config.praefect.address
-        else
-          config.gitaly.address
-        end
-      end
     end
 
     settings :auto_devops do
