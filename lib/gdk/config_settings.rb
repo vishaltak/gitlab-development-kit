@@ -61,16 +61,29 @@ module GDK
       @yaml = yaml || load_yaml!
     end
 
-    def dump!(file = nil)
-      base_methods = settings_klass.new.methods
+    def validate!
+      our_methods.each do |method|
+        next if ignore_method?(method.to_s)
 
-      yaml = (methods - base_methods).sort.each_with_object({}) do |method, hash|
+        value = fetch(method)
+        if value.is_a?(ConfigSettings)
+          value.validate!
+        elsif value.is_a?(Enumerable) && value.first.is_a?(ConfigSettings)
+          value.each(&:validate!)
+        end
+      end
+
+      nil
+    end
+
+    def dump!(file = nil)
+      yaml = our_methods.each_with_object({}) do |method, hash|
         method_name = method.to_s
 
         # We don't dump a config if it:
         #  - starts with a double underscore (intended for internal use)
         #  - is a ? method (always has a non-? counterpart)
-        next if method_name.start_with?('__') || method_name.end_with?('?')
+        next if ignore_method?(method_name)
 
         value = fetch(method)
         hash[method_name] = if value.is_a?(ConfigSettings)
@@ -188,6 +201,14 @@ module GDK
 
     private
 
+    def ignore_method?(method_name)
+      method_name.start_with?('__') || method_name.end_with?('?')
+    end
+
+    def our_methods
+      @our_methods ||= (methods - settings_klass.new.methods).sort
+    end
+
     def slug_for(name)
       [slug, name].compact.join('.')
     end
@@ -208,7 +229,8 @@ module GDK
     def load_yaml!
       return {} unless defined?(self.class::FILE) && File.exist?(self.class::FILE)
 
-      YAML.load_file(self.class::FILE) || {}
+      raw_yaml = File.read(self.class::FILE)
+      YAML.safe_load(raw_yaml) || {}
     end
 
     def from_yaml(slug, default: nil)

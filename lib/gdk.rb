@@ -45,6 +45,8 @@ module GDK
       return false
     end
 
+    validate_yaml!
+
     case subcommand = ARGV.shift
     when 'run'
       abort <<~GDK_RUN_NO_MORE
@@ -234,5 +236,14 @@ module GDK
     GDK::Output.puts
     GDK::Output.notice("GitLab available at #{config.__uri} shortly.")
     GDK::Output.notice("GitLab Kubernetes Agent Server available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
+  end
+
+  def self.validate_yaml!
+    config.validate!
+    nil
+  rescue StandardError => e
+    GDK::Output.error("Your gdk.yml is invalid.\n\n")
+    GDK::Output.puts(e.message)
+    abort
   end
 end
