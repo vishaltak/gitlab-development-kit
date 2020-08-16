@@ -154,6 +154,8 @@ Unless already set, you will likely have to increase the watches limit of `inoti
 
 Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
 
+We assume you are using an active LTS release (16.04, 18.04, 20.04) or higher.
+
 1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
 1. Install remaining dependencies; modify the `GDK_GO_VERSION` with the major.minor version number (currently 1.14) as needed:
 
@@ -178,9 +180,6 @@ Please read [the prerequisites for all platforms](#prerequisites-for-all-platfor
    ```
 
    > ℹ️ Ubuntu 18.04 (Bionic Beaver) and beyond doesn't have `python-software-properties` as a separate package.
-   >
-   > ℹ️ Ubuntu 14.04 (Trusty Tahr) doesn't have the `libre2-dev` package available, but
-   > you can [install re2 manually](https://github.com/google/re2/wiki/Install).
 
 1. You're all set now. [Go to next steps](#next-steps).
 
