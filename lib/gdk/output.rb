@@ -38,11 +38,11 @@ module GDK
     end
 
     def self.warn(message)
-      puts("(!) WARNING: #{message}")
+      Kernel.warn("(!) WARNING: #{message}")
     end
 
     def self.error(message)
-      puts("(❌) Error: #{message}")
+      Kernel.warn("(❌) Error: #{message}")
     end
 
     def self.success(message)

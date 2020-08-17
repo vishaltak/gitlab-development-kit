@@ -9,6 +9,18 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.warn' do
+    it 'puts to stderr' do
+      expect { described_class.warn('test') }.to output("(!) WARNING: test\n").to_stderr
+    end
+  end
+
+  describe '.error' do
+    it 'puts to stderr' do
+      expect { described_class.error('test') }.to output("(❌) Error: test\n").to_stderr
+    end
+  end
+
   describe '.color' do
     it 'returns a color for index' do
       expect(described_class.color(0)).to eq("31")
