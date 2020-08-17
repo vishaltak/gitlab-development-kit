@@ -120,6 +120,9 @@ module GDK
     when 'doctor'
       GDK::Command::Doctor.new.run
       true
+    when 'measure'
+      GDK::Command::Measure.new.run(ARGV)
+      true
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run
       true
