@@ -892,25 +892,8 @@ rubocop:
 rspec:
 	$(Q)bundle exec $@
 
-.PHONY: eclint
-eclint: install-eclint
-	$(Q)eclint check $$(git ls-files) || (echo "editorconfig check failed. Please run \`make correct\`" && exit 1)
-
-.PHONY: correct
-correct: correct-editorconfig
-
-.PHONY: correct-editorconfig
-correct-editorconfig: install-eclint
-	$(Q)eclint fix $$(git ls-files)
-
-.PHONY: install-eclint
-install-eclint:
-	$(Q)(command -v eclint > /dev/null) || \
-	((command -v npm > /dev/null) && npm install -g eclint) || \
-	((command -v yarn > /dev/null) && yarn global add eclint)
-
 .PHONY: lint
-lint: eclint lint-vale lint-markdown
+lint: lint-vale lint-markdown
 
 .PHONY: install-vale
 install-vale:
