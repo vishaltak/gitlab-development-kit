@@ -91,3 +91,9 @@ yard:
     expire_in: 1 week
     paths:
       - yard/*
+
+gdk_example_yml:
+  extends: .rules:code-changes
+  stage: test
+  script:
+    - support/ci/gdk_example_yml
