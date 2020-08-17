@@ -17,6 +17,12 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.success' do
+    it 'puts to stdout' do
+      expect { described_class.success('test') }.to output("(✔) test\n").to_stdout
+    end
+  end
+
   describe '.warn' do
     it 'puts to stderr' do
       expect { described_class.warn('test') }.to output("(!) WARNING: test\n").to_stderr
