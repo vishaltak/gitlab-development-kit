@@ -4,12 +4,6 @@ docs_lint:
   script:
     - PATH="${HOME}/go/bin:${PATH}" make lint
 
-eclint:
-  extends: .rules:docs-code-changes
-  stage: test
-  script:
-    - make eclint
-
 rubocop:
   extends: .rules:code-changes
   stage: test
