@@ -38,15 +38,15 @@ module GDK
     end
 
     def self.warn(message)
-      Kernel.warn("(!) WARNING: #{message}")
+      puts("\u26a0\ufe0f  " + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
     end
 
     def self.error(message)
-      Kernel.warn("(❌) Error: #{message}")
+      puts("\u274C\ufe0f " + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
     end
 
     def self.success(message)
-      puts("(✔) #{message}")
+      puts("\u2705\ufe0f #{message}")
     end
   end
 end

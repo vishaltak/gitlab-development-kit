@@ -19,19 +19,19 @@ RSpec.describe GDK::Output do
 
   describe '.success' do
     it 'puts to stdout' do
-      expect { described_class.success('test') }.to output("(✔) test\n").to_stdout
+      expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
     end
   end
 
   describe '.warn' do
     it 'puts to stderr' do
-      expect { described_class.warn('test') }.to output("(!) WARNING: test\n").to_stderr
+      expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
     end
   end
 
   describe '.error' do
     it 'puts to stderr' do
-      expect { described_class.error('test') }.to output("(❌) Error: test\n").to_stderr
+      expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
     end
   end
 
