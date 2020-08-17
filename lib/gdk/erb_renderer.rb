@@ -66,7 +66,7 @@ module GDK
     end
 
     def warn_not_applied!
-      GDK::Output.warn 'The changes have not been applied.'
+      GDK::Output.warn "The changes to '#{target}' have not been applied."
       puts <<~NOT_APPLIED
         - To apply these changes, run:
           rm #{target} && make #{target}

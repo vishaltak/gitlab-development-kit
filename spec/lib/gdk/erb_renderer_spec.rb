@@ -48,6 +48,7 @@ describe GDK::ErbRenderer do
         let(:protected_config_files) { [] }
 
         it 'warns about changes and overwrites content' do
+          expect(GDK::Output).to receive(:warn).with(%r{'tmp/example.out' has been overwritten})
           expect(renderer).to receive(:warn_changes!)
 
           renderer.safe_render!
@@ -60,6 +61,7 @@ describe GDK::ErbRenderer do
         let(:protected_config_files) { ['tmp/*.out'] }
 
         it 'warns about changes and does not overwrite content' do
+          expect(GDK::Output).to receive(:warn).with(%r{The changes to 'tmp/example.out' have not been applied})
           expect(renderer).to receive(:warn_changes!)
 
           renderer.safe_render!
