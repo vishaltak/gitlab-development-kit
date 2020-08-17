@@ -29,8 +29,8 @@ module GDK
       ansi(0)
     end
 
-    def self.puts(message = nil)
-      $stdout.puts(message)
+    def self.puts(message = nil, stderr: false)
+      stderr ? Kernel.warn(message) : $stdout.puts(message)
     end
 
     def self.notice(message)

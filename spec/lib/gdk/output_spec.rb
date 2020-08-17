@@ -4,8 +4,16 @@ require 'spec_helper'
 
 RSpec.describe GDK::Output do
   describe '.puts' do
-    it 'puts to stdout' do
-      expect { described_class.puts('test') }.to output("test\n").to_stdout
+    context 'by default' do
+      it 'puts to stdout' do
+        expect { described_class.puts('test') }.to output("test\n").to_stdout
+      end
+    end
+
+    context 'with stderr: true' do
+      it 'puts to stdout' do
+        expect { described_class.puts('test', stderr: true) }.to output("test\n").to_stderr
+      end
     end
   end
 
