@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe GDK do
+  let(:up_shortly_msg) { 'GitLab available at http://127.0.0.1:3000 shortly.' }
+
   before do
     allow(described_class).to receive(:install_root_ok?).and_return(true)
   end
@@ -64,6 +66,67 @@ RSpec.describe GDK do
       let(:raw_yaml) { "---\ngdk:\n  debug: fals" }
 
       it_behaves_like 'invalid YAML', "Value 'fals' for gdk.debug is not a valid bool"
+    end
+  end
+
+  shared_examples 'GDK managing all services' do
+    it 'prints up shortly message' do
+      expect(GDK::Output).to receive(:puts)
+      expect(GDK::Output).to receive(:notice).with(up_shortly_msg)
+
+      action
+    end
+  end
+
+  shared_examples 'GDK managing some services' do
+    it 'does not print up shortly message' do
+      expect(GDK::Output).not_to receive(:notice).with(up_shortly_msg)
+
+      action
+    end
+  end
+
+  describe '.start' do
+    before do
+      allow(Runit).to receive(:sv).with('start', services)
+    end
+
+    context 'when starting all services' do
+      let(:services) { [] }
+
+      it_behaves_like 'GDK managing all services' do
+        let(:action) { described_class.start(services) }
+      end
+    end
+
+    context 'when starting some services' do
+      let(:services) { %w[rails-web] }
+
+      it_behaves_like 'GDK managing some services', %w[rails-web] do
+        let(:action) { described_class.start(services) }
+      end
+    end
+  end
+
+  describe '.restart' do
+    before do
+      allow(Runit).to receive(:sv).with('force-restart', services)
+    end
+
+    context 'when starting all services' do
+      let(:services) { [] }
+
+      it_behaves_like 'GDK managing all services' do
+        let(:action) { described_class.restart(services) }
+      end
+    end
+
+    context 'when starting some services' do
+      let(:services) { %w[rails-web] }
+
+      it_behaves_like 'GDK managing some services', %w[rails-web] do
+        let(:action) { described_class.restart(services) }
+      end
     end
   end
 end
