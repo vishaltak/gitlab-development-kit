@@ -28,23 +28,23 @@ module GDK
     end
 
     def self.puts(message = nil)
-      $stdout.puts message
+      $stdout.puts(message)
     end
 
     def self.notice(message)
-      puts "=> #{message}"
+      puts("=> #{message}")
     end
 
     def self.warn(message)
-      puts "(!) WARNING: #{message}"
+      puts("(!) WARNING: #{message}")
     end
 
     def self.error(message)
-      puts "(❌) Error: #{message}"
+      puts("(❌) Error: #{message}")
     end
 
     def self.success(message)
-      puts "(✔) #{message}"
+      puts("(✔) #{message}")
     end
   end
 end
