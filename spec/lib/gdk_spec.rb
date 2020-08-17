@@ -54,7 +54,7 @@ RSpec.describe GDK do
     shared_examples 'invalid YAML' do |error_message|
       it 'prints an error' do
         expect(GDK::Output).to receive(:error).with("Your gdk.yml is invalid.\n\n")
-        expect(GDK::Output).to receive(:puts).with(error_message)
+        expect(GDK::Output).to receive(:puts).with(error_message, stderr: true)
 
         expect { described_class.validate_yaml! }.to raise_error(SystemExit)
       end

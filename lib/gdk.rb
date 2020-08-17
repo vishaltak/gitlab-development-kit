@@ -245,7 +245,7 @@ module GDK
     nil
   rescue StandardError => e
     GDK::Output.error("Your gdk.yml is invalid.\n\n")
-    GDK::Output.puts(e.message)
+    GDK::Output.puts(e.message, stderr: true)
     abort
   end
 end
