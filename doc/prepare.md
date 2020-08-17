@@ -1,158 +1,102 @@
-# Preparing your computing environment for GDK
+# Prepare your system for GDK
 
-Before [setting up GDK](index.md), your local environment must have
-prerequisite software installed and configured.
+Before [setting up GDK](index.md), your local environment must have prerequisite software installed
+and configured.
 
-## Prerequisites for all platforms
+## Install dependencies
 
-_TLDR: see sample package manager commands (`brew`, `apt`, and so on) listed in [Platform-specific setup](#platform-specific-setup) below for quick installation._
+GDK depends on third-party software to run. Some dependencies can be installed with a
+"package manager".
 
-Make sure you follow all the guidelines and resolve all the dependencies listed below before installing GDK. Otherwise, you will experience strange errors during installation.
+The following [operating system dependencies](#install-os-dependencies) should be installed using
+[`brew`](https://brew.sh) for macOS or your Linux distribution's package manager:
 
-| Prerequisite       | Description                                                                                                                                                                                                                                                                                                                                         |
-|:-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| User account       | Use a **non-root** Unix user to install GDK. This can be your normal user, but **DO NOT** run the installation as a root user.                                                                                                                                                                                                                      |
-| [Ruby](#ruby)      | The current [`gitlab` Ruby version](https://gitlab.com/gitlab-org/gitlab/blob/master/.ruby-version).                                                                                                                                                                                                                                                |
-| Bundler            | <p>Install the version of Bundler specified in this [Gemfile.lock](https://gitlab.com/gitlab-org/gitlab/blob/master/Gemfile.lock), as noted with the `BUNDLED WITH` text at the end of the file.</p><p> To install Bundler, use the following command: `gem install bundler -v <version>`. Replace `<version>` with the `BUNDLED WITH` version.</p> |
-| Git                | <p>We require using Git version 2.28 or higher.</p><p>Git installation is covered in the instructions in the [Platform-specific setup](#platform-specific-setup).</p><p>For checking out test fixtures, you will also need Git LFS.</p>                                                                       |
-| Git LFS            | <p>We recommend using Git LFS version 2.10 or higher (minimal supported version is 1.0.1).</p><p>Git LFS installation is covered in the instructions in the [Platform-specific setup](#platform-specific-setup).</p>                                                                                                                                |
-| [Node.js](#nodejs) | <p>Node.js **LTS** and Yarn 1.12 or newer.</p><p>Node.js and Yarn installation is covered in the instructions below.                                                                                                                                                                                                                                |
-| Go                 | <p>Go 1.14.</p><p>Go installation is covered in the instructions below. If your package manager does not have up-to-date versions of Go available, visit the official [Go](https://golang.org/doc/install) website for installation instructions.</p>                                                                                               |
-| Google Chrome      | [Google Chrome](https://www.google.com/chrome/) 60 or greater with [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) version 2.33 or greater. Visit the Chrome Driver [Getting started](https://sites.google.com/a/chromium.org/chromedriver/getting-started) page for more details.                                   |
-| PostgreSQL         | <p>PostgreSQL version 11.x.</p><p>PostgreSQL installation is covered in the instructions [below](#platform-specific-setup). Some instructions still pin the version of PostgreSQL to version 10. Please update the documentation steps to version 11 as you successfully install PostreSQL 11 on your platform.</p>                                 |
-| GraphicsMagick     | GraphicsMagick installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                       |
-| Exiftool           | Exiftool installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                             |
-| runit              | runit installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                |
-| MinIO              | MinIO installation is covered in the instructions [below](#platform-specific-setup).                                                                                                                                                                                                                                                                |
+- [`asdf`](https://asdf-vm.com/#/)
+- [Git](https://git-scm.com) version 2.28 or higher
+- [Git LFS](https://git-lfs.github.com) version 2.10 or higher
+- [GraphicsMagick](http://www.graphicsmagick.org)
+- [Exiftool](https://exiftool.org)
+- [runit](http://smarden.org/runit/)
+- [Google Chrome](https://www.google.com/chrome/) version 60 or higher. Many users will have
+  installed this already without a package manager
+- [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) version 2.33 or
+  higher
 
-## Ruby
+You should regularly keep these dependencies up to date. Generally, the latest versions of these
+dependencies work fine.
 
-Check your active Ruby version with `ruby --version`. It must match the
-the current [`gitlab` Ruby version](https://gitlab.com/gitlab-org/gitlab/blob/master/.ruby-version).
-**DO NOT** use the Ruby version that comes with your OS. For the sake of ease
-of use, we recommend using a Ruby version manager such as:
+We recommend installing the following [additional dependencies](#install-additional-dependencies) with
+[`asdf`](https://asdf-vm.com/#/core-manage-asdf-vm) for both macOS and Linux:
 
-1. [rbenv](https://github.com/rbenv/rbenv#installation) - _Generally preferred, most lightweight_
-   - We also recommend the [rbenv-communal-gems](https://github.com/tpope/rbenv-communal-gems) plugin to share installed gems between minor Ruby versions.
-1. [RVM](https://rvm.io/)
-1. [chruby](https://github.com/postmodern/chruby#install)
+- [Ruby](https://www.ruby-lang.org)
+- [Node.js](https://nodejs.org)
+- [Yarn](https://yarnpkg.com)
+- [PostgreSQL](https://www.postgresql.org)
+- [Go](https://golang.org)
+- [MinIO](https://min.io)
+- [Redis](https://redis.io)
+
+`asdf` alerts you when these dependencies fall out of date compared to the project's
+[`.tool-versions`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/.tool-versions)
+file. You should not update beyond the versions specified in this project.
 
 NOTE: **Note:**
-You may have to close and reopen the terminal after installing a Ruby
-version manager to read new `PATH` variables added for Ruby executable files.
+Install, configure, and update all of these dependencies as a non-root user. If you don't know what
+a root user is, you very likely run everything as a non-root user already.
 
-### Install Ruby on Ubuntu
+### Install OS dependencies
 
-1. Remove the default version of Ruby:
+The process for installing operating system dependencies depends on your operating system.
 
-   ```shell
-   sudo apt-get purge ruby
-   ```
+#### Install macOS dependencies
 
-1. Install rbenv. See rbenv
-   [installation](https://github.com/rbenv/rbenv#installation) documentation
-   for details.
-1. Install the version of Ruby used by GitLab. This can be found in the
-   [`.ruby-version`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/.ruby-version)
-   file in the project.
+GDK supports macOS 10.13 (High Sierra) and higher. In macOS 10.15 (Catalina) the default shell
+changed from [Bash](https://www.gnu.org/software/bash/) to [Zsh](http://zsh.sourceforge.net). The
+differences are handled by setting a `shell_file` variable based on your current shell.
 
-   ```shell
-   rbenv install <ruby_version>
-   ```
+To install dependencies for macOS:
 
-## Node.js
-
-Confirm you have Node.js installed with the following command:
-
-```shell
-which node
-```
-
-If you don't have [Node.js](https://nodejs.org/en/) installed, or if `.nvm` wasn't in the path
-containing `node` from the command above:
-
-1. Install [NVM](https://github.com/nvm-sh/nvm) to manage Node.js.
-1. Install the [LTS](https://nodejs.org/en/about/releases/) version of Node.js.
-
-To install NVM and Node.js LTS:
-
-1. [Install NVM](https://github.com/nvm-sh/nvm#installing-and-updating).
-1. Install the latest LTS version of Node.js:
+1. [Install](https://brew.sh) `brew`.
+1. Run the following `brew` commands:
 
    ```shell
-   nvm install --lts
+   brew install asdf git git-lfs libiconv pkg-config cmake openssl coreutils re2 graphicsmagick gpg icu4c exiftool sqlite
+   brew link pkg-config
+   brew pin libffi icu4c readline re2
+   if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
+   echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
+   source ${shell_file}
+   brew cask install google-chrome chromedriver
    ```
 
-1. Set the LTS version as the default:
+1. Follow any post-installation instructions that are provided. For example, `asdf` has
+   [post-install instructions](https://asdf-vm.com/#/core-manage-asdf-vm?id=add-to-your-shell).
 
-   ```shell
-   nvm use --lts --default
-   ```
-
-## Platform-specific setup
-
-To start preparing the GDK installation, pick your platform of choice:
-
-| [macOS](#macos) | [Ubuntu](#ubuntu) | [Arch Linux](#arch-linux) | [Debian](#debian) | [Fedora](#fedora) | [CentOS](#centos) | [OpenSUSE](#opensuse) | [FreeBSD](#freebsd) | [Windows 10](#windows-10) |
-|-|-|-|-|-|-|-|-|-|
-
-### macOS
-
-Supported versions: macOS 10.13 (High Sierra) and up.
-
-In macOS 10.15 (Catalina) the default shell changed from Bash to Zsh. The instructions below for Homebrew and
-MacPorts handle Bash or Zsh slightly differently by setting a `shell_file` variable based on your current shell.
-
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
-
-We are using PostgreSQL 11 in the following example. If you want to use another version, please adjust paths accordingly.
-
-#### Install macOS prerequisites using Homebrew
-
-[Homebrew](https://brew.sh/) is a package manager for macOS that allows you to easily install programs
-and tools through the Terminal. Visit their website for installation details.
-
-| **Note on the Homebrew installation directory** |
-| ------ |
-| We strongly recommend using the default installation directory for Homebrew `/usr/local`. This makes it a lot easier to install Ruby gems with C extensions. If you use a custom directory, you will have to do a lot of extra work when installing Ruby gems. For more information, see [Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal). |
-
-```shell
-brew install git git-lfs redis postgresql@11 libiconv pkg-config cmake go openssl coreutils re2 graphicsmagick gpg runit icu4c exiftool sqlite minio/stable/minio
-brew install yarn
-brew link pkg-config
-brew pin icu4c readline
-bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
-echo 'export PATH="/usr/local/opt/postgresql@11/bin:$PATH"' >> ${shell_file}
-echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
-source ${shell_file}
-brew cask install google-chrome chromedriver
-```
-
-If ChromeDriver fails to open with an error message because the developer "cannot
-be verified", create an exception for it as documented in
+If ChromeDriver fails to open with an error message because the developer "cannot be verified",
+create an exception for it as documented in
 [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
 
-#### Install macOS prerequisites using MacPorts
+NOTE: **Note:**
+We strongly recommend using the default installation directory for `brew` (`/usr/local`). This makes
+it a lot easier to install Ruby gems with C extensions. If you use a custom directory, you have to
+do a lot of extra work when installing Ruby gems. For more information, see
+[Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal).
 
-[MacPorts](https://www.macports.org/) is another package manager for macOS. Visit their website for installation details.
+#### Install Linux dependencies
 
-```shell
-sudo port install git git-lfs redis libiconv postgresql11-server icu pkgconfig cmake go openssl npm5 yarn coreutils re2 GraphicsMagick runit exiftool minio sqlite3
-bundle config build.eventmachine --with-cppflags=-I/opt/local/include/openssl
-if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
-echo 'export PATH=/opt/local/lib/postgresql11/bin/:$PATH' >> ${shell_file}
-source ${shell_file}
-```
+The process for installing dependencies on Linux depends on your Linux distribution.
 
-### Linux
+Unless already set, you will likely have to increase the watches limit of `inotify` in order for
+frontend development tools such as `webpack` to effectively track file changes.
+See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
+for details and instructions on how to apply this change.
+
+##### Ubuntu
 
 NOTE: **Note:**
-Unless already set, you will likely have to increase the watches limit of `inotify` in order for frontend development tools such as `webpack` and `karma` to effectively track file changes. [See here](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit) for details and instructions on how to apply this change.
+These instructions don't account for using `asdf` for managing some dependencies.
 
-#### Ubuntu
-
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
+To install dependencies for Ubuntu:
 
 We assume you are using an active LTS release (16.04, 18.04, 20.04) or higher.
 
@@ -183,9 +127,12 @@ We assume you are using an active LTS release (16.04, 18.04, 20.04) or higher.
 
 1. You're all set now. [Go to next steps](#next-steps).
 
-#### Arch Linux
+##### Arch Linux
 
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
+NOTE: **Note:**
+These instructions don't account for using `asdf` for managing some dependencies.
+
+To install dependencies for Arch Linux:
 
 ```shell
 pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs go re2 \
@@ -199,9 +146,12 @@ The Arch Linux core repository does not contain anymore the `runit` package. It 
 pikaur -S runit-systemd
 ```
 
-#### Debian
+##### Debian
 
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
+NOTE: **Note:**
+These instructions don't account for using `asdf` for managing some dependencies.
+
+To install dependencies for Debian:
 
 ```shell
 sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
@@ -218,7 +168,10 @@ instructions.
 
 You may need to install Redis 5.0 or newer manually.
 
-#### Fedora
+##### Fedora
+
+NOTE: **Note:**
+These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using Fedora >= 22.
 
@@ -233,6 +186,8 @@ sudo dnf install fedora-repos-modular
 sudo dnf module enable postgresql:10
 ```
 
+To install dependencies for Fedora:
+
 ```shell
 sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel \
   git git-lfs ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
@@ -244,7 +199,7 @@ sudo chmod +x /usr/local/bin/minio
 
 You may need to install Redis 5.0 or newer manually.
 
-##### runit
+###### runit
 
 You will also need to install [runit](http://smarden.org/runit) manually.
 
@@ -263,11 +218,12 @@ The following instructions worked for runit version 2.1.2 - but please make sure
 
 1. Make sure all binaries in `command/` are accessible from your `PATH` (e.g. symlink / copy them to `/usr/local/bin`)
 
-#### CentOS
+##### CentOS
 
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
+NOTE: **Note:**
+These instructions don't account for using `asdf` for managing some dependencies.
 
-This is tested on CentOS 6.5:
+To install dependencies for Fedora (tested on CentOS 6.5):
 
 ```shell
 sudo yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-6-x86_64/pgdg-centos10-10-2.noarch.rpm
@@ -297,14 +253,17 @@ binary version of Git.
 
 You may need to install Redis 5.0 or newer manually.
 
-#### OpenSUSE
+##### OpenSUSE
 
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
+NOTE: **Note:**
+These instructions don't account for using `asdf` for managing some dependencies.
 
 This was tested on `openSUSE Tumbleweed (20200628)`.
 
 > NOTE: OpenSUSE LEAP is currently not supported, because since a8e2f74d PostgreSQL 11+
 > is required, but `LEAP 15.1` includes PostgreSQL 10 only.
+
+To install dependencies for OpenSUSE:
 
 ```shell
 sudo zypper dup
@@ -394,16 +353,16 @@ bundle config build.gpgme --use-system-libraries
 
 Now you can proceed to [set up GDK](index.md).
 
-#### FreeBSD
+##### FreeBSD
 
-Please read [the prerequisites for all platforms](#prerequisites-for-all-platforms).
+To install dependencies for FreeBSD:
 
 ```shell
 sudo pkg install postgresql10-server postgresql10-contrib postgresql-libpqxx \
 redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio sqlite3
 ```
 
-### Windows 10
+#### Windows 10
 
 > 🚨 Support for Windows 10 became stable with the introduction of the Windows Subsystem for Linux 2 (WSL2) in version 2004.
 
@@ -450,7 +409,16 @@ wsl -l
 wsl --set-version <your subsystem name here>
 ```
 
-Return to the prerequisite installation steps.
+### Install additional dependencies
+
+`asdf` is a unified package manager that can install, configure, and update the additional
+dependencies required by GDK.
+
+To install additional dependencies with `asdf`, use `make bootstrap`:
+
+```shell
+make bootstrap
+```
 
 ## Documentation tools
 
