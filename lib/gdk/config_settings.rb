@@ -107,7 +107,7 @@ module GDK
       # https://gitlab.com/gitlab-org/gitlab/blob/master/doc/development/shell_commands.md#bypass-the-shell-by-splitting-commands-into-separate-tokens
       raise ::ArgumentError, 'Command must be an array' unless cmd.is_a?(Array)
 
-      IO.popen(cmd, &:read).chomp
+      IO.popen(cmd, chdir: GDK.root, &:read).chomp
     end
 
     def find_executable!(bin)

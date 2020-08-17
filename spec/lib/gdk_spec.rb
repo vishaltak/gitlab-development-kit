@@ -7,6 +7,10 @@ RSpec.describe GDK do
 
   before do
     allow(described_class).to receive(:install_root_ok?).and_return(true)
+
+    fake_io = double('IO', read: '/usr/local/bin')
+    allow(IO).to receive(:popen).and_call_original
+    allow(IO).to receive(:popen).with(%w[support/pg_bindir], chdir: described_class.root).and_yield(fake_io)
   end
 
   def expect_exec(input, cmdline)
