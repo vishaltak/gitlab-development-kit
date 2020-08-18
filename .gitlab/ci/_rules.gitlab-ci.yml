@@ -50,9 +50,3 @@
 .rules:docs-code-changes:
   rules:
     - changes: *docs-code-changes
-
-.rules:docs-code-changes-manual:
-  rules:
-    - changes: *docs-code-changes
-      when: manual
-      allow_failure: true
