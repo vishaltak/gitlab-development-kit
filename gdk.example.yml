@@ -38,8 +38,10 @@ gitaly:
   auth_token: ''
   auto_update: true
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
+  enabled: false
   internal_socket_dir: "/home/git/gdk/tmp/gitaly"
   log_dir: "/home/git/gdk/log/gitaly"
+  repository_storages: "/home/git/gdk/repository_storages"
   storage_count: 1
   storage_dir: "/home/git/gdk/repositories"
 gitlab:
@@ -68,6 +70,8 @@ hostname: 127.0.0.1
 https:
   enabled: false
 listen_address: 127.0.0.1
+load_balancing:
+  enabled: false
 mattermost:
   enabled: false
   image: mattermost/mattermost-preview
