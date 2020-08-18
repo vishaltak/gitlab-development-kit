@@ -207,13 +207,40 @@ gitlab_pages:
 
 ## Update GDK
 
-To update an existing GDK installation, run the following commands:
+To update an existing GDK installation, run the following:
 
 ```shell
 cd <gdk-dir>
-gdk update
-gdk reconfigure
+gdk update && gdk reconfigure
 ```
+
+You can run `gdk doctor` to ensure the update left GDK in a good state. If it reports any issues,
+you should address them as soon as possible.
+
+### Update external dependencies
+
+As well as keeping GDK up to date, many of the underlying dependencies should also be regularly
+updated. For example, to list dependencies that are outdated for macOS with `brew`, run:
+
+```shell
+brew update && brew outdated
+```
+
+Review the list of outdated dependencies. There may be dependencies you don't wish to upgrade. To
+upgrade:
+
+- All outdated dependencies for macOS with `brew`, run:
+
+  ```shell
+  brew update && brew upgrade
+  ```
+
+- Specific dependencies for macOS with `brew`, run:
+
+  ```shell
+  brew update && brew upgrade <package name>
+
+We recommend you update GDK immediately after you update external dependencies.
 
 ## Create new GDK
 
