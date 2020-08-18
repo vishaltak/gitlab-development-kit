@@ -6,7 +6,7 @@
 1. Create and new project in gcloud and take note of the project id for later steps
 1. Download your `account.json` credentials from your gcloud account and put it inside the GDK `packer` folder.
 1. [Install Packer](https://learn.hashicorp.com/tutorials/packer/getting-started-install)
-1. Find out which gcloud zone is best for you with [gcping](http://www.gcping.com/)
+1. Find out which gcloud region is best for you with [gcping](http://www.gcping.com/), then select a zone within that region (from [Google Cloud Docs](https://cloud.google.com/compute/docs/regions-zones)). For example, if the region is `australia-southeast1`, a suitable zone would be `australia-southeast1-b`.
 1. `cd` into your GDK `packer` directory and run:
 
    ```shell
