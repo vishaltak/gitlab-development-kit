@@ -60,7 +60,7 @@ $apt_reqs = <<COMMANDS # rubocop:disable Style/GlobalVars
   apt-get -y install golang-1.13-go
   ln -s /usr/lib/go-1.13/bin/* /usr/local/bin
   apt-get -y install git graphicsmagick postgresql postgresql-contrib libpq-dev libimage-exiftool-perl redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed nginx libgmp-dev rvm yarn libre2-dev docker.io runit
-  curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio && chmod +x /usr/local/bin/minio
+  wget -qO /usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio && chmod +x /usr/local/bin/minio
   apt-get -y upgrade
 COMMANDS
 
