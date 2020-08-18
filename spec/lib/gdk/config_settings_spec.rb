@@ -138,4 +138,10 @@ RSpec.describe GDK::ConfigSettings do
       expect(config.arrrr.map(&:buz)).to eq(['sub 0', 'sub 1', 'sub 2'])
     end
   end
+
+  describe '#cmd!' do
+    it 'executes command with the chdir being GDK.root' do
+      expect(config.cmd!(%w[pwd])).to eql(GDK.root.to_s)
+    end
+  end
 end
