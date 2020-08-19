@@ -40,7 +40,7 @@ We recommend installing the following [additional dependencies](#install-additio
 [`.tool-versions`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/.tool-versions)
 file. You should not update beyond the versions specified in this project.
 
-NOTE: **Note:**
+**Note:**
 Install, configure, and update all of these dependencies as a non-root user. If you don't know what
 a root user is, you very likely run everything as a non-root user already.
 
