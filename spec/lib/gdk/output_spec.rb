@@ -52,4 +52,11 @@ RSpec.describe GDK::Output do
       expect(described_class.reset_color).to eq("\e[0m")
     end
   end
+
+  describe '.wrap_in_color' do
+    it 'returns a message that is colorized' do
+      msg = 'An error occurred'
+      expect(described_class.wrap_in_color(msg, described_class::COLOR_CODE_RED)).to eq("\e[31m#{msg}\e[0m")
+    end
+  end
 end

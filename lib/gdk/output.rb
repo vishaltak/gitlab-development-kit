@@ -33,6 +33,10 @@ module GDK
       ansi(0)
     end
 
+    def self.wrap_in_color(message, color_code)
+      ansi(color_code) + message + reset_color
+    end
+
     def self.puts(message = nil, stderr: false)
       stderr ? Kernel.warn(message) : $stdout.puts(message)
     end
