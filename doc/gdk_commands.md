@@ -30,6 +30,18 @@ the service names as arguments. Multiple arguments are supported.
 gdk start postgresql redis
 ```
 
+### Performance measurements
+
+You can easily create a sitespeed report for local `gdk` urls or
+also online urls with our standardised Sitespeed settings.
+We support local relative and absolute url's as arguments. As
+soon as the report is done it will be automatically opened in your
+browser. Needs docker installed and running.
+
+```shell
+gdk measure /explore http://127.0.0.1/explore https://gitlab.com/explore
+```
+
 ## Update GitLab
 
 To update `gitlab` and all of its dependencies, run the following command.
