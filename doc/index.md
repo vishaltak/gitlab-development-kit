@@ -35,16 +35,16 @@ To get GDK up and running:
       - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
         recommend developing against the GitLab project (the default). For:
 
+        - SSH (recommended), run:
+
+          ```shell
+          gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
+          ```
+
         - HTTP, run:
 
           ```shell
           gdk install
-          ```
-
-        - SSH, run:
-
-          ```shell
-          gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
           ```
 
         Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
@@ -62,16 +62,16 @@ To get GDK up and running:
 
 After installing the `gitlab-development-kit` gem and initializing a GDK directory, for:
 
-- HTTP, run:
-
-  ```shell
-  gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
-  ```
-
 - SSH, run:
 
   ```shell
   gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab-foss.git
+  ```
+
+- HTTP, run:
+
+  ```shell
+  gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
   ```
 
 Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
@@ -84,19 +84,19 @@ The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/doc
 
 After installing the `gitlab-development-kit` gem and initializing a GDK directory, for:
 
-- HTTP, run:
-
-  ```shell
-  # Replace <YOUR-NAMESPACE> with your namespace
-  gdk install gitlab_repo=https://gitlab.com/<YOUR-NAMESPACE>/gitlab.git
-  support/set-gitlab-upstream
-  ```
-
 - SSH, run:
 
   ```shell
   # Replace <YOUR-NAMESPACE> with your namespace
   gdk install gitlab_repo=git@gitlab.com:<YOUR-NAMESPACE>/gitlab.git
+  support/set-gitlab-upstream
+  ```
+
+- HTTP, run:
+
+  ```shell
+  # Replace <YOUR-NAMESPACE> with your namespace
+  gdk install gitlab_repo=https://gitlab.com/<YOUR-NAMESPACE>/gitlab.git
   support/set-gitlab-upstream
   ```
 
