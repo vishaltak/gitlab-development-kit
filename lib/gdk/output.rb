@@ -2,10 +2,14 @@
 
 module GDK
   module Output
+    COLOR_CODE_RED = '31'
+    COLOR_CODE_GREEN = '32'
+    COLOR_CODE_YELLOW = '33'
+
     COLORS = {
-      red: '31',
-      green: '32',
-      yellow: '33',
+      red: COLOR_CODE_RED,
+      green: COLOR_CODE_GREEN,
+      yellow: COLOR_CODE_YELLOW,
       blue: '34',
       magenta: '35',
       cyan: '36',
