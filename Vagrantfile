@@ -102,7 +102,8 @@ $user_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
 COMMANDS
 
 $chromedriver_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
-  wget -qO- https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip | gunzip > /tmp/chromedriver
+  export CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  wget -qO- https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip | gunzip > /tmp/chromedriver
   install -m 0755 -o root -g root /tmp/chromedriver /usr/local/bin
   rm -f /tmp/chromedriver
 COMMANDS
