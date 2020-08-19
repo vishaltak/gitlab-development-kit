@@ -43,7 +43,7 @@ module GDK
             exit
           end
 
-          # Getting a folder name with branch name (if local stats) and time 
+          # Getting a folder name with branch name (if local stats) and time
           save_folder = report_folder_name
 
           stdout.puts "Starting Sitespeed measurements for #{local_urls.join(', ')}"
