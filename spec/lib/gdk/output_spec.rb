@@ -16,13 +16,13 @@ RSpec.describe GDK::Output do
   end
 
   describe '.ansi' do
-    it 'returns and ansi encode string' do
+    it 'returns the ansi color code string' do
       expect(described_class.ansi('31')).to eq("\e[31m")
     end
   end
 
   describe '.reset_color' do
-    it 'returns and ansi encode string' do
+    it 'returns the ansi reset code string' do
       expect(described_class.reset_color).to eq("\e[0m")
     end
   end
