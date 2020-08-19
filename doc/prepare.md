@@ -76,7 +76,7 @@ If ChromeDriver fails to open with an error message because the developer "canno
 create an exception for it as documented in
 [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
 
-NOTE: **Note:**
+**Note:**
 We strongly recommend using the default installation directory for `brew` (`/usr/local`). This makes
 it a lot easier to install Ruby gems with C extensions. If you use a custom directory, you have to
 do a lot of extra work when installing Ruby gems. For more information, see
@@ -93,7 +93,7 @@ for details and instructions on how to apply this change.
 
 ##### Ubuntu
 
-NOTE: **Note:**
+**Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Ubuntu:
@@ -129,7 +129,7 @@ We assume you are using an active LTS release (16.04, 18.04, 20.04) or higher.
 
 ##### Arch Linux
 
-NOTE: **Note:**
+**Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Arch Linux:
@@ -139,7 +139,7 @@ pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs 
   unzip graphicsmagick perl-image-exiftool rsync yarn minio sqlite python2
 ```
 
-NOTE: **Note:**
+**Note:**
 The Arch Linux core repository does not contain anymore the `runit` package. It is required to install `runit-systemd` from the Arch User Repository (AUR) with an AUR package manager like `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur)) or `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)). See [Arch Linux Wiki page AUR_helpers](https://wiki.archlinux.org/index.php/AUR_helpers) for more information.
 
 ```shell
@@ -148,7 +148,7 @@ pikaur -S runit-systemd
 
 ##### Debian
 
-NOTE: **Note:**
+**Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Debian:
@@ -170,14 +170,14 @@ You may need to install Redis 5.0 or newer manually.
 
 ##### Fedora
 
-NOTE: **Note:**
+**Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using Fedora >= 22.
 
 If you are running Fedora < 27 you'll need to install `go` manually using [go] official installation instructions.
 
-NOTE: **Note:**
+**Note:**
 Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use `postgresql:10` module to install PostgreSQL 10.
 But keep in mind that will replace the PostgreSQL 11.x package, so you cannot use both versions at once.
 
@@ -220,7 +220,7 @@ The following instructions worked for runit version 2.1.2 - but please make sure
 
 ##### CentOS
 
-NOTE: **Note:**
+**Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Fedora (tested on CentOS 6.5):
@@ -255,7 +255,7 @@ You may need to install Redis 5.0 or newer manually.
 
 ##### OpenSUSE
 
-NOTE: **Note:**
+**Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 This was tested on `openSUSE Tumbleweed (20200628)`.
