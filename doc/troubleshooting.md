@@ -14,7 +14,7 @@ by:
   This installs required Node.js modules and Ruby gems, and performs database migrations, which can
   fix errors caused by switching branches.
 
-- [Updating GDK](.../index.md#update-gdk).
+- [Updating GDK](index.md#update-gdk).
 
 ## Rebuilding gems with native extensions
 
