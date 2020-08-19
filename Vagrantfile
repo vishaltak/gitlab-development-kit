@@ -139,8 +139,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       enable_shares(override, false)
     else
       cpus = Facter.value('processors')['count']
-      if facter_mem = Facter.value('memory')
-        mem = facter_mem.slice! " GiB".to_i * 1024
+      if facter_mem = Facter.value('memory')['system']['total']
+        mem = facter_mem.to_i * 1024
       elsif facter_mem = Facter.value('memorysize_mb')
         mem = facter_mem.to_i
       else
