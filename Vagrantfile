@@ -54,8 +54,10 @@ $apt_reqs = <<COMMANDS # rubocop:disable Style/GlobalVars
   wget -qO- https://deb.nodesource.com/setup_12.x | bash -
   wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+  wget -qO-  https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
   echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   echo "deb https://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google.list
+  echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
   export DEBIAN_FRONTEND=noninteractive
   export RUNLEVEL=1
   apt-get update
