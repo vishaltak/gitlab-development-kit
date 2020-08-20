@@ -140,7 +140,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box = "ubuntu/xenial64"
+    override.vm.box = "ubuntu/bionic64"
     override.disksize.size = "15GB"
     if Vagrant::Util::Platform.windows?
       # thanks to https://github.com/rdsubhas/vagrant-faster/blob/master/lib/vagrant/faster/action.rb
