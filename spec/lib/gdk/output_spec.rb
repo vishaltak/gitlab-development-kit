@@ -29,7 +29,7 @@ RSpec.describe GDK::Output do
     context 'when we are a tty' do
       context 'when NO_COLOR=true is not defined' do
         it 'puts to stdout' do
-          allow(STDOUT).to receive(:isatty).and_return(true)
+          stub_tty(true)
           stub_no_color_env('')
 
           expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
@@ -122,7 +122,10 @@ RSpec.describe GDK::Output do
 
   describe '.wrap_in_color' do
     it 'returns a message that is colorized' do
+      stub_tty(true)
+
       msg = 'An error occurred'
+
       expect(described_class.wrap_in_color(msg, described_class::COLOR_CODE_RED)).to eq("\e[31m#{msg}\e[0m")
     end
   end
@@ -130,11 +133,11 @@ RSpec.describe GDK::Output do
   describe '.icon' do
     context 'when NO_COLOR=true is not defined' do
       it 'returns the icon code with trailing space' do
-        icon_code = described_class::ICONS[:success]
+        icon = described_class::ICONS[:success]
 
         stub_no_color_env('')
 
-        expect(described_class.icon(icon_code)).to eq("#{icon_code} ")
+        expect(described_class.icon(:success)).to eq("#{icon} ")
       end
     end
 

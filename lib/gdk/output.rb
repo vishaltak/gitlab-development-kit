@@ -54,21 +54,21 @@ module GDK
     end
 
     def self.warn(message)
-      puts(icon(ICONS[:warning]) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
+      puts(icon(:warning) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
     end
 
     def self.error(message)
-      puts(icon(ICONS[:error]) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
+      puts(icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
     end
 
     def self.success(message)
-      puts(icon(ICONS[:success]) + message)
+      puts(icon(:success) + message)
     end
 
     def self.icon(code)
       return '' unless colorize?
 
-      "#{code} "
+      ICONS[code] + ' '
     end
 
     def self.colorize?
