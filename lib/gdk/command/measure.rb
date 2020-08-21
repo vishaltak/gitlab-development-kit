@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'time'
+require 'net/http'
 
 module GDK
   module Command
@@ -13,38 +14,15 @@ module GDK
         abort('Please add a URL as argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
         abort('ERROR: Docker is not installed or running!') unless docker_running?
 
-        # .. the reset of the logic here ..
-          unless docker_running?
-            stderr.puts 'ERROR: Docker is not installed or running!'
-            exit
-          end
+        # Check if GDK is running if local URL
+        abort("ERROR: GDK is not running locally on #{GDK.config.__uri}!") if has_local_url? && !gdk_running?
 
-          # Check and transform args URLs into docker host format
-          local_urls = []
-          @has_local_url = false
-          argv.map do |localurl|
-            # Transform local relative URL's
-            if localurl.start_with? '/'
-              localurl = "#{GDK.config.__uri}#{localurl}"
-              @has_local_url = true
-            end
+        GDK::Output.notice "Starting Sitespeed measurements for #{local_urls.join(', ')}"
+        run_sitespeed
 
-            localurl = localurl.gsub('localhost', 'host.docker.internal')
-            localurl = localurl.gsub('127.0.0.1', 'host.docker.internal')
-
-            local_urls.push(localurl)
-          end
-
-          # Check if GDK is running if local URL
-          abort("ERROR: GDK is not running locally on #{GDK.config.__uri}!") if has_local_url? && !gdk_running?
-
-          stdout.puts "Starting Sitespeed measurements for #{local_urls.join(', ')}"
-          run_sitespeed
-
-          # Open directly browser with new report
-          stdout.puts "Opening Report open ./sitespeed_result/#{save_folder}/index.html"
-          Shellout.new("open ./sitespeed-result/#{save_folder}/index.html").run
-        end
+        # Open directly browser with new report
+        GDK::Output.notice "Opening Report open ./sitespeed_result/#{report_folder_name}/index.html"
+        Shellout.new("open ./sitespeed-result/#{report_folder_name}/index.html").run
       end
 
       private
@@ -61,12 +39,48 @@ module GDK
         docker_check.success?
       end
 
+      def local_urls
+        @local_urls ||= begin
+          urls.map do |url|
+            # Transform local relative URL's
+            url = "#{GDK.config.__uri}#{url}" if url_is_local?(url)
+      
+            url = url.gsub('localhost', 'host.docker.internal')
+            url.gsub('127.0.0.1', 'host.docker.internal')
+          end
+        end
+      end
+
+      def url_is_local?(url)
+        url.start_with?('/')
+      end
+      
+      def has_local_url?
+        @has_local_url ||= urls.detect { |url| url_is_local?(url) }
+      end
+
       def report_folder_name
         @report_folder_name ||= begin
           folder_name = @has_local_url ? Shellout.new('git rev-parse --abbrev-ref HEAD', chdir: GDK.config.gitlab.dir).run : 'external'
           folder_name + "_#{Time.new.strftime('%F-%H-%M-%S')}"
         end
       end
+
+      def run_sitespeed
+        # Start Sitespeed through docker
+        docker_command = 'docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:14.2.3 -b chrome '
+        # 4 repetitions
+        docker_command += '-n 4 '
+        # Limit Cable Connection
+        docker_command += '-c cable '
+        # Deactivate the performance bar as it slows the measurements down
+        docker_command += '--cookie perf_bar_enabled=false '
+        docker_command += "--outputFolder sitespeed-result/#{report_folder_name} "
+        docker_command += local_urls.join(' ')
+      
+        Shellout.new(docker_command).stream
+      end
+      
     end
   end
 end

@@ -36,7 +36,9 @@ You can easily create a sitespeed report for local `gdk` urls or
 also online urls with our standardised Sitespeed settings.
 We support local relative and absolute URL's as arguments. As
 soon as the report is done it will be automatically opened in your
-browser. Needs Docker installed and running.
+browser. 
+The reports are stored in `<gdk-root>/sitespeed-result`
+as `<branch>_YYYY-MM-DD-HH-MM-SS`. Needs Docker installed and running.
 
 ```shell
 gdk measure /explore http://127.0.0.1/explore https://gitlab.com/explore
