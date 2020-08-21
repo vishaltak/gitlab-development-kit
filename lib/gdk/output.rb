@@ -1,9 +1,15 @@
+# frozen_string_literal: true
+
 module GDK
   module Output
+    COLOR_CODE_RED = '31'
+    COLOR_CODE_GREEN = '32'
+    COLOR_CODE_YELLOW = '33'
+
     COLORS = {
-      red: '31',
-      green: '32',
-      yellow: '33',
+      red: COLOR_CODE_RED,
+      green: COLOR_CODE_GREEN,
+      yellow: COLOR_CODE_YELLOW,
       blue: '34',
       magenta: '35',
       cyan: '36',
@@ -13,6 +19,12 @@ module GDK
       bright_blue: '34;1',
       bright_magenta: '35;1',
       bright_cyan: '36;1'
+    }.freeze
+
+    ICONS = {
+      success: "\u2705\ufe0f",
+      warning: "\u26A0\ufe0f ", # requires an extra space
+      error: "\u274C\ufe0f"
     }.freeze
 
     def self.color(index)
@@ -27,24 +39,40 @@ module GDK
       ansi(0)
     end
 
-    def self.puts(message = nil)
-      $stdout.puts message
+    def self.wrap_in_color(message, color_code)
+      return message unless colorize?
+
+      ansi(color_code) + message + reset_color
+    end
+
+    def self.puts(message = nil, stderr: false)
+      stderr ? Kernel.warn(message) : $stdout.puts(message)
     end
 
     def self.notice(message)
-      puts "=> #{message}"
+      puts("=> #{message}")
     end
 
     def self.warn(message)
-      puts "(!) WARNING: #{message}"
+      puts(icon(:warning) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
     end
 
     def self.error(message)
-      puts "(❌) Error: #{message}"
+      puts(icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
     end
 
     def self.success(message)
-      puts "(✔) #{message}"
+      puts(icon(:success) + message)
+    end
+
+    def self.icon(code)
+      return '' unless colorize?
+
+      ICONS[code] + ' '
+    end
+
+    def self.colorize?
+      STDOUT.isatty && ENV.fetch('NO_COLOR', '').empty?
     end
   end
 end
