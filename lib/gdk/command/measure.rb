@@ -30,7 +30,7 @@ module GDK
       attr_reader :urls
 
       def gdk_running?
-         %w[200 302].include?(Net::HTTP.get_response(GDK.config.__uri).code)
+        %w[200 302].include?(Net::HTTP.get_response(GDK.config.__uri).code)
       end
 
       def docker_running?
@@ -44,7 +44,7 @@ module GDK
           urls.map do |url|
             # Transform local relative URL's
             url = "#{GDK.config.__uri}#{url}" if url_is_local?(url)
-      
+
             url = url.gsub('localhost', 'host.docker.internal')
             url.gsub('127.0.0.1', 'host.docker.internal')
           end
@@ -54,7 +54,7 @@ module GDK
       def url_is_local?(url)
         url.start_with?('/')
       end
-      
+
       def has_local_url?
         @has_local_url ||= urls.detect { |url| url_is_local?(url) }
       end
@@ -77,10 +77,9 @@ module GDK
         docker_command += '--cookie perf_bar_enabled=false '
         docker_command += "--outputFolder sitespeed-result/#{report_folder_name} "
         docker_command += local_urls.join(' ')
-      
+
         Shellout.new(docker_command).stream
       end
-      
     end
   end
 end
