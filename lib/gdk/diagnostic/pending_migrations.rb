@@ -17,7 +17,7 @@ module GDK
       def detail
         <<~MESSAGE
           There are pending database migrations.
-          To update your database, run `cd gitlab && bundle exec rails db:migrate`.
+          To update your database, run `bundle exec rails db:migrate` in your `gitlab` directory.
         MESSAGE
       end
     end
