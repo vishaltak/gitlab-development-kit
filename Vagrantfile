@@ -53,13 +53,15 @@ $apt_reqs = <<COMMANDS # rubocop:disable Style/GlobalVars
   add-apt-repository -y ppa:git-core/ppa
   wget -qO- https://deb.nodesource.com/setup_12.x | bash -
   wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
   echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+  echo "deb https://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google.list
   export DEBIAN_FRONTEND=noninteractive
   export RUNLEVEL=1
   apt-get update
   apt-get -y install golang-1.13-go
   ln -s /usr/lib/go-1.13/bin/* /usr/local/bin
-  apt-get -y install git graphicsmagick postgresql postgresql-contrib libpq-dev libimage-exiftool-perl redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed nginx libgmp-dev rvm yarn libre2-dev docker.io runit
+  apt-get -y install git graphicsmagick postgresql postgresql-contrib libpq-dev libimage-exiftool-perl redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed nginx libgmp-dev rvm yarn libre2-dev docker.io runit google-chrome-stable
   wget -qO /usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio && chmod +x /usr/local/bin/minio
   apt-get -y upgrade
 COMMANDS
@@ -99,10 +101,18 @@ $user_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
   sudo -u $DEV_USER -i bash -c "gdk trust /vagrant"
 COMMANDS
 
+$chromedriver_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
+  export CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  wget -qO- https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip | gunzip > /tmp/chromedriver
+  install -m 0755 -o root -g root /tmp/chromedriver /usr/local/bin
+  rm -f /tmp/chromedriver
+COMMANDS
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # rubocop:disable Style/GlobalVars
   config.vm.provision "shell", inline: $apt_reqs
   config.vm.provision "shell", inline: $user_setup
+  config.vm.provision "shell", inline: $chromedriver_setup
   # rubocop:enable Style/GlobalVars
   unless Vagrant::Util::Platform.windows?
     # NFS setup
