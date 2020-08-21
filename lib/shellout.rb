@@ -68,11 +68,11 @@ class Shellout
 
   def print_out(msg)
     @stdout_str += msg
-    $stdout.print(msg)
+    GDK::Output.puts(msg)
   end
 
   def print_err(msg)
     @stderr_str += msg
-    $stderr.print(msg)
+    GDK::Output.puts(msg, stderr: true)
   end
 end
