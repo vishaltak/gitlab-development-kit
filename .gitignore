@@ -95,6 +95,7 @@
 /repositories/
 /repository_storages/
 /services/
+/sitespeed-result/
 /sv/
 /webpack_port
 /*.log
