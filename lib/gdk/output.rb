@@ -72,7 +72,7 @@ module GDK
     end
 
     def self.colorize?
-      ENV.fetch('NO_COLOR', '').empty?
+      STDOUT.isatty && ENV.fetch('NO_COLOR', '').empty?
     end
   end
 end

@@ -18,55 +18,86 @@ RSpec.describe GDK::Output do
   end
 
   describe '.success' do
-    context 'when NO_COLOR=true is not defined' do
+    context "when we're not a tty" do
       it 'puts to stdout' do
-        stub_no_color_env('')
+        stub_tty(false)
 
-        expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
+        expect { described_class.success('test') }.to output("test\n").to_stdout
       end
     end
 
-    context 'when NO_COLOR=true is defined' do
-      it 'puts to stdout minus icon and colorization' do
-        stub_no_color_env('true')
+    context 'when we are a tty' do
+      context 'when NO_COLOR=true is not defined' do
+        it 'puts to stdout' do
+          allow(STDOUT).to receive(:isatty).and_return(true)
+          stub_no_color_env('')
 
-        expect { described_class.success('test') }.to output("test\n").to_stdout
+          expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
+        end
+      end
+
+      context 'when NO_COLOR=true is defined' do
+        it 'puts to stdout minus icon and colorization' do
+          stub_no_color_env('true')
+
+          expect { described_class.success('test') }.to output("test\n").to_stdout
+        end
       end
     end
   end
 
   describe '.warn' do
-    context 'when NO_COLOR=true is not defined' do
-      it 'puts to stderr' do
-        stub_no_color_env('')
+    context "when we're not a tty" do
+      it 'puts to stderr minus icon and colorization' do
+        stub_tty(false)
 
-        expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
+        expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
       end
     end
 
-    context 'when NO_COLOR=true is defined' do
-      it 'puts to stdout minus icon and colorization' do
-        stub_no_color_env('true')
+    context 'when we are a tty' do
+      context 'when NO_COLOR=true is not defined' do
+        it 'puts to stderr' do
+          stub_no_color_env('')
 
-        expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
+          expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
+        end
+      end
+
+      context 'when NO_COLOR=true is defined' do
+        it 'puts to stderr minus icon and colorization' do
+          stub_no_color_env('true')
+
+          expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
+        end
       end
     end
   end
 
   describe '.error' do
-    context 'when NO_COLOR=true is not defined' do
-      it 'puts to stderr' do
-        stub_no_color_env('')
+    context "when we're not a tty" do
+      it 'puts to stderr minus icon and colorization' do
+        stub_tty(false)
 
-        expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
+        expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
       end
     end
 
-    context 'when NO_COLOR=true is defined' do
-      it 'puts to stdout minus icon and colorization' do
-        stub_no_color_env('true')
+    context 'when we are a tty' do
+      context 'when NO_COLOR=true is not defined' do
+        it 'puts to stderr' do
+          stub_no_color_env('')
 
-        expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
+          expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
+        end
+      end
+
+      context 'when NO_COLOR=true is defined' do
+        it 'puts to stderr minus icon and colorization' do
+          stub_no_color_env('true')
+
+          expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
+        end
       end
     end
   end
@@ -134,7 +165,13 @@ RSpec.describe GDK::Output do
     end
   end
 
+  def stub_tty(state)
+    allow(STDOUT).to receive(:isatty).and_return(state)
+  end
+
   def stub_no_color_env(res)
+    stub_tty(true)
+
     # res needs to be of type String as we're simulating what's coming from
     # the shell command line.
     allow(ENV).to receive(:fetch).and_call_original
