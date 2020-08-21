@@ -242,6 +242,7 @@ module GDK
           false
         end
       end
+      string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
     end
 
     settings :auto_devops do
