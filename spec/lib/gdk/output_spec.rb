@@ -18,20 +18,56 @@ RSpec.describe GDK::Output do
   end
 
   describe '.success' do
-    it 'puts to stdout' do
-      expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stdout' do
+        stub_no_color_env('')
+
+        expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
+      end
+    end
+
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stdout minus icon and colorization' do
+        stub_no_color_env('true')
+
+        expect { described_class.success('test') }.to output("test\n").to_stdout
+      end
     end
   end
 
   describe '.warn' do
-    it 'puts to stderr' do
-      expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stderr' do
+        stub_no_color_env('')
+
+        expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
+      end
+    end
+
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stdout minus icon and colorization' do
+        stub_no_color_env('true')
+
+        expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
+      end
     end
   end
 
   describe '.error' do
-    it 'puts to stderr' do
-      expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stderr' do
+        stub_no_color_env('')
+
+        expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
+      end
+    end
+
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stdout minus icon and colorization' do
+        stub_no_color_env('true')
+
+        expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
+      end
     end
   end
 
@@ -58,5 +94,50 @@ RSpec.describe GDK::Output do
       msg = 'An error occurred'
       expect(described_class.wrap_in_color(msg, described_class::COLOR_CODE_RED)).to eq("\e[31m#{msg}\e[0m")
     end
+  end
+
+  describe '.icon' do
+    context 'when NO_COLOR=true is not defined' do
+      it 'returns the icon code with trailing space' do
+        icon_code = described_class::ICONS[:success]
+
+        stub_no_color_env('')
+
+        expect(described_class.icon(icon_code)).to eq("#{icon_code} ")
+      end
+    end
+
+    context 'when NO_COLOR=true is defined' do
+      it 'returns an empty string' do
+        stub_no_color_env('true')
+
+        expect(described_class.icon('doesntmatter')).to be_empty
+      end
+    end
+  end
+
+  describe '.colorize?' do
+    context 'when NO_COLOR=true is not defined' do
+      it 'returns true' do
+        stub_no_color_env('')
+
+        expect(described_class.colorize?).to be(true)
+      end
+    end
+
+    context 'when NO_COLOR=true is defined' do
+      it 'returns false' do
+        stub_no_color_env('true')
+
+        expect(described_class.colorize?).to be(false)
+      end
+    end
+  end
+
+  def stub_no_color_env(res)
+    # res needs to be of type String as we're simulating what's coming from
+    # the shell command line.
+    allow(ENV).to receive(:fetch).and_call_original
+    allow(ENV).to receive(:fetch).with('NO_COLOR', '').and_return(res)
   end
 end

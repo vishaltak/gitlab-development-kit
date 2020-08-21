@@ -21,6 +21,12 @@ module GDK
       bright_cyan: '36;1'
     }.freeze
 
+    ICONS = {
+      success: "\u2705\ufe0f",
+      warning: "\u26A0\ufe0f ", # requires an extra space
+      error: "\u274C\ufe0f"
+    }.freeze
+
     def self.color(index)
       COLORS.values[index % COLORS.size]
     end
@@ -34,6 +40,8 @@ module GDK
     end
 
     def self.wrap_in_color(message, color_code)
+      return message unless colorize?
+
       ansi(color_code) + message + reset_color
     end
 
@@ -46,15 +54,25 @@ module GDK
     end
 
     def self.warn(message)
-      puts("\u26a0\ufe0f  " + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
+      puts(icon(ICONS[:warning]) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
     end
 
     def self.error(message)
-      puts("\u274C\ufe0f " + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
+      puts(icon(ICONS[:error]) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
     end
 
     def self.success(message)
-      puts("\u2705\ufe0f #{message}")
+      puts(icon(ICONS[:success]) + message)
+    end
+
+    def self.icon(code)
+      return '' unless colorize?
+
+      "#{code} "
+    end
+
+    def self.colorize?
+      ENV.fetch('NO_COLOR', '').empty?
     end
   end
 end
