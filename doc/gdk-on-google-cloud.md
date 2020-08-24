@@ -21,7 +21,7 @@
 1. Confirm that a VM got created by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
 1. Stop the instance.
 1. Go to the detail page of your new Virtual Machine and click on Edit.
-1. Upgrade the machine type to **n1-standard-4 (4 vCPU, 15GB Memory)**, enable both **Allow HTTP traffic** and **Allow HTTPS traffic** in the Firewalls section and save your changes.
+1. Enable both **Allow HTTP traffic** and **Allow HTTPS traffic** in the Firewalls section and save your changes.
 
 ## Running the GDK
 
