@@ -33,3 +33,6 @@ Rails:
 
 RSpec/ContextWording:
   Enabled: false
+
+RSpec/PredicateMatcher:
+  Enabled: false
