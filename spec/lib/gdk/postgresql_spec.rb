@@ -13,8 +13,8 @@ RSpec.describe GDK::Postgresql do
     context 'with host defined to a path' do
       let(:yaml) do
         {
-          'postgresql' => {
-            'host' => '/home/git/gdk/postgresql'
+          postgresql: {
+            host: '/home/git/gdk/postgresql'
           }
         }
       end
@@ -27,8 +27,8 @@ RSpec.describe GDK::Postgresql do
     context 'with host defined to a hostname' do
       let(:yaml) do
         {
-          'postgresql' => {
-            'host' => 'localhost'
+          postgresql: {
+            host: 'localhost'
           }
         }
       end

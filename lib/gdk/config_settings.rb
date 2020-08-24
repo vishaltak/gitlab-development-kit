@@ -50,7 +50,7 @@ module GDK
 
       def setting(name, config_type, &blk)
         define_method(name) do
-          config_type.new(yaml.fetch(name.to_s, instance_eval(&blk)), slug: slug_for(name)).value
+          config_type.new(yaml.fetch(name, instance_eval(&blk)), slug: slug_for(name)).value
         end
       end
     end
@@ -63,7 +63,7 @@ module GDK
 
     def validate!
       our_methods.each do |method|
-        next if ignore_method?(method.to_s)
+        next if ignore_method?(method)
 
         value = fetch(method)
         if value.is_a?(ConfigSettings)
@@ -78,15 +78,13 @@ module GDK
 
     def dump!(file = nil)
       yaml = our_methods.each_with_object({}) do |method, hash|
-        method_name = method.to_s
-
         # We don't dump a config if it:
         #  - starts with a double underscore (intended for internal use)
         #  - is a ? method (always has a non-? counterpart)
-        next if ignore_method?(method_name)
+        next if ignore_method?(method)
 
         value = fetch(method)
-        hash[method_name] = if value.is_a?(ConfigSettings)
+        hash[method.to_s] = if value.is_a?(ConfigSettings)
                               value.dump!
                             elsif value.is_a?(Enumerable) && value.first.is_a?(ConfigSettings)
                               value.map(&:dump!)
@@ -154,7 +152,7 @@ module GDK
     end
 
     def dig(*slugs)
-      slugs = slugs.first.to_s.split('.') if slugs.one?
+      slugs = slugs.first.split('.') if slugs.one?
 
       value = fetch(slugs.shift)
 
@@ -202,7 +200,7 @@ module GDK
     private
 
     def ignore_method?(method_name)
-      method_name.start_with?('__') || method_name.end_with?('?')
+      method_name.to_s.start_with?('__') || method_name.to_s.end_with?('?')
     end
 
     def our_methods
@@ -214,23 +212,24 @@ module GDK
     end
 
     def enabled_value(method_name)
-      return nil unless method_name.to_s.end_with?('?')
+      method_name = method_name.to_s
 
-      chopped_name = method_name.to_s.chop.to_sym
-      fetch(chopped_name, nil)&.fetch(:enabled, nil)
+      return nil unless method_name.chomp!('?')
+
+      fetch(method_name, nil)&.fetch(:enabled, nil)
     end
 
     def subconfig!(name, &blk)
       sub = Class.new(settings_klass)
       sub.class_eval(&blk)
-      sub.new(parent: self, yaml: yaml.fetch(name.to_s, {}), slug: slug_for(name))
+      sub.new(parent: self, yaml: yaml.fetch(name, {}), slug: slug_for(name))
     end
 
     def load_yaml!
       return {} unless defined?(self.class::FILE) && File.exist?(self.class::FILE)
 
       raw_yaml = File.read(self.class::FILE)
-      YAML.safe_load(raw_yaml) || {}
+      YAML.safe_load(raw_yaml, symbolize_names: true) || {}
     end
 
     def from_yaml(slug, default: nil)

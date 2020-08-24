@@ -9,10 +9,10 @@ RSpec.describe GDK::Config do
   let(:overwrite_changes) { false }
   let(:yaml) do
     {
-      'auto_devops' => { 'enabled' => auto_devops_enabled },
-      'gdk' => { 'protected_config_files' => protected_config_files, 'overwrite_changes' => overwrite_changes },
-      'nginx' => { 'enabled' => nginx_enabled },
-      'hostname' => 'gdk.example.com'
+      auto_devops: { enabled: auto_devops_enabled },
+      gdk: { protected_config_files: protected_config_files, overwrite_changes: overwrite_changes },
+      nginx: { enabled: nginx_enabled },
+      hostname: 'gdk.example.com'
     }
   end
   let(:default_config) { described_class.new }
@@ -65,7 +65,7 @@ RSpec.describe GDK::Config do
 
     context 'when port is set to 1234' do
       it 'returns http://gdk.example.com:1234' do
-        yaml['port'] = '1234'
+        yaml[:port] = 1234
 
         expect(config.__uri.to_s).to eq('http://gdk.example.com:1234')
       end
@@ -73,7 +73,7 @@ RSpec.describe GDK::Config do
 
     context 'when a relative_url_root is set' do
       it 'returns http://gdk.example.com:3000/gitlab' do
-        yaml['relative_url_root'] = '/gitlab/'
+        yaml[:relative_url_root] = '/gitlab/'
 
         expect(config.__uri.to_s).to eq('http://gdk.example.com:3000/gitlab')
       end
@@ -81,7 +81,7 @@ RSpec.describe GDK::Config do
 
     context 'when https is enabled' do
       before do
-        yaml['https'] = { 'enabled' => true }
+        yaml[:https] = { enabled: true }
       end
 
       it 'returns https://gdk.example.com:3000' do
@@ -90,7 +90,7 @@ RSpec.describe GDK::Config do
 
       context 'and port is set to 443' do
         it 'returns https://gdk.example.com/' do
-          yaml['port'] = '443'
+          yaml[:port] = 443
 
           expect(config.__uri.to_s).to eq('https://gdk.example.com')
         end
@@ -108,7 +108,7 @@ RSpec.describe GDK::Config do
 
       context 'when enabled in config file' do
         let(:yaml) do
-          { 'elasticsearch' => { 'enabled' => true } }
+          { elasticsearch: { enabled: true } }
         end
 
         it 'returns true' do
@@ -125,7 +125,7 @@ RSpec.describe GDK::Config do
       context 'when specified in config file' do
         let(:version) { '7.8.0' }
         let(:yaml) do
-          { 'elasticsearch' => { 'version' => version } }
+          { elasticsearch: { version: version } }
         end
 
         it 'returns the version from the config file' do
@@ -141,7 +141,7 @@ RSpec.describe GDK::Config do
 
       context 'when specified in config file' do
         let(:yaml) do
-          { 'elasticsearch' => { 'mac_checksum' => checksum } }
+          { elasticsearch: { mac_checksum: checksum } }
         end
 
         it 'returns the version from the config file' do
@@ -157,7 +157,7 @@ RSpec.describe GDK::Config do
 
       context 'when specified in config file' do
         let(:yaml) do
-          { 'elasticsearch' => { 'linux_checksum' => checksum } }
+          { elasticsearch: { linux_checksum: checksum } }
         end
 
         it 'returns the version from the config file' do
@@ -294,11 +294,11 @@ RSpec.describe GDK::Config do
     describe '#database' do
       let(:yaml) do
         {
-          'praefect' => {
-            'node_count' => 3,
-            'database' => {
-              'host' => 'localhost',
-              'port' => 1234
+          praefect: {
+            node_count: 3,
+            database: {
+              host: 'localhost',
+              port: 1234
             }
           }
         }
@@ -350,12 +350,12 @@ RSpec.describe GDK::Config do
   describe '#postgresql' do
     let(:yaml) do
       {
-        'postgresql' => {
-          'host' => 'localhost',
-          'port' => 1234,
-          'geo' => {
-            'host' => 'geo',
-            'port' => 5678
+        postgresql: {
+          host: 'localhost',
+          port: 1234,
+          geo: {
+            host: 'geo',
+            port: 5678
           }
         }
       }
@@ -401,11 +401,11 @@ RSpec.describe GDK::Config do
     let(:storage_count) { 3 }
     let(:yaml) do
       {
-        'gitaly' => {
-          'storage_count' => storage_count
+        gitaly: {
+          storage_count: storage_count
         },
-        'praefect' => {
-          'enabled' => praefect_enabled
+        praefect: {
+          enabled: praefect_enabled
         }
       }
     end
@@ -461,7 +461,7 @@ RSpec.describe GDK::Config do
         context 'when enabled in config file' do
           let(:yaml) do
             {
-              'geo' => { 'registry_replication' => { "enabled" => true } }
+              geo: { registry_replication: { enabled: true } }
             }
           end
 
@@ -479,7 +479,7 @@ RSpec.describe GDK::Config do
         context 'when URL is specified' do
           let(:yaml) do
             {
-              'geo' => { 'registry_replication' => { "primary_api_url" => 'http://localhost:5001' } }
+              geo: { registry_replication: { primary_api_url: 'http://localhost:5001' } }
             }
           end
 
@@ -600,7 +600,7 @@ RSpec.describe GDK::Config do
         context 'when ActionCable in-app mode is disabled' do
           let(:yaml) do
             {
-              'action_cable' => { 'in_app' => false }
+              action_cable: { in_app: false }
             }
           end
 
@@ -638,8 +638,8 @@ RSpec.describe GDK::Config do
     describe '#__listen_address' do
       let(:yaml) do
         {
-          'port' => 1234,
-          'nginx' => { 'listen' => 'localhost' }
+          port: 1234,
+          nginx: { listen: 'localhost' }
         }
       end
 
@@ -685,7 +685,7 @@ RSpec.describe GDK::Config do
     describe '#live_reload' do
       context 'when https is disabled' do
         before do
-          yaml['https'] = { 'enabled' => false }
+          yaml[:https] = { enabled: false }
         end
 
         it 'is true' do
@@ -695,7 +695,7 @@ RSpec.describe GDK::Config do
 
       context 'when https is enabled' do
         before do
-          yaml['https'] = { 'enabled' => true }
+          yaml[:https] = { enabled: true }
         end
 
         it 'is false' do
@@ -776,7 +776,7 @@ RSpec.describe GDK::Config do
       context 'when host is specified' do
         let(:yaml) do
           {
-            'gitlab_pages' => { 'host' => 'pages.localhost' }
+            gitlab_pages: { host: 'pages.localhost' }
           }
         end
 
@@ -796,7 +796,7 @@ RSpec.describe GDK::Config do
       context 'when port is specified' do
         let(:yaml) do
           {
-            'gitlab_pages' => { 'port' => 5555 }
+            gitlab_pages: { port: 5555 }
           }
         end
 

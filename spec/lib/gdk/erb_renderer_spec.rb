@@ -6,7 +6,7 @@ describe GDK::ErbRenderer do
   let(:protected_config_files) { [] }
   let(:erb_file) { fixture_path.join('example.erb') }
   let(:out_file) { Pathname.new('tmp/example.out') }
-  let(:config) { config_klass.new(yaml: { 'gdk' => { 'protected_config_files' => protected_config_files } }) }
+  let(:config) { config_klass.new(yaml: { gdk: { protected_config_files: protected_config_files } }) }
 
   let(:config_klass) do
     Class.new(GDK::ConfigSettings) do

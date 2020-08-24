@@ -42,9 +42,9 @@ RSpec.describe Runit::Config do
 
     it 'doesnt include GITLAB_TRACING related env variables when jaeger is disabled' do
       yaml = {
-        'tracer' => {
-          'jaeger' => {
-            'enabled' => false
+        tracer: {
+          jaeger: {
+            enabled: false
           }
 
         }

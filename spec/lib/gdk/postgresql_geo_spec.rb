@@ -13,9 +13,9 @@ RSpec.describe GDK::PostgresqlGeo do
     context 'with host defined to a path' do
       let(:yaml) do
         {
-          'postgresql' => {
-            'geo' => {
-              'host' => '/home/git/gdk/postgresql-geo'
+          postgresql: {
+            geo: {
+              host: '/home/git/gdk/postgresql-geo'
             }
           }
         }
@@ -29,9 +29,9 @@ RSpec.describe GDK::PostgresqlGeo do
     context 'with host defined to a hostname' do
       let(:yaml) do
         {
-          'postgresql' => {
-            'geo' => {
-              'host' => 'localhost'
+          postgresql: {
+            geo: {
+              host: 'localhost'
             }
           }
         }
