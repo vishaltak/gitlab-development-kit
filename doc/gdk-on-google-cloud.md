@@ -56,7 +56,7 @@
    systemctl --user restart code-server
 ```
 1. Open https://IP_OF_YOUR_VM to see VS Code running in your browser.
-1. Click the first icon in the left sidebar, and select **File** -> **Open..**. That brings up a new menu where you can select **gdk** -> **gitlab**. Here you can now switch branches, make changes that will directly be displayed in the cloud GDK and commit  anything you did.
+1. Click the first icon in the left sidebar, and select **File** -> **Open..**. That brings up a new menu where you can select **gdk** -> **gitlab**. Here you can now switch branches, make changes that will directly be displayed in the cloud GDK and commit any changes you made.
 
 🎉 This is everything you needed to review and develop in the cloud GDK from now on! 🦊
 
