@@ -49,6 +49,11 @@ restart() {
   gdk start
 }
 
+status() {
+  cd "${GDK_CHECKOUT_PATH}" || exit
+  gdk status || true
+}
+
 doctor() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Running gdk doctor.."

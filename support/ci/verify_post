@@ -1,0 +1,9 @@
+#!/bin/bash -ex
+
+parent_path=$(dirname "$0")
+
+# shellcheck source=support/ci/functions.sh
+source "${parent_path}"/functions.sh
+
+# print which processes are running
+status

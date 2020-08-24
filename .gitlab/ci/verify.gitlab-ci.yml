@@ -20,6 +20,8 @@
         - .tools-versions
     paths:
       - .bundle
+  after_script:
+    - support/ci/verify_post
 
 install:
   extends: .verify_job
