@@ -1,6 +1,6 @@
-# Install, set up, and update GDK
+# Install and set up GDK
 
-> 🚨**Note:** Before undertaking these steps, be sure you have [prepared your system](prepare.md). 🚨
+Before undertaking these steps, be sure you have [prepared your system](prepare.md).
 
 To get GDK up and running:
 
@@ -35,56 +35,55 @@ To get GDK up and running:
       - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
         recommend developing against the GitLab project (the default). For:
 
-        - SSH (recommended), run:
+        - Cloning `gitlab` using SSH (recommended), run:
 
           ```shell
           gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
           ```
 
-        - HTTP, run:
+        - Cloning `gitlab` using HTTPS, run:
 
           ```shell
           gdk install
           ```
 
         Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-        The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+        The clone is done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
       - Other options, in order of recommendation:
+        - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
+        - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
 
-        - [Develop in your own GitLab fork](#develop-in-your-own-gitlab-fork)
-        - [Develop against the GitLab FOSS project](#develop-against-the-gitlab-foss-project)
-
-## Develop against the GitLab FOSS project
+## Install using GitLab FOSS project
 
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
 
 After installing the `gitlab-development-kit` gem and initializing a GDK directory, for:
 
-- SSH, run:
+- Cloning `gitlab-foss` using SSH, run:
 
   ```shell
   gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab-foss.git
   ```
 
-- HTTP, run:
+- Cloning `gitlab-foss` using HTTPS, run:
 
   ```shell
   gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
   ```
 
 Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-The clone will be done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+The clone is done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
-## Develop in your own GitLab fork
+## Install using your own GitLab fork
 
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab](https://gitlab.com/gitlab-org/gitlab).
 
 After installing the `gitlab-development-kit` gem and initializing a GDK directory, for:
 
-- SSH, run:
+- Cloning your `gitlab` fork using SSH, run:
 
   ```shell
   # Replace <YOUR-NAMESPACE> with your namespace
@@ -92,7 +91,7 @@ After installing the `gitlab-development-kit` gem and initializing a GDK directo
   support/set-gitlab-upstream
   ```
 
-- HTTP, run:
+- Cloning your `gitlab` fork using HTTPS, run:
 
   ```shell
   # Replace <YOUR-NAMESPACE> with your namespace
@@ -132,115 +131,35 @@ tools. To set up `gdk.test` as a hostname:
    gdk reconfigure
    ```
 
-## Common errors during installation and troubleshooting
+## Resolve installation errors
 
-During `gdk install` process, you may encounter some dependencies related errors. Please refer to
-the [Troubleshooting page](troubleshooting.md) or [open an issue on GDK tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues)
-if you get stuck.
+During the `gdk install` process, you may encounter some dependency-related errors. If these errors
+occur:
 
-## GitLab Enterprise Features
+- Run `gdk doctor`, which can detect problems and offer possible solutions.
+- Refer to the [troubleshooting page](troubleshooting.md).
+- [Open an issue in the GDK tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
+
+## Use GitLab Enterprise features
 
 Instructions to generate a developer license can be found in the
 [onboarding documentation](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee).
 
-The license key generator is only available for GitLab team members, who should use the "Sign in with GitLab"
-link using their `dev.gitlab.org` account.
+The license key generator is only available for GitLab team members, who should use the "Sign in
+with GitLab" link using their `dev.gitlab.org` account.
 
 ## Post-installation
 
-Start GitLab and all required services:
+After successful installation, see:
 
-```shell
-gdk start
-```
-
-To stop the Rails app, which saves memory (useful when running tests):
-
-```shell
-gdk stop rails
-```
-
-To access GitLab, you may now go to <http://localhost:3000> in your browser.
-It may take a few minutes for the Rails app to be ready. During this period you would see `dial unix /Users/.../gitlab.socket: connect: connection refused` in the browser.
-
-The development login credentials are `root` and
-`5iveL!fe`.
-
-GDK comes with a number of settings, and most users will use the
-default values, but you are able to override these in `gdk.yml` in the
-GDK root.
-
-For example, to change the port you can set this in your `gdk.yml`:
-
-```yaml
-port: 3001
-```
-
-And run the following command to apply:
-
-```shell
-gdk reconfigure
-```
-
-You can find a bunch of other settings that are configurable in `gdk.example.yml`.
-
-Read the [configuration document](configuration.md) for more details.
+- [GDK commands](gdk_commands.md).
+- [GDK configuration](configuration.md).
 
 After installation [learn how to use GDK](howto/index.md) enable other features.
 
-### Running GitLab and GitLab FOSS concurrently
-
-To have multiple GDK instances running concurrently, for example to
-test GitLab and GitLab FOSS, initialize each into a separate GDK
-folder. To run them simultaneously, make sure they don't use
-conflicting port numbers.
-
-You can for example use the following `gdk.yml` in one of both GDKs.
-
-```yaml
-port: 3001
-webpack:
-  port: 3809
-gitlab_pages:
-  port: 3011
-```
-
 ## Update GDK
 
-To update an existing GDK installation, run the following:
-
-```shell
-cd <gdk-dir>
-gdk update && gdk reconfigure
-```
-
-You can run `gdk doctor` to ensure the update left GDK in a good state. If it reports any issues,
-you should address them as soon as possible.
-
-### Update external dependencies
-
-As well as keeping GDK up to date, many of the underlying dependencies should also be regularly
-updated. For example, to list dependencies that are outdated for macOS with `brew`, run:
-
-```shell
-brew update && brew outdated
-```
-
-Review the list of outdated dependencies. There may be dependencies you don't wish to upgrade. To
-upgrade:
-
-- All outdated dependencies for macOS with `brew`, run:
-
-  ```shell
-  brew update && brew upgrade
-  ```
-
-- Specific dependencies for macOS with `brew`, run:
-
-  ```shell
-  brew update && brew upgrade <package name>
-
-We recommend you update GDK immediately after you update external dependencies.
+For information on updating GDK, see [Update GDK](gdk_commands.md#update-gdk).
 
 ## Create new GDK
 

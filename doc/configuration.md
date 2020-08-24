@@ -1,4 +1,4 @@
-# Configuration
+# GDK configuration
 
 This document describes how you can configure your GDK environment.
 
@@ -20,8 +20,8 @@ There are many configuration options for GDK. GDK can be configured using either
 
 ### `gdk.yml`
 
-Placing your settings in `gdk.yml` at the root of GDK is the preferred configuration
-method.
+You can override the GDK's default settings with a `gdk.yml` in the GDK root,
+which is the only supported configuration method.
 
 To see available configuration settings, see [`gdk.example.yml`](../gdk.example.yml).
 
@@ -30,6 +30,22 @@ that these values may not be the default that GDK will use.
 
 If you want to check which settings are in place, you can run `rake dump_config`, which will print
 all applied settings in a YAML structure.
+
+#### Run GitLab and GitLab FOSS concurrently
+
+To have multiple GDK instances running concurrently, for example to test GitLab and GitLab FOSS,
+initialize each into a separate GDK folder. To run them simultaneously, make sure they don't use
+conflicting port numbers.
+
+For example, you can create the following `gdk.yml` in the GitLab FOSS GDK to customise to avoid conflicting port numbers:
+
+```yaml
+port: 3001
+webpack:
+  port: 3809
+gitlab_pages:
+  port: 3011
+```
 
 #### Overwriting configuration files
 
@@ -65,6 +81,18 @@ Here are a few settings worth mentioning:
 | `object_store.enabled`  | `false`            | Set this to `true` to enable Object Storage with MinIO.                                    |
 | `registry.enabled`      | `false`            | Set this to `true` to enable container registry.                                           |
 | `geo.enabled`           | `false`            | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
+
+For example, to change the port GDK is accessible on, you can set this in your `gdk.yml`:
+
+```yaml
+port: 3001
+```
+
+And run the following command to apply the change:
+
+```shell
+gdk reconfigure
+```
 
 #### GDK settings
 
