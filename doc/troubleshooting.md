@@ -346,6 +346,27 @@ In the above example, you see that the charlock_holmes gem fails to load
 `libicui18n.52.1.dylib`. You can try fixing this by [re-installing
 charlock_holmes](#rebuilding-gems-with-native-extensions).
 
+## 'yarn install' fails due node incompatibility issues
+
+If you're running a version of node between 13.0 and 13.7, you might see the following error message:
+
+```plaintext
+error extract-files@8.1.0: The engine "node" is incompatible with this module. Expected version "10 - 12 || >= 13.7". Got "13.2.0"
+error Found incompatible module.
+```
+
+If you're using `nvm`, you can confirm the version of node that you're using:
+
+```shell
+nvm current node -v
+```
+
+You can adjust node to an acceptable version with the following command:
+
+```shell
+nvm install <version>
+```
+
 ## 'bundle install' fails due to permission problems
 
 This can happen if you are using a system-wide Ruby installation. You can
