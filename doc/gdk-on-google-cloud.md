@@ -65,9 +65,12 @@
    sudo setcap cap_net_bind_service=+ep /usr/lib/code-server/lib/node
    systemctl --user restart code-server
 ```
-
+<!-- vale gitlab.no-bare-urls = NO -->
 1. Open https://IP_OF_YOUR_VM to see VS Code running in your browser.
+<!-- vale gitlab.no-bare-urls = YES -->
+<!-- vale gitlab.proper-names = NO -->
 1. Click the first icon in the left sidebar, and select **File** -> **Open..**. That brings up a new menu where you can select **gdk** -> **gitlab**. Here you can now switch branches, make changes that will directly be displayed in the cloud GDK and commit any changes you made.
+<!-- vale gitlab.proper-names = YES -->
 
 🎉 This is everything you needed to review and develop in the cloud GDK from now on! 🦊
 
@@ -104,4 +107,6 @@ If you rather want to use your local VS Code version, you can also connect via S
 
 1. Choose where you want to save the configuration.
 1. You should now see a toast message that a new host was added, click on **Connect**.
+<!-- vale gitlab.proper-names = NO -->
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then select first **gdk**, followed by **gitlab**.
+<!-- vale gitlab.proper-names = YES -->
