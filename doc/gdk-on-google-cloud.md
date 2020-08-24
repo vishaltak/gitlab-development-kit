@@ -15,7 +15,7 @@
 1. Create a virtual machine with the GDK image: 
 
 ```shell
-   gcloud compute instances create gdk --image-project gdk-cloud --image gitlab-gdk-master-1597726225
+   gcloud compute instances create gdk --machine-type n1-standard-4 --image-project gdk-cloud --image gitlab-gdk-master-1597726225
 ```
 
 1. Confirm that a VM got created by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
