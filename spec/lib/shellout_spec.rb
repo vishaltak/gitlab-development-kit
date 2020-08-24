@@ -40,7 +40,7 @@ RSpec.describe Shellout do
       expect(subject.stream).to eq('foo')
     end
 
-    it 'send output to stdout' do
+    it 'send output to stdout', :with_stdout do
       expect { subject.stream }.to output("foo\n").to_stdout
     end
 
