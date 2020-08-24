@@ -39,11 +39,9 @@ module GDK
       def display_migrate_message(tasks)
         str = tasks.join(' and ')
 
-        GDK::Output.puts <<~TEXT
-          #{'-' * 60}
-          Processing gitlab #{str} DB migrations
-          #{'-' * 60}
-        TEXT
+        GDK::Output.divider
+        GDK::Output.puts("Processing gitlab #{str} DB migrations")
+        GDK::Output.divider
       end
 
       def rake(tasks)

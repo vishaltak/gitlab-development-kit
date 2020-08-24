@@ -49,6 +49,10 @@ module GDK
       stderr ? Kernel.warn(message) : $stdout.puts(message)
     end
 
+    def self.divider(symbol: '-', length: 80, stderr: false)
+      puts(symbol * length, stderr: stderr)
+    end
+
     def self.notice(message)
       puts("=> #{message}")
     end
