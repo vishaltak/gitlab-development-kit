@@ -420,16 +420,6 @@ To install additional dependencies with `asdf`, use `make bootstrap`:
 make bootstrap
 ```
 
-## Documentation tools
-
-Linting for GDK documentation is performed by:
-
-- markdownlint.
-- Vale.
-
-For more information and instructions on installing tooling and plugins for editors, see
-[Linting](https://docs.gitlab.com/ee/development/documentation/#linting).
-
 ## Next Steps
 
 After you have completed everything here, [set up GDK](index.md).
