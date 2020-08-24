@@ -13,9 +13,11 @@
 ## Creating the Virtual Machine
 
 1. Create a virtual machine with the GDK image: 
+
 ```shell
    gcloud compute instances create gdk --image-project gdk-cloud --image gitlab-gdk-master-1597726225
 ```
+
 1. Confirm that a VM got created by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
 1. Stop the instance.
 1. Go to the detail page of your new Virtual Machine and click on Edit.
@@ -40,7 +42,7 @@
 ```
 
 1. Now press **i**, change `http://localhost:8080` to `http://localhost:3000`, press **ESC** and then type **:wq** and press **Enter**
-1. Restart nginx:
+1. Restart NGINX:
 
 ```shell
    sudo nginx -s reload
