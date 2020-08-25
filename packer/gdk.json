@@ -35,6 +35,11 @@
       "execute_command": "echo 'ubuntu' | sudo -u gdk -S bash -l -c '{{ .Vars }} {{ .Path }}'"
     },
     {
+      "type": "file",
+      "source": "files/gdk.yml",
+      "destination": "/tmp/gdk.yml"
+    },
+    {
       "type": "shell",
       "script": "provisioners/gdk.sh",
       "execute_command": "sudo su -l gdk -c '{{ .Vars }} {{ .Path }}'"

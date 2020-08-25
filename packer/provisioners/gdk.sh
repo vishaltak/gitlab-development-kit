@@ -5,6 +5,7 @@ gem install bundler -v '= 1.17.3'
 gem install gitlab-development-kit
 gdk init gdk
 cd gdk
+cp /tmp/gdk.yml .
 gdk install
 gdk stop
 sleep 10
