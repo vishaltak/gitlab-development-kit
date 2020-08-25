@@ -71,6 +71,7 @@ apt-get -y install \
   net-tools \
   libnss3-dev \
   ack \
+  apache2-utils \
   zsh powerline fonts-powerline
 
 # put go binary in the right place
