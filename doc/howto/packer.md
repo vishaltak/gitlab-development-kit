@@ -38,3 +38,17 @@ sudo su - gdk
 echo YOUR_SSH_PUB_KEY >> ~/.ssh/authorized_keys
 chmod 644 ~/.ssh/authorized_keys
 ```
+
+### Making the image public and sharing
+
+You can turn your image public for sharing like so:
+
+```shell
+gcloud compute images add-iam-policy-binding IMAGE_NAME_HERE --project PROJECT_NAME_HERE --member='allAuthenticatedUsers' --role='roles/compute.imageUser'
+```
+
+This will allow anyone to create an instance with the newly created image like so:
+
+```shell
+gcloud compute instances create INSTANCE_NAME_HERE --image-project gdk-cloud --image CREATED_IMAGE_ID
+```
