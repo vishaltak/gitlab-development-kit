@@ -1,6 +1,6 @@
 # Using Google Cloud images to developer with GDK
 
-## Building the image
+## Building the base image
 
 1. Make sure you have a Google Cloud account
 1. Create and new project in gcloud and take note of the project id for later steps
@@ -15,6 +15,21 @@
    ```
 
 This should take a while to build (10-30 min). If successfull, you should see an output indicating the created image name.
+
+## Building the GDK Image
+
+After successfully creating the base image (or using a pre-existing one), you can create the GDK image by following the same steps:
+
+```shell
+cd gdk/packer
+packer build -var zone=<zone_id> project_id=<gcloud_project_id> base_image=<base_image_id> gdk.json
+```
+
+Example:
+
+```shell
+packer build -var zone=australia-southeast1-b project_id=<gcloud_project_id> base_image=gitlab-gdk-base-master-1598318174 gdk.json
+```
 
 ### Using the image
 
