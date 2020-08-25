@@ -148,6 +148,9 @@ Instructions to generate a developer license can be found in the
 The license key generator is only available for GitLab team members, who should use the "Sign in
 with GitLab" link using their `dev.gitlab.org` account.
 
+For information on adding your license to GitLab, see
+[Activate GitLab EE with a license](https://docs.gitlab.com/ee/user/admin_area/license.html)
+
 ## Post-installation
 
 After successful installation, see:
