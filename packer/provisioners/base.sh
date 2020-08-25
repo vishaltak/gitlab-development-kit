@@ -53,6 +53,9 @@ apt-get -y install \
   redis-server \
   libicu-dev \
   cmake \
+  libpcre2-dev \
+  libcurl4-gnutls-dev \
+  pkg-config \
   g++ \
   nodejs \
   libkrb5-dev \
@@ -67,6 +70,7 @@ apt-get -y install \
   runit \
   net-tools \
   libnss3-dev \
+  ack \
   zsh powerline fonts-powerline
 
 # put go binary in the right place
@@ -127,3 +131,9 @@ echo '/swapfile swap swap defaults 0 0' >> /etc/fstab
 # IO tunning
 # https://cloud.google.com/compute/docs/disks/optimizing-pd-performance
 blockdev --setra 16384 /dev/root
+
+# GIT
+# link git away from the same path as ruby
+# to avoid gitaly conflicts
+# See https://gitlab.com/gitlab-org/gitaly/-/issues/3085
+ln -sf /usr/bin/git /usr/local/bin/
