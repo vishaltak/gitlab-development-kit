@@ -15,17 +15,13 @@
 1. Create a virtual machine with the GDK image: 
 
 ```shell
-   gcloud compute instances create gdk --machine-type n1-standard-4 --image-project gdk-cloud --image gitlab-gdk-master-1597726225
+   gcloud compute instances create gdk --machine-type n1-standard-4 --tags http-server,https-server --image-project gdk-cloud --image gitlab-gdk-master-1597726225
 ```
 
-1. Confirm that a VM got created by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
-1. Stop the instance.
-1. Go to the detail page of your new Virtual Machine and click on Edit.
-1. Enable both **Allow HTTP traffic** and **Allow HTTPS traffic** in the Firewalls section and save your changes.
+1. Confirm that a VM got created and is running by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
 
 ## Running the GDK
 
-1. Start the instance.
 1. Connect to your Virtual Machine via SSH. You can do so by clicking the SSH dropdown for your Virtual Machine on the overview page in the Google Cloud UI and selecting **Open in browser window**.
 1. Wait for the terminal to load, then enter the following commands (all following terminal commands are supposed to be executed in this window, unless stated otherwise):
 
