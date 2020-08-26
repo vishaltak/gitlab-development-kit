@@ -1,54 +1,26 @@
 # Prepare your system for GDK
 
-Before [setting up GDK](index.md), your local environment must have prerequisite software installed
-and configured.
-
-## Install dependencies
-
-GDK depends on third-party software to run. Some dependencies can be installed with a
-"package manager".
-
-The following [operating system dependencies](#install-os-dependencies) should be installed using
-[`brew`](https://brew.sh) for macOS or your Linux distribution's package manager:
-
-- [`asdf`](https://asdf-vm.com/#/)
-- [Git](https://git-scm.com) version 2.28 or higher
-- [Git LFS](https://git-lfs.github.com) version 2.10 or higher
-- [GraphicsMagick](http://www.graphicsmagick.org)
-- [Exiftool](https://exiftool.org)
-- [runit](http://smarden.org/runit/)
-- [Google Chrome](https://www.google.com/chrome/) version 60 or higher. Many users will have
-  installed this already without a package manager
-- [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) version 2.33 or
-  higher
+Before [setting up GDK](index.md), your local environment must have prerequisite third-party
+software installed and configured. Some dependencies can be installed with a "package manager".
 
 You should regularly keep these dependencies up to date. Generally, the latest versions of these
 dependencies work fine.
-
-We recommend installing the following [additional dependencies](#install-additional-dependencies) with
-[`asdf`](https://asdf-vm.com/#/core-manage-asdf-vm) for both macOS and Linux:
-
-- [Ruby](https://www.ruby-lang.org)
-- [Node.js](https://nodejs.org)
-- [Yarn](https://yarnpkg.com)
-- [PostgreSQL](https://www.postgresql.org)
-- [Go](https://golang.org)
-- [MinIO](https://min.io)
-- [Redis](https://redis.io)
-
-`asdf` alerts you when these dependencies fall out of date compared to the project's
-[`.tool-versions`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/.tool-versions)
-file. You should not update beyond the versions specified in this project.
 
 NOTE: **Note:**
 Install, configure, and update all of these dependencies as a non-root user. If you don't know what
 a root user is, you very likely run everything as a non-root user already.
 
-### Install OS dependencies
+## Install OS dependencies
 
-The process for installing operating system dependencies depends on your operating system.
+The process for installing dependencies depends on your operating system.
+Instructions are available for:
 
-#### Install macOS dependencies
+- [macOS](#install-macos-dependencies)
+- [Linux distributions](#install-linux-dependencies)
+- [FreeBSD](#install-freebsd-dependencies)
+- [Windows 10](#install-windows-10-dependencies)
+
+### Install macOS dependencies
 
 GDK supports macOS 10.13 (High Sierra) and higher. In macOS 10.15 (Catalina) the default shell
 changed from [Bash](https://www.gnu.org/software/bash/) to [Zsh](http://zsh.sourceforge.net). The
@@ -56,7 +28,7 @@ differences are handled by setting a `shell_file` variable based on your current
 
 To install dependencies for macOS:
 
-1. [Install](https://brew.sh) `brew`.
+1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for package management.
 1. Run the following `brew` commands:
 
    ```shell
@@ -71,37 +43,36 @@ To install dependencies for macOS:
 
 1. Follow any post-installation instructions that are provided. For example, `asdf` has
    [post-install instructions](https://asdf-vm.com/#/core-manage-asdf-vm?id=add-to-your-shell).
+1. [Install Ruby](#install-ruby).
 
-If ChromeDriver fails to open with an error message because the developer "cannot be verified",
-create an exception for it as documented in
+If ChromeDriver fails to open with an error message because the developer *cannot be verified*,
+create an exception for it as documented in the
 [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
 
 NOTE: **Note:**
-We strongly recommend using the default installation directory for `brew` (`/usr/local`). This makes
-it a lot easier to install Ruby gems with C extensions. If you use a custom directory, you have to
-do a lot of extra work when installing Ruby gems. For more information, see
+We strongly recommend using the default installation directory for Homebrew (`/usr/local`). This simplifies
+the Ruby gems installation with C extensions. If you use a custom directory, additional work is required 
+when installing Ruby gems. For more information, see
 [Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal).
 
-#### Install Linux dependencies
+### Install Linux dependencies
 
 The process for installing dependencies on Linux depends on your Linux distribution.
 
-Unless already set, you will likely have to increase the watches limit of `inotify` in order for
+Unless already set, you'll probably have to increase the watches limit of `inotify` for
 frontend development tools such as `webpack` to effectively track file changes.
 See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
-for details and instructions on how to apply this change.
+for details and instructions about how to apply this change.
 
-##### Ubuntu
+#### Ubuntu
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
-To install dependencies for Ubuntu:
-
-We assume you are using an active LTS release (16.04, 18.04, 20.04) or higher.
+To install dependencies for Ubuntu (assuming you're using an active LTS release (16.04, 18.04, 20.04) or higher):
 
 1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
-1. Install remaining dependencies; modify the `GDK_GO_VERSION` with the major.minor version number (currently 1.14) as needed:
+1. Install remaining dependencies. Modify the `GDK_GO_VERSION` with the major.minor version number (currently 1.14) as needed:
 
    ```shell
    # Add apt-add-repository helper script
@@ -127,7 +98,7 @@ We assume you are using an active LTS release (16.04, 18.04, 20.04) or higher.
 
 1. You're all set now. [Go to next steps](#next-steps).
 
-##### Arch Linux
+#### Arch Linux
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -146,7 +117,7 @@ The Arch Linux core repository does not contain anymore the `runit` package. It 
 pikaur -S runit-systemd
 ```
 
-##### Debian
+#### Debian
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -161,21 +132,22 @@ sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr
 sudo chmod +x /usr/local/bin/minio
 ```
 
-If you are running Debian [Experimental](https://wiki.debian.org/DebianExperimental), or [newer](https://packages.debian.org/search?keywords=golang-go) you can install a Go
-compiler via your package manager: `sudo apt-get install golang`.
-Otherwise you need to install it manually. See [Go](https://golang.org/doc/install#install) official installation
+If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental), or
+[newer](https://packages.debian.org/search?keywords=golang-go) you can install a Go
+compiler using your package manager: `sudo apt-get install golang`.
+Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official installation
 instructions.
 
 You may need to install Redis 5.0 or newer manually.
 
-##### Fedora
+#### Fedora
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using Fedora >= 22.
 
-If you are running Fedora < 27 you'll need to install `go` manually using [go] official installation instructions.
+If you are running Fedora < 27, you'll need to install `go` manually by using the official [go] installation instructions.
 
 NOTE: **Note:**
 Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use `postgresql:10` module to install PostgreSQL 10.
@@ -199,9 +171,9 @@ sudo chmod +x /usr/local/bin/minio
 
 You may need to install Redis 5.0 or newer manually.
 
-###### runit
+##### runit
 
-You will also need to install [runit](http://smarden.org/runit) manually.
+You'll also need to install [runit](http://smarden.org/runit) manually.
 
 The following instructions worked for runit version 2.1.2 - but please make sure you read the up to date installation instructions on [the website](http://smarden.org/runit) before continuing.
 
@@ -218,7 +190,7 @@ The following instructions worked for runit version 2.1.2 - but please make sure
 
 1. Make sure all binaries in `command/` are accessible from your `PATH` (e.g. symlink / copy them to `/usr/local/bin`)
 
-##### CentOS
+#### CentOS
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -244,7 +216,7 @@ sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
 ```
 
-Install `go` manually using [go] official installation instructions.
+Install `go` manually using the official [go] installation instructions.
 
 Git 1.7.1-3 is the latest Git binary for CentOS 6.5 and GitLab. Spinach tests
 will fail due to a higher version requirement by GitLab. You can follow the
@@ -253,7 +225,7 @@ binary version of Git.
 
 You may need to install Redis 5.0 or newer manually.
 
-##### OpenSUSE
+#### OpenSUSE
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -335,16 +307,16 @@ And reload it using:
 source ~/.bashrc
 ```
 
-Now check that currenty Ruby version is 2.6.x:
+Now determine that the current Ruby version is 2.6.x:
 
 ```shell
 ruby --version
 ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux]
 ```
 
-If it is different (for example Ruby 2.7 - system default in Tumbleweed) you need to relogin.
+If it's different (for example Ruby 2.7 - system default in Tumbleweed), you must sign in again.
 
-The following `bundle config` options are recommended before you run `gdk install` in order to avoid problems with the embedded libraries inside `nokogiri` and `gpgme`:
+The following `bundle config` options are recommended before you run `gdk install` to avoid problems with the embedded libraries inside `nokogiri` and `gpgme`:
 
 ```shell
 bundle config build.nokogiri "--use-system-libraries" --global
@@ -353,7 +325,7 @@ bundle config build.gpgme --use-system-libraries
 
 Now you can proceed to [set up GDK](index.md).
 
-##### FreeBSD
+### Install FreeBSD dependencies
 
 To install dependencies for FreeBSD:
 
@@ -362,7 +334,7 @@ sudo pkg install postgresql10-server postgresql10-contrib postgresql-libpqxx \
 redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio sqlite3
 ```
 
-#### Windows 10
+### Install Windows 10 dependencies
 
 > 🚨 Support for Windows 10 became stable with the introduction of the Windows Subsystem for Linux 2 (WSL2) in version 2004.
 
@@ -378,7 +350,7 @@ wsl --set-default-version 2
 
 Restart your computer when prompted.
 
-Install your Linux Distribution of Choice via the Windows Store. Currently the distro options are:
+Install your Linux Distribution of Choice using the Windows Store. The available distro options include:
 
 - Ubuntu
 - OpenSUSE
@@ -409,17 +381,33 @@ wsl -l
 wsl --set-version <your subsystem name here>
 ```
 
-### Install additional dependencies
+## Install Ruby
 
 `asdf` is a unified package manager that can install, configure, and update the additional
 dependencies required by GDK.
 
-To install additional dependencies with `asdf`, use `make bootstrap`:
+To install Ruby with `asdf`:
 
-```shell
-make bootstrap
-```
+1. Install the Ruby `asdf` plugin:
+
+   ```shell
+   asdf plugin add ruby
+   ```
+
+1. Install the version of Ruby set in [`.tool-versions`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/.tool-versions).
+   For example, to install Ruby 2.6.6, run:
+
+   ```shell
+   asdf install ruby 2.6.6
+   ```
+
+1. Set a global Ruby version in `asdf` to match the version in [`.tool-versions`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/.tool-versions).
+   For example, to set Ruby 2.6.6 as the global version, run:
+
+   ```shell
+   asdf global ruby 2.6.6
+   ```
 
 ## Next Steps
 
-After you have completed everything here, [set up GDK](index.md).
+After you've completed the steps on this page, [install and set up GDK](index.md).

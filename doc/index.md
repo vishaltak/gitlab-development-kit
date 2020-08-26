@@ -1,6 +1,6 @@
 # Install and set up GDK
 
-Before undertaking these steps, be sure you have [prepared your system](prepare.md).
+Before attempting to use these steps, be sure you have [prepared your system](prepare.md).
 
 To get GDK up and running:
 
@@ -10,11 +10,12 @@ To get GDK up and running:
    gem install gitlab-development-kit
    ```
 
-   This is required the first time you install GDK, and any time you upgrade Ruby.
+   This is required both the first time you install GDK and any time you upgrade Ruby.
 
-1. Initialize a new GDK directory. You can initialize either:
+1. Initialize a new GDK directory, using one of the following commands, based on
+   your choice of directory:
 
-   - The default directory (`gitlab-development-kit`), with:
+   - The default directory (`gitlab-development-kit`):
 
      ```shell
      gdk init
@@ -26,14 +27,25 @@ To get GDK up and running:
      gdk init gdk
      ```
 
-1. Install GDK components within the GDK directory:
+1. Install GDK components in the GDK directory:
 
-   1. Change into the newly-created GDK directory.
+   1. Change to the newly-created GDK directory.
+   1. Run `make bootstrap` to install remaining dependencies. If you receive an error
+      message that begins with: **Authenticity of checksum file can not be assured!**:
+      1. Follow the [`asdf-nodejs` Install section instructions](https://github.com/asdf-vm/asdf-nodejs#install).
+      1. Run `make bootstrap` after you resolve the problem.
+   1. Make the newly install PostgreSQL headers (assumes PostgreSQL 11.8) available to the system by
+      running:
+
+      ```shell
+      bundle config build.pg --with-opt-dir="${HOME}/.asdf/installs/postgres/11.8"
+      ```
+
    1. Install the necessary components (repositories, Ruby gem bundles, and configuration) using
       `gdk install`. Use one of the following methods:
 
       - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
-        recommend developing against the GitLab project (the default). For:
+        recommend developing against the GitLab project (the default):
 
         - Cloning `gitlab` using SSH (recommended), run:
 
@@ -48,7 +60,7 @@ To get GDK up and running:
           ```
 
         Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-        The clone is done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+        The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
       - Other options, in order of recommendation:
         - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
@@ -74,7 +86,7 @@ After installing the `gitlab-development-kit` gem and initializing a GDK directo
   ```
 
 Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-The clone is done using [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
 ## Install using your own GitLab fork
 
@@ -145,10 +157,10 @@ occur:
 Instructions to generate a developer license can be found in the
 [onboarding documentation](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee).
 
-The license key generator is only available for GitLab team members, who should use the "Sign in
-with GitLab" link using their `dev.gitlab.org` account.
+The license key generator is available only for GitLab team members, who should use the
+**Sign in with GitLab** link using their `dev.gitlab.org` account.
 
-For information on adding your license to GitLab, see
+For information about adding your license to GitLab, see
 [Activate GitLab EE with a license](https://docs.gitlab.com/ee/user/admin_area/license.html)
 
 ## Post-installation
@@ -158,15 +170,15 @@ After successful installation, see:
 - [GDK commands](gdk_commands.md).
 - [GDK configuration](configuration.md).
 
-After installation [learn how to use GDK](howto/index.md) enable other features.
+After installation, [learn how to use GDK](howto/index.md) to enable other features.
 
 ## Update GDK
 
-For information on updating GDK, see [Update GDK](gdk_commands.md#update-gdk).
+For information about updating GDK, see [Update GDK](gdk_commands.md#update-gdk).
 
 ## Create new GDK
 
-After you have set up GDK initially, it's very easy to create new "fresh installations".
+After you have set up GDK initially, you can create new *fresh installations*.
 You might do this if you have problems with existing installation that are complicated to fix, and
 you just need to get up and running quickly. To create a fresh installation:
 
