@@ -6,7 +6,7 @@ namespace :gitlab_rails do
   namespace :db do
     desc 'Run GitLab migrations'
     task :migrate do
-      GDK::GitlabRails::DB.new.migrate!
+      GDK::GitlabRails::DB.new.migrate
     end
   end
 end
