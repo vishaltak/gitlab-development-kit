@@ -9,6 +9,11 @@ cp /tmp/gdk.yml .
 gdk install
 gdk stop
 sleep 10
+gdk start postgresql
+sleep 10
+cp /tmp/Gitlab.gitlab-license ./gitlab/config/Gitlab.gitlab-license
+cd gitlab && bundle exec rake gitlab:license:load --trace
+gdk stop
 
 # enable-guest-attributes = TRUE
 # gdk-hostname = gdk.test

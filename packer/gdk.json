@@ -40,6 +40,11 @@
       "destination": "/tmp/gdk.yml"
     },
     {
+      "type": "file",
+      "source": "files/Gitlab.gitlab-license",
+      "destination": "/tmp/Gitlab.gitlab-license"
+    },
+    {
       "type": "shell",
       "script": "provisioners/gdk.sh",
       "execute_command": "sudo su -l gdk -c '{{ .Vars }} {{ .Path }}'"
