@@ -54,13 +54,15 @@ $apt_reqs = <<COMMANDS # rubocop:disable Style/GlobalVars
   wget -qO- https://deb.nodesource.com/setup_12.x | bash -
   wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+  wget -qO-  https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
   echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
   echo "deb https://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google.list
+  echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
   export DEBIAN_FRONTEND=noninteractive
   export RUNLEVEL=1
   apt-get update
-  apt-get -y install golang-1.13-go
-  ln -s /usr/lib/go-1.13/bin/* /usr/local/bin
+  apt-get -y install golang-1.14-go
+  ln -s /usr/lib/go-1.14/bin/* /usr/local/bin
   apt-get -y install git graphicsmagick postgresql postgresql-contrib libpq-dev libimage-exiftool-perl redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed nginx libgmp-dev rvm yarn libre2-dev docker.io runit google-chrome-stable
   wget -qO /usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio && chmod +x /usr/local/bin/minio
   apt-get -y upgrade
@@ -138,7 +140,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box = "ubuntu/xenial64"
+    override.vm.box = "ubuntu/bionic64"
     override.disksize.size = "15GB"
     if Vagrant::Util::Platform.windows?
       # thanks to https://github.com/rdsubhas/vagrant-faster/blob/master/lib/vagrant/faster/action.rb
