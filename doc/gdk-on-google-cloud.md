@@ -15,7 +15,7 @@
 1. Create a virtual machine with the GDK image: 
 
 ```shell
-   gcloud compute instances create gdk --machine-type n1-standard-4 --tags http-server,https-server --image-project gdk-cloud --image gitlab-gdk-master-1597726225
+   gcloud compute instances create gdk --machine-type n1-standard-4 --tags http-server,https-server --image-project gdk-cloud --image gitlab-gdk-master-1598444035
 ```
 
 1. Confirm that a VM got created and is running by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
@@ -29,19 +29,6 @@
    sudo su - gdk
    cd gdk
    gdk start
-```
-
-1. We now have to fix some settings, this is a temporary step that will hopefully not be necessary anymore soon.
-
-```shell
-   sudo vim /etc/nginx/sites-enabled/default
-```
-
-1. Now press **i**, change `http://localhost:8080` to `http://localhost:3000`, press **ESC** and then type **:wq** and press **Enter**
-1. Restart NGINX:
-
-```shell
-   sudo nginx -s reload
 ```
 
 1. On the Virtual Machine details, you can see the external IP. Visit that address in a new tab (don't use https://, only http://).
