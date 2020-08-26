@@ -12,7 +12,7 @@ sleep 10
 gdk start postgresql
 sleep 10
 cp /tmp/Gitlab.gitlab-license ./gitlab/config/Gitlab.gitlab-license
-cd gitlab && bundle exec rake gitlab:license:load --trace
+cd gitlab && bundle exec rake gitlab:license:load
 gdk stop
 
 # enable-guest-attributes = TRUE
