@@ -46,13 +46,13 @@ As soon as you see a green arrow on a new line, you are logged in. You can now s
 
 If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
 
-**IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, stop the Virtual Machine:
+**IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, first leave the SSH environment by typing `exit` into the terminal and then execute the following command:
 
 ```shell
    gcloud compute instances stop gdk
 ```
 
-Any time you need it to start again, you can follow only the instructions in this section.
+Any time you need it to work with the GDK again, you can follow only the instructions in this section (Running the GDK).
 
 ## Making changes to the code 
 
