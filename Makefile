@@ -222,7 +222,7 @@ endif
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb
+gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb gitlab/.root_password
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
@@ -231,6 +231,9 @@ gitlab/config/gitlab.yml:
 .PHONY: gitlab/config/database.yml
 gitlab/config/database.yml:
 	$(Q)rake $@
+
+gitlab/.root_password:
+	openssl rand -base64 10 > $@
 
 # Versions older than GitLab 11.5 won't have this file
 gitlab/config/puma.example.development.rb:
