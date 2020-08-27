@@ -44,6 +44,7 @@ As soon as you see a green arrow on a new line, you are logged in. You can now s
 1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension. 
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
 1. In the menu that pops up, select **Remote-SSH: Connect to Host...** and then **+ Add New SSH Host...**.
+1. You should now already see an option **gdk.YOUR_ZONE.YOUR_PROJECT_ID**. If that's the case
 1. Enter the following SSH Connection Command:
 
 ```shell
