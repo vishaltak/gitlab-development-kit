@@ -30,10 +30,12 @@ You can now start your Virtual Machine:
 
 Now log into your Virtual Machine and forward the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and follow the instructions to create your SSH key file:
 
+<!-- markdownlint-disable MD044 -->
 ```shell
    gcloud compute config-ssh
    gcloud compute ssh gdk@gdk -- -L 3000:localhost:3000
 ```
+<!-- markdownlint-enable MD044 -->
 
 As soon as you see a green arrow on a new line, you are logged in. You can now start the gdk as usual:
 
@@ -58,10 +60,10 @@ Any time you need it to start again, you can follow only the instructions in thi
 
 1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension. 
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
+<!-- markdownlint-disable MD044 -->
 <!-- vale off -->
 1. In the menu that pops up, select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
 <!-- vale on -->
-<!-- markdownlint-disable MD044 -->
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
 <!-- markdownlint-enable MD044 -->
 
