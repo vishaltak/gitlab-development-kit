@@ -28,6 +28,13 @@ Now log into your Virtual Machine and forward the port the GDK is running on in 
    gcloud compute ssh gdk@gdk -- -L 3000:localhost:3000
 ```
 
+As soon as you see a green arrow on a new line, you are logged in. You can now start the gdk as usual:
+
+```shell
+   cd gdk
+   gdk start
+```
+
 1. If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
 
 ## Making changes to the code 
