@@ -56,7 +56,7 @@ Any time you need it to work with the GDK again, you can follow only the instruc
 
 ## Making changes to the code 
 
-## Option A: VS Code on your own machine
+## Option A (recommended): VS Code on your own machine
 
 1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension. 
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
