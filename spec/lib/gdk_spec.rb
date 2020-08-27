@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe GDK do
-  let(:up_shortly_msg) { 'GitLab available at http://127.0.0.1:3000 shortly.' }
+  let(:up_shortly_msg) { 'GitLab will be available at http://127.0.0.1:3000 shortly.' }
 
   before do
     allow(described_class).to receive(:install_root_ok?).and_return(true)
