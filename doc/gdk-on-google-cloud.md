@@ -62,7 +62,7 @@ Any time you need it to start again, you can follow only the instructions in thi
 1. In the menu that pops up, select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
 <!-- vale on -->
 <!-- markdownlint-disable MD044 -->
-1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then select **..**, followed by **gdk**, another time **gdk** again, and then **gitlab**.
+1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
 <!-- markdownlint-enable MD044 -->
 
 ### Option B: Code Server (VS Code in your browser)
