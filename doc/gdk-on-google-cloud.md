@@ -30,9 +30,7 @@ Connect to your Virtual Machine via SSH. You can do so by clicking the SSH dropd
    gdk start
 ```
 
-The GDK is now already running, we only need to make sure you can reach it from your laptop:
-
-Hint: To get YOUR_PUBLIC_SSH_KEY, you can run `pbcopy < ~/.ssh/id_ed25519.pub` in the terminal of your own machine.
+The GDK is now already running, we only need to make sure you can only reach it from your laptop and it's not publicly available on the internet, so execute the following commands in the browser window terminal:
 
 ```shell
    mkdir ~/.ssh
@@ -42,7 +40,9 @@ Hint: To get YOUR_PUBLIC_SSH_KEY, you can run `pbcopy < ~/.ssh/id_ed25519.pub` i
    chmod 600 ~/.ssh/authorized_keys
 ```
 
-1. Forward now the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and keep it running:
+Hint: To get YOUR_PUBLIC_SSH_KEY, you can run `pbcopy < ~/.ssh/id_ed25519.pub` in the terminal of your own machine.
+
+Forward now the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and keep it running:
 
 ```shell
    ssh -N -L 3000:localhost:3000 gdk@IP_OF_YOUR_VM
@@ -63,7 +63,9 @@ Hint: To get YOUR_PUBLIC_SSH_KEY, you can run `pbcopy < ~/.ssh/id_ed25519.pub` i
    ssh -i PATH_OF_YOUR_PRIVATE_SSH_KEY_FILE gdk@IP_OF_YOUR_VM
 ```
 
-1. Choose where you want to save the configuration.
+Hint: The PATH_OF_YOUR_PRIVATE_SSH_KEY_FILE is the same path as for your public SSH key file, just without the `.pub` ending.
+
+1. Choose the file you want to save the configuration in.
 1. You should now see a toast message that a new host was added, click on **Connect**.
 <!-- markdownlint-disable MD044 -->
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then select first **gdk**, followed by **gitlab**.
