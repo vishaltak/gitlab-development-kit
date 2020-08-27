@@ -18,13 +18,20 @@ Create a virtual machine with the GDK image:
    gcloud compute instances create gdk --machine-type n1-standard-4 --image-project gdk-cloud --image gitlab-gdk-master-1598444035
 ```
 
-Confirm that a VM got created and is running by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
+Confirm that a VM got created by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
 
 ## Running the GDK
+
+You can now start your Virtual Machine:
+
+```shell
+   gcloud compute instances start gdk
+```
 
 Now log into your Virtual Machine and forward the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and follow the instructions to create your SSH key file:
 
 ```shell
+   gcloud compute config-ssh
    gcloud compute ssh gdk@gdk -- -L 3000:localhost:3000
 ```
 
@@ -35,7 +42,15 @@ As soon as you see a green arrow on a new line, you are logged in. You can now s
    gdk start
 ```
 
-1. If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
+If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
+
+**IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, stop the Virtual Machine:
+
+```shell
+   gcloud compute instances stop gdk
+```
+
+Any time you need it to start again, you can follow only the instructions in this section.
 
 ## Making changes to the code 
 
@@ -44,15 +59,7 @@ As soon as you see a green arrow on a new line, you are logged in. You can now s
 1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension. 
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
 1. In the menu that pops up, select **Remote-SSH: Connect to Host...** and then **+ Add New SSH Host...**.
-1. You should now already see an option **gdk.YOUR_ZONE.YOUR_PROJECT_ID**. If that's the case
-1. Enter the following SSH Connection Command:
-
-```shell
-   ssh -i ~/.ssh/google_compute_engine gdk@IP_OF_YOUR_VM
-```
-
-1. Choose the file you want to save the configuration in.
-1. You should now see a toast message that a new host was added, click on **Connect**.
+1. You should now already see an option **gdk.YOUR_ZONE.YOUR_PROJECT_ID**, choose that one.
 <!-- markdownlint-disable MD044 -->
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then select first **gdk**, followed by **gitlab**.
 <!-- markdownlint-enable MD044 -->
