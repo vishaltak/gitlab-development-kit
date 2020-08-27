@@ -30,22 +30,10 @@ Connect to your Virtual Machine via SSH. You can do so by clicking the SSH dropd
    gdk start
 ```
 
-The GDK is now already running, we only need to make sure you can only reach it from your laptop and it's not publicly available on the internet, so execute the following commands in the browser window terminal:
+Forward now the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and follow the instructions to create your SSH key file:
 
 ```shell
-   mkdir ~/.ssh
-   chmod 700 ~/.ssh
-   touch ~/.ssh/authorized_keys
-   echo YOUR_PUBLIC_SSH_KEY >> ~/.ssh/authorized_keys
-   chmod 600 ~/.ssh/authorized_keys
-```
-
-Hint: To get YOUR_PUBLIC_SSH_KEY, you can run `pbcopy < ~/.ssh/id_ed25519.pub` in the terminal of your own machine.
-
-Forward now the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and keep it running:
-
-```shell
-   ssh -N -L 3000:localhost:3000 gdk@IP_OF_YOUR_VM
+   gcloud compute ssh gdk -- -L 3000:localhost:3000
 ```
 
 1. If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
