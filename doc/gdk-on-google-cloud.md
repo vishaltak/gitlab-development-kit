@@ -22,18 +22,10 @@ Confirm that a VM got created and is running by checking the overview of your [V
 
 ## Running the GDK
 
-Connect to your Virtual Machine via SSH. You can do so by clicking the SSH dropdown for your Virtual Machine on the overview page in the Google Cloud UI and selecting **Open in browser window**. Wait for the terminal to load, then enter the following commands (all following terminal commands are supposed to be executed in this window, unless stated otherwise):
+Now log into your Virtual Machine and forward the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and follow the instructions to create your SSH key file:
 
 ```shell
-   sudo su - gdk
-   cd gdk
-   gdk start
-```
-
-Forward now the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and follow the instructions to create your SSH key file:
-
-```shell
-   gcloud compute ssh gdk -- -L 3000:localhost:3000
+   gcloud compute ssh gdk@gdk -- -L 3000:localhost:3000
 ```
 
 1. If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
@@ -48,10 +40,8 @@ Forward now the port the GDK is running on in the cloud to your local machine. T
 1. Enter the following SSH Connection Command:
 
 ```shell
-   ssh -i PATH_OF_YOUR_PRIVATE_SSH_KEY_FILE gdk@IP_OF_YOUR_VM
+   ssh -i ~/.ssh/google_compute_engine gdk@IP_OF_YOUR_VM
 ```
-
-Hint: The PATH_OF_YOUR_PRIVATE_SSH_KEY_FILE is the same path as for your public SSH key file, just without the `.pub` ending.
 
 1. Choose the file you want to save the configuration in.
 1. You should now see a toast message that a new host was added, click on **Connect**.
