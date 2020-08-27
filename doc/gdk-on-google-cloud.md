@@ -37,7 +37,7 @@ Now log into your Virtual Machine and forward the port the GDK is running on in 
 ```
 <!-- markdownlint-enable MD044 -->
 
-As soon as you see a green arrow on a new line, you are logged in. You can now start the gdk as usual:
+As soon as you see a green arrow on a new line, you are logged in. You can now start the GDK as usual:
 
 ```shell
    cd gdk
