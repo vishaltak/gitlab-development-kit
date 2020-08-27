@@ -62,7 +62,9 @@ Any time you need it to start again, you can follow only the instructions in thi
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
 <!-- markdownlint-disable MD044 -->
 <!-- vale off -->
-1. In the menu that pops up, select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
+1. In the menu that pops up, select **Remote-SSH: Open configuration file** and select the first option.
+1. In the file that now opens, add `User gdk` below the line with the `HostName` variable.
+1. Open the Remote menu from the lower left corner again and this time select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
 <!-- vale on -->
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
 <!-- markdownlint-enable MD044 -->
