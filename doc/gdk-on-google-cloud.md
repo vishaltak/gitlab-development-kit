@@ -71,7 +71,7 @@ Hint: The PATH_OF_YOUR_PRIVATE_SSH_KEY_FILE is the same path as for your public 
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then select first **gdk**, followed by **gitlab**.
 <!-- markdownlint-enable MD044 -->
 
-### Option B: Code Server (cloud version of VS Code)
+### Option B: Code Server (VS Code in your browser)
 
 1. In the browser terminal of your Virtual Machine, create a self-signed certificate for Code Server:
 
@@ -85,7 +85,7 @@ Hint: The PATH_OF_YOUR_PRIVATE_SSH_KEY_FILE is the same path as for your public 
    systemctl --user restart code-server
 ```
 
-1. Forward now the Code Server port from the Virtual Machine to your machine by entering the following command in the terminal of your own machine:
+1. Forward now the Code Server port from the Virtual Machine to your machine by entering the following command in the terminal of your own machine, and keeping it running:
 
 ```shell
    ssh -N -L 8080:localhost:8080 gdk@IP_OF_YOUR_VM
