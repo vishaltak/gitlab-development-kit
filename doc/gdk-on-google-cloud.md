@@ -44,7 +44,7 @@ As soon as you see a green arrow on a new line, you are logged in. You can now s
    gdk start
 ```
 
-If you visit the familiar `localhost:3000` you should now see the familiar 502 page. Wait 1-2 minutes and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message, reloading the page 1-2 times should fix it.
+If you visit the familiar `localhost:3000` you should now see the familiar 502 page, if not just wait a couple of seconds and reload the page. Wait 1-2 minutes while the 502 page reloads itself multiple times, and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message or an error message that the "Request ran for longer than 60000ms", reloading the page 1-2 more times should fix it.
 
 **IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, first leave the SSH environment by typing `exit` into the terminal and then execute the following command:
 
@@ -66,29 +66,25 @@ Any time you need it to work with the GDK again, you can follow only the instruc
 1. In the file that now opens, add `User gdk` below the line with the `HostName` variable.
 1. Open the Remote menu from the lower left corner again and this time select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
 <!-- vale on -->
-1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
+1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key that you configured previously in the terminal. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
 <!-- markdownlint-enable MD044 -->
 
 ### Option B: Code Server (VS Code in your browser)
 
-1. In the browser terminal of your Virtual Machine, create a self-signed certificate for Code Server:
+Open a new terminal window if you want to keep the GDK running at the same time as Code Server. Then you need to also forward the Code Server port from the Virtual Machine to your machine by entering the following command in the terminal of your own machine, and keeping it running:
 
 ```shell
-   export XDG_RUNTIME_DIR=/run/user/`id -u`
-   loginctl enable-linger $(whoami)
-   systemctl --user enable --now code-server
+   gcloud compute ssh gdk@gdk -- -L 8080:localhost:8080
+```
+
+Enter the passphrase for your SSH key file again and wait for same green arrow to appear, then execute the following commands:
+
+```shell
    sed -i.bak 's/auth: password/auth: none/' ~/.config/code-server/config.yaml
-   sudo setcap cap_net_bind_service=+ep /usr/lib/code-server/lib/node
    systemctl --user restart code-server
 ```
 
-1. Forward now the Code Server port from the Virtual Machine to your machine by entering the following command in the terminal of your own machine, and keeping it running:
-
-```shell
-   ssh -N -L 8080:localhost:8080 gdk@IP_OF_YOUR_VM
-```
-
-1. Open `localhost:8080` to see VS Code running in your browser.
+1. You can now open `localhost:8080` to see VS Code running in your browser.
 <!-- markdownlint-disable MD044 -->
 1. Click the first icon in the left sidebar, and select **File** -> **Open..**. That brings up a new menu where you can select **gdk** -> **gitlab**. Here you can now switch branches, make changes that will directly be displayed in the cloud GDK and commit any changes you made.
 <!-- markdownlint-enable MD044 -->
