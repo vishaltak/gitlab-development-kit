@@ -57,6 +57,7 @@
 /influxdb/
 /jaeger-artifacts/
 /jaeger/
+/lefthook-local.yml
 /log/
 /mattermost
 /minio
