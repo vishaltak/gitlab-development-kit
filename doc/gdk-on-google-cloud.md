@@ -3,7 +3,7 @@
 ## Preparations
 
 1. Make sure you have a [Google Cloud](console.cloud.google.com/) account.
-1. Create and new project in gcloud and take note of the project id for later steps.
+1. Create and new project in gcloud and take note of the project id for later steps. A new project ensures you are not inheriting any vulnerable configurations, such as wide-open firewall rules.
 1. [Install the Google Cloud CLI](https://cloud.google.com/sdk/docs/quickstart-macos) on your machine, initialize it, and configure it to use the project you just created (only if you have more than one):
 
 ```shell
