@@ -3,16 +3,22 @@
 ## Preparations
 
 1. Make sure you have a [Google Cloud](console.cloud.google.com/) account.
-1. Create and new project in gcloud and take note of the project id for later steps. A new project ensures you are not inheriting any vulnerable configurations, such as wide-open firewall rules.
-1. [Install the Google Cloud CLI](https://cloud.google.com/sdk/docs/quickstart-macos) on your machine, initialize it, and configure it to use the project you just created (only if you have more than one):
+1. [Install the Google Cloud CLI](https://cloud.google.com/sdk/docs/quickstart-macos) on your machine
+1. Create and new project in gcloud. A new project ensures you are not inheriting any vulnerable configurations, such as wide-open firewall rules. The project name has to be unique across all Google Cloud projects for all users, so you might have to try multiple times.
 
 ```shell
-   gcloud config set project YOUR_PROJECT_ID
+   gcloud projects create YOUR_NEW_PROJECT_NAME
+```
+
+1. Now you have to make sure to use that new project as default target for any commands you are going to run.
+
+```shell
+   gcloud config set project YOUR_NEW_PROJECT_NAME
 ```
 
 ## Creating the Virtual Machine
 
-Create a virtual machine with the GDK image: 
+Create a virtual machine with the GDK image. It is possible that this fails with an error message that billing is not enabled for that project, in that case visit https://console.cloud.google.com/billing/linkedaccount?project=YOUR_NEW_PROJECT_NAME, link a billing acount to this project and run the command again.
 
 ```shell
    gcloud compute instances create gdk --machine-type n1-standard-4 --no-service-account --no-scopes --image-project gdk-cloud --image gitlab-gdk-master-1598444035
@@ -46,7 +52,7 @@ As soon as you see a green arrow on a new line, you are logged in. You can now s
 
 If you visit the familiar `localhost:3000` you should now see the familiar 502 page, if not just wait a couple of seconds and reload the page. Wait 1-2 minutes while the 502 page reloads itself multiple times, and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message or an error message that the "Request ran for longer than 60000ms", reloading the page 1-2 more times should fix it.
 
-**IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, first leave the SSH environment by typing `exit` into the terminal and then execute the following command:
+**IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, first leave the SSH environment by typing `exit` into the terminal, followed by **Control + c** and then execute the following command:
 
 ```shell
    gcloud compute instances stop gdk
@@ -77,10 +83,16 @@ Open a new terminal window if you want to keep the GDK running at the same time 
    gcloud compute ssh gdk@gdk -- -L 8080:localhost:8080
 ```
 
-Enter the passphrase for your SSH key file again and wait for same green arrow to appear, then execute the following commands:
+Enter the passphrase for your SSH key file again and wait for same green arrow to appear, then execute the following commands to set up Code Server for the first time and disable the unnecessary authentication:
 
 ```shell
+   systemctl --user enable --now code-server
    sed -i.bak 's/auth: password/auth: none/' ~/.config/code-server/config.yaml
+```
+
+You can now start Code Server. Logging in with the first command in this section and running the following line is the only thing you have to do from now on to get Code Server running, the previous setup instructions are only necessary for the first time.
+
+```shell
    systemctl --user restart code-server
 ```
 
