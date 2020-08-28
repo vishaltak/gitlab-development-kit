@@ -18,9 +18,9 @@
 
 ## Creating the Virtual Machine
 
-<!-- markdownlint-disable MD044 -->
+<!-- markdownlint-disable MD034 -->
 Create a virtual machine with the GDK image. It is possible that this fails with an error message that billing is not enabled for that project, in that case visit https://console.cloud.google.com/billing/linkedaccount?project=YOUR_NEW_PROJECT_NAME, link a billing acount to this project and run the command again.
-<!-- markdownlint-enable MD044 -->
+<!-- markdownlint-enable MD034 -->
 
 ```shell
    gcloud compute instances create gdk --machine-type n1-standard-4 --no-service-account --no-scopes --image-project gdk-cloud --image gitlab-gdk-master-1598444035
