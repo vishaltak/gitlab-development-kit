@@ -893,7 +893,11 @@ test_list_missing_tools:
 	@test ${RSPEC} || echo "WARNING: rspec is not currently installed."
 
 .PHONY: test
+ifeq ($(and $(VALE),$(MARKDOWNLINT),$(RUBOCOP),$(RSPEC)),)
+test: test_list_missing_tools lint rubocop rspec
+else
 test: lint rubocop rspec
+endif
 
 .PHONY: rubocop
 rubocop:
