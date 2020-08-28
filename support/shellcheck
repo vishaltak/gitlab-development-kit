@@ -4,7 +4,7 @@
 #
 # https://github.com/koalaman/shellcheck/wiki/SC1071 - ShellCheck only supports sh/bash/dash/ksh scripts. Sorry!
 
-root="$(realpath "$(dirname "${0}")/../..")"
+root="$(realpath "$(dirname "${0}")/..")"
 
 exec find "${root}/bin" "${root}/support" "${root}/support/ci" "${root}/support/completions" \
       -maxdepth 1 \
