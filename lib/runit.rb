@@ -91,7 +91,7 @@ module Runit
   end
 
   def self.stop
-    GDK::Output.notice "Shutting all services: "
+    GDK::Output.notice "Shutting down all services: "
 
     # The first stop attempt may fail; ignore its return value.
     stopped = false
@@ -117,7 +117,7 @@ module Runit
     Process.kill('HUP', pid)
 
     GDK::Output.puts
-    GDK::Output.success "All services are shutdown!"
+    GDK::Output.success "All services have been shut down!"
   end
 
   def self.sv(cmd, services)
