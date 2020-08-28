@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 group :development do
+  gem 'lefthook', '~> 0.7', require: false
   gem 'yard', '~> 0.9', require: false
 end
 
