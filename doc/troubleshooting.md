@@ -104,8 +104,8 @@ You may run into the following errors on running `gdk install`
 ```plaintext
 Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
 
-    current directory: /Users/janedoe/.rvm/gems/ruby-2.3.3/gems/pg-0.18.4/ext
-/Users/janedoe/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20180330-95521-1k5x76v.rb extconf.rb
+    current directory: /Users/gdk/.rvm/gems/ruby-2.3.3/gems/pg-0.18.4/ext
+/Users/gdk/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20180330-95521-1k5x76v.rb extconf.rb
 checking for pg_config... no
 No pg_config... trying anyway. If building fails, please try again with
  --with-pg-config=/path/to/pg_config
@@ -333,12 +333,12 @@ upgrade`) which may break binary compatibility.
 ```shell
 bundle exec rake db:create dev:setup
 rake aborted!
-LoadError: dlopen(/Users/janedoe/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle, 9): Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.52.1.dylib
-  Referenced from: /Users/janedoe/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
-  Reason: image not found - /Users/janedoe/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
-/Users/janedoe/gitlab-development-kit/gitlab/config/application.rb:6:in `<top (required)>'
-/Users/janedoe/gitlab-development-kit/gitlab/Rakefile:5:in `require'
-/Users/janedoe/gitlab-development-kit/gitlab/Rakefile:5:in `<top (required)>'
+LoadError: dlopen(/Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle, 9): Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.52.1.dylib
+  Referenced from: /Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
+  Reason: image not found - /Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
+/Users/gdk/gitlab-development-kit/gitlab/config/application.rb:6:in `<top (required)>'
+/Users/gdk/gitlab-development-kit/gitlab/Rakefile:5:in `require'
+/Users/gdk/gitlab-development-kit/gitlab/Rakefile:5:in `<top (required)>'
 (See full trace by running task with --trace)
 ```
 
@@ -495,7 +495,12 @@ A solution is to:
 
 1. Re-run `gdk install`
 
-## `gem install ffi` fails
+## FFI gem issues
+
+The following are problems you might encounter when installing the
+[FFI gem](https://github.com/ffi/ffi/wiki) with possible solutions.
+
+### `gem install ffi` fails with '`ffi.h` file not found'
 
 If you see the following error installing the `ffi` gem via `gdk install`:
 
@@ -536,6 +541,51 @@ A solution on macOS is to:
 
 1. Re-run `gdk install`
 
+### `gem install ffi` fails with 'error: implicit declaration of function'
+
+```shell
+Installing ffi 1.13.1 with native extensions
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+current directory:
+/Users/gdk/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/ffi-1.13.1/ext/ffi_c
+-- snip --
+compiling Function.c
+Function.c:852:17: error: implicit declaration of function
+'ffi_prep_closure_loc' is invalid in C99
+[-Werror,-Wimplicit-function-declaration]
+ffiStatus = ffi_prep_closure_loc(code, &fnInfo->ffi_cif, callback_invoke,
+closure, code);
+                ^
+Function.c:852:17: note: did you mean 'ffi_prep_closure'?
+/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/usr/include/ffi/ffi.h:269:1:
+note: 'ffi_prep_closure' declared here
+ffi_prep_closure(
+^
+1 error generated.
+make[2]: *** [Function.o] Error 1
+
+make failed, exit code 2
+
+Gem files will remain installed in
+/Users/gdk/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/ffi-1.13.1 for
+inspection.
+Results logged to
+/Users/gdk/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-darwin-18/2.6.0/ffi-1.13.1/gem_make.out
+
+An error occurred while installing ffi (1.13.1), and Bundler cannot continue.
+Make sure that `gem install ffi -v '1.13.1' --source 'https://rubygems.org/'`
+succeeds before bundling.
+
+In Gemfile:
+  rbtrace was resolved to 0.4.14, which depends on
+    ffi
+make[1]: *** [/Users/gdk/code/ee-gdk/gitaly/.ruby-bundle] Error 5
+make: *** [gitaly/bin/gitaly] Error 2
+```
+
+A solution on macOS is to re-install [Xcode Command Line Tools](https://apple.stackexchange.com/questions/93573/how-to-reinstall-xcode-command-line-tools).
+
 ## LoadError due to readline
 
 On macOS, GitLab may fail to start and fail with an error message about
@@ -543,9 +593,9 @@ On macOS, GitLab may fail to start and fail with an error message about
 
 ```plaintext
 LoadError:
-    dlopen(/Users/janedoe/.rbenv/versions/2.6.3/lib/ruby/2.5.0/x86_64-darwin15/readline.bundle, 9): Library not loaded: /usr/local/opt/readline/lib/libreadline.7.dylib
-        Referenced from: /Users/janedoe/.rbenv/versions/2.6.3/lib/ruby/2.5.0/x86_64-darwin15/readline.bundle
-        Reason: image not found - /Users/janedoe/.rbenv/versions/2.6.3/lib/ruby/2.5.0/x86_64-darwin15/readline.bundle
+    dlopen(/Users/gdk/.rbenv/versions/2.6.3/lib/ruby/2.5.0/x86_64-darwin15/readline.bundle, 9): Library not loaded: /usr/local/opt/readline/lib/libreadline.7.dylib
+        Referenced from: /Users/gdk/.rbenv/versions/2.6.3/lib/ruby/2.5.0/x86_64-darwin15/readline.bundle
+        Reason: image not found - /Users/gdk/.rbenv/versions/2.6.3/lib/ruby/2.5.0/x86_64-darwin15/readline.bundle
 ```
 
 This happens because the Ruby interpreter was linked with a version of
