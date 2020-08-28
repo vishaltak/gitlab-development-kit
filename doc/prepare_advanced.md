@@ -1,10 +1,21 @@
-# Prepare your system for GDK
+# Prepare your system for GDK (advanced)
 
-## Install OS dependencies
+The following are preparation instructions for systems other than those covered in the
+[main preparation instructions](prepare.md#install-dependencies).
 
-### Linux
+These instructions may contain advanced configuration options.
 
-#### Arch Linux
+## Install Linux dependencies
+
+The process for installing dependencies on Linux depends on your Linux distribution. For Ubuntu
+instructions, see [Install Ubuntu dependencies](prepare.md#install-ubuntu-dependencies)
+
+Unless already set, you'll probably have to increase the watches limit of `inotify` for
+frontend development tools such as `webpack` to effectively track file changes.
+See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
+for details and instructions about how to apply this change.
+
+### Arch Linux
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -23,7 +34,7 @@ The Arch Linux core repository does not contain anymore the `runit` package. It 
 pikaur -S runit-systemd
 ```
 
-#### Debian
+### Debian
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -46,7 +57,7 @@ instructions.
 
 You may need to install Redis 5.0 or newer manually.
 
-#### Fedora
+### Fedora
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -77,7 +88,7 @@ sudo chmod +x /usr/local/bin/minio
 
 You may need to install Redis 5.0 or newer manually.
 
-##### runit
+#### runit
 
 You'll also need to install [runit](http://smarden.org/runit) manually.
 
@@ -96,7 +107,7 @@ The following instructions worked for runit version 2.1.2 - but please make sure
 
 1. Make sure all binaries in `command/` are accessible from your `PATH` (e.g. symlink / copy them to `/usr/local/bin`)
 
-#### CentOS
+### CentOS
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -131,7 +142,7 @@ binary version of Git.
 
 You may need to install Redis 5.0 or newer manually.
 
-#### OpenSUSE
+### OpenSUSE
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -231,7 +242,7 @@ bundle config build.gpgme --use-system-libraries
 
 Now you can proceed to [set up GDK](index.md).
 
-### Install FreeBSD dependencies
+## Install FreeBSD dependencies
 
 To install dependencies for FreeBSD:
 
@@ -239,3 +250,54 @@ To install dependencies for FreeBSD:
 sudo pkg install postgresql10-server postgresql10-contrib postgresql-libpqxx \
 redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio sqlite3
 ```
+
+## Install Windows 10 dependencies
+
+> 🚨 Support for Windows 10 became stable with the introduction of the Windows Subsystem for Linux 2 (WSL2) in version 2004.
+
+**Setting up the Windows Subsystem for Linux:**
+
+Open PowerShell as Administrator and run:
+
+```shell
+Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+wsl --set-default-version 2
+```
+
+Restart your computer when prompted.
+
+Install your Linux Distribution of Choice using the Windows Store. The available distro options include:
+
+- Ubuntu
+- OpenSUSE
+- SLES
+- Kali Linux
+- Debian GNU/Linux
+
+Launch the distro of choice.
+
+You must ensure that your Linux distribution uses WSL version 2. Open PowerShell with
+administrator privileges and run the following:
+
+```shell
+# If the command below does not return a list of your installed distributions,
+# you have WS1.
+wsl -l
+```
+
+You can [upgrade](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel) your WSL.
+
+If you noticed your distribution of choice is an older subsystem, you can upgrade it by
+running:
+
+```shell
+# Get the name of your subsystem
+wsl -l
+# Run the following command
+wsl --set-version <your subsystem name here>
+```
+
+## Next Steps
+
+After you've completed the steps on this page, [install and set up GDK](index.md).

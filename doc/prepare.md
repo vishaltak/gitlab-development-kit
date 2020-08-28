@@ -10,15 +10,19 @@ NOTE: **Note:**
 Install, configure, and update all of these dependencies as a non-root user. If you don't know what
 a root user is, you very likely run everything as a non-root user already.
 
-## Install OS dependencies
+## Install dependencies
 
-The process for installing dependencies depends on your operating system.
-Instructions are available for:
+The process for installing dependencies depends on your operating system. Instructions are available
+for:
 
 - [macOS](#install-macos-dependencies)
-- [Linux distributions](#install-linux-dependencies)
-- [FreeBSD](#install-freebsd-dependencies)
-- [Windows 10](#install-windows-10-dependencies)
+- [Ubuntu](#install-ubuntu-dependencies)
+
+[Advanced instructions](prepare_advanced.md) are also available, including instructions for:
+
+- [Other Linux distributions](prepare_advanced.md#install-linux-dependencies)
+- [FreeBSD](prepare_advanced.md#install-freebsd-dependencies)
+- [Windows 10](prepare_advanced#install-windows-10-dependencies)
 
 ### Install macOS dependencies
 
@@ -55,16 +59,7 @@ the Ruby gems installation with C extensions. If you use a custom directory, add
 when installing Ruby gems. For more information, see
 [Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal).
 
-### Install Linux dependencies
-
-The process for installing dependencies on Linux depends on your Linux distribution.
-
-Unless already set, you'll probably have to increase the watches limit of `inotify` for
-frontend development tools such as `webpack` to effectively track file changes.
-See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
-for details and instructions about how to apply this change.
-
-#### Ubuntu
+### Install Ubuntu dependencies
 
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
@@ -97,57 +92,6 @@ To install dependencies for Ubuntu (assuming you're using an active LTS release 
    > ℹ️ Ubuntu 18.04 (Bionic Beaver) and beyond doesn't have `python-software-properties` as a separate package.
 
 1. You're all set now. [Go to next steps](#next-steps).
-
-### Install Windows 10 dependencies
-
-> 🚨 Support for Windows 10 became stable with the introduction of the Windows Subsystem for Linux 2 (WSL2) in version 2004.
-
-**Setting up the Windows Subsystem for Linux:**
-
-Open PowerShell as Administrator and run:
-
-```shell
-Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-wsl --set-default-version 2
-```
-
-Restart your computer when prompted.
-
-Install your Linux Distribution of Choice using the Windows Store. The available distro options include:
-
-- Ubuntu
-- OpenSUSE
-- SLES
-- Kali Linux
-- Debian GNU/Linux
-
-Launch the distro of choice.
-
-You must ensure that your Linux distribution uses WSL version 2. Open PowerShell with
-administrator privileges and run the following:
-
-```shell
-# If the command below does not return a list of your installed distributions,
-# you have WS1.
-wsl -l
-```
-
-You can [upgrade](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel) your WSL.
-
-If you noticed your distribution of choice is an older subsystem, you can upgrade it by
-running:
-
-```shell
-# Get the name of your subsystem
-wsl -l
-# Run the following command
-wsl --set-version <your subsystem name here>
-```
-
-### Other Operating Systems
-
-For other operating systems, see [prepare other](prepare_other.md).
 
 ## Next Steps
 
