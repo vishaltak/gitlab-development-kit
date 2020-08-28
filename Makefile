@@ -885,6 +885,13 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 # Tests
 ##############################################################
 
+.PHONY: test_list_missing_tools
+test_list_missing_tools:
+	@test ${VALE} || echo "WARNING: vale is not currently installed"
+	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not currently installed."
+	@test ${RUBOCOP} || echo "WARNING: rubocop is not currently installed."
+	@test ${RSPEC} || echo "WARNING: rspec is not currently installed."
+
 .PHONY: test
 test: lint rubocop rspec
 
