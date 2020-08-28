@@ -2,6 +2,10 @@
 
 SHELL = /bin/bash
 RAKE := $(shell command -v rake 2> /dev/null)
+VALE := $(shell command -v vale 2> /dev/null)
+MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+RUBOCOP := $(shell bundle exec command -v rubocop 2> /dev/null)
+RSPEC := $(shell bundle exec command -v rspec 2> /dev/null)
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
