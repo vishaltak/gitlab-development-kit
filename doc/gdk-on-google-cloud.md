@@ -77,7 +77,6 @@ Any time you need it to work with the GDK again, you can follow only the instruc
    export XDG_RUNTIME_DIR=/run/user/`id -u`
    loginctl enable-linger $(whoami)
    systemctl --user enable --now code-server
-   sed -i.bak 's/cert: false/cert: true/' ~/.config/code-server/config.yaml
    sed -i.bak 's/auth: password/auth: none/' ~/.config/code-server/config.yaml
    sudo setcap cap_net_bind_service=+ep /usr/lib/code-server/lib/node
    systemctl --user restart code-server
