@@ -41,6 +41,7 @@ Now log into your Virtual Machine and forward the port the GDK is running on in 
 <!-- markdownlint-disable MD044 -->
 ```shell
    gcloud compute config-ssh
+   sed -i '' $'/CheckHostIP=no/s/^/ User gdk\\\n/' ~/.ssh/config
    gcloud compute ssh gdk@gdk -- -L 3000:localhost:3000
 ```
 <!-- markdownlint-enable MD044 -->
