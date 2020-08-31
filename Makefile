@@ -4,9 +4,13 @@ SHELL = /bin/bash
 RAKE := $(shell command -v rake 2> /dev/null)
 VALE := $(shell command -v vale 2> /dev/null)
 MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+BUNDLE := $(shell command -v bundle 2> /dev/null)
 RUBOCOP := $(shell command -v rubocop 2> /dev/null)
 RSPEC := $(shell command -v rspec 2> /dev/null)
 SHELLCHECK := $(shell command -v shellcheck 2> /dev/null)
+GOLANG := $(shell command -v go 2> /dev/null)
+NPM := $(shell command -v npm 2> /dev/null)
+YARN := $(shell command -v yarn 2> /dev/null)
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
@@ -34,9 +38,9 @@ pages_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_r
 gitlab_elasticsearch_indexer_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")
-bundle_install_cmd = bundle install --jobs 4 --without production ${quiet_bundle_flag}
+bundle_install_cmd = ${BUNDLE} install --jobs 4 --without production ${quiet_bundle_flag}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
-gitlab_rake_cmd = $(in_gitlab) bundle exec rake
+gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
 psql := $(postgresql_bin_dir)/psql
@@ -269,7 +273,7 @@ gitlab/public/uploads:
 	@echo "------------------------------------------------------------"
 	@echo "Installing gitlab-org/gitlab Node.js packages"
 	@echo "------------------------------------------------------------"
-	$(Q)$(in_gitlab) yarn install --pure-lockfile ${QQ}
+	$(Q)$(in_gitlab) ${YARN} install --pure-lockfile ${QQ}
 	$(Q)touch $@
 
 .gettext:
@@ -875,69 +879,105 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 test_list_missing_tools:
 	@test ${VALE} || echo "WARNING: vale is not installed"
 	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not installed."
+	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not installed."
 	@test ${RUBOCOP} || echo "WARNING: rubocop is not installed."
 	@test ${RSPEC} || echo "WARNING: rspec is not installed."
-	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not installed."
 
 .PHONY: test_warn_missing_tools
-ifeq ($(and $(VALE),$(MARKDOWNLINT),$(RUBOCOP),$(RSPEC),$(SHELLCHECK)),)
+ifeq ($(and $(VALE),$(MARKDOWNLINT),$(SHELLCHECK),$(RUBOCOP),$(RSPEC)),)
 test_warn_missing_tools: test_list_missing_tools
 else
 test_warn_missing_tools: test
 endif
 
 .PHONY: test
-ifeq ($(and $(VALE),$(MARKDOWNLINT),$(RUBOCOP),$(RSPEC),$(SHELLCHECK)),)
-test: test_list_missing_tools lint rubocop rspec shellcheck
+ifeq ($(and $(VALE),$(MARKDOWNLINT),$(SHELLCHECK),$(RUBOCOP),$(RSPEC)),)
+test: test_list_missing_tools lint shellcheck rubocop rspec
 else
-test: lint rubocop rspec shellcheck
+test: lint shellcheck rubocop rspec
 endif
 
 .PHONY: rubocop
 rubocop:
-	$(Q)bundle exec rubocop --config .rubocop-gdk.yml --parallel
+ifeq ($(and $(BUNDLE)),)
+	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@false
+else
+ifeq ($(and $(RUBOCOP)),)
+	@echo "INFO: Installing RuboCop.."
+	$(Q)${bundle_install_cmd} > /dev/null
+endif
+	@echo -n "RuboCop: "
+	$(Q)${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
+endif
 
 .PHONY: rspec
 rspec:
-	$(Q)bundle exec $@
+ifeq ($(and $(BUNDLE)),)
+	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@false
+else
+ifeq ($(and $(RSPEC)),)
+	@echo "INFO: Installing RSpec.."
+	$(Q)${bundle_install_cmd} > /dev/null
+endif
+	@echo -n "RSpec: "
+	$(Q)${BUNDLE} exec $@
+endif
 
 .PHONY: lint
-lint: lint-vale lint-markdown
+lint: vale markdownlint
 
-.PHONY: install-vale
-install-vale:
-	$(Q)(command -v vale > /dev/null) || echo Error: Vale not installed
+.PHONY: vale-install
+vale-install:
+ifeq ($(and $(GOLANG)),)
+	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@false
+else
+ifeq ($(and $(VALE)),)
+	@echo "INFO: Installing vale.."
+	$(Q)GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482
+endif
+endif
 
-.PHONY: lint-vale
-lint-vale: install-vale
-	$(Q)vale --minAlertLevel error *.md doc
+.PHONY: vale
+vale: vale-install
+	@echo -n "Vale: "
+	$(Q)${VALE} --minAlertLevel error *.md doc
 
-.PHONY: install-markdownlint
-install-markdownlint:
-	$(Q)(command -v markdownlint > /dev/null) || \
-	((command -v npm > /dev/null) && npm install -g markdownlint-cli@0.23.2) || \
-	((command -v yarn > /dev/null) && yarn global add markdownlint-cli@0.23.2)
+.PHONY: markdownlint-install
+markdownlint-install:
+ifeq ($(or $(NPM),$(YARN)),)
+	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@false
+else
+ifeq ($(and $(MARKDOWNLINT)),)
+	@echo "INFO: Installing markdownlint.."
+	@([[ "${YARN}" ]] && ${YARN} global add markdownlint-cli@0.23.2) || ([[ "${NPM}" ]] && ${NPM} install -g markdownlint-cli@0.23.2)
+endif
+endif
 
-.PHONY: lint-markdown
-lint-markdown: install-markdownlint
-	$(Q)markdownlint --config .markdownlint.json 'doc/**/*.md'
+.PHONY: markdownlint
+markdownlint: markdownlint-install
+	@echo -n "MarkdownLint: "
+	$(Q)${MARKDOWNLINT} --config .markdownlint.json 'doc/**/*.md' && echo "OK"
 
-.PHONY: install-shellcheck
-install-shellcheck:
+.PHONY: shellcheck-install
+shellcheck-install:
 ifeq ($(and $(SHELLCHECK)),)
 ifeq ($(platform),macos)
+	@echo "INFO: Installing Shellcheck.."
 	$(Q)brew install shellcheck
 else
 	@echo "INFO: To install shellcheck, please consult the docs at https://github.com/koalaman/shellcheck#installing"
 	@false
 endif
-else
-	@true
 endif
 
 .PHONY: shellcheck
-shellcheck: install-shellcheck
-	$(Q)support/shellcheck
+shellcheck: shellcheck-install
+	@echo -n "Shellcheck: "
+	$(Q)support/shellcheck && echo "OK"
 
 ##############################################################
 # Misc
