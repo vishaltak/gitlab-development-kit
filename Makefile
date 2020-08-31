@@ -2,6 +2,10 @@
 
 SHELL = /bin/bash
 RAKE := $(shell command -v rake 2> /dev/null)
+VALE := $(shell command -v vale 2> /dev/null)
+MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+RUBOCOP := $(shell bundle exec command -v rubocop 2> /dev/null)
+RSPEC := $(shell bundle exec command -v rspec 2> /dev/null)
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
@@ -864,8 +868,26 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 # Tests
 ##############################################################
 
+.PHONY: test_list_missing_tools
+test_list_missing_tools:
+	@test ${VALE} || echo "WARNING: vale is not currently installed"
+	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not currently installed."
+	@test ${RUBOCOP} || echo "WARNING: rubocop is not currently installed."
+	@test ${RSPEC} || echo "WARNING: rspec is not currently installed."
+
+.PHONY: test_warn_missing_tools
+ifeq ($(and $(VALE),$(MARKDOWNLINT),$(RUBOCOP),$(RSPEC)),)
+test_warn_missing_tools: test_list_missing_tools
+else
+test_warn_missing_tools: test
+endif
+
 .PHONY: test
+ifeq ($(and $(VALE),$(MARKDOWNLINT),$(RUBOCOP),$(RSPEC)),)
+test: test_list_missing_tools lint rubocop rspec
+else
 test: lint rubocop rspec
+endif
 
 .PHONY: rubocop
 rubocop:
