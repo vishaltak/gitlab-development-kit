@@ -30,3 +30,13 @@ end
 def temp_path
   spec_path.parent.join('tmp')
 end
+
+def stub_gdk_yaml(yaml)
+  allow(GDK).to receive(:config) { GDK::Config.new(yaml: yaml) }
+end
+
+def stub_pg_bindir
+  fake_io = double('IO', read: '/usr/local/bin')
+  allow(IO).to receive(:popen).and_call_original
+  allow(IO).to receive(:popen).with(%w[support/pg_bindir], any_args).and_yield(fake_io)
+end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Preflight checks for dependencies'
 task 'preflight-checks' do
   checker = GDK::Dependencies::Checker.new

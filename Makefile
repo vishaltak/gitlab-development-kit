@@ -34,9 +34,6 @@ gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
 psql := $(postgresql_bin_dir)/psql
 
-postgresql_in_recovery_cmd = $(psql) -X -h $(postgresql_host) -p $(postgresql_port) -d postgres -tc 'SELECT pg_is_in_recovery();' $(QQerr)
-when_postgresql_not_in_recovery = [[ "$$($(postgresql_in_recovery_cmd) | tr -d '[:space:]')" == "t" ]] ||
-
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
 ifeq ($(gdk_debug),true)
@@ -186,7 +183,7 @@ install-prerequisites:
 
 gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
-gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab-geo-db-migrate
+gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate
 
 .PHONY: gitlab/git-restore
 gitlab/git-restore:
@@ -201,22 +198,9 @@ gitlab/.git/pull: gitlab/git-restore
 	$(Q)$(gitlab_git_cmd) checkout master ${QQ}
 	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
 
+.PHONY: gitlab-db-migrate
 gitlab-db-migrate:
-	@$(when_postgresql_not_in_recovery)echo "------------------------------------------------------------"
-	@$(when_postgresql_not_in_recovery)echo "Processing gitlab-org/gitlab Rails DB migrations"
-	@$(when_postgresql_not_in_recovery)echo "------------------------------------------------------------"
-	$(Q)$(when_postgresql_not_in_recovery)($(gitlab_rake_cmd) db:migrate db:test:prepare)
-
-gitlab-geo-db-migrate:
-ifeq ($(geo_enabled),true)
-	@echo
-	@echo "------------------------------------------------------------"
-	@echo "Processing gitlab-org/gitlab Rails Geo DB migrations"
-	@echo "------------------------------------------------------------"
-	$(Q)$(gitlab_rake_cmd) geo:db:migrate geo:db:test:prepare
-else
-	@true
-endif
+	$(Q)rake gitlab_rails:db:migrate
 
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
@@ -429,13 +413,13 @@ else
 endif
 
 .PHONY: geo-primary-migrate
-geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab-geo-db-migrate gitlab/git-restore diff-config
+geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore diff-config
 
 .PHONY: geo-primary-update
 geo-primary-update: update geo-primary-migrate diff-config
 
 .PHONY: geo-secondary-migrate
-geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-geo-db-migrate gitlab/git-restore
+geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore
 
 .PHONY: geo-secondary-update
 geo-secondary-update: update geo-secondary-migrate diff-config
