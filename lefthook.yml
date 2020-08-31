@@ -4,4 +4,4 @@
 pre-push:
   commands:
     test:
-      run: make test
+      run: make test_warn_missing_tools
