@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
-  let(:shellout_mock) { double('Shellout', run: nil, try_run: nil, success?: true) }
+  let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) }
 
   before do
     stub_pg_bindir

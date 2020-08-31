@@ -39,7 +39,7 @@ module GDK
                    database: 'postgres',
                    command: 'SELECT pg_is_in_recovery();')
 
-      Shellout.new(cmd).try_run == 't'
+      Shellout.new(cmd).try_run.downcase.strip.chomp == 't'
     end
 
     private
