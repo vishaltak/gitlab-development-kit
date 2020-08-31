@@ -873,11 +873,11 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 
 .PHONY: test_list_missing_tools
 test_list_missing_tools:
-	@test ${VALE} || echo "WARNING: vale is not currently installed"
-	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not currently installed."
-	@test ${RUBOCOP} || echo "WARNING: rubocop is not currently installed."
-	@test ${RSPEC} || echo "WARNING: rspec is not currently installed."
-	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not currently installed."
+	@test ${VALE} || echo "WARNING: vale is not installed"
+	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not installed."
+	@test ${RUBOCOP} || echo "WARNING: rubocop is not installed."
+	@test ${RSPEC} || echo "WARNING: rspec is not installed."
+	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not installed."
 
 .PHONY: test_warn_missing_tools
 ifeq ($(and $(VALE),$(MARKDOWNLINT),$(RUBOCOP),$(RSPEC),$(SHELLCHECK)),)
