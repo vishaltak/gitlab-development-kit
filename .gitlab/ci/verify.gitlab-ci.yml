@@ -17,7 +17,7 @@
     key:
       prefix: "gdk-verify"
       files:
-        - .tools-versions
+        - .tool-versions
     paths:
       - .bundle
 
