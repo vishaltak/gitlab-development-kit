@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
-  let(:shellout_mock) { double('Shellout', run: nil, try_run: nil, success?: true) }
+  let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) }
 
   before do
     stub_pg_bindir
@@ -43,7 +43,7 @@ RSpec.describe GDK::Postgresql do
 
   describe '#db_exists?' do
     it 'calls psql with the correct arguments' do
-      expect(Shellout).to receive(:new).with(array_including('/usr/local/bin/psql', '--dbname=blaat', '--command='), any_args).and_return(shellout_mock)
+      expect(Shellout).to receive(:new).with(array_including('/usr/local/bin/psql', '--dbname=blaat'), any_args).and_return(shellout_mock)
 
       expect(subject.db_exists?('blaat')).to be_truthy
     end

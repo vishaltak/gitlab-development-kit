@@ -4,7 +4,7 @@ module GDK
   class Postgresql
     def ready?
       last_error = nil
-      cmd = pg_cmd(database: 'template1', command: '')
+      cmd = pg_cmd(database: 'template1')
 
       10.times do
         shellout = Shellout.new(cmd)
@@ -25,7 +25,7 @@ module GDK
     end
 
     def db_exists?(dbname)
-      Shellout.new(pg_cmd(database: dbname, command: '')).tap(&:try_run).success?
+      Shellout.new(pg_cmd(database: dbname)).tap(&:try_run).success?
     end
 
     def createdb(*args)
@@ -39,7 +39,7 @@ module GDK
                    database: 'postgres',
                    command: 'SELECT pg_is_in_recovery();')
 
-      Shellout.new(cmd).try_run == 't'
+      Shellout.new(cmd).try_run.downcase.strip.chomp == 't'
     end
 
     private
