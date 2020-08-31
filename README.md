@@ -11,10 +11,13 @@ Read on for installation instructions or skip to the [usage documentation](doc/h
 
 The GitLab Development Kit (GDK) helps you install a GitLab instance on your workstation. It includes a collection of GitLab requirements such as Ruby, Node.js, Go, PostgreSQL, Redis, and more.
 
-The GDK is recommended for anyone contributing to the GitLab codebase, whether a GitLab team member or a member of the wider community. It allows you to test your changes locally on your workstation in an isolated manner which can speed up the time it takes to make successful contributions.
+The GDK is recommended for anyone contributing to the GitLab codebase, whether a GitLab team member or a member of the wider community.
+It allows you to test your changes locally on your workstation in an isolated manner. This can speed
+up the time it takes to make successful contributions.
 
 For help with GDK:
-- GitLab team members can use the #gdk channel on the GitLab Slack workspace.
+
+- GitLab team members can use the `#gdk` channel on the GitLab Slack workspace.
 - Wider community members can use the [Gitter contributors room](https://gitter.im/gitlab/contributors) or [GitLab Forum](https://forum.gitlab.com/c/community-contributions).
 
 ## Contributing to GitLab Development Kit
@@ -26,13 +29,13 @@ for more details.
 
 The preferred way to use GitLab Development Kit is to install Ruby and its
 dependencies on your 'native' OS. We strongly recommend the native install,
-since it is much faster than a virtualized one. Due to heavy IO operations a
-virtualized installation will be much slower running the app and the tests.
+since it is much faster than a virtualized one. Due to heavy IO operations, a
+virtualized installation is much slower running the app and the tests.
 
 To do a native install:
 
-1. [Prepare your computer](doc/prepare.md)
-1. [Set-up GDK](doc/index.md)
+1. [Install dependencies](doc/index.md#install-dependencies)
+1. [Install and set up GDK](doc/index.md#install-and-set-up-gdk)
 
 Or if you want to use a slower virtualized installation with [Vagrant](https://www.vagrantup.com/),
 please see the [instructions for using Vagrant with VirtualBox or Docker](doc/howto/vagrant.md).
@@ -49,7 +52,7 @@ If you have an old installation, [update your existing GDK installation](doc/ind
 - Get the user started, do not try to take care of everything
 - Run everything as your 'desktop' user on your development machine
 - GitLab Development Kit itself does not run `sudo` commands
-- It is OK to leave some things to the user (e.g. installing Ruby)
+- It is OK to leave some things to the user (for example, installing Ruby)
 
 ## Components included
 

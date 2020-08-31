@@ -1,14 +1,14 @@
-# Prepare your system for GDK (advanced)
+# Advanced dependency instructions
 
-The following are preparation instructions for systems other than those covered in the
-[main preparation instructions](prepare.md#install-dependencies).
+The following are dependency installation instructions for systems other than those covered in the
+[main dependency installation instructions](index.md#install-dependencies).
 
 These instructions may contain advanced configuration options.
 
 ## Install Linux dependencies
 
 The process for installing dependencies on Linux depends on your Linux distribution. For Ubuntu
-instructions, see [Install Ubuntu dependencies](prepare.md#install-ubuntu-dependencies)
+instructions, see [Install Ubuntu dependencies](index.md#install-ubuntu-dependencies)
 
 Unless already set, you'll probably have to increase the watches limit of `inotify` for
 frontend development tools such as `webpack` to effectively track file changes.
