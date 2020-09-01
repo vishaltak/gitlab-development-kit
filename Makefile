@@ -28,6 +28,7 @@ workhorse_version = $(shell bin/resolve-dependency-commitish "${gitlab_developme
 gitlab_shell_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 gitaly_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
 pages_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
+gitlab_k8s_agent_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
 gitlab_elasticsearch_indexer_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")
@@ -567,9 +568,9 @@ ${gitlab_k8s_agent_clone_dir}/.git:
 gitlab-k8s-agent/.git/pull:
 	@echo
 	@echo "------------------------------------------------------------"
-	@echo "Updating gitlab-org/cluster-integration/gitlab-agent"
+	@echo "Updating gitlab-org/cluster-integration/gitlab-agent to ${gitlab_k8s_agent_version}"
 	@echo "------------------------------------------------------------"
-	$(Q)cd "${gitlab_k8s_agent_clone_dir}" && git stash && git pull --ff-only --all --tags --prune
+	$(Q)support/component-git-update gitlab_k8s_agent "${gitlab_k8s_agent_clone_dir}" "${gitlab_k8s_agent_version}"
 
 ##############################################################
 # gitlab performance metrics
