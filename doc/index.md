@@ -12,8 +12,7 @@ To get GDK up and running:
 
    This is required both the first time you install GDK and any time you upgrade Ruby.
 
-1. Initialize a new GDK directory, using one of the following commands, based on
-   your choice of directory:
+1. Clone and initialize GDK using one of the following commands:
 
    - The default directory (`gitlab-development-kit`):
 
@@ -29,7 +28,7 @@ To get GDK up and running:
 
 1. Install GDK components in the GDK directory:
 
-   1. Change to the newly-created GDK directory.
+   1. Navigate to the newly-created GDK directory.
    1. Run `make bootstrap` to install remaining dependencies. If you receive an error
       message that begins with: **Authenticity of checksum file can not be assured!**:
       1. Follow the [`asdf-nodejs` Install section instructions](https://github.com/asdf-vm/asdf-nodejs#install).
