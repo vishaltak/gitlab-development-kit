@@ -72,7 +72,7 @@ shellcheck:
   extends: .rules:code-changes
   image: koalaman/shellcheck-alpine:stable
   script:
-    - support/ci/shellcheck
+    - support/shellcheck
 
 yard:
   stage: test
