@@ -217,15 +217,15 @@ cd gitlab-development-kit
 cat postgresql/data/PG_VERSION
 ```
 
-If the content of the `PG_VERSION` file is `9`, your data folder is compatible
-with PostgreSQL 9.x.
+If the content of the `PG_VERSION` file is `10`, your data folder is compatible
+with PostgreSQL 10.
 
 Downgrade your PostgreSQL to the compatible version. For example, to downgrade to
-PostgreSQL 9.6 on macOS using Homebrew:
+PostgreSQL 10 on macOS using Homebrew:
 
 ```shell
-brew install postgresql@9.6
-brew link --force postgresql@9.6
+brew install postgresql@10
+brew link --force postgresql@10
 ```
 
 You also need to update your `Procfile` to use the downgraded PostgreSQL binaries:
