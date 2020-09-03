@@ -2,8 +2,12 @@ docs_lint:
   extends: .rules:docs-changes
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:vale-2.3.3-markdownlint-0.23.2"
   stage: test
+  needs: []
   script:
-    - make lint
+    # Lint prose
+    - vale --minAlertLevel error doc
+    # Lint Markdown
+    - markdownlint --config .markdownlint.json 'doc/**/*.md'
 
 rubocop:
   extends: .rules:code-changes
