@@ -66,19 +66,16 @@ You may need to install Redis 5.0 or newer manually.
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
-We assume you are using Fedora >= 22.
-
-If you are running Fedora < 27, you'll need to install `go` manually by using
-the official [go] installation instructions.
+We assume you are using Fedora >= 31.
 
 NOTE: **Note:**
-Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use
-`postgresql:10` module to install PostgreSQL 10. But keep in mind that will
-replace the PostgreSQL 11.x package, so you cannot use both versions at once.
+Fedora 32 ships PostgreSQL 11.x and Fedora 32+ ships PostgreSQL 12.x in default repositories.
+You can use `postgresql:11` or `postgresql:12` module to install PostgreSQL 11 or 12.
+But keep in mind that will replace the default version of PostgreSQL package, so you cannot
+use both versions at once.
 
 ```shell
-sudo dnf install fedora-repos-modular
-sudo dnf module enable postgresql:10
+sudo dnf module enable postgresql:12 # or postgresql:11
 ```
 
 To install dependencies for Fedora:
@@ -121,19 +118,20 @@ before continuing.
 NOTE: **Note:**
 These instructions don't account for using `asdf` for managing some dependencies.
 
-To install dependencies for Fedora (tested on CentOS 6.5):
+We assume you are using CentOS >= 8.
+
+To install dependencies for CentOS (tested on CentOS 8.2):
 
 ```shell
-sudo yum install https://download.postgresql.org/pub/repos/yum/10/redhat/rhel-6-x86_64/pgdg-centos10-10-2.noarch.rpm
-sudo yum install https://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-sudo yum install postgresql10-server postgresql10-devel libicu-devel git git-lfs cmake \
-  gcc-c++ redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
-  libstdc++.so.6 npm re2 re2-devel GraphicsMagick runit perl-Image-ExifTool \
+sudo dnf module enable postgresql:12
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cmake \
+  gcc-c++ go redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
+  libstdc++.so.6 npm re2 re2-devel GraphicsMagick perl-Image-ExifTool \
   rsync sqlite-devel
 sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
-bundle config build.pg --with-pg-config=/usr/pgsql-10/bin/pg_config
 # This example uses Ruby 2.6.6. Substitute with the current version if different.
 sudo rvm install 2.6.6
 sudo rvm use 2.6.6
@@ -142,14 +140,7 @@ sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
 ```
 
-Install `go` manually using the official [go] installation instructions.
-
-Git 1.7.1-3 is the latest Git binary for CentOS 6.5 and GitLab. Spinach tests
-will fail due to a higher version requirement by GitLab. You can follow the
-instructions found [in the GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos#add-puias-computational-repository) to install a newer binary
-version of Git.
-
-You may need to install Redis 5.0 or newer manually.
+You'll need to follow [runit install instruction](#runit) to install it manually.
 
 ### OpenSUSE
 
