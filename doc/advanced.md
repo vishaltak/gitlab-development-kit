@@ -1,18 +1,18 @@
 # Advanced dependency instructions
 
-The following are dependency installation instructions for systems other than those covered in the
-[main dependency installation instructions](index.md#install-dependencies).
+The following are dependency installation instructions for systems other than
+those covered in the [main dependency installation instructions](index.md#install-dependencies).
 
 These instructions may contain advanced configuration options.
 
 ## Install Linux dependencies
 
-The process for installing dependencies on Linux depends on your Linux distribution. For Ubuntu
-instructions, see [Install Ubuntu dependencies](index.md#install-ubuntu-dependencies)
+The process for installing dependencies on Linux depends on your Linux
+distribution. For Ubuntu instructions, see [Install Ubuntu dependencies](index.md#install-ubuntu-dependencies)
 
-Unless already set, you'll probably have to increase the watches limit of `inotify` for
-frontend development tools such as `webpack` to effectively track file changes.
-See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
+Unless already set, you'll probably have to increase the watches limit of
+`inotify` for frontend development tools such as `webpack` to effectively track
+file changes. See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
 for details and instructions about how to apply this change.
 
 ### Arch Linux
@@ -28,7 +28,11 @@ pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs 
 ```
 
 NOTE: **Note:**
-The Arch Linux core repository does not contain anymore the `runit` package. It is required to install `runit-systemd` from the Arch User Repository (AUR) with an AUR package manager like `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur)) or `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)). See [Arch Linux Wiki page AUR_helpers](https://wiki.archlinux.org/index.php/AUR_helpers) for more information.
+The Arch Linux core repository no longer contains the `runit` package. You must
+install `runit-systemd` from the Arch User Repository (AUR) with an AUR package
+manager, such as `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur))
+or `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)).
+For more information, see [Arch Linux Wiki page AUR_helpers](https://wiki.archlinux.org/index.php/AUR_helpers).
 
 ```shell
 pikaur -S runit-systemd
@@ -49,11 +53,11 @@ sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr
 sudo chmod +x /usr/local/bin/minio
 ```
 
-If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental), or
-[newer](https://packages.debian.org/search?keywords=golang-go) you can install a Go
-compiler using your package manager: `sudo apt-get install golang`.
-Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official installation
-instructions.
+If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental),
+or [newer](https://packages.debian.org/search?keywords=golang-go) you can
+install a Go compiler using your package manager: `sudo apt-get install golang`.
+Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install)
+official installation instructions.
 
 You may need to install Redis 5.0 or newer manually.
 
@@ -64,11 +68,13 @@ These instructions don't account for using `asdf` for managing some dependencies
 
 We assume you are using Fedora >= 22.
 
-If you are running Fedora < 27, you'll need to install `go` manually by using the official [go] installation instructions.
+If you are running Fedora < 27, you'll need to install `go` manually by using
+the official [go] installation instructions.
 
 NOTE: **Note:**
-Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use `postgresql:10` module to install PostgreSQL 10.
-But keep in mind that will replace the PostgreSQL 11.x package, so you cannot use both versions at once.
+Fedora 30+ ships PostgreSQL 11.x in default repositories, you can use
+`postgresql:10` module to install PostgreSQL 10. But keep in mind that will
+replace the PostgreSQL 11.x package, so you cannot use both versions at once.
 
 ```shell
 sudo dnf install fedora-repos-modular
@@ -92,7 +98,9 @@ You may need to install Redis 5.0 or newer manually.
 
 You'll also need to install [runit](http://smarden.org/runit) manually.
 
-The following instructions worked for runit version 2.1.2 - but please make sure you read the up to date installation instructions on [the website](http://smarden.org/runit) before continuing.
+Although the following instructions work for runit version 2.1.2, be sure to
+read the up-to-date installation instructions on [the website](http://smarden.org/runit)
+before continuing.
 
 1. Download and extract the runit source code to a local folder to compile it:
 
@@ -105,7 +113,8 @@ The following instructions worked for runit version 2.1.2 - but please make sure
    ./package/check
    ```
 
-1. Make sure all binaries in `command/` are accessible from your `PATH` (e.g. symlink / copy them to `/usr/local/bin`)
+1. Ensure all binaries in `command/` are accessible from your `PATH` (for
+   example, symlink / copy them to `/usr/local/bin`)
 
 ### CentOS
 
@@ -137,8 +146,8 @@ Install `go` manually using the official [go] installation instructions.
 
 Git 1.7.1-3 is the latest Git binary for CentOS 6.5 and GitLab. Spinach tests
 will fail due to a higher version requirement by GitLab. You can follow the
-instructions found [in the GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos#add-puias-computational-repository) to install a newer
-binary version of Git.
+instructions found [in the GitLab recipes repository](https://gitlab.com/gitlab-org/gitlab-recipes/tree/master/install/centos#add-puias-computational-repository) to install a newer binary
+version of Git.
 
 You may need to install Redis 5.0 or newer manually.
 
@@ -193,7 +202,8 @@ sed -i -E 's/ -static$//g' src/Makefile
 sudo ./package/install
 ```
 
-Setup local Ruby 2.6 environment (see [Ruby](#ruby) for details), for example using [RVM](https://rvm.io/):
+Setup local Ruby 2.6 environment (see [Ruby](#ruby) for details), for example
+using [RVM](https://rvm.io/):
 
 ```shell
 curl -sSL -o setup_rvm.sh https://get.rvm.io
@@ -231,9 +241,12 @@ ruby --version
 ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux]
 ```
 
-If it's different (for example Ruby 2.7 - system default in Tumbleweed), you must sign in again.
+If it's different (for example Ruby 2.7 - system default in Tumbleweed), you
+must sign in again.
 
-The following `bundle config` options are recommended before you run `gdk install` to avoid problems with the embedded libraries inside `nokogiri` and `gpgme`:
+The following `bundle config` options are recommended before you run
+`gdk install` to avoid problems with the embedded libraries inside `nokogiri`
+and `gpgme`:
 
 ```shell
 bundle config build.nokogiri "--use-system-libraries" --global
@@ -267,7 +280,8 @@ wsl --set-default-version 2
 
 Restart your computer when prompted.
 
-Install your Linux Distribution of Choice using the Windows Store. The available distro options include:
+Install your Linux distribution of choice using the Windows Store. The available
+distribution options include:
 
 - Ubuntu
 - OpenSUSE
@@ -275,10 +289,10 @@ Install your Linux Distribution of Choice using the Windows Store. The available
 - Kali Linux
 - Debian GNU/Linux
 
-Launch the distro of choice.
+Launch the distribution of choice.
 
-You must ensure that your Linux distribution uses WSL version 2. Open PowerShell with
-administrator privileges and run the following:
+You must ensure that your Linux distribution uses WSL version 2. Open PowerShell
+with administrator privileges, and then run the following:
 
 ```shell
 # If the command below does not return a list of your installed distributions,
@@ -286,10 +300,11 @@ administrator privileges and run the following:
 wsl -l
 ```
 
-You can [upgrade](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel) your WSL.
+You can [upgrade](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel) your
+WSL.
 
-If you noticed your distribution of choice is an older subsystem, you can upgrade it by
-running:
+If you noticed your distribution of choice is an older subsystem, you can
+upgrade it by running:
 
 ```shell
 # Get the name of your subsystem
