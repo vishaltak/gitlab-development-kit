@@ -49,12 +49,10 @@ backend Gitaly nodes to use in more virtual storages:
      [[virtual_storage.node]]
      storage = "praefect-internal-0"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-0.socket"
-     primary = true
 
      [[virtual_storage.node]]
      storage = "praefect-internal-1"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-1.socket"
-     primary = false
      ```
 
    - After:
@@ -66,7 +64,6 @@ backend Gitaly nodes to use in more virtual storages:
      [[virtual_storage.node]]
      storage = "praefect-internal-0"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-0.socket"
-     primary = true
 
      [[virtual_storage]]
      name = 'default2'
@@ -74,7 +71,6 @@ backend Gitaly nodes to use in more virtual storages:
      [[virtual_storage.node]]
      storage = "praefect-internal-1"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-1.socket"
-     primary = true
      ```
 
 1. Edit `gitlab/config/gitlab.yml` to add the new virtual storage:
@@ -122,7 +118,6 @@ example, to create several shards with a single Praefect node:
      [[virtual_storage.node]]
      storage = "praefect-internal-0"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-0.socket"
-     primary = true
      ```
 
    - After:
@@ -134,7 +129,6 @@ example, to create several shards with a single Praefect node:
      [[virtual_storage.node]]
      storage = "praefect-internal-0"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-0.socket"
-     primary = true
 
      [[virtual_storage]]
      name = 'storage_2'
@@ -142,7 +136,6 @@ example, to create several shards with a single Praefect node:
      [[virtual_storage.node]]
      storage = "praefect-internal-extra-2"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-0.socket"
-     primary = true
 
      [[virtual_storage]]
      name = 'storage_3'
@@ -150,7 +143,6 @@ example, to create several shards with a single Praefect node:
      [[virtual_storage.node]]
      storage = "praefect-internal-extra-3"
      address = "unix:/Users/paulokstad/gitlab-development-kit/gitaly-praefect-0.socket"
-     primary = true
      ```
 
 1. Edit `gitaly/gitaly.config.toml` to add the new virtual storage:

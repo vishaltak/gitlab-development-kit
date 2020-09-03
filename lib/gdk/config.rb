@@ -370,7 +370,6 @@ module GDK
           path(:address) { config.gdk_root.join("gitaly-praefect-#{i}.socket") }
           string(:config_file) { "gitaly/gitaly-#{i}.praefect.toml" }
           path(:log_dir) { config.gdk_root.join("log", "praefect-gitaly-#{i}") }
-          bool(:primary) { i.zero? }
           string(:service_name) { "praefect-gitaly-#{i}" }
           string(:storage) { "praefect-internal-#{i}" }
           path(:storage_dir) { config.repositories_root }

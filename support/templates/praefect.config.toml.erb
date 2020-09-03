@@ -31,7 +31,6 @@ name = 'default'
 [[virtual_storage.node]]
   storage = "<%= praefect_node[:storage] %>"
   address = "unix:<%= praefect_node[:address] %>"
-  primary = <%= praefect_node[:primary] %>
 <% end %>
 
 [database]
