@@ -1003,6 +1003,24 @@ rm -rf gitlab/tmp/cache/bootsnap-*
 gdk start
 ```
 
+## Git fails to compile within Gitaly project
+
+If you see the following error when running a `gdk update`:
+
+```shell
+ld: library not found for -lgit2
+```
+
+A known fix is to clean your go cache by running the following from the GDK's root
+directory:
+
+```shell
+go clean -cache
+rm -rf gitaly
+```
+
+Now re-run `gdk update`.
+
 ## Other problems
 
 Please open an issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
