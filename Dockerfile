@@ -12,6 +12,8 @@ COPY packages.txt /
 RUN apt-get update && apt-get install -y software-properties-common \
     && add-apt-repository ppa:git-core/ppa -y \
     && apt-get install -y $(sed -e 's/#.*//' /packages.txt) \
+    && apt-get purge software-properties-common -y \
+    && apt-get autoremove -y \
     && rm -rf /tmp/*
 
 WORKDIR /home/gdk
