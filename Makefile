@@ -722,7 +722,7 @@ elasticsearch-${elasticsearch_version}.tar.gz:
 # minio / object storage
 ##############################################################
 
-object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages
+object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform
 
 minio/data/%:
 	$(Q)mkdir -p $@
