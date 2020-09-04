@@ -178,7 +178,7 @@ module GDK
       end
 
       def check_runit_installed
-        @error_messages << missing_dependency('Runit') unless system("which runsvdir >/dev/null 2>&1")
+        @error_messages << missing_dependency('Runit') unless MakeMakefile.find_executable('runsvdir')
       end
 
       def require_minimum_version(dependency, actual, expected)

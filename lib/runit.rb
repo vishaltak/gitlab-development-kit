@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'mkmf'
+
 require_relative 'shellout'
 require_relative 'runit/config'
 require_relative 'gdk/output'
@@ -66,7 +68,7 @@ module Runit
   end
 
   def self.runit_installed!
-    return unless Shellout.new(%w[which runsvdir]).run.empty?
+    return if MakeMakefile.find_executable('runsvdir')
 
     abort <<~MESSAGE
 

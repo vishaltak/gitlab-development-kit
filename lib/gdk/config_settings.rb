@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'mkmf'
 require_relative 'config_type/anything'
 require_relative 'config_type/array'
 require_relative 'config_type/bool'
@@ -111,8 +112,7 @@ module GDK
     end
 
     def find_executable!(bin)
-      result = cmd!(%W[which #{bin}])
-      result.empty? ? nil : result
+      MakeMakefile.find_executable(bin)
     end
 
     def read!(filename)
