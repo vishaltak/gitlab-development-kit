@@ -929,8 +929,20 @@ endif
 .PHONY: lint
 lint: vale markdownlint
 
+.PHONY: vale-install
+vale-install:
+ifeq ($(and $(GOLANG)),)
+	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@false
+else
+ifeq ($(and $(VALE)),)
+	@echo "INFO: Installing vale.."
+	$(Q)GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482
+endif
+endif
+
 .PHONY: vale
-vale:
+vale: vale-install
 	@echo -n "Vale: "
 	$(Q)${VALE} --minAlertLevel error *.md doc
 

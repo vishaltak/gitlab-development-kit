@@ -19,7 +19,7 @@ by:
 ## Rebuilding gems with native extensions
 
 There may be times when your local libraries that are used to build some gems'
-native extensions are updated (for example, `libicu`), thus resulting in errors like:
+native extensions are updated (i.e., `libicu`), thus resulting in errors like:
 
 ```shell
 rails-background-jobs.1 | /home/user/.rvm/gems/ruby-2.3.0/gems/activesupport-4.2.5.2/lib/active_support/dependencies.rb:274:in 'require': libicudata.so
