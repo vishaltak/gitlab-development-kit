@@ -6,6 +6,9 @@ require_relative 'shellout'
 require_relative 'runit/config'
 require_relative 'gdk/output'
 
+MakeMakefile::Logging.quiet = true
+MakeMakefile::Logging.logfile(File::NULL)
+
 module Runit
   SERVICE_SHORTCUTS = {
     'rails' => 'rails-*',

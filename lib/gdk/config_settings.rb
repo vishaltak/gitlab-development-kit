@@ -9,6 +9,9 @@ require_relative 'config_type/integer'
 require_relative 'config_type/path'
 require_relative 'config_type/string'
 
+MakeMakefile::Logging.quiet = true
+MakeMakefile::Logging.logfile(File::NULL)
+
 module GDK
   class ConfigSettings
     SettingUndefined = Class.new(StandardError)

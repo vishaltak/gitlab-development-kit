@@ -3,11 +3,8 @@
 require 'net/http'
 require 'mkmf'
 
-# Make the MakeMakefile logger write file output to null.
-module MakeMakefile::Logging
-  @logfile = File::NULL
-  @quiet = true
-end
+MakeMakefile::Logging.quiet = true
+MakeMakefile::Logging.logfile(File::NULL)
 
 module GDK
   module Dependencies
@@ -72,9 +69,9 @@ module GDK
         check_runit_installed
       end
 
-      def check_binary(binary)
+      def check_binary(binary, name: binary)
         find_executable(binary).tap do |result|
-          @error_messages << "#{binary} does not exist. You may need to check your PATH or install a missing package." unless result
+          @error_messages << missing_dependency(name) unless result
         end
       end
 
@@ -178,7 +175,7 @@ module GDK
       end
 
       def check_runit_installed
-        @error_messages << missing_dependency('Runit') unless MakeMakefile.find_executable('runsvdir')
+        check_binary('runsvdir', name: 'Runit')
       end
 
       def require_minimum_version(dependency, actual, expected)
@@ -186,7 +183,7 @@ module GDK
       end
 
       def missing_dependency(dependency, minimum_version: nil)
-        message = "#{dependency} is not installed, please install #{dependency}"
+        message = "#{dependency} is not installed, please install #{dependency} or make sure it is in your PATH"
         message += "#{minimum_version} or higher" unless minimum_version.nil?
         message + "."
       end
