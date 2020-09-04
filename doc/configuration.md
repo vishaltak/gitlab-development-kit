@@ -26,7 +26,7 @@ which is the only supported configuration method.
 To see available configuration settings, see [`gdk.example.yml`](../gdk.example.yml).
 
 This file contains all possible settings with example values. Note
-that these values may not be the default that GDK will use.
+that these values may not be the default that GDK uses.
 
 If you want to check which settings are in place, you can run `rake dump_config`, which prints
 all applied settings in a YAML structure.
