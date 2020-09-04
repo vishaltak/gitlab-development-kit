@@ -66,7 +66,7 @@ module Runit
   end
 
   def self.runit_installed!
-    return unless Shellout.new(%w[which runsvdir]).run.empty?
+    return unless Shellout.new(%w[command -v runsvdir]).run.empty?
 
     abort <<~MESSAGE
 

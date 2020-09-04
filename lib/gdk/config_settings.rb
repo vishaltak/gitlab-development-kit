@@ -111,7 +111,7 @@ module GDK
     end
 
     def find_executable!(bin)
-      result = cmd!(%W[which #{bin}])
+      result = cmd!(%W[command -v #{bin}])
       result.empty? ? nil : result
     end
 
