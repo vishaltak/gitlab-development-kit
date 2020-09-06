@@ -122,7 +122,8 @@ to clean up unused persistent disks above](index.md#unused-persistent-disks).
 
 ### 502 Bad Gateway
 
-There are two known reasons for which you may receive a 502 Bad Gateway response when opening the application using the tunnel URL:
+You may receive a `502 Bad Gateway` response when opening the application using the
+tunnel URL. The following are possible solutions to some known problems.
 
 #### SSH requires a passphrase
 
@@ -166,4 +167,22 @@ You can fix this by running:
 
 ```shell
 rm registry/config.yml && make registry/config.yml
+```
+
+#### Docker daemon is not running
+
+You might see the following error being logged when GDK starts but jobs fail:
+
+```plaintext
+Error response from daemon: login attempt to `https://[PORT].qa-tunnel.gitlab.info:443/v2/` failed with status: 502 Bad Gateway
+```
+
+The most likely scenario is that your Docker daemon is not running and therefore your
+registry tunnel is returning a 502. You can verify this by visiting the tunnel URL for
+your registry from your browser. 
+
+You can fix this by starting the Docker daemon by running:
+
+```shell
+open --hide --background -a Docker
 ```
