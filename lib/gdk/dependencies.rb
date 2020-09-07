@@ -8,6 +8,8 @@ MakeMakefile::Logging.logfile(File::NULL)
 
 module GDK
   module Dependencies
+    MissingDependency = Class.new(StandardError)
+
     class GitLabVersions
       VersionNotDetected = Class.new(StandardError)
 
@@ -114,12 +116,13 @@ module GDK
         return unless check_binary('go')
 
         current_version = Checker.parse_version(`go version`, prefix: 'go')
+        expected = Gem::Version.new(EXPECTED_GO_VERSION)
+
+        raise MissingDependency unless current_version
 
         actual = Gem::Version.new(current_version)
-        expected = Gem::Version.new(EXPECTED_GO_VERSION)
         @error_messages << require_minimum_version('Go', actual, expected) if actual < expected
-
-      rescue Errno::ENOENT
+      rescue Errno::ENOENT, MissingDependency
         @error_messages << missing_dependency('Go', minimum_version: EXPECTED_GO_VERSION)
       end
 
@@ -128,12 +131,13 @@ module GDK
 
         current_version = Checker.parse_version(`node --version`, prefix: 'v')
 
+        raise MissingDependency unless current_version
+
         actual = Gem::Version.new(current_version)
         expected = Gem::Version.new(EXPECTED_NODEJS_VERSION)
 
         @error_messages << require_minimum_version('Node.js', actual, expected) if actual < expected
-
-      rescue Errno::ENOENT
+      rescue Errno::ENOENT, MissingDependency
         @error_messages << missing_dependency('Node.js', minimum_version: EXPECTED_NODEJS_VERSION)
       end
 
@@ -141,25 +145,28 @@ module GDK
         return unless check_binary('yarn')
 
         current_version = Checker.parse_version(`yarn --version`)
-
-        actual = Gem::Version.new(current_version)
         expected = Gem::Version.new(EXPECTED_YARN_VERSION)
 
-        @error_messages << require_minimum_version('Yarn', actual, expected) if actual < expected
+        raise MissingDependency unless current_version
 
-      rescue Errno::ENOENT
+        actual = Gem::Version.new(current_version)
+        @error_messages << require_minimum_version('Yarn', actual, expected) if actual < expected
+      rescue Errno::ENOENT, MissingDependency
         @error_messages << missing_dependency('Yarn', minimum_version: expected)
       end
 
       def check_postgresql_version
         return unless check_binary('psql')
 
-        current_postgresql_version = Checker.parse_version(`psql --version`, prefix: 'psql \(PostgreSQL\) ')
-
-        actual = Gem::Version.new(current_postgresql_version)
+        current_version = Checker.parse_version(`psql --version`, prefix: 'psql \(PostgreSQL\) ')
         expected = Gem::Version.new(EXPECTED_POSTGRESQL_VERSION)
 
-        @error_messages << require_minimum_version('PostgreSQL', actual, expected) if actual.segments[0] < expected.segments[0]
+        raise MissingDependency unless current_version
+
+        actual = Gem::Version.new(current_version)
+        @error_messages << require_minimum_version('PostgreSQL', actual, expected) if actual < expected
+      rescue Errno::ENOENT, MissingDependency
+        @error_messages << missing_dependency('PostgreSQL', minimum_version: expected)
       end
 
       def check_graphicsmagick_installed
@@ -179,12 +186,12 @@ module GDK
       end
 
       def require_minimum_version(dependency, actual, expected)
-        "#{dependency} version #{actual} detected, please install #{dependency} version #{expected} or higher."
+        "ERROR: #{dependency} version #{actual} detected, please install #{dependency} version #{expected} or higher."
       end
 
       def missing_dependency(dependency, minimum_version: nil)
-        message = "#{dependency} is not installed, please install #{dependency} or make sure it is in your PATH"
-        message += "#{minimum_version} or higher" unless minimum_version.nil?
+        message = "ERROR: #{dependency} is not installed or not available in your PATH"
+        message += ". #{minimum_version} or higher is required" unless minimum_version.nil?
         message + "."
       end
 
