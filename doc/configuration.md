@@ -49,7 +49,7 @@ gitlab_pages:
 
 #### Overwriting configuration files
 
-Any configuration file managed by GDK will be overwritten
+Any configuration file managed by GDK is overwritten
 whenever there are changes in its source (a `.example` or `.erb`
 file). When GDK overwrites a configuration file it moves the original file
 into the `.backups` subdirectory of your GDK installation.
@@ -64,8 +64,7 @@ gdk:
   - 'gitaly/*.toml'
 ```
 
-> Note that `gdk.yml` is not managed by GDK, and GDK will
-never overwrite it.
+> Note that `gdk.yml` is not managed by GDK and GDK never overwrites it.
 
 #### Notable settings
 
@@ -77,7 +76,7 @@ Here are a few settings worth mentioning:
 | `webpack.port`          | `3808`             | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings) |
 | `gitlab_pages.host` | `127.0.0.1.nip.io` | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
 | `gitlab_pages.port`     | `3010`             | Specify on which port GitLab Pages should run. See also the [Pages guide](howto/pages.md#port). |
-| `relative_url_root`     | `/`                | When you want to test GitLab being available on a different path than `/`, e.g. `/gitlab`. |
+| `relative_url_root`     | `/`                | When you want to test GitLab being available on a different path than `/`. For example, `/gitlab`. |
 | `object_store.enabled`  | `false`            | Set this to `true` to enable Object Storage with MinIO.                                    |
 | `registry.enabled`      | `false`            | Set this to `true` to enable container registry.                                           |
 | `geo.enabled`           | `false`            | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
@@ -102,7 +101,7 @@ There are also a few settings that configure the behavior of GDK itself:
 |-----------------------------------|---------|--------------------------------------------------------------------------------------------------|
 | `gdk.ask_to_restart_after_update` | `true`  | Set this to `false` if you do not wish to be prompted to restart your GDK after an update. |
 | `gdk.debug`                       | `false` | Set this to `true` to enable increased output. |
-| `gdk.overwrite_changes`           | `false` | When set to `true` `gdk reconfigure` will overwrite files and move the old version to `.backups`.|
+| `gdk.overwrite_changes`           | `false` | When set to `true`, `gdk reconfigure` overwrites files and move the old version to `.backups`.|
 | `gdk.protected_config_files`           | `[]` | Contains file names / globs of configuration files GDK should not overwrite. |
 
 ##### Experimental GDK settings
@@ -119,7 +118,7 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `nginx.enabled` | `false` | Set this to `true` to enable the `nginx` service. |
-| `nginx.listen` | `127.0.0.1` | Set this to be the IP that NGINX will listen on. |
+| `nginx.listen` | `127.0.0.1` | Set this to the IP for NGINX to listen on. |
 | `nginx.bin` | `/usr/sbin/nginx` | Set this to the path to your `nginx` binary. |
 | `nginx.ssl.certificate` | `localhost.crt` | This maps to [NGINX's `ssl_certificate`](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate). |
 | `nginx.ssl.key` | `localhost.key` | This maps to [NGINX's `ssl_certificate_key`](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate_key). |
@@ -162,7 +161,7 @@ Below is a table of all the settings that can be set this way:
 
 ### Configuration precedence
 
-GDK will use the following order of precedence when selecting the
+GDK uses the following order of precedence when selecting the
 configuration method to use:
 
 - `gdk.yml`
@@ -186,8 +185,8 @@ This is the base class and the engine behind the configuration
 management. It defines a DSL to configure GDK.
 
 Most of the magic happens through the class method
-`.method_missing`. The implementation of this method will dynamically
-define instance methods for configuration settings.
+`.method_missing`. The implementation of this method dynamically
+defines instance methods for configuration settings.
 
 Below is an example subclass of `GDK::ConfigSettings` to demonstrate
 each kind.
@@ -203,7 +202,7 @@ end
 ```
 
 - `foo`: (literal value) This is just a literal value, it can be any
-  type (e.g. Number, Boolean, String).
+  type (for example, Number, Boolean, String).
 - `bar`: (block without argument) This is using a block to set a
   value. It evaluates the Ruby code to dynamically calculate a value.
 - `fuz`: (block with argument) When the block takes a single argument,
@@ -234,7 +233,7 @@ each setting a default is provided.
 
 Some settings in `GDK::Config` are prepended with `__` (double
 underscore). These are not supposed to be set in `gdk.yml` and only
-act as a intermediate value. They also will not be shown by `#dump!`.
+act as a intermediate value. They also are not shown by `#dump!`.
 
 ### Adding a setting
 
