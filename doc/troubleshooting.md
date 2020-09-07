@@ -16,7 +16,19 @@ by:
 
 - [Updating GDK](index.md#update-gdk).
 
-## Rebuilding gems with native extensions
+## Sections
+
+- [Ruby](#ruby)
+- [Node.js](#nodejs)
+- [PostgreSQL](#postgresql)
+- [Git](#git)
+- [Webpack](#webpack)
+- [Gitaly](#gitaly)
+- [Elasticsearch](#elasticsearch)
+
+## Ruby
+
+### Rebuilding gems with native extensions
 
 There may be times when your local libraries that are used to build some gems'
 native extensions are updated (i.e., `libicu`), thus resulting in errors like:
@@ -58,13 +70,13 @@ In which case you would run:
 gem pristine re2
 ```
 
-## An error occurred while installing gpgme on macOS
+### An error occurred while installing gpgme on macOS
 
 Check if you have `gawk` installed >= 5.0.0 and uninstall it.
 
 Re-run the `gdk install` again and follow any on-screen instructions related to installing `gpgme`.
 
-## `charlock_holmes` `0.7.5` cannot be installed with icu4c 61.1
+### `charlock_holmes` `0.7.5` cannot be installed with icu4c 61.1
 
 The installation of the `charlock_holmes` v0.7.5 gem during `bundle install`
 may fail with the following error:
@@ -94,157 +106,7 @@ gem install charlock_holmes -v '0.7.5' -- --with-cppflags=-DU_USING_ICU_NAMESPAC
 
 0.7.6 fixes this issue. See [this issue](https://github.com/brianmario/charlock_holmes/issues/126) for more details.
 
-## PostgreSQL
-
-### Unable to build and install `pg` gem on GDK install
-
-After installing PostgreSQL with brew you will have to set the proper path to PostgreSQL.
-You may run into the following errors on running `gdk install`
-
-```plaintext
-Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
-
-    current directory: /Users/gdk/.rvm/gems/ruby-2.3.3/gems/pg-0.18.4/ext
-/Users/gdk/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20180330-95521-1k5x76v.rb extconf.rb
-checking for pg_config... no
-No pg_config... trying anyway. If building fails, please try again with
- --with-pg-config=/path/to/pg_config
-
- ...
-
-An error occurred while installing pg (0.18.4), and Bundler cannot continue.
-Make sure that `gem install pg -v '0.18.4'` succeeds before bundling.
-```
-
-This is because the script fails to find the PostgreSQL instance in the path.
-The instructions for this may show up after installing PostgreSQL.
-The example below is from running `brew install postgresql@11` on macOS installation.
-For other versions, other platform install and other shell terminal please adjust the path accordingly.
-
-```plaintext
-If you need to have this software first in your PATH run:
-  echo 'export PATH="/usr/local/opt/postgresql@11/bin:$PATH"' >> ~/.bash_profile
-```
-
-Once this is set, run the `gdk install` command again.
-
-### Error in database migrations when pg_trgm extension is missing
-
-Since GitLab 8.6+ the PostgreSQL extension `pg_trgm` must be installed. If you
-are installing GDK for the first time this is handled automatically from the
-database schema. In case you are updating your GDK and you experience this
-error, make sure you pull the latest changes from the GDK repository and run:
-
-```shell
-./support/enable-postgres-extensions
-```
-
-### PostgreSQL is looking for wrong version of icu4c
-
-If the Rails server cannot connect to PostgreSQL and you see the following when running `gdk tail postgresql`:
-
-```plaintext
-2020-07-06_00:26:20.51557 postgresql            : support/postgresql-signal-wrapper:16:in `<main>': undefined method `exitstatus' for nil:NilClass (NoMethodError)
-2020-07-06_00:26:21.62892 postgresql            : dyld: Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.66.dylib
-2020-07-06_00:26:21.62896 postgresql            :   Referenced from: /usr/local/opt/postgresql@11/bin/postgres
-2020-07-06_00:26:21.62897 postgresql            :   Reason: image not found
-```
-
-This means the PostgreSQL is trying to load an older version of `icu4c` (`66` in the example), and failing.
-This can happen when `icu4c` is not pinned and is upgraded beyond the version supported
-by PostgreSQL.
-
-To resolve this, reinstall PostgreSQL with:
-
-```shell
-brew reinstall postgresql@11
-```
-
-## ActiveRecord::PendingMigrationError at /
-
-After running the GitLab Development Kit using `gdk start` and browsing to `http://localhost:3000/`, you may see an error page that says `ActiveRecord::PendingMigrationError at /. Migrations are pending`.
-
-To fix this error, the pending migration must be resolved. Perform the following steps in your terminal:
-
-1. Change to the `gitlab` directory using `cd gitlab`
-1. Run the following command to perform the migration: `rails db:migrate RAILS_ENV=development`
-
-Once the operation is complete, refresh the page.
-
-## Error installing node-gyp
-
-node-gyp may fail to build on macOS Catalina installations. Follow [the node-gyp troubleshooting guide](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md).
-
-## Database files incompatible with server
-
-If you see `FATAL: database files are incompatible with server` errors, it means
-the PostgreSQL data directory was initialized by an old PostgreSQL version, which
-is not compatible with your current PostgreSQL version.
-
-You can solve it in one of two ways, depending if you would like to retain your data or not:
-
-### If you do not need to retain your data
-
-Note that this will wipe out the existing contents of your database.
-
-```shell
-# cd into your GDK folder
-cd gitlab-development-kit
-
-# Remove your existing data
-mv postgresql/data postgresql/data.bkp
-
-# Initialize a new data folder
-make postgresql/data
-
-# Initialize the gitlabhq_development database
-gdk reconfigure
-
-# Start your database.
-gdk start db
-```
-
-You may remove the `data.bkp` folder if your database is working well.
-
-### If you would like to retain your data
-
-Check the version of PostgreSQL that your data is compatible with:
-
-```shell
-# cd into your GDK folder
-cd gitlab-development-kit
-
-cat postgresql/data/PG_VERSION
-```
-
-If the content of the `PG_VERSION` file is `10`, your data folder is compatible
-with PostgreSQL 10.
-
-Downgrade your PostgreSQL to the compatible version. For example, to downgrade to
-PostgreSQL 10 on macOS using Homebrew:
-
-```shell
-brew install postgresql@10
-brew link --force postgresql@10
-```
-
-You also need to update your `Procfile` to use the downgraded PostgreSQL binaries:
-
-```shell
-# Change Procfile to use downgraded PostgreSQL binaries
-gdk reconfigure
-```
-
-You can now follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql)
-to upgrade your PostgreSQL version while retaining your current data.
-
-## Rails cannot connect to PostgreSQL
-
-- Use `gdk status` to see if `postgresql` is running.
-- Check for custom PostgreSQL connection settings defined via the environment; we
-  assume none such variables are set. Look for them with `set | grep '^PG'`.
-
-## undefined symbol: SSLv2_method
+### undefined symbol: SSLv2_method
 
 This happens if your local OpenSSL library is updated and your Ruby binary is
 built against an older version.
@@ -256,167 +118,7 @@ command will fetch Ruby 2.3 and install it from source:
 rvm reinstall --disable-binary 2.3
 ```
 
-## Fix conflicts in database migrations if you use the same db for CE and EE
-
-NOTE: **Note:**
-The recommended way to fix the problem is to rebuild your database and move
-your EE development into a new directory.
-
-In case you use the same database for both CE and EE development, sometimes you
-can get stuck in a situation when the migration is up in `rake db:migrate:status`,
-but in reality the database doesn't have it.
-
-For example, <https://gitlab.com/gitlab-org/gitlab-foss/merge_requests/3186>
-introduced some changes when a few EE migrations were added to CE. If you were
-using the same db for CE and EE you would get hit by the following error:
-
-```shell
-undefined method `share_with_group_lock' for #<Group
-```
-
-This exception happened because the system thinks that such migration was
-already run, and thus Rails skipped adding the `share_with_group_lock` field to
-the `namespaces` table.
-
-The problem is that you can not run `rake db:migrate:up VERSION=xxx` since the
-system thinks the migration is already run. Also, you can not run
-`rake db:migrate:redo VERSION=xxx` since it tries to do `down` before `up`,
-which fails if column does not exist or can cause data loss if column exists.
-
-A quick solution is to remove the database data and then recreate it:
-
-```shell
-bundle exec rake setup
-```
-
----
-
-If you don't want to nuke the database, you can perform the migrations manually.
-Open a terminal and start the rails console:
-
-```shell
-rails console
-```
-
-And run manually the migrations:
-
-```plaintext
-require Rails.root.join("db/migrate/20130711063759_create_project_group_links.rb")
-CreateProjectGroupLinks.new.change
-require Rails.root.join("db/migrate/20130820102832_add_access_to_project_group_link.rb")
-AddAccessToProjectGroupLink.new.change
-require Rails.root.join("db/migrate/20150930110012_add_group_share_lock.rb")
-AddGroupShareLock.new.change
-```
-
-You should now be able to continue your development. You might want to note
-that in this case we had 3 migrations happening:
-
-```plaintext
-db/migrate/20130711063759_create_project_group_links.rb
-db/migrate/20130820102832_add_access_to_project_group_link.rb
-db/migrate/20150930110012_add_group_share_lock.rb
-```
-
-In general it doesn't matter in which order you run them, but in this case
-the last two migrations create columns in a table which is created by the first
-migration. So, in this example the order is important. Otherwise you would try
-to create a column in a non-existent table which would of course fail.
-
-## 'LoadError: dlopen' when starting Ruby apps
-
-This can happen when you try to load a Ruby gem with native extensions that
-were linked against a system library that is no longer there. A typical culprit
-is Homebrew on macOS, which encourages frequent updates (`brew update && brew
-upgrade`) which may break binary compatibility.
-
-```shell
-bundle exec rake db:create dev:setup
-rake aborted!
-LoadError: dlopen(/Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle, 9): Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.52.1.dylib
-  Referenced from: /Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
-  Reason: image not found - /Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
-/Users/gdk/gitlab-development-kit/gitlab/config/application.rb:6:in `<top (required)>'
-/Users/gdk/gitlab-development-kit/gitlab/Rakefile:5:in `require'
-/Users/gdk/gitlab-development-kit/gitlab/Rakefile:5:in `<top (required)>'
-(See full trace by running task with --trace)
-```
-
-In the above example, you see that the charlock_holmes gem fails to load
-`libicui18n.52.1.dylib`. You can try fixing this by [re-installing
-charlock_holmes](#rebuilding-gems-with-native-extensions).
-
-## 'yarn install' fails due node incompatibility issues
-
-If you're running a version of node between 13.0 and 13.7, you might see the following error message:
-
-```plaintext
-error extract-files@8.1.0: The engine "node" is incompatible with this module. Expected version "10 - 12 || >= 13.7". Got "13.2.0"
-error Found incompatible module.
-```
-
-If you're using `nvm`, you can confirm the version of node that you're using:
-
-```shell
-nvm current node -v
-```
-
-You can adjust node to an acceptable version with the following command:
-
-```shell
-nvm install <version>
-```
-
-## 'bundle install' fails due to permission problems
-
-This can happen if you are using a system-wide Ruby installation. You can
-override the Ruby gem install path with `BUNDLE_PATH`:
-
-```shell
-# Install gems in (current directory)/vendor/bundle
-make BUNDLE_PATH=$(pwd)/vendor/bundle
-```
-
-## 'bundle install' fails while compiling eventmachine gem
-
-On OS X El Capitan, the eventmachine gem compilation might fail with:
-
-```plaintext
-Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
-<snip>
-make "DESTDIR=" clean
-
-make "DESTDIR="
-compiling binder.cpp
-In file included from binder.cpp:20:
-./project.h:116:10: fatal error: 'openssl/ssl.h' file not found
-#include <openssl/ssl.h>
-        ^
-1 error generated.
-make: *** [binder.o] Error 1
-
-make failed, exit code 2
-```
-
-To fix it:
-
-```shell
-bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-```
-
-and then do `bundle install` once again.
-
-## 'Invalid reference name' when creating a new tag
-
-Make sure that `git` is configured correctly on your development
-machine (where GDK runs).
-
-```shell
-git checkout -b can-I-commit
-git commit --allow-empty -m 'I can commit'
-```
-
-## 'gem install nokogiri' fails
+### 'gem install nokogiri' fails
 
 Make sure that Xcode Command Line Tools installed on your development machine. For the discussion see
 this [issue](https://gitlab.com/gitlab-org/gitlab-development-kit/issues/124).
@@ -428,7 +130,7 @@ xcode-select --install
 gem install nokogiri
 ```
 
-## `gem install gpgme` `2.0.x` fails to compile native extension on macOS Mojave
+### `gem install gpgme` `2.0.x` fails to compile native extension on macOS Mojave
 
 If building `gpgme` gem fails with an `Undefined symbols for architecture x86_64` error on macOS Mojave, build `gpgme` using system libraries instead.
 
@@ -452,7 +154,7 @@ If building `gpgme` gem fails with an `Undefined symbols for architecture x86_64
 
 You can now run `gdk install` or `bundle` again.
 
-## `gem install nokogumbo` fails
+### `gem install nokogumbo` fails
 
 If you see the following error installing the `nokogumbo` gem via `gdk install`:
 
@@ -495,7 +197,7 @@ A solution is to:
 
 1. Re-run `gdk install`
 
-## FFI gem issues
+### FFI gem issues
 
 The following are problems you might encounter when installing the
 [FFI gem](https://github.com/ffi/ffi/wiki) with possible solutions.
@@ -586,7 +288,7 @@ make: *** [gitaly/bin/gitaly] Error 2
 
 A solution on macOS is to re-install [Xcode Command Line Tools](https://apple.stackexchange.com/questions/93573/how-to-reinstall-xcode-command-line-tools).
 
-## LoadError due to readline
+### LoadError due to readline
 
 On macOS, GitLab may fail to start and fail with an error message about
 `libreadline`:
@@ -606,7 +308,326 @@ managed with:
 - [rbenv](https://github.com/rbenv/rbenv), run `rbenv install 2.6.6`.
 - [RVM](https://rvm.io), run `rvm reinstall ruby-2.6.6`.
 
-## Delete non-existent migrations from the database
+### 'LoadError: dlopen' when starting Ruby apps
+
+This can happen when you try to load a Ruby gem with native extensions that
+were linked against a system library that is no longer there. A typical culprit
+is Homebrew on macOS, which encourages frequent updates (`brew update && brew
+upgrade`) which may break binary compatibility.
+
+```shell
+bundle exec rake db:create dev:setup
+rake aborted!
+LoadError: dlopen(/Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle, 9): Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.52.1.dylib
+  Referenced from: /Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
+  Reason: image not found - /Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extensions/x86_64-darwin-13/2.1.0-static/charlock_holmes-0.6.9.4/charlock_holmes/charlock_holmes.bundle
+/Users/gdk/gitlab-development-kit/gitlab/config/application.rb:6:in `<top (required)>'
+/Users/gdk/gitlab-development-kit/gitlab/Rakefile:5:in `require'
+/Users/gdk/gitlab-development-kit/gitlab/Rakefile:5:in `<top (required)>'
+(See full trace by running task with --trace)
+```
+
+In the above example, you see that the charlock_holmes gem fails to load
+`libicui18n.52.1.dylib`. You can try fixing this by [re-installing
+charlock_holmes](#rebuilding-gems-with-native-extensions).
+
+### 'bundle install' fails due to permission problems
+
+This can happen if you are using a system-wide Ruby installation. You can
+override the Ruby gem install path with `BUNDLE_PATH`:
+
+```shell
+# Install gems in (current directory)/vendor/bundle
+make BUNDLE_PATH=$(pwd)/vendor/bundle
+```
+
+### 'bundle install' fails while compiling eventmachine gem
+
+On OS X El Capitan, the eventmachine gem compilation might fail with:
+
+```plaintext
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+<snip>
+make "DESTDIR=" clean
+
+make "DESTDIR="
+compiling binder.cpp
+In file included from binder.cpp:20:
+./project.h:116:10: fatal error: 'openssl/ssl.h' file not found
+#include <openssl/ssl.h>
+        ^
+1 error generated.
+make: *** [binder.o] Error 1
+
+make failed, exit code 2
+```
+
+To fix it:
+
+```shell
+bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
+```
+
+and then do `bundle install` once again.
+
+## Node.js
+
+### Error installing node-gyp
+
+node-gyp may fail to build on macOS Catalina installations. Follow [the node-gyp troubleshooting guide](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md).
+
+### 'yarn install' fails due node incompatibility issues
+
+If you're running a version of node between 13.0 and 13.7, you might see the following error message:
+
+```plaintext
+error extract-files@8.1.0: The engine "node" is incompatible with this module. Expected version "10 - 12 || >= 13.7". Got "13.2.0"
+error Found incompatible module.
+```
+
+If you're using `nvm`, you can confirm the version of node that you're using:
+
+```shell
+nvm current node -v
+```
+
+You can adjust node to an acceptable version with the following command:
+
+```shell
+nvm install <version>
+```
+
+### yarn: error: no such option: --pure-lockfile
+
+The full error you might be getting is:
+
+```plaintext
+Makefile:134: recipe for target '.gitlab-yarn' failed
+make: *** [.gitlab-yarn] Error 2
+```
+
+This is likely to happen if you installed `yarn` using `apt install cmdtest`.
+
+To fix this, install yarn using npm instead:
+
+```shell
+npm install --global yarn
+```
+
+## PostgreSQL
+
+### Unable to build and install `pg` gem on GDK install
+
+After installing PostgreSQL with brew you will have to set the proper path to PostgreSQL.
+You may run into the following errors on running `gdk install`
+
+```plaintext
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/gdk/.rvm/gems/ruby-2.3.3/gems/pg-0.18.4/ext
+/Users/gdk/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20180330-95521-1k5x76v.rb extconf.rb
+checking for pg_config... no
+No pg_config... trying anyway. If building fails, please try again with
+ --with-pg-config=/path/to/pg_config
+
+ ...
+
+An error occurred while installing pg (0.18.4), and Bundler cannot continue.
+Make sure that `gem install pg -v '0.18.4'` succeeds before bundling.
+```
+
+This is because the script fails to find the PostgreSQL instance in the path.
+The instructions for this may show up after installing PostgreSQL.
+The example below is from running `brew install postgresql@11` on a macOS installation.
+For other versions, other platform install and other shell terminal please adjust the path accordingly.
+
+```plaintext
+If you need to have this software first in your PATH run:
+  echo 'export PATH="/usr/local/opt/postgresql@11/bin:$PATH"' >> ~/.bash_profile
+```
+
+Once this is set, run the `gdk install` command again.
+
+### Error in database migrations when pg_trgm extension is missing
+
+Since GitLab 8.6+ the PostgreSQL extension `pg_trgm` must be installed. If you
+are installing GDK for the first time this is handled automatically from the
+database schema. In case you are updating your GDK and you experience this
+error, make sure you pull the latest changes from the GDK repository and run:
+
+```shell
+./support/enable-postgres-extensions
+```
+
+### PostgreSQL is looking for wrong version of icu4c
+
+If the Rails server cannot connect to PostgreSQL and you see the following when running `gdk tail postgresql`:
+
+```plaintext
+2020-07-06_00:26:20.51557 postgresql            : support/postgresql-signal-wrapper:16:in `<main>': undefined method `exitstatus' for nil:NilClass (NoMethodError)
+2020-07-06_00:26:21.62892 postgresql            : dyld: Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.66.dylib
+2020-07-06_00:26:21.62896 postgresql            :   Referenced from: /usr/local/opt/postgresql@11/bin/postgres
+2020-07-06_00:26:21.62897 postgresql            :   Reason: image not found
+```
+
+This means the PostgreSQL is trying to load an older version of `icu4c` (`66` in the example), and failing.
+This can happen when `icu4c` is not pinned and is upgraded beyond the version supported
+by PostgreSQL.
+
+To resolve this, reinstall PostgreSQL with:
+
+```shell
+brew reinstall postgresql@11
+```
+
+### ActiveRecord::PendingMigrationError at /
+
+After running the GitLab Development Kit using `gdk start` and browsing to `http://localhost:3000/`, you may see an error page that says `ActiveRecord::PendingMigrationError at /. Migrations are pending`.
+
+To fix this error, the pending migration must be resolved. Perform the following steps in your terminal:
+
+1. Change to the `gitlab` directory using `cd gitlab`
+1. Run the following command to perform the migration: `rails db:migrate RAILS_ENV=development`
+
+Once the operation is complete, refresh the page.
+
+### Database files incompatible with server
+
+If you see `FATAL: database files are incompatible with server` errors, it means
+the PostgreSQL data directory was initialized by an old PostgreSQL version, which
+is not compatible with your current PostgreSQL version.
+
+You can solve it in one of two ways, depending if you would like to retain your data or not:
+
+### If you do not need to retain your data
+
+Note that this will wipe out the existing contents of your database.
+
+```shell
+# cd into your GDK folder
+cd gitlab-development-kit
+
+# Remove your existing data
+mv postgresql/data postgresql/data.bkp
+
+# Initialize a new data folder
+make postgresql/data
+
+# Initialize the gitlabhq_development database
+gdk reconfigure
+
+# Start your database.
+gdk start db
+```
+
+You may remove the `data.bkp` folder if your database is working well.
+
+### If you would like to retain your data
+
+Check the version of PostgreSQL that your data is compatible with:
+
+```shell
+# cd into your GDK folder
+cd gitlab-development-kit
+
+cat postgresql/data/PG_VERSION
+```
+
+If the content of the `PG_VERSION` file is `10`, your data folder is compatible
+with PostgreSQL 10.
+
+Downgrade your PostgreSQL to the compatible version. For example, to downgrade to
+PostgreSQL 10 on macOS using Homebrew:
+
+```shell
+brew install postgresql@10
+brew link --force postgresql@10
+```
+
+You also need to update your `Procfile` to use the downgraded PostgreSQL binaries:
+
+```shell
+# Change Procfile to use downgraded PostgreSQL binaries
+gdk reconfigure
+```
+
+You can now follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql)
+to upgrade your PostgreSQL version while retaining your current data.
+
+### Rails cannot connect to PostgreSQL
+
+- Use `gdk status` to see if `postgresql` is running.
+- Check for custom PostgreSQL connection settings defined via the environment; we
+  assume none such variables are set. Look for them with `set | grep '^PG'`.
+
+### Fix conflicts in database migrations if you use the same db for CE and EE
+
+NOTE: **Note:**
+The recommended way to fix the problem is to rebuild your database and move
+your EE development into a new directory.
+
+In case you use the same database for both CE and EE development, sometimes you
+can get stuck in a situation when the migration is up in `rake db:migrate:status`,
+but in reality the database doesn't have it.
+
+For example, <https://gitlab.com/gitlab-org/gitlab-foss/merge_requests/3186>
+introduced some changes when a few EE migrations were added to CE. If you were
+using the same db for CE and EE you would get hit by the following error:
+
+```shell
+undefined method `share_with_group_lock' for #<Group
+```
+
+This exception happened because the system thinks that such migration was
+already run, and thus Rails skipped adding the `share_with_group_lock` field to
+the `namespaces` table.
+
+The problem is that you can not run `rake db:migrate:up VERSION=xxx` since the
+system thinks the migration is already run. Also, you can not run
+`rake db:migrate:redo VERSION=xxx` since it tries to do `down` before `up`,
+which fails if column does not exist or can cause data loss if column exists.
+
+A quick solution is to remove the database data and then recreate it:
+
+```shell
+bundle exec rake setup
+```
+
+---
+
+If you don't want to nuke the database, you can perform the migrations manually.
+Open a terminal and start the rails console:
+
+```shell
+rails console
+```
+
+And run manually the migrations:
+
+```plaintext
+require Rails.root.join("db/migrate/20130711063759_create_project_group_links.rb")
+CreateProjectGroupLinks.new.change
+require Rails.root.join("db/migrate/20130820102832_add_access_to_project_group_link.rb")
+AddAccessToProjectGroupLink.new.change
+require Rails.root.join("db/migrate/20150930110012_add_group_share_lock.rb")
+AddGroupShareLock.new.change
+```
+
+You should now be able to continue your development. You might want to note
+that in this case we had 3 migrations happening:
+
+```plaintext
+db/migrate/20130711063759_create_project_group_links.rb
+db/migrate/20130820102832_add_access_to_project_group_link.rb
+db/migrate/20150930110012_add_group_share_lock.rb
+```
+
+In general it doesn't matter in which order you run them, but in this case
+the last two migrations create columns in a table which is created by the first
+migration. So, in this example the order is important. Otherwise you would try
+to create a column in a non-existent table which would of course fail.
+
+### Delete non-existent migrations from the database
 
 If for some reason you end up having database migrations that no longer exist
 but are present in your database, you might want to remove them.
@@ -628,6 +649,31 @@ but are present in your database, you might want to remove them.
 
 You can now run `rake db:migrate:status` again to verify that the entries are
 deleted from the database.
+
+## Git
+
+### 'Invalid reference name' when creating a new tag
+
+Make sure that `git` is configured correctly on your development
+machine (where GDK runs).
+
+```shell
+git checkout -b can-I-commit
+git commit --allow-empty -m 'I can commit'
+```
+
+### `fatal: not a git repository`
+
+If `gdk init` or any other `gdk` command gives you the following error:
+
+```plaintext
+fatal: not a git repository (or any of the parent directories): .git
+```
+
+Make sure you don't have `gdk` aliased in your shell.
+For example the Git module in [prezto](https://github.com/sorin-ionescu/prezto)
+has an [alias](https://github.com/sorin-ionescu/prezto/blob/master/modules/git/README.md#data)
+for `gdk` that lists killed files.
 
 ## Webpack
 
@@ -793,19 +839,6 @@ For Unicorn: edit `gitlab/config/unicorn.rb`:
 timeout 3600
 ```
 
-## `fatal: not a git repository`
-
-If `gdk init` or any other `gdk` command gives you the following error:
-
-```plaintext
-fatal: not a git repository (or any of the parent directories): .git
-```
-
-Make sure you don't have `gdk` aliased in your shell.
-For example the Git module in [prezto](https://github.com/sorin-ionescu/prezto)
-has an [alias](https://github.com/sorin-ionescu/prezto/blob/master/modules/git/README.md#data)
-for `gdk` that lists killed files.
-
 ## Problems with Sidekiq (Cluster)
 
 GDK uses Sidekiq Cluster (running a single Sidekiq process) by default instead
@@ -843,7 +876,9 @@ a `gdk reconfigure`:
 For more information about Jaeger, visit the [distributed tracing GitLab developer
 documentation](https://docs.gitlab.com/ee/development/distributed_tracing.html).
 
-## Gitaly `config.toml: no such file or directory`
+## Gitaly
+
+### `config.toml: no such file or directory`
 
 If you see errors such as:
 
@@ -941,23 +976,6 @@ To fix this, remove `tmp/tests/` in the `gitlab/` directory and regenerate the f
 
 ```shell
 rm -rf tmp/tests/ && bin/rake karma:fixtures
-```
-
-## yarn: error: no such option: --pure-lockfile
-
-The full error you might be getting is:
-
-```plaintext
-Makefile:134: recipe for target '.gitlab-yarn' failed
-make: *** [.gitlab-yarn] Error 2
-```
-
-This is likely to happen if you installed `yarn` using `apt install cmdtest`.
-
-To fix this, install yarn using npm instead:
-
-```shell
-npm install --global yarn
 ```
 
 ## Homebrew troubleshooting
