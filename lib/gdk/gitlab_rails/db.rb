@@ -30,7 +30,7 @@ module GDK
 
       def migrate_tasks
         tasks = {}
-        tasks['rails'] = MAIN_TASKS unless in_recovery?
+        tasks['rails'] = MAIN_TASKS unless geo_secondary? || in_recovery?
         tasks['Geo'] = GEO_TASKS if geo?
 
         tasks
@@ -49,6 +49,10 @@ module GDK
                           chdir: config.gdk_root.join('gitlab'))
         sh.stream
         sh.success?
+      end
+
+      def geo_secondary?
+        config.geo.secondary?
       end
 
       def config

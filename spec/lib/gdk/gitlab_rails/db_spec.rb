@@ -31,6 +31,15 @@ RSpec.describe GDK::GitlabRails::DB do
 
         migrate
       end
+
+      it 'does not migrate the main database when Geo is a secondary' do
+        stub_gdk_yaml('geo' => { 'enabled' => true, 'secondary' => true })
+
+        allow(Shellout).to receive(:new).and_return(shellout_mock)
+        expect(Shellout).not_to receive(:new).with(array_including('db:migrate'), any_args)
+
+        migrate
+      end
     end
 
     context 'database is in recovery' do
