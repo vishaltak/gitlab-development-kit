@@ -49,7 +49,7 @@ To install dependencies for macOS:
 1. Run the following `brew` commands:
 
    ```shell
-   brew install asdf git git-lfs libiconv pkg-config cmake openssl coreutils re2 graphicsmagick gpg icu4c exiftool sqlite
+   brew install asdf git git-lfs libiconv pkg-config cmake openssl coreutils re2 graphicsmagick gpg icu4c exiftool sqlite runit
    brew link pkg-config
    brew pin libffi icu4c readline re2
    if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
