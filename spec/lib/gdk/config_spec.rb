@@ -311,11 +311,12 @@ RSpec.describe GDK::Config do
           end
         end
 
-        context 'for a Geo setup' do
+        context 'for a Geo secondary' do
           let!(:yaml) do
             {
               'geo' => {
-                'enabled' => true
+                'enabled' => true,
+                'secondary' => true
               }
             }
           end
@@ -335,11 +336,12 @@ RSpec.describe GDK::Config do
           end
         end
 
-        context 'for a Geo setup' do
+        context 'for a Geo secondary' do
           let!(:yaml) do
             {
               'geo' => {
-                'enabled' => true
+                'enabled' => true,
+                'secondary' => true
               }
             }
           end

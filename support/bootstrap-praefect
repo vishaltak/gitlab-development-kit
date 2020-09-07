@@ -3,7 +3,7 @@
 require_relative '../lib/gdk'
 
 def postgresql
-  @postgresql ||= config.geo.enabled? ? GDK::PostgresqlGeo.new : GDK::Postgresql.new
+  @postgresql ||= config.geo.secondary? ? GDK::PostgresqlGeo.new : GDK::Postgresql.new
 end
 
 def config

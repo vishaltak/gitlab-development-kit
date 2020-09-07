@@ -360,8 +360,8 @@ module GDK
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       settings :database do
-        string(:host) { config.geo.enabled? ? config.postgresql.geo.host : config.postgresql.host }
-        integer(:port) { config.geo.enabled? ? config.postgresql.geo.port : config.postgresql.port }
+        string(:host) { config.geo.secondary? ? config.postgresql.geo.host : config.postgresql.host }
+        integer(:port) { config.geo.secondary? ? config.postgresql.geo.port : config.postgresql.port }
         string(:dbname) { 'praefect_development' }
         string(:sslmode) { 'disable' }
       end

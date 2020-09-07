@@ -627,7 +627,7 @@ postgresql-seed-rails: ensure-databases-running postgresql-seed-praefect
 
 .PHONY: postgresql-seed-praefect
 postgresql-seed-praefect: Procfile postgresql/data
-	$(Q)gdk start postgresql
+	$(Q)gdk start db
 	$(Q)support/bootstrap-praefect
 
 postgresql/port:
