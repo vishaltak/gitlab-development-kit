@@ -29,6 +29,7 @@ geo:
   registry_replication:
     enabled: false
     primary_api_url: http://localhost:5000
+  secondary: false
 git:
   bin: "/usr/local/bin/git"
 git_repositories: []

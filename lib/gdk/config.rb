@@ -266,6 +266,7 @@ module GDK
 
     settings :geo do
       bool(:enabled) { false }
+      bool(:secondary) { false }
       string(:node_name) { config.gdk_root.basename.to_s }
       settings :registry_replication do
         bool(:enabled) { false }
