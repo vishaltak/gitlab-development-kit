@@ -305,16 +305,50 @@ RSpec.describe GDK::Config do
       describe '#host' do
         it { expect(default_config.praefect.database.host).to eq(default_config.postgresql.dir.to_s) }
 
-        it 'returns configured value' do
-          expect(config.praefect.database.host).to eq('localhost')
+        context 'for a non-Geo setup' do
+          it 'returns configured value' do
+            expect(config.praefect.database.host).to eq('localhost')
+          end
+        end
+
+        context 'for a Geo secondary' do
+          let!(:yaml) do
+            {
+              'geo' => {
+                'enabled' => true,
+                'secondary' => true
+              }
+            }
+          end
+
+          it 'returns configured value' do
+            expect(config.praefect.database.host).to eq('/home/git/gdk/postgresql-geo')
+          end
         end
       end
 
       describe '#port' do
         it { expect(default_config.praefect.database.port).to eq(5432) }
 
-        it 'returns configured value' do
-          expect(config.praefect.database.port).to eq(1234)
+        context 'for a non-Geo setup' do
+          it 'returns configured value' do
+            expect(config.praefect.database.port).to eq(1234)
+          end
+        end
+
+        context 'for a Geo secondary' do
+          let!(:yaml) do
+            {
+              'geo' => {
+                'enabled' => true,
+                'secondary' => true
+              }
+            }
+          end
+
+          it 'returns configured value' do
+            expect(config.praefect.database.port).to eq(5431)
+          end
         end
       end
 

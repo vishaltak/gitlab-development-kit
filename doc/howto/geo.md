@@ -87,6 +87,12 @@ gdk start postgresql postgresql-geo
 make geo-setup
 ```
 
+### Praefect on a Geo secondary
+
+After changing the setting of `geo.secondary` in your GDK configuration, the
+Praefect database needs to be recreated. Check out the [Praefect
+documentation](gitaly.md#praefect-on-a-geo-secondary) for the details.
+
 ## Database replication
 
 For GitLab Geo, you will need a primary/secondary database replication defined.

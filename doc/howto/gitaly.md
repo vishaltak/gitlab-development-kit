@@ -17,6 +17,20 @@ praefect:
   enabled: false
 ```
 
+### Praefect on a Geo secondary
+
+Praefect needs a read-write capable database to track it's state. On a Geo
+secondary the main database will be read-only. So when GDK is [configured to be
+a Geo secondary](geo.md#secondary), Praefect will use the Geo tracking database
+instead.
+
+If you have modified this setting, you'll need to recreate the Praefect database
+using:
+
+```shell
+make gitaly-setup
+```
+
 ### Praefect virtual storages
 
 If you need to work with multiple storages in GitLab, you can create a second virtual storage in

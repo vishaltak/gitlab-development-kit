@@ -2,17 +2,22 @@
 
 require_relative '../lib/gdk'
 
+def postgresql
+  @postgresql ||= config.geo.secondary? ? GDK::PostgresqlGeo.new : GDK::Postgresql.new
+end
+
+def config
+  @config ||= GDK::Config.new
+end
+
+def db_name
+  @db_name ||= config.praefect.database.dbname
+end
+
 def main
-  postgresql = GDK::Postgresql.new
   abort 'postgres not ready' unless postgresql.ready?
-
-  config = GDK::Config.new
-  dbname = config.praefect.database.dbname
-
-  exit if postgresql.db_exists?(dbname)
-
-  abort 'createdb failed' unless postgresql.createdb(%W[--encoding=UTF8 --locale=C --echo #{dbname}])
-
+  exit if postgresql.db_exists?(db_name)
+  abort 'createdb failed' unless postgresql.createdb(%W[--encoding=UTF8 --locale=C --echo #{db_name}])
   abort 'migrate failed' unless system('support/migrate-praefect')
 end
 
