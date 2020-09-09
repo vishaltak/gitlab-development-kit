@@ -4,7 +4,7 @@ GDK users often need to interact with PostgreSQL.
 
 ## Access PostgreSQL
 
-GDK uses the PostgreSQL binaries installed on your system (see [install](../prepare.md) section),
+GDK uses the PostgreSQL binaries installed on your system (see [install](../index.md) section),
 but keeps the data files within the GDK directory structure, under `gitlab-development-kit/postgresql/data`.
 
 This means that the databases cannot be seen with `psql -l`, but you can use the `gdk psql` wrapper

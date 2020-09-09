@@ -49,8 +49,7 @@ depends on our infrastructure. For non-GitLab team members you can see
    > Welcome to Ubuntu 16.04.4 LTS (GNU/Linux 4.13.0-1019-gcp x86_64)
    ```
 
-1. Set up the GDK for your workstation following [the preparation
-   instructions](../../prepare.md) and [setup instructions](../../index.md)
+1. [Set up the GDK](../../index.md) for your workstation.
 
 NOTE: Running Auto DevOps flow [downloads/uploads gigabytes of data on each
 run](#massive-bandwidth-used-by-auto-devops). For this reason it is not a good

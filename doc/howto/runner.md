@@ -7,8 +7,7 @@ do so when GitLab is running under GDK.
 
 ## Set up GitLab
 
-Start by [preparing your computer](../prepare.md) and
-[setting up GDK](../index.md).
+Start by [setting up the GDK](../../index.md) for your workstation.
 
 In some configurations, GitLab Runner needs access to GitLab from inside a
 Docker container, or even another machine, which isn't supported in the default

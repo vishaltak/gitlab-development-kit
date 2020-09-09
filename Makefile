@@ -903,7 +903,7 @@ endif
 .PHONY: rubocop
 rubocop:
 ifeq ($(and $(BUNDLE)),)
-	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
 ifeq ($(and $(RUBOCOP)),)
@@ -917,7 +917,7 @@ endif
 .PHONY: rspec
 rspec:
 ifeq ($(and $(BUNDLE)),)
-	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
 ifeq ($(and $(RSPEC)),)
@@ -934,7 +934,7 @@ lint: vale markdownlint
 .PHONY: vale-install
 vale-install:
 ifeq ($(and $(GOLANG)),)
-	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
 ifeq ($(and $(VALE)),)
@@ -951,7 +951,7 @@ vale: vale-install
 .PHONY: markdownlint-install
 markdownlint-install:
 ifeq ($(or $(NPM),$(YARN)),)
-	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/prepare.md for more details"
+	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
 ifeq ($(and $(MARKDOWNLINT)),)

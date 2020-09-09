@@ -10,7 +10,7 @@ Setting up GDK involves:
 
 ## Install dependencies
 
-Before [setting up GDK](#install-and-setup-gdk), your local environment must
+Before [setting up GDK](#install-and-set-up-gdk), your local environment must
 have prerequisite third-party software installed and configured. Some
 dependencies can be installed with a *package manager*.
 
