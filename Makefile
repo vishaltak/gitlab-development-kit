@@ -966,6 +966,7 @@ endif
 
 .PHONY: markdownlint
 markdownlint: markdownlint-install
+	$(eval MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null))
 	@echo -n "MarkdownLint: "
 	$(Q)${MARKDOWNLINT} --config .markdownlint.json 'doc/**/*.md' && echo "OK"
 
