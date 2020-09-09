@@ -1,6 +1,7 @@
 .NOTPARALLEL:
 
 SHELL = /bin/bash
+ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
 VALE := $(shell command -v vale 2> /dev/null)
 MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
@@ -960,6 +961,7 @@ ifeq ($(and $(MARKDOWNLINT)),)
 	@echo "INFO: Installing markdownlint.."
 	@([[ "${YARN}" ]] && ${YARN} global add markdownlint-cli@0.23.2 ${QQ}) || ([[ "${NPM}" ]] && ${NPM} install -g markdownlint-cli@0.23.2 ${QQ})
 endif
+	@([[ "${ASDF}" ]] && ${ASDF} reshim nodejs || true)
 endif
 
 .PHONY: markdownlint
