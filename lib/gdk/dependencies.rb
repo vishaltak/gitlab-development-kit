@@ -42,10 +42,10 @@ module GDK
     end
 
     class Checker
-      EXPECTED_GO_VERSION = '1.14'
-      EXPECTED_YARN_VERSION = '1.12'
-      EXPECTED_NODEJS_VERSION = '12.10'
-      EXPECTED_POSTGRESQL_VERSION = '11.7.x'
+      EXPECTED_GO_VERSION = '1.15.1'
+      EXPECTED_YARN_VERSION = '1.22.5'
+      EXPECTED_NODEJS_VERSION = '12.18.3'
+      EXPECTED_POSTGRESQL_VERSION = '11.9'
 
       attr_reader :error_messages
 

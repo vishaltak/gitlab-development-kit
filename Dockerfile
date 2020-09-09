@@ -23,7 +23,7 @@ USER gdk
 ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
 COPY --chown=gdk .tool-versions .
 RUN git clone https://github.com/asdf-vm/asdf.git /home/gdk/.asdf --branch v0.8.0-rc1 && \
-  for plugin in $(cat .tool-versions | cut -f1 -d" "); do \
+  for plugin in $(grep -v '#' .tool-versions | cut -f1 -d" "); do \
   echo "Installing asdf plugin '$plugin' and install current version" ; \
   asdf plugin add $plugin; \
   NODEJS_CHECK_SIGNATURES=no asdf install ; done \
