@@ -33,12 +33,6 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
         bundle exec rails console
         ```
 
-    1. The internal API that `kas` (GitLab Kubernetes Agent Server) uses is disabled by default. To enable it run the following in the Rails console:
-
-        ```ruby
-        Feature.enable(:kubernetes_agent_internal_api)
-        ```
-
     1. Create the agent record and an authentication token for the agent:
 
         ```ruby
