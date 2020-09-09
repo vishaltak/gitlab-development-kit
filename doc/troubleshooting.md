@@ -18,15 +18,28 @@ by:
 
 ## Sections
 
+GDK troubleshooting information is available for the following:
+
 - [Ruby](#ruby)
 - [Node.js](#nodejs)
 - [PostgreSQL](#postgresql)
 - [Git](#git)
 - [Webpack](#webpack)
+- [Running tests](#running-tests)
+- [Puma and Unicorn](#puma-and-unicorn)
+- [Sidekiq Cluster](#sidekiq-cluster)
+- [Jaeger](#jaeger)
 - [Gitaly](#gitaly)
 - [Elasticsearch](#elasticsearch)
+- [Homebrew](#homebrew)
+- [Live reloading](#live-reloading)
+
+If you can't solve your problem in these areas, or if you have a problem in another area, open an
+issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
 
 ## Ruby
+
+The following are possible solutions to problems you might encounter with Ruby and GDK.
 
 ### Rebuilding gems with native extensions
 
@@ -370,7 +383,26 @@ bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/includ
 
 and then do `bundle install` once again.
 
+### Bootsnap-related problems
+
+If your local instance does not start up and you see `bootsnap` errors like this:
+
+```plaintext
+2020-07-09_07:29:27.20103 rails-web             : .rvm/gems/ruby-2.6.6/gems/bootsnap-1.4.6/lib/bootsnap/load_path_cache/core_ext/active_support.rb:61:in `block in load_missing_constant': uninitialized constant EE::OperationsHelper (NameError)
+2020-07-09_07:29:27.20104 rails-web             : .rvm/gems/ruby-2.6.6/gems/bootsnap-1.4.6/lib/bootsnap/load_path_cache/core_ext/active_support.rb:17:in `allow_bootsnap_retry'
+```
+
+You should remove the `bootsnap` cache:
+
+```shell
+gdk stop
+rm -rf gitlab/tmp/cache/bootsnap-*
+gdk start
+```
+
 ## Node.js
+
+The following are possible solutions to problems you might encounter with Node.js and GDK.
 
 ### Error installing node-gyp
 
@@ -415,6 +447,8 @@ npm install --global yarn
 ```
 
 ## PostgreSQL
+
+The following are possible solutions to problems you might encounter with PostgreSQL and GDK.
 
 ### Unable to build and install `pg` gem on GDK install
 
@@ -652,6 +686,8 @@ deleted from the database.
 
 ## Git
 
+The following are possible solutions to problems you might encounter with Git and GDK.
+
 ### 'Invalid reference name' when creating a new tag
 
 Make sure that `git` is configured correctly on your development
@@ -770,7 +806,7 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   command `ss -pntl 'sport = :3808'`. The left over process can be killed with
   the command `kill PID`.
 
-## Problems with running tests
+## Running tests
 
 There may be times when running spinach feature tests or Ruby Capybara RSpec
 tests (tests that are located in the `spec/features` directory) will fail.
@@ -815,7 +851,29 @@ cd gitlab
 bundle exec rake db:test:prepare
 ```
 
-## Puma/Unicorn timeout
+### Failures when generating Karma fixtures
+
+In some cases, running `bin/rake karma:fixtures` might fail to generate some fixtures, you'll see errors in the console like these:
+
+```plaintext
+Failed examples:
+
+rspec ./spec/javascripts/fixtures/blob.rb:25 # Projects::BlobController (JavaScript fixtures) blob/show.html
+rspec ./spec/javascripts/fixtures/branches.rb:24 # Projects::BranchesController (JavaScript fixtures) branches/new_branch.html
+rspec ./spec/javascripts/fixtures/commit.rb:22 # Projects::CommitController (JavaScript fixtures) commit/show.html
+```
+
+To fix this, remove `tmp/tests/` in the `gitlab/` directory and regenerate the fixtures:
+
+```shell
+rm -rf tmp/tests/ && bin/rake karma:fixtures
+```
+
+## Puma and Unicorn
+
+The following are possible solutions to problems you might encounter with Puma, Unicorn, and GDK.
+
+### Puma or Unicorn timeout
 
 Browser shows `EOF`. Logs show a timeout:
 
@@ -839,7 +897,7 @@ For Unicorn: edit `gitlab/config/unicorn.rb`:
 timeout 3600
 ```
 
-## Problems with Sidekiq (Cluster)
+## Sidekiq Cluster
 
 GDK uses Sidekiq Cluster (running a single Sidekiq process) by default instead
 `bundle exec sidekiq` directly, which is a step towards making development a
@@ -858,7 +916,7 @@ Sidekiq Cluster by:
 
 When doing so, please create an issue describing what happened.
 
-## Jaeger Issues
+## Jaeger
 
 If you're seeing errors such as:
 
@@ -878,6 +936,8 @@ documentation](https://docs.gitlab.com/ee/development/distributed_tracing.html).
 
 ## Gitaly
 
+The following are possible solutions to problems you might encounter with Gitaly and GDK.
+
 ### `config.toml: no such file or directory`
 
 If you see errors such as:
@@ -892,6 +952,24 @@ the following in your GDK directory:
 ```shell
 make gitaly-setup
 ```
+
+### Git fails to compile within Gitaly project
+
+If you see the following error when running a `gdk update`:
+
+```shell
+ld: library not found for -lgit2
+```
+
+A known fix is to clean your Go cache by running the following from the GDK's root
+directory:
+
+```shell
+go clean -cache
+rm -rf gitaly
+```
+
+Now rerun `gdk update`.
 
 ## Elasticsearch
 
@@ -960,27 +1038,9 @@ cd gitlab-elasticsearch-indexer/
 go clean -cache
 ```
 
-## Failures when generating Karma fixtures
+## Homebrew
 
-In some cases, running `bin/rake karma:fixtures` might fail to generate some fixtures, you'll see this kind of errors in the console:
-
-```plaintext
-Failed examples:
-
-rspec ./spec/javascripts/fixtures/blob.rb:25 # Projects::BlobController (JavaScript fixtures) blob/show.html
-rspec ./spec/javascripts/fixtures/branches.rb:24 # Projects::BranchesController (JavaScript fixtures) branches/new_branch.html
-rspec ./spec/javascripts/fixtures/commit.rb:22 # Projects::CommitController (JavaScript fixtures) commit/show.html
-```
-
-To fix this, remove `tmp/tests/` in the `gitlab/` directory and regenerate the fixtures:
-
-```shell
-rm -rf tmp/tests/ && bin/rake karma:fixtures
-```
-
-## Homebrew troubleshooting
-
-Most `brew` problems can be sniffed out by running
+Most `brew` problems can be figured out by running:
 
 ```shell
 brew doctor
@@ -997,48 +1057,11 @@ brew cleanup
 For more information on uninstalling old versions of a formula, see the [Homebrew FAQ](https://docs.brew.sh/FAQ#how-do-i-uninstall-old-versions-of-a-formula).
 For additional troubleshooting information, see the Homebrew [Common Issues](https://docs.brew.sh/Common-Issues) page.
 
-## CSS isn't live reloading
+## Live reloading
 
 If you previously compiled production assets with `bundle exec rake gitlab:assets:compile`, the GDK
 serves the assets from the `public/assets/` directory, which means that changing SCSS files won't
-have any effect in development until you re-compile the assets manually. To re-enable live-reloading
-of CSS in development, remove the `public/assets/` directory and restart the GDK.
+have any effect in development until you recompile the assets manually.
 
-## Bootsnap related problems
-
-If your local instance does not start up and you see `bootsnap` errors like this:
-
-```plaintext
-2020-07-09_07:29:27.20103 rails-web             : .rvm/gems/ruby-2.6.6/gems/bootsnap-1.4.6/lib/bootsnap/load_path_cache/core_ext/active_support.rb:61:in `block in load_missing_constant': uninitialized constant EE::OperationsHelper (NameError)
-2020-07-09_07:29:27.20104 rails-web             : .rvm/gems/ruby-2.6.6/gems/bootsnap-1.4.6/lib/bootsnap/load_path_cache/core_ext/active_support.rb:17:in `allow_bootsnap_retry'
-```
-
-You should try to remove the `bootsnap` cache:
-
-```shell
-gdk stop
-rm -rf gitlab/tmp/cache/bootsnap-*
-gdk start
-```
-
-## Git fails to compile within Gitaly project
-
-If you see the following error when running a `gdk update`:
-
-```shell
-ld: library not found for -lgit2
-```
-
-A known fix is to clean your go cache by running the following from the GDK's root
-directory:
-
-```shell
-go clean -cache
-rm -rf gitaly
-```
-
-Now re-run `gdk update`.
-
-## Other problems
-
-Please open an issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
+To re-enable live reloading of CSS in development, remove the `public/assets/` directory and restart
+GDK.
