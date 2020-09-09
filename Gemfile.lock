@@ -21,6 +21,7 @@ GEM
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
+    lefthook (0.7.2)
     method_source (1.0.0)
     minitest (5.14.1)
     parallel (1.19.2)
@@ -34,6 +35,7 @@ GEM
       pry (~> 0.13.0)
     rack (2.2.3)
     rainbow (3.0.0)
+    rake (12.3.3)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -79,7 +81,9 @@ PLATFORMS
 
 DEPENDENCIES
   gitlab-styles (~> 3.2.0)
+  lefthook (~> 0.7)
   pry-byebug (~> 3.9.0)
+  rake (~> 12.0)
   rspec (~> 3.9.0)
   rspec_junit_formatter (~> 0.4.0)
   yard (~> 0.9)

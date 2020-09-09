@@ -1,0 +1,7 @@
+# Refer for explanation to following link:
+# https://github.com/Arkweid/lefthook/blob/master/docs/full_guide.md
+
+pre-push:
+  commands:
+    test:
+      run: make test_warn_missing_tools
