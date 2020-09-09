@@ -880,7 +880,7 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 
 .PHONY: test_list_missing_tools
 test_list_missing_tools:
-	@test ${VALE} || echo "WARNING: vale is not installed"
+	@test ${VALE} || echo "WARNING: vale is not installed."
 	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not installed."
 	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not installed."
 	@test ${RUBOCOP} || echo "WARNING: rubocop is not installed."
@@ -908,7 +908,7 @@ ifeq ($(and $(BUNDLE)),)
 else
 ifeq ($(and $(RUBOCOP)),)
 	@echo "INFO: Installing RuboCop.."
-	$(Q)${bundle_install_cmd} > /dev/null
+	$(Q)${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RuboCop: "
 	$(Q)${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
@@ -922,7 +922,7 @@ ifeq ($(and $(BUNDLE)),)
 else
 ifeq ($(and $(RSPEC)),)
 	@echo "INFO: Installing RSpec.."
-	$(Q)${bundle_install_cmd} > /dev/null
+	$(Q)${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RSpec: "
 	$(Q)${BUNDLE} exec $@
@@ -939,13 +939,15 @@ ifeq ($(and $(GOLANG)),)
 else
 ifeq ($(and $(VALE)),)
 	@echo "INFO: Installing vale.."
-	$(Q)GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482
+	# b18d1869aabd2fe0769dc30e07f5ef5128157482 = v2.3.4
+	$(Q)GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482 ${QQ}
 endif
 endif
 
 .PHONY: vale
 vale: vale-install
 	@echo -n "Vale: "
+	$(eval VALE := $(shell command -v vale 2> /dev/null))
 	$(Q)${VALE} --minAlertLevel error *.md doc
 
 .PHONY: markdownlint-install
@@ -956,7 +958,7 @@ ifeq ($(or $(NPM),$(YARN)),)
 else
 ifeq ($(and $(MARKDOWNLINT)),)
 	@echo "INFO: Installing markdownlint.."
-	@([[ "${YARN}" ]] && ${YARN} global add markdownlint-cli@0.23.2) || ([[ "${NPM}" ]] && ${NPM} install -g markdownlint-cli@0.23.2)
+	@([[ "${YARN}" ]] && ${YARN} global add markdownlint-cli@0.23.2 ${QQ}) || ([[ "${NPM}" ]] && ${NPM} install -g markdownlint-cli@0.23.2 ${QQ})
 endif
 endif
 
@@ -970,7 +972,7 @@ shellcheck-install:
 ifeq ($(and $(SHELLCHECK)),)
 ifeq ($(platform),macos)
 	@echo "INFO: Installing Shellcheck.."
-	$(Q)brew install shellcheck
+	$(Q)brew install shellcheck ${QQ}
 else
 	@echo "INFO: To install shellcheck, please consult the docs at https://github.com/koalaman/shellcheck#installing"
 	@false
