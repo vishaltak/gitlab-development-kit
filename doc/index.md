@@ -75,7 +75,7 @@ gems. For more information, see
 ### Install Ubuntu dependencies
 
 NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+These instructions don't account for using [`asdf` for managing some dependencies](https://asdf-vm.com/#/core-manage-asdf-vm).
 
 To install dependencies for Ubuntu, assuming you're using an active LTS release
 (16.04, 18.04, 20.04) or higher:
