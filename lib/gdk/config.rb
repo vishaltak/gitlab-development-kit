@@ -163,6 +163,10 @@ module GDK
         config.hostname
       end
 
+      string :listen_address do
+        config.listen_address
+      end
+
       string :api_host do
         next config.listen_address if config.auto_devops?
 
