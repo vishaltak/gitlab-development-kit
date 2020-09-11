@@ -191,16 +191,6 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe 'container registry' do
-    describe 'image' do
-      context 'when no image is specified' do
-        it 'returns the default image' do
-          expect(config.registry.image).to eq('registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v2.9.1-gitlab')
-        end
-      end
-    end
-  end
-
   describe '#__active_port' do
     context 'when AutoDevOps and nginx are not enabled' do
       it 'returns 3000' do
@@ -784,6 +774,14 @@ RSpec.describe GDK::Config do
   end
 
   describe 'registry' do
+    describe 'image' do
+      context 'when no image is specified' do
+        it 'returns the default image' do
+          expect(config.registry.image).to eq('registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v2.9.1-gitlab')
+        end
+      end
+    end
+
     describe '#external_port' do
       it 'returns 5000' do
         expect(config.registry.external_port).to eq(5000)
@@ -817,6 +815,12 @@ RSpec.describe GDK::Config do
     describe '#tunnel_port' do
       it 'returns 5000' do
         expect(config.registry.tunnel_port).to eq(5000)
+      end
+    end
+
+    describe '#listen_address' do
+      it 'returns 127.0.0.1 by default' do
+        expect(config.registry.listen_address).to eq('127.0.0.1')
       end
     end
   end
