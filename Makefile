@@ -715,7 +715,12 @@ influxdb-setup:
 # elasticsearch
 ##############################################################
 
+ifeq ($(architecture),x86_64)
 elasticsearch-setup: elasticsearch/bin/elasticsearch
+else
+elasticsearch-setup:
+	@true
+endif
 
 elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
 	$(Q)rm -rf elasticsearch
@@ -849,7 +854,7 @@ endif
 # jaeger
 ##############################################################
 
-ifeq ($(jaeger_server_enabled),true)
+ifeq ($(shell [[ $(jaeger_server_enabled) == true && $(architecture) == x86_64 ]] && echo true ),true)
 .PHONY: jaeger-setup
 jaeger-setup: jaeger/jaeger-${jaeger_version}/jaeger-all-in-one
 else
