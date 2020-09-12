@@ -31,12 +31,12 @@ gitaly_clone_dir = gitaly
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 
-workhorse_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
-gitlab_shell_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
-gitaly_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
-pages_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
-gitlab_k8s_agent_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
-gitlab_elasticsearch_indexer_version = $(shell bin/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
+workhorse_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
+gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
+gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
+pages_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
+gitlab_k8s_agent_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
+gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")
 bundle_install_cmd = ${BUNDLE} install --jobs 4 --without production ${quiet_bundle_flag}
@@ -232,7 +232,7 @@ gitlab/config/puma.example.development.rb:
 	$(Q)touch $@
 
 gitlab/config/puma.rb: gitlab/config/puma.example.development.rb
-	$(Q)bin/safe-sed "$@" \
+	$(Q)support/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		"$<"
 
@@ -241,12 +241,12 @@ gitlab/config/puma_actioncable.example.development.rb:
 	$(Q)touch $@
 
 gitlab/config/puma_actioncable.rb: gitlab/config/puma_actioncable.example.development.rb
-	$(Q)bin/safe-sed "$@" \
+	$(Q)support/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		"$<"
 
 gitlab/config/unicorn.rb: gitlab/config/unicorn.rb.example.development
-	$(Q)bin/safe-sed "$@" \
+	$(Q)support/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		"$<"
 
@@ -724,7 +724,7 @@ elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
 	$(Q)touch $@
 
 elasticsearch-${elasticsearch_version}.tar.gz:
-	$(Q)./bin/download-elasticsearch "${elasticsearch_version}" "$@" "${elasticsearch_mac_tar_gz_sha512}" "${elasticsearch_linux_tar_gz_sha512}"
+	$(Q)./support/download-elasticsearch "${elasticsearch_version}" "$@" "${elasticsearch_mac_tar_gz_sha512}" "${elasticsearch_linux_tar_gz_sha512}"
 
 ##############################################################
 # minio / object storage
@@ -755,7 +755,7 @@ grafana/bin/grafana-server:
 	$(Q)cd grafana && ${MAKE} ${QQ}
 
 grafana/grafana.ini: grafana/grafana.ini.example
-	$(Q)bin/safe-sed "$@" \
+	$(Q)support/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		-e "s/GDK_USERNAME/${username}/g" \
 		"$<"
@@ -860,7 +860,7 @@ endif
 
 jaeger-artifacts/jaeger-${jaeger_version}.tar.gz:
 	$(Q)mkdir -p $(@D)
-	$(Q)./bin/download-jaeger "${jaeger_version}" "$@"
+	$(Q)./support/download-jaeger "${jaeger_version}" "$@"
 	# To save disk space, delete old versions of the download,
 	# but to save bandwidth keep the current version....
 	$(Q)find jaeger-artifacts ! -path "$@" -type f -exec rm -f {} + -print

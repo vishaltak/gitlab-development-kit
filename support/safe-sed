@@ -10,7 +10,7 @@ BACKUP_DIR=.backups
 dest_file=$1
 shift
 
-OVERWRITE=$(bin/allow-overwrite "$dest_file")
+OVERWRITE=$(support/allow-overwrite "$dest_file")
 
 temp_file=$(mktemp)
 function finish {
