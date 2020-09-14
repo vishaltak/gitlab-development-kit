@@ -13,7 +13,7 @@
 1. Now you have to make sure to use that new project as default target for any commands you are going to run.
 
 ```shell
-   gcloud config set project YOUR_NEW_PROJECT_NAME
+   gcloud config set project <YOUR_NEW_PROJECT_NAME>
 ```
 
 ## Creating the Virtual Machine
