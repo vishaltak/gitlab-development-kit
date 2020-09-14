@@ -7,7 +7,7 @@
 1. Create and new project in gcloud. A new project ensures you are not inheriting any vulnerable configurations, such as wide-open firewall rules. The project name has to be unique across all Google Cloud projects for all users, so you might have to try multiple times.
 
 ```shell
-   gcloud projects create YOUR_NEW_PROJECT_NAME
+   gcloud projects create <YOUR_NEW_PROJECT_NAME>
 ```
 
 1. Now you have to make sure to use that new project as default target for any commands you are going to run.
