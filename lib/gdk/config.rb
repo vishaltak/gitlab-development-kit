@@ -9,6 +9,7 @@ module GDK
     GDK_ROOT = Pathname.new(__dir__).parent.parent
     FILE = File.join(GDK_ROOT, 'gdk.yml')
 
+    string(:__architecture) { RbConfig::CONFIG['target_cpu'] }
     string(:__platform) do
       case RbConfig::CONFIG['host_os']
       when /darwin/i

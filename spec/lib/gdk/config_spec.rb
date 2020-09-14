@@ -24,6 +24,14 @@ RSpec.describe GDK::Config do
     allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).and_return(nil)
   end
 
+  describe '__architecture' do
+    it 'returns x86_64' do
+      allow(RbConfig::CONFIG).to receive(:[]).with('target_cpu').and_return('x86_64')
+
+      expect(config.__architecture).to eq('x86_64')
+    end
+  end
+
   describe '__platform' do
     let(:host_os) { nil }
 
