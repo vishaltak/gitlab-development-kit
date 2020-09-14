@@ -6,7 +6,11 @@ parent_path=$(dirname "$0")
 source "${parent_path}"/functions.sh
 
 init
-checkout "${CI_COMMIT_SHA}"
+if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
+  checkout "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}"
+else
+  checkout "${CI_COMMIT_SHA}"
+fi
 install
 doctor
 start
