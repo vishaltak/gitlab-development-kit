@@ -40,26 +40,46 @@ pikaur -S runit-systemd
 
 ### Debian
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+For Debian there are two ways to manage dependencies, either:
 
-To install dependencies for Debian:
+- Using `asdf`.
+- Managing all dependencies yourself.
 
-```shell
-sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
-  libicu-dev cmake g++ libkrb5-dev libre2-dev ed pkg-config graphicsmagick \
-  runit libimage-exiftool-perl rsync libsqlite3-dev
-sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
-sudo chmod +x /usr/local/bin/minio
-```
+#### Manage dependencies using `asdf`
 
-If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental),
-or [newer](https://packages.debian.org/search?keywords=golang-go) you can
-install a Go compiler using your package manager: `sudo apt-get install golang`.
-Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install)
-official installation instructions.
+To install some dependencies for Debian and use `asdf`:
 
-You may need to install Redis 5.0 or newer manually.
+1. Install base dependencies:
+
+   ```shell
+   sudo apt-get update && sudo apt-get install libicu-dev cmake g++ libkrb5-dev libre2-dev ed \
+     pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
+   ```
+
+1. [Complete dependency installation](../index.md#install-and-set-up-gdk) using `asdf`.
+
+#### Manage dependencies yourself
+
+To install dependencies for Debian and manage them yourself:
+
+1. Run the following commands:
+
+   ```shell
+   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
+     libicu-dev cmake g++ libkrb5-dev libre2-dev ed pkg-config graphicsmagick \
+     runit libimage-exiftool-perl rsync libsqlite3-dev
+   sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
+   sudo chmod +x /usr/local/bin/minio
+   ```
+
+1. Install Go:
+   - If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental) or
+     [newer](https://packages.debian.org/search?keywords=golang-go), you can install a Go compiler
+    using your package manager: `sudo apt-get install golang`.
+   - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
+     installation instructions.
+1. Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have it.
+1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv).
 
 ### Fedora
 
