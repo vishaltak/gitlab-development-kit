@@ -113,7 +113,7 @@ You may need to install Redis 5.0 or newer manually.
 
 #### runit
 
-You'll also need to install [runit](http://smarden.org/runit) manually.
+You also need to install [runit](http://smarden.org/runit) manually.
 
 Although the following instructions work for runit version 2.1.2, be sure to
 read the up-to-date installation instructions on [the website](http://smarden.org/runit)
@@ -160,7 +160,7 @@ sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
 ```
 
-You'll need to follow [runit install instruction](#runit) to install it manually.
+You need to follow [runit install instruction](#runit) to install it manually.
 
 ### OpenSUSE
 

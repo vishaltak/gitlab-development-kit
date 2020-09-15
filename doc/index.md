@@ -100,7 +100,7 @@ To install dependencies for Ubuntu, assuming you're using an active LTS release
      libicu-dev cmake g++ libre2-dev libkrb5-dev libsqlite3-dev golang-${GDK_GO_VERSION}-go ed \
      pkg-config graphicsmagick runit libimage-exiftool-perl rsync libssl-dev libpcre2-dev
    [[ $(lsb_release -sr) < "18.10" ]] && sudo apt-get install g++-8
-   sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
+   sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
    sudo chmod +x /usr/local/bin/minio
    ```
 
@@ -234,7 +234,7 @@ If you want to push changes from upstream to your fork, run `gdk update` and the
 `gdk.test` is the standard for referring to the local GDK instance in
 documentation steps and GDK tools. To set up `gdk.test` as a hostname:
 
-1. Make `gdk.test` resolveable. For example, add the following to `/etc/hosts`:
+1. Map `gdk.test` to 127.0.0.1. For example, add the following to `/etc/hosts`:
 
    ```plaintext
    127.0.0.1 gdk.test
