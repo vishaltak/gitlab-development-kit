@@ -1,69 +1,94 @@
 # Deploying the GDK in the Google Cloud
 
-## Preparations
+Before you create a Compute Engine virtual machine:
 
 1. Make sure you have a [Google Cloud](console.cloud.google.com/) account.
 1. [Install the Google Cloud CLI](https://cloud.google.com/sdk/docs/quickstart-macos) on your machine
-1. Create and new project in gcloud. A new project ensures you are not inheriting any vulnerable configurations, such as wide-open firewall rules. The project name has to be unique across all Google Cloud projects for all users, so you might have to try multiple times.
+1. Create a new project in Google Cloud. A new project ensures you are not inheriting
+   any vulnerable configurations, such as wide-open firewall rules. The project name
+   must be unique across all Google Cloud projects for all users, so you might have to
+   try multiple times:
 
-```shell
+   ```shell
    gcloud projects create <YOUR_NEW_PROJECT_NAME>
-```
+   ```
 
-1. Now you have to make sure to use that new project as default target for any commands you are going to run.
+1. Set the new project as default target for any commands you run:
 
-```shell
+   ```shell
    gcloud config set project <YOUR_NEW_PROJECT_NAME>
-```
+   ```
 
-## Creating the Virtual Machine
+## Create the virtual machine
 
-<!-- markdownlint-disable MD034 -->
-Create a virtual machine with the GDK image. It is possible that this fails with an error message that billing is not enabled for that project, in that case visit https://console.cloud.google.com/billing/linkedaccount?project=YOUR_NEW_PROJECT_NAME, link a billing acount to this project and run the command again.
-<!-- markdownlint-enable MD034 -->
+To create a virtual machine for GDK:
 
-```shell
+1. Create a virtual machine with the GDK image.
+
+   ```shell
    gcloud compute instances create gdk --machine-type n1-standard-4 --no-service-account --no-scopes --image-project gdk-cloud --image gitlab-gdk-master-1598444035
-```
+   ```
 
-Confirm that a VM got created by checking the overview of your [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
+   The command might fail with an error message that billing is not enabled for that
+   project. If so:
 
-## Running the GDK
+   1. Visit `https://console.cloud.google.com/billing/linkedaccount?project=<YOUR_NEW_PROJECT_NAME>`.
+   1. Link a billing account to this project and run the command again.
 
-You can now start your Virtual Machine:
+1. Confirm that a virtual machine was created by checking the overview of your
+   [Virtual Machine Instances](https://console.cloud.google.com/compute/instances).
 
-```shell
+## Run GDK
+
+To run GDK on the image created above:
+
+1. Start the virtual machine:
+
+   ```shell
    gcloud compute instances start gdk
-```
+   ```
 
-Now log into your Virtual Machine and forward the port the GDK is running on in the cloud to your local machine. To do so, enter the following command in the terminal on your own machine and follow the instructions to create your SSH key file:
+1. Log in to the virtual machine and forward the GDK port on the virtual machine to your
+   local machine by running the following commands:
 
-<!-- markdownlint-disable MD044 -->
-```shell
+   ```shell
    gcloud compute config-ssh
    sed -i '' $'/CheckHostIP=no/s/^/ User gdk\\\n/' ~/.ssh/config
    gcloud compute ssh gdk@gdk -- -L 3000:localhost:3000
-```
-<!-- markdownlint-enable MD044 -->
+   ```
 
-As soon as you see a green arrow on a new line, you are logged in. You can now start the GDK as usual:
+   This will create an SSH key file.
 
-```shell
+1. When you see a green arrow on a new line, you are logged in. You can now start GDK:
+
+   ```shell
    cd gdk
    gdk start
-```
+   ```
 
-If you visit the familiar `localhost:3000` you should now see the familiar 502 page, if not just wait a couple of seconds and reload the page. Wait 1-2 minutes while the 502 page reloads itself multiple times, and you will (hopefully) see the login screen to your GDK 🎉. In case you see a 504 Gateway Timeout message or an error message that the "Request ran for longer than 60000ms", reloading the page 1-2 more times should fix it.
+Go to [`localhost:3000`](http://localhost:3000) and after about 1-2 minutes, you will
+see the login screen for GDK 🎉.
 
-**IMPORTANT:** While your Virtual Machine is running, it costs money. When you are done working on the GDK, first leave the SSH environment by typing `exit` into the terminal, followed by **Control + c** and then execute the following command:
+## Stop GDK
 
-```shell
+**IMPORTANT:** While your virtual machine is running, it costs money. When you are
+finished using GDK:
+
+1. Leave the SSH environment by typing `exit` into the terminal.
+1. Type **Control + C** and then execute the following command:
+   
+   ```shell
    gcloud compute instances stop gdk
-```
+   ```
 
-Any time you need it to work with the GDK again, you can follow only the instructions in this section (Running the GDK).
+To run GDK again, follow the instructions in [Run GDK](#run-gdk).
 
-## Making changes to the code 
+## Change code in GDK
+
+There are two ways to change code using GDK on Google cloud:
+
+- Using an editor on your own machine.
+- Using a code server.
 
 ## Option A (recommended): VS Code on your own machine
 
