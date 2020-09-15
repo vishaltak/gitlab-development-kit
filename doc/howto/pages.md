@@ -1,5 +1,9 @@
 # Pages
 
+This page contains information about developing GitLab Pages inside the GDK. This method allows you test GitLab Pages from deployment to visiting your static site.
+
+If you would like to develop Pages *outside* of the GDK, see [Getting started with development](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/master/doc/development.md) in the `gitlab-pages` repository.
+
 ## Port
 
 GDK features an HTTP-only GitLab Pages daemon on port `3010`.
