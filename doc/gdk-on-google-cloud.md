@@ -1,4 +1,13 @@
-# Deploying the GDK in the Google Cloud
+# Deploy GDK in Google Cloud
+
+GDK can be deployed to Google [Compute Engine](https://cloud.google.com/compute)
+virtual machine. This provides an alternative to installing GDK on your local machine.
+
+Important notes:
+
+- You must have your own [Google Cloud](console.cloud.google.com/) account.
+- Running GDK on Google Compute Engine costs money. It's important you
+  [stop GDK](#stop-gdk) when you aren't using it.
 
 Before you create a Compute Engine virtual machine:
 
