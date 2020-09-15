@@ -106,7 +106,6 @@ There are two ways to change code using GDK on Google cloud:
 <!-- markdownlint-disable MD044 -->
 <!-- vale off -->
 1. In the menu that pops up, select **Remote-SSH: Open configuration file** and select the first option.
-1. In the file that now opens, add `User gdk` below the line with the `HostName` variable.
 1. Open the Remote menu from the lower left corner again and this time select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
 <!-- vale on -->
 1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key that you configured previously in the terminal. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
