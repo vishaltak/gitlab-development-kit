@@ -34,4 +34,4 @@ update_from_master:
 update_from_mr_branch:
   extends: .verify_job
   script:
-    - support/ci/verify_update ${CI_COMMIT_SHA}
+    - support/ci/verify_update
