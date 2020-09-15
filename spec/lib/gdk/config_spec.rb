@@ -576,6 +576,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#bin' do
+      it 'returns gitlab-runner' do
+        expect(config.runner.bin).to eq('gitlab-runner')
+      end
+    end
+
     context 'when config_file exists' do
       let(:file_contents) do
         <<~CONTENTS
