@@ -7,7 +7,7 @@ release-image:
   before_script:
     - apk add --no-cache jq curl
   script:
-    - ./bin/docker ci-login
-    - ./bin/docker ci-build-if-necessary
+    - ./support/docker ci-login
+    - ./support/docker ci-build-if-necessary
   after_script:
-    - ./bin/docker ci-logout
+    - ./support/docker ci-logout
