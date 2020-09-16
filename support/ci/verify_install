@@ -16,6 +16,6 @@ fi
 install_gem
 install
 doctor
-start
-wait_for_boot
-"${parent_path}"/test_url
+#start
+#wait_for_boot
+#"${parent_path}"/test_url

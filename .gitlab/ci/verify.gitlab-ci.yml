@@ -27,11 +27,11 @@ install:
     - support/ci/verify_install
 
 update_from_master:
-  extends: .verify_job
-  script:
-    - support/ci/verify_update master
+ extends: .verify_job
+ script:
+   - support/ci/verify_update master
 
 update_from_mr_branch:
-  extends: .verify_job
-  script:
-    - support/ci/verify_update
+ extends: .verify_job
+ script:
+   - support/ci/verify_update

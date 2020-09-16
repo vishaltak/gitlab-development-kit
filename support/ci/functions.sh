@@ -58,6 +58,9 @@ restart() {
 doctor() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Running gdk doctor.."
+
+  # shellcheck disable=SC1090
+  source "${HOME}/.asdf/asdf.sh"
   gdk doctor
 }
 

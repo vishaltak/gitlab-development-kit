@@ -31,7 +31,9 @@ module GDK
       def gem_ok?(name)
         require name
         true
-      rescue LoadError
+      rescue LoadError => e
+        GDK::Output.error(format('%<error>s - %<trace>s', error: e, trace: e.backtrace.join("\n")))
+        GDK::Output.puts
         false
       end
 
