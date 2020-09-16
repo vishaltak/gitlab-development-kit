@@ -79,22 +79,29 @@ section for examples of how to query the registry manually using `curl`.
 Since `localhost` and `127.0.0.1` have different meanings inside a Docker-based runner
 than from your computer, a different host is required to access your GitLab instance and your registry.
 
-The simplest solution is to alias your local IP address (*not* `127.0.0.1`) to
-`gdk.test`  in `/etc/hosts`:
+One solution is to bind `gdk.test` to a loopback IP *alias* (*not*
+`127.0.0.1`) in `/etc/hosts`. A loopback IP alias is like `127.0.0.1` (requests go
+straight to your computer) but this IP will remain accessible from within a container
+(unlike `127.0.0.1`). To set this up:
 
-```plaintext
-# in /etc/hosts
-your.ip.address gdk.test
-```
+1. Follow the instructions to [set up an internal dummy interface](runner.md#using-an-internal-dummy-interface).
+1. Point `gdk.test` to this new IP in your `/etc/hosts` file. For example:
 
-Note the following:
+   ```plaintext
+   # Local network loopback alias
+   #
+   # create alias: sudo ifconfig lo0 alias 172.16.123.1
+   # remove alias: sudo ifconfig lo0 -alias 172.16.123.1
+   172.16.123.1 gdk.test
+   ```
 
-- `gdk.test` is arbitrary. You can set it to anything, but the documentation assumes `gdk.test`.
-- You can also use the IP address directly, but it is easier to only edit `/etc/hosts` instead of
-  reconfiguring GDK when the IP address changes.
-- If you're using `docker-machine`, you must replace this IP address with the one returned from
-  `docker-machine ip default`. See the [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)
-  for details.
+**Warning:** If for some reason you end up on a network with the loopback alias as
+your local network IP, your GDK will become accessible on the local network.
+
+NOTE: **Note:**
+If you're using `docker-machine`, you must replace this IP address with the one returned from
+`docker-machine ip default`. See the [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)
+for details.
 
 ### Trusting the registry's self-signed certificate
 
