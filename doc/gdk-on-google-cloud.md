@@ -99,42 +99,57 @@ There are two ways to change code using GDK on Google cloud:
 - Using an editor on your own machine.
 - Using a code server.
 
-## Option A (recommended): VS Code on your own machine
+## Use editor on your own machine (recommended)
+
+Many code editors can be used to modify files on remote machines. The following are
+instructions for [VS Code](https://code.visualstudio.com):
 
 1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension. 
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
-<!-- markdownlint-disable MD044 -->
-<!-- vale off -->
-1. In the menu that pops up, select **Remote-SSH: Open configuration file** and select the first option.
-1. Open the Remote menu from the lower left corner again and this time select **Remote-SSH: Connect to Host...** and then choose **gdk.YOUR_ZONE.YOUR_PROJECT_ID**.
-<!-- vale on -->
-1. A new VS Code window should start, confirm that you want to continue and enter the passphrase for your SSH key that you configured previously in the terminal. You are now connected, jump to the explorer tab (first option in the left sidebar), click on **Open folder** and then enter the folder **/home/gdk/gdk/gitlab** to be opened.
-<!-- markdownlint-enable MD044 -->
+1. In the menu that pops up, select **Remote-SSH: Open configuration file** and select the
+   first option.
+1. Open the Remote menu from the lower left corner again and this time select **Remote-SSH:
+   Connect to Host...** and then choose `gdk.YOUR_ZONE.YOUR_PROJECT_ID`. A new VS Code window
+   should start.
+1. Confirm that you want to continue and enter the passphrase for your SSH key that you
+   configured previously in the terminal. You are now connected.
+1. Switch to the explorer tab (first option in the left sidebar), click on **Open folder**
+   and then enter the folder `/home/gdk/gdk/gitlab` to be opened.
 
-### Option B: Code Server (VS Code in your browser)
+### Use VS Code in a browser
 
-Open a new terminal window if you want to keep the GDK running at the same time as Code Server. Then you need to also forward the Code Server port from the Virtual Machine to your machine by entering the following command in the terminal of your own machine, and keeping it running:
+As an alternative, you can run VS Code in a web browser using Code Server:
 
-```shell
+1. Open a new terminal window to keep the GDK running at the same time as Code Server.
+1. Forward the Code Server port from the virtual machine to your local machine by entering
+   the following command in the terminal of your own machine, and keeping it running:
+
+   ```shell
    gcloud compute ssh gdk@gdk -- -L 8080:localhost:8080
-```
+   ```
 
-Enter the passphrase for your SSH key file again and wait for same green arrow to appear, then execute the following commands to set up Code Server for the first time and disable the unnecessary authentication:
+1. Enter the passphrase for your SSH key file again and wait for same green arrow to appear, 
+   then execute the following commands to set up Code Server for the first time and disable
+   the unnecessary authentication:
 
-```shell
+   ```shell
    systemctl --user enable --now code-server
    sed -i.bak 's/auth: password/auth: none/' ~/.config/code-server/config.yaml
-```
+   ```
 
-You can now start Code Server. Logging in with the first command in this section and running the following line is the only thing you have to do from now on to get Code Server running, the previous setup instructions are only necessary for the first time.
+1. Start Code Server:
 
-```shell
+   ```shell
    systemctl --user restart code-server
-```
+   ```
+   
+   Logging in with the first command in this section and this command is the only thing you
+   have to do from now on to get Code Server running. The previous setup instructions are
+   only necessary the first time.
 
-1. You can now open `localhost:8080` to see VS Code running in your browser.
-<!-- markdownlint-disable MD044 -->
-1. Click the first icon in the left sidebar, and select **File** -> **Open..**. That brings up a new menu where you can select **gdk** -> **gitlab**. Here you can now switch branches, make changes that will directly be displayed in the cloud GDK and commit any changes you made.
-<!-- markdownlint-enable MD044 -->
+1. Open `localhost:8080` to see VS Code running in your browser.
+1. Click the first icon in the left sidebar, and select **File > Open..**. That brings up a
+   new menu where you can select `gdk` -> `gitlab`. Here you can now switch branches, make
+   changes that will directly be displayed in the cloud GDK, and commit any changes you made.
 
 🎉 This is everything you needed to review and develop in the cloud GDK from now on! 🦊
