@@ -11,7 +11,7 @@ bootstrap_asdf() {
     exit 1
   fi
 
-  comm -23 <(cut -d ' ' -f 1 .tool-versions | sort) <(asdf plugin list | sort) | xargs ${xargs_extra_args} -tn1 asdf plugin add
+  comm -23 <(cut -d ' ' -f 1 .tool-versions | sort | grep -v '#') <(asdf plugin list | sort) | xargs ${xargs_extra_args} -tn1 asdf plugin add
 
   # Install all packages specified in .tool-versions
   MAKELEVEL=0 asdf install
