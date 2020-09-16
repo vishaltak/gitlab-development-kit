@@ -1,0 +1,58 @@
+.verify-job-macos:
+  stage: verify
+  extends: .rules:code-changes
+  image: macos-12-xcode-13
+  needs:
+    - []
+  tags:
+    - shared-macos-amd64
+  variables:
+    BUNDLE_PATH: "$CI_PROJECT_DIR/.bundle"
+  cache:
+    key:
+      prefix: "gdk-verify-job-macos"
+      files:
+        - .tool-versions
+    paths:
+      - ".bundle"
+      - ".asdf"
+      - ".usr_local"
+  artifacts:
+    paths:
+      - ./gdk/gitlab/log/*.log
+      - ./gdk/log
+      - ./gdk/sv/*/run
+    expire_in: 2 days
+    when: always
+
+install-macos:
+  extends: .verify-job-macos
+  variables:
+    GDK_DEBUG: 'true'
+  script:
+    # Copy cached asdf into $HOME/.asdf/
+    #
+    - rsync -ax .asdf/ $HOME/.asdf/ || true
+    - "[[ -f ${HOME}/.asdf/asdf.sh ]] && source ${HOME}/.asdf/asdf.sh"
+    - asdf list || true
+
+    # Copy cached Homebrew into /usr/local/
+    #
+    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    - rsync -ax .usr_local/ /usr/local/ || true
+    - brew list || true
+
+    - make bootstrap
+
+    # Update asdf cache with latest $HOME/.asdf
+    #
+    - "[[ -f ${HOME}/.asdf/asdf.sh ]] && source ${HOME}/.asdf/asdf.sh"
+    - asdf list || true
+    - rsync -ax --delete-after $HOME/.asdf/ .asdf/ || true
+
+    # Update Homebrew cache with latest /usr/local/
+    #
+    - brew list || true
+    - rsync -ax --delete-after /usr/local/ .usr_local/ || true
+
+    #- support/ci/verify-install

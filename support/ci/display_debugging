@@ -16,8 +16,10 @@ execute_command() {
 }
 
 if [ "${GDK_DEBUG}" = "1" ] || [ "${GDK_DEBUG}" = "true" ]; then
+  execute_command uname -a
   execute_command ulimit -a
   execute_command nproc
   execute_command free -m
+  execute_command sysctl hw.memsize
   execute_command env
 fi

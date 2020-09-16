@@ -393,11 +393,12 @@ setup_platform_darwin() {
     return 1
   fi
 
-  if [[ ! -d "/Applications/Google Chrome.app" ]]; then
-    if ! brew list --cask google-chrome > /dev/null 2>&1; then
-      if ! ${brew_opts} brew install google-chrome; then
-        return 1
-      fi
-    fi
-  fi
+  # FIXME:
+  # if [[ ! -d "/Applications/Google Chrome.app" ]]; then
+  #   if ! brew list --cask google-chrome > /dev/null 2>&1; then
+  #     if ! ${brew_opts} brew install google-chrome; then
+  #       return 1
+  #     fi
+  #   fi
+  # fi
 }
