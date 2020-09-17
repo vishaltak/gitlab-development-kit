@@ -49,3 +49,4 @@ to learn how to contribute to GitLab.
 - [Dependency Proxy](dependency_proxy.md)
 - [End to End Test Configuration](end_to_end_test_configuration.md)
 - [Lefthook](lefthook.md)
+- [GDK as VM on Google Cloud](gdk-on-google-cloud.md)
