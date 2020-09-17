@@ -11,7 +11,7 @@ gdk start
 ```
 
 To access GitLab, go to <http://localhost:3000> in your browser. It may take a few minutes for the
-Rails app to be ready. During this period you can see `If you just started GDK it can take 30-60 seconds before GitLab has finished booting. This page will automatically reload every 5 seconds.`
+Rails app to be ready. During this period you can see `If you just started GDK it can take 60-300 seconds before GitLab has finished booting. This page will automatically reload every 5 seconds.`
 in the browser.
 
 The development login credentials are `root` and `5iveL!fe`.
