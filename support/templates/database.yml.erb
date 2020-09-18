@@ -5,6 +5,8 @@ development:
   host: <%= config.postgresql.host %>
   port: <%= config.postgresql.port %>
   pool: 10
+  variables:
+    statement_timeout: 15s
 <%- if config.load_balancing.enabled -%>
   <%- unless config.geo? -%>
   load_balancing:
@@ -20,3 +22,5 @@ test: &test
   host: <%= config.postgresql.host %>
   port: <%= config.postgresql.port %>
   pool: 10
+  variables:
+    statement_timeout: 15s
