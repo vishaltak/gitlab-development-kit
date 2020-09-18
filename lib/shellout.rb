@@ -3,11 +3,19 @@
 require 'open3'
 
 class Shellout
+  Failed = Class.new(StandardError)
+
   attr_reader :args, :opts
 
   def initialize(*args, **opts)
     @args = args.flatten
     @opts = opts
+  end
+
+  def stream!(extra_options = {})
+    stream(extra_options)
+
+    raise(Failed, read_stderr) unless success?
   end
 
   def stream(extra_options = {})
@@ -26,6 +34,12 @@ class Shellout
     end
 
     read_stdout
+  end
+
+  def run!
+    capture
+
+    raise(Failed, read_stderr) unless success?
   end
 
   def run

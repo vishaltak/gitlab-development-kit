@@ -520,6 +520,26 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#primary_path' do
+      let(:yaml) do
+        {
+          'gdk_root' => Dir.mktmpdir
+        }
+      end
+
+      it 'is nil when there is no symlink' do
+        expect(config.geo.primary_path).to be_nil
+      end
+
+      it 'returns full path when symlink exists and points to a existing dir' do
+        Dir.mktmpdir('gdk_primary') do |primary_dir|
+          File.symlink(primary_dir, config.gdk_root.join('postgresql-primary'))
+
+          expect(config.geo.primary_path.to_s).to eq(Dir.tmpdir)
+        end
+      end
+    end
+
     describe '#registry_replication' do
       describe '#enabled' do
         it 'returns false be default' do

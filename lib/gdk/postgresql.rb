@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 module GDK
+  autoload :LineInFile, 'gdk/line_in_file'
+  autoload :PostgresqlGeoPrimary, 'gdk/postgresql_geo_primary'
+
   class Postgresql
     def psql_cmd(args)
       database = args.empty? ? default_database : nil
@@ -34,6 +39,11 @@ module GDK
       Shellout.new(pg_cmd(database: dbname)).tap(&:try_run).success?
     end
 
+    def initdb
+      cmd = %W[#{bin_dir.join('initdb')} --locale=C --encoding=utf-8 #{config.data_dir}]
+      Shellout.new(cmd).run!
+    end
+
     def createdb(*args)
       cmd = pg_cmd(*args, program: 'createdb')
 
@@ -41,17 +51,66 @@ module GDK
     end
 
     def in_recovery?
-      cmd = pg_cmd('--no-psqlrc', '--tuples-only',
-                   database: 'postgres',
-                   command: 'SELECT pg_is_in_recovery();')
-
-      Shellout.new(cmd).try_run.downcase.strip.chomp == 't'
+      query(<<~SQL).casecmp('t').zero?
+        SELECT pg_is_in_recovery();
+      SQL
     end
 
-    private
+    def trust_replication
+      pg_hba = LineInFile.new(config.data_dir.join('pg_hba.conf'))
+
+      pg_hba.append(regexp: /gitlab_replication/) do
+        'local   replication     gitlab_replication                      trust'
+      end
+    end
+
+    def standby_mode
+      return if version < 12
+
+      # https://www.postgresql.org/docs/12/runtime-config-wal.html#RUNTIME-CONFIG-WAL-ARCHIVE-RECOVERY
+      FileUtils.touch(config.data_dir.join('standby.signal'))
+    end
+
+    def query(sql, database: 'postgres')
+      cmd = pg_cmd('--no-psqlrc', '--tuples-only',
+                   database: database,
+                   command: sql.strip)
+
+      Shellout.new(cmd).try_run.strip
+    end
+
+    def reconfigure
+      postgresql_conf = LineInFile.new(config.data_dir.join('postgresql.conf'))
+
+      # Remove old style includes
+      postgresql_conf.remove(regexp: /include 'gitlab.conf'/)
+      postgresql_conf.remove(regexp: /include 'replication.conf'/)
+      FileUtils.rm_f([config.data_dir.join('gitlab.conf'),
+                      config.data_dir.join('replication.conf')])
+
+      postgresql_conf.append(line: "include 'gdk.conf'\n")
+
+      erb_render('gdk.conf')
+      erb_render('recovery.conf') if config.root.geo.secondary? && version < 12
+    end
+
+    def version
+      @version ||=
+        Shellout.new(bin_dir.join('psql').to_s, '--version').try_run
+                .match(/psql.* (\d+)\.\d+/).captures.first.to_i
+    end
 
     def config
       @config ||= GDK.config.postgresql
+    end
+
+    def primary_config
+      @primary_config ||=
+        begin
+          GDK::PostgresqlGeoPrimary.new.config
+        rescue PostgresqlGeoPrimary::PathNotSpecified
+          nil
+        end
     end
 
     def host
@@ -78,6 +137,17 @@ module GDK
 
     def bin_dir
       config.bin_dir
+    end
+
+    def erb_render(file)
+      template = "support/templates/postgresql.#{file}.erb"
+      erb_args = {
+        config: config,
+        primary_config: primary_config,
+        pg_version: version
+      }
+
+      ErbRenderer.new(template, config.data_dir.join(file), erb_args).render!
     end
   end
 end

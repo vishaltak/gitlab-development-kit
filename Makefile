@@ -120,7 +120,7 @@ show-updated-at
 #
 reconfigure: touch-examples \
 unlock-dependency-installers \
-postgresql-sensible-defaults \
+postgresql/reconfigure \
 all \
 show-reconfigured-at
 
@@ -404,7 +404,7 @@ gitaly/praefect.config.toml:
 	$(Q)rake $@
 
 .PHONY: praefect-migrate
-praefect-migrate: postgresql-seed-praefect
+praefect-migrate: postgresql/seed-praefect
 	$(Q)support/migrate-praefect
 
 ##############################################################
@@ -450,8 +450,8 @@ gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
 # gitlab geo
 ##############################################################
 
-.PHONY: geo-setup geo-cursor
-geo-setup: geo-setup-check Procfile geo-cursor geo-config postgresql/geo
+.PHONY: geo-setup
+geo-setup: geo-setup-check Procfile postgresql-geo geo-config
 
 geo-setup-check:
 ifneq ($(geo_enabled),true)
@@ -461,10 +461,7 @@ else
 	@true
 endif
 
-geo-config: gitlab/config/database_geo.yml postgresql/geo/port
-
-geo-cursor:
-	$(Q)grep '^geo-cursor:' Procfile || (printf ',s/^#geo-cursor/geo-cursor/\nwq\n' | ed -s Procfile)
+geo-config: gitlab/config/database_geo.yml postgresql-geo/reconfigure
 
 .PHONY: gitlab/config/database_geo.yml
 gitlab/config/database_geo.yml:
@@ -708,55 +705,37 @@ redis/redis.conf:
 # postgresql
 ##############################################################
 
-postgresql: postgresql/data postgresql/port postgresql-seed-rails postgresql-seed-praefect
+postgresql: postgresql/data postgresql/reconfigure postgresql/seed-rails postgresql/seed-praefect
 
 postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
 
-.PHONY: postgresql-seed-rails
-postgresql-seed-rails: ensure-databases-running postgresql-seed-praefect
+.PHONY: postgresql/seed-rails
+postgresql/seed-rails: postgresql/data ensure-databases-running
 	$(Q)support/bootstrap-rails
 
-.PHONY: postgresql-seed-praefect
-postgresql-seed-praefect: Procfile postgresql/data
-	$(Q)gdk start db
+.PHONY: postgresql/seed-praefect
+postgresql/seed-praefect: postgresql/data ensure-databases-running
 	$(Q)support/bootstrap-praefect
 
-postgresql/port:
-	$(Q)support/postgres-port ${postgresql_dir} ${postgresql_port}
-
-postgresql-sensible-defaults:
-	$(Q)support/postgresql-sensible-defaults ${postgresql_dir}
+.PHONY: postgresql/reconfigure
+postgresql/reconfigure:
+	$(Q)rake postgresql:reconfigure
 
 ##############################################################
 # postgresql replication
 ##############################################################
 
-postgresql-replication-primary: postgresql-replication/access postgresql-replication/role postgresql-replication/config
+postgresql-replication-primary: postgresql-replication/role postgresql/reconfigure
 
-postgresql-replication-secondary: postgresql-replication/data postgresql-replication/access postgresql-replication/backup postgresql-replication/config
+.PHONY: postgresql-replication-secondary
+postgresql-replication-secondary:
+	$(Q)rake postgresql:geo:replicate postgresql:reconfigure
 
 postgresql-replication-primary-create-slot: postgresql-replication/slot
 
-postgresql-replication/data:
-	${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
-
-postgresql-replication/access:
-	$(Q)cat support/pg_hba.conf.add >> ${postgresql_data_dir}/pg_hba.conf
-
 postgresql-replication/role:
 	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"
-
-postgresql-replication/backup:
-	$(Q)$(eval postgresql_primary_dir := $(realpath postgresql-primary))
-	$(Q)$(eval postgresql_primary_host := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.host $(QQerr)))
-	$(Q)$(eval postgresql_primary_port := $(shell cd ${postgresql_primary_dir}/../ && gdk config get postgresql.port $(QQerr)))
-
-	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
-	$(Q)rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgresql_primary_dir}/data postgresql
-	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
-	$(Q)./support/recovery.conf ${postgresql_primary_host} ${postgresql_primary_port} > ${postgresql_data_dir}/recovery.conf
-	$(Q)$(MAKE) postgresql/port ${QQ}
 
 postgresql-replication/slot:
 	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_create_physical_replication_slot('gitlab_gdk_replication_slot');"
@@ -767,14 +746,11 @@ postgresql-replication/list-slots:
 postgresql-replication/drop-slot:
 	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_drop_replication_slot('gitlab_gdk_replication_slot');"
 
-postgresql-replication/config:
-	$(Q)./support/postgres-replication ${postgresql_dir}
-
 ##############################################################
 # postgresql geo
 ##############################################################
 
-postgresql/geo: postgresql-geo/data postgresql/geo/port postgresql/geo/seed-data
+postgresql-geo: postgresql-geo/data postgresql-geo/reconfigure postgresql-geo/seed-data
 
 postgresql-geo/data:
 ifeq ($(geo_enabled),true)
@@ -783,17 +759,16 @@ else
 	@true
 endif
 
-postgresql/geo/port: postgresql-geo/data
+.PHONY: postgresql-geo/reconfigure
+postgresql-geo/reconfigure: postgresql-geo/data
 ifeq ($(geo_enabled),true)
-	$(Q)support/postgres-port ${postgresql_geo_dir} ${postgresql_geo_port}
+	$(Q)rake postgresql:geo:reconfigure
 else
 	@true
 endif
 
-postgresql/geo/Procfile:
-	$(Q)grep '^postgresql-geo:' Procfile || (printf ',s/^#postgresql-geo/postgresql-geo/\nwq\n' | ed -s Procfile)
-
-postgresql/geo/seed-data:
+.PHONY: postgresql-geo/seed-data
+postgresql-geo/seed-data: postgresql-geo/data ensure-databases-running
 	$(Q)support/bootstrap-geo
 
 ##############################################################

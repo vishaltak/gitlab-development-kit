@@ -32,6 +32,7 @@ gdk_root: "/home/git/gdk"
 geo:
   enabled: false
   node_name: gdk
+  primary_path:
   registry_replication:
     enabled: false
     primary_api_url: http://localhost:5000
@@ -152,6 +153,7 @@ postgresql:
   data_dir: "/home/git/gdk/postgresql/data"
   dir: "/home/git/gdk/postgresql"
   geo:
+    data_dir: "/home/git/gdk/postgresql-geo/data"
     dir: "/home/git/gdk/postgresql-geo"
     host: "/home/git/gdk/postgresql-geo"
     port: 5431

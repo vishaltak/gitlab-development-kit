@@ -282,6 +282,11 @@ module GDK
       bool(:enabled) { false }
       bool(:secondary) { false }
       string(:node_name) { config.gdk_root.basename.to_s }
+      anything(:primary_path) do  # TODO path(:primary_path, allow_nil: true)
+        path = config.gdk_root.join('postgresql-primary')
+        path.realpath.parent if path.exist?
+      end
+
       settings :registry_replication do
         bool(:enabled) { false }
         string(:primary_api_url) { 'http://localhost:5000' }
@@ -345,6 +350,7 @@ module GDK
       settings :geo do
         integer(:port) { 5431 }
         path(:dir) { config.gdk_root.join('postgresql-geo') }
+        path(:data_dir) { config.postgresql.geo.dir.join('data') }
         string(:host) { config.postgresql.geo.dir.to_s }
         string(:__active_host) { GDK::PostgresqlGeo.new.use_tcp? ? config.postgresql.geo.host : '' }
       end

@@ -1,0 +1,20 @@
+port = <%= config.port %>
+
+# sensible defaults
+random_page_cost = '1'
+work_mem = '16MB'
+maintenance_work_mem = '64MB'
+shared_buffers = '256MB'
+
+# replication
+wal_level = hot_standby
+max_replication_slots = 1
+max_wal_senders = 10
+wal_keep_segments = 10
+hot_standby = on
+
+<% if config.root.geo.secondary? && pg_version >= 12 %>
+# primary
+primary_conninfo = 'host=<%= primary_config.host %> port=<%= primary_config.port %> user=gitlab_replication'
+primary_slot_name = 'gitlab_gdk_replication_slot'
+<% end %>
