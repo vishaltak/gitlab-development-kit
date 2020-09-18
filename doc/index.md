@@ -46,6 +46,7 @@ To install dependencies for macOS:
 
 1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for
    package management.
+1. [Install Chrome](https://www.google.com/chrome/) because the GDK depends on `chromedriver` for testing.
 1. Run the following `brew` commands:
 
    ```shell
@@ -55,7 +56,7 @@ To install dependencies for macOS:
    if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
    echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
    source ${shell_file}
-   brew cask install google-chrome chromedriver
+   brew cask install chromedriver
    ```
 
 1. Follow any post-installation instructions that are provided. For example,
