@@ -44,12 +44,13 @@ or lack of internet access, then you can use a local registry:
     registry:
       enabled: true
       host: gdk.test
+      listen_address: '172.16.123.1' # your loopback alias
       self_signed: true  # or false, see below for details (default is false)
       auth_enabled: true # or false, see below for details (default is true)
     ```
 
-    where `gdk.test` points to your computer's local, non-loopback address. For more
-    information, see [Obtaining a usable hostname](#obtaining-a-usable-hostname).
+    where `gdk.test` is configured according to [Obtaining a usable hostname](#obtaining-a-usable-hostname),
+    and `172.16.123.1` is the corresponding loopback alias.
 
 1. Run `gdk reconfigure` to update the configuration and generate certificate files
    for the local registry (`registry_host.crt` and `registry_host.key`) if needed.
@@ -112,7 +113,7 @@ GDK root, called `registry_host.crt`, and must be copied as `ca.crt` to the
 If you are using Docker Desktop for Mac, GDK includes the shorthand:
 
 ```shell
-make trust-docker-registry
+rm -f registry_host.{key,crt} && make trust-docker-registry
 ```
 
 This will place the certificate under `~/.docker/certs.d/$REGISTRY_HOST:$REGISRY_PORT/ca.crt`, *overwriting any existing certificate* at that path.
