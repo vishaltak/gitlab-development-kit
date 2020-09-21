@@ -138,10 +138,17 @@ To get GDK up and running:
 1. Install GDK components in the GDK directory:
 
    1. Navigate to the newly-created GDK directory.
-   1. Run `make bootstrap` to install remaining dependencies. If you receive an error
-      message that begins with: **Authenticity of checksum file can not be assured!**:
-      1. Follow the [`asdf-nodejs` Install section instructions](https://github.com/asdf-vm/asdf-nodejs#install).
-      1. Run `make bootstrap` after you resolve the problem.
+   1. Run `make bootstrap` to install remaining dependencies.
+
+      - If you receive an error message that begins with **Authenticity of checksum file can not be assured!**:
+        1. Follow the [`asdf-nodejs` Install section instructions](https://github.com/asdf-vm/asdf-nodejs#install).
+        1. Run `make bootstrap` after you resolve the problem.
+
+      - If you receive an error message relating to `asdf` not found:
+        1. Install it as discussed in the [Manage asdf-vm](https://asdf-vm.com/#/core-manage-asdf-vm)
+           page.
+        1. Run `make boostrap` again.
+
    1. Make the newly install PostgreSQL headers (assumes PostgreSQL 11.8) available to the system by
       running:
 
