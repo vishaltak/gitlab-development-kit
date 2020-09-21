@@ -183,7 +183,11 @@ To prepare GDK for previewing GDK changes:
 
 The process for applying changes to GitLab depends on whether you are:
 
-- Making the changes yourself.
+- Making the changes yourself. When making your own changes, install and run:
+  - [Front-end linting tools](https://docs.gitlab.com/ee/development/fe_guide/tooling.html)
+    when making front-end changes.
+  - [Overcommit](https://docs.gitlab.com/ee/development/contributing/style_guides.html#pre-commit-static-analysis)
+    when making back-end changes.
 - Previewing someone else's changes.
 
 To make your own changes:
