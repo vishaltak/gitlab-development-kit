@@ -35,7 +35,7 @@ To create a virtual machine for GDK:
 1. Create a virtual machine with the GDK image.
 
    ```shell
-   gcloud compute instances create gdk --machine-type n1-standard-4 --no-service-account --no-scopes --image-project gdk-cloud --image gitlab-gdk-master-1598444035
+   gcloud compute instances create gdk --machine-type n1-standard-4 --no-service-account --no-scopes --image-project gdk-cloud --image gitlab-gdk-master-1600728268
    ```
 
    The command might fail with an error message that billing is not enabled for that
@@ -85,7 +85,7 @@ finished using GDK:
 
 1. Leave the SSH environment by typing `exit` into the terminal.
 1. Type **Control + C** and then execute the following command:
-   
+
    ```shell
    gcloud compute instances stop gdk
    ```
@@ -104,7 +104,7 @@ There are two ways to change code using GDK on Google cloud:
 Many code editors can be used to modify files on remote machines. The following are
 instructions for [VS Code](https://code.visualstudio.com):
 
-1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension. 
+1. Open VS Code and install the [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) extension.
 1. Your VS Code should now have a green button with a `lower than` and `greater than` sign at the bottom left, click on it.
 1. In the menu that pops up, select **Remote-SSH: Open configuration file** and select the
    first option.
@@ -128,7 +128,7 @@ As an alternative, you can run VS Code in a web browser using Code Server:
    gcloud compute ssh gdk@gdk -- -L 8080:localhost:8080
    ```
 
-1. Enter the passphrase for your SSH key file again and wait for same green arrow to appear, 
+1. Enter the passphrase for your SSH key file again and wait for same green arrow to appear,
    then execute the following commands to set up Code Server for the first time and disable
    the unnecessary authentication:
 
@@ -142,7 +142,7 @@ As an alternative, you can run VS Code in a web browser using Code Server:
    ```shell
    systemctl --user restart code-server
    ```
-   
+
    Logging in with the first command in this section and this command is the only thing you
    have to do from now on to get Code Server running. The previous setup instructions are
    only necessary the first time.
