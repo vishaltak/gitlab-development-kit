@@ -38,7 +38,7 @@ pages_version = $(shell support/resolve-dependency-commitish "${gitlab_developme
 gitlab_k8s_agent_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
 gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
-quiet_bundle_flag = $(shell ${gdk_quiet} && echo " | egrep -v '^Using '")
+quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_install_cmd = ${BUNDLE} install --jobs 4 --without production ${quiet_bundle_flag}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
