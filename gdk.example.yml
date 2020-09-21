@@ -159,7 +159,7 @@ repositories:
 repositories_root: "/home/git/gdk/repositories"
 repository_storages: "/home/git/gdk/repository_storages"
 runner:
-  bin: gitlab-runner
+  bin: "/usr/local/bin/gitlab-runner"
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
   enabled: false
   extra_hosts: []

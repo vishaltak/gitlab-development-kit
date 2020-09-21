@@ -80,8 +80,6 @@ for your operating system
 [OSX](https://docs.gitlab.com/runner/install/osx.html),
 [Windows](https://docs.gitlab.com/runner/install/windows.html)).
 
-Ensure `gitlab-runner` is on your `$PATH` so the GDK can find it.
-
 #### Build from source
 
 To build from source, you'll need to set up a development environment manually -
