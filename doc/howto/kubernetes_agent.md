@@ -15,10 +15,10 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
 1. Create a new project. It will be used for agent's configuration. Note the project's ID. Use it as `project_id` below.
 
-1. In the project's repository create a directory named `agents/my-agent`. In this directory create a file `config.yaml` with the following contents:
+1. In the project's repository create a directory named `.gitlab/agents/my-agent`. In this directory create a file `config.yaml` with the following contents:
 
     ```yaml
-    deployments:
+    gitops:
       manifest_projects:
     #  - id: "some_project/name"
     ```
