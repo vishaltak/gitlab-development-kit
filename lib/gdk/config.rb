@@ -210,7 +210,7 @@ module GDK
 
     settings :gitlab_pages do
       bool(:enabled) { true }
-      string(:host) { '127.0.0.1.nip.io' }
+      string(:host) { "#{config.listen_address}.nip.io" }
       integer(:port) { read!('gitlab_pages_port') || 3010 }
       bool(:auto_update) { true }
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
@@ -221,7 +221,7 @@ module GDK
       bool(:enabled) { false }
       bool(:auto_update) { true }
       string(:listen_network) { 'tcp' }
-      string(:listen_address) { '127.0.0.1:5005' }
+      string(:listen_address) { "#{config.listen_address}:5005" }
       string(:__listen_url_path) { '/-/kubernetes-agent' }
       string :__url_for_agentk do
         if config.nginx?

@@ -74,7 +74,7 @@ Here are a few settings worth mentioning:
 |------------------------ |--------------------|--------------------------------------------------------------------------------------------|
 | `port`                  | `3000`             | Select the port to run GDK on, useful when running multiple GDKs in parallel.              |
 | `webpack.port`          | `3808`             | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings) |
-| `gitlab_pages.host` | `127.0.0.1.nip.io` | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
+| `gitlab_pages.host`     | `127.0.0.1.nip.io` | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
 | `gitlab_pages.port`     | `3010`             | Specify on which port GitLab Pages should run. See also the [Pages guide](howto/pages.md#port). |
 | `relative_url_root`     | `/`                | When you want to test GitLab being available on a different path than `/`. For example, `/gitlab`. |
 | `object_store.enabled`  | `false`            | Set this to `true` to enable Object Storage with MinIO.                                    |
