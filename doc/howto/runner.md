@@ -68,6 +68,10 @@ a note of the `Registration token`.
 
 ### Simple configuration
 
+Runner can be installed using a pre-build binary or from source.
+
+#### Install pre-built binary
+
 Unless you want to make changes to the Runner, it's easiest to install a binary
 package. Follow the
 [installation instructions](https://docs.gitlab.com/runner/install/)
@@ -76,12 +80,19 @@ for your operating system
 [OSX](https://docs.gitlab.com/runner/install/osx.html),
 [Windows](https://docs.gitlab.com/runner/install/windows.html)).
 
+#### Build from source
+
 To build from source, you'll need to set up a development environment manually -
 GDK doesn't manage it for you. The official GitLab Runner repository is
 [here](https://gitlab.com/gitlab-org/gitlab-runner); just follow
 [the development instructions](https://docs.gitlab.com/runner/development/).
 
-All the methods should (eventually) create a `gitlab-runner` binary.
+To specify a custom `gitlab-runner` binary, add the following to `gdk.yml`:
+
+```yaml
+runner:
+  bin: <path_to_gitlab_runner_binary>/gitlab-runner-darwin-amd64
+```
 
 ### Advanced configuration
 

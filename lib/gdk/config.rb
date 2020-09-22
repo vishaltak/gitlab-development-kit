@@ -411,6 +411,7 @@ module GDK
       bool(:enabled) { !!read!(config.runner.config_file) }
       array(:extra_hosts) { [] }
       string(:token) { 'DEFAULT TOKEN: Register your runner to get a valid token' }
+      path(:bin) { find_executable!('gitlab-runner') || '/usr/local/bin/gitlab-runner' }
     end
 
     settings :grafana do
