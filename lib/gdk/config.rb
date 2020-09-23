@@ -212,6 +212,7 @@ module GDK
       bool(:enabled) { true }
       string(:host) { "#{config.listen_address}.nip.io" }
       integer(:port) { read!('gitlab_pages_port') || 3010 }
+      string(:__uri) { "#{config.gitlab_pages.host}:#{config.gitlab_pages.port}" }
       bool(:auto_update) { true }
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
       bool(:verbose) { false }
