@@ -887,6 +887,12 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#__uri' do
+      it 'returns 127.0.0.1.nip.io:3010' do
+        expect(config.gitlab_pages.__uri.to_s).to eq('127.0.0.1.nip.io:3010')
+      end
+    end
   end
 
   describe 'prometheus' do
