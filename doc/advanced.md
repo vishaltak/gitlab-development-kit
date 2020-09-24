@@ -5,7 +5,111 @@ those covered in the [main dependency installation instructions](index.md#instal
 
 These instructions may contain advanced configuration options.
 
-## Install Linux dependencies
+## macOS
+
+GDK supports macOS 10.13 (High Sierra) and higher. In macOS 10.15 (Catalina) the
+default shell changed from [Bash](https://www.gnu.org/software/bash/) to
+[Zsh](http://zsh.sourceforge.net). The differences are handled by setting a
+`shell_file` variable based on your current shell.
+
+To install dependencies for macOS:
+
+1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for
+   package management.
+1. Run the following `brew` commands:
+
+   ```shell
+   brew bundle
+   brew link pkg-config
+   brew pin libffi icu4c readline re2
+   if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
+   echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
+   source ${shell_file}
+   brew cask install chromedriver
+   ```
+
+If ChromeDriver fails to open with an error message because the developer
+*cannot be verified*, create an exception for it as documented in the
+[macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
+
+NOTE: **Note:**
+We strongly recommend using the default installation directory for Homebrew
+(`/usr/local`). This simplifies the Ruby gems installation with C extensions. If
+you use a custom directory, additional work is required when installing Ruby
+gems. For more information, see
+[Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal).
+
+## Ubuntu
+
+NOTE: **Note:**
+These instructions don't account for using `asdf` for managing some dependencies.
+
+To install dependencies for Ubuntu, assuming you're using an active LTS release
+(16.04, 18.04, 20.04) or higher:
+
+1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
+1. Install remaining dependencies. Modify the `GDK_GO_VERSION` with the
+   major.minor version number (currently 1.14) as needed:
+
+   ```shell
+   # Add apt-add-repository helper script
+   sudo apt-get update
+   sudo apt-get install software-properties-common
+   [[ $(lsb_release -sr) < "18.04" ]] && sudo apt-get install python-software-properties
+   # This PPA contains an up-to-date version of git
+   sudo add-apt-repository ppa:git-core/ppa
+   sudo apt-get install libpq-dev libicu-dev cmake g++ libre2-dev libkrb5-dev \
+     libsqlite3-dev libreadline-dev libz-dev pkg-config graphicsmagick libimage-exiftool-perl \
+     libssl-dev libpcre2-dev git git-lfs rsync runit curl tzdata
+   [[ $(lsb_release -sr) < "18.10" ]] && sudo apt-get install g++-8
+   ```
+
+   > ℹ️ Ubuntu 18.04 (Bionic Beaver) and beyond doesn't have `python-software-properties` as a separate package.
+
+## Debian
+
+For Debian there are two ways to manage dependencies, either:
+
+- Using `asdf`.
+- Managing all dependencies yourself.
+
+### Manage dependencies using `asdf`
+
+To install some dependencies for Debian and use `asdf`:
+
+1. Install base dependencies:
+
+   ```shell
+   sudo apt-get update && sudo apt-get install libicu-dev cmake g++ libkrb5-dev libre2-dev ed \
+     pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
+   ```
+
+1. [Complete dependency installation](../index.md#install-and-set-up-gdk) using `asdf`.
+
+### Manage dependencies yourself
+
+To install dependencies for Debian and manage them yourself:
+
+1. Run the following commands:
+
+   ```shell
+   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
+     libicu-dev cmake g++ libkrb5-dev libre2-dev ed pkg-config graphicsmagick \
+     runit libimage-exiftool-perl rsync libsqlite3-dev
+   sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
+   sudo chmod +x /usr/local/bin/minio
+   ```
+
+1. Install Go:
+   - If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental) or
+     [newer](https://packages.debian.org/search?keywords=golang-go), you can install a Go compiler
+    using your package manager: `sudo apt-get install golang`.
+   - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
+     installation instructions.
+1. Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have it.
+1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv).
+
+## Install Other Linux dependencies
 
 The process for installing dependencies on Linux depends on your Linux
 distribution. For Ubuntu instructions, see [Install Ubuntu dependencies](index.md#install-ubuntu-dependencies)
@@ -37,49 +141,6 @@ For more information, see [Arch Linux Wiki page AUR_helpers](https://wiki.archli
 ```shell
 pikaur -S runit-systemd
 ```
-
-### Debian
-
-For Debian there are two ways to manage dependencies, either:
-
-- Using `asdf`.
-- Managing all dependencies yourself.
-
-#### Manage dependencies using `asdf`
-
-To install some dependencies for Debian and use `asdf`:
-
-1. Install base dependencies:
-
-   ```shell
-   sudo apt-get update && sudo apt-get install libicu-dev cmake g++ libkrb5-dev libre2-dev ed \
-     pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
-   ```
-
-1. [Complete dependency installation](../index.md#install-and-set-up-gdk) using `asdf`.
-
-#### Manage dependencies yourself
-
-To install dependencies for Debian and manage them yourself:
-
-1. Run the following commands:
-
-   ```shell
-   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
-     libicu-dev cmake g++ libkrb5-dev libre2-dev ed pkg-config graphicsmagick \
-     runit libimage-exiftool-perl rsync libsqlite3-dev
-   sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
-   sudo chmod +x /usr/local/bin/minio
-   ```
-
-1. Install Go:
-   - If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental) or
-     [newer](https://packages.debian.org/search?keywords=golang-go), you can install a Go compiler
-    using your package manager: `sudo apt-get install golang`.
-   - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
-     installation instructions.
-1. Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have it.
-1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv).
 
 ### Fedora
 

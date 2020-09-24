@@ -23,89 +23,22 @@ you don't know what a root user is, you very likely run everything as a non-root
 user already.
 
 The process for installing dependencies depends on your operating system.
-Instructions are available for:
+We automatically install dependencies for the following operating systems as
+part of the bootstrapping process which is described below:
 
-- [macOS](#install-macos-dependencies)
-- [Ubuntu](#install-ubuntu-dependencies)
+- macOS
+- Ubuntu
+- Debian
 
 [Advanced instructions](advanced.md) are also available, including instructions
 for:
 
-- [Other Linux distributions](advanced.md#install-linux-dependencies)
+- [macOS](advanced.md#macos)
+- [Ubuntu](advanced.md#ubuntu)
+- [Debian](advanced.md#debian)
+- [Other Linux distributions](advanced.md#install-other-linux-dependencies)
 - [FreeBSD](advanced.md#install-freebsd-dependencies)
 - [Windows 10](advanced#install-windows-10-dependencies)
-
-### Install macOS dependencies
-
-GDK supports macOS 10.13 (High Sierra) and higher. In macOS 10.15 (Catalina) the
-default shell changed from [Bash](https://www.gnu.org/software/bash/) to
-[Zsh](http://zsh.sourceforge.net). The differences are handled by setting a
-`shell_file` variable based on your current shell.
-
-To install dependencies for macOS:
-
-1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for
-   package management.
-1. [Install Chrome](https://www.google.com/chrome/) because the GDK depends on `chromedriver` for testing.
-1. Run the following `brew` commands:
-
-   ```shell
-   brew install asdf git git-lfs libiconv pkg-config cmake openssl coreutils re2 graphicsmagick gpg icu4c exiftool sqlite runit
-   brew link pkg-config
-   brew pin libffi icu4c readline re2
-   if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
-   echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
-   source ${shell_file}
-   brew cask install chromedriver
-   ```
-
-1. Follow any post-installation instructions that are provided. For example,
-   `asdf` has [post-install instructions](https://asdf-vm.com/#/core-manage-asdf-vm?id=add-to-your-shell).
-
-If ChromeDriver fails to open with an error message because the developer
-*cannot be verified*, create an exception for it as documented in the
-[macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
-
-NOTE: **Note:**
-We strongly recommend using the default installation directory for Homebrew
-(`/usr/local`). This simplifies the Ruby gems installation with C extensions. If
-you use a custom directory, additional work is required when installing Ruby
-gems. For more information, see
-[Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal).
-
-### Install Ubuntu dependencies
-
-NOTE: **Note:**
-These instructions don't account for using [`asdf` for managing some dependencies](https://asdf-vm.com/#/core-manage-asdf-vm).
-
-To install dependencies for Ubuntu, assuming you're using an active LTS release
-(16.04, 18.04, 20.04) or higher:
-
-1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
-1. Install remaining dependencies. Modify the `GDK_GO_VERSION` with the
-   major.minor version number (currently 1.14) as needed:
-
-   ```shell
-   # Add apt-add-repository helper script
-   sudo apt-get update
-   sudo apt-get install software-properties-common
-   [[ $(lsb_release -sr) < "18.04" ]] && sudo apt-get install python-software-properties
-   # This PPA contains an up-to-date version of Go
-   sudo add-apt-repository ppa:longsleep/golang-backports
-   # Setup path for Go
-   export GDK_GO_VERSION="1.14"
-   export PATH="/usr/lib/go-${GDK_GO_VERSION}/bin:$PATH"
-   # This PPA contains an up-to-date version of git
-   sudo add-apt-repository ppa:git-core/ppa
-   sudo apt-get install git git-lfs postgresql postgresql-contrib libpq-dev redis-server \
-     libicu-dev cmake g++ libre2-dev libkrb5-dev libsqlite3-dev golang-${GDK_GO_VERSION}-go ed \
-     pkg-config graphicsmagick runit libimage-exiftool-perl rsync libssl-dev libpcre2-dev
-   [[ $(lsb_release -sr) < "18.10" ]] && sudo apt-get install g++-8
-   sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
-   sudo chmod +x /usr/local/bin/minio
-   ```
-
-   > ℹ️ Ubuntu 18.04 (Bionic Beaver) and beyond doesn't have `python-software-properties` as a separate package.
 
 ## Install and set up GDK
 
@@ -113,73 +46,59 @@ Before attempting to use these steps, be sure you have [installed dependencies](
 
 To get GDK up and running:
 
-1. Install the `gitlab-development-kit` gem:
+1. Ensure `git` is avalable:
+
+   If you're on macOS, `git` is installed by default, so skip to the next step.
+
+   If you're on Ubuntu/Debian, run the following to install `git`:
 
    ```shell
-   gem install gitlab-development-kit
+   apt-get update && apt-get install git
    ```
 
-   This is required both the first time you install GDK and any time you upgrade Ruby.
+1. Clone the `gitlab-development-kit` repository into your preferred location:
 
-1. Clone and initialize GDK using one of the following commands:
+   ```shell
+   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
+   ```
 
-   - The default directory (`gitlab-development-kit`):
+1. Change into the newly-created GDK clone directory.
 
-     ```shell
-     gdk init
-     ```
+1. Install required software such as Ruby, Node.js, PostgreSQL, etc:
 
-   - A custom directory. For example, to initialize `gdk`, run:
+   ```shell
+   make bootstrap
+   ```
 
-     ```shell
-     gdk init gdk
-     ```
+1. Activate `asdf`:
 
-1. Install GDK components in the GDK directory:
+   ```shell
+   source "${ASDF_DIR:-${HOME}/.asdf}/asdf.sh"
+   ```
 
-   1. Navigate to the newly-created GDK directory.
-   1. Run `make bootstrap` to install remaining dependencies.
+1. Complete GDK installation by installing and configuring GitLab and other projects
+   using `gdk install`. Use one of the following methods:
 
-      - If you receive an error message that begins with **Authenticity of checksum file can not be assured!**:
-        1. Follow the [`asdf-nodejs` Install section instructions](https://github.com/asdf-vm/asdf-nodejs#install).
-        1. Run `make bootstrap` after you resolve the problem.
+   - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
+     recommend developing against the GitLab project (the default):
+     - Cloning `gitlab` using SSH (recommended), run:
 
-      - If you receive an error message relating to `asdf` not found:
-        1. Install it as discussed in the [Manage asdf-vm](https://asdf-vm.com/#/core-manage-asdf-vm)
-           page.
-        1. Run `make boostrap` again.
+       ```shell
+       gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
+       ```
 
-   1. Make the newly install PostgreSQL headers (assumes PostgreSQL 11.8) available to the system by
-      running:
+     - Cloning `gitlab` using HTTPS, run:
 
-      ```shell
-      bundle config build.pg --with-opt-dir="${HOME}/.asdf/installs/postgres/11.8"
-      ```
+       ```shell
+       gdk install
+       ```
 
-   1. Install the necessary components (repositories, Ruby gem bundles, and configuration) using
-      `gdk install`. Use one of the following methods:
+     Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
+     The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
-      - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
-        recommend developing against the GitLab project (the default):
-
-        - Cloning `gitlab` using SSH (recommended), run:
-
-          ```shell
-          gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
-          ```
-
-        - Cloning `gitlab` using HTTPS, run:
-
-          ```shell
-          gdk install
-          ```
-
-        Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-        The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
-
-      - Other options, in order of recommendation:
-        - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
-        - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
+   - Other options, in order of recommendation:
+     - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
+     - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
 
 ### Install using GitLab FOSS project
 
@@ -299,7 +218,7 @@ For information about updating GDK, see [Update GDK](gdk_commands.md#update-gdk)
 After you have set up GDK initially, you can create new *fresh installations*.
 You might do this if you have problems with existing installation that are
 complicated to fix, and you just need to get up and running quickly. To create a
-fresh installation:
+.resh installation:
 
 1. In the parent folder for GDK, run
    [`gdk init <new directory>`](#initialize-a-new-gdk-directory).
