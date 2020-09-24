@@ -6,6 +6,7 @@
 .bundle/
 .idea
 .yardoc
+/*.log
 /.backups/
 /.env
 /.gdk-install-root
@@ -37,9 +38,9 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
+/gitlab-k8s-agent/
 /gitlab-pages
 /gitlab-pages-secret
-/gitlab-k8s-agent/
 /gitlab-runner-config.toml
 /gitlab-shell
 /gitlab-shell/
@@ -99,4 +100,4 @@
 /sitespeed-result/
 /sv/
 /webpack_port
-/*.log
+Brewfile.lock.json

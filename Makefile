@@ -79,7 +79,7 @@ gitlab-elasticsearch-indexer-setup
 
 # This is used by `gdk install`
 #
-install: all show-installed-at
+install: all show-installed-at start
 
 # This is used by `gdk update`
 #
@@ -184,10 +184,8 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 # bootstrap
 ##############################################################
 
-bootstrap: install-prerequisites
-
-install-prerequisites:
-	${Q}support/bootstrap/install_prerequisites
+bootstrap:
+	@support/bootstrap
 
 ##############################################################
 # GitLab
@@ -985,6 +983,11 @@ shellcheck: shellcheck-install
 ##############################################################
 # Misc
 ##############################################################
+
+.PHONY: start
+start:
+	@echo
+	$(Q)gdk start
 
 .PHONY: ask-to-restart
 ask-to-restart:
