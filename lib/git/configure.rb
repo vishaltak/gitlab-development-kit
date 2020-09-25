@@ -1,3 +1,5 @@
+require_relative '../gdk/output'
+
 module Git
   class Configure
     def initialize(global: false)
@@ -6,17 +8,17 @@ module Git
 
     def run!
       recommendations.each do |rec|
-        puts rec.description
-        puts "Possible input: #{rec.possible_values.join(',')} (default: #{rec.default})"
+        GDK::Output.puts(rec.description)
+        GDK::Output.puts("Possible input: #{rec.possible_values.join(',')} (default: #{rec.default})")
 
         input = STDIN.gets.chomp
         input = rec.default if input.empty?
 
-        abort("Invalid input: #{input}, possible values: #{rec.possible_values}") unless rec.valid_input_value?(input)
+        GDK::Output.abort("Invalid input: #{input}, possible values: #{rec.possible_values}") unless rec.valid_input_value?(input)
 
         set_config(rec.key, input)
 
-        puts # New line to separate each recommendation
+        GDK::Output.puts # New line to separate each recommendation
       end
     end
 
