@@ -112,7 +112,7 @@ To install dependencies for Debian and manage them yourself:
 ## Install Other Linux dependencies
 
 The process for installing dependencies on Linux depends on your Linux
-distribution. For Ubuntu instructions, see [Install Ubuntu dependencies](index.md#install-ubuntu-dependencies)
+distribution.
 
 Unless already set, you'll probably have to increase the watches limit of
 `inotify` for frontend development tools such as `webpack` to effectively track
