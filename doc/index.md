@@ -46,14 +46,14 @@ Before attempting to use these steps, be sure you have [installed dependencies](
 
 To get GDK up and running:
 
-1. Ensure `git` is avalable:
+1. Ensure `git` and `make` are available:
 
-   If you're on macOS, `git` is installed by default, so skip to the next step.
+   If you're on macOS, `git` and `make` are installed by default, so skip to the next step.
 
    If you're on Ubuntu/Debian, run the following to install `git`:
 
    ```shell
-   apt-get update && apt-get install git
+   apt-get update && apt-get install git make
    ```
 
 1. Clone the `gitlab-development-kit` repository into your preferred location:
