@@ -36,11 +36,11 @@ RSpec.describe Shellout do
   end
 
   describe '#stream' do
-    it 'returns output of shell command' do
+    it 'returns output of shell command', :hide_stdout do
       expect(subject.stream).to eq('foo')
     end
 
-    it 'send output to stdout', :with_stdout do
+    it 'send output to stdout' do
       expect { subject.stream }.to output("foo\n").to_stdout
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Shellout do
       let(:opts) { { chdir: tmp_directory } }
 
       it 'changes into the specified directory before executing' do
-        expect(subject.stream).to eq(tmp_directory)
+        expect { expect(subject.stream).to eq(tmp_directory) }.to output("#{tmp_directory}\n").to_stdout
       end
     end
   end

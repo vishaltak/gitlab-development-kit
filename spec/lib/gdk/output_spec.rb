@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe GDK::Output, :with_stdout do
+RSpec.describe GDK::Output do
   describe '.puts' do
     context 'by default' do
       it 'puts to stdout' do
