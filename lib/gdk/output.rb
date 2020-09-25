@@ -61,8 +61,16 @@ module GDK
       puts(icon(:warning) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
     end
 
+    def self._error(message)
+      icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}"
+    end
+
     def self.error(message)
-      puts(icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}", stderr: true)
+      puts(_error(message), stderr: true)
+    end
+
+    def self.abort(message)
+      Kernel.abort(_error(message))
     end
 
     def self.success(message)
