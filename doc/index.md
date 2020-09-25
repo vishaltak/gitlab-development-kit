@@ -46,15 +46,13 @@ Before attempting to use these steps, be sure you have [installed dependencies](
 
 To get GDK up and running:
 
-1. Ensure `git` and `make` are available:
+1. Ensure `git` and `make` are available. If you're on:
+   - macOS, `git` and `make` are installed by default.
+   - Ubuntu/Debian, run the following to install `git` and `make`:
 
-   If you're on macOS, `git` and `make` are installed by default, so skip to the next step.
-
-   If you're on Ubuntu/Debian, run the following to install `git`:
-
-   ```shell
-   apt-get update && apt-get install git make
-   ```
+     ```shell
+     apt-get update && apt-get install git make
+     ```
 
 1. Clone the `gitlab-development-kit` repository into your preferred location:
 
@@ -63,31 +61,24 @@ To get GDK up and running:
    ```
 
 1. Change into the newly-created GDK clone directory.
-
-1. Install required software such as Ruby, Node.js, PostgreSQL, etc:
+1. Install required software such as Ruby, Node.js, PostgreSQL, and so on:
 
    ```shell
    make bootstrap
    ```
 
-1. Activate `asdf`:
-
-   ```shell
-   source "${ASDF_DIR:-${HOME}/.asdf}/asdf.sh"
-   ```
-
-1. Complete GDK installation by installing and configuring GitLab and other projects
+1. Complete GDK installation by cloning and configuring GitLab and other projects
    using `gdk install`. Use one of the following methods:
 
    - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
-     recommend developing against the GitLab project (the default):
-     - Cloning `gitlab` using SSH (recommended), run:
+     recommend developing against the GitLab project (the default). To:
+     - Clone `gitlab` using SSH (recommended), run:
 
        ```shell
        gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
        ```
 
-     - Cloning `gitlab` using HTTPS, run:
+     - Clone `gitlab` using HTTPS, run:
 
        ```shell
        gdk install
@@ -105,16 +96,15 @@ To get GDK up and running:
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
 
-After installing the `gitlab-development-kit` gem and initializing a GDK
-directory, for:
+After cloning the `gitlab-development-kit` project and running `support/bootstrap`, to:
 
-- Cloning `gitlab-foss` using SSH, run:
+- Clone `gitlab-foss` using SSH, run:
 
   ```shell
   gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab-foss.git
   ```
 
-- Cloning `gitlab-foss` using HTTPS, run:
+- Clone `gitlab-foss` using HTTPS, run:
 
   ```shell
   gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
@@ -128,10 +118,9 @@ space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/do
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab](https://gitlab.com/gitlab-org/gitlab).
 
-After installing the `gitlab-development-kit` gem and initializing a GDK
-directory, for:
+After cloning the `gitlab-development-kit` project and running `support/bootstrap`, to:
 
-- Cloning your `gitlab` fork using SSH, run:
+- Clone your `gitlab` fork using SSH, run:
 
   ```shell
   # Replace <YOUR-NAMESPACE> with your namespace
@@ -139,7 +128,7 @@ directory, for:
   support/set-gitlab-upstream
   ```
 
-- Cloning your `gitlab` fork using HTTPS, run:
+- Clone your `gitlab` fork using HTTPS, run:
 
   ```shell
   # Replace <YOUR-NAMESPACE> with your namespace
