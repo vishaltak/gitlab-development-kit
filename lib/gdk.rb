@@ -35,16 +35,8 @@ module GDK
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
   # rubocop:disable Metrics/AbcSize
-  def self.main # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    if !install_root_ok? && ARGV.first != 'reconfigure'
-      puts <<~GDK_MOVED
-        According to #{ROOT_CHECK_FILE} this gitlab-development-kit
-        installation was moved. Run 'gdk reconfigure' to update hard-coded
-        paths.
-      GDK_MOVED
-      return false
-    end
-
+  def self.main # rubocop:disable Metrics/CyclomaticComplexity
+    validate_dir!
     validate_yaml!
 
     case subcommand = ARGV.shift
@@ -54,8 +46,10 @@ module GDK
 
         Use 'gdk start', 'gdk stop', and 'gdk tail' instead.
       GDK_RUN_NO_MORE
+
     when 'install'
       install
+
     when 'update'
       update_result = update
       return false unless update_result
@@ -65,10 +59,11 @@ module GDK
       else
         update_result
       end
+
     when 'diff-config'
       GDK::Command::DiffConfig.new.run
-
       true
+
     when 'config'
       config_command = ARGV.shift
       abort 'Usage: gdk config get <configuration value>' if config_command != 'get' || ARGV.empty?
@@ -79,36 +74,37 @@ module GDK
       rescue GDK::ConfigSettings::SettingUndefined
         abort "Cannot get config for #{ARGV.join('.')}"
       end
+
     when 'reconfigure'
       reconfigure
+
     when 'psql'
       pg_port = config.postgresql.port
       args = ARGV.empty? ? ['-d', 'gitlabhq_development'] : ARGV
 
       exec('psql', '-h', GDK.root.join('postgresql').to_s, '-p', pg_port.to_s, *args, chdir: GDK.root)
+
     when 'redis-cli'
       exec('redis-cli', '-s', config.redis_socket.to_s, *ARGV, chdir: GDK.root)
+
     when 'env'
       GDK::Env.exec(ARGV)
+
     when 'status'
       exit(Runit.sv(subcommand, ARGV))
+
     when 'start'
       exit(start(ARGV))
+
     when 'restart'
       exit(restart(ARGV))
+
     when 'stop'
-      if ARGV.empty?
-        # Runit.stop will stop all services and stop Runit (runsvdir) itself.
-        # This is only safe if all services are shut down; this is why we have
-        # an integrated method for this.
-        Runit.stop
-        exit
-      else
-        # Stop the requested services, but leave Runit itself running.
-        exit(Runit.sv('force-stop', ARGV))
-      end
+      stop(ARGV)
+
     when 'tail'
       Runit.tail(ARGV)
+
     when 'thin'
       # We cannot use Runit.sv because that calls Kernel#exec. Use system instead.
       system('gdk', 'stop', 'rails-web')
@@ -117,15 +113,19 @@ module GDK
         *%W[bundle exec thin --socket=#{config.gitlab.__socket_file} start],
         chdir: GDK.root.join('gitlab')
       )
+
     when 'doctor'
       GDK::Command::Doctor.new.run
       true
+
     when 'measure'
       GDK::Command::Measure.new(ARGV).run
       true
+
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run
       true
+
     else
       GDK::Output.notice "gdk: #{subcommand} is not a gdk command."
       GDK::Output.notice "See 'gdk help' for more detail."
@@ -170,13 +170,27 @@ module GDK
   #
   # @return [Pathname] path to GDK base directory
   def self.root
-    Pathname.new($gdk_root || Pathname.new(__dir__).parent) # rubocop:disable Style/GlobalVars
+    @root ||= Pathname.new(root_dir || Pathname.new(__dir__).parent)
   end
 
   def self.make(*targets)
     sh = Shellout.new(MAKE, targets, chdir: GDK.root)
     sh.stream
     sh.success?
+  end
+
+  # Called when running `gdk stop`
+  def self.stop(argv)
+    if argv.empty?
+      # Runit.stop will stop all services and stop Runit (runsvdir) itself.
+      # This is only safe if all services are shut down; this is why we have
+      # an integrated method for this.
+      Runit.stop
+      exit
+    else
+      # Stop the requested services, but leave Runit itself running.
+      exit(Runit.sv('force-stop', argv))
+    end
   end
 
   # Called when running `gdk start`
@@ -199,6 +213,7 @@ module GDK
 
   # Called when running `gdk install`
   def self.install
+    trust_and_remember_directory!(Dir.pwd)
     result = make('install', *ARGV)
 
     unless result
@@ -243,6 +258,21 @@ module GDK
     GDK::Output.notice("GitLab Kubernetes Agent Server available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
   end
 
+  def self.validate_dir!
+    return true if %w[install reconfigure].include?(ARGV.first) || install_root_ok?
+
+    message = <<~GDK_MOVED
+      According to #{ROOT_CHECK_FILE}, this gitlab-development-kit
+      installation was moved. Run 'gdk reconfigure' to update hard-coded
+      paths.
+    GDK_MOVED
+
+    GDK::Output.error("Your gdk installation may have been moved.\n\n")
+    GDK::Output.puts(message, stderr: true)
+
+    abort
+  end
+
   def self.validate_yaml!
     config.validate!
     nil
@@ -250,5 +280,23 @@ module GDK
     GDK::Output.error("Your gdk.yml is invalid.\n\n")
     GDK::Output.puts(e.message, stderr: true)
     abort
+  end
+
+  def self.root_dir
+    @root_dir ||= find_root(Dir.pwd)
+  end
+
+  def self.find_root(current)
+    if File.exist?(File.join(current, 'GDK_ROOT'))
+      File.realpath(current)
+    elsif File.realpath(current) == '/'
+      nil
+    else
+      find_root(File.join(current, '..'))
+    end
+  end
+
+  def self.trust_and_remember_directory!(directory)
+    trust!(directory) && remember!(directory)
   end
 end
