@@ -51,6 +51,10 @@ module Git
       ]
     end
 
+    def gdk_repositories
+      @gdk_repositories ||= GDK::Config.new.git_repositories
+    end
+
     def set_config(key, value)
       if @global
         run_git(%w[config --global key value])
