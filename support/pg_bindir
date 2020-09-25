@@ -1,12 +1,16 @@
 #!/usr/bin/env ruby
 
+require 'mkmf'
 require 'pathname'
 require_relative '../lib/shellout.rb'
+
+MakeMakefile::Logging.quiet = true
+MakeMakefile::Logging.logfile(File::NULL)
 
 POSTGRESQL_VERSIONS = [11, 10, 9.6].freeze
 
 def brew_linked_discover
-  dirname_if_exists_for('/usr/local/bin/postgres')
+  dirname_if_exists_for(find_executable('postgres'))
 end
 
 def brew_symlink_discover
@@ -41,6 +45,8 @@ rescue Errno::ENOENT
 end
 
 def dirname_if_exists_for(path)
+  return unless path
+
   path = Pathname.new(path)
 
   return unless path.exist?
