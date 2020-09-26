@@ -36,6 +36,7 @@ RUN bash -lc ' \
         GOROOT=$HOME/go && \
         gem install gitlab-development-kit rake mdl && \
         cd $HOME && gdk init && \
+        npm upgrade --global yarn && \
         export BUNDLER_VERSION="$(grep -A 1 "BUNDLED WITH" "$HOME/gitlab-development-kit/Gemfile.lock" | tail -n 1)" && \
         gem install bundler -v $BUNDLER_VERSION && \
         export RUBY_VERSION=$(awk "\$1 == \"ruby\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
@@ -46,7 +47,6 @@ RUN bash -lc ' \
         . $HOME/.nvm/nvm.sh && \
         nvm install $NODE_VERSION && \
         nvm alias default $NODE_VERSION && \
-        npm upgrade --global yarn && \
         export GO_VERSION=$(awk "\$1 == \"golang\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
         rm -rf go && curl -sSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
         cd gitlab-development-kit && gdk install shallow_clone=true && \
