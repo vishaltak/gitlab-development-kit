@@ -52,7 +52,7 @@ RUN bash -lc ' \
         cd gitlab-development-kit && gdk install shallow_clone=true && \
         gdk stop && \
         rm -rf gitlab && rm -rf tmp && \
-        cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
+        cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk \
     '
 
 RUN echo "rvm_gems_path=/workspace/.rvm\nrvm_silence_path_mismatch_check_flag=1" >> ~/.rvmrc
