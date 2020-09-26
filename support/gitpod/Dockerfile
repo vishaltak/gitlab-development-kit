@@ -49,9 +49,12 @@ RUN bash -lc ' \
         nvm alias default $NODE_VERSION && \
         export GO_VERSION=$(awk "\$1 == \"golang\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
         rm -rf go && curl -sSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
-        cd gitlab-development-kit && gdk install shallow_clone=true && gdk stop \
-        rm -rf gitlab && \
-        cp $HOME/gitlab-development-kit/support/completions/gdk.bash $HOME/.bashrc.d/90-gdk \
+        cd /workspace && gdk init && \
+        cd gitlab-development-kit && gdk install shallow_clone=true && \
+        gdk stop && \
+        rm -rf gitlab && rm -rf tmp && \
+        cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
+        cd /workspace && mv gitlab-development-kit $HOME/ && mv .rvm $HOME/.rvm-workspace \
     '
 
 RUN echo "rvm_gems_path=/workspace/.rvm\nrvm_silence_path_mismatch_check_flag=1" >> ~/.rvmrc
