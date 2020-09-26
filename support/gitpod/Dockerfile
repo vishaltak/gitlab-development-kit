@@ -53,7 +53,6 @@ RUN bash -lc ' \
         gdk stop && \
         rm -rf gitlab && rm -rf tmp && \
         cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
-        cd /workspace && mv gitlab-development-kit $HOME/ && mv .rvm $HOME/.rvm-workspace \
     '
 
 RUN echo "rvm_gems_path=/workspace/.rvm\nrvm_silence_path_mismatch_check_flag=1" >> ~/.rvmrc
