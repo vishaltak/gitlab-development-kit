@@ -50,7 +50,7 @@ RUN bash -lc ' \
         export GO_VERSION=$(awk "\$1 == \"golang\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
         rm -rf go && curl -sSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
         cd gitlab-development-kit && gdk install shallow_clone=true && gdk stop \
-        rm -r -rf gitlab && \
+        rm -rf gitlab && \
         cp $HOME/gitlab-development-kit/support/completions/gdk.bash $HOME/.bashrc.d/90-gdk \
     '
 
