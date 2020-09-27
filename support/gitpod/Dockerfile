@@ -63,8 +63,6 @@ RUN echo "GITLAB_BUNDLER_VERSION  $GITLAB_BUNDLER_VERSION" && \
         gdk stop && \
         rm -rf gitlab && rm -rf tmp && \
         cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
-        curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash && \
-        export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E apt-get install gitlab-runner && \
         cd /workspace && mv gitlab-development-kit $HOME/ && mv .rvm $HOME/.rvm-workspace \
     "
 
