@@ -45,13 +45,13 @@ RUN echo "GITLAB_BUNDLER_VERSION  $GITLAB_BUNDLER_VERSION" && \
     echo "GITLAB_RUBY_VERSION     $GITLAB_RUBY_VERSION" && \
     echo "GITLAB_NODE_VERSION     $GITLAB_NODE_VERSION" && \
     echo "GITLAB_GO_VERSION       $GITLAB_GO_VERSION" && \
-    bash -lc ' \
+    bash -lc " \
         GOPATH=$HOME/go-packages && \
         GOROOT=$HOME/go && \
         npm upgrade --global yarn && \
         rvm install $GITLAB_RUBY_VERSION --create && \
         rvm use $GITLAB_RUBY_VERSION --default && \
-        echo \"rvm use $GITLAB_RUBY_VERSION --default --create > /dev/null\" > ~/.bashrc.d/71-ruby && \
+        echo \"rvm use $GITLAB_RUBY_VERSION --default > /dev/null\" > ~/.bashrc.d/71-ruby && \
         gem install bundler -v $GITLAB_BUNDLER_VERSION && \
         gem install gitlab-development-kit rake mdl && \
         . $HOME/.nvm/nvm.sh && \
@@ -64,6 +64,6 @@ RUN echo "GITLAB_BUNDLER_VERSION  $GITLAB_BUNDLER_VERSION" && \
         rm -rf gitlab && rm -rf tmp && \
         cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
         cd /workspace && mv gitlab-development-kit $HOME/ && mv .rvm $HOME/.rvm-workspace \
-    '
+    "
 
 RUN sudo rm -rf /workspace
