@@ -1,5 +1,13 @@
 FROM gitpod/workspace-full
 
+ARG GITLAB_BUNDLER_VERSION
+ARG GITLAB_RUBY_VERSION
+ARG GITLAB_NODE_VERSION
+ARG GITLAB_GO_VERSION
+
+ENV GO_VERSION=${GITLAB_GO_VERSION} \
+    NODE_VERSION=${GITLAB_NODE_VERSION}
+
 RUN sudo apt-get update \
     && sudo apt-get install -y \
         software-properties-common \
@@ -29,30 +37,33 @@ RUN sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output 
 # scrips/lint-doc.sh dependency
 RUN brew install vale
 
-RUN rm -f ~/.rvmrc
+RUN echo "rvm_silence_path_mismatch_check_flag=1" >> $HOME/.rvmrc
 
-RUN bash -lc ' \
+RUN sudo mkdir -p /workspace/gitlab && sudo chown -R gitpod:gitpod /workspace
+
+RUN echo "GITLAB_BUNDLER_VERSION  $GITLAB_BUNDLER_VERSION" && \
+    echo "GITLAB_RUBY_VERSION     $GITLAB_RUBY_VERSION" && \
+    echo "GITLAB_NODE_VERSION     $GITLAB_NODE_VERSION" && \
+    echo "GITLAB_GO_VERSION       $GITLAB_GO_VERSION" && \
+    bash -lc ' \
         GOPATH=$HOME/go-packages && \
         GOROOT=$HOME/go && \
-        gem install gitlab-development-kit rake mdl && \
-        cd $HOME && gdk init && \
         npm upgrade --global yarn && \
-        export BUNDLER_VERSION="$(grep -A 1 "BUNDLED WITH" "$HOME/gitlab-development-kit/Gemfile.lock" | tail -n 1)" && \
-        gem install bundler -v $BUNDLER_VERSION && \
-        export RUBY_VERSION=$(awk "\$1 == \"ruby\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
-        rvm install $RUBY_VERSION --create && \
-        rvm use $RUBY_VERSION --default && \
-        echo "rvm use $RUBY_VERSION --default > /dev/null" > ~/.bashrc.d/71-ruby && \
-        export NODE_VERSION=$(awk "\$1 == \"nodejs\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
+        rvm install $GITLAB_RUBY_VERSION --create && \
+        rvm use $GITLAB_RUBY_VERSION --default && \
+        echo \"rvm use $GITLAB_RUBY_VERSION --default --create > /dev/null\" > ~/.bashrc.d/71-ruby && \
+        gem install bundler -v $GITLAB_BUNDLER_VERSION && \
+        gem install gitlab-development-kit rake mdl && \
         . $HOME/.nvm/nvm.sh && \
-        nvm install $NODE_VERSION && \
-        nvm alias default $NODE_VERSION && \
-        export GO_VERSION=$(awk "\$1 == \"golang\" {print \$2}" "$HOME/gitlab-development-kit/.tool-versions") && \
-        rm -rf go && curl -sSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
+        nvm install $GITLAB_NODE_VERSION && \
+        nvm alias default $GITLAB_NODE_VERSION && \
+        rm -rf go && curl -sSL https://storage.googleapis.com/golang/go$GITLAB_GO_VERSION.linux-amd64.tar.gz | tar xzs && \
+        cd /workspace && gdk init && \
         cd gitlab-development-kit && gdk install shallow_clone=true && \
         gdk stop && \
         rm -rf gitlab && rm -rf tmp && \
-        cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk \
+        cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
+        cd /workspace && mv gitlab-development-kit $HOME/ && mv .rvm $HOME/.rvm-workspace \
     '
 
-RUN echo "rvm_gems_path=/workspace/.rvm\nrvm_silence_path_mismatch_check_flag=1" >> ~/.rvmrc
+RUN sudo rm -rf /workspace

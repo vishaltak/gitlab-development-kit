@@ -8,6 +8,6 @@ deploy-gitpod-workspace-image:
     - apk add --no-cache jq curl
   script:
     - ./support/docker ci-login
-    - cd ./support/gitpod && docker build . --tag "${GITPOD_WORKSPACE_IMAGE}" && docker push "${GITPOD_WORKSPACE_IMAGE}"
+    - ./support/gitpod/docker-build
   after_script:
     - ./support/docker ci-logout
