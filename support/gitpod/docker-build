@@ -1,1 +1,16 @@
-cd ./support/gitpod && docker build . --tag "${GITPOD_WORKSPACE_IMAGE}" && docker push "${GITPOD_WORKSPACE_IMAGE}"
+#!/bin/sh
+
+GITLAB_BUNDLER_VERSION="$(grep -A 1 "BUNDLED WITH" ./Gemfile.lock | tail -n 1)"
+GITLAB_RUBY_VERSION=$(awk "\$1 == \"ruby\" {print \$2}" ./.tool-versions)
+GITLAB_NODE_VERSION=$(awk "\$1 == \"nodejs\" {print \$2}" ./.tool-versions)
+GITLAB_GO_VERSION=$(awk "\$1 == \"golang\" {print \$2}" ./.tool-versions)
+
+cd ./support/gitpod
+docker build \
+    --build-arg "GITLAB_BUNDLER_VERSION=$GITLAB_BUNDLER_VERSION" \
+    --build-arg "GITLAB_RUBY_VERSION=$GITLAB_RUBY_VERSION" \
+    --build-arg "GITLAB_NODE_VERSION=$GITLAB_NODE_VERSION" \
+    --build-arg "GITLAB_GO_VERSION=$GITLAB_GO_VERSION" \
+    --tag "${GITPOD_WORKSPACE_IMAGE}" \
+    .
+docker push "${GITPOD_WORKSPACE_IMAGE}"
