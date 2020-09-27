@@ -14,4 +14,4 @@ for file in ~/.bash_profile ~/.bashrc ~/.zshrc ~/.zprofile; do
   echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> $file
 done
 
-nvm install 12.13.1
+nvm install 12.18.3
