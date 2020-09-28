@@ -15,7 +15,9 @@ for the documentation in GitLab. To run the links checks locally or preview the 
    cd gitlab-docs/
    ```
 
-1. Create the HTML files and check the internal links and anchors:
+1. Either use your editor's "Follow Link" or "Got To Declaration/Usage/Implementation"
+   function (or similar) to verify your changes to internal links and anchors, or
+   run the following to check them all:
 
    ```shell
    make gitlab-docs-check
