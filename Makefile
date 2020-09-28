@@ -393,6 +393,12 @@ symlink-gitlab-docs:
 
 gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.yaml
 
+gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
+	$(Q)cd gitlab-docs && \
+		bundle exec nanoc && \
+		bundle exec nanoc check internal_links && \
+		bundle exec nanoc check internal_anchors
+
 ##############################################################
 # gitlab geo
 ##############################################################

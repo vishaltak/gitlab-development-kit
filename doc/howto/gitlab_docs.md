@@ -15,22 +15,10 @@ for the documentation in GitLab. To run the links checks locally or preview the 
    cd gitlab-docs/
    ```
 
-1. Create the HTML files:
+1. Create the HTML files and check the internal links and anchors:
 
    ```shell
-   bundle exec nanoc
-   ```
-
-1. Run the internal links check:
-
-   ```shell
-   bundle exec nanoc check internal_links
-   ```
-
-1. Run the internal anchors check:
-
-   ```shell
-   bundle exec nanoc check internal_anchors
+   make gitlab-docs-check
    ```
 
 1. (Optionally) Preview the docs site locally:
