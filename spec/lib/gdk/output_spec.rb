@@ -74,12 +74,12 @@ RSpec.describe GDK::Output do
     end
   end
 
-  describe '._error' do
+  describe '.format_error' do
     context "when we're not a tty" do
       it 'puts to stderr minus icon and colorization' do
         stub_tty(false)
 
-        expect(described_class._error('test')).to eq("ERROR: test")
+        expect(described_class.format_error('test')).to eq("ERROR: test")
       end
     end
 
@@ -88,7 +88,7 @@ RSpec.describe GDK::Output do
         it 'puts to stderr' do
           stub_no_color_env('')
 
-          expect(described_class._error('test')).to eq("\u274C\ufe0f \e[31mERROR\e[0m: test")
+          expect(described_class.format_error('test')).to eq("\u274C\ufe0f \e[31mERROR\e[0m: test")
         end
       end
 
@@ -96,7 +96,7 @@ RSpec.describe GDK::Output do
         it 'puts to stderr minus icon and colorization' do
           stub_no_color_env('true')
 
-          expect(described_class._error('test')).to eq("ERROR: test")
+          expect(described_class.format_error('test')).to eq("ERROR: test")
         end
       end
     end
