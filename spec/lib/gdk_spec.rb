@@ -21,12 +21,24 @@ RSpec.describe GDK do
     describe 'psql' do
       it 'uses the development database by default' do
         expect_exec ['psql'],
-                    ['psql', '-h', described_class.root.join('postgresql').to_s, '-p', '5432', '-d', 'gitlabhq_development', chdir: described_class.root]
+                    ["/usr/local/bin/psql --host=#{described_class.config.postgresql.host} --port=5432 --dbname=gitlabhq_development ", chdir: described_class.root]
       end
 
       it 'uses custom arguments if present' do
         expect_exec ['psql', '-w', '-d', 'gitlabhq_test'],
-                    ['psql', '-h', described_class.root.join('postgresql').to_s, '-p', '5432', '-w', '-d', 'gitlabhq_test', chdir: described_class.root]
+                    ["/usr/local/bin/psql --host=#{described_class.config.postgresql.host} --port=5432 -w -d gitlabhq_test", chdir: described_class.root]
+      end
+    end
+
+    describe 'psql-geo' do
+      it 'uses the development database by default' do
+        expect_exec ['psql-geo'],
+                    ["/usr/local/bin/psql --host=#{described_class.config.postgresql.geo.host} --port=5431 --dbname=gitlabhq_geo_development ", chdir: described_class.root]
+      end
+
+      it 'uses custom arguments if present' do
+        expect_exec ['psql-geo', '-w', '-d', 'gitlabhq_geo_test'],
+                    ["/usr/local/bin/psql --host=#{described_class.config.postgresql.geo.host} --port=5431 -w -d gitlabhq_geo_test", chdir: described_class.root]
       end
     end
   end

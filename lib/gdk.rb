@@ -82,10 +82,9 @@ module GDK
     when 'reconfigure'
       reconfigure
     when 'psql'
-      pg_port = config.postgresql.port
-      args = ARGV.empty? ? ['-d', 'gitlabhq_development'] : ARGV
-
-      exec('psql', '-h', GDK.root.join('postgresql').to_s, '-p', pg_port.to_s, *args, chdir: GDK.root)
+      exec(GDK::Postgresql.new.psql_cmd, chdir: GDK.root)
+    when 'psql-geo'
+      exec(GDK::PostgresqlGeo.new.psql_cmd, chdir: GDK.root)
     when 'redis-cli'
       exec('redis-cli', '-s', config.redis_socket.to_s, *ARGV, chdir: GDK.root)
     when 'env'

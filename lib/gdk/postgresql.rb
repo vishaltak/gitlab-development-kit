@@ -2,6 +2,13 @@
 
 module GDK
   class Postgresql
+    def psql_cmd
+      args = ARGV
+      database = args.empty? ? default_database : nil
+
+      pg_cmd(args, database: database).join(" ")
+    end
+
     def ready?
       last_error = nil
       cmd = pg_cmd(database: 'template1')
@@ -64,6 +71,10 @@ module GDK
       cmd << "--command=#{command}" if command
 
       cmd + args
+    end
+
+    def default_database
+      'gitlabhq_development'
     end
 
     def bin_dir

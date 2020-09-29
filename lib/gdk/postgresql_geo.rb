@@ -15,5 +15,9 @@ module GDK
     def postgresql_config
       @postgresql_config ||= GDK.config.postgresql
     end
+
+    def default_database
+      'gitlabhq_geo_development'
+    end
   end
 end
