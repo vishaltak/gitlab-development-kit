@@ -33,6 +33,10 @@ RUN sudo apt-get update \
 
 RUN sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio && \
     sudo chmod +x /usr/local/bin/minio
+    
+RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+
+RUN export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E apt-get install gitlab-runner
 
 # scrips/lint-doc.sh dependency
 RUN brew install vale
