@@ -91,6 +91,7 @@ dir = "<%= config.gitlab_shell.dir %>"
 
 [gitlab]
 url = "http+unix://<%= config.gitlab.__socket_file_escaped %>"
+relative_url_root = "<%= config.relative_url_root %>"
 
 [gitlab.http-settings]
 self_signed_cert = false
