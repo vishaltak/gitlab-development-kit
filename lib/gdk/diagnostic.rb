@@ -8,6 +8,7 @@ require_relative 'diagnostic/pending_migrations'
 require_relative 'diagnostic/configuration'
 require_relative 'diagnostic/geo'
 require_relative 'diagnostic/git'
+require_relative 'diagnostic/postgresql'
 require_relative 'diagnostic/ruby_gems'
 require_relative 'diagnostic/re2'
 require_relative 'diagnostic/golang'
@@ -23,6 +24,7 @@ module GDK
         Git
         Dependencies
         PendingMigrations
+        PostgreSQL
         Geo
         Status
         Re2

@@ -16,6 +16,7 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Git,
         GDK::Diagnostic::Dependencies,
         GDK::Diagnostic::PendingMigrations,
+        GDK::Diagnostic::PostgreSQL,
         GDK::Diagnostic::Geo,
         GDK::Diagnostic::Status,
         GDK::Diagnostic::Re2,
