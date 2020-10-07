@@ -5,6 +5,8 @@ require_relative '../lib/shellout.rb'
 require_relative '../lib/gdk'
 require_relative '../lib/gdk/postgresql'
 
+require 'set'
+
 class PostgresUpgrader
   POSTGRESQL_VERSIONS = [11, 10, 9.6].freeze
   TARGET_VERSION = 11
@@ -18,8 +20,8 @@ class PostgresUpgrader
   def check!
     puts "Available PostgreSQL versions: #{available_versions}"
 
-    raise "Unable to find target PostgreSQL version #{@target_version}" unless available_versions.include?(@target_version)
-    raise "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
+    abort "Unable to find target PostgreSQL version #{@target_version}" unless available_versions.include?(@target_version)
+    abort "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
   end
 
   def needs_upgrade?
@@ -28,7 +30,7 @@ class PostgresUpgrader
 
   def upgrade!
     unless needs_upgrade?
-      puts "PostgreSQL data directory does not need upgrading"
+      puts 'PostgreSQL data directory does not need upgrading'
       return
     end
 
@@ -84,7 +86,22 @@ class PostgresUpgrader
   end
 
   def available_versions
-    @available_versions ||= brew_cellar_available_versions
+    @available_versions ||=
+      if brew?
+        brew_cellar_available_versions
+      elsif apt?
+        apt_available_versions
+      else
+        abort "Only Homebrew and apt based Linux systems supported."
+      end
+  end
+
+  def brew?
+    Shellout.new(%w[brew help]).try_run != ''
+  end
+
+  def apt?
+    Shellout.new(%w[apt-cache help]).try_run != ''
   end
 
   def brew_cellar_available_versions
@@ -96,6 +113,28 @@ class PostgresUpgrader
       brew_cellar_pg_bin = Dir.glob(File.join(brew_cellar_pg, '/*/bin'))
 
       paths[version] = brew_cellar_pg_bin.last if brew_cellar_pg_bin.any?
+    end
+  end
+
+  def apt_available_versions
+    versions = POSTGRESQL_VERSIONS.map { |ver| "postgresql-#{ver}" }
+    lines = Shellout.new(%w[apt-cache madison] + versions).try_run
+
+    return {} if lines.empty?
+
+    available_packages = Set.new
+
+    lines.split("\n").each do |line|
+      package_data = line.strip.split('|')
+      available_packages << package_data.first.strip
+    end
+
+    postgresql_packages = available_packages & versions
+
+    postgresql_packages.each_with_object({}) do |package, paths|
+      version = package.gsub(/^postgresql-/, '').to_i
+      pg_path = "/usr/lib/postgresql/#{version}/bin"
+      paths[version] = pg_path if Dir.exist?(pg_path)
     end
   end
 
