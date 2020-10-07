@@ -364,7 +364,7 @@ praefect-migrate: postgresql-seed-praefect
 # gitlab-docs
 ##############################################################
 
-gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs/nanoc.yaml symlink-gitlab-docs
+gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle symlink-gitlab-docs
 
 gitlab-docs/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
@@ -378,11 +378,6 @@ gitlab-docs/.git/pull:
 		git stash ${QQ} && \
 		git checkout master ${QQ} &&\
 		git pull --ff-only ${QQ}
-
-# We need to force delete since there's already a nanoc.yaml file
-# in the docs folder which we need to overwrite.
-gitlab-docs/rm-nanoc.yaml:
-	$(Q)rm -f gitlab-docs/nanoc.yaml
 
 gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
 	$(Q)cp nanoc.yaml.example $@
