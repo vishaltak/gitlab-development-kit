@@ -207,7 +207,7 @@ For information about updating GDK, see [Update GDK](gdk_commands.md#update-gdk)
 After you have set up GDK initially, you can create new *fresh installations*.
 You might do this if you have problems with existing installation that are
 complicated to fix, and you just need to get up and running quickly. To create a
-.resh installation:
+fresh installation:
 
 1. In the parent folder for GDK, run
    [`gdk init <new directory>`](#initialize-a-new-gdk-directory).
