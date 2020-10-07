@@ -4,6 +4,8 @@
   image: ${VERIFY_IMAGE}
   needs:
     - release-image
+  after_script:
+    - tail -n 250 gitlab-development-kit/gitlab/log/development.log
   artifacts:
     paths:
       - ./gitlab-development-kit/gitlab/log/*.log
