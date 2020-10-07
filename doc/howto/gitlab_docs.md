@@ -15,14 +15,6 @@ for the documentation in GitLab. To run the links checks locally or preview the 
    cd gitlab-docs/
    ```
 
-1. Either use your editor's "Follow Link" or "Got To Declaration/Usage/Implementation"
-   function (or similar) to verify your changes to internal links and anchors, or
-   run the following to check them all:
-
-   ```shell
-   make gitlab-docs-check
-   ```
-
 1. (Optionally) Preview the docs site locally:
 
    ```shell
@@ -38,3 +30,15 @@ for the documentation in GitLab. To run the links checks locally or preview the 
    ```
 
    Select another port and try again.
+
+## Check documentation links
+
+If you've moved or renamed any sections within the documentation, to verify your
+changes to internal links and anchors, either:
+
+- Use your editor's "Follow Link" or "Go To Declaration/Usage/Implementation" function (or similar).
+- Run the following:
+
+  ```shell
+  make gitlab-docs-check
+  ```
