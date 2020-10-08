@@ -84,7 +84,7 @@ To install some dependencies for Debian and use `asdf`:
      pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
    ```
 
-1. [Complete dependency installation](../index.md#install-and-set-up-gdk) using `asdf`.
+1. [Complete dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
 
 ### Manage dependencies yourself
 
