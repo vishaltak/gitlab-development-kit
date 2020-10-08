@@ -95,6 +95,7 @@ gitlab-k8s-agent-update \
 gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
+object-storage-update \
 show-updated-at
 
 # This is used by `gdk reconfigure`
@@ -733,7 +734,9 @@ elasticsearch-${elasticsearch_version}.tar.gz:
 # minio / object storage
 ##############################################################
 
-object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform
+object-storage-update: object-storage-setup
+
+object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform minio/data/external-diffs
 
 minio/data/%:
 	$(Q)mkdir -p $@
