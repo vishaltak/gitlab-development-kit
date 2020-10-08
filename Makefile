@@ -364,7 +364,7 @@ praefect-migrate: postgresql-seed-praefect
 # gitlab-docs
 ##############################################################
 
-gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle symlink-gitlab-docs
+gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs
 
 gitlab-docs/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
@@ -384,6 +384,9 @@ gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
 
 gitlab-docs-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
+
+gitlab-docs-yarn:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
 
 symlink-gitlab-docs:
 	$(Q)support/symlink ${gitlab_development_root}/gitlab-docs/content/ee ${gitlab_development_root}/gitlab/doc
