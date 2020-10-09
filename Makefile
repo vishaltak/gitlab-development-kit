@@ -374,7 +374,7 @@ gitlab-docs/.git/pull:
 	@echo "------------------------------------------------------------"
 	@echo "Updating gitlab-org/gitlab-docs to master"
 	@echo "------------------------------------------------------------"
-	$(Q)cd gitlab-docs && \
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
 		git stash ${QQ} && \
 		git checkout master ${QQ} &&\
 		git pull --ff-only ${QQ}
@@ -392,6 +392,12 @@ symlink-gitlab-docs:
 	$(Q)support/symlink ${gitlab_development_root}/gitlab-docs/content/ee ${gitlab_development_root}/gitlab/doc
 
 gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.yaml
+
+gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
+		bundle exec nanoc && \
+		bundle exec nanoc check internal_links && \
+		bundle exec nanoc check internal_anchors
 
 ##############################################################
 # gitlab geo

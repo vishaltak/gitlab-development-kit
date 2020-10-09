@@ -282,7 +282,7 @@ if ! asdf_install_packages; then
   error "Failed to install some asdf packages." >&2
 fi
 
-echo "INFO: Rehimming asdf.."
+echo "INFO: Reshimming asdf.."
 if ! asdf_reshim; then
   error "Failed to reshim asdf." >&2
 fi
@@ -297,7 +297,7 @@ if ! gdk_prepare_directory; then
   error "Failed to prepare GDK directory." >&2
 fi
 
-echo "INFO: Confguring Ruby Bundler.."
+echo "INFO: Configuring Ruby Bundler.."
 if ! configure_ruby_bundler; then
   error "Failed to configure Ruby Bundler." >&2
 fi
