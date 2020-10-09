@@ -881,27 +881,8 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 # Tests
 ##############################################################
 
-.PHONY: test_list_missing_tools
-test_list_missing_tools:
-	@test ${VALE} || echo "WARNING: vale is not installed."
-	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint-cli is not installed."
-	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not installed."
-	@test ${RUBOCOP} || echo "WARNING: rubocop is not installed."
-	@test ${RSPEC} || echo "WARNING: rspec is not installed."
-
-.PHONY: test_warn_missing_tools
-ifeq ($(and $(VALE),$(MARKDOWNLINT),$(SHELLCHECK),$(RUBOCOP),$(RSPEC)),)
-test_warn_missing_tools: test_list_missing_tools
-else
-test_warn_missing_tools: test
-endif
-
 .PHONY: test
-ifeq ($(and $(VALE),$(MARKDOWNLINT),$(SHELLCHECK),$(RUBOCOP),$(RSPEC)),)
-test: test_list_missing_tools lint shellcheck rubocop rspec
-else
 test: lint shellcheck rubocop rspec
-endif
 
 .PHONY: rubocop
 rubocop:
