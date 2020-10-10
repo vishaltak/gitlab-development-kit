@@ -5,7 +5,7 @@
 # to be the new previous versions. Add other versions as required.
 #
 # <current-default-version> <previous-default-version> <other-version>
-ruby 2.7.2 2.6.6
+ruby 2.6.6 2.7.2
 # Gitaly requires Go 1.14.x
 golang 1.14.9 1.15.1
 nodejs 12.18.4
