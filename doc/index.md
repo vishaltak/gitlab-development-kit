@@ -38,7 +38,7 @@ for:
 - [Debian](advanced.md#debian)
 - [Other Linux distributions](advanced.md#install-other-linux-dependencies)
 - [FreeBSD](advanced.md#install-freebsd-dependencies)
-- [Windows 10](advanced#install-windows-10-dependencies)
+- [Windows 10](advanced.md#install-windows-10-dependencies)
 
 ## Install and set up GDK
 
