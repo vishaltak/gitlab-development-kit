@@ -5,4 +5,4 @@ pre-push:
   commands:
     # Run all tests (warn if there are any missing tools required for tests).
     test:
-      run: make test_warn_missing_tools
+      run: make test
