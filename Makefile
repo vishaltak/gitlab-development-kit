@@ -85,7 +85,8 @@ install: all show-installed-at start
 # This is used by `gdk update`
 #
 # Pull gitlab directory first since dependencies are linked from there.
-update: ensure-databases-running \
+update: asdf-update \
+ensure-databases-running \
 unlock-dependency-installers \
 gitlab/.git/pull \
 gitlab-shell-update \
@@ -188,6 +189,34 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 
 bootstrap:
 	@support/bootstrap
+
+##############################################################
+# asdf
+##############################################################
+
+asdf-update: asdf-plugin-update asdf-tool-update
+
+asdf-plugin-update:
+ifdef ASDF
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Updating asdf plugins"
+	@echo "------------------------------------------------------------"
+	@asdf plugin update --all
+else
+	@true
+endif
+
+asdf-tool-update:
+ifdef ASDF
+	@echo
+	@echo "------------------------------------------------------------"
+	@echo "Updating asdf tools"
+	@echo "------------------------------------------------------------"
+	@asdf install
+else
+	@true
+endif
 
 ##############################################################
 # GitLab
