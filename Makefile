@@ -210,7 +210,7 @@ gitlab/.git/pull: gitlab/git-restore
 	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
 
 .PHONY: gitlab-db-migrate
-gitlab-db-migrate:
+gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab_rails:db:migrate
 
 gitlab/.git:
