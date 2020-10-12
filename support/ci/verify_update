@@ -17,6 +17,8 @@ else
     checkout "${CI_COMMIT_SHA}"
   fi
 fi
+
+install_gem
 install
 start
 wait_for_boot
@@ -28,11 +30,13 @@ if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
 else
   checkout "${CI_COMMIT_SHA}"
 fi
+
 restart
 wait_for_boot
 "${parent_path}"/test_url
 
 # test GDK components update
+install_gem
 update
 doctor
 wait_for_boot
