@@ -47,9 +47,7 @@ asdf_add_initializer() {
 asdf_install_plugins() {
   cut -d ' ' -f 1 .tool-versions | grep -v '^#' | while IFS= read -r plugin
   do
-    if ! asdf plugin list | grep -xq "^${plugin}$"; then
-      asdf plugin add "${plugin}" || true
-    fi
+    asdf plugin update "${plugin}" || asdf plugin add "${plugin}"
   done
 
   # Install Node.js' OpenPGP key
