@@ -270,7 +270,7 @@ fi
 
 echo "INFO: Installing asdf.."
 if ! asdf_install; then
-  error "asdf install failed to install." >&2
+  error "Failed to install asdf." >&2
 fi
 
 echo "INFO: Installing asdf plugins.."
