@@ -23,7 +23,7 @@ _gdk()
   root=$(_gdk_root)
 
   if [ -z "$root" ]; then
-    words="$(compgen -W "version init trust" -- "$cur")"
+    words="$(compgen -W "help version init trust" -- "$cur")"
   else
     case $index in
       1)
