@@ -45,6 +45,12 @@ _gdk()
               words="gitlabhq_development gitlabhq_test"
             fi
             ;;
+          redis-cli)
+            if [ -z "$ZSH_VERSION" ]; then
+              _command_offset 1
+              return
+            fi
+            ;;
         esac
         ;;
     esac
