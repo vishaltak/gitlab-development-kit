@@ -58,8 +58,8 @@ asdf_install_plugins() {
   return 0
 }
 
-asdf_install_packages() {
-  # Install all packages specified in .tool-versions
+asdf_install_tools() {
+  # Install all tools specified in .tool-versions
   ruby_configure_opts=$(ruby_configure_opts)
   bash -c "MAKELEVEL=0 ${ruby_configure_opts} asdf install"
 
@@ -276,9 +276,9 @@ if ! asdf_install_plugins; then
   error "Failed to install some asdf plugins." >&2
 fi
 
-echo "INFO: Installing asdf packages.."
-if ! asdf_install_packages; then
-  error "Failed to install some asdf packages." >&2
+echo "INFO: Installing asdf tools.."
+if ! asdf_install_tools; then
+  error "Failed to install some asdf tools." >&2
 fi
 
 echo "INFO: Reshimming asdf.."
