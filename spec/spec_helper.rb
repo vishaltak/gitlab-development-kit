@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require 'simplecov-cobertura'
+
+SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+SimpleCov.start
+
 require_relative '../lib/gdk'
 
 RSpec.configure do |config|
