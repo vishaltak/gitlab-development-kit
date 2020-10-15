@@ -26,6 +26,7 @@
 /auto_devops_registry_port
 /bootstrap-rails.log
 /builds
+/coverage
 /elasticsearch*
 /env.runit
 /gdk-ce/**
