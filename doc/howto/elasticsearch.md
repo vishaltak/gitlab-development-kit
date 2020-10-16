@@ -69,7 +69,7 @@ docker run -p 9200:9200 -d docker.elastic.co/elasticsearch/elasticsearch:6.8.9
    cd gitlab && bundle exec rake gitlab:elastic:index
    ```
 
-1. Go to **Admin Area > Settings > Integrations** to enable Elasticsearch.
+1. Go to **Admin Area > Settings > General** to enable Elasticsearch.
 
 ## Tips and Tricks
 
