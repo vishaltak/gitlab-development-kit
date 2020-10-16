@@ -97,6 +97,7 @@ configure_ruby_bundler() {
   current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
 
   bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
+  bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 }
 
 ensure_not_root() {
