@@ -261,37 +261,35 @@ webpack:
 | --- | ------ | ----- |
 | `host` | `127.0.0.1` | The host your webpack dev server is running on. Usually no need to change. |
 | `port` | `3808` | The port your webpack dev server is running on. You should change this if you are running multiple GDKs |
-| `static` | `false` | Setting this to `true` will replace the webpack dev server with a lightweight Ruby server. See below for more information |
-| `vendor_dll` | `false` | Setting this to `true` will move certain dependencies to a webpack DLL. See below for more information |
+| `static` | `false` | Setting this to `true` replaces the webpack dev server with a lightweight Ruby server with. See below for more information |
+| `vendor_dll` | `false` | Setting this to `true` moves certain dependencies to a webpack DLL. See below for more information |
 | `sourcemaps` | `true` | Setting this to `false` will disable sourcemaps. This will reduce memory consumption for those who do not need to debug frontend code. |
 | `live_reload` | `true` | Setting this to `false` will disable hot module replacement when changes are detected. This feature uses sockets and is currently incompatible with SSL, so it is disabled by default when SSL is enabled. |
 
 #### Saving memory on the webpack dev server
 
-By default webpack will run a dev server which watches file changes and keeps all the frontend assets in memory.
-This allows for very quick recompile times, but is very memory demanding.
-There are two settings from above which can help with this.
+GDK defaults to memory-intensive settings. GDK uses the webpack development server, which watches
+file changes and keeps all the frontend assets in memory. This allows for very fast recompilation.
 
-If you do not require frequent frontend asset recompiles, for example you are a backend
-developer who rarely changes frontend files, you can enable `webpack.static: true` in
-your `gdk.yml`. All frontend assets will be compiled once when GDK starts and
-again, from scratch, if any frontend source or dependency file changes (for example,
-branch switches).
+An alternative is to lower the memory requirements of GDK. This is useful for back-end development
+or where GDK is running in lower-memory environments. To lower the memory requirements of GDK:
 
-This means you pay a high upfront cost of a single compile (a lot of memory and CPU),
-but if you do not change any frontend files, you will just have a lightweight Ruby
-server running.
+- Set `webpack.static: true` in your `gdk.yml`. All frontend assets are compiled once when GDK starts
+  and again from scratch if any front-end source or dependency file changes. For example, when
+  switching branches.
+- Set `webpack.vendor_dll: true` in your `gdk.yml`. This mode is an alternate memory saving mode,
+  which takes infrequently updated dependencies and combines them into one long-lived bundle that is
+  written to disk and does not reside in memory. You may see 200 to 300 MB in memory savings.
 
-The `webpack.vendor_dll: true` mode is an alternate memory saving mode, which takes
-infrequently updated dependencies and combines them into one long-lived bundle that is
-written to disk and does not reside in memory. We have seen around 200 to 300 MB in
-memory savings.
+This means you pay a high upfront cost of a single memory- and CPU-intenstive compile. However, if
+you do not change any frontend files, you just have a lightweight Ruby server running.
 
-This mode is recommended for everyone. It is still disabled by default, because we want
-to get more real usage data. One of the side-effects could be an increasingly large
-`gitlab/tmp` directory. We will eventually make this the default.
+If you experience any problems with one of the modes, you can quickly change the settings in your
+`gdk.yml` and regenerate the `Procfile`:
 
-If you experience any problems with one of the modes, you can quickly change the settings in your `gdk.yml` and regenerate the Procfile.
+```shell
+gdk reconfigure
+```
 
 ### Webpack ENV variables
 
