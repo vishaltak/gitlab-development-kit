@@ -189,6 +189,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 # bootstrap
 ##############################################################
 
+.PHONY: bootstrap
 bootstrap:
 	@support/bootstrap
 
@@ -196,6 +197,7 @@ bootstrap:
 # asdf
 ##############################################################
 
+.PHONY: asdf-update
 asdf-update:
 ifdef ASDF
 	@support/asdf-update
