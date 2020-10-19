@@ -16,11 +16,11 @@ number of drawbacks in GDK:
   gets closed abruptly, Foreman is not able to cleanly shut down the
   processes it was supervising, leaving them running in the
   background. This is a problem because the next time you start
-  Foreman, most of its services will fail to start because they need
+  Foreman, most of its services fail to start because they need
   resources (network ports) still being used by the old processes that
   never got cleaned up.
 - There is no good way to start / stop / restart individual processes
-  in the Procfile. This is not so noticeable when you work with Ruby
+  in the `Procfile`. This is not so noticeable when you work with Ruby
   or JavaScript because of live code reload features, but for Go
   programs (for example, `gitaly`) this does not work well. There you really
   need to stop an old binary and start a new binary.
@@ -85,14 +85,14 @@ GDK updates the runit service configuration from the Procfile.
 
 If you want to remove a service `foo`:
 
-- Comment out or delete `foo: exec bar` from Procfile
+- Comment out or delete `foo: exec bar` from `Procfile`
 - Run `gdk stop foo`
 - `rm services/foo`
 
 ## Modifying environment configuration for services
 
 If you want to set environment variables for services, either edit the
-Procfile and restart the service, or create a file `env.runit` in the root directory with contents such as `export myvar=myvalue`.
+`Procfile` and restart the service, or create a file `env.runit` in the root directory with contents such as `export myvar=myvalue`.
 
 Example:
 
