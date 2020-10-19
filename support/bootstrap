@@ -225,7 +225,7 @@ ruby_configure_opts() {
   return 0
 }
 
-ensure_required_software_available() {
+ensure_sudo_available() {
   if [ -z "$(command -v sudo)" ]; then
     echo "ERROR: sudo command not found!" >&2
     return 1
@@ -257,8 +257,8 @@ if ! ensure_not_root; then
   error "Running as root is not supported."
 fi
 
-if ! ensure_required_software_available; then
-  error "Some required software is not installed, please install." >&2
+if ! ensure_sudo_available; then
+  error "sudo is required, please install." >&2
 fi
 
 echo "INFO: Setting up platform.."
