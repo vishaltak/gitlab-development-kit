@@ -851,7 +851,7 @@ localhost.key:
 registry_host.crt: registry_host.key
 
 registry_host.key:
-	$(Q)openssl req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "registry_host.key" -out "registry_host.crt"
+	$(Q)openssl req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:4096 -nodes -keyout "registry_host.key" -out "registry_host.crt" -addext "subjectAltName=IP.1:${registry_host}"
 	$(Q)chmod 600 $@
 
 registry/storage:
