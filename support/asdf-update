@@ -105,37 +105,24 @@ setup_platform() {
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
     if [[ "${os_id}" == "ubuntu" ]]; then
-      if ! setup_platform_ubuntu; then
+      if ! setup_platform_linux_with "packages.txt"; then
         return 1
       fi
     elif [[ "${os_id}" == "debian" ]]; then
-      if ! setup_platform_debian; then
+      if ! setup_platform_linux_with "packages_debian.txt"; then
         return 1
       fi
     fi
   fi
 }
 
-setup_platform_ubuntu() {
+setup_platform_linux_with() {
   if ! echo_if_unsuccessful sudo apt-get update; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo apt-get install -y $(sed -e 's/#.*//' packages.txt); then
-    return 1
-  fi
-
-  return 0
-}
-
-setup_platform_debian() {
-  if ! echo_if_unsuccessful sudo apt-get update; then
-    return 1
-  fi
-
-  # shellcheck disable=SC2046
-  if ! sudo apt-get install -y $(sed -e 's/#.*//' packages_debian.txt); then
+  if ! sudo apt-get install -y $(sed -e 's/#.*//' ${1}); then
     return 1
   fi
 
