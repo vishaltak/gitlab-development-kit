@@ -22,9 +22,9 @@ DIVIDER="-----------------------------------------------------------------------
 
 header_print() {
   echo
-	echo "${DIVIDER}"
-	echo "${1}"
-	echo "${DIVIDER}"
+  echo "${DIVIDER}"
+  echo "${1}"
+  echo "${DIVIDER}"
 }
 
 asdf_update() {
