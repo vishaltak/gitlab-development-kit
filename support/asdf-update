@@ -7,17 +7,6 @@ parent_path=$(dirname "$0")
 # shellcheck source=support/bootstrap-common.sh
 source "${parent_path}"/bootstrap-common.sh
 
-# Ensure we're a supported shell before progressing any further..
-#
-case "${SHELL}" in
-*/zsh|*/bash)
-  true
-  ;;
-*)
-  error "Unsupported shell. Only bash and zsh supported currently." >&2
-  ;;
-esac
-
 DIVIDER="--------------------------------------------------------------------------------"
 
 header_print() {
