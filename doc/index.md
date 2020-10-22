@@ -17,7 +17,7 @@ dependencies can be installed with a *package manager*.
 You should regularly keep these dependencies up to date. Generally, the latest
 versions of these dependencies work fine.
 
-NOTE: **Note:**
+NOTE:
 Install, configure, and update all of these dependencies as a non-root user. If
 you don't know what a root user is, you very likely run everything as a non-root
 user already.

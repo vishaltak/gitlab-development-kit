@@ -32,7 +32,7 @@ If ChromeDriver fails to open with an error message because the developer
 *cannot be verified*, create an exception for it as documented in the
 [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
 
-NOTE: **Note:**
+NOTE:
 We strongly recommend using the default installation directory for Homebrew
 (`/usr/local`). This simplifies the Ruby gems installation with C extensions. If
 you use a custom directory, additional work is required when installing Ruby
@@ -41,8 +41,7 @@ gems. For more information, see
 
 ## Ubuntu
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Ubuntu, assuming you're using an active LTS release
 (16.04, 18.04, 20.04) or higher:
@@ -121,8 +120,7 @@ for details and instructions about how to apply this change.
 
 ### Arch Linux
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Arch Linux:
 
@@ -131,7 +129,7 @@ pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs 
   unzip graphicsmagick perl-image-exiftool rsync yarn minio sqlite python2
 ```
 
-NOTE: **Note:**
+NOTE:
 The Arch Linux core repository no longer contains the `runit` package. You must
 install `runit-systemd` from the Arch User Repository (AUR) with an AUR package
 manager, such as `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur))
@@ -144,12 +142,11 @@ pikaur -S runit-systemd
 
 ### Fedora
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using Fedora >= 31.
 
-NOTE: **Note:**
+NOTE:
 Fedora 32 ships PostgreSQL 11.x and Fedora 32+ ships PostgreSQL 12.x in default repositories.
 You can use `postgresql:11` or `postgresql:12` module to install PostgreSQL 11 or 12.
 But keep in mind that will replace the default version of PostgreSQL package, so you cannot
@@ -196,8 +193,7 @@ before continuing.
 
 ### CentOS
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using CentOS >= 8.
 
@@ -225,8 +221,7 @@ You need to follow [runit install instruction](#runit) to install it manually.
 
 ### OpenSUSE
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 This was tested on `openSUSE Tumbleweed (20200628)`.
 

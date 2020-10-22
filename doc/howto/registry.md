@@ -65,7 +65,7 @@ or lack of internet access, then you can use a local registry:
    on [using an insecure registry](#using-an-insecure-registry-from-gitlab-ci) using
    Docker-in-Docker, see the documentation.
 
-NOTE: **Note:**
+NOTE:
 When changing the hostname for a self-signed registry, you must run `gdk reconfigure` and
 [update the trusted certificates in Docker](#trusting-the-registrys-self-signed-certificate).
 
@@ -99,7 +99,7 @@ straight to your computer) but this IP will remain accessible from within a cont
 **Warning:** If for some reason you end up on a network with the loopback alias as
 your local network IP, your GDK will become accessible on the local network.
 
-NOTE: **Note:**
+NOTE:
 If you're using `docker-machine`, you must replace this IP address with the one returned from
 `docker-machine ip default`. See the [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)
 for details.
@@ -338,7 +338,7 @@ pipelines.
    docker build -t gdk.test:5000/custom-docker-image .
    ```
 
-1. Push the image to the registry. (**Note:** See [Configuring the GitLab Docker runner to automatically pull images](#configuring-the-gitlab-docker-runner-to-automatically-pull-images) for the preferred method which doesn't require you to constantly push the image after each change.)
+1. Push the image to the registry. (See [Configuring the GitLab Docker runner to automatically pull images](#configuring-the-gitlab-docker-runner-to-automatically-pull-images) for the preferred method which doesn't require you to constantly push the image after each change.)
 
    ```shell
    docker push gdk.test:5000/custom-docker-image
@@ -467,7 +467,7 @@ container_scanning:
     REGISTRY_INSECURE: "true" # see note below for discussion
 ```
 
-NOTE: **Note:**
+NOTE:
 The contents of the above `.gitlab-ci.yml` file will differ depending on how the container registry has been configured:
 
 1. When the local container registry is insecure because `registry.self_signed: false` has been [configured](#configuring-a-local-only-registry), the above `.gitlab-ci.yml` file can be used.

@@ -63,7 +63,7 @@ Sign in can also be initiated from the identity provider at `https://localhost:8
 
 Configuring SAML for a GitLab instance can be done using the [SAML OmniAuth Docs](https://docs.gitlab.com/ee/integration/saml.html).
 
-NOTE: **Note:**
+NOTE:
 If you configured your instance to use HTTPS, please ensure to use the HTTPS port and update all links in the samples below to be `https` instead of `http`.
 
 To start an identity provider that works with instance SAML, you'll need to configure the entity ID and callback URL when starting the container:
