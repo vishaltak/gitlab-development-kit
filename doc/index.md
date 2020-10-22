@@ -96,7 +96,7 @@ To get GDK up and running:
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
 
-After cloning the `gitlab-development-kit` project and running `support/bootstrap`, to:
+After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
 
 - Clone `gitlab-foss` using SSH, run:
 
@@ -118,7 +118,7 @@ space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/do
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab](https://gitlab.com/gitlab-org/gitlab).
 
-After cloning the `gitlab-development-kit` project and running `support/bootstrap`, to:
+After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
 
 - Clone your `gitlab` fork using SSH, run:
 
