@@ -635,7 +635,7 @@ to upgrade your PostgreSQL version while retaining your current data.
 
 ### Fix conflicts in database migrations if you use the same db for CE and EE
 
-NOTE: **Note:**
+NOTE:
 The recommended way to fix the problem is to rebuild your database and move
 your EE development into a new directory.
 
