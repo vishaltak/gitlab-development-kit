@@ -4,7 +4,7 @@
 # GDK for asdf users.
 #
 # <default-version> <other-version>
-ruby 2.6.6 2.7.2
+ruby 2.7.2 2.6.6
 # Gitaly requires Go 1.14.x.
 # GitLab Pages set to Go 1.15.1.
 golang 1.14.9 1.15.1
