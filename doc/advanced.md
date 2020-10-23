@@ -209,9 +209,9 @@ sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cma
 sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
-# This example uses Ruby 2.6.6. Substitute with the current version if different.
-sudo rvm install 2.6.6
-sudo rvm use 2.6.6
+# This example uses Ruby 2.7.2. Substitute with the current version if different.
+sudo rvm install 2.7.2
+sudo rvm use 2.7.2
 #Ensure your user is in rvm group
 sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
@@ -301,11 +301,11 @@ And reload it using:
 source ~/.bashrc
 ```
 
-Now determine that the current Ruby version is 2.6.x:
+Now determine that the current Ruby version is 2.7.x:
 
 ```shell
 ruby --version
-ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux]
+ruby 2.7.2p137 (2020-10-01 revision 5445e04352) [x86_64-linux]
 ```
 
 If it's different (for example Ruby 2.7 - system default in Tumbleweed), you

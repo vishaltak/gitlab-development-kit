@@ -357,8 +357,8 @@ the `readline` library that may have been updated on your system. To fix
 the error, reinstall the Ruby interpreter. For example, for environments
 managed with:
 
-- [rbenv](https://github.com/rbenv/rbenv), run `rbenv install 2.6.6`.
-- [RVM](https://rvm.io), run `rvm reinstall ruby-2.6.6`.
+- [rbenv](https://github.com/rbenv/rbenv), run `rbenv install 2.7.2`.
+- [RVM](https://rvm.io), run `rvm reinstall ruby-2.7.2`.
 
 ### 'LoadError: dlopen' when starting Ruby apps
 
