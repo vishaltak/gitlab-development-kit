@@ -97,6 +97,7 @@ configure_ruby_bundler() {
   current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
 
   bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
+  bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 }
 
 ensure_not_root() {
@@ -282,7 +283,7 @@ if ! asdf_install_packages; then
   error "Failed to install some asdf packages." >&2
 fi
 
-echo "INFO: Rehimming asdf.."
+echo "INFO: Reshimming asdf.."
 if ! asdf_reshim; then
   error "Failed to reshim asdf." >&2
 fi
@@ -297,7 +298,7 @@ if ! gdk_prepare_directory; then
   error "Failed to prepare GDK directory." >&2
 fi
 
-echo "INFO: Confguring Ruby Bundler.."
+echo "INFO: Configuring Ruby Bundler.."
 if ! configure_ruby_bundler; then
   error "Failed to configure Ruby Bundler." >&2
 fi

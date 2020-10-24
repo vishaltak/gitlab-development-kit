@@ -22,7 +22,7 @@ _gdk()
   root=$(_gdk_root)
 
   if [ -z "$root" ]; then
-    mapfile -t COMPREPLY < <(compgen -W "version init trust" -- "$cur")
+    COMPREPLY=( "$(compgen -W "version init trust" -- "$cur")" )
     return
   fi
 
@@ -50,7 +50,7 @@ _gdk()
       ;;
   esac
 
-  mapfile -t COMPREPLY < <(compgen -W "$words" -- "$cur")
+  COMPREPLY=( "$(compgen -W "$words" -- "$cur")" )
 }
 
 complete -F _gdk gdk

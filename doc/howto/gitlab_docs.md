@@ -1,9 +1,9 @@
-# Setting up GitLab Docs
+# Set up GitLab Docs
 
-Our CI includes [some checks](https://docs.gitlab.com/ee/development/documentation/index.html#testing) for the documentation in GitLab. In order
-to run the relative links checks locally or preview the changes, do the following:
+Our CI/CD pipelines include [some documentation checks](https://docs.gitlab.com/ee/development/documentation/index.html#testing)
+for the documentation in GitLab. To run the links checks locally or preview the changes:
 
-1. Pull the `gitlab-docs` repo from within your GDK directory:
+1. Pull the `gitlab-docs` repository from within your GDK directory and build dependencies:
 
    ```shell
    make gitlab-docs-setup
@@ -13,30 +13,6 @@ to run the relative links checks locally or preview the changes, do the followin
 
    ```shell
    cd gitlab-docs/
-   ```
-
-1. Install Node dependencies:
-
-   ```shell
-   yarn install
-   ```
-
-1. Create the HTML files:
-
-   ```shell
-   bundle exec nanoc
-   ```
-
-1. Run the internal links check:
-
-   ```shell
-   bundle exec nanoc check internal_links
-   ```
-
-1. Run the internal anchors check:
-
-   ```shell
-   bundle exec nanoc check internal_anchors
    ```
 
 1. (Optionally) Preview the docs site locally:
@@ -54,3 +30,15 @@ to run the relative links checks locally or preview the changes, do the followin
    ```
 
    Select another port and try again.
+
+## Check documentation links
+
+If you've moved or renamed any sections within the documentation, to verify your
+changes to internal links and anchors, either:
+
+- Use your editor's "Follow Link" or "Go To Declaration/Usage/Implementation" function (or similar).
+- Run the following:
+
+  ```shell
+  make gitlab-docs-check
+  ```

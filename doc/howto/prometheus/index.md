@@ -76,7 +76,7 @@ Minikube requires virtualization. Install the appropriate driver for your operat
 
 #### Start Minikube
 
-NOTE: **Note:**
+NOTE:
 If you are using a network filter such as [LittleSnitch](https://www.obdev.at/products/littlesnitch/index.html) you may need to disable it or permit `minikube`,
 as Minikube needs to download multiple ISO's to operate correctly.
 
@@ -97,7 +97,7 @@ For Linux:
 minikube start --vm-driver kvm2 --disk-size=20g --kubernetes-version=v1.15.4
 ```
 
-NOTE: **Note:**
+NOTE:
 If running Linux, you may need to install a handful of extra packages alongside Minikube, like `ebtables`, `dnsmasq`, `libvirtd`, `virt-manager`, and then ensure `libvirtd` is running correctly with `sudo systemctl restart libvirtd`.
 
 ### Open the Kubernetes Dashboard

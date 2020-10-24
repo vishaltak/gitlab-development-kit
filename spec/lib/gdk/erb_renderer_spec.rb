@@ -44,7 +44,7 @@ describe GDK::ErbRenderer do
         File.write(out_file, 'Foo is bar')
       end
 
-      context 'with no protected config file match' do
+      context 'with no protected config file match', :hide_stdout do
         let(:protected_config_files) { [] }
 
         it 'warns about changes and overwrites content' do
@@ -57,7 +57,7 @@ describe GDK::ErbRenderer do
         end
       end
 
-      context 'with protected config file match' do
+      context 'with protected config file match', :hide_stdout do
         let(:protected_config_files) { ['tmp/*.out'] }
 
         it 'warns about changes and does not overwrite content' do

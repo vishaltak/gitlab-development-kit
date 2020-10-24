@@ -1,5 +1,7 @@
 .NOTPARALLEL:
 
+DIVIDER = "--------------------------------------------------------------------------------"
+
 SHELL = /bin/bash
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
@@ -85,7 +87,8 @@ install: all show-installed-at start
 # This is used by `gdk update`
 #
 # Pull gitlab directory first since dependencies are linked from there.
-update: ensure-databases-running \
+update: asdf-update \
+ensure-databases-running \
 unlock-dependency-installers \
 gitlab/.git/pull \
 gitlab-shell-update \
@@ -95,6 +98,7 @@ gitlab-k8s-agent-update \
 gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
+object-storage-update \
 show-updated-at
 
 # This is used by `gdk reconfigure`
@@ -107,9 +111,9 @@ show-reconfigured-at
 
 self-update: unlock-dependency-installers
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Running self-update on GDK"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)git stash ${QQ}
 	$(Q)git checkout master ${QQ}
 	$(Q)git fetch ${QQ}
@@ -189,6 +193,34 @@ bootstrap:
 	@support/bootstrap
 
 ##############################################################
+# asdf
+##############################################################
+
+asdf-update: asdf-plugin-update asdf-tool-update
+
+asdf-plugin-update:
+ifdef ASDF
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating asdf plugins"
+	@echo "${DIVIDER}"
+	@asdf plugin update --all
+else
+	@true
+endif
+
+asdf-tool-update:
+ifdef ASDF
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating asdf tools"
+	@echo "${DIVIDER}"
+	@asdf install
+else
+	@true
+endif
+
+##############################################################
 # GitLab
 ##############################################################
 
@@ -202,15 +234,16 @@ gitlab/git-restore:
 
 gitlab/.git/pull: gitlab/git-restore
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab to current master"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)$(gitlab_git_cmd) stash ${QQ}
 	$(Q)$(gitlab_git_cmd) checkout master ${QQ}
 	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
 
 .PHONY: gitlab-db-migrate
-gitlab-db-migrate:
+gitlab-db-migrate: ensure-databases-running
+	@echo
 	$(Q)rake gitlab_rails:db:migrate
 
 gitlab/.git:
@@ -262,25 +295,25 @@ gitlab/public/uploads:
 
 .gitlab-bundle:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
 .gitlab-yarn:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Node.js packages"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) ${YARN} install --pure-lockfile ${QQ}
 	$(Q)touch $@
 
 .gettext:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Generating gitlab-org/gitlab Rails translations"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
 	$(Q)$(gitlab_git_cmd) checkout locale/*/gitlab.po
 	$(Q)touch $@
@@ -296,9 +329,9 @@ gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
 
 gitlab-shell/.git/pull:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-shell to ${gitlab_shell_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_shell "${gitlab_development_root}/gitlab-shell" "${gitlab_shell_version}"
 
 # This task is phony to allow
@@ -335,9 +368,9 @@ gitaly-update: gitaly/.git/pull gitaly-clean gitaly-setup praefect-migrate
 .PHONY: gitaly/.git/pull
 gitaly/.git/pull: ${gitaly_clone_dir}/.git
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitaly to ${gitaly_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" ${QQ}
 
 gitaly-clean:
@@ -345,6 +378,10 @@ gitaly-clean:
 
 .PHONY: gitaly/bin/gitaly
 gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Building gitlab-org/gitaly ${gitaly_version}"
+	@echo "${DIVIDER}"
 	$(Q)$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="tracer_static tracer_static_jaeger"
 	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(bundle_install_cmd)
 
@@ -364,25 +401,20 @@ praefect-migrate: postgresql-seed-praefect
 # gitlab-docs
 ##############################################################
 
-gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs/nanoc.yaml symlink-gitlab-docs
+gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs
 
 gitlab-docs/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
 
 gitlab-docs/.git/pull:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-docs to master"
-	@echo "------------------------------------------------------------"
-	$(Q)cd gitlab-docs && \
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
 		git stash ${QQ} && \
 		git checkout master ${QQ} &&\
 		git pull --ff-only ${QQ}
-
-# We need to force delete since there's already a nanoc.yaml file
-# in the docs folder which we need to overwrite.
-gitlab-docs/rm-nanoc.yaml:
-	$(Q)rm -f gitlab-docs/nanoc.yaml
 
 gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
 	$(Q)cp nanoc.yaml.example $@
@@ -390,10 +422,19 @@ gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
 gitlab-docs-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
 
+gitlab-docs-yarn:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
+
 symlink-gitlab-docs:
 	$(Q)support/symlink ${gitlab_development_root}/gitlab-docs/content/ee ${gitlab_development_root}/gitlab/doc
 
 gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.yaml
+
+gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
+		bundle exec nanoc && \
+		bundle exec nanoc check internal_links && \
+		bundle exec nanoc check internal_anchors
 
 ##############################################################
 # gitlab geo
@@ -463,9 +504,9 @@ ${gitlab_workhorse_clone_dir}/.git:
 
 gitlab-workhorse/.git/pull:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-workhorse to ${workhorse_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)support/remove-empty-file gitlab-workhorse/config.toml.example
 	$(Q)support/component-git-update workhorse "${gitlab_workhorse_clone_dir}" "${workhorse_version}"
 
@@ -490,9 +531,9 @@ gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsea
 .PHONY: gitlab-elasticsearch-indexer/.git/pull
 gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-elasticsearch-indexer to ${gitlab_elasticsearch_indexer_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_elasticsearch_indexer gitlab-elasticsearch-indexer "${gitlab_elasticsearch_indexer_version}"
 
 ##############################################################
@@ -522,9 +563,9 @@ ${gitlab_pages_clone_dir}/.git:
 
 gitlab-pages/.git/pull:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-pages to ${pages_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_pages "${gitlab_pages_clone_dir}" "${pages_version}"
 
 ##############################################################
@@ -552,9 +593,9 @@ gitlab-k8s-agent-clean:
 
 gitlab-k8s-agent/build/gdk/bin/kas_race: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/bazel
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/cluster-integration/gitlab-agent"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
 
@@ -575,9 +616,9 @@ ${gitlab_k8s_agent_clone_dir}/.git:
 
 gitlab-k8s-agent/.git/pull:
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/cluster-integration/gitlab-agent to ${gitlab_k8s_agent_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_k8s_agent "${gitlab_k8s_agent_clone_dir}" "${gitlab_k8s_agent_version}"
 
 ##############################################################
@@ -593,12 +634,12 @@ performance-metrics-setup: Procfile grafana-setup
 support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 ifeq ($(auto_devops_enabled),true)
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Tunnel URLs"
 	@echo
 	@echo "GitLab: https://${hostname}"
 	@echo "Registry: https://${registry_host}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 endif
 
 ##############################################################
@@ -729,7 +770,9 @@ elasticsearch-${elasticsearch_version}.tar.gz:
 # minio / object storage
 ##############################################################
 
-object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform
+object-storage-update: object-storage-setup
+
+object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform minio/data/external-diffs
 
 minio/data/%:
 	$(Q)mkdir -p $@
@@ -866,9 +909,9 @@ jaeger-artifacts/jaeger-${jaeger_version}.tar.gz:
 
 jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jaeger_version}.tar.gz
 	@echo
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 	@echo "Installing jaeger ${jaeger_version}"
-	@echo "------------------------------------------------------------"
+	@echo "${DIVIDER}"
 
 	$(Q)mkdir -p "jaeger/jaeger-${jaeger_version}"
 	$(Q)tar -xf "$<" -C "jaeger/jaeger-${jaeger_version}" --strip-components 1
@@ -877,27 +920,8 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 # Tests
 ##############################################################
 
-.PHONY: test_list_missing_tools
-test_list_missing_tools:
-	@test ${VALE} || echo "WARNING: vale is not installed."
-	@test ${MARKDOWNLINT} || echo "WARNING: markdownlint is not installed."
-	@test ${SHELLCHECK} || echo "WARNING: shellcheck is not installed."
-	@test ${RUBOCOP} || echo "WARNING: rubocop is not installed."
-	@test ${RSPEC} || echo "WARNING: rspec is not installed."
-
-.PHONY: test_warn_missing_tools
-ifeq ($(and $(VALE),$(MARKDOWNLINT),$(SHELLCHECK),$(RUBOCOP),$(RSPEC)),)
-test_warn_missing_tools: test_list_missing_tools
-else
-test_warn_missing_tools: test
-endif
-
 .PHONY: test
-ifeq ($(and $(VALE),$(MARKDOWNLINT),$(SHELLCHECK),$(RUBOCOP),$(RSPEC)),)
-test: test_list_missing_tools lint shellcheck rubocop rspec
-else
 test: lint shellcheck rubocop rspec
-endif
 
 .PHONY: rubocop
 rubocop:

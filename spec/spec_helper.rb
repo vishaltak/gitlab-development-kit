@@ -1,19 +1,20 @@
 # frozen_string_literal: true
 
+require 'simplecov-cobertura'
+
+SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+SimpleCov.start
+
 require_relative '../lib/gdk'
 
 RSpec.configure do |config|
-  config.before do
-    allow(GDK::Output).to receive(:puts)
+  config.before do |example|
+    allow(GDK::Output).to receive(:puts) if example.metadata[:hide_stdout]
 
     # isolate configs for the testing environment
     allow(GDK).to receive(:root) { Pathname.new(temp_path) }
     stub_const('GDK::Config::GDK_ROOT', '/home/git/gdk')
     stub_const('GDK::Config::FILE', 'gdk.example.yml')
-  end
-
-  config.before(:each, :with_stdout) do
-    allow(GDK::Output).to receive(:puts).and_call_original
   end
 
   config.disable_monkey_patching

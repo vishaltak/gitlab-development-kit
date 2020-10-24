@@ -185,21 +185,18 @@ production: &base
 
   ## Merge request external diff storage
   external_diffs:
-    # If disabled (the default), the diffs are in-database. Otherwise, they can
-    # be stored on disk, or in object storage
-    enabled: false
-    # The location where external diffs are stored (default: shared/lfs-external-diffs).
-    # storage_path: shared/external-diffs
-    # object_store:
-    #   enabled: false
-    #   remote_directory: external-diffs
-    #   background_upload: false
-    #   proxy_download: false
-    #   connection:
-    #     provider: AWS
-    #     aws_access_key_id: AWS_ACCESS_KEY_ID
-    #     aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-    #     region: us-east-1
+    enabled: <%= config.object_store? %>
+    object_store:
+      enabled: <%= config.object_store? %>
+      remote_directory: external-diffs
+      direct_upload: true
+      connection:
+        provider: AWS
+        aws_access_key_id: minio
+        aws_secret_access_key: gdk-minio
+        region: gdk
+        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        path_style: true
 
   ## Git LFS
   lfs:
@@ -279,6 +276,16 @@ production: &base
     admin:
       address: unix:<%= config.gdk_root %>/gitlab/tmp/sockets/private/pages-admin.socket # TCP connections are supported too (e.g. tcp://host:port)
     secret_file: <%= config.gitlab_pages.secret_file %>
+    object_store:
+      enabled: <%= config.object_store? %>
+      remote_directory: pages # The bucket name
+      connection:
+        provider: AWS
+        aws_access_key_id: minio
+        aws_secret_access_key: gdk-minio
+        region: gdk
+        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        path_style: true
 
   ## Mattermost
   ## For enabling Add to Mattermost button
@@ -802,6 +809,9 @@ production: &base
     # IP whitelist to access monitoring endpoints
     ip_whitelist:
       - 127.0.0.0/8
+      - 10.0.0.0/8
+      - 172.16.0.0/12
+      - 192.168.0.0/16
 
     # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
@@ -937,6 +947,14 @@ test:
 
   pages:
     path: tmp/tests/pages
+    object_store:
+      enabled: false
+      remote_directory: pages
+      connection:
+        provider: AWS # Only AWS supported at the moment
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        region: us-east-1
   repositories:
     storages:
       default:

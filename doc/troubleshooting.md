@@ -83,6 +83,45 @@ In which case you would run:
 gem pristine re2
 ```
 
+### An error occurred while installing thin (1.7.2) on macOS
+
+```plaintext
+[SNIPPED]
+
+thin.c:338:8: error: implicit declaration of function 'thin_http_parser_has_error' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+    if(thin_http_parser_has_error(http)) {
+       ^
+thin.c:338:8: note: did you mean 'http_parser_has_error'?
+./parser.h:44:5: note: 'http_parser_has_error' declared here
+int http_parser_has_error(http_parser *parser);
+    ^
+thin.c:359:10: error: implicit declaration of function 'thin_http_parser_has_error' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+  return thin_http_parser_has_error(http) ? Qtrue : Qfalse;
+         ^
+thin.c:374:10: error: implicit declaration of function 'thin_http_parser_is_finished' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+  return thin_http_parser_is_finished(http) ? Qtrue : Qfalse;
+         ^
+9 errors generated.
+make: *** [thin.o] Error 1
+
+make failed, exit code 2
+
+Gem files will remain installed in /Users/tkuah/.rbenv/versions/2.7.2/lib/ruby/gems/2.7.0/gems/thin-1.7.2 for inspection.
+Results logged to /Users/tkuah/.rbenv/versions/2.7.2/lib/ruby/gems/2.7.0/extensions/x86_64-darwin-19/2.7.0/thin-1.7.2/gem_make.out
+
+An error occurred while installing thin (1.7.2), and Bundler cannot continue.
+Make sure that `gem install thin -v '1.7.2' --source 'https://rubygems.org/'` succeeds before bundling.
+```
+
+To fix this, you can run the following in the `gitlab` directory:
+
+```shell
+bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+bundle install
+```
+
+See this [issue](https://github.com/macournoyer/thin/pull/364) for more details.
+
 ### An error occurred while installing gpgme on macOS
 
 Check if you have `gawk` installed >= 5.0.0 and uninstall it.
@@ -318,8 +357,8 @@ the `readline` library that may have been updated on your system. To fix
 the error, reinstall the Ruby interpreter. For example, for environments
 managed with:
 
-- [rbenv](https://github.com/rbenv/rbenv), run `rbenv install 2.6.6`.
-- [RVM](https://rvm.io), run `rvm reinstall ruby-2.6.6`.
+- [rbenv](https://github.com/rbenv/rbenv), run `rbenv install 2.7.2`.
+- [RVM](https://rvm.io), run `rvm reinstall ruby-2.7.2`.
 
 ### 'LoadError: dlopen' when starting Ruby apps
 
@@ -596,7 +635,7 @@ to upgrade your PostgreSQL version while retaining your current data.
 
 ### Fix conflicts in database migrations if you use the same db for CE and EE
 
-NOTE: **Note:**
+NOTE:
 The recommended way to fix the problem is to rebuild your database and move
 your EE development into a new directory.
 

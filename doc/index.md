@@ -17,7 +17,7 @@ dependencies can be installed with a *package manager*.
 You should regularly keep these dependencies up to date. Generally, the latest
 versions of these dependencies work fine.
 
-NOTE: **Note:**
+NOTE:
 Install, configure, and update all of these dependencies as a non-root user. If
 you don't know what a root user is, you very likely run everything as a non-root
 user already.
@@ -38,7 +38,7 @@ for:
 - [Debian](advanced.md#debian)
 - [Other Linux distributions](advanced.md#install-other-linux-dependencies)
 - [FreeBSD](advanced.md#install-freebsd-dependencies)
-- [Windows 10](advanced#install-windows-10-dependencies)
+- [Windows 10](advanced.md#install-windows-10-dependencies)
 
 ## Install and set up GDK
 
@@ -207,7 +207,7 @@ For information about updating GDK, see [Update GDK](gdk_commands.md#update-gdk)
 After you have set up GDK initially, you can create new *fresh installations*.
 You might do this if you have problems with existing installation that are
 complicated to fix, and you just need to get up and running quickly. To create a
-.resh installation:
+fresh installation:
 
 1. In the parent folder for GDK, run
    [`gdk init <new directory>`](#initialize-a-new-gdk-directory).

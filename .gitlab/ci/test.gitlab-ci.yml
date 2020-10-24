@@ -1,6 +1,6 @@
 docs_lint:
   extends: .rules:docs-changes
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:vale-2.3.4-markdownlint-0.23.2"
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
   stage: test
   needs: []
   script:
@@ -13,6 +13,7 @@ rubocop:
   extends: .rules:code-changes
   stage: test
   script:
+    - gem install bundler -v 1.17.3
     - bundle install --jobs 4
     - make rubocop
 
@@ -20,10 +21,11 @@ rspec:
   extends: .rules:code-changes
   stage: test
   script:
+    - gem install bundler -v 1.17.3
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec rspec --format progress --format RspecJunitFormatter --out rspec.xml
   cache:
-      key: "ruby-2.6-bundle"
+      key: "ruby-2.7-bundle"
       paths:
         - ./vendor/bundle
   artifacts:
@@ -31,6 +33,7 @@ rspec:
       - rspec.xml
     reports:
       junit: rspec.xml
+      cobertura: coverage/coverage.xml
 
 include:
   - template: Code-Quality.gitlab-ci.yml
@@ -81,10 +84,11 @@ shellcheck:
 yard:
   stage: test
   script:
+    - gem install bundler -v 1.17.3
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec yardoc
   cache:
-      key: "ruby-2.6-bundle"
+      key: "ruby-2.7-bundle"
       paths:
         - ./vendor/bundle
   artifacts:

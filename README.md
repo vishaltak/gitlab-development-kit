@@ -23,7 +23,7 @@ For help with the GDK:
 
 - GitLab team members can use the `#gdk` channel on the GitLab Slack workspace.
 - Wider community members can use the [Gitter contributors room](https://gitter.im/gitlab/contributors)
-  or [GitLab Forum](https://forum.gitlab.com/c/community-contributions).
+  or [GitLab Forum](https://forum.gitlab.com/c/community/community-contributions/15).
 
 ## Contributing to GitLab Development Kit
 

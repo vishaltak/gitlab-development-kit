@@ -1,15 +1,15 @@
 # Versions of GDK dependencies managed by asdf.
 #
 # New versions must be introduced alongside the current version, and are automatically installed by
-# GDK using asdf. Set new versions as the current default version, and set current default versions
-# to be the new previous versions. Add other versions as required.
+# GDK for asdf users.
 #
-# <current-default-version> <previous-default-version> <other-version>
-ruby 2.6.6
-# Gitaly requires Go 1.14.x
+# <default-version> <other-version>
+ruby 2.7.2 2.6.6
+# Gitaly requires Go 1.14.x.
+# GitLab Pages set to Go 1.15.1.
 golang 1.14.9 1.15.1
-nodejs 12.18.4 12.18.3
-yarn 1.22.5 1.22.4
-minio 2020-09-21T22-31-59Z 2020-08-27T05-16-20Z
-postgres 11.9 11.8
-redis 6.0.8 6.0.7
+nodejs 12.18.4
+yarn 1.22.5
+minio 2020-10-03T02-19-42Z
+postgres 11.9 12.4
+redis 6.0.8

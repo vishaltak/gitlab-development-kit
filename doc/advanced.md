@@ -32,7 +32,7 @@ If ChromeDriver fails to open with an error message because the developer
 *cannot be verified*, create an exception for it as documented in the
 [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
 
-NOTE: **Note:**
+NOTE:
 We strongly recommend using the default installation directory for Homebrew
 (`/usr/local`). This simplifies the Ruby gems installation with C extensions. If
 you use a custom directory, additional work is required when installing Ruby
@@ -41,8 +41,7 @@ gems. For more information, see
 
 ## Ubuntu
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Ubuntu, assuming you're using an active LTS release
 (16.04, 18.04, 20.04) or higher:
@@ -84,7 +83,7 @@ To install some dependencies for Debian and use `asdf`:
      pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
    ```
 
-1. [Complete dependency installation](../index.md#install-and-set-up-gdk) using `asdf`.
+1. [Complete dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
 
 ### Manage dependencies yourself
 
@@ -112,7 +111,7 @@ To install dependencies for Debian and manage them yourself:
 ## Install Other Linux dependencies
 
 The process for installing dependencies on Linux depends on your Linux
-distribution. For Ubuntu instructions, see [Install Ubuntu dependencies](index.md#install-ubuntu-dependencies)
+distribution.
 
 Unless already set, you'll probably have to increase the watches limit of
 `inotify` for frontend development tools such as `webpack` to effectively track
@@ -121,8 +120,7 @@ for details and instructions about how to apply this change.
 
 ### Arch Linux
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Arch Linux:
 
@@ -131,7 +129,7 @@ pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs 
   unzip graphicsmagick perl-image-exiftool rsync yarn minio sqlite python2
 ```
 
-NOTE: **Note:**
+NOTE:
 The Arch Linux core repository no longer contains the `runit` package. You must
 install `runit-systemd` from the Arch User Repository (AUR) with an AUR package
 manager, such as `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur))
@@ -144,12 +142,11 @@ pikaur -S runit-systemd
 
 ### Fedora
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using Fedora >= 31.
 
-NOTE: **Note:**
+NOTE:
 Fedora 32 ships PostgreSQL 11.x and Fedora 32+ ships PostgreSQL 12.x in default repositories.
 You can use `postgresql:11` or `postgresql:12` module to install PostgreSQL 11 or 12.
 But keep in mind that will replace the default version of PostgreSQL package, so you cannot
@@ -196,8 +193,7 @@ before continuing.
 
 ### CentOS
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using CentOS >= 8.
 
@@ -213,9 +209,9 @@ sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cma
 sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
-# This example uses Ruby 2.6.6. Substitute with the current version if different.
-sudo rvm install 2.6.6
-sudo rvm use 2.6.6
+# This example uses Ruby 2.7.2. Substitute with the current version if different.
+sudo rvm install 2.7.2
+sudo rvm use 2.7.2
 #Ensure your user is in rvm group
 sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
@@ -225,8 +221,7 @@ You need to follow [runit install instruction](#runit) to install it manually.
 
 ### OpenSUSE
 
-NOTE: **Note:**
-These instructions don't account for using `asdf` for managing some dependencies.
+NOTE: These instructions don't account for using `asdf` for managing some dependencies.
 
 This was tested on `openSUSE Tumbleweed (20200628)`.
 
@@ -306,11 +301,11 @@ And reload it using:
 source ~/.bashrc
 ```
 
-Now determine that the current Ruby version is 2.6.x:
+Now determine that the current Ruby version is 2.7.x:
 
 ```shell
 ruby --version
-ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux]
+ruby 2.7.2p137 (2020-10-01 revision 5445e04352) [x86_64-linux]
 ```
 
 If it's different (for example Ruby 2.7 - system default in Tumbleweed), you
