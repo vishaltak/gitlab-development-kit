@@ -57,7 +57,7 @@ RUN echo "GITLAB_BUNDLER_VERSION  $GITLAB_BUNDLER_VERSION" && \
         rvm use $GITLAB_RUBY_VERSION --default && \
         echo \"rvm use $GITLAB_RUBY_VERSION --default > /dev/null\" > ~/.bashrc.d/71-ruby && \
         gem install bundler -v $GITLAB_BUNDLER_VERSION && \
-        gem install gitlab-development-kit rake mdl && \
+        gem install gitlab-development-kit mdl && \
         . $HOME/.nvm/nvm.sh && \
         nvm install $GITLAB_NODE_VERSION && \
         nvm alias default $GITLAB_NODE_VERSION && \
