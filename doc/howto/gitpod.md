@@ -101,15 +101,6 @@ advanced features.
 
 ### Enable runners
 
-As a first step you have to reset the registration token for runners, follow these steps from the terminal of the Gitpod UI:
-
-1. Run  `cd ../gitlab && ./bin/rails console`.
-1. Wait about one minute until you see the message that the development environment
-   has been loaded, then run `ApplicationSetting.current.reset_runners_registration_token!`.
-1. Leave the console by typing `exit` and hitting Enter.
-
-Having the registration token reset, you can now register and run a GitLab Runner:
-
 1. Go to **Admin Area > Runners** in the GitLab UI running in GDK.
 1. In the terminal, switch to the GDK directory `(cd ../gitlab-development-kit)`
 1. Run `gitlab-runner register --run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
