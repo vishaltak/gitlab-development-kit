@@ -65,6 +65,7 @@ RUN echo "GITLAB_BUNDLER_VERSION  $GITLAB_BUNDLER_VERSION" && \
         cd /workspace && gdk init && \
         cd gitlab-development-kit && gdk install shallow_clone=true && \
         gdk stop && \
+        mv gitlab/config/secrets.yml . && \
         rm -rf gitlab && rm -rf tmp && \
         cp ./support/completions/gdk.bash $HOME/.bashrc.d/90-gdk && \
         cd /workspace && mv gitlab-development-kit $HOME/ && mv .rvm $HOME/.rvm-workspace \
