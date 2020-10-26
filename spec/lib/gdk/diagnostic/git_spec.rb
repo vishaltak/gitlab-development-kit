@@ -91,7 +91,7 @@ RSpec.describe GDK::Diagnostic::Git do
     context 'when git is installed' do
       context 'and it is too old' do
         it 'return a too old message' do
-          expected_message = 'Git version 2.21.0 is too old.  You need at least 2.28.0.'
+          expected_message = 'Git version 2.21.0 is too old.  You need at least 2.29.0.'
 
           stub_version('2.21.0')
 
@@ -101,7 +101,7 @@ RSpec.describe GDK::Diagnostic::Git do
 
       context 'and it is equal to the minimum' do
         it 'returns an OK but not the recommended version message' do
-          expected_message = 'Git version 2.27.0 is OK but at least 2.28.0 is recommended.'
+          expected_message = 'Git version 2.27.0 is OK but at least 2.29.0 is recommended.'
 
           stub_const("GDK::Diagnostic::Git::MINIMUM_VERSION", '2.27.0')
           stub_version(described_class::MINIMUM_VERSION)
