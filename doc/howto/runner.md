@@ -227,7 +227,8 @@ container. Here's how:
 
    ```shell
    sudo ip link add dummy0 type dummy
-   ifconfig dummy0 172.16.123.1
+   sudo ip address add 172.16.123.1 dev dummy0
+   sudo ip link set dummy0 up
    ```
 
 1. In `config/gitlab.yml`, set the `host` parameter to `172.16.123.1`.
@@ -263,3 +264,26 @@ at startup. To do this on macOS, create a file called `org.gitlab1.ifconfig.plis
 </dict>
 </plist>
 ```
+
+The method to persist this dummy interface on Linux varies between distributions. On
+Ubuntu 20.04, you can run:
+
+```shell
+sudo nmcli connection add type dummy ifname dummy0 ip4 172.16.123.1
+```
+
+##### Use custom hostname
+
+To access your GDK via a hostname that points to this dummy interface (for example
+`gdk.test`):
+
+1. Set your runner to resolve the hostname by adding `runner.extra_hosts` to your `gdk.yml`.
+   For example, for `gdk.test`:
+
+   ```yaml
+   runner:
+     extra_hosts: ["gdk.test:172.16.123.1"]
+   ```
+
+1. Set up the custom hostname. Follow these [instructions for setting up `gdk.test`](../index.md#set-up-gdktest-hostname)
+   but use the `172.16.123.1` instead of `127.0.0.1`.
