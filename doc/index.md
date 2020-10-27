@@ -42,7 +42,13 @@ for:
 
 ## Install and set up GDK
 
-Before attempting to use these steps, be sure you have [installed dependencies](#install-dependencies).
+Before attempting to use these steps:
+
+- Ensure you have [installed dependencies](#install-dependencies).
+- If you want GDK to manage your Ruby installation for you, ensure previous `rbenv` or `rvm`
+  installations are removed. For more information, see:
+  - [`rbenv` uninstallation](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
+  - [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
 
 To get GDK up and running:
 
@@ -65,6 +71,19 @@ To get GDK up and running:
 
    ```shell
    make bootstrap
+   ```
+
+   If you've previously installed Ruby using `rvm` or `rbenv`, the related
+   Makefile may lead to conflicts with `asdf`. You may need to uninstall `rvm`, `rbenv`,
+   as well as related configuration changes to your home directory in
+   directories such as `~/.rvm` and `~/.rbenv`. You may also need to revert configuration
+   settings related to your shell, in files such as `.bashrc`.
+   settings related to your shell, such as `.bashrc`.
+
+1. Include the `gdk` command in your shell with the following command:
+
+   ```shell
+   gem install gitlab-development-kit
    ```
 
 1. Complete GDK installation by cloning and configuring GitLab and other projects
