@@ -248,6 +248,7 @@ module GDK
           false
         end
       end
+      string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }
       string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
     end
 

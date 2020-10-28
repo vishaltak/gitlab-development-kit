@@ -573,7 +573,7 @@ gitlab-pages/.git/pull:
 ##############################################################
 
 ifeq ($(gitlab_k8s_agent_enabled),true)
-gitlab-k8s-agent-setup: gitlab-k8s-agent/build/gdk/bin/kas_race
+gitlab-k8s-agent-setup: gitlab-k8s-agent/build/gdk/bin/kas_race gitlab-k8s-agent-config.yml
 else
 gitlab-k8s-agent-setup:
 	@true
@@ -585,6 +585,10 @@ else
 gitlab-k8s-agent-update:
 	@true
 endif
+
+.PHONY: gitlab-k8s-agent-config.yml
+gitlab-k8s-agent-config.yml:
+	$(Q)rake $@
 
 .PHONY: gitlab-k8s-agent-clean
 gitlab-k8s-agent-clean:
