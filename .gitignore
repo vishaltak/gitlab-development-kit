@@ -40,6 +40,7 @@
 /gitlab-docs
 /gitlab-elasticsearch-indexer
 /gitlab-k8s-agent/
+/gitlab-k8s-agent-config.yml
 /gitlab-pages
 /gitlab-pages-secret
 /gitlab-runner-config.toml
