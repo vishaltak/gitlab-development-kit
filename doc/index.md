@@ -79,48 +79,71 @@ Before attempting to use these steps:
 - Ensure [`git` and `make` are installed](#install-git-and-make).
 - Ensure you have [installed dependencies](#install-dependencies), if necessary.
 
-To get GDK up and running:
+To install GDK:
 
-1. Clone the `gitlab-development-kit` repository into your preferred location:
+- With GDK managing your dependencies using `asdf`:
 
-   ```shell
-   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
-   ```
+  1. Clone the `gitlab-development-kit` repository into your preferred location:
 
-1. Change into the newly-created GDK clone directory.
-1. If you want:
+     ```shell
+     git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
+     ```
 
-   - GDK to manage your dependencies with `asdf` (recommended), run:
+  1. Change into the newly-created GDK clone directory:
+
+     ```shell
+     cd gitlab-development-kit
+     ```
+
+  1. Run:
 
      ```shell
      make bootstrap
      ```
 
-   - To manage your own dependencies, you can continue to the next step.
+- Having managed your own dependencies:
 
-1. Complete GDK installation by cloning and configuring GitLab and other projects
-   using `gdk install`. Use one of the following methods:
+  1. Install the `gitlab-development-kit` gem:
 
-   - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
-     recommend developing against the GitLab project (the default). To:
-     - Clone `gitlab` using SSH (recommended), run:
+     ```shell
+     gem install gitlab-development-kit
+     ```
 
-       ```shell
-       gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
-       ```
+  1. Initialize a GDK directory (this also checks out the project) by running the following in your
+     preferred location:
 
-     - Clone `gitlab` using HTTPS, run:
+     ```shell
+     gdk init
+     ```
 
-       ```shell
-       gdk install
-       ```
+     The default directory created is `gitlab-development-kit`. This can be customized by appending
+     a different directory name to the command.
 
-     Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-     The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+  1. Change into the newly-created GDK directory.
 
-   - Other options, in order of recommendation:
-     - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
-     - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
+Complete GDK installation by cloning and configuring GitLab and other projects
+using `gdk install`. Use one of the following methods:
+
+- For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
+  recommend developing against the GitLab project (the default). To:
+  - Clone `gitlab` using SSH (recommended), run:
+
+    ```shell
+    gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
+    ```
+
+  - Clone `gitlab` using HTTPS, run:
+
+    ```shell
+    gdk install
+    ```
+
+  Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
+  The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+
+- Other options, in order of recommendation:
+  - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
+  - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
 
 ### Install using GitLab FOSS project
 
