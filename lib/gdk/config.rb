@@ -224,6 +224,7 @@ module GDK
       string(:listen_network) { 'tcp' }
       string(:listen_address) { "#{config.listen_address}:5005" }
       string(:__listen_url_path) { '/-/kubernetes-agent' }
+      string(:__gitlab_address) { "http://#{config.workhorse.__listen_address}" }
       string :__url_for_agentk do
         if config.nginx?
           # kas is behind nginx
