@@ -90,8 +90,7 @@ dir = "<%= config.gdk_root.join('gitaly', 'ruby') %>"
 dir = "<%= config.gitlab_shell.dir %>"
 
 [gitlab]
-url = "http+unix://<%= config.gitlab.__socket_file_escaped %>"
-relative_url_root = "<%= config.relative_url_root %>"
+url = "<%= config.__uri %>"
 
 [gitlab.http-settings]
 self_signed_cert = false
