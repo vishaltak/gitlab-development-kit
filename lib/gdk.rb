@@ -35,7 +35,7 @@ module GDK
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
   # rubocop:disable Metrics/AbcSize
-  def self.main # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def self.main # rubocop:disable Metrics/CyclomaticComplexity
     if !install_root_ok? && ARGV.first != 'reconfigure'
       puts <<~GDK_MOVED
         According to #{ROOT_CHECK_FILE} this gitlab-development-kit
@@ -97,16 +97,7 @@ module GDK
     when 'restart'
       exit(restart(ARGV))
     when 'stop'
-      if ARGV.empty?
-        # Runit.stop will stop all services and stop Runit (runsvdir) itself.
-        # This is only safe if all services are shut down; this is why we have
-        # an integrated method for this.
-        Runit.stop
-        exit
-      else
-        # Stop the requested services, but leave Runit itself running.
-        exit(Runit.sv('force-stop', ARGV))
-      end
+      exit(stop(ARGV))
     when 'tail'
       Runit.tail(ARGV)
     when 'thin'
@@ -186,6 +177,19 @@ module GDK
     print_url_ready_message if argv.empty?
 
     result
+  end
+
+  # Called when running `gdk stop`
+  def self.stop(argv)
+    if argv.empty?
+      # Runit.stop will stop all services and stop Runit (runsvdir) itself.
+      # This is only safe if all services are shut down; this is why we have
+      # an integrated method for this.
+      Runit.stop
+    else
+      # Stop the requested services, but leave Runit itself running.
+      Runit.sv('force-stop', argv)
+    end
   end
 
   # Called when running `gdk restart`
