@@ -17,6 +17,14 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.info' do
+    it 'puts to stdout' do
+      stub_no_color_env('')
+
+      expect { described_class.info('test') }.to output("\u2139\ufe0f  test\n").to_stdout
+    end
+  end
+
   describe '.success' do
     context "when we're not a tty" do
       it 'puts to stdout' do
