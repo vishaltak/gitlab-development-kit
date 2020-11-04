@@ -15,46 +15,50 @@ _gdk_root()
 
 _gdk()
 {
-  local index cur root words
+  local index cur action root words
   local j k
 
   index="$COMP_CWORD"
   cur="${COMP_WORDS[index]}"
+  action="${COMP_WORDS[1]}"
   root=$(_gdk_root)
 
-  if [ -z "$root" ]; then
-    words="$(compgen -W "help version init trust" -- "$cur")"
+  if [ "$index" = 1 ]; then
+    if [ -z "$root" ]; then
+      words="help version init trust"
+    else
+      words=$(awk '/^  gdk / { print $2 }' "$root/HELP")
+    fi
   else
-    case $index in
-      1)
-        words=$(awk '/^  gdk / { print $2 }' "$root/HELP")
-        ;;
-      *)
-        case "${COMP_WORDS[1]}" in
-          start|stop|status|restart|tail)
-            words=$(awk -F: '/^[^#:]+:/ { print $1 }' "$root/Procfile")
-            ;;
-          init|trust)
-            compopt -o nospace
-            words=$(compgen -o dirnames -- "$cur")
-            ;;
-          psql)
-            if [ "$index" = 2 ]; then
-              words="-d"
-            elif [ "$index" = 3 ]; then
-              words="gitlabhq_development gitlabhq_test"
-            fi
-            ;;
-          redis-cli)
-            if [ -z "$ZSH_VERSION" ]; then
-              _command_offset 1
-              return
-            fi
-            ;;
-        esac
+    case "$action" in
+      init|trust)
+        [ -z "$ZSH_VERSION" ] && compopt -o nospace
+        words=$(compgen -o dirnames -- "$cur")
         ;;
     esac
+
+    if [ -n "$root" ]; then
+      case "$action" in
+        start|stop|status|restart|tail)
+          words=$(awk -F: '/^[^#:]+:/ { print $1 }' "$root/Procfile")
+          ;;
+        psql)
+          if [ "$index" = 2 ]; then
+            words="-d"
+          elif [ "$index" = 3 ]; then
+            words="gitlabhq_development gitlabhq_test"
+          fi
+          ;;
+        redis-cli)
+          if [ -z "$ZSH_VERSION" ]; then
+            _command_offset 1
+            return
+          fi
+          ;;
+      esac
+    fi
   fi
+
   for j in $(compgen -W "$words" -- "$cur")
   do
     COMPREPLY[k++]=$j
