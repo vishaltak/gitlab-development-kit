@@ -83,13 +83,14 @@ To install GDK:
 
 - With GDK managing your dependencies using `asdf`:
 
-  1. Clone the `gitlab-development-kit` repository into your preferred location:
+  1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't
+     previously:
 
      ```shell
      git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
      ```
 
-  1. Change into the newly-created GDK clone directory:
+  1. Change into the GDK project directory:
 
      ```shell
      cd gitlab-development-kit
