@@ -189,6 +189,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 # bootstrap
 ##############################################################
 
+.PHONY: bootstrap
 bootstrap:
 	@support/bootstrap
 
@@ -196,26 +197,10 @@ bootstrap:
 # asdf
 ##############################################################
 
-asdf-update: asdf-plugin-update asdf-tool-update
-
-asdf-plugin-update:
+.PHONY: asdf-update
+asdf-update:
 ifdef ASDF
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Updating asdf plugins"
-	@echo "${DIVIDER}"
-	@asdf plugin update --all
-else
-	@true
-endif
-
-asdf-tool-update:
-ifdef ASDF
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Updating asdf tools"
-	@echo "${DIVIDER}"
-	@asdf install
+	@support/asdf-update
 else
 	@true
 endif
