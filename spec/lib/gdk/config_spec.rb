@@ -926,4 +926,48 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'gdk' do
+    describe '#start_hooks' do
+      describe '#before' do
+        it 'is an empty array by default' do
+          expect(config.gdk.start_hooks.before).to eq([])
+        end
+      end
+
+      describe '#after' do
+        it 'is an empty array by default' do
+          expect(config.gdk.start_hooks.after).to eq([])
+        end
+      end
+    end
+
+    describe '#stop_hooks' do
+      describe '#before' do
+        it 'is an empty array by default' do
+          expect(config.gdk.stop_hooks.before).to eq([])
+        end
+      end
+
+      describe '#after' do
+        it 'is an empty array by default' do
+          expect(config.gdk.stop_hooks.after).to eq([])
+        end
+      end
+    end
+
+    describe '#update_hooks' do
+      describe '#before' do
+        it 'is an empty array by default' do
+          expect(config.gdk.update_hooks.before).to eq([])
+        end
+      end
+
+      describe '#after' do
+        it 'is an empty array by default' do
+          expect(config.gdk.update_hooks.after).to eq([])
+        end
+      end
+    end
+  end
 end

@@ -51,6 +51,18 @@ module GDK
       end
       bool(:overwrite_changes) { false }
       array(:protected_config_files) { [] }
+      settings :start_hooks do
+        array(:before) { [] }
+        array(:after) { [] }
+      end
+      settings :stop_hooks do
+        array(:before) { [] }
+        array(:after) { [] }
+      end
+      settings :update_hooks do
+        array(:before) { [] }
+        array(:after) { [] }
+      end
     end
 
     path(:repositories_root) { config.gdk_root.join('repositories') }

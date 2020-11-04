@@ -102,7 +102,24 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.ask_to_restart_after_update` | `true`  | Set this to `false` if you do not wish to be prompted to restart your GDK after an update. |
 | `gdk.debug`                       | `false` | Set this to `true` to enable increased output. |
 | `gdk.overwrite_changes`           | `false` | When set to `true`, `gdk reconfigure` overwrites files and move the old version to `.backups`.|
-| `gdk.protected_config_files`           | `[]` | Contains file names / globs of configuration files GDK should not overwrite. |
+| `gdk.protected_config_files`      | `[]`    | Contains file names / globs of configuration files GDK should not overwrite. |
+
+##### Hooks
+
+Before and after hooks are supported for `gdk start`, `gdk stop`, and `gdk update`.
+
+NOTE: Hooks are executed with the GDK root directory as the working directory. Execution halts if a command completes with a non-zero exit code.
+
+| Setting                    | Default | Description                                                         |
+|----------------------------|---------|---------------------------------------------------------------------|
+| `gdk.start_hooks.before`   | `[]`    | Array of commands to be executed sequentially before `gdk start`.   |
+| `gdk.start_hooks.after`    | `[]`    | Array of commands to be executed sequentially after `gdk start`.    |
+| `gdk.stop_hooks.before`    | `[]`    | Array of commands to be executed sequentially before `gdk stop`.    |
+| `gdk.stop_hooks.after`     | `[]`    | Array of commands to be executed sequentially after `gdk stop`.     |
+| `gdk.update_hooks.before`  | `[]`    | Array of commands to be executed sequentially before `gdk update`.  |
+| `gdk.update_hooks.after`   | `[]`    | Array of commands to be executed sequentially after `gdk update`.   |
+
+NOTE: When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed before restarting and `gdk.start_hooks` (both before & after) are executed after restarting.
 
 ##### Experimental GDK settings
 

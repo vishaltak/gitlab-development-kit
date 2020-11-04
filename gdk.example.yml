@@ -22,6 +22,15 @@ gdk:
     quiet: false
   overwrite_changes: false
   protected_config_files: []
+  start_hooks:
+    after: []
+    before: []
+  stop_hooks:
+    after: []
+    before: []
+  update_hooks:
+    after: []
+    before: []
 gdk_root: "/home/git/gdk"
 geo:
   enabled: false
