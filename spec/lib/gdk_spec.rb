@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe GDK do
-  let(:up_shortly_msg) { 'GitLab will be available at http://127.0.0.1:3000 shortly.' }
+  let(:hooks) { %w[date] }
 
   before do
     stub_pg_bindir
@@ -70,64 +70,137 @@ RSpec.describe GDK do
     end
   end
 
-  shared_examples 'GDK managing all services' do
-    it 'prints up shortly message' do
-      expect(GDK::Output).to receive(:puts)
-      expect(GDK::Output).to receive(:notice).with(up_shortly_msg)
-
-      action
-    end
-  end
-
-  shared_examples 'GDK managing some services' do
-    it 'does not print up shortly message' do
-      expect(GDK::Output).not_to receive(:notice).with(up_shortly_msg)
-
-      action
-    end
-  end
-
   describe '.start' do
+    it 'executes hooks and starts services' do
+      services = %w[rails-web]
+
+      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.start_hooks').and_return(hooks)
+
+      expect(described_class).to receive(:with_hooks).with(hooks, 'gdk start').and_yield
+      expect(Runit).to receive(:sv).with('start', services).and_return(true)
+
+      described_class.start(services)
+    end
+  end
+
+  describe '.stop' do
     before do
-      allow(Runit).to receive(:sv).with('start', services)
+      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.stop_hooks').and_return(hooks)
     end
 
-    context 'when starting all services' do
-      let(:services) { [] }
+    context 'all services' do
+      it 'executes hooks and stops all services' do
+        expect(Runit).to receive(:stop).and_return(true)
+        expect(described_class).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
 
-      it_behaves_like 'GDK managing all services' do
-        let(:action) { described_class.start(services) }
+        described_class.stop([])
       end
     end
 
-    context 'when starting some services' do
-      let(:services) { %w[rails-web] }
+    context 'some services' do
+      it 'executes hooks and stops some services' do
+        services = %w[rails-web]
 
-      it_behaves_like 'GDK managing some services', %w[rails-web] do
-        let(:action) { described_class.start(services) }
+        expect(Runit).to receive(:sv).with('force-stop', services).and_return(true)
+        expect(described_class).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
+
+        described_class.stop(services)
       end
     end
   end
 
   describe '.restart' do
+    it 'executes hooks and restarts services' do
+      services = %w[rails-web]
+      stop_hooks = %w[date]
+      start_hooks = %w[uptime]
+
+      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.stop_hooks').and_return(stop_hooks)
+      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.start_hooks').and_return(start_hooks)
+
+      expect(described_class).to receive(:with_hooks).with(stop_hooks, 'gdk stop')
+      expect(described_class).to receive(:with_hooks).with(start_hooks, 'gdk restart').and_yield
+      expect(Runit).to receive(:sv).with('force-restart', services).and_return(true)
+
+      described_class.restart(services)
+    end
+  end
+
+  describe '.update' do
+    it 'executes hooks and performs update' do
+      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.update_hooks').and_return(hooks)
+
+      expect(described_class).to receive(:with_hooks).with(hooks, 'gdk update').and_yield
+      expect(described_class).to receive(:make).with('self-update').and_return(true)
+      expect(described_class).to receive(:make).with('self-update', 'update').and_return(true)
+
+      described_class.update
+    end
+  end
+
+  describe '.execute_hooks' do
+    it 'calls execute_hook_cmd for each cmd and returns true' do
+      cmd = 'echo'
+      description = 'example'
+
+      allow(described_class).to receive(:execute_hook_cmd).with(cmd, description).and_return(true)
+
+      expect(described_class.execute_hooks([cmd], description)).to be(true)
+    end
+  end
+
+  describe '.execute_hook_cmd' do
+    let(:cmd) { 'echo' }
+    let(:description) { 'example' }
+
     before do
-      allow(Runit).to receive(:sv).with('force-restart', services)
+      stub_tty(false)
     end
 
-    context 'when starting all services' do
-      let(:services) { [] }
+    context 'when cmd is not a string' do
+      it 'aborts with error message' do
+        error_message = %(ERROR: Cannot execute 'example' hook '\\["echo"\\]')
 
-      it_behaves_like 'GDK managing all services' do
-        let(:action) { described_class.restart(services) }
+        expect { described_class.execute_hook_cmd([cmd], description) }.to raise_error(/#{error_message}/).and output(/#{error_message}/).to_stderr
       end
     end
 
-    context 'when starting some services' do
-      let(:services) { %w[rails-web] }
+    context 'when cmd is a string' do
+      context 'when cmd does not exist' do
+        it 'aborts with error message', :hide_stdout do
+          error_message = %(ERROR: No such file or directory - fail)
 
-      it_behaves_like 'GDK managing some services', %w[rails-web] do
-        let(:action) { described_class.restart(services) }
+          expect { described_class.execute_hook_cmd('fail', description) }.to raise_error(/#{error_message}/).and output(/#{error_message}/).to_stderr
+        end
       end
+
+      context 'when cmd fails' do
+        it 'aborts with error message', :hide_stdout do
+          error_message = %(ERROR: 'false' has exited with code 1.)
+
+          expect { described_class.execute_hook_cmd('false', description) }.to raise_error(/#{error_message}/).and output(/#{error_message}/).to_stderr
+        end
+      end
+
+      context 'when cmd succeeds' do
+        it 'returns true', :hide_stdout do
+          expect(described_class.execute_hook_cmd(cmd, description)).to be(true)
+        end
+      end
+    end
+  end
+
+  describe '.with_hooks' do
+    it 'returns true' do
+      before_hooks = %w[date]
+      after_hooks = %w[uptime]
+      hooks = { before: before_hooks, after: after_hooks }
+      name = 'example'
+
+      expect(described_class).to receive(:execute_hooks).with(before_hooks, "#{name}: before").and_return(true)
+      expect(described_class).to receive(:execute_hooks).with(after_hooks, "#{name}: after").and_return(true)
+
+      expect(described_class.with_hooks(hooks, name) { true }).to be(true)
     end
   end
 end

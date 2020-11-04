@@ -13,6 +13,8 @@ require_relative 'runit'
 autoload :Shellout, 'shellout'
 
 module GDK
+  HookCommandError = Class.new(StandardError)
+
   PROGNAME = 'gdk'
   MAKE = RUBY_PLATFORM.match?(/bsd/) ? 'gmake' : 'make'
 
@@ -170,9 +172,43 @@ module GDK
     sh.success?
   end
 
+  def self.execute_hooks(hooks, description)
+    hooks.each do |cmd|
+      execute_hook_cmd(cmd, description)
+    end
+
+    true
+  end
+
+  def self.execute_hook_cmd(cmd, description)
+    GDK::Output.abort("Cannot execute '#{description}' hook '#{cmd}' as it's invalid") unless cmd.is_a?(String)
+
+    GDK::Output.info("#{description} hook -> #{cmd}")
+
+    sh = Shellout.new(cmd, chdir: GDK.root)
+    sh.stream
+
+    raise HookCommandError, "'#{cmd}' has exited with code #{sh.exit_code}." unless sh.success?
+
+    true
+  rescue HookCommandError, Errno::ENOENT => e
+    GDK::Output.abort(e.message)
+  end
+
+  def self.with_hooks(hooks, name)
+    execute_hooks(hooks[:before], "#{name}: before")
+    result = block_given? ? yield : true
+    execute_hooks(hooks[:after], "#{name}: after")
+
+    result
+  end
+
   # Called when running `gdk start`
   def self.start(argv)
-    result = Runit.sv('start', argv)
+    result = with_hooks(config.gdk.start_hooks, 'gdk start') do
+      Runit.sv('start', argv)
+    end
+
     # Only print if run like `gdk start`, not e.g. `gdk start rails-web`
     print_url_ready_message if argv.empty?
 
@@ -181,20 +217,27 @@ module GDK
 
   # Called when running `gdk stop`
   def self.stop(argv)
-    if argv.empty?
-      # Runit.stop will stop all services and stop Runit (runsvdir) itself.
-      # This is only safe if all services are shut down; this is why we have
-      # an integrated method for this.
-      Runit.stop
-    else
-      # Stop the requested services, but leave Runit itself running.
-      Runit.sv('force-stop', argv)
+    with_hooks(config.gdk.stop_hooks, 'gdk stop') do
+      if argv.empty?
+        # Runit.stop will stop all services and stop Runit (runsvdir) itself.
+        # This is only safe if all services are shut down; this is why we have
+        # an integrated method for this.
+        Runit.stop
+      else
+        # Stop the requested services, but leave Runit itself running.
+        Runit.sv('force-stop', argv)
+      end
     end
   end
 
   # Called when running `gdk restart`
   def self.restart(argv)
-    result = Runit.sv('force-restart', argv)
+    with_hooks(config.gdk.stop_hooks, 'gdk stop')
+
+    result = with_hooks(config.gdk.start_hooks, 'gdk restart') do
+      Runit.sv('force-restart', argv)
+    end
+
     # Only print if run like `gdk restart`, not e.g. `gdk restart rails-web`
     print_url_ready_message if argv.empty?
 
@@ -215,9 +258,10 @@ module GDK
 
   # Called when running `gdk update`
   def self.update
-    make('self-update')
-
-    result = make('self-update', 'update')
+    result = with_hooks(config.gdk.update_hooks, 'gdk update') do
+      make('self-update')
+      make('self-update', 'update')
+    end
 
     unless result
       GDK::Output.error('Failed to update.')
