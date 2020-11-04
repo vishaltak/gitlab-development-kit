@@ -81,15 +81,17 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
 ## (Optional) Deploy the GitLab Kubernetes Agent (agentk) with k3d
 
-1. [Install k3d](https://github.com/rancher/k3d#get)
-
-1. Create a k3d cluster
+1. [Install k3d](https://github.com/rancher/k3d#get).
+1. Create a k3d cluster:
 
    ```shell
    k3d cluster create
    ```
 
-1. Set up a [loopback alias IP](runner.md#using-an-internal-dummy-interface). We will use it as the listen address so that agentk can reach your local GitLab and KAS. Let's assume this is `172.16.123.1`. We recommend you also bind your hostname to this address in `/etc/hosts`, by adding the line `172.16.123.1 gdk.test` to `/etc/hosts`
+1. Set up a [loopback alias IP](runner.md#using-an-internal-dummy-interface). We can use it as the
+   listen address so that `agentk` can reach your local GitLab and KAS. Let's assume this is `172.16.123.1`.
+   We recommend you also bind your hostname to this address in `/etc/hosts`, by adding the line
+   `172.16.123.1 gdk.test` to `/etc/hosts`
 
    Then update your `gdk.yml` to include these global keys:
 
@@ -98,27 +100,32 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
    listen_address: "172.16.123.1"
    ```
 
-   This sets the default hostname and listen address for all GDK services, including GitLab. For example, with the default ports, GitLab would now be on `http://gdk.test:3000`, and the registry on `https://gdk.test:5000`.
+   This sets the default hostname and listen address for all GDK services, including GitLab.
+   For example, with the default ports:
 
-1. run `gdk reconfigure` to apply the above change.
+   - GitLab would now be available on `http://gdk.test:3000`.
+   - The registry would now be available on `https://gdk.test:5000`.
 
-1. Deploy agentk
+1. Run `gdk reconfigure` to apply the above change.
+1. Deploy `agentk`:
 
-   - [Create the secret](https://docs.gitlab.com/ee/user/clusters/agent/#create-the-kubernetes-secret) as you normally would to deploy it to any cluster.
+   1. [Create the secret](https://docs.gitlab.com/ee/user/clusters/agent/#create-the-kubernetes-secret)
+      as you normally would to deploy it to any cluster.
+   1. [Install the Agent to the cluster](https://docs.gitlab.com/ee/user/clusters/agent/#install-the-agent-into-the-cluster).
+      At this step, be sure to set your `resources.yml` with the `kas-address` using the loopback alias.
 
-   - [Install the Agent to the cluster](https://docs.gitlab.com/ee/user/clusters/agent/#install-the-agent-into-the-cluster). At this step, be sure to set your `resources.yml` with the `kas-address` using the loopback alias.
-
-   ```yaml
-   args:
-       - --token-file=/config/token
-       - --kas-address
-       - grpc://172.16.123.1:5005
-       # - wss://172.16.123.1:5005/-/kubernetes-agent # when using nginx WITH https
-       # - ws://172.16.123.1:5005/-/kubernetes-agent # when using nginx WITHOUT https
-   ```
+      ```yaml
+      args:
+          - --token-file=/config/token
+          - --kas-address
+          - grpc://172.16.123.1:5005
+          # - wss://172.16.123.1:5005/-/kubernetes-agent # when using nginx WITH https
+          # - ws://172.16.123.1:5005/-/kubernetes-agent # when using nginx WITHOUT https
+      ```
 
    Your above address scheme can be checked with `gdk config get gitlab_k8s_agent.__url_for_agentk`
 
-## (Optional) Running the GitLab Kubernetes Agent Server and Agent locally with Bazel instead of GDK
+## (Optional) Run using Bazel instead of GDK
 
-See the [GitLab Kubernetes Agent docs](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally) about running the agent locally.
+If you want to run GitLab Kubernetes Agent Server and Agent locally with Bazel instead of GDK, see
+the [GitLab Kubernetes Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
