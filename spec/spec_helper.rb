@@ -41,3 +41,16 @@ def stub_pg_bindir
   allow(IO).to receive(:popen).and_call_original
   allow(IO).to receive(:popen).with(%w[support/pg_bindir], any_args).and_yield(fake_io)
 end
+
+def stub_tty(state)
+  allow(STDOUT).to receive(:isatty).and_return(state)
+end
+
+def stub_no_color_env(res)
+  stub_tty(true)
+
+  # res needs to be of type String as we're simulating what's coming from
+  # the shell command line.
+  allow(ENV).to receive(:fetch).and_call_original
+  allow(ENV).to receive(:fetch).with('NO_COLOR', '').and_return(res)
+end

@@ -231,17 +231,4 @@ RSpec.describe GDK::Output do
       end
     end
   end
-
-  def stub_tty(state)
-    allow(STDOUT).to receive(:isatty).and_return(state)
-  end
-
-  def stub_no_color_env(res)
-    stub_tty(true)
-
-    # res needs to be of type String as we're simulating what's coming from
-    # the shell command line.
-    allow(ENV).to receive(:fetch).and_call_original
-    allow(ENV).to receive(:fetch).with('NO_COLOR', '').and_return(res)
-  end
 end
