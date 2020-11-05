@@ -81,7 +81,7 @@ ensure_supported_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian" ]]; then
+    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian" || "$os_id" = "neon" ]]; then
       return 0
     fi
   fi
@@ -97,7 +97,7 @@ setup_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
-    if [[ "${os_id}" == "ubuntu" ]]; then
+    if [[ "${os_id}" == "ubuntu" || "${os_id}" = "neon" ]]; then
       if ! setup_platform_linux_with "packages.txt"; then
         return 1
       fi
