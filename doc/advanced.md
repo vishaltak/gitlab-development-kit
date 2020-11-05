@@ -7,37 +7,26 @@ These instructions may contain advanced configuration options.
 
 ## macOS
 
-GDK supports macOS 10.13 (High Sierra) and higher. In macOS 10.15 (Catalina) the
-default shell changed from [Bash](https://www.gnu.org/software/bash/) to
-[Zsh](http://zsh.sourceforge.net). The differences are handled by setting a
-`shell_file` variable based on your current shell.
+GDK supports macOS 10.13 (High Sierra) and later. To install dependencies for macOS:
 
-To install dependencies for macOS:
-
-1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for
-   package management.
-1. Run the following `brew` commands:
+1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for package management.
+1. Clone the [`gitlab-development-kit` project](https://gitlab.com/gitlab-org/gitlab-development-kit)
+   so you have access to the project's
+   [`Brewfile`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/Brewfile).
+   You can:
+     - Reuse an existing checkout if you have one, but make sure it's up to date.
+     - Use this check out again when you [install and set up GDK](index.md#install-and-set-up-gdk).
+1. In the `gitlab-development-kit` checkout, run the following `brew` commands:
 
    ```shell
    brew bundle
-   brew link pkg-config
-   brew pin libffi icu4c readline re2
-   if [ ${ZSH_VERSION} ]; then shell_file="${HOME}/.zshrc"; else shell_file="${HOME}/.bash_profile"; fi
-   echo 'export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"' >> ${shell_file}
-   source ${shell_file}
-   brew cask install chromedriver
+   brew install go postgresql@12 minio/stable/minio rbenv redis yarn
    ```
 
-If ChromeDriver fails to open with an error message because the developer
-*cannot be verified*, create an exception for it as documented in the
-[macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
-
-NOTE:
-We strongly recommend using the default installation directory for Homebrew
-(`/usr/local`). This simplifies the Ruby gems installation with C extensions. If
-you use a custom directory, additional work is required when installing Ruby
-gems. For more information, see
-[Why does Homebrew prefer I install to /usr/local?](https://docs.brew.sh/FAQ#why-does-homebrew-prefer-i-install-to-usrlocal).
+1. Add `/usr/local/opt/postgresql@12/bin` to your shell's `PATH` environment variable.
+1. [Configure `rbenv`](https://github.com/rbenv/rbenv#homebrew-on-macos) for your shell.
+1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating), and configure it for your
+   shell.
 
 ## Ubuntu
 
