@@ -28,6 +28,7 @@ RUN sudo apt-get update \
         libimage-exiftool-perl \
         rsync \
         libssl-dev \
+        chromium-chromedriver \
     && sudo apt-get clean \
     && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
 
