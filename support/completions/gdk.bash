@@ -32,7 +32,7 @@ _gdk()
   else
     case "$action" in
       init|trust)
-        [ -z "$ZSH_VERSION" ] && compopt -o nospace
+        [ -n "$BASH_VERSION" ] && compopt -o nospace
         words=$(compgen -o dirnames -- "$cur")
         ;;
     esac
@@ -50,7 +50,7 @@ _gdk()
           fi
           ;;
         redis-cli)
-          if [ -z "$ZSH_VERSION" ]; then
+          if [ -n "$BASH_VERSION" ] && type -t _command_offset >/dev/null; then
             _command_offset 1
             return
           fi
