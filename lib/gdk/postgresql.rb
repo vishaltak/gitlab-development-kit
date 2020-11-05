@@ -2,8 +2,7 @@
 
 module GDK
   class Postgresql
-    def psql_cmd
-      args = ARGV
+    def psql_cmd(args)
       database = args.empty? ? default_database : nil
 
       pg_cmd(args, database: database).join(" ")
