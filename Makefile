@@ -14,6 +14,7 @@ SHELLCHECK := $(shell command -v shellcheck 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
+REQUIRED_BUNDLER_VERSION := $(shell grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
@@ -283,6 +284,7 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
+	$(Q)$(in_gitlab) gem list bundler -i -v ">=${REQUIRED_BUNDLER_VERSION}" > /dev/null || gem install bundler -v ${REQUIRED_BUNDLER_VERSION}
 	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
