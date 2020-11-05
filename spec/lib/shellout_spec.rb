@@ -35,6 +35,34 @@ RSpec.describe Shellout do
     end
   end
 
+  describe '#exit_code' do
+    describe '#run has not yet been executed' do
+      it 'returns nil' do
+        expect(subject.exit_code).to be_nil
+      end
+    end
+
+    describe '#run has been executed' do
+      before do
+        subject.run
+      end
+
+      context 'when command is successful' do
+        it 'returns 0' do
+          expect(subject.exit_code).to be(0)
+        end
+      end
+
+      context 'when command is not successful' do
+        let(:command) { 'echo error 1>&2; exit 1' }
+
+        it 'returns 1' do
+          expect(subject.exit_code).to be(1)
+        end
+      end
+    end
+  end
+
   describe '#stream' do
     it 'returns output of shell command', :hide_stdout do
       expect(subject.stream).to eq('foo')

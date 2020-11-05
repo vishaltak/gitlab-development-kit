@@ -54,6 +54,12 @@ class Shellout
     @status.success?
   end
 
+  def exit_code
+    return nil unless @status
+
+    @status.exitstatus
+  end
+
   private
 
   def capture(extra_options = {})
