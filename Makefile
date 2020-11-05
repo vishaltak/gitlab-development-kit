@@ -43,7 +43,8 @@ gitlab_k8s_agent_version = $(shell support/resolve-dependency-commitish "${gitla
 gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
-bundle_install_cmd = ${BUNDLE} install --jobs 4 --without production ${quiet_bundle_flag}
+bundle_without_production_cmd = ${BUNDLE} config set without 'production'
+bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
@@ -285,6 +286,7 @@ gitlab/public/uploads:
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) gem list bundler -i -v ">=${REQUIRED_BUNDLER_VERSION}" > /dev/null || gem install bundler -v ${REQUIRED_BUNDLER_VERSION}
+	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
 	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
