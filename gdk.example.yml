@@ -62,7 +62,7 @@ gitlab_elasticsearch_indexer:
 gitlab_k8s_agent:
   auto_update: true
   enabled: false
-  listen_address: 127.0.0.1:5005
+  listen_address: 127.0.0.1:8150
   listen_network: tcp
 gitlab_pages:
   auto_update: true

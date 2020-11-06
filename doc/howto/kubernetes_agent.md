@@ -54,14 +54,14 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
     ```plaintext
     => GitLab will be available at http://127.0.0.1:3000 shortly.
-    => GitLab Kubernetes Agent Server available at grpc://127.0.0.1:5005.
+    => GitLab Kubernetes Agent Server available at grpc://127.0.0.1:8150.
     ```
 
 1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
 
 1. To verify that `kas` is running you can:
     - Run `gdk tail gitlab-k8s-agent` to check the logs. You should see no errors in the logs. Empty logs are normal too.
-    - Run `curl 127.0.0.1:5005`. It should print
+    - Run `curl 127.0.0.1:8150`. It should print
 
         ```plaintext
         Warning: Binary output can mess up your terminal. Use "--output -" to tell
@@ -118,9 +118,9 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
       args:
           - --token-file=/config/token
           - --kas-address
-          - grpc://172.16.123.1:5005
-          # - wss://172.16.123.1:5005/-/kubernetes-agent # when using nginx WITH https
-          # - ws://172.16.123.1:5005/-/kubernetes-agent # when using nginx WITHOUT https
+          - grpc://172.16.123.1:8150
+          # - wss://172.16.123.1:8150/-/kubernetes-agent # when using nginx WITH https
+          # - ws://172.16.123.1:8150/-/kubernetes-agent # when using nginx WITHOUT https
       ```
 
    Your above address scheme can be checked with `gdk config get gitlab_k8s_agent.__url_for_agentk`
