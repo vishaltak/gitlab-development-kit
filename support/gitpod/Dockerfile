@@ -29,6 +29,7 @@ RUN sudo apt-get update \
         rsync \
         libssl-dev \
         chromium-chromedriver \
+        git \
     && sudo apt-get clean \
     && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
 
