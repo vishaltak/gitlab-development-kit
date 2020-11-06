@@ -1,0 +1,13 @@
+deploy-gitpod-workspace-image:
+  extends:
+    - .docker:use-docker-in-docker
+    - .rules:code-changes
+  image: docker:git
+  stage: post
+  before_script:
+    - apk add --no-cache jq curl
+  script:
+    - ./support/docker ci-login
+    - ./support/gitpod/docker-build
+  after_script:
+    - ./support/docker ci-logout

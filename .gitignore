@@ -102,6 +102,7 @@
 /repository_storages/
 /services/
 /sitespeed-result/
+/support/gitpod/packages.txt
 /sv/
 /webpack_port
 Brewfile.lock.json
