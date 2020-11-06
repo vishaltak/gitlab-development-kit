@@ -50,7 +50,7 @@ module GDK
       attr_reader :error_messages
 
       def self.parse_version(string, prefix: '')
-        string[/#{prefix}((\d+.\d+)(.\d+)*)/, 1]
+        string[/#{prefix}((\d+\.\d+)(\.\d+)*)/, 1]
       end
 
       def initialize
