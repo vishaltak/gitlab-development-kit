@@ -13,7 +13,6 @@ rubocop:
   extends: .rules:code-changes
   stage: test
   script:
-    - gem install bundler -v 1.17.3
     - bundle install --jobs 4
     - make rubocop
 
@@ -21,7 +20,6 @@ rspec:
   extends: .rules:code-changes
   stage: test
   script:
-    - gem install bundler -v 1.17.3
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec rspec --format progress --format RspecJunitFormatter --out rspec.xml
   cache:
@@ -84,7 +82,6 @@ shellcheck:
 yard:
   stage: test
   script:
-    - gem install bundler -v 1.17.3
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec yardoc
   cache:

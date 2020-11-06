@@ -5,7 +5,7 @@ CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-$CURRENT_ASDF_DIR}"
 
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
-BUNDLER_VERSION=$(grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
+REQUIRED_BUNDLER_VERSION=$(grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
 
 error() {
   echo
@@ -28,7 +28,7 @@ asdf_reshim() {
 }
 
 gdk_install_gem() {
-  if ! echo_if_unsuccessful asdf exec gem install bundler -v "= ${BUNDLER_VERSION}"; then
+  if ! echo_if_unsuccessful asdf exec gem install bundler -v "= ${REQUIRED_BUNDLER_VERSION}"; then
     return 1
   fi
 
