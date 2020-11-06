@@ -91,9 +91,17 @@ To install dependencies for Debian and manage them yourself:
    ```
 
 1. Install Go:
-   - If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental) or
-     [newer](https://packages.debian.org/search?keywords=golang-go), you can install a Go compiler
-    using your package manager: `sudo apt-get install golang`.
+   - Check the required Go version in `.tool-versions`
+   - You may be able to install the required version using
+     `apt`. Check [the available
+     versions](https://packages.debian.org/search?keywords=golang-go). If
+     you're lucky it's just: `sudo apt-get install golang`.
+   - The required version may only be available [as a
+     backport](https://backports.debian.org/Instructions/#index2h2). When
+     using the backport package you may need to update your
+     `$PATH`. E.g. `export PATH=/usr/lib/go-1.14/bin:$PATH` when using
+     1.14 from `buster-backports` to get 1.14 instead of the 1.15 from
+     `stable`.
    - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
      installation instructions.
 
@@ -106,6 +114,10 @@ To install dependencies for Debian and manage them yourself:
    `apt-get install rbenv`. Then run `rbenv init` to get instructions
    for what to add to your shell RC. See [the upstream
    docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell).
+   - If the required Ruby version in `.tool-versions` isn't
+     installable you'll need to get the [`ruby-build`
+     plugin](https://github.com/rbenv/ruby-build#installation) and
+     build it.
 
 ## Install Other Linux dependencies
 
