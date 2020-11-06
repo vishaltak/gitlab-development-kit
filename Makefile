@@ -14,6 +14,7 @@ SHELLCHECK := $(shell command -v shellcheck 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
+REQUIRED_BUNDLER_VERSION := $(shell grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
@@ -189,6 +190,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 # bootstrap
 ##############################################################
 
+.PHONY: bootstrap
 bootstrap:
 	@support/bootstrap
 
@@ -196,26 +198,10 @@ bootstrap:
 # asdf
 ##############################################################
 
-asdf-update: asdf-plugin-update asdf-tool-update
-
-asdf-plugin-update:
+.PHONY: asdf-update
+asdf-update:
 ifdef ASDF
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Updating asdf plugins"
-	@echo "${DIVIDER}"
-	@asdf plugin update --all
-else
-	@true
-endif
-
-asdf-tool-update:
-ifdef ASDF
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Updating asdf tools"
-	@echo "${DIVIDER}"
-	@asdf install
+	@support/asdf-update
 else
 	@true
 endif
@@ -298,6 +284,7 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
+	$(Q)$(in_gitlab) gem list bundler -i -v ">=${REQUIRED_BUNDLER_VERSION}" > /dev/null || gem install bundler -v ${REQUIRED_BUNDLER_VERSION}
 	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
@@ -573,7 +560,7 @@ gitlab-pages/.git/pull:
 ##############################################################
 
 ifeq ($(gitlab_k8s_agent_enabled),true)
-gitlab-k8s-agent-setup: gitlab-k8s-agent/build/gdk/bin/kas_race
+gitlab-k8s-agent-setup: gitlab-k8s-agent/build/gdk/bin/kas_race gitlab-k8s-agent-config.yml
 else
 gitlab-k8s-agent-setup:
 	@true
@@ -585,6 +572,10 @@ else
 gitlab-k8s-agent-update:
 	@true
 endif
+
+.PHONY: gitlab-k8s-agent-config.yml
+gitlab-k8s-agent-config.yml:
+	$(Q)rake $@
 
 .PHONY: gitlab-k8s-agent-clean
 gitlab-k8s-agent-clean:

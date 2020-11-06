@@ -51,6 +51,18 @@ module GDK
       end
       bool(:overwrite_changes) { false }
       array(:protected_config_files) { [] }
+      settings :start_hooks do
+        array(:before) { [] }
+        array(:after) { [] }
+      end
+      settings :stop_hooks do
+        array(:before) { [] }
+        array(:after) { [] }
+      end
+      settings :update_hooks do
+        array(:before) { [] }
+        array(:after) { [] }
+      end
     end
 
     path(:repositories_root) { config.gdk_root.join('repositories') }
@@ -222,8 +234,9 @@ module GDK
       bool(:enabled) { false }
       bool(:auto_update) { true }
       string(:listen_network) { 'tcp' }
-      string(:listen_address) { "#{config.listen_address}:5005" }
+      string(:listen_address) { "#{config.listen_address}:8150" }
       string(:__listen_url_path) { '/-/kubernetes-agent' }
+      string(:__gitlab_address) { "http://#{config.workhorse.__listen_address}" }
       string :__url_for_agentk do
         if config.nginx?
           # kas is behind nginx
@@ -248,6 +261,7 @@ module GDK
           false
         end
       end
+      string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }
       string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
     end
 
@@ -255,7 +269,7 @@ module GDK
       bool(:enabled) { read!('auto_devops_enabled') || false }
       string(:listen_address) { '0.0.0.0' }
       settings :gitlab do
-        integer(:port) { read_or_write!('auto_devops_gitlab_port', rand(20000..24999)) }
+        integer(:port) { read_or_write!('auto_devops_gitlab_port', rand(20_000..24_999)) }
       end
       settings :registry do
         integer(:port) { read!('auto_devops_registry_port') || (config.auto_devops.gitlab.port + 5000) }
@@ -353,7 +367,7 @@ module GDK
             if i.zero?
               parent.storage_dir
             else
-              File.join(config.repository_storages, "gitaly", name)
+              File.join(config.repository_storages, 'gitaly', name)
             end
           end
         end
@@ -362,7 +376,7 @@ module GDK
 
     settings :praefect do
       path(:address) { config.gdk_root.join('praefect.socket') }
-      path(:config_file) { config.gdk_root.join("gitaly", "praefect.config.toml") }
+      path(:config_file) { config.gdk_root.join('gitaly', 'praefect.config.toml') }
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       settings :database do
@@ -376,7 +390,7 @@ module GDK
         settings_array!(config.praefect.node_count) do |i|
           path(:address) { config.gdk_root.join("gitaly-praefect-#{i}.socket") }
           string(:config_file) { "gitaly/gitaly-#{i}.praefect.toml" }
-          path(:log_dir) { config.gdk_root.join("log", "praefect-gitaly-#{i}") }
+          path(:log_dir) { config.gdk_root.join('log', "praefect-gitaly-#{i}") }
           string(:service_name) { "praefect-gitaly-#{i}" }
           string(:storage) { "praefect-internal-#{i}" }
           path(:storage_dir) { config.repositories_root }
@@ -423,7 +437,7 @@ module GDK
       bool(:enabled) { false }
       integer(:port) { 9090 }
       integer(:gitaly_exporter_port) { 9236 }
-      integer(:praefect_exporter_port) { 10101 }
+      integer(:praefect_exporter_port) { 10_101 }
       integer(:sidekiq_exporter_port) { 3807 }
     end
 

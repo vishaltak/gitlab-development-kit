@@ -143,3 +143,19 @@ verson:
    ```
 
 Your GDK should now be ready to use.
+
+## Access Geo Secondary Database
+
+```shell
+# Connect to the default gitlabhq_geo_development database
+gdk psql-geo
+
+# List all databases
+gdk psql-geo -l
+
+# Connect to a different database
+gdk psql-geo -d gitlabhq_geo_test
+
+# Show all options
+gdk psql-geo --help
+```

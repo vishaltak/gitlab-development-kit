@@ -41,17 +41,23 @@ class Shellout
   end
 
   def read_stdout
-    @stdout_str.chomp
+    @stdout_str.to_s.chomp
   end
 
   def read_stderr
-    @stderr_str.chomp
+    @stderr_str.to_s.chomp
   end
 
   def success?
     return false unless @status
 
     @status.success?
+  end
+
+  def exit_code
+    return nil unless @status
+
+    @status.exitstatus
   end
 
   private

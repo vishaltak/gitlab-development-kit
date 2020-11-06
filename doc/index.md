@@ -5,33 +5,50 @@ and related projects.
 
 Setting up GDK involves:
 
-- [Installing dependencies](#install-dependencies)
-- [Installing and setting up GDK](#install-and-set-up-gdk)
+- [Installing Git and Make](#install-git-and-make).
+- [Installing dependencies](#install-dependencies).
+- [Installing and setting up GDK](#install-and-set-up-gdk).
+
+## Install Git and Make
+
+Because GDK requires them, you must ensure `git` and `make` are available. If you're on:
+
+- macOS, `git` and `make` are installed by default.
+- Ubuntu/Debian, run the following to install `git` and `make`:
+
+   ```shell
+   apt-get update && apt-get install git make
+   ```
+
+- Other systems, use your system's package manager to install them.
 
 ## Install dependencies
 
 Before [setting up GDK](#install-and-set-up-gdk), your local environment must
-have prerequisite third-party software installed and configured. Some
-dependencies can be installed with a *package manager*.
+have prerequisite third-party software installed and configured. GDK dependencies are:
 
-You should regularly keep these dependencies up to date. Generally, the latest
-versions of these dependencies work fine.
+- [Go](https://golang.org)
+- [MinIO](https://min.io)
+- [Node.js](https://nodejs.org)
+- [PostgreSQL](https://www.postgresql.org)
+- [Redis](https://redis.io)
+- [Ruby](https://www.ruby-lang.org)
+- [Yarn](https://yarnpkg.com)
 
-NOTE:
-Install, configure, and update all of these dependencies as a non-root user. If
-you don't know what a root user is, you very likely run everything as a non-root
-user already.
+These can be installed and managed:
 
-The process for installing dependencies depends on your operating system.
-We automatically install dependencies for the following operating systems as
-part of the bootstrapping process which is described below:
+- The recommended way by letting GDK manage dependencies for you using
+  [`asdf`](https://asdf-vm.com/#/core-manage-asdf). The following platforms are supported:
+  - macOS
+  - Ubuntu
+  - Debian
+- By you using your operating system's package manager. You should regularly keep these
+  dependencies up to date. Generally, the latest versions of these dependencies work fine. Install,
+  configure, and update all of these dependencies as a non-root user. If you don't know what a root
+  user is, you very likely run everything as a non-root user already.
 
-- macOS
-- Ubuntu
-- Debian
-
-[Advanced instructions](advanced.md) are also available, including instructions
-for:
+For those manually managing their dependencies, [advanced instructions](advanced.md) are also
+available, including instructions for:
 
 - [macOS](advanced.md#macos)
 - [Ubuntu](advanced.md#ubuntu)
@@ -40,63 +57,101 @@ for:
 - [FreeBSD](advanced.md#install-freebsd-dependencies)
 - [Windows 10](advanced.md#install-windows-10-dependencies)
 
+### From `rvm` and `rbenv` to `asdf`
+
+If you've previously installed Ruby using `rvm` or `rbenv`, and intend to let GDK manage
+dependencies for you using `asdf`, you may need to:
+
+- Uninstall `rvm`, `rbenv`.
+- Remove configuration changes to your home directory in directories such as `~/.rvm` and
+  `~/.rbenv`.
+- Revert configuration settings related to your shell in files such as `.bashrc`.
+
+For more information, see:
+
+- [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
+- [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
+
 ## Install and set up GDK
 
-Before attempting to use these steps, be sure you have [installed dependencies](#install-dependencies).
+Before attempting to use these steps:
 
-To get GDK up and running:
+- Ensure [`git` and `make` are installed](#install-git-and-make).
+- Ensure you have [installed dependencies](#install-dependencies), if necessary.
 
-1. Ensure `git` and `make` are available. If you're on:
-   - macOS, `git` and `make` are installed by default.
-   - Ubuntu/Debian, run the following to install `git` and `make`:
+To install GDK:
+
+- With GDK managing your dependencies using `asdf`:
+
+  1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't
+     previously:
 
      ```shell
-     apt-get update && apt-get install git make
+     git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
      ```
 
-1. Clone the `gitlab-development-kit` repository into your preferred location:
+  1. Change into the GDK project directory:
 
-   ```shell
-   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
-   ```
+     ```shell
+     cd gitlab-development-kit
+     ```
 
-1. Change into the newly-created GDK clone directory.
-1. Install required software such as Ruby, Node.js, PostgreSQL, and so on:
+  1. Run:
 
-   ```shell
-   make bootstrap
-   ```
+     ```shell
+     make bootstrap
+     ```
 
-1. Complete GDK installation by cloning and configuring GitLab and other projects
-   using `gdk install`. Use one of the following methods:
+- Having managed your own dependencies:
 
-   - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
-     recommend developing against the GitLab project (the default). To:
-     - Clone `gitlab` using SSH (recommended), run:
+  1. Install the `gitlab-development-kit` gem:
 
-       ```shell
-       gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
-       ```
+     ```shell
+     gem install gitlab-development-kit
+     ```
 
-     - Clone `gitlab` using HTTPS, run:
+  1. Initialize a GDK directory (this also checks out the project) by running the following in your
+     preferred location:
 
-       ```shell
-       gdk install
-       ```
+     ```shell
+     gdk init
+     ```
 
-     Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
-     The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+     The default directory created is `gitlab-development-kit`. This can be customized by appending
+     a different directory name to the command.
 
-   - Other options, in order of recommendation:
-     - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
-     - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
+  1. Change into the newly-created GDK directory.
+
+Complete GDK installation by cloning and configuring GitLab and other projects
+using `gdk install`. Use one of the following methods:
+
+- For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
+  recommend developing against the GitLab project (the default). To:
+  - Clone `gitlab` using SSH (recommended), run:
+
+    ```shell
+    gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
+    ```
+
+  - Clone `gitlab` using HTTPS, run:
+
+    ```shell
+    gdk install
+    ```
+
+  Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
+  The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+
+- Other options, in order of recommendation:
+  - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
+  - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
 
 ### Install using GitLab FOSS project
 
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
 
-After cloning the `gitlab-development-kit` project and running `support/bootstrap`, to:
+After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
 
 - Clone `gitlab-foss` using SSH, run:
 
@@ -118,7 +173,7 @@ space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/do
 > Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
 > of [GitLab](https://gitlab.com/gitlab-org/gitlab).
 
-After cloning the `gitlab-development-kit` project and running `support/bootstrap`, to:
+After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
 
 - Clone your `gitlab` fork using SSH, run:
 

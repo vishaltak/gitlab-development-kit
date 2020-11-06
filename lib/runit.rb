@@ -123,6 +123,8 @@ module Runit
 
     GDK::Output.puts
     GDK::Output.success "All services have been shut down!"
+
+    true
   end
 
   def self.sv(cmd, services)

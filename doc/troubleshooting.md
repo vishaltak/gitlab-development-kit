@@ -855,21 +855,21 @@ tests (tests that are located in the `spec/features` directory) will fail.
 ChromeDriver is the app on your machine that is used to run headless
 browser tests.
 
-If you see this error in your test output (you may need to scroll up):
-`Selenium::WebDriver::Error::SessionNotCreatedError` coupled with the
-error message: `This version of ChromeDriver only supports Chrome
-version [...]` then you need to update your version of ChromeDriver:
+If you see this error in your test output (you may need to scroll up): `Selenium::WebDriver::Error::SessionNotCreatedError`
+coupled with the error message: `This version of ChromeDriver only supports Chrome version [...]`,
+you need to update your version of ChromeDriver:
 
-If you installed ChromeDriver with Homebrew, then you can update by
-running:
+- If you installed ChromeDriver with Homebrew, then you can update by running:
 
-```shell
-brew cask upgrade chromedriver
-```
+  ```shell
+  brew upgrade --cask chromedriver
+  ```
 
-Otherwise, if you installed the ChromeDriver without Homebrew, you may
-need to
-[download and install the latest ChromeDrive directly](https://sites.google.com/a/chromium.org/chromedriver/downloads).
+- Otherwise you may need to [download and install](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+  the latest ChromeDriver directly.
+
+If ChromeDriver fails to open with an error message because the developer "cannot be verified",
+create an exception for it as documented in the [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
 
 ### Database problems
 

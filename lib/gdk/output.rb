@@ -22,6 +22,7 @@ module GDK
     }.freeze
 
     ICONS = {
+      info: "\u2139\ufe0f ",    # requires an extra space
       success: "\u2705\ufe0f",
       warning: "\u26A0\ufe0f ", # requires an extra space
       error: "\u274C\ufe0f"
@@ -55,6 +56,10 @@ module GDK
 
     def self.notice(message)
       puts("=> #{message}")
+    end
+
+    def self.info(message)
+      puts(icon(:info) + message)
     end
 
     def self.warn(message)

@@ -17,6 +17,14 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.info' do
+    it 'puts to stdout' do
+      stub_no_color_env('')
+
+      expect { described_class.info('test') }.to output("\u2139\ufe0f  test\n").to_stdout
+    end
+  end
+
   describe '.success' do
     context "when we're not a tty" do
       it 'puts to stdout' do
@@ -222,18 +230,5 @@ RSpec.describe GDK::Output do
         expect(described_class.colorize?).to be(false)
       end
     end
-  end
-
-  def stub_tty(state)
-    allow(STDOUT).to receive(:isatty).and_return(state)
-  end
-
-  def stub_no_color_env(res)
-    stub_tty(true)
-
-    # res needs to be of type String as we're simulating what's coming from
-    # the shell command line.
-    allow(ENV).to receive(:fetch).and_call_original
-    allow(ENV).to receive(:fetch).with('NO_COLOR', '').and_return(res)
   end
 end

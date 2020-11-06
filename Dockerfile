@@ -4,7 +4,6 @@ LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab
 # Directions when writing this dockerfile:
 # Keep least changed directives first. This improves layers caching when rebuilding.
 
-RUN useradd --user-group --create-home gdk
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install packages
@@ -15,6 +14,9 @@ RUN apt-get update && apt-get install -y software-properties-common \
     && apt-get purge software-properties-common -y \
     && apt-get autoremove -y \
     && rm -rf /tmp/*
+
+RUN useradd --user-group --create-home --groups sudo gdk
+RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk_no_password
 
 WORKDIR /home/gdk
 USER gdk

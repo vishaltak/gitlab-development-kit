@@ -1,0 +1,7 @@
+listen:
+  network: <%= config.gitlab_k8s_agent.listen_network %>
+  address:  <%= config.gitlab_k8s_agent.listen_address %>
+  websocket: <%= config.gitlab_k8s_agent.__listen_websocket %>
+gitlab:
+  address: <%= config.gitlab_k8s_agent.__gitlab_address %>
+  authentication_secret_file: <%= config.gitlab_k8s_agent.__secret_file %>

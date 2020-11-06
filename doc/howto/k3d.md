@@ -11,7 +11,7 @@
 Instead of using a third-party provider such as GCP, we can have a fully-functional Kubernetes cluster running
 on the machine under test.
 
-Execute the following command in the 'qa/' directory:
+Execute the following command in the `qa/` directory:
 
 ```shell
 GITLAB_ADMIN_ACCESS_TOKEN=<admin-access-token> bundle exec bin/qa Test::Integration::Kubernetes https://localhost:3001 -- qa/specs/features/browser_ui/7_configure/kubernetes/kubernetes_integration_spec.rb

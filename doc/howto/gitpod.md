@@ -101,27 +101,8 @@ advanced features.
 
 ### Enable runners
 
-As a first step you have to recover the secrets file, follow these steps from the terminal of the Gitpod UI:
-
-1. Run  `cd ../gitlab && ./bin/rails console`.
-1. Wait about one minute until you see the message that the development environment
-   has been loaded, then run `ApplicationSetting.current.reset_runners_registration_token!`.
-1. Leave the console by typing `exit` and hitting Enter.
-1. Run `bundle exec rails dbconsole` and wait about 1 minute until you see the
-   `gitlabhq_development=#` prompt, then run the following commands:
-   1. `UPDATE projects SET runners_token = null, runners_token_encrypted = null;`
-   1. `UPDATE namespaces SET runners_token = null, runners_token_encrypted = null;`
-   1. `UPDATE application_settings SET runners_registration_token_encrypted = null;`
-   1. `UPDATE ci_builds SET token = null, token_encrypted = null;`
-1. Leave the console again by typing `exit` and hitting Enter.
-
-Having the secrets file recovered, you can now register and run a GitLab Runner:
-
-1. Switch to the GDK directory `(cd ../gitlab-development-kit)` and run
-   `gdk reconfigure && gdk restart`.
-1. Go to **Admin Area > Runners** in the GitLab running in GDK.
-1. Click the **Reset runners registration token button**`*** and manually
-   reload the page to be sure you are seeing the most up-to-date token.
+1. Go to **Admin Area > Runners** in the GitLab UI running in GDK.
+1. In the terminal, switch to the GDK directory `(cd ../gitlab-development-kit)`
 1. Run `gitlab-runner register --run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
    and enter the information from the GitLab UI running in GDK.
 1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
