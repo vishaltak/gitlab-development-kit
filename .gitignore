@@ -60,6 +60,7 @@
 /influxdb/
 /jaeger-artifacts/
 /jaeger/
+/kerberos/http.keytab
 /lefthook-local.yml
 /log/
 /mattermost

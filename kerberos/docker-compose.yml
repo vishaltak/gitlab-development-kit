@@ -1,0 +1,8 @@
+version: "3"
+services:
+  krb5:
+    build: .
+    ports:
+      - "88:88"
+      - "749:749"
+      - "750:750"
