@@ -61,18 +61,19 @@ For Debian there are two ways to manage dependencies, either:
 - Using `asdf`.
 - Managing all dependencies yourself.
 
-### Manage dependencies using `asdf`
+### Common setup
 
-To install some dependencies for Debian and use `asdf`:
-
-1. Install base dependencies:
+First run `make bootstrap-packages`. It is a light subset of `make
+bootstrap` which just does an `apt-get update` and then `apt-get
+install` on the packages found in `packages_debian.txt`.
 
    ```shell
-   sudo apt-get update && sudo apt-get install libicu-dev cmake g++ libkrb5-dev libre2-dev ed \
-     pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
+   make bootstrap-packages
    ```
 
-1. [Complete dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
+### Manage dependencies using `asdf`
+
+[Complete the dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
 
 ### Manage dependencies yourself
 
@@ -81,9 +82,7 @@ To install dependencies for Debian and manage them yourself:
 1. Run the following commands:
 
    ```shell
-   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
-     libicu-dev cmake g++ libkrb5-dev libre2-dev ed pkg-config graphicsmagick \
-     runit libimage-exiftool-perl rsync libsqlite3-dev
+   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
    sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
    sudo chmod +x /usr/local/bin/minio
    ```
