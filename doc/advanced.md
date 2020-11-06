@@ -118,6 +118,10 @@ To install dependencies for Debian and manage them yourself:
      installable you'll need to get the [`ruby-build`
      plugin](https://github.com/rbenv/ruby-build#installation) and
      build it.
+   - You'll need to select the Ruby version over your OS one (if
+     any). See [these
+     instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). E.g. `echo
+     2.7.2 >~/.rbenv/version`.
 
 ## Install Other Linux dependencies
 
