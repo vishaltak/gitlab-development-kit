@@ -83,7 +83,9 @@ module Runit
     end
 
     def services_from_procfile
-      File.read('Procfile').lines.map do |line|
+      fname = 'Procfile'
+      abort "fatal: need Procfile to continue, make it with `make Procfile`?" unless File.exist?(fname)
+      File.read(fname).lines.map do |line|
         line.chomp!
         next if line.start_with?('#')
 
