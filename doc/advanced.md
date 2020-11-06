@@ -94,8 +94,16 @@ To install dependencies for Debian and manage them yourself:
     using your package manager: `sudo apt-get install golang`.
    - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
      installation instructions.
-1. Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have it.
-1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv).
+
+1. The `make bootstrap-packages` will have installed
+   `redis-server`. Make sure it's 5.0 or newer (`apt list
+   redis-server`). Install [Redis](https://redis.io) 5.0 or newer
+   manually, if you don't already have it.
+
+1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv). Do
+   `apt-get install rbenv`. Then run `rbenv init` to get instructions
+   for what to add to your shell RC. See [the upstream
+   docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell).
 
 ## Install Other Linux dependencies
 
