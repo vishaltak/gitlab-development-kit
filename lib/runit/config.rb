@@ -71,6 +71,7 @@ module Runit
         export port=#{GDK.config.port}
         export relative_url_root=#{GDK.config.relative_url_root}
         export cache_classes=#{GDK.config.gitlab.cache_classes}
+        export bundle_gemfile=#{File.join(GDK.config.gitlab.dir, 'Gemfile')}
       RUN_ENV
 
       if GDK.config.tracer.jaeger?
