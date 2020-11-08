@@ -647,6 +647,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#cache_classes' do
+      it 'returns if Ruby classes should be cached' do
+        expect(config.gitlab.cache_classes).to be(false)
+      end
+    end
+
     describe '#__socket_file' do
       it 'returns the GitLab socket path' do
         expect(config.gitlab.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.socket'))
