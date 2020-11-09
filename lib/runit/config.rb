@@ -137,9 +137,13 @@ module Runit
         pid = Integer(File.read('<%= File.join(dir(service), 'supervise/pid') %>'))
 
         # Use - to signal the process group, not just a single PID.
-        pid_destination = -pid
-        puts "runit control/t: sending #{signal} to #{pid_destination}"
-        Process.kill(signal, pid_destination)
+        pid_group = -pid
+        puts "runit control/t: sending #{signal} to #{pid_group}"
+        Process.kill(signal, pid_group)
+
+        # Kill process
+        puts "runit control/t: sending #{signal} to #{pid}"
+        Process.kill(signal, pid)
       TEMPLATE
       control_t_path = File.join(dir(service), 'control/t')
       write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
