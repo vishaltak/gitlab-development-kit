@@ -8,11 +8,14 @@ RSpec.describe GDK::Command::Doctor do
   let(:mock_stderr) { double(:stderr, puts: nil) }
   let(:successful_diagnostic) { double(GDK::Diagnostic, success?: true, diagnose: nil, message: nil) }
   let(:failing_diagnostic) { double(GDK::Diagnostic, success?: false, diagnose: 'error', message: 'check failed') }
-  let(:diagnostics) { [] }
+  let(:diagnostics_serial) { [] }
+  let(:diagnostics_parallel) { [] }
   let(:warning_message) { 'This is a warning' }
   let(:shellout) { double(Shellout, run: nil) }
 
-  subject { described_class.new(diagnostics: diagnostics, stdout: mock_stdout, stderr: mock_stderr) }
+  subject { described_class.new(diagnostics_serial: diagnostics_serial,
+                                diagnostics_parallel: diagnostics_parallel,
+                                stdout: mock_stdout, stderr: mock_stderr) }
 
   before do
     allow(Shellout).to receive(:new).with('gdk start postgresql').and_return(shellout)
@@ -26,7 +29,7 @@ RSpec.describe GDK::Command::Doctor do
   end
 
   context 'with passing diagnostics' do
-    let(:diagnostics) { [successful_diagnostic, successful_diagnostic] }
+    let(:diagnostics_parallel) { [successful_diagnostic, successful_diagnostic] }
 
     it 'runs all diagnosis' do
       expect(successful_diagnostic).to receive(:diagnose).twice
@@ -40,7 +43,7 @@ RSpec.describe GDK::Command::Doctor do
   end
 
   context 'with failing diagnostics' do
-    let(:diagnostics) { [failing_diagnostic, failing_diagnostic] }
+    let(:diagnostics_parallel) { [failing_diagnostic, failing_diagnostic] }
 
     it 'runs all diagnosis' do
       expect(failing_diagnostic).to receive(:diagnose).twice
@@ -55,7 +58,7 @@ RSpec.describe GDK::Command::Doctor do
   end
 
   context 'with partial failing diagnostics' do
-    let(:diagnostics) { [failing_diagnostic, successful_diagnostic, failing_diagnostic] }
+    let(:diagnostics_parallel) { [failing_diagnostic, successful_diagnostic, failing_diagnostic] }
 
     it 'runs all diagnosis' do
       expect(failing_diagnostic).to receive(:diagnose).twice

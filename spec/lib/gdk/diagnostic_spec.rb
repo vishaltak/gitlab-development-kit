@@ -8,11 +8,13 @@ RSpec.describe GDK::Diagnostic do
       expect { described_class.all }.not_to raise_error
     end
 
-    it 'contains only diagnostic classes' do
-      diagnostic_classes = [
+    it 'contains our diagnostic classes' do
+      serial_classes = [
+        GDK::Diagnostic::Configuration,
+      ]
+      parallel_classes = [
         GDK::Diagnostic::RubyGems,
         GDK::Diagnostic::Version,
-        GDK::Diagnostic::Configuration,
         GDK::Diagnostic::Git,
         GDK::Diagnostic::Dependencies,
         GDK::Diagnostic::PendingMigrations,
@@ -24,7 +26,9 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::StaleServices
       ]
 
-      expect(described_class.all.map(&:class)).to eq(diagnostic_classes)
+      expect(described_class.serial_classes.map(&:class)).to eq(serial_classes)
+      expect(described_class.parallel_classes.map(&:class)).to eq(parallel_classes)
+      expect(described_class.all.map(&:class)).to eq(serial_classes + parallel_classes)
     end
   end
 end
