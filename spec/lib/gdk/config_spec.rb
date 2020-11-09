@@ -586,7 +586,9 @@ RSpec.describe GDK::Config do
 
     describe '#bin' do
       it 'returns gitlab-runner' do
-        expect(config.runner.bin).to eq(Pathname.new('/usr/local/bin/gitlab-runner'))
+        found = find_executable('gitlab-runner')
+        path = found || '/usr/local/bin/gitlab-runner'
+        expect(config.runner.bin).to eq(Pathname.new(path))
       end
     end
 
