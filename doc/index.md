@@ -27,6 +27,7 @@ Because GDK requires them, you must ensure `git` and `make` are available. If yo
 Before [setting up GDK](#install-and-set-up-gdk), your local environment must
 have prerequisite third-party software installed and configured. GDK dependencies are:
 
+- [Git](https://git-scm.com)
 - [Go](https://golang.org)
 - [MinIO](https://min.io)
 - [Node.js](https://nodejs.org)
