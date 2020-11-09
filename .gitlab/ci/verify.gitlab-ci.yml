@@ -4,9 +4,6 @@
   image: ${VERIFY_IMAGE}
   needs:
     - release-image
-  after_script:
-    - cd /builds/gitlab-org/gitlab-development-kit/gitlab-development-kit && gdk status
-    - tail -n 250 gitlab/log/development.log
   artifacts:
     paths:
       - ./gitlab-development-kit/gitlab/log/*.log
