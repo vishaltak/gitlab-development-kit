@@ -75,8 +75,11 @@ module GDK
           # generated.
           return nil unless file_path.exist?
 
-          File.rename(file_path, file_path_unchanged)
-
+          # We must not do the equivalent of "mv && make" here,
+          # because we'd race with other checks when "gdk doctor"
+          # runs us in parallel with checks that need to read these
+          # config files.
+          FileUtils.cp_r(file_path, file_path_unchanged) # must handle files & preserve symlinks
           @make_output = update_config_file
 
           @output = diff_with_unchanged
