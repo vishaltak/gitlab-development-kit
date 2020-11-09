@@ -70,6 +70,7 @@ module Runit
         export host=#{GDK.config.hostname}
         export port=#{GDK.config.port}
         export relative_url_root=#{GDK.config.relative_url_root}
+        export cache_classes=#{GDK.config.gitlab.cache_classes}
       RUN_ENV
 
       if GDK.config.tracer.jaeger?

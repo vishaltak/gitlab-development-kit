@@ -31,6 +31,12 @@ that these values may not be the default that GDK uses.
 If you want to check which settings are in place, you can run `rake dump_config`, which prints
 all applied settings in a YAML structure.
 
+- [Notable settings](#notable-settings)
+- [GDK settings](#gdk-settings)
+- [NGINX settings](#nginx-settings)
+- [Webpack settings](#webpack-settings)
+- [ActionCable settings](#actioncable-settings)
+
 #### Run GitLab and GitLab FOSS concurrently
 
 To have multiple GDK instances running concurrently, for example to test GitLab and GitLab FOSS,
@@ -74,6 +80,7 @@ Here are a few settings worth mentioning:
 |------------------------ |--------------------|--------------------------------------------------------------------------------------------|
 | `port`                  | `3000`             | Select the port to run GDK on, useful when running multiple GDKs in parallel.              |
 | `webpack.port`          | `3808`             | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings). |
+| `gitlab.cache_classes`  | `false`            | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
 | `gitlab_pages.host`     | `127.0.0.1.nip.io` | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
 | `gitlab_pages.port`     | `3010`             | Specify on which port GitLab Pages should run. See also the [Pages guide](howto/pages.md#port). |
 | `relative_url_root`     | `/`                | When you want to test GitLab being available on a different path than `/`. For example, `/gitlab`. |
@@ -129,6 +136,12 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 |---------|---------|-------------|
 | `gdk.experimental.quiet` | `false` | Set this to `true` to reduce the level of output when updating the GDK. |
 | `gdk.experimental.auto_reconfigure` | `false` | Set this to `true` to automatically run a `gdk reconfigure` after a successful `gdk update`. |
+
+### GitLab settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `gitlab.cache_classes` | `false` | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
 
 ### NGINX settings
 
@@ -260,7 +273,7 @@ When you add a new setting:
 1. Run `rake gdk.example.yml` to regenerate this file.
 1. Commit both files.
 
-## Webpack Settings
+## Webpack settings
 
 ### Webpack `gdk.yml` settings
 

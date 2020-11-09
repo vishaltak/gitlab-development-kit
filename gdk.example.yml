@@ -56,6 +56,7 @@ gitaly:
   storage_dir: "/home/git/gdk/repositories"
 gitlab:
   actioncable: {}
+  cache_classes: false
   dir: "/home/git/gdk/gitlab"
 gitlab_elasticsearch_indexer:
   auto_update: true
