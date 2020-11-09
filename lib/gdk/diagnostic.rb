@@ -17,21 +17,10 @@ require_relative 'diagnostic/stale_services'
 module GDK
   module Diagnostic
     def self.all
-        self.serial_classes + self.parallel_classes
-    end
-    def self.serial_classes
-      klasses = %i[
-        Configuration
-      ]
-
-      klasses.map do |const|
-        const_get(const).new
-      end
-    end
-    def self.parallel_classes
       klasses = %i[
         RubyGems
         Version
+        Configuration
         Git
         Dependencies
         PendingMigrations

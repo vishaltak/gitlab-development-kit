@@ -3,11 +3,8 @@
 module GDK
   module Command
     class Doctor
-      def initialize(diagnostics_serial: GDK::Diagnostic.serial_classes,
-                     diagnostics_parallel: GDK::Diagnostic.parallel_classes,
-                     stdout: $stdout, stderr: $stderr)
-        @diagnostics_serial = diagnostics_serial
-        @diagnostics_parallel = diagnostics_parallel
+      def initialize(diagnostics: GDK::Diagnostic.all, stdout: $stdout, stderr: $stderr)
+        @diagnostics = diagnostics
         @stdout = stdout
         @stderr = stderr
       end
@@ -27,18 +24,11 @@ module GDK
       attr_reader :diagnostics, :stdout, :stderr
 
       def diagnostic_results
-        return @diagnostic_results if @diagnostic_results
-
-        serial = @diagnostics_serial.map do |diagnostic|
-          perform_diagnosis_for(diagnostic)
-        end
-        parallel = jobs.map { |x| x.join[:results] }.compact
-
-        @diagnostic_results = serial + parallel
+        @diagnostic_results ||= jobs.map { |x| x.join[:results] }.compact
       end
 
       def jobs
-        @diagnostics_parallel.map do |diagnostic|
+        diagnostics.map do |diagnostic|
           Thread.new do
             Thread.current[:results] = perform_diagnosis_for(diagnostic)
           end
