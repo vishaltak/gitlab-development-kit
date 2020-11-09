@@ -46,6 +46,7 @@ module GDK
     settings :gdk do
       bool(:ask_to_restart_after_update) { true }
       bool(:debug) { false }
+      integer(:runit_wait_secs) { 10 }
       settings :experimental do
         bool(:quiet) { false }
         bool(:auto_reconfigure) { false }

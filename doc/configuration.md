@@ -110,6 +110,7 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.debug`                       | `false` | Set this to `true` to enable increased output. |
 | `gdk.overwrite_changes`           | `false` | When set to `true`, `gdk reconfigure` overwrites files and move the old version to `.backups`.|
 | `gdk.protected_config_files`      | `[]`    | Contains file names / globs of configuration files GDK should not overwrite. |
+| `gdk.runit_wait_secs`             | `10`    | The number of seconds `runit` will wait. `runit` is used behind the scenes for `gdk stop/start/restart` and waits for 7 secs by default. |
 
 ##### Hooks
 
