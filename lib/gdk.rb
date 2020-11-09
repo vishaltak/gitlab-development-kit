@@ -231,16 +231,8 @@ module GDK
 
   # Called when running `gdk restart`
   def self.restart(argv)
-    with_hooks(config.gdk.stop_hooks, 'gdk stop')
-
-    result = with_hooks(config.gdk.start_hooks, 'gdk restart') do
-      Runit.sv('force-restart', argv)
-    end
-
-    # Only print if run like `gdk restart`, not e.g. `gdk restart rails-web`
-    print_url_ready_message if argv.empty?
-
-    result
+    stop(argv)
+    start(argv)
   end
 
   # Called when running `gdk install`
