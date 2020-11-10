@@ -10,6 +10,11 @@ RSpec.describe GDK::Dependencies do
         expect(described_class.parse_version('foo 1.2.3.4.5.6 bar')).to eq('1.2.3.4.5.6')
       end
 
+      it 'picks the first version looking number' do
+        expect(described_class.parse_version("Yarn v0.1.1 2011 Author Name")).to eq('0.1.1')
+        expect(described_class.parse_version('v0.1.1 2011')).to eq('0.1.1')
+      end
+
       it 'uses the given prefix' do
         expect(described_class.parse_version('1.2.3 v4.5.6', prefix: 'v')).to eq('4.5.6')
       end
