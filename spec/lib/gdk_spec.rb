@@ -122,17 +122,11 @@ RSpec.describe GDK do
   end
 
   describe '.restart' do
-    it 'executes hooks and restarts services' do
+    it 'calls stop then start' do
       services = %w[rails-web]
-      stop_hooks = %w[date]
-      start_hooks = %w[uptime]
 
-      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.stop_hooks').and_return(stop_hooks)
-      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.start_hooks').and_return(start_hooks)
-
-      expect(described_class).to receive(:with_hooks).with(stop_hooks, 'gdk stop')
-      expect(described_class).to receive(:with_hooks).with(start_hooks, 'gdk restart').and_yield
-      expect(Runit).to receive(:sv).with('force-restart', services).and_return(true)
+      expect(described_class).to receive(:stop).with(services)
+      expect(described_class).to receive(:start).with(services)
 
       described_class.restart(services)
     end

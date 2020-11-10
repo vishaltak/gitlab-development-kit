@@ -936,6 +936,12 @@ RSpec.describe GDK::Config do
   end
 
   describe 'gdk' do
+    describe '#runit_wait_secs' do
+      it 'is 10 secs by default' do
+        expect(config.gdk.runit_wait_secs).to eq(10)
+      end
+    end
+
     describe '#start_hooks' do
       describe '#before' do
         it 'is an empty array by default' do

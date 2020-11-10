@@ -132,7 +132,8 @@ module Runit
     start_runsvdir
     services = service_args(services)
     services.each { |svc| wait_runsv!(svc) }
-    system('sv', cmd, *services)
+
+    system('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services)
   end
 
   def self.service_args(services)
@@ -235,5 +236,9 @@ module Runit
       Process.kill('TERM', pid)
     rescue Errno::ESRCH
     end
+  end
+
+  def self.config
+    @config ||= GDK::Config.new
   end
 end
