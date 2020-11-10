@@ -69,6 +69,23 @@ These instructions require:
 To be able to get a Kerberos ticket, configure the client so it can find the
 appropriate KDC for a specific realm.
 
+1. Open `/etc/hosts` and add the following:
+
+   ```plaintext
+   127.0.0.1 krb5.gdk.test
+   ```
+
+1. Open `/etc/krb5.conf` and add the following under `[realms]`:
+
+   ```plaintext
+   GDK.TEST = {
+       kdc = tcp/krb5.gdk.test:1088
+   }
+   ```
+
+   This configures the Kerberos client so it can connect with the KDC for
+   `GDK.TEST` realm on port `1088`.
+
 1. Run `kinit` to get a ticket:
 
    ```shell
