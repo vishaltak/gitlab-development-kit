@@ -29,7 +29,6 @@ RUN git clone https://github.com/asdf-vm/asdf.git /home/gdk/.asdf --branch v0.8.
   echo "Installing asdf plugin '$plugin' and install current version" ; \
   asdf plugin add $plugin; \
   NODEJS_CHECK_SIGNATURES=no asdf install ; done \
-  && gem install bundler -v '= 1.17.3' \
   # simple tests that tools work
   && bash -lec "asdf version; yarn --version; node --version; ruby --version" \
   # clear tmp caches e.g. from postgres compilation

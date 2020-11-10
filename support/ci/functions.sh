@@ -8,7 +8,6 @@ init() {
 }
 
 install_gem() {
-  gem install -N bundler:1.17.3
   cd gem || exit
   gem build gitlab-development-kit.gemspec
   gem install gitlab-development-kit-*.gem
