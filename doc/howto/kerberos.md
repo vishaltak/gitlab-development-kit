@@ -1,37 +1,39 @@
 # Kerberos
 
-In order to test Kerberos integration with your GDK, you need to have a working
-Kerberos server.
+In order to test the [Kerberos integration](https://docs.gitlab.com/ee/integration/kerberos.html)
+using GDK, set up a local Kerberos server.
 
 ## Requirements
 
-Install [Docker](https://docs.docker.com/get-docker/) and
-[Docker Compose](https://docs.docker.com/compose/install/).
+These instructions require:
 
-## Setting up integration with GDK
+- [Docker](https://docs.docker.com/get-docker/).
+- [Docker Compose](https://docs.docker.com/compose/install/).
 
-1. Run `docker-compose up` in `kerberos/` directory. This will build a docker
-   image and start a container with a Kerberos KDC for `EXAMPLE.COM` realm.
-1. Copy the `http.keytab` generated in the container:
+## Set up integration with GDK
 
-   ```shell
-   $ docker cp <container ID or name>:/etc/http.keytab <GDK directory>/kerberos
-   ```
-
-   Example:
+1. Change into the `kerberos/` directory:
 
    ```shell
-   $ docker cp kerberos_krb5_1:/etc/http.keytab /home/user/gdk/kerberos
+   cd kerberos
    ```
 
-   This keytab will then be used by GitLab to authenticate Kerberos users.
+1. Run `docker-compose up`. This will build a Docker image and start a container
+   with a Kerberos KDC for `GDK.TEST` realm listening on port `1088`.
+1. Copy the `http.keytab` generated in the container to the host system:
+
+   ```shell
+   docker cp $(docker-compose ps -qa krb5):/etc/http.keytab .
+   ```
+
+   This keytab is then used by GitLab to authenticate Kerberos users.
 1. Ensure `http.keytab` is readable only by the user of your GDK.
 
    Example (`git` as the GDK user):
 
    ```shell
-   $ chown git /home/user/gdk/kerberos/http.keytab
-   $ chmod 0600 /home/user/gdk/kerberos/http.keytab
+   chown $(whoami) http.keytab
+   chmod 0600 http.keytab
    ```
 
 1. Configure `config/gitlab.yml` following the instructions from Kerberos
@@ -39,25 +41,19 @@ Install [Docker](https://docs.docker.com/get-docker/) and
    The `keytab` option should point to where `http.keytab` exists.
 1. Restart GDK: `gdk restart`.
 
-## Adding a user principal
+## Add a user principal
 
 1. Access the KDC shell and enter `kadmin`:
 
    ```shell
-   $ docker-compose exec krb5 bash
-   $ kadmin.local
+   docker-compose exec krb5 bash
+   kadmin.local
    ```
 
-1. Create user principal that will be linked to a GitLab user account:
+1. Create user principal to link to a GitLab user account:
 
    ```shell
-   addprinc <username>
-   ```
-
-   Example:
-
-   ```shell
-   addprinc user
+   addprinc <GitLab username>
    ```
 
    You'll be asked to enter and re-enter password.
@@ -65,10 +61,10 @@ Install [Docker](https://docs.docker.com/get-docker/) and
    via Rails console.
 
    ```shell
-   Identity.create(user: User.find_by(username: 'user'), extern_uid: 'user@EXAMPLE.COM', provider: 'kerberos')
+   Identity.create(user: User.find_by(username: 'user'), extern_uid: 'user@GDK.TEST', provider: 'kerberos')
    ```
 
-## Authenticating with Kerberos
+## Authenticate with Kerberos
 
 To be able to get a Kerberos ticket, configure the client so it can find the
 appropriate KDC for a specific realm.
@@ -76,7 +72,7 @@ appropriate KDC for a specific realm.
 1. Run `kinit` to get a ticket:
 
    ```shell
-   $ kinit user@EXAMPLE.COM
+   kinit user@GDK.TEST
    ```
 
    You'll be asked to enter the password set for the specified user principal.
@@ -85,17 +81,17 @@ appropriate KDC for a specific realm.
 
    ```shell
    $ klist
-   $ Credentials cache: API:ABCDEFGH-1234-ABCD-1234-ABCDEFGHIJKL
-             Principal: user@EXAMPLE.COM
+   Credentials cache: API:ABCDEFGH-1234-ABCD-1234-ABCDEFGHIJKL
+           Principal: user@GDK.TEST
 
-       Issued                Expires               Principal
-     Nov  6 18:13:08 2020  Nov  7 04:13:05 2020  krbtgt/EXAMPLE.COM@EXAMPLE.COM
+     Issued                Expires               Principal
+   Nov  6 18:13:08 2020  Nov  7 04:13:05 2020  krbtgt/GDK.TEST@GDK.TEST
    ```
 
 1. Test that you can clone a repository without any credentials:
 
    ```shell
-   $ git clone http://:@gitlab.example.com:3000/root/gitlab.git
+   git clone http://:@gdk.test:3000/root/gitlab.git
    ```
 
    If you encounter a `HTTP Basic: Access denied` error, configure `git` to set

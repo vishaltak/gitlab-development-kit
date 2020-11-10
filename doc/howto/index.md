@@ -50,3 +50,4 @@ to learn how to contribute to GitLab.
 - [End to End Test Configuration](end_to_end_test_configuration.md)
 - [Lefthook](lefthook.md)
 - [GDK in Gitpod](gitpod.md)
+- [Kerberos](kerberos.md)
