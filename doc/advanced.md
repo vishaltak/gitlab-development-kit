@@ -1,7 +1,7 @@
 # Advanced dependency instructions
 
 The following are dependency installation instructions for systems other than
-those covered in the [main dependency installation instructions](index.md#install-dependencies).
+those covered in the [main dependency installation instructions](index.md#install-git-and-make).
 
 These instructions may contain advanced configuration options.
 
