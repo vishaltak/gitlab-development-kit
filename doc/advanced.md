@@ -63,9 +63,12 @@ For Debian there are two ways to manage dependencies, either:
 
 ### Common setup
 
-First run `make bootstrap-packages`. It is a light subset of `make
-bootstrap` which just does an `apt-get update` and then `apt-get
-install` on the packages found in `packages_debian.txt`.
+After [installing `git` and `make`](index.md#install-git-and-make) run
+`make bootstrap-packages`.
+
+It is a light subset of `make bootstrap` which just does an `apt-get
+update` and then `apt-get install` on the packages found in
+`packages_debian.txt`.
 
    ```shell
    make bootstrap-packages
