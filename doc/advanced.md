@@ -397,4 +397,5 @@ wsl --set-version <your subsystem name here>
 
 ## Next Steps
 
-After you've completed the steps on this page, [install and set up GDK](index.md).
+After you've completed the steps on this page, [install and set up
+GDK](index.md#install-and-set-up-gdk).
