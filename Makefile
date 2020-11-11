@@ -925,7 +925,7 @@ ifeq ($(and $(RUBOCOP)),)
 	$(Q)${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RuboCop: "
-	$(Q)${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
+	@${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
 endif
 
 .PHONY: rspec
@@ -939,7 +939,7 @@ ifeq ($(and $(RSPEC)),)
 	$(Q)${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RSpec: "
-	$(Q)${BUNDLE} exec $@
+	@${BUNDLE} exec $@
 endif
 
 .PHONY: lint
@@ -954,7 +954,7 @@ else
 ifeq ($(and $(VALE)),)
 	@echo "INFO: Installing vale.."
 	# b18d1869aabd2fe0769dc30e07f5ef5128157482 = v2.3.4
-	$(Q)GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482 ${QQ}
+	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482 ${QQ}
 endif
 endif
 
@@ -962,7 +962,7 @@ endif
 vale: vale-install
 	@echo -n "Vale: "
 	$(eval VALE := $(shell command -v vale 2> /dev/null))
-	$(Q)${VALE} --minAlertLevel error *.md doc
+	@${VALE} --minAlertLevel error *.md doc
 
 .PHONY: markdownlint-install
 markdownlint-install:
@@ -981,7 +981,7 @@ endif
 markdownlint: markdownlint-install
 	$(eval MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null))
 	@echo -n "MarkdownLint: "
-	$(Q)${MARKDOWNLINT} --config .markdownlint.json 'doc/**/*.md' && echo "OK"
+	@${MARKDOWNLINT} --config .markdownlint.json 'doc/**/*.md' && echo "OK"
 
 .PHONY: shellcheck-install
 shellcheck-install:
@@ -998,7 +998,7 @@ endif
 .PHONY: shellcheck
 shellcheck: shellcheck-install
 	@echo -n "Shellcheck: "
-	$(Q)support/shellcheck && echo "OK"
+	@support/shellcheck && echo "OK"
 
 ##############################################################
 # Misc
