@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :development do
   gem 'lefthook', '~> 0.7', require: false
-  gem 'rake', '~> 12.0'
+  gem 'rake', '> 12.0'
   gem 'yard', '~> 0.9', require: false
 end
 
