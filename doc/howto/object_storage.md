@@ -15,9 +15,16 @@ object_store:
   port: 9000
 ```
 
-The object store port defaults to `9000` but can be changed via the `object_store.port` setting in your `gdk.yml`.
+The object store has the following default settings:
 
-Changing port number requires `gdk reconfigure`.
+| Setting                | Default            | Description                                                                             |
+|----------------------- |--------------------|-----------------------------------------------------------------------------------------|
+| `object_store.enabled` | `false`            | Can be changed by adding/updating the `object_store.enabled` setting in your `gdk.yml`. |
+| `object_store.port`    | `9000`             | Can be changed by adding/updating the `object_store.port` setting in your `gdk.yml`.    |
+| `access key`           | `minio`            | Access key needed by MinIO to log in via its web UI. Cannot be changed.                 |
+| `secret key`           | `gdk-minio`        | Secret key needed by MinIO to log in via its web UI. Cannot be changed.                 |
+
+Changing settings requires `gdk reconfigure` to be run.
 
 ## MinIO errors
 
