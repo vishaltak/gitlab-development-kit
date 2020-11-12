@@ -81,7 +81,18 @@ ensure_supported_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian" || "$os_id" = "neon" ]]; then
+    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian" ]]; then
+      return 0
+    fi
+
+    # Ubuntu derivatives like KDE neon or Pop!_OS should be compatible as well
+    # We match only the start of the string since according to FreeDesktop docs
+    # ID_LIKE lists OSes in order of how closely they are related to the local
+    # operating system.
+    # https://www.freedesktop.org/software/systemd/man/os-release.html#ID_LIKE=
+    os_id_like=$(awk -F= '$1=="ID_LIKE" { print $2 ;}' /etc/os-release)
+
+    if [[ "$os_id_like" == \"ubuntu* ]]; then
       return 0
     fi
   fi
