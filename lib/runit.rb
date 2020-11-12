@@ -103,7 +103,6 @@ module Runit
 
     2.times do
       stopped = sv('force-stop', [])
-
       break if stopped
 
       GDK::Output.notice 'retrying stop'
