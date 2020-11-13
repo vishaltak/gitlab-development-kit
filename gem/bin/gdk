@@ -28,6 +28,7 @@ module GDK
         puts 'Usage: gdk init [DIR]'
         return false
       end
+
       directory = ARGV.count == 2 ? ARGV[1] : DEFAULT_INIT_DIRECTORY
       if directory.start_with?('-')
         warn <<~INVALID_GDK_DIR_NAME
@@ -36,6 +37,7 @@ module GDK
         INVALID_GDK_DIR_NAME
         return false
       end
+
       cmd = %W[git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git #{directory}]
       system(*cmd) && trust!(directory) && remember!(directory)
     when 'trust'
@@ -43,6 +45,7 @@ module GDK
         puts 'Usage: gdk trust DIR'
         return false
       end
+
       trust!(ARGV[1])
     else
       # rubocop:disable Style/GlobalVars

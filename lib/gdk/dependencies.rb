@@ -192,7 +192,7 @@ module GDK
       def missing_dependency(dependency, minimum_version: nil)
         message = "ERROR: #{dependency} is not installed or not available in your PATH"
         message += ". #{minimum_version} or higher is required" unless minimum_version.nil?
-        message + "."
+        "#{message}."
       end
 
       private

@@ -9,7 +9,7 @@ end
 
 desc 'Dump the configured settings'
 task 'dump_config' do
-  GDK::Config.new.dump!(STDOUT)
+  GDK::Config.new.dump!($stdout)
 end
 
 desc 'Generate an example config file with all the defaults'

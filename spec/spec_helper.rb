@@ -43,7 +43,7 @@ def stub_pg_bindir
 end
 
 def stub_tty(state)
-  allow(STDOUT).to receive(:isatty).and_return(state)
+  allow($stdout).to receive(:isatty).and_return(state)
 end
 
 def stub_no_color_env(res)

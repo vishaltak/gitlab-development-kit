@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 #
+# frozen_string_literal: true
+
 # Translate SIGTERM to SIGINT to request a 'fast shutdown' from Postgres.
 
 Signal.trap('TERM') do

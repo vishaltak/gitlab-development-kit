@@ -17,6 +17,7 @@ RSpec.describe GDK::Config do
       'omniauth' => { 'group_saml' => { 'enabled' => group_saml_enabled } }
     }
   end
+
   let(:default_config) { described_class.new }
 
   subject(:config) { described_class.new(yaml: yaml) }

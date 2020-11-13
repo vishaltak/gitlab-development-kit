@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative '../lib/shellout.rb'
+require_relative '../lib/shellout'
 require_relative '../lib/gdk'
 require_relative '../lib/gdk/postgresql'
 

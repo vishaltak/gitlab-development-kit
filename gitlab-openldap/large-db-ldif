@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+#
+# frozen_string_literal: true
+
 require 'erb'
 
 abort "Usage: #{$PROGRAM_NAME} USER_COUNT" if ARGV.count != 1

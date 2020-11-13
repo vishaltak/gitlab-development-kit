@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+#
+# frozen_string_literal: true
 
 def run(cmd)
   puts "(support/self-update-git-worktree) > #{cmd.join(' ')}"

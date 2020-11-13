@@ -33,13 +33,15 @@ module Runit
     args = runsvdir_base_args
     return if runsvdir_pid(args)
 
+    dots = '.' * 395
+
     Process.fork do
       Dir.chdir('/')
       Process.setsid
 
       # Cargo-culting the use of 395 periods from omnibus-gitlab.
       # https://gitlab.com/gitlab-org/omnibus-gitlab/blob/5dfdcafa30ad6e203a04a917f180b630d5121cf6/config/templates/runit/runsvdir-start.erb#L42
-      args << ('log: ' + '.' * 395)
+      args << "log: #{dots}"
 
       spawn(cleaned_path_env, *args, in: '/dev/null', out: '/dev/null', err: '/dev/null')
     end
@@ -65,8 +67,10 @@ module Runit
     return if pgrep.empty?
 
     pids = pgrep.split("\n").map { |str| Integer(str) }
+    runsvdir_ps = "#{args.join(' ')} "
+
     pids.find do |pid|
-      Shellout.new(%W[ps -o args= -p #{pid}]).run.start_with?(args.join(' ') + ' ')
+      Shellout.new(%W[ps -o args= -p #{pid}]).run.start_with?(runsvdir_ps)
     end
   end
 

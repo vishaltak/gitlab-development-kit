@@ -99,7 +99,7 @@ module GDK
     anything :__uri do
       # Only include the port if it's 'non standard'
       klass = config.https? ? URI::HTTPS : URI::HTTP
-      relative_url_root = config.relative_url_root.gsub(%r{\/+$}, '')
+      relative_url_root = config.relative_url_root.gsub(%r{/+$}, '')
 
       klass.build(host: config.hostname, port: config.port, path: relative_url_root)
     end

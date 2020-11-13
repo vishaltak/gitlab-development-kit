@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+#
+# frozen_string_literal: true
+
 require_relative '../lib/gdk'
 
 system(*%w[gdk start postgresql])
