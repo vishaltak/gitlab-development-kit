@@ -5,6 +5,7 @@ require 'spec_helper'
 RSpec.describe GDK::Config do
   let(:auto_devops_enabled) { false }
   let(:nginx_enabled) { false }
+  let(:group_saml_enabled) { false }
   let(:protected_config_files) { [] }
   let(:overwrite_changes) { false }
   let(:yaml) do
@@ -12,7 +13,8 @@ RSpec.describe GDK::Config do
       'auto_devops' => { 'enabled' => auto_devops_enabled },
       'gdk' => { 'protected_config_files' => protected_config_files, 'overwrite_changes' => overwrite_changes },
       'nginx' => { 'enabled' => nginx_enabled },
-      'hostname' => 'gdk.example.com'
+      'hostname' => 'gdk.example.com',
+      'omniauth' => { 'group_saml' => { 'enabled' => group_saml_enabled } }
     }
   end
   let(:default_config) { described_class.new }
@@ -851,6 +853,22 @@ RSpec.describe GDK::Config do
     describe '#host' do
       it 'returns the default hostname' do
         expect(config.object_store.host).to eq('127.0.0.1')
+      end
+    end
+  end
+
+  describe 'omniauth' do
+    context 'when group SAML is disabled' do
+      it 'returns false' do
+        expect(config.omniauth.group_saml.enabled).to be false
+      end
+    end
+
+    context 'when group SAML is enabled' do
+      let(:group_saml_enabled) { true }
+
+      it 'returns true' do
+        expect(config.omniauth.group_saml.enabled).to be true
       end
     end
   end
