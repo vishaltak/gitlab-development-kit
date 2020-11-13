@@ -5,6 +5,7 @@ require 'mkmf'
 require_relative 'config_type/anything'
 require_relative 'config_type/array'
 require_relative 'config_type/bool'
+require_relative 'config_type/hash'
 require_relative 'config_type/integer'
 require_relative 'config_type/path'
 require_relative 'config_type/string'
@@ -25,6 +26,10 @@ module GDK
 
       def array(name, &blk)
         setting(name, ConfigType::Array, &blk)
+      end
+
+      def hash(name, &blk)
+        setting(name, ConfigType::Hash, &blk)
       end
 
       def bool(name, &blk)
@@ -92,6 +97,8 @@ module GDK
         value = fetch(method)
         hash[method_name] = if value.is_a?(ConfigSettings)
                               value.dump!
+                            elsif value.is_a?(Hash)
+                              value.transform_keys { |k, v| k.to_s }
                             elsif value.is_a?(Enumerable) && value.first.is_a?(ConfigSettings)
                               value.map(&:dump!)
                             elsif value.is_a?(Pathname)

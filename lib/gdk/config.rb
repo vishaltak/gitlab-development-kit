@@ -217,9 +217,32 @@ module GDK
     end
 
     settings :object_store do
+      bool(:consolidated_form) { false }
       bool(:enabled) { read!('object_store_enabled') || false }
       string(:host) { config.listen_address }
       integer(:port) { read!('object_store_port') || 9000 }
+      hash(:connection) do
+        {
+          'provider' => 'AWS',
+          'aws_access_key_id' => 'minio',
+          'aws_secret_access_key' => 'gdk-minio',
+          'region' => 'gdk',
+          'endpoint' => "http://#{config.object_store.host}:#{config.object_store.port}",
+          'path_style' => true
+        }
+      end
+      hash(:objects) do
+        {
+          'artifacts' => { 'bucket' => 'artifacts' },
+          'external_diffs' => { 'bucket' => 'external-diffs' },
+          'lfs' => { 'bucket' => 'lfs-objects' },
+          'uploads' => { 'bucket' => 'uploads' },
+          'packages' => { 'bucket' => 'packages' },
+          'dependency_proxy' => { 'bucket' => 'dependency_proxy' },
+          'terraform_state' => { 'bucket' => 'terraform' },
+          'pages' => { 'bucket' => 'pages' }
+        }
+      end
     end
 
     settings :gitlab_pages do
