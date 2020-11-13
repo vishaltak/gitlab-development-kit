@@ -75,24 +75,29 @@ ensure_not_root() {
   return 0
 }
 
+read_os_id() {
+  # We can see if a distro is a derivative of Ubuntu or Debian by inspecting
+  # the contents of ID_LIKE.
+  # https://www.freedesktop.org/software/systemd/man/os-release.html#ID_LIKE=
+  os_id_like=$(source /etc/os-release && echo $ID_LIKE | cut -d ' ' -f 1)
+  if [[ -n $os_id_like ]]; then
+    export OS_ID=$os_id_like
+    return 0
+  fi
+
+  os_id=$(source /etc/os-release && echo $ID)
+
+  export OS_ID=$os_id
+  return 0
+}
+
 ensure_supported_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
     return 0
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+    read_os_id
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian" ]]; then
-      return 0
-    fi
-
-    # Ubuntu derivatives like KDE neon or Pop!_OS should be compatible as well
-    # We match only the start of the string since according to FreeDesktop docs
-    # ID_LIKE lists OSes in order of how closely they are related to the local
-    # operating system.
-    # https://www.freedesktop.org/software/systemd/man/os-release.html#ID_LIKE=
-    os_id_like=$(awk -F= '$1=="ID_LIKE" { print $2 ;}' /etc/os-release)
-
-    if [[ "$os_id_like" == \"ubuntu* ]]; then
+    if [[ "$OS_ID" == "ubuntu" || "$OS_ID" == "debian" ]]; then
       return 0
     fi
   fi
@@ -106,13 +111,13 @@ setup_platform() {
       return 1
     fi
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+    read_os_id
 
-    if [[ "${os_id}" == "ubuntu" || "${os_id}" = "neon" ]]; then
+    if [[ "${OS_ID}" == "ubuntu" ]]; then
       if ! setup_platform_linux_with "packages.txt"; then
         return 1
       fi
-    elif [[ "${os_id}" == "debian" ]]; then
+    elif [[ "${OS_ID}" == "debian" ]]; then
       if ! setup_platform_linux_with "packages_debian.txt"; then
         return 1
       fi
