@@ -284,6 +284,9 @@ module GDK
         string(:client_id) { read!('google_oauth_client_id') || '' }
         string(:client_secret) { read!('google_oauth_client_secret') || '' }
       end
+      settings :group_saml do
+        bool(:enabled) { false }
+      end
     end
 
     settings :geo do

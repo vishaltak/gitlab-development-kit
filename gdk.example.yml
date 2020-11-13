@@ -110,6 +110,8 @@ omniauth:
     client_id: ''
     client_secret: ''
     enabled: ''
+  group_saml:
+    enabled: false
 openldap:
   enabled: false
 port: 3000
