@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../gdk/output'
 
 module Git
@@ -11,7 +13,7 @@ module Git
         GDK::Output.puts(rec.description)
         GDK::Output.puts("Possible input: #{rec.possible_values.join(',')} (default: #{rec.default})")
 
-        input = STDIN.gets.chomp
+        input = $stdin.gets.chomp
         input = rec.default if input.empty?
 
         GDK::Output.abort("Invalid input: #{input}, possible values: #{rec.possible_values}") unless rec.valid_input_value?(input)

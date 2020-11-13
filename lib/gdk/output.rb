@@ -85,11 +85,11 @@ module GDK
     def self.icon(code)
       return '' unless colorize?
 
-      ICONS[code] + ' '
+      "#{ICONS[code]} "
     end
 
     def self.colorize?
-      STDOUT.isatty && ENV.fetch('NO_COLOR', '').empty?
+      STDOUT.isatty && ENV.fetch('NO_COLOR', '').empty? # rubocop:disable Style/GlobalStdStream
     end
   end
 end

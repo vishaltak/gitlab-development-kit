@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def main
   daemon_pid = daemonize(ARGV)
   trap('INT') { trigger_normal_shutdown(daemon_pid) }
@@ -32,7 +34,7 @@ def daemonize(args)
 
   pipe_read.close
 
-  STDIN.reopen '/dev/null'
+  $stdin.reopen '/dev/null'
 
   # Become session leader (standard part of daemonizing).
   Process.setsid

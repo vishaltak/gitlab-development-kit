@@ -16,7 +16,7 @@ module GDK
   HookCommandError = Class.new(StandardError)
 
   PROGNAME = 'gdk'
-  MAKE = RUBY_PLATFORM.match?(/bsd/) ? 'gmake' : 'make'
+  MAKE = RUBY_PLATFORM.include?('bsd') ? 'gmake' : 'make'
 
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`

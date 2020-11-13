@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'erb'
 require 'fileutils'
 require_relative '../gdk/config'
@@ -50,9 +52,10 @@ module Runit
 
     def stale_service_links(services)
       service_names = services.map(&:name)
+      dir_matcher = %w[. ..]
 
       stale_entries = Dir.entries(services_dir).reject do |svc|
-        service_names.include?(svc) || %w[. ..].include?(svc)
+        service_names.include?(svc) || dir_matcher.include?(svc)
       end
 
       stale_entries.map do |entry|

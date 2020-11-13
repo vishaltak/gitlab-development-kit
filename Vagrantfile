@@ -1,11 +1,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+#
+# frozen_string_literal: true
 
 # Please see the Vagrant section in the docs for caveats and tips
 # https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/vagrant.md
 
 Vagrant.require_version ">= 1.6.0"
-VAGRANTFILE_API_VERSION = "2".freeze
+VAGRANTFILE_API_VERSION = "2"
 
 def enable_shares(config, nfs)
   # paths must be listed as shortest to longest per bug: https://github.com/GM-Alex/vagrant-winnfsd/issues/12#issuecomment-78195957
@@ -21,7 +23,7 @@ end
 def running_in_admin_mode?
   return false unless Vagrant::Util::Platform.windows?
 
-  (`reg query HKU\\S-1-5-19 2>&1` =~ /ERROR/).nil?
+  `reg query HKU\\S-1-5-19 2>&1`.include?('ERROR')
 end
 
 raise Vagrant::Errors::VagrantError.new, "You must run the GitLab Vagrant from an elevated command prompt" if Vagrant::Util::Platform.windows? && !running_in_admin_mode?
@@ -43,6 +45,7 @@ required_plugins.each do |plugin|
     system('vagrant', 'plugin', 'install', plugin)
     need_restart = true
   end
+
   exec "vagrant #{ARGV.join(' ')}" if need_restart
 end
 
@@ -160,7 +163,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # disables NFS on macOS to prevent UID / GID issues with mounted shares
-      enable_nfs = !Vagrant::Util::Platform.platform.match?(/darwin/)
+      enable_nfs = !Vagrant::Util::Platform.platform.include?('darwin')
       enable_shares(override, enable_nfs)
     end
 
