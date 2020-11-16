@@ -955,8 +955,8 @@ ifeq ($(and $(GOLANG)),)
 else
 ifeq ($(and $(VALE)),)
 	@echo "INFO: Installing vale.."
-	# b18d1869aabd2fe0769dc30e07f5ef5128157482 = v2.3.4
-	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@b18d1869aabd2fe0769dc30e07f5ef5128157482 ${QQ}
+	# 864264ac8c865d5cbb870be2119f5a458a8b6c15 = v2.6.1
+	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale@864264ac8c865d5cbb870be2119f5a458a8b6c15 ${QQ}
 endif
 endif
 
