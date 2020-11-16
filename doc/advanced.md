@@ -102,7 +102,7 @@ To install dependencies for Debian and manage them yourself:
 The process for installing dependencies on Linux depends on your Linux
 distribution.
 
-Unless already set, you'll probably have to increase the watches limit of
+Unless already set, you might have to increase the watches limit of
 `inotify` for frontend development tools such as `webpack` to effectively track
 file changes. See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
 for details and instructions about how to apply this change.
@@ -138,7 +138,7 @@ We assume you are using Fedora >= 31.
 NOTE:
 Fedora 32 ships PostgreSQL 11.x and Fedora 32+ ships PostgreSQL 12.x in default repositories.
 You can use `postgresql:11` or `postgresql:12` module to install PostgreSQL 11 or 12.
-But keep in mind that will replace the default version of PostgreSQL package, so you cannot
+But keep in mind that replaces the default version of PostgreSQL package, so you cannot
 use both versions at once.
 
 ```shell

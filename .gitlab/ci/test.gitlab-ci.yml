@@ -1,6 +1,6 @@
 docs_lint:
   extends: .rules:docs-changes
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.12-vale-2.6.1-markdownlint-0.24.0"
   stage: test
   needs: []
   script:
@@ -23,9 +23,9 @@ rspec:
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec rspec --format progress --format RspecJunitFormatter --out rspec.xml
   cache:
-      key: "ruby-2.7-bundle"
-      paths:
-        - ./vendor/bundle
+    key: "ruby-2.7-bundle"
+    paths:
+      - ./vendor/bundle
   artifacts:
     paths:
       - rspec.xml
@@ -85,9 +85,9 @@ yard:
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec yardoc
   cache:
-      key: "ruby-2.7-bundle"
-      paths:
-        - ./vendor/bundle
+    key: "ruby-2.7-bundle"
+    paths:
+      - ./vendor/bundle
   artifacts:
     expire_in: 1 week
     paths:
