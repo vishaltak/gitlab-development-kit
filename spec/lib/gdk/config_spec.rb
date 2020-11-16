@@ -726,6 +726,19 @@ RSpec.describe GDK::Config do
         expect(config.nginx.__listen_address).to eq('localhost:1234')
       end
     end
+
+    describe '#__request_buffering_off_routes' do
+      it 'has some defailt routes' do
+        expected_routes = [
+          '/api/v\d/jobs/\d+/artifacts$',
+          '\.git/git-receive-pack$',
+          '\.git/gitlab-lfs/objects',
+          '\.git/info/lfs/objects/batch$'
+        ]
+
+        expect(config.nginx.__request_buffering_off_routes).to eq(expected_routes)
+      end
+    end
   end
 
   describe 'gitlab_elasticsearch_indexer' do
