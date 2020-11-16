@@ -482,6 +482,12 @@ RSpec.describe GDK::Config do
         expect(config.gitaly.__storages[2].path).to eq(Pathname.new('/home/git/gdk/repository_storages/gitaly/gitaly-2'))
       end
     end
+
+    describe 'auth_token' do
+      it 'is not set by default' do
+        expect(config.gitaly.auth_token).to be('')
+      end
+    end
   end
 
   context 'geo' do
@@ -701,14 +707,6 @@ RSpec.describe GDK::Config do
     describe 'auto_update' do
       it 'is enabled by default' do
         expect(config.gitlab_k8s_agent.auto_update).to be(true)
-      end
-    end
-  end
-
-  describe 'gitaly' do
-    describe 'auth_token' do
-      it 'is not set by default' do
-        expect(config.gitaly.auth_token).to be('')
       end
     end
   end
