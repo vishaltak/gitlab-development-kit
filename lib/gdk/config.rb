@@ -330,6 +330,14 @@ module GDK
         bool(:enabled) { false }
       end
       string(:__listen_address) { "#{config.nginx.listen}:#{config.port}" }
+      array(:__request_buffering_off_routes) do
+        [
+          '/api/v\d/jobs/\d+/artifacts$',
+          '\.git/git-receive-pack$',
+          '\.git/gitlab-lfs/objects',
+          '\.git/info/lfs/objects/batch$'
+        ]
+      end
     end
 
     settings :postgresql do
