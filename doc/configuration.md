@@ -76,17 +76,19 @@ gdk:
 
 Here are a few settings worth mentioning:
 
-| Setting                 | Default            | Description                                                                                |
-|------------------------ |--------------------|--------------------------------------------------------------------------------------------|
-| `port`                  | `3000`             | Select the port to run GDK on, useful when running multiple GDKs in parallel.              |
-| `webpack.port`          | `3808`             | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings). |
-| `gitlab.cache_classes`  | `false`            | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
-| `gitlab_pages.host`     | `127.0.0.1.nip.io` | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
-| `gitlab_pages.port`     | `3010`             | Specify on which port GitLab Pages should run. See also the [Pages guide](howto/pages.md#port). |
-| `relative_url_root`     | `/`                | When you want to test GitLab being available on a different path than `/`. For example, `/gitlab`. |
-| `object_store.enabled`  | `false`            | Set this to `true` to enable Object Storage with MinIO.                                    |
-| `registry.enabled`      | `false`            | Set this to `true` to enable container registry.                                           |
-| `geo.enabled`           | `false`            | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
+| Setting                          | Default               | Description                                                                                |
+|--------------------------------- |-----------------------|--------------------------------------------------------------------------------------------|
+| `port`                           | `3000`                | Select the port to run GDK on, useful when running multiple GDKs in parallel.              |
+| `webpack.port`                   | `3808`                | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings). |
+| `gitlab.cache_classes`           | `false`               | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
+| `gitlab_pages.host`              | `127.0.0.1.nip.io`    | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
+| `gitlab_pages.port`              | `3010`                | Specify on which port GitLab Pages should run. See also the [Pages guide](howto/pages.md#port). |
+| `relative_url_root`              | `/`                   | When you want to test GitLab being available on a different path than `/`. For example, `/gitlab`. |
+| `object_store.enabled`           | `false`               | Set this to `true` to enable Object Storage with MinIO.                                    |
+| `object_store.consolidated_form` | `false`               | Set this to `true` to use the [consolidated object storage configuration](https://docs.gitlab.com/ee/administration/object_storage.html#consolidated-object-storage-configuration). Required for Microsoft Azure. |
+| `object_store.connection`        | See `gdk.example.yml` | Specify the [object storage connection settings](https://docs.gitlab.com/ee/administration/object_storage.html#connection-settings).
+| `registry.enabled`               | `false`               | Set this to `true` to enable container registry.                                           |
+| `geo.enabled`                    | `false`               | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
 
 For example, to change the port GDK is accessible on, you can set this in your `gdk.yml`:
 
@@ -98,6 +100,76 @@ And run the following command to apply the change:
 
 ```shell
 gdk reconfigure
+```
+
+##### Object storage config
+
+The following examples are a quick guide for configuring object storage
+for external S3 providers or Microsoft Azure. See the [object storage
+settings](https://docs.gitlab.com/ee/administration/object_storage.html).
+Note that we recommend enabling `consolidated_form` to `true`.
+
+In development, you may also use a single bucket for testing.
+
+###### External S3 providers
+
+```yaml
+object_store:
+  enabled: true
+  consolidated_form: true
+  connection:
+    provider: 'AWS'
+    aws_access_key_id: '<YOUR AWS ACCESS KEY ID>'
+    aws_secret_access_key: '<YOUR AWS SECRET ACCESS KEY>'
+  objects:
+    artifacts:
+      bucket: artifacts
+    external_diffs:
+      bucket: external-diffs
+    lfs:
+      bucket: lfs-objects
+    uploads:
+      bucket: uploads
+    packages:
+      bucket: packages
+    dependency_proxy:
+      bucket: dependency_proxy
+    terraform_state:
+      bucket: terraform
+    pages:
+      bucket: pages
+```
+
+###### Microsoft Azure Blob storage
+
+To make Microsoft Azure Blob storage work, `consolidated_form` must be
+set to `true`:
+
+```yaml
+object_store:
+  enabled: true
+  consolidated_form: true
+  connection:
+    provider: 'AzureRM'
+    azure_storage_account_name: '<YOUR AZURE STORAGE ACCOUNT>'
+    azure_storage_access_key: '<YOUR AZURE STORAGE ACCESS KEY>'
+  objects:
+    artifacts:
+      bucket: artifacts
+    external_diffs:
+      bucket: external-diffs
+    lfs:
+      bucket: lfs-objects
+    uploads:
+      bucket: uploads
+    packages:
+      bucket: packages
+    dependency_proxy:
+      bucket: dependency_proxy
+    terraform_state:
+      bucket: terraform
+    pages:
+      bucket: pages
 ```
 
 #### GDK settings

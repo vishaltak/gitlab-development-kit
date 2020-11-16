@@ -5,6 +5,7 @@ require 'mkmf'
 require_relative 'config_type/anything'
 require_relative 'config_type/array'
 require_relative 'config_type/bool'
+require_relative 'config_type/hash'
 require_relative 'config_type/integer'
 require_relative 'config_type/path'
 require_relative 'config_type/string'
@@ -25,6 +26,10 @@ module GDK
 
       def array(name, &blk)
         setting(name, ConfigType::Array, &blk)
+      end
+
+      def hash(name, &blk)
+        setting(name, ConfigType::Hash, &blk)
       end
 
       def bool(name, &blk)

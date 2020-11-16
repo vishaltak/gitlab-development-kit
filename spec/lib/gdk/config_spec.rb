@@ -869,6 +869,51 @@ RSpec.describe GDK::Config do
         expect(config.object_store.host).to eq('127.0.0.1')
       end
     end
+
+    describe '#connection' do
+      context 'default settings' do
+        let(:default_connection) do
+          {
+            'provider' => 'AWS',
+            'aws_access_key_id' => 'minio',
+            'aws_secret_access_key' => 'gdk-minio',
+            'region' => 'gdk',
+            'endpoint' => "http://127.0.0.1:9000",
+            'path_style' => true
+          }
+        end
+
+        it 'returns the default Minio connection parameters' do
+          expect(config.object_store.connection).to eq(default_connection)
+        end
+      end
+
+      context 'with external S3 provider' do
+        let(:s3_connection) do
+          {
+            'provider' => 'AWS',
+            'aws_access_key_id' => 'test_access_key',
+            'aws_secret_access_key' => 'secret'
+          }
+        end
+
+        before do
+          yaml.merge!(
+            {
+              'object_store' => {
+                'enabled' => true,
+                'connection' => s3_connection
+              }
+            }
+          )
+        end
+
+        it 'configures the S3 provider' do
+          expect(config.object_store.enabled?).to be true
+          expect(config.object_store.connection).to eq(s3_connection)
+        end
+      end
+    end
   end
 
   describe 'omniauth' do

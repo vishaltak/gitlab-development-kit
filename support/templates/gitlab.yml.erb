@@ -136,6 +136,17 @@ production: &base
     # The IDLE command timeout.
     idle_timeout: 60
 
+  <%- if config.object_store.consolidated_form? -%>
+  ## Consolidated object store config
+  ## This will only take effect if the object_store sections are not defined
+  ## within the types (e.g. artifacts, lfs, etc.).
+  object_store:
+    enabled: <%= config.object_store? %>
+    proxy_download: false
+    connection: <%= config.object_store.connection.to_json %>
+    objects: <%= config.object_store.objects.to_json %>
+  <%- end %>
+
   ## Service desk email
   # Allow users to create new service desk issues by sending an email to
   # service desk address.
@@ -171,6 +182,7 @@ production: &base
   ## Build Artifacts
   artifacts:
     enabled: true
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: artifacts
@@ -182,10 +194,12 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+    <%- end -%>
 
   ## Merge request external diff storage
   external_diffs:
     enabled: <%= config.object_store? %>
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: external-diffs
@@ -197,10 +211,12 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+    <%- end -%>
 
   ## Git LFS
   lfs:
     enabled: true
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: lfs-objects
@@ -212,12 +228,14 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+    <%- end -%>
 
   ## Uploads (attachments, avatars, etc...)
   uploads:
     # The location where uploads objects are stored (default: public/).
     # storage_path: public/
     # base_dir: uploads/-/system
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: uploads
@@ -229,10 +247,12 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+    <%- end -%>
 
   ## Packages (maven repository, npm registry, etc...)
   packages:
     enabled: true
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: packages
@@ -244,6 +264,7 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+    <%- end -%>
 
   ## Dependency Proxy
   dependency_proxy:
@@ -252,6 +273,7 @@ production: &base
   ## Terraform state
   terraform_state:
     enabled: true
+   <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: terraform
@@ -262,6 +284,7 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+    <%- end -%>
 
   ## GitLab Pages
   pages:
@@ -276,6 +299,7 @@ production: &base
     admin:
       address: unix:<%= config.gdk_root %>/gitlab/tmp/sockets/private/pages-admin.socket # TCP connections are supported too (e.g. tcp://host:port)
     secret_file: <%= config.gitlab_pages.secret_file %>
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
       remote_directory: pages # The bucket name
@@ -286,6 +310,7 @@ production: &base
         region: gdk
         endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
         path_style: true
+     <%- end -%>
 
   ## Mattermost
   ## For enabling Add to Mattermost button
@@ -879,6 +904,7 @@ test:
     # when: always
     # The location where external diffs are stored (default: shared/external-diffs).
     # storage_path: shared/external-diffs
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: false
       remote_directory: external-diffs # The bucket name
@@ -887,10 +913,12 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
+    <%- end -%>
   lfs:
     enabled: true
     # The location where LFS objects are stored (default: shared/lfs-objects).
     # storage_path: shared/lfs-objects
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: false
       remote_directory: lfs-objects # The bucket name
@@ -899,11 +927,13 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
+    <%- end -%>
   artifacts:
     path: tmp/tests/artifacts
     enabled: true
     # The location where build artifacts are stored (default: shared/artifacts).
     # path: shared/artifacts
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: false
       remote_directory: artifacts # The bucket name
@@ -913,8 +943,10 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
+    <%- end -%>
   uploads:
     storage_path: tmp/tests/public
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: false
       connection:
@@ -922,9 +954,11 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
+    <%- end -%>
   terraform_state:
     enabled: true
     storage_path: tmp/tests/terraform_state
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: false
       remote_directory: terraform
@@ -933,6 +967,7 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
+    <%- end -%>
   gitlab:
     host: localhost
     port: 80
@@ -950,6 +985,7 @@ test:
 
   pages:
     path: tmp/tests/pages
+    <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: false
       remote_directory: pages
@@ -958,6 +994,7 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
+    <%- end -%>
   repositories:
     storages:
       default:
