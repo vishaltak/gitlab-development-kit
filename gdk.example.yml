@@ -50,6 +50,9 @@ gitaly:
   auto_update: true
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   enabled: false
+  gitlab:
+    http_settings:
+      ca_path: ''
   internal_socket_dir: "/home/git/gdk/tmp/gitaly"
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
@@ -76,6 +79,7 @@ gitlab_pages:
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
+  ssl_cert_dir: ''
 grafana:
   enabled: false
 hostname: 127.0.0.1

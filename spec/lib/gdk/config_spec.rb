@@ -27,6 +27,14 @@ RSpec.describe GDK::Config do
     allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).and_return(nil)
   end
 
+  describe 'common' do
+    describe 'ca_path' do
+      it 'is not set by default' do
+        expect(config.common.ca_path).to be('')
+      end
+    end
+  end
+
   describe '__architecture' do
     it 'returns x86_64' do
       allow(RbConfig::CONFIG).to receive(:[]).with('target_cpu').and_return('x86_64')

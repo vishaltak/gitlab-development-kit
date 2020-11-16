@@ -27,6 +27,12 @@ http_settings:
 # File used as authorized_keys for gitlab user
 auth_file: "<%= config.gdk_root %>/.ssh/authorized_keys"
 
+<%- unless config.common.ca_path.empty? -%>
+# SSL certificate dir where custom certificates can be placed
+# https://golang.org/pkg/crypto/x509/
+ssl_cert_dir: "<%= config.common.ca_path %>"
+<%- end -%>
+
 # File that contains the secret key for verifying access to GitLab.
 # Default is .gitlab_shell_secret in the gitlab-shell directory.
 # secret_file: "<%= config.gitlab_shell.dir %>/.gitlab_shell_secret"
