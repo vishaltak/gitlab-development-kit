@@ -1,7 +1,7 @@
 # Advanced dependency instructions
 
 The following are dependency installation instructions for systems other than
-those covered in the [main dependency installation instructions](index.md#install-dependencies).
+those covered in the [main dependency installation instructions](index.md#install-git-and-make).
 
 These instructions may contain advanced configuration options.
 
@@ -61,18 +61,22 @@ For Debian there are two ways to manage dependencies, either:
 - Using `asdf`.
 - Managing all dependencies yourself.
 
-### Manage dependencies using `asdf`
+### Common setup
 
-To install some dependencies for Debian and use `asdf`:
+After [installing `git` and `make`](index.md#install-git-and-make) run
+`make bootstrap-packages`.
 
-1. Install base dependencies:
+It is a light subset of `make bootstrap` which just does an `apt-get
+update` and then `apt-get install` on the packages found in
+`packages_debian.txt`.
 
    ```shell
-   sudo apt-get update && sudo apt-get install libicu-dev cmake g++ libkrb5-dev libre2-dev ed \
-     pkg-config graphicsmagick runit libimage-exiftool-perl rsync libsqlite3-dev
+   make bootstrap-packages
    ```
 
-1. [Complete dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
+### Manage dependencies using `asdf`
+
+[Complete the dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
 
 ### Manage dependencies yourself
 
@@ -81,21 +85,43 @@ To install dependencies for Debian and manage them yourself:
 1. Run the following commands:
 
    ```shell
-   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib libpq-dev redis-server \
-     libicu-dev cmake g++ libkrb5-dev libre2-dev ed pkg-config graphicsmagick \
-     runit libimage-exiftool-perl rsync libsqlite3-dev
+   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
    sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
    sudo chmod +x /usr/local/bin/minio
    ```
 
 1. Install Go:
-   - If you're running Debian [Experimental](https://wiki.debian.org/DebianExperimental) or
-     [newer](https://packages.debian.org/search?keywords=golang-go), you can install a Go compiler
-    using your package manager: `sudo apt-get install golang`.
+   - Check the required Go version in `.tool-versions`
+   - You may be able to install the required version using
+     `apt`. Check [the available
+     versions](https://packages.debian.org/search?keywords=golang-go). If
+     you're lucky it's just: `sudo apt-get install golang`.
+   - The required version may only be available [as a
+     backport](https://backports.debian.org/Instructions/#index2h2). When
+     using the backport package you may need to update your
+     `$PATH`. E.g. `export PATH=/usr/lib/go-1.14/bin:$PATH` when using
+     1.14 from `buster-backports` to get 1.14 instead of the 1.15 from
+     `stable`.
    - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
      installation instructions.
-1. Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have it.
-1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv).
+
+1. The `make bootstrap-packages` will have installed
+   `redis-server`. Make sure it's 5.0 or newer (`apt list
+   redis-server`). Install [Redis](https://redis.io) 5.0 or newer
+   manually, if you don't already have it.
+
+1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv). Do
+   `apt-get install rbenv`. Then run `rbenv init` to get instructions
+   for what to add to your shell RC. See [the upstream
+   docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell).
+   - If the required Ruby version in `.tool-versions` isn't
+     installable you'll need to get the [`ruby-build`
+     plugin](https://github.com/rbenv/ruby-build#installation) and
+     build it.
+   - You'll need to select the Ruby version over your OS one (if
+     any). See [these
+     instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). E.g. `echo
+     2.7.2 >~/.rbenv/version`.
 
 ## Install Other Linux dependencies
 
@@ -371,4 +397,5 @@ wsl --set-version <your subsystem name here>
 
 ## Next Steps
 
-After you've completed the steps on this page, [install and set up GDK](index.md).
+After you've completed the steps on this page, [install and set up
+GDK](index.md#install-and-set-up-gdk).

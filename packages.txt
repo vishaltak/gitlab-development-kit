@@ -13,6 +13,7 @@ wget
 
 # rest of gitlab requirements
 cmake
+ed
 g++
 libicu-dev
 libkrb5-dev
