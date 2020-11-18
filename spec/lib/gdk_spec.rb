@@ -205,17 +205,22 @@ RSpec.describe GDK do
     let(:uploads_path) { root.join('gitlab', 'public', 'uploads') }
     let(:repo_path) { root.join('repositories') }
     let!(:data_dirs) { [pg_data_path, uploads_path, repo_path] }
+    let!(:backup_data_dirs) { data_dirs.map { |dir| dir.to_s + '.old' } }
     let(:content) { 'Foo' }
 
     before do
       allow(described_class).to receive(:system).and_call_original
       allow(described_class).to receive(:remember!)
 
+      backup_data_dirs.each do |dir|
+        FileUtils.rm_rf(backup_data_dirs, secure: true) if Dir.exist?(dir)
+      end
       FileUtils.mkdir_p(repo_path)
       FileUtils.touch(repo_path.join('.gitkeep'))
     end
 
     it 'resets data' do
+      expect(Runit).to receive(:stop)
       expect(described_class).to receive(:system).with(
         described_class::MAKE,
         chdir: root
@@ -230,9 +235,7 @@ RSpec.describe GDK do
       # We already checks MAKE is called,
       # therefore we don't check new data directory are created.
       # Instead we focus on old directory are moved
-      data_dirs.each do |dir|
-        new_dir = dir.to_s + '.old'
-
+      backup_data_dirs.each do |new_dir|
         expect(Dir.entries(new_dir)).to contain_exactly('.', '..', 'foo.txt')
         expect(File.read(Pathname.new(new_dir).join('foo.txt'))).to eq(content)
       end

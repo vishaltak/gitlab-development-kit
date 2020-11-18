@@ -215,20 +215,13 @@ module GDK
 
   # Called when running `gdk reset_data`
   def self.reset_data
+    path = Pathname.getwd.join('./support/backup-data')
+    sh = Shellout.new(path.to_s, chdir: GDK.root)
     Runit.stop
 
     remember!(GDK.root)
 
-    system('rm', '-rf', 'postgresql/data.old', chdir: GDK.root)
-    system('mv', 'postgresql/data', 'postgresql/data.old', chdir: GDK.root)
-
-    system('rm', '-rf', 'gitlab/public/uploads.old', chdir: GDK.root)
-    system('mv', 'gitlab/public/uploads', 'gitlab/public/uploads.old', chdir: GDK.root)
-
-    system('rm', '-rf', 'repositories.old', chdir: GDK.root)
-    system('mv', 'repositories', 'repositories.old', chdir: GDK.root)
-    system('mkdir', 'repositories', chdir: GDK.root)
-    system('mv', 'repositories.old/.gitkeep', 'repositories/', chdir: GDK.root)
+    sh.run
 
     system(MAKE, chdir: GDK.root)
   end

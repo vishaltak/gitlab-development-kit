@@ -1,0 +1,10 @@
+rm -rf postgresql/data.old
+mv postgresql/data postgresql/data.old
+
+rm -rf gitlab/public/uploads.old
+mv gitlab/public/uploads gitlab/public/uploads.old
+
+rm -rf repositories.old
+mv repositories repositories.old
+mkdir repositories
+mv repositories.old/.gitkeep repositories/
