@@ -22,6 +22,10 @@ module GDK
       end
     end
 
+    settings :common do
+      string(:ca_path) { '' }
+    end
+
     settings :repositories do
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }

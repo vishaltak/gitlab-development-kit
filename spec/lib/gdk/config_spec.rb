@@ -27,6 +27,14 @@ RSpec.describe GDK::Config do
     allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).and_return(nil)
   end
 
+  describe 'common' do
+    describe 'ca_path' do
+      it 'is not set by default' do
+        expect(config.common.ca_path).to be('')
+      end
+    end
+  end
+
   describe '__architecture' do
     it 'returns x86_64' do
       allow(RbConfig::CONFIG).to receive(:[]).with('target_cpu').and_return('x86_64')
@@ -482,6 +490,12 @@ RSpec.describe GDK::Config do
         expect(config.gitaly.__storages[2].path).to eq(Pathname.new('/home/git/gdk/repository_storages/gitaly/gitaly-2'))
       end
     end
+
+    describe 'auth_token' do
+      it 'is not set by default' do
+        expect(config.gitaly.auth_token).to be('')
+      end
+    end
   end
 
   context 'geo' do
@@ -701,14 +715,6 @@ RSpec.describe GDK::Config do
     describe 'auto_update' do
       it 'is enabled by default' do
         expect(config.gitlab_k8s_agent.auto_update).to be(true)
-      end
-    end
-  end
-
-  describe 'gitaly' do
-    describe 'auth_token' do
-      it 'is not set by default' do
-        expect(config.gitaly.auth_token).to be('')
       end
     end
   end

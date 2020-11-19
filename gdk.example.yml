@@ -9,6 +9,8 @@ auto_devops:
   listen_address: 0.0.0.0
   registry:
     port: 25000
+common:
+  ca_path: ''
 elasticsearch:
   enabled: false
   linux_checksum: bbd0b012194f8dfb911e75a355f3a23d8aebee58a748d8010558c969ada706e61340b3e66b16a13788ae772d9e8da2e26a35cfbfa14a04d718fb8a992d661518

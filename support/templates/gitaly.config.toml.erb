@@ -93,6 +93,9 @@ dir = "<%= config.gitlab_shell.dir %>"
 url = "<%= config.__uri %>"
 
 [gitlab.http-settings]
+<%- unless config.common.ca_path.empty? -%>
+ca_path = "<%= config.common.ca_path %>"
+<%- end -%>
 self_signed_cert = false
 
 # # You can adjust the concurrency of each RPC endpoint
