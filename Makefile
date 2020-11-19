@@ -769,7 +769,7 @@ elasticsearch-${elasticsearch_version}.tar.gz:
 
 object-storage-update: object-storage-setup
 
-object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform minio/data/external-diffs
+object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform minio/data/pages minio/data/external-diffs
 
 minio/data/%:
 	$(Q)mkdir -p $@
