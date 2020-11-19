@@ -9,6 +9,8 @@ auto_devops:
   listen_address: 0.0.0.0
   registry:
     port: 25000
+common:
+  ca_path: ''
 elasticsearch:
   enabled: false
   linux_checksum: bbd0b012194f8dfb911e75a355f3a23d8aebee58a748d8010558c969ada706e61340b3e66b16a13788ae772d9e8da2e26a35cfbfa14a04d718fb8a992d661518
@@ -50,9 +52,6 @@ gitaly:
   auto_update: true
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   enabled: false
-  gitlab:
-    http_settings:
-      ca_path: ''
   internal_socket_dir: "/home/git/gdk/tmp/gitaly"
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
@@ -79,7 +78,6 @@ gitlab_pages:
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
-  ssl_cert_dir: ''
 grafana:
   enabled: false
 hostname: 127.0.0.1
