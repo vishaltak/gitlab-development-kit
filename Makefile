@@ -955,10 +955,10 @@ lint: vale markdownlint
 .PHONY: vale-install
 vale-install:
 ifeq ($(and $(GOLANG)),)
+ifeq ($(VALE),)
 	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
-ifeq ($(and $(VALE)),)
 	@echo "INFO: Installing vale.."
 	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale/v2 ${QQ}
 endif
