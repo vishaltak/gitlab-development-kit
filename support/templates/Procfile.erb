@@ -18,7 +18,7 @@ postgresql: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> 
 
 # Backend services
 #
-gitlab-workhorse: exec /usr/bin/env PATH="<%= config.gdk_root.join('gitlab-workhorse') %>:$PATH" gitlab-workhorse -authSocket <%= config.gitlab.__socket_file %> -cableSocket <%= config.gitlab.actioncable.__socket_file %> -listenAddr '<%= config.workhorse.__listen_address %>' -documentRoot <%= config.gdk_root.join('gitlab', 'public') %> -developmentMode -secretPath <%= config.gdk_root.join('gitlab', '.gitlab_workhorse_secret') %> -config <%= config.gdk_root.join('gitlab-workhorse', 'config.toml') %>
+gitlab-workhorse: exec /usr/bin/env PATH="<%= config.gdk_root.join('gitlab-workhorse') %>:$PATH" gitlab-workhorse -<%= config.workhorse.listen_settings.type %> <%= config.workhorse.listen_settings.address %> -cableSocket <%= config.gitlab.actioncable.__socket_file %> -listenAddr '<%= config.workhorse.__listen_address %>' -documentRoot <%= config.gdk_root.join('gitlab', 'public') %> -developmentMode -secretPath <%= config.gdk_root.join('gitlab', '.gitlab_workhorse_secret') %> -config <%= config.gdk_root.join('gitlab-workhorse', 'config.toml') %>
 rails-background-jobs: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle_gemfile SIDEKIQ_WORKERS=1 RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$relative_url_root support/exec-cd gitlab bin/background_jobs start_foreground
 <%= '#' unless config.gitlab_k8s_agent.enabled %>gitlab-k8s-agent: exec gitlab-k8s-agent/build/gdk/bin/kas_race --configuration-file '<%= config.gitlab_k8s_agent.__config_file %>'
 <% if config.praefect? -%>

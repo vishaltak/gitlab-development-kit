@@ -61,6 +61,11 @@ gitlab:
   actioncable: {}
   cache_classes: false
   dir: "/home/git/gdk/gitlab"
+  rails:
+    address: ''
+    listen_settings:
+      address: "/home/git/gdk/gitlab.socket"
+      protocol: unix
 gitlab_elasticsearch_indexer:
   auto_update: true
 gitlab_k8s_agent:
@@ -229,3 +234,6 @@ webpack:
 workhorse:
   auto_update: true
   configured_port: 3333
+  listen_settings:
+    address: "/home/git/gdk/gitlab.socket"
+    type: authSocket

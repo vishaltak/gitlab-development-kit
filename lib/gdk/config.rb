@@ -136,6 +136,24 @@ module GDK
     settings :workhorse do
       integer(:configured_port) { 3333 }
 
+      settings :listen_settings do
+        string(:type) do
+          if config.gitlab.rails.address.empty?
+            'authSocket'
+          else
+            'authBackend'
+          end
+        end
+
+        string(:address) do
+          if config.gitlab.rails.address.empty?
+            config.gitlab.rails.__socket_file
+          else
+            "http://#{config.gitlab.rails.address}"
+          end
+        end
+      end
+
       string :__active_host do
         next config.auto_devops.listen_address if config.auto_devops?
 
@@ -495,8 +513,30 @@ module GDK
     settings :gitlab do
       path(:dir) { config.gdk_root.join('gitlab') }
       bool(:cache_classes) { false }
-      path(:__socket_file) { config.gdk_root.join('gitlab.socket') }
-      string(:__socket_file_escaped) { CGI.escape(config.gitlab.__socket_file.to_s) }
+
+      settings :rails do
+        string(:address) { '' }
+        path(:__socket_file) { config.gdk_root.join('gitlab.socket') }
+        string(:__socket_file_escaped) { CGI.escape(config.gitlab.rails.__socket_file.to_s) }
+
+        settings :listen_settings do
+          string(:protocol) do
+            if config.gitlab.rails.address.empty?
+              'unix'
+            else
+              'tcp'
+            end
+          end
+
+          string(:address) do
+            if config.gitlab.rails.address.empty?
+              config.gitlab.rails.__socket_file
+            else
+              config.gitlab.rails.address
+            end
+          end
+        end
+      end
 
       settings :actioncable do
         path(:__socket_file) do
