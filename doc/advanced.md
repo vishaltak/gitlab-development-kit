@@ -56,74 +56,55 @@ To install dependencies for Ubuntu, assuming you're using an active LTS release
 
 ## Debian
 
-For Debian there are two ways to manage dependencies, either:
+The following are instructions for Debian users that don't want
+[GDK to manage their dependencies](index.md#install-dependencies).
 
-- Using `asdf`.
-- Managing all dependencies yourself.
+To install Debian dependencies you manage yourself:
 
-### Common setup
-
-After [installing `git` and `make`](index.md#install-git-and-make) run
-`make bootstrap-packages`.
-
-It is a light subset of `make bootstrap` which just does an `apt-get
-update` and then `apt-get install` on the packages found in
-`packages_debian.txt`.
+1. [Install `git` and `make`](index.md#install-git-and-make).
+1. Run `make bootstrap-packages`. This is a light subset of `make bootstrap` that runs
+   `apt-get update` and then `apt-get install` on the packages found in `packages_debian.txt`.
 
    ```shell
    make bootstrap-packages
    ```
 
-### Manage dependencies using `asdf`
-
-[Complete the dependency installation](index.md#install-and-set-up-gdk) using `asdf`.
-
-### Manage dependencies yourself
-
-To install dependencies for Debian and manage them yourself:
-
-1. Run the following commands:
+1. Install PostgreSQL and MinIO. Run the following commands:
 
    ```shell
-   sudo apt-get update && sudo apt-get install postgresql postgresql-contrib
+   sudo apt update && sudo apt install postgresql postgresql-contrib
    sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
    sudo chmod +x /usr/local/bin/minio
    ```
 
-1. Install Go:
-   - Check the required Go version in `.tool-versions`
-   - You may be able to install the required version using
-     `apt`. Check [the available
-     versions](https://packages.debian.org/search?keywords=golang-go). If
-     you're lucky it's just: `sudo apt-get install golang`.
-   - The required version may only be available [as a
-     backport](https://backports.debian.org/Instructions/#index2h2). When
-     using the backport package you may need to update your
-     `$PATH`. E.g. `export PATH=/usr/lib/go-1.14/bin:$PATH` when using
-     1.14 from `buster-backports` to get 1.14 instead of the 1.15 from
-     `stable`.
-   - Otherwise, install it manually. See the [Go](https://golang.org/doc/install#install) official
-     installation instructions.
+1. Check the required Go version in `.tool-versions`. You may be able to install the required
+   version using `apt`. Check [the available versions](https://packages.debian.org/search?keywords=golang-go).
+1. Install Go using one of the following methods:
+   - If available for your version of Debian, run `sudo apt-get install golang`.
+   - If the required version is only available [as a backport](https://backports.debian.org/Instructions/#index2h2),
+     use the backport package. You may need to update your `$PATH`. For example, `export PATH=/usr/lib/go-1.14/bin:$PATH`
+     when using 1.14 from `buster-backports` to get 1.14 instead of the 1.15 from `stable`.
+   - If unavailable, install it manually. See the official [Go installation](https://golang.org/doc/install#install)
+     instructions.
 
-1. The `make bootstrap-packages` will have installed
-   `redis-server`. Make sure it's 5.0 or newer (`apt list
-   redis-server`). Install [Redis](https://redis.io) 5.0 or newer
-   manually, if you don't already have it.
+1. Check that `make bootstrap-packages` installed `redis-server` version 5.0 or newer (`apt list
+   redis-server`). Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have
+   it.
+1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv). Install `rbenv`:
 
-1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv). Do
-   `apt-get install rbenv`. Then run `rbenv init` to get instructions
-   for what to add to your shell RC. See [the upstream
-   docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell).
-   - If the required Ruby version in `.tool-versions` isn't
-     installable you'll need to get the [`ruby-build`
-     plugin](https://github.com/rbenv/ruby-build#installation) and
-     build it.
-   - You'll need to select the Ruby version over your OS one (if
-     any). See [these
-     instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). E.g. `echo
-     2.7.2 >~/.rbenv/version`.
+   ```shell
+   sudo apt install rbenv
+   ```
 
-## Install Other Linux dependencies
+1. Run `rbenv init` to get instructions for what to add to your shell configuration file. For more
+   information, see [the `rbenv` docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell). Note:
+   - If the required Ruby version in `.tool-versions` isn't installable, you need to get the
+     [`ruby-build` plugin](https://github.com/rbenv/ruby-build#installation) and build it.
+   - You need to select the Ruby version instead of your distributions default one (if any). See the
+     [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
+     `echo 2.7.2 >~/.rbenv/version`.
+
+## Install other Linux dependencies
 
 The process for installing dependencies on Linux depends on your Linux
 distribution.
