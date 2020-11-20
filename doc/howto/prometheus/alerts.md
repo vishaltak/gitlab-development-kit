@@ -17,7 +17,7 @@ Steps to configure Prometheus Alert with the GitLab managed Prometheus.
     1. Install **Prometheus**
     1. Install **GitLab Runner**
 1. Configure CI/CD for your project
-    1. Navigate to the project (the one you are going to use with Prometheus)
+    1. Navigate to the project (the one to use with Prometheus).
     1. Create a `.gitlab-ci.yml` file with [the following content](https://gitlab.com/joshlambert/autodevops-deploy/-/blob/master/.gitlab-ci.yml).
 1. Create a metric
     1. Navigate to **> Settings > Integrations > Prometheus**
@@ -29,6 +29,6 @@ Steps to configure Prometheus Alert with the GitLab managed Prometheus.
         - Y-axis label: `up/down`
         - Unit label: `-`
         - Legend label: `job`
-1. Create an alert on **Operations > Metrics** page. Something that will trigger the alert for sure. For example, that environment uses not enough memory.
+1. Create an alert on **Operations > Metrics** page. Something to trigger the alert for sure. For example, that environment uses not enough memory.
    More info [here](https://docs.gitlab.com/ee/user/project/integrations/prometheus.html#setting-up-alerts-for-prometheus-metrics)
 1. Wait for alert to be triggered. *That usually takes about 5 minutes.*

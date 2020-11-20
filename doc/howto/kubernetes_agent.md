@@ -13,7 +13,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
       enabled: true
     ```
 
-1. Create a new project. It will be used for agent's configuration. Note the project's ID. Use it as `project_id` below.
+1. Create a new project. It is used for agent's configuration. Note the project's ID. Use it as `project_id` below.
 
 1. In the project's repository create a directory named `.gitlab/agents/my-agent`. In this directory create a file `config.yaml` with the following contents:
 
@@ -50,7 +50,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
 1. Run `gdk reconfigure` to update various configuration files.
 
-1. You can start GDK with `gdk start`. It will print the URL for `agentk` to use:
+1. You can start GDK with `gdk start`. It prints the URL for `agentk` to use:
 
     ```plaintext
     => GitLab will be available at http://127.0.0.1:3000 shortly.

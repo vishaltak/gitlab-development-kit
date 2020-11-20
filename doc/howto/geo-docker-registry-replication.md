@@ -4,7 +4,7 @@
 
 On every push of new Docker image, GitLab creates a special Geo event that is
 propagated to secondary nodes. On the secondary node, there is a specialized
-worker called `Geo::ContainerRepositoryServiceWorker` that will fetch the
+worker called `Geo::ContainerRepositoryServiceWorker` that fetches the
 image from primary node.
 
 ## How to set up
@@ -41,8 +41,7 @@ notifications:
 
 In this example:
 
-- `secret` is a secret word that will be used for communication between Registry and the primary
-  node.
+- `secret` is a secret word used for communication between Registry and the primary node.
 - The primary node is running on port `3001` of your localhost.
 - The host name is for macOS. If you use Linux, use `host.docker.internal` instead of
   `docker.for.mac.localhost`,

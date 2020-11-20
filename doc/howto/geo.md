@@ -1,6 +1,6 @@
 # GitLab Geo
 
-This document will instruct you to set up GitLab Geo using GDK.
+This document instructs you to set up GitLab Geo using GDK.
 
 Geo allows you to replicate a whole GitLab instance. Customers use this for
 Disaster Recovery, as well as to offload read-only requests to secondary
@@ -34,8 +34,8 @@ We assume your primary GDK instance lives in a parallel folder: `../gdk`,
 make sure you use the correct folder name if not when looking at
 the instructions below.
 
-We'll create a secondary instance in a `gdk-geo` folder to act as
-a secondary node. We'll configure unique ports for the new instance so
+We create a secondary instance in a `gdk-geo` folder to act as
+a secondary node. We configure unique ports for the new instance so
 that it can run alongside the primary.
 
 ```shell
@@ -72,9 +72,9 @@ gdk install gitlab_repo=../gdk/gitlab
 Note the `gitlab_repo` parameter is an optimization, but it is not
 strictly required. It saves you time by performing a local `git clone`
 instead of pulling from GitLab.com. In addition, a `git pull` in the
-`gitlab` directory will update from your local primary Git repository.
+`gitlab` directory updates from your local primary Git repository.
 
-When seeding begins, cancel it (Ctrl-C) since we will delete the data anyway.
+When seeding begins, cancel it (Ctrl-C) since we delete the data anyway.
 
 Then run the following commands:
 
@@ -95,13 +95,13 @@ documentation](gitaly.md#praefect-on-a-geo-secondary) for the details.
 
 ## Database replication
 
-For GitLab Geo, you will need a primary/secondary database replication defined.
+For GitLab Geo, you need a primary/secondary database replication defined.
 There are a few extra steps to follow.
 
 ### Prepare primary for replication
 
 In your primary instance (`gdk`) you need to prepare the database for
-replication. This requires the PostgreSQL server to be running, so we'll start
+replication. This requires the PostgreSQL server to be running, so we start
 the server, perform the change (via a `make` task), and then kill and restart
 the server to pick up the change:
 
@@ -117,7 +117,7 @@ gdk restart postgresql
 
 ### Set up replication on secondary
 
-Because we'll be replicating the primary database to the secondary, we need to
+Because we replicate the primary database to the secondary, we need to
 remove the secondary's PostgreSQL data folder:
 
 ```shell
@@ -147,7 +147,7 @@ make postgresql-replication-secondary
 
 The secondary has a read-write tracking database, which is necessary for some
 Geo tests to run. However, its copy of the replicated database is read-only, so
-tests will fail to run.
+tests fail to run.
 
 You can add the tracking database to the primary node by running:
 
@@ -159,11 +159,11 @@ gdk start
 make geo-setup
 ```
 
-This will add both development and test instances, but the primary will continue
+This adds both development and test instances, but the primary continues
 to operate *as* a primary except in tests where the current Geo node has been
 stubbed.
 
-To ensure the tracking database is started, restart GDK. You will need to use
+To ensure the tracking database is started, restart GDK. You need to use
 `gdk start` to be able to run the tests.
 
 #### On a secondary
@@ -190,7 +190,7 @@ test: &test
 
 ## Copy database encryption key
 
-The primary and the secondary nodes will be using the same secret key
+The primary and the secondary nodes use the same secret key
 to encrypt attributes in the database. To copy the secret from your primary to your secondary:
 
 1. Open `gdk/gitlab/config/secrets.yml` with your editor of choice
@@ -281,7 +281,7 @@ mv postgresql-geo/data postgresql-geo/data.backup
 
 ### GDK update command error on secondaries
 
-You will see the following error after running `gdk update` on your local Geo
+You see the following error after running `gdk update` on your local Geo
 secondary. It is ok to ignore. Your local Geo secondary does not have or need a
 test DB, and this error occurs on the very last step of `gdk update`.
 

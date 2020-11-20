@@ -18,7 +18,7 @@ These instructions require:
    cd kerberos
    ```
 
-1. Run `docker-compose up`. This will build a Docker image and start a container
+1. Run `docker-compose up`. This builds a Docker image and starts a container
    with a Kerberos KDC for `GDK.TEST` realm listening on port `1088`.
 1. Copy the `http.keytab` generated in the container to the host system:
 
@@ -56,7 +56,7 @@ These instructions require:
    addprinc <GitLab username>
    ```
 
-   You'll be asked to enter and re-enter password.
+   You are asked to enter and re-enter password.
 1. Create an identity for a user you want to associate with the user principal
    via Rails console.
 
@@ -92,7 +92,7 @@ appropriate KDC for a specific realm.
    kinit user@GDK.TEST
    ```
 
-   You'll be asked to enter the password set for the specified user principal.
+   You are asked to enter the password set for the specified user principal.
 
 1. Confirm that you got a ticket by running `klist`. You should see something like:
 

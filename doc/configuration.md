@@ -182,7 +182,7 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.debug`                       | `false` | Set this to `true` to enable increased output. |
 | `gdk.overwrite_changes`           | `false` | When set to `true`, `gdk reconfigure` overwrites files and move the old version to `.backups`.|
 | `gdk.protected_config_files`      | `[]`    | Contains file names / globs of configuration files GDK should not overwrite. |
-| `gdk.runit_wait_secs`             | `10`    | The number of seconds `runit` will wait. `runit` is used behind the scenes for `gdk stop/start/restart` and waits for 7 secs by default. |
+| `gdk.runit_wait_secs`             | `10`    | The number of seconds `runit` waits. `runit` is used behind the scenes for `gdk stop/start/restart` and waits for 7 secs by default. |
 
 ##### Hooks
 
@@ -235,8 +235,7 @@ Before `gdk.yml` was introduced, GDK could be configured through a
 bunch of loose files, where each file sets one setting.
 
 It is still possible to use these loose files, but it's deprecated and
-will be removed in the future. A migration path will be provided
-when this option is removed.
+is scheduled to be removed in the future. A migration path is planned.
 
 Below is a table of all the settings that can be set this way:
 
@@ -309,9 +308,9 @@ end
 - `bar`: (block without argument) This is using a block to set a
   value. It evaluates the Ruby code to dynamically calculate a value.
 - `fuz`: (block with argument) When the block takes a single argument,
-  it expects you'll be setting child settings.
+  it expects you are setting child settings.
 
-If you'd dump this configuration with `rake dump_config` you'll get something
+If you'd dump this configuration with `rake dump_config`, you get something
 like:
 
 ```yaml

@@ -1,6 +1,6 @@
 # Auto DevOps
 
-This document will instruct you to set up a working GitLab instance with
+This document instructs you to set up a working GitLab instance with
 the ability to run the full Auto DevOps workflow.
 
 ## Prerequisites (For GitLab team members only)
@@ -19,8 +19,8 @@ depends on our infrastructure. For non-GitLab team members you can see
       - The `GitLab - ASA - QA Tunnel` group in Okta to provision your account on the
         server for SSH access.
 1. Install the [Okta ASA client](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft.htm)
-   on your workstation. After software installation, it will ask you to "enroll"
-   your client (which will open a browser):
+   on your workstation. After software installation, it asks you to "enroll"
+   your client (which opens a browser):
    1. To enroll your client, either:
       - Run `sft enroll --team gitlab-poc` on the command line.
       - Run `sft enroll` and enter the team name yourself (enter `gitlab-poc`).
@@ -35,11 +35,11 @@ depends on our infrastructure. For non-GitLab team members you can see
      ProxyCommand "sft" proxycommand  %h
    ```
 
-1. Run `sft login`. This will open a web browser window requiring a login to
+1. Run `sft login`. This opens a web browser window requiring a login to
    Okta and clicking an **Approve** button.
 
-   By default, you will remain logged in for 9 hours and will have to re-run
-   `sft login` after that. SSH requests from your GDK will fail silently
+   By default, you remain logged in for 9 hours and have to re-run
+   `sft login` after that. SSH requests from your GDK fail silently
    until you do. Administrators can change the session expiration time on the ASA
    dashboard.
 1. Verify you have `ssh` access into `qa-tunnel.gitlab.info`:
@@ -73,11 +73,11 @@ auto_devops:
 
 Once created, run `gdk reconfigure` to apply the configuration.
 
-This script will create all necessary configuration for one to run Auto DevOps locally. Including
+This script creates all necessary configuration for one to run Auto DevOps locally. Including
 assigning two random ports for GitLab instance and GitLab Registry. It's important that these
 ports are randomized so we avoid colliding two developers with the same ports.
 
-After the script finishes, it will inform you of the `GitLab` and `Registry` URLs. For example:
+After the script finishes, it informs you of the `GitLab` and `Registry` URLs. For example:
 
 ```shell
 *********************************************
@@ -141,7 +141,7 @@ howto](../google-oauth2.md#gdk-setup).
 
 ## Conclusion
 
-With this configuration you will have an internet-accessible
+With this configuration you have an internet-accessible
 GitLab and registry, so with a valid SSL cert (terminated in the
 tunnel server) you should be able to run the full Auto DevOps
 flow.
@@ -155,8 +155,7 @@ spec](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/qa/specs/features/brow
 
 ### Install gcloud and kubectl
 
-Before you can run the spec, you will need `gcloud` and `kubectl`
-installed.
+Before you can run the spec, you need `gcloud` and `kubectl` installed.
 
 Follow the instructions at <https://cloud.google.com/sdk/docs/quickstarts>
 for the operating system that you are using to install `gcloud`.
@@ -174,8 +173,8 @@ After you have installed `gcloud`, run the
 gcloud init
 ```
 
-This init command will help you setup your default zone and project. It will
-also prompt you to log in with your Google account.
+This init command helps you set up your default zone and project. It also prompts you to log in with
+your Google account.
 
 ```plaintext
 To continue, you must log in. Would you like to log in (Y/n)? Y
@@ -212,7 +211,7 @@ GITLAB_PASSWORD=<root-user-password> GCLOUD_REGION=us-central1 CHROME_HEADLESS=f
 ```
 
 You can also run single tests with RSpec line number arguments. As the
-`orchestrated` tag is normally excluded, we will also need to include a
+`orchestrated` tag is normally excluded, we also need to include a
 `--tag` argument to override the exclusion:
 
 ```shell
@@ -223,22 +222,22 @@ More information about running QA tests can be found in
 [qa/README.md](https://gitlab.com/gitlab-org/gitlab/blob/master/qa/README.md#how-can-i-use-it).
 There are also other ways of running the QA specs that are documented in the
 [`gitlab-qa` project](https://gitlab.com/gitlab-org/gitlab-qa) but using the
-above approach is recommended as it will allow you to debug and iterate on the
+above approach is recommended as it allows you to debug and iterate on the
 spec without rebuilding any Docker images and since the above command runs the
 spec in your environment rather than in Docker it requires less configuration
 as it inherits your `gcloud` credentials.
 
-NOTE: This test will run as the default project ID. To set or override
+NOTE: This test runs as the default project ID. To set or override
 the project ID, set `CLOUDSDK_CORE_PROJECT=<gcloud-project-id>`.
 
-NOTE: The GCP account you are using for `gcloud` will require the
+NOTE: The GCP account you are using for `gcloud` requires the
 `roles/container.admin` for the given GCP project in order for the tests to
 succeed.
 
 NOTE: [This
 test](https://gitlab.com/gitlab-org/gitlab/blob/a0d3691c8660c90a1db1bac3115f8c17a968f148/qa/qa/specs/features/browser_ui/7_configure/auto_devops/create_project_with_auto_devops_spec.rb#L65)
-does teardown the K8s cluster at the end so after the test finishes it won't be
-possible to run the pipeline again unless you comment this out.
+tears down the K8s cluster at the end so after the test finishes, it isn't possible to run the
+pipeline again unless you comment this out.
 
 ## Technical Details and Alternatives
 
@@ -249,18 +248,18 @@ of the straightforward approaches here.
 
 #### Registry Must Be Routable
 
-Auto DevOps will "deploy" your application to a K8s cluster but the way
+Auto DevOps "deploys" your application to a K8s cluster but the way
 this works in K8s is that the cluster actually needs to
 download the image from your Docker registry running on your machine. Put
 another way the K8s cluster needs access over HTTPS to the registry running
-on your machine. And HTTPS is necessary as K8s won't download insecure images
+on your machine. And HTTPS is necessary as K8s does not download insecure images
 by default.
 
 #### GKE K8s cluster is outside of your network
 
-You will likely want to run K8s clusters on GKE as this allows us to test our
+You likely want to run K8s clusters on GKE as this allows us to test our
 GCP integrations as well. You can use Minikube too but there are limitations
-with this as Minikube won't test our GCP integration and Minikube does not
+with this as Minikube doesn't test our GCP integration and Minikube does not
 simulate a real cluser (eg. internet-facing load balancers with external IP
 address are not possible). So when you do choose GKE you conclude that your
 registry running on your machine needs to be internet accessible since GKE
@@ -271,8 +270,8 @@ is outside your network.
 Assuming that you choose to run the K8s cluster on GKE you may also wish to use
 the [1 click
 install](https://docs.gitlab.com/ee/user/project/clusters/#installing-applications)
-to install the Runner on this cluster. This will mean that in addition to the
-registry (which is a separate server on your machine) you will also need the
+to install the Runner on this cluster. This means that in addition to the
+registry (which is a separate server on your machine), you also need the
 GitLab instance to be internet accessible because now the runner is not on your
 network.
 
@@ -287,11 +286,11 @@ uses a lot of bandwidth doing the following with Docker images:
 - K8s downloads images from the registry
 
 These Docker images tend to be in the order of 400MB-1GB and the pipeline is
-not really well optimized for caching. So you will find that if you have a slow
-network you really won't be able to run these pipelines at all because it will
-take hours to complete. Even if you do have a fast connection you're still
+not really well optimized for caching. So you can find that if you have a slow
+network, you really can't run these pipelines at all because they can
+take hours to complete. Even if you do have a fast connection, you're still
 looking at around 20 mins to complete a single run. To speed things up
-dramatically you can run everything on a VM on GCP. This will ensure that all
+dramatically, you can run everything on a VM on GCP. This ensures that all
 data is staying inside Google's network and things move a lot faster.
 
 If you don't need a full-fledged application, consider testing with the
@@ -306,10 +305,10 @@ If you want you can just manually configure a reverse proxy in front of your
 GDK instance that does SSL termination for you. A good approach to this would
 be to use NGINX for SSL termination on a VM with a static IP address. It is
 also necessary to have a different external hostname for the container registry
-so your reverse proxy will need two virtual hosts configured and both will need
+so your reverse proxy needs two virtual hosts configured and both need
 SSL termination.
 
-You will need to replace `<gitlab-hostname>` and `<registry-hostname>` below
+You need to replace `<gitlab-hostname>` and `<registry-hostname>` below
 with the appropriate values from your reverse proxy settings and run the
 following commands:
 
@@ -323,7 +322,7 @@ echo 443 > registry_external_port
 gdk reconfigure
 ```
 
-You will need to replace `<gitlab-hostname>` below with the appropriate values
+You need to replace `<gitlab-hostname>` below with the appropriate values
 from your reverse proxy settings and edit `registry/config.yml` like so:
 
 ```yaml
@@ -365,14 +364,14 @@ version of Debian GNU/Linux.
 
 1. Request a certificate for your domain or subdomains
 
-   You will need to obtain certificates for GitLab web application and for
+   You need to obtain certificates for GitLab web application and for
    Container Registry separately. You can do that using following commands:
 
    ```shell
    sudo certbot -i nginx -d gdk.example.com -d registry.example.com
    ```
 
-   Certbot will attempt to verify your domain ownership, however you might
+   Certbot attempts to verify your domain ownership, however you might
    want to do this manually. You can append `--manual` argument in order to
    do that.
 
@@ -387,14 +386,12 @@ version of Debian GNU/Linux.
    sudo certbot --manual -i nginx -d "*.gdk.example.com" --server https://acme-v02.api.letsencrypt.org/directory
    ```
 
-   Certificates generated with `--manual` option will not be renewed
-   automatically.
+   Certificates generated with `--manual` option are not renewed automatically.
 
 1. Configure NGINX
 
-   Certbot is going to pre-configure your files, what is useful because you
-   do not need to add certificates manually, however you will need to adjust
-   a few things in the configuration.
+   Certbot pre-configures your files, which is useful because you do not need to add certificates
+   manually. However, you need to adjust a few things in the configuration.
 
    You can find an example of how to configure reverse proxy with SSL
    termination with NGINX to proxy requests to GitLab Registry and GDK.
@@ -463,14 +460,14 @@ In theory both of these tools accomplish what we need which is exposing our
 local running GitLab instance to the internet. However, both of these
 services, at least in their hosted forms, place limitations on the number of
 open connections and the max size of files being uploaded. As such neither of
-them, even in the paid plans, will work with proxying the `docker pull` and
+them, even in the paid plans, work with proxying the `docker pull` and
 `docker push` commands to the container registry.
 
 #### Test changes to `Auto-DevOps.gitlab-ci.yml` on GitLab.com
 
-If you are only changing `Auto-DevOps.gitlab-ci.yml` then you will be
+If you are only changing `Auto-DevOps.gitlab-ci.yml`, you are
 able to just copy and paste this into a `.gitlab-ci.yml` on a project on
-GitLab.com to test it out. This won't work if you're also testing this
+GitLab.com to test it out. This doesn't work if you're also testing this
 with corresponding changes to code.
 
 #### Use some seed data for viewing stuff in the UI
@@ -506,7 +503,7 @@ that.
 
 ### Unused Load Balancers
 
-When you install the Ingress on your cluster it will create a GCP Load Balancer
+When you install the Ingress on your cluster, it creates a GCP Load Balancer
 behind the scenes with a static IP address. Because static IP addresses have a
 fixed limit per GCP project and also because they cost money it is important
 that we periodically clean up all the unused orphaned load balancers from
@@ -525,7 +522,7 @@ You can find and delete any unused load balancers following these steps:
 
 ### Unused Persistent Disks
 
-When creating a new GKE cluster it will also provision persistent disks in your
+When creating a new GKE cluster, it also provisions persistent disks in your
 GCP project. Because persistent disks have a fixed limit per GCP project and
 also because they cost money it is important that we periodically clean up all
 the unused orphaned persistent disks from deleted clusters.
@@ -545,8 +542,8 @@ You can find and delete any unused persistent disks following these steps:
 NOTE: When [running the integration test](#run-the-integration-test) it is
 creating clusters named `qa-cluster-<timestamp>-<random-suffix>`. As such it is
 actually safe and encouraged for you to also delete unused persistent disks
-created by these automated tests. The disk name will start with
-`gke-qa-cluster-`. Also note there will likely be many such disks here as our
+created by these automated tests. The disk name starts with
+`gke-qa-cluster-`. Also note there can be many such disks here as our
 automated tests do not clean these up after each run. It is a good idea to
 clean them up yourself while you're on this page.
 

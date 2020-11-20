@@ -1,11 +1,11 @@
 # NGINX
 
-Installing and configuring NGINX will allow you to enable HTTPS, HTTP/2 as
+Installing and configuring NGINX allows you to enable HTTPS, HTTP/2 as
 well as greater flexibility around HTTP routing.
 
 ## Install dependencies
 
-You'll need to install `NGINX`:
+You need to install NGINX:
 
 ```shell
 # on macOS

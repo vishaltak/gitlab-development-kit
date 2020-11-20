@@ -17,12 +17,12 @@
   to save yourself from setting up a full working Auto DevOps project.
 
 - Set the environment variable `CHROME_REUSE_PROFILE` to `true` which
-  will allow QA to re-use the same user profile so that slow files such
+  allows QA to re-use the same user profile so that slow files such
   as `main.chunk.js` can be cached in memory.
 
 - Disable source-maps for GDK by setting the environment variable
   `NO_SOURCEMAPS` to `true`. This reduces the size of `main.chunk.js`
-  from 11 MB to 4.6 MB, which will help for connections with slow upload speeds.
+  from 11 MB to 4.6 MB, which helps connections with slow upload speeds.
 
 ### Helm/Tiller Communication
 
@@ -110,7 +110,7 @@ If your Ingress is never assigned an IP address and you've waited for the IP add
 
 ### Error due to `Insufficient regional quota` for `DISKS_TOTAL_GB`
 
-When [creating a new GKE cluster](https://docs.gitlab.com/ee/user/project/clusters/#creating-the-cluster), GKE will create persistent disks for you. If you are
+When [creating a new GKE cluster](https://docs.gitlab.com/ee/user/project/clusters/#creating-the-cluster), GKE creates persistent disks for you. If you are
 running into the following error:
 
 ```plaintext
@@ -127,7 +127,7 @@ tunnel URL. The following are possible solutions to some known problems.
 
 #### SSH requires a passphrase
 
-For GDK to run, it needs to be able to SSH into `qa-tunnel.gitlab.info` without user input. The following steps will allow you to authenticate without entering your passphrase on future logins:
+For GDK to run, it needs to be able to SSH into `qa-tunnel.gitlab.info` without user input. The following steps allow you to authenticate without entering your passphrase on future logins:
 
 1. Run [`ssh-add`](https://linux.die.net/man/1/ssh-add).
 1. Enter your passphrase.

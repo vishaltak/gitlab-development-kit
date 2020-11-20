@@ -30,7 +30,7 @@ or, _very important_, know to which context your kubectl is current connected to
 kubectl config current-context
 ```
 
-This determines if you're communicating to your local development cluster (Minikube for instance) or your remote cluster (hosted on GKE for instance). It also determines which cluster [Helm](#helmtiller-commands) is going to be communicating to.
+This determines if you're communicating to your local development cluster (Minikube for instance) or your remote cluster (hosted on GKE for instance). It also determines which cluster [Helm](#helmtiller-commands) communicates to.
 
 ## Change your current context
 
