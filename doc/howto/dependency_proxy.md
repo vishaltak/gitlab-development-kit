@@ -37,7 +37,7 @@ in the output.
 
 ### MacOS
 
-#### Use an IP address with your GDK installation, `localhost` will not work
+#### Use an IP address with your GDK installation, `localhost` does not work
 
 This can be accomplished by [updating the GDK configuration](../configuration.md) by
 creating or updating the `gdk.yml` file in the root of your GDK directory.
@@ -56,7 +56,7 @@ Run `gdk reconfigure` and `gdk restart` to invoke the changes and visit the IP
 ##### Old Docker for Mac (< 2.2.0.0)
 
 Open Docker -> Preferences, and navigate to the tab labeled **Daemon**.
-Check the box to enable **Experimental features** and you will be able to add
+Check the box to enable **Experimental features** and you can add
 a new **Insecure registry**. Click **Apply & Restart**.
 
 ![Adding an insecure registry](img/dependency_proxy_macos_config.png)

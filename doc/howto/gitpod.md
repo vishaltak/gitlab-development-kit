@@ -33,7 +33,7 @@ If you have never used Gitpod before, you must:
 1. Connect the Gitpod account to your GitLab account.
 
 After that is done, you just wait 7-8 minutes for the entire setup to finish, and
-you will see the GDK UI pop up in the right sidebar.
+you see the GDK UI pop up in the right sidebar.
 
 ![GDK in Gitpod](img/gdk-in-gitpod.png)
 
@@ -55,7 +55,7 @@ The easiest way to switch to another branch is to use the UI functionality:
 
    ![Switching branch in Gitpod](img/switch-branch-gitpod.png)
 
-1. A context menu will appear with a list of other branches where you can type in
+1. A context menu appears with a list of other branches where you can type in
    the name of the branch you want to switch to and select it as soon as it appears in
    the list.
 
@@ -72,7 +72,7 @@ git checkout -b "BRANCH_NAME" "origin/BRANCH_NAME"
 
 If you have made changes to any of the files and want to push and commit them:
 
-1. Navigate to the **Source Control: Git** tab in the left sidebar. There you will also
+1. Navigate to the **Source Control: Git** tab in the left sidebar. There you also
    see all files that have been changed.
 
    ![Source Control Tab in Gitpod.png](img/source-control-gitpod.png)

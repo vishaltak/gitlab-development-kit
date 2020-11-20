@@ -13,7 +13,7 @@ Port number can be customized by editing `gdk.yml` as explained in
 ## Hostname
 
 In order to handle wildcard hostnames, pages integration relies on
-[nip.io](https://nip.io) and will not work on a disconnected system.
+[nip.io](https://nip.io) and does not work on a disconnected system.
 This is the preferred configuration and the default value for the
 GitLab Pages hostname is `127.0.0.1.nip.io`.
 

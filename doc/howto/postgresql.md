@@ -57,14 +57,14 @@ script fails for some reason.
 
 ## Run the upgrade script
 
-For macOS users with Homebrew, there is a convenient script that will
-automatically run `pg_upgrade` with the right parameters:
+For macOS users with Homebrew, there is a convenient script that automatically runs `pg_upgrade`
+with the right parameters:
 
 ```shell
 support/upgrade-postgresql
 ```
 
-This script will attempt to:
+This script attempts to:
 
 1. Find both the current and target PostgreSQL binaries.
 1. Initialize a new `data` directory for the target PostgreSQL version.

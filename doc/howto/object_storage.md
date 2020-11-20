@@ -30,13 +30,13 @@ Changing settings requires `gdk reconfigure` to be run.
 
 If you cannot start MinIO, you may have an old version not supporting the `--compat` parameter.
 
-`gdk tail minio` will show a crash loop with the following error
+`gdk tail minio` shows a crash loop with the following error:
 
 ```plaintext
 Incorrect Usage: flag provided but not defined: -compat
 ```
 
-Upgrading MinIO to the latest version will fix it.
+Upgrading MinIO to the latest version fixes it.
 
 ## Creating a new bucket
 
