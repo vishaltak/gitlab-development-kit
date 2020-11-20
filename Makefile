@@ -19,7 +19,7 @@ REQUIRED_BUNDLER_VERSION := $(shell grep -A1 'BUNDLED WITH' Gemfile.lock | tail 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
 
-NO_RUBY_REQUIRED := bootstrap lint
+NO_RUBY_REQUIRED := bootstrap lint shellcheck
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
