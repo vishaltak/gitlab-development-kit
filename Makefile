@@ -51,7 +51,7 @@ gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commit
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_without_production_cmd = ${BUNDLE} config set without 'production'
-bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag}
+bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
