@@ -946,7 +946,7 @@ ifeq ($(and $(RSPEC)),)
 	$(Q)${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RSpec: "
-	@${BUNDLE} exec $@
+	@${BUNDLE} exec $@ ${RSPEC_ARGS}
 endif
 
 .PHONY: lint
