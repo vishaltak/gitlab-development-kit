@@ -28,6 +28,13 @@ include $(shell rake gdk-config.mk)
 endif
 endif
 
+ifeq ($(platform),macos)
+OPENSSL_PREFIX := $(shell brew --prefix openssl)
+OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
+else
+OPENSSL := $(shell command -v openssl 2> /dev/null)
+endif
+
 gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
 gitlab_workhorse_clone_dir = gitlab-workhorse
@@ -845,13 +852,13 @@ registry-setup: registry/storage registry/config.yml localhost.crt
 localhost.crt: localhost.key
 
 localhost.key:
-	$(Q)openssl req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "localhost.key" -out "localhost.crt"
+	$(Q)${OPENSSL} req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "localhost.key" -out "localhost.crt"
 	$(Q)chmod 600 $@
 
 registry_host.crt: registry_host.key
 
 registry_host.key:
-	$(Q)openssl req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "registry_host.key" -out "registry_host.crt"
+	$(Q)${OPENSSL} req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "registry_host.key" -out "registry_host.crt" -addext "subjectAltName=DNS:${registry_host}"
 	$(Q)chmod 600 $@
 
 registry/storage:
