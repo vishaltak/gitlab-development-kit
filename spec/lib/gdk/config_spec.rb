@@ -684,6 +684,34 @@ RSpec.describe GDK::Config do
           expect(config.gitlab.rails.__socket_file_escaped.to_s).to eq('%2Fhome%2Fgit%2Fgdk%2Fgitlab.socket')
         end
       end
+
+      describe '#listen_settings' do
+        it 'defaults to UNIX socket' do
+          expect(config.gitlab.rails.address).to eq('')
+          expect(config.gitlab.rails.listen_settings.protocol).to eq('unix')
+          expect(config.gitlab.rails.listen_settings.address).to eq('/home/git/gdk/gitlab.socket')
+          expect(config.workhorse.listen_settings.type).to eq('authSocket')
+          expect(config.workhorse.listen_settings.address).to eq('/home/git/gdk/gitlab.socket')
+        end
+      end
+
+      context 'with TCP address' do
+        before do
+          yaml['gitlab'] = {
+            'rails' => {
+              'address' => 'localhost:3443'
+            }
+          }
+        end
+
+        it 'sets listen_settings to HTTP port' do
+          expect(config.gitlab.rails.address).to eq('localhost:3443')
+          expect(config.gitlab.rails.listen_settings.protocol).to eq('tcp')
+          expect(config.gitlab.rails.listen_settings.address).to eq('localhost:3443')
+          expect(config.workhorse.listen_settings.type).to eq('authBackend')
+          expect(config.workhorse.listen_settings.address).to eq('http://localhost:3443')
+        end
+      end
     end
 
     describe 'actioncable' do
