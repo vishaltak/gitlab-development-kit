@@ -17,7 +17,7 @@ Because GDK requires them, you must ensure `git` and `make` are available. If yo
 - Ubuntu/Debian, run the following to install `git` and `make`:
 
    ```shell
-   apt-get update && apt-get install git make
+   sudo apt update && sudo apt install git make
    ```
 
 - Other systems, use your system's package manager to install them.

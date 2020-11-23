@@ -7,7 +7,7 @@
 ruby 2.7.2
 # Gitaly requires Go 1.14.x.
 # GitLab Pages set to Go 1.15.1.
-golang 1.14.9 1.15.1
+golang 1.14.9 1.15.1 1.15.5
 nodejs 12.18.4
 yarn 1.22.5
 minio 2020-10-03T02-19-42Z
