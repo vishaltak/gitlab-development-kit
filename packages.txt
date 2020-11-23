@@ -22,6 +22,7 @@ net-tools
 openssh-server
 pkg-config
 psmisc
+python
 redis-server
 rsync
 runit
