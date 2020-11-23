@@ -24,19 +24,41 @@ function sha_for_url() {
   esac
 }
 
-function url_for_version() {
-  # Add new architectures/operating systems in here as needed
+function os_type() {
   case "$OSTYPE" in
     linux-gnu|linux-musl)
-      echo "https://github.com/jaegertracing/jaeger/releases/download/v${1}/jaeger-${1}-linux-amd64.tar.gz"
+      echo "linux"
       ;;
     darwin*)
-      echo "https://github.com/jaegertracing/jaeger/releases/download/v${1}/jaeger-${1}-darwin-amd64.tar.gz"
+      echo "darwin"
       ;;
     *)
-    >&2 echo "cannot download jaeger binary: unable to determine operation system."
+    >&2 echo "unable to determine operation system."
     return 1
   esac
+}
+
+function machine_type() {
+  case "$MACHTYPE" in
+    x86_64*)
+      echo "amd64"
+      ;;
+    aarch64*)
+      echo "arm64"
+      ;;
+    *)
+    >&2 echo "unable to determine machine type."
+    return 1
+  esac
+}
+
+function url_for_version() {
+  local os_type
+  local machine_type
+  os_type=$(os_type)
+  machine_type=$(machine_type)
+
+  echo "https://github.com/jaegertracing/jaeger/releases/download/v${1}/jaeger-${1}-${os_type}-${machine_type}.tar.gz"
 }
 
 url=$(url_for_version "${jaeger_version}")
