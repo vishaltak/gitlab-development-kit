@@ -351,7 +351,7 @@ module GDK
       string(:build_tags) { 'tracer_static tracer_static_jaeger' }
       settings :jaeger do
         bool(:enabled) { true }
-        string(:version) { '1.10.1' }
+        string(:version) { '1.18.1' }
       end
     end
 

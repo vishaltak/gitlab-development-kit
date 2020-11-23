@@ -219,7 +219,7 @@ tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:
     enabled: true
-    version: 1.10.1
+    version: 1.18.1
 username: git
 webpack:
   host: 127.0.0.1
