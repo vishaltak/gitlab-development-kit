@@ -22,8 +22,8 @@ Prerequisites:
    - **Target Port**: Select the Target Port found in Step 4, e.g. 9090.
    - **Protocol**: Leave as-is (e.g. TCP).
    - **Service Type**: Load balancer.
-1. Click **Save**. The UI will open a page for the load balancer service. The external
-   IP address and port will be visible under the **External endpoints** field.
+1. Click **Save**. The UI opens a page for the load balancer service. The external
+   IP address and port are visible under the **External endpoints** field.
 
    Note: It may take several minutes for the load balancer to become operational.
 

@@ -9,14 +9,14 @@ after you have set up your Vagrant machine.
 
 Clone the GDK to you local machine. Enter that directory.
 
-Vagrant will use the `Vagrantfile` and other configuration files to prepare your
+Vagrant uses the `Vagrantfile` and other configuration files to prepare your
 container.
 
 ## Vagrant setup
 
 [Vagrant](https://www.vagrantup.com) is a tool for setting up identical development environments including
-all dependencies regardless of the host platform you are using. Vagrant will
-default to using [VirtualBox](https://www.virtualbox.org), but it has many plugins for different environments.
+all dependencies regardless of the host platform you are using. Vagrant defaults to using
+[VirtualBox](https://www.virtualbox.org), but it has many plugins for different environments.
 
 Vagrant allows you to develop GitLab without affecting your host machine (but we
 recommend developing GitLab on metal if you can).
@@ -35,8 +35,8 @@ To avoid usage of slow VirtualBox shared folders we use NFS here.
 1. [Configure NFS for Vagrant](https://docs.vagrantup.com/v2/synced-folders/nfs.html)
    if you are on Linux.
 1. Run `vagrant up --provider=virtualbox --provision` in this directory (from an elevated
-   command prompt if on Windows). Vagrant will download an OS image, bring it
-   up, and install all the prerequisites.
+   command prompt if on Windows). Vagrant downloads an OS image, brings it
+   up, and installs all the prerequisites.
 1. Run `vagrant ssh` to SSH into the box.
 1. Run `cd /vagrant`.
 1. Continue setup at [Installation](../index.md#develop-against-the-gitlab-project-default).
@@ -47,8 +47,8 @@ To avoid usage of slow VirtualBox shared folders we use NFS here.
 Docker provider has a big advantage, as it doesn't have a big virtualisation
 overhead compared to Virtualbox and provides the native performance via
 containers technology. This Docker setup makes sense only on Linux, as on other
-OSes like Windows/OSX you will have to run the entire Docker hypervisor in a VM
-(which will be almost the same like Vagrant Virtualbox provider).
+OSes like Windows/macOS, you have to run the entire Docker hypervisor in a VM
+(which is almost the same as Vagrant Virtualbox provider).
 
 1. Install [Vagrant](https://www.vagrantup.com).
 1. Install [VirtualBox](https://www.virtualbox.org). Vagrant requires the `VBoxManage` binary included with
@@ -56,8 +56,8 @@ OSes like Windows/OSX you will have to run the entire Docker hypervisor in a VM
 1. Install [Docker Engine](https://www.docker.com/products/docker-engine). Don't forget to
    [add your user to the Docker group](https://docs.docker.com/install/linux/linux-postinstall/)
    and re-login.
-1. Run `vagrant up --provider=docker --provision` in this directory. Vagrant will build a
-   Docker image and start the container.
+1. Run `vagrant up --provider=docker --provision` in this directory. Vagrant builds a
+   Docker image and starts the container.
 1. Run `vagrant ssh` to SSH into the container.
 1. Continue setup at [Installation](../index.md).
 
@@ -69,7 +69,7 @@ OSes like Windows/OSX you will have to run the entire Docker hypervisor in a VM
   is `tcuser`(You may be asked to type-in the password several times, but for different operations thus you need to key in the same password: `tcuser`).
 - Follow the general [GDK setup documentation](../index.md) but running the
   commands in the `vagrant ssh` session.
-- Files in the `gitlab`, `go-gitlab-shell` and `gitlab-runner` folders will be synced between the
+- Files in the `gitlab`, `go-gitlab-shell` and `gitlab-runner` folders are synced between the
   host OS & guest OS so can be edited on either the host (under this folder) or
   guest OS (under `~/gitlab-development-kit/`).
 - When you want to shutdown Vagrant run `exit` from the guest OS and then
@@ -77,7 +77,7 @@ OSes like Windows/OSX you will have to run the entire Docker hypervisor in a VM
 
 ### Vagrant troubleshooting
 
-- On some setups the shared folder will have the wrong user. This is detected
+- On some setups, the shared folder has the wrong user. This is detected
   by the Vagrantfile and you should `sudo su - build` to switch to the correct
   user in that case.
 - If you get a "Timed out while waiting for the machine to boot" message, you

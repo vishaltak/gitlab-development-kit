@@ -164,7 +164,7 @@ This happens if your local OpenSSL library is updated and your Ruby binary is
 built against an older version.
 
 If you are using `rvm`, you should reinstall the Ruby binary. The following
-command will fetch Ruby 2.3 and install it from source:
+command fetches Ruby 2.3 and installs it from source:
 
 ```shell
 rvm reinstall --disable-binary 2.3
@@ -491,7 +491,7 @@ The following are possible solutions to problems you might encounter with Postgr
 
 ### Unable to build and install `pg` gem on GDK install
 
-After installing PostgreSQL with brew you will have to set the proper path to PostgreSQL.
+After installing PostgreSQL with brew, you have to set the proper path to PostgreSQL.
 You may run into the following errors on running `gdk install`
 
 ```plaintext
@@ -574,7 +574,7 @@ You can solve it in one of two ways, depending if you would like to retain your 
 
 ### If you do not need to retain your data
 
-Note that this will wipe out the existing contents of your database.
+Note that this wipes out the existing contents of your database.
 
 ```shell
 # cd into your GDK folder
@@ -848,7 +848,7 @@ If you still encounter some errors, see the troubleshooting FAQ below:
 ## Running tests
 
 There may be times when running spinach feature tests or Ruby Capybara RSpec
-tests (tests that are located in the `spec/features` directory) will fail.
+tests (tests that are located in the `spec/features` directory) fails.
 
 ### ChromeDriver problems
 
@@ -892,7 +892,7 @@ bundle exec rake db:test:prepare
 
 ### Failures when generating Karma fixtures
 
-In some cases, running `bin/rake karma:fixtures` might fail to generate some fixtures, you'll see errors in the console like these:
+In some cases, running `bin/rake karma:fixtures` might fail to generate some fixtures. You can see errors in the console like these:
 
 ```plaintext
 Failed examples:
@@ -948,10 +948,10 @@ of running Sidekiq directly, but eventually problems may arise.
 If you're experiencing performance issues or jobs not being picked up, try disabling
 Sidekiq Cluster by:
 
-1. First stopping all running processes with `gdk stop`
-1. Going to `$GDKROOT/Procfile`
-1. Removing the `SIDEKIQ_WORKERS` environment variable from `rails-background-jobs`
-1. Booting GDK again with `gdk start`
+1. Stopping all running processes with `gdk stop`.
+1. Opening the `$GDKROOT/Procfile` file.
+1. Removing the `SIDEKIQ_WORKERS` environment variable from `rails-background-jobs`.
+1. Starting GDK again with `gdk start`.
 
 When doing so, please create an issue describing what happened.
 
@@ -1037,7 +1037,7 @@ Find the directory where `icu-i18n.pc` resides:
 - On Ubuntu/Debian it might be in `/usr/lib/x86_64-linux-gnu/pkgconfig`
 - On Fedora it is expected to be in `/usr/lib64/pkgconfig`
 
-You'll need to add that directory to the `PKG_CONFIG_PATH` environment variable.
+You need to add that directory to the `PKG_CONFIG_PATH` environment variable.
 
 To fix this now, run the following on the command line:
 
@@ -1099,7 +1099,7 @@ For additional troubleshooting information, see the Homebrew [Common Issues](htt
 ## Live reloading
 
 If you previously compiled production assets with `bundle exec rake gitlab:assets:compile`, the GDK
-serves the assets from the `public/assets/` directory, which means that changing SCSS files won't
+serves the assets from the `public/assets/` directory, which means that changing SCSS files doesn't
 have any effect in development until you recompile the assets manually.
 
 To re-enable live reloading of CSS in development, remove the `public/assets/` directory and restart

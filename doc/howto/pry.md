@@ -14,12 +14,14 @@ because Puma/Unicorn is not compatible with Pry. Start by kicking off the normal
 gdk thin
 ```
 
-This will kill the Puma/Unicorn server and start a Thin server in its place. Once
-the `binding.pry` breakpoint has been reached, Pry prompts will appear in the window
+This kills the Puma/Unicorn server and start a Thin server in its place. Once
+the `binding.pry` breakpoint has been reached, Pry prompts appear in the window
 that runs `gdk thin`.
 
 When you have finished debugging, remove the `binding.pry` breakpoint and go
 back to using Puma/Unicorn. Terminate `gdk thin` by pressing Ctrl-C
 and run `gdk start`.
 
-**Note**: It's not possible to submit commits from the web without at least two `puma/unicorn` server threads running. Which means when running `thin` for debugging, actions such as creating a file from the web will time out. See [Use GitLab with only 1 Unicorn worker?](https://gitlab.com/gitlab-org/gitlab/issues/14546)
+NOTE: It's not possible to submit commits from the web without at least two `puma/unicorn` server
+threads running. This means when running `thin` for debugging, actions such as creating a file from
+the web time out. See [Use GitLab with only 1 Unicorn worker?](https://gitlab.com/gitlab-org/gitlab/issues/14546)
