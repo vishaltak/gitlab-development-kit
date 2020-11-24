@@ -1,7 +1,7 @@
 # Serverless (Knative)
 
-This document will instruct you to set up a working GitLab instance that can
-deploy Serverless applications (ie. Knative services) to a Kubernetes cluster
+This document instructs you to set up a working GitLab instance that can
+deploy Serverless applications (that is, Knative services) to a Kubernetes cluster
 via GitLab CI.
 
 ## Prerequisites
@@ -18,12 +18,12 @@ DevOps](auto_devops/index.md) before following any steps in here.
 1. Create a new project
 1. Add a cluster to the project
 1. Install Tiller and Knative on the cluster
-  When installing Knative you are asked for a domain name. You will later need
+  When installing Knative you are asked for a domain name. You later need
   to set up a DNS record for this domain name in order to reach your deployed
   serverless applications so it's necessary that you own this domain name.
   Alternatively there are some [workarounds to avoid buying a domain
   name](#workarounds-to-avoid-buying-a-domain-name) below.
-1. Assuming you used a domain name that you own you will then need to setup a
+1. Assuming you used a domain name that you own, you then need to setup a
   wildcard DNS record that points to the IP address of the Knative Ingress.
   Once the IP address finishes fetching (usually a few minutes after Knative
   intall finishes) then go to your DNS provider and set up a wildcard A record

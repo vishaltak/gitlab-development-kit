@@ -9,7 +9,7 @@ Docker image, both to test instance-wide SAML and the multi-tenant Group SAML us
 
 Group SAML requires [HTTPS](nginx.md) to be set up for GitLab.
 
-You'll also need to enable Group SAML in [`gitlab/config/gitlab.yml`](https://gitlab.com/gitlab-org/gitlab/blob/d8ef45c25ef3f08e5fcda703185f36203bfecd6b/config/gitlab.yml.example#L693), within the `development` section:
+You also need to enable Group SAML in [`gitlab/config/gitlab.yml`](https://gitlab.com/gitlab-org/gitlab/blob/d8ef45c25ef3f08e5fcda703185f36203bfecd6b/config/gitlab.yml.example#L693), within the `development` section:
 
 ```yaml
 development:
@@ -66,7 +66,7 @@ Configuring SAML for a GitLab instance can be done using the [SAML OmniAuth Docs
 NOTE:
 If you configured your instance to use HTTPS, please ensure to use the HTTPS port and update all links in the samples below to be `https` instead of `http`.
 
-To start an identity provider that works with instance SAML, you'll need to configure the entity ID and callback URL when starting the container:
+To start an identity provider that works with instance SAML, you need to configure the entity ID and callback URL when starting the container:
 
 ```shell
 docker run --name=instance_saml_idp -p 8080:8080 -p 8443:8443 \
@@ -75,7 +75,7 @@ docker run --name=instance_saml_idp -p 8080:8080 -p 8443:8443 \
 -d jamedjo/test-saml-idp
 ```
 
-In addition, you'll need to configure the `idp_sso_target_url` and `idp_cert_fingerprint` to match the values provided by the Docker image:
+In addition, you need to configure the `idp_sso_target_url` and `idp_cert_fingerprint` to match the values provided by the Docker image:
 
 ```yaml
 omniauth:

@@ -1,8 +1,8 @@
 # SSH
 
 If you want to work on GitLab's SSH integration then uncomment the
-'sshd:' line in your `<gdk-root>/Procfile`. Next time you run `gdk start` or `gdk start sshd`
-you will get an unprivileged SSH daemon process running on
+'sshd:' line in your `<gdk-root>/Procfile`. Next time you run `gdk start` or `gdk start sshd`,
+you get an unprivileged SSH daemon process running on
 `localhost:2222`, integrated with `gitlab-shell`.
 
 To change the host/port you need to edit `<gdk-root>/openssh/sshd_config` and
@@ -13,7 +13,7 @@ Procfile commented out.
 ## Try it out
 
 You can check that SSH works by cloning any project (e.g. `Project.first.ssh_url_to_repo`).
-This will also update your `known_hosts` file.
+This also updates your `known_hosts` file.
 
 ## SSH key lookup from database
 

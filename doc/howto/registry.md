@@ -23,7 +23,7 @@ the `gdk restart rails` command.
 ### With the Auto DevOps QA tunnel
 
 If you've previously followed the [Auto DevOps configuration steps](auto_devops/index.md),
-you will have a secure registry *accessible from the internet* after you run the
+you have a secure registry *accessible from the internet* after you run the
 `gdk restart tunnel` command.
 
 Since the registry is on the internet, it should work with any runner registered with your GDK without additional steps.
@@ -60,7 +60,7 @@ or lack of internet access, then you can use a local registry:
     1. Configure any local runner to [mount the trusted certificates](#configuring-a-local-docker-based-runner).
 
 1. If you set either `registry.self_signed` or `registry.auth_enabled` to `false`, your
-   registry will be considered *insecure* by Docker and you must
+   registry is considered *insecure* by Docker and you must
    [explicitly allow it](https://docs.docker.com/registry/insecure/). For information
    on [using an insecure registry](#using-an-insecure-registry-from-gitlab-ci) using
    Docker-in-Docker, see the documentation.
@@ -82,7 +82,7 @@ than from your computer, a different host is required to access your GitLab inst
 
 One solution is to bind `gdk.test` to a loopback IP *alias* (*not*
 `127.0.0.1`) in `/etc/hosts`. A loopback IP alias is like `127.0.0.1` (requests go
-straight to your computer) but this IP will remain accessible from within a container
+straight to your computer) but this IP remains accessible from within a container
 (unlike `127.0.0.1`). To set this up:
 
 1. Follow the instructions to [set up an internal dummy interface](runner.md#using-an-internal-dummy-interface).
@@ -97,7 +97,7 @@ straight to your computer) but this IP will remain accessible from within a cont
    ```
 
 **Warning:** If for some reason you end up on a network with the loopback alias as
-your local network IP, your GDK will become accessible on the local network.
+your local network IP, your GDK becomes accessible on the local network.
 
 NOTE:
 If you're using `docker-machine`, you must replace this IP address with the one returned from
@@ -116,7 +116,7 @@ If you are using Docker Desktop for Mac, GDK includes the shorthand:
 rm -f registry_host.{key,crt} && make trust-docker-registry
 ```
 
-This will place the certificate under `~/.docker/certs.d/$REGISTRY_HOST:$REGISRY_PORT/ca.crt`, *overwriting any existing certificate* at that path.
+This places the certificate under `~/.docker/certs.d/$REGISTRY_HOST:$REGISRY_PORT/ca.crt`, *overwriting any existing certificate* at that path.
 
 Afterwards, you **must restart Docker** to apply the changes.
 
@@ -360,7 +360,7 @@ pipelines.
        - curl -I httpstat.us/201
    ```
 
-1. The CI job should now pass and will execute the `curl` command which we previously added to our base image:
+1. The CI job should now pass and execute the `curl` command which we previously added to our base image:
 
    ```shell
    # CI job log output
@@ -468,12 +468,17 @@ container_scanning:
 ```
 
 NOTE:
-The contents of the above `.gitlab-ci.yml` file will differ depending on how the container registry has been configured:
+The contents of the above `.gitlab-ci.yml` file differs depending on how the container registry has been configured:
 
 1. When the local container registry is insecure because `registry.self_signed: false` has been [configured](#configuring-a-local-only-registry), the above `.gitlab-ci.yml` file can be used.
 
-   It's necessary to set `REGISTRY_INSECURE: "true"` in the `container_scanning` job because the [container scanning tool](https://gitlab.com/gitlab-org/security-products/analyzers/klar/) uses [klar](https://github.com/optiopay/klar) under the hood, and `klar` will attempt to fetch the image from our registry using `HTTPS`, meanwhile our registry is running insecurely over `HTTP`. Setting the `REGISTRY_INSECURE` flag of klar, documented in the klar repo [here](https://github.com/optiopay/klar#usage) and also in the GitLab container scanning repo [here](https://gitlab.com/gitlab-org/security-products/analyzers/klar/#environment-variables) will force the `klar` tool to
-use `HTTP` when fetching the container image from our insecure registry.
+   It's necessary to set `REGISTRY_INSECURE: "true"` in the `container_scanning` job because the
+   [container scanning tool](https://gitlab.com/gitlab-org/security-products/analyzers/klar/) uses
+   [klar](https://github.com/optiopay/klar) under the hood. `klar` attempts to fetch the image from
+   our registry using `HTTPS`, meanwhile our registry is running insecurely over `HTTP`. Setting the
+   `REGISTRY_INSECURE` flag of `klar`, documented in the klar repo [here](https://github.com/optiopay/klar#usage)
+   and also in the GitLab container scanning repo [here](https://gitlab.com/gitlab-org/security-products/analyzers/klar/#environment-variables)
+   forces the `klar` tool to use `HTTP` when fetching the container image from our insecure registry.
 
 1. When the registry is secure because `registry.self_signed: true` has been [configured](#configuring-a-local-only-registry), but we haven't referenced the self-signed certificate, then the following `services` and `container_scanning` sections of the above `.gitlab-ci.yml` must be used (the rest of the file has been omitted for brevity):
 
@@ -514,7 +519,7 @@ DOCKER_MACHINE_NAME=default
 DOCKER_TLS_VERIFY=1
 ```
 
-If a list of environment variables are returned as above, this means that you're currently using `docker-machine` and any `docker` commands will be routed to the virtual machine controlled by `docker-machine`.
+If a list of environment variables are returned as above, this means that you're currently using `docker-machine` and any `docker` commands are routed to the virtual machine controlled by `docker-machine`.
 
 To switch from `docker-machine` to `docker-desktop-for-mac`, simply unset the above environment variables:
 

@@ -2,7 +2,7 @@
 
 Most features of [GitLab CI/CD](http://docs.gitlab.com/ee/ci/) need a
 [Runner](http://docs.gitlab.com/ee/ci/runners/README.html) to be registered with
-the GitLab installation. This HOWTO will take you through the necessary steps to
+the GitLab installation. This howto takes you through the necessary steps to
 do so when GitLab is running under GDK.
 
 ## Set up GitLab
@@ -17,7 +17,7 @@ configuration.
 
 If you intend to just use the "shell" executor (fine for very
 simple jobs), you can use GDK with its default settings and skip the Advanced
-configuration below. If GDK is already running, you'll need to restart it after making
+configuration below. If GDK is already running, you need to restart it after making
 these changes.
 
 With GDK running:
@@ -29,7 +29,7 @@ With GDK running:
 
 Ensure you have Docker installed, then set up GitLab to bind to all
 IPs on your machine by following [these instructions](local_network.md).
-Without this step, builds will fail with a 'connection refused' error.
+Without this step, builds fail with a 'connection refused' error.
 
 The configured `hostname` needs to be set to an IP address that
 *actually exists on the computer*.
@@ -82,7 +82,7 @@ for your operating system
 
 #### Build from source
 
-To build from source, you'll need to set up a development environment manually -
+To build from source, you need to set up a development environment manually -
 GDK doesn't manage it for you. The official GitLab Runner repository is
 [here](https://gitlab.com/gitlab-org/gitlab-runner); just follow
 [the development instructions](https://docs.gitlab.com/runner/development/).
@@ -126,7 +126,7 @@ Run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-
 
   Comma-separated tags. Jobs can be set up to use only Runners with specific tags.
 
-The Runner will write its configuration file to `gitlab-runner-config.toml`,
+The Runner writes its configuration file to `gitlab-runner-config.toml`,
 which is in GDK's `.gitignore` file.
 
 To ensure the Runner token persists between subsequent runs of `gdk reconfigure`, add
@@ -140,7 +140,7 @@ runner:
 
 If Docker is installed and you followed the special setup instructions above,
 choose `docker` as the executor. Otherwise, choose `shell` - but remember that
-builds will then be run directly on the host computer! Don't use random
+builds then run directly on the host computer! Don't use random
 `.gitlab-ci.yml` files from the Internet unless you understand them fully, it
 could be a security risk.
 
@@ -151,15 +151,15 @@ Each `register` invocation adds a section to the configuration file, so make
 sure you're referencing the same one each time.
 
 Finally, rebuild your `Procfile` with `rm Procfile; make Procfile` or un-comment
-the line that starts with `runner:`. This will allow you to manage it along with
+the line that starts with `runner:`. This allows you to manage it along with
 your other GDK processes.
 
 Alternately, run `gitlab-runner --log-level debug run --config <path-to-gdk>/gitlab-runner-config.toml`
 to get a long-lived Runner process, using the configuration you created in the
-last step. It will stay in the foreground, outputting logs as it executes
+last step. It stays in the foreground, outputting logs as it executes
 builds, so run it in its own terminal session.
 
-The Runners pane in the administration panel will now list the Runners. Create a
+The Runners pane in the administration panel now lists the Runners. Create a
 project in the GitLab web interface and add a
 [`.gitlab-ci.yml`](https://docs.gitlab.com/ee/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
@@ -216,7 +216,7 @@ for Mac, but the "proper" way to support a Docker executor is to use an
 internal, dummy interface that can be used by both the host and the
 container. Here's how:
 
-1. Create an internal interface. On macOS, this will add an alias IP
+1. Create an internal interface. On macOS, this adds an alias IP
    172.16.123.1 to the loopback adapter:
 
    ```shell
