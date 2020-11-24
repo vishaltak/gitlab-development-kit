@@ -99,6 +99,7 @@ install: all show-installed-at start
 update: asdf-update \
 ensure-databases-running \
 unlock-dependency-installers \
+gettext-unlock \
 gitlab/.git/pull \
 gitlab-shell-update \
 gitlab-workhorse-update \
@@ -172,8 +173,7 @@ unlock-dependency-installers:
 	$(Q)rm -f \
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
-	.gitlab-yarn \
-	.gettext \
+	.gitlab-yarn
 
 gdk.yml:
 	$(Q)touch $@
@@ -308,6 +308,14 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) ${YARN} install --pure-lockfile ${QQ}
 	$(Q)touch $@
+
+
+.PHONY: gettext-unlock
+gettext-unlock:
+	$(Q)rm -f .gettext
+
+.PHONY: gettext-update
+gettext-update: gettext-unlock .gettext
 
 .gettext:
 	@echo
