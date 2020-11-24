@@ -688,10 +688,12 @@ RSpec.describe GDK::Config do
       describe '#listen_settings' do
         it 'defaults to UNIX socket' do
           expect(config.gitlab.rails.address).to eq('')
-          expect(config.gitlab.rails.listen_settings.protocol).to eq('unix')
-          expect(config.gitlab.rails.listen_settings.address).to eq('/home/git/gdk/gitlab.socket')
-          expect(config.workhorse.listen_settings.type).to eq('authSocket')
-          expect(config.workhorse.listen_settings.address).to eq('/home/git/gdk/gitlab.socket')
+          expect(config.gitlab.rails.__bind).to eq('unix:///home/git/gdk/gitlab.socket')
+          expect(config.gitlab.rails.__workhorse_url).to eq('/home/git/gdk/gitlab.socket')
+          expect(config.gitlab.rails.__listen_settings.__protocol).to eq('unix')
+          expect(config.gitlab.rails.__listen_settings.__address).to eq('/home/git/gdk/gitlab.socket')
+          expect(config.workhorse.__listen_settings.__type).to eq('authSocket')
+          expect(config.workhorse.__listen_settings.__address).to eq('/home/git/gdk/gitlab.socket')
         end
       end
 
@@ -706,10 +708,12 @@ RSpec.describe GDK::Config do
 
         it 'sets listen_settings to HTTP port' do
           expect(config.gitlab.rails.address).to eq('localhost:3443')
-          expect(config.gitlab.rails.listen_settings.protocol).to eq('tcp')
-          expect(config.gitlab.rails.listen_settings.address).to eq('localhost:3443')
-          expect(config.workhorse.listen_settings.type).to eq('authBackend')
-          expect(config.workhorse.listen_settings.address).to eq('http://localhost:3443')
+          expect(config.gitlab.rails.__bind).to eq('tcp://localhost:3443')
+          expect(config.gitlab.rails.__workhorse_url).to eq('http://localhost:3443')
+          expect(config.gitlab.rails.__listen_settings.__protocol).to eq('tcp')
+          expect(config.gitlab.rails.__listen_settings.__address).to eq('localhost:3443')
+          expect(config.workhorse.__listen_settings.__type).to eq('authBackend')
+          expect(config.workhorse.__listen_settings.__address).to eq('http://localhost:3443')
         end
       end
     end

@@ -293,10 +293,10 @@ module GDK
 
   def self.thin_command
     args =
-      if config.gitlab.rails.listen_settings.protocol == 'unix'
+      if config.gitlab.rails.__listen_settings.__protocol == 'unix'
         %W[--socket #{config.gitlab.rails.__socket_file}]
       else
-        url = URI("http://#{config.gitlab.rails.listen_settings.address}")
+        url = URI(config.gitlab.rails.__bind)
         %W[--address #{url.host} --port #{url.port}]
       end
 

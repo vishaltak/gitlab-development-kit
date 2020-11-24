@@ -136,8 +136,8 @@ module GDK
     settings :workhorse do
       integer(:configured_port) { 3333 }
 
-      settings :listen_settings do
-        string(:type) do
+      settings :__listen_settings do
+        string(:__type) do
           if config.gitlab.rails.address.empty?
             'authSocket'
           else
@@ -145,12 +145,8 @@ module GDK
           end
         end
 
-        string(:address) do
-          if config.gitlab.rails.address.empty?
-            config.gitlab.rails.__socket_file
-          else
-            "http://#{config.gitlab.rails.address}"
-          end
+        string(:__address) do
+          config.gitlab.rails.__workhorse_url
         end
       end
 
@@ -516,11 +512,19 @@ module GDK
 
       settings :rails do
         string(:address) { '' }
+        string(:__bind) { "#{config.gitlab.rails.__listen_settings.__protocol}://#{config.gitlab.rails.__listen_settings.__address}" }
+        string(:__workhorse_url) do
+          if config.gitlab.rails.address.empty?
+            config.gitlab.rails.__socket_file
+          else
+            "http://#{config.gitlab.rails.__listen_settings.__address}"
+          end
+        end
         path(:__socket_file) { config.gdk_root.join('gitlab.socket') }
         string(:__socket_file_escaped) { CGI.escape(config.gitlab.rails.__socket_file.to_s) }
 
-        settings :listen_settings do
-          string(:protocol) do
+        settings :__listen_settings do
+          string(:__protocol) do
             if config.gitlab.rails.address.empty?
               'unix'
             else
@@ -528,7 +532,7 @@ module GDK
             end
           end
 
-          string(:address) do
+          string(:__address) do
             if config.gitlab.rails.address.empty?
               config.gitlab.rails.__socket_file
             else

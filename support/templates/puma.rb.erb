@@ -41,7 +41,7 @@ queue_requests false
 
 # Bind the server to "url". "tcp://", "unix://" and "ssl://" are the only
 # accepted protocols.
-bind '<%= config.gitlab.rails.listen_settings.protocol %>://<%= config.gitlab.rails.listen_settings.address %>'
+bind '<%= config.gitlab.rails.__bind %>'
 
 workers 2
 
