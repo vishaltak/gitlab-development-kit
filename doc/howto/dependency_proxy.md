@@ -86,3 +86,27 @@ Docker should succeed and you should see the following:
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
 ```
+
+## Object storage
+
+When using [object storage](object_storage.md), two additional steps must be taken.
+
+1. The object storage host must be the same as the Dependency Proxy host. If you used
+   `0.0.0.0` as described above, you must include that as the object storage host in the
+   `gdk.yml` file:
+
+  ```yaml
+  object_store:
+    enabled: true
+    host: 0.0.0.0
+  ```
+
+1. The object storage domain must be added to the `insecure-registries` list in the
+[configuration](#configuration) section. For example:
+
+  ```json
+  {
+    "experimental": true,
+    "insecure-registries": ["0.0.0.0:3000", "0.0.0.0:9000"]
+  }
+  ```
