@@ -268,7 +268,20 @@ production: &base
 
   ## Dependency Proxy
   dependency_proxy:
-    enabled: false
+    enabled: true
+    <%- unless config.object_store.consolidated_form? -%>
+    object_store:
+      enabled: <%= config.object_store? %>
+      remote_directory: dependency-proxy
+      direct_upload: true
+      connection:
+        provider: AWS
+        aws_access_key_id: minio
+        aws_secret_access_key: gdk-minio
+        region: gdk
+        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        path_style: true
+    <%- end -%>
 
   ## Terraform state
   terraform_state:
