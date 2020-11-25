@@ -81,7 +81,7 @@ ensure_supported_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop"]]; then
+    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" ]]; then
       return 0
     fi
   fi
