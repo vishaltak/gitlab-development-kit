@@ -345,7 +345,7 @@ module GDK
     end
 
     settings :gitaly do
-      bool(:enabled) { !config.praefect? || __storages.length > 1 }
+      bool(:enabled) { !config.praefect? || storage_count > 1 }
       path(:address) { config.gdk_root.join('gitaly.socket') }
       path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
       path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
@@ -356,15 +356,13 @@ module GDK
       string(:auth_token) { '' }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
-      array(:__storages) do
-        settings_array!(storage_count) do |i|
-          string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
-          path(:path) do
-            if i.zero?
-              parent.storage_dir
-            else
-              File.join(config.repository_storages, 'gitaly', name)
-            end
+      settings_array :__storages, size: -> { storage_count } do |i|
+        string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
+        path(:path) do
+          if i.zero?
+            parent.parent.storage_dir
+          else
+            File.join(config.repository_storages, 'gitaly', name)
           end
         end
       end
@@ -382,22 +380,18 @@ module GDK
         string(:sslmode) { 'disable' }
       end
       integer(:node_count) { 1 }
-      array(:__nodes) do
-        settings_array!(config.praefect.node_count) do |i|
-          path(:address) { config.gdk_root.join("gitaly-praefect-#{i}.socket") }
-          string(:config_file) { "gitaly/gitaly-#{i}.praefect.toml" }
-          path(:log_dir) { config.gdk_root.join('log', "praefect-gitaly-#{i}") }
-          string(:service_name) { "praefect-gitaly-#{i}" }
-          string(:storage) { "praefect-internal-#{i}" }
-          path(:storage_dir) { config.repositories_root }
-          path(:repository_storages) { config.repository_storages }
-          path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
-          array(:__storages) do
-            settings_array!(1) do |j|
-              string(:name) { parent.storage }
-              path(:path) { i.zero? && j.zero? ? parent.storage_dir : File.join(parent.repository_storages, parent.service_name, name) }
-            end
-          end
+      settings_array :__nodes, size: -> { config.praefect.node_count } do |i|
+        path(:address) { config.gdk_root.join("gitaly-praefect-#{i}.socket") }
+        string(:config_file) { "gitaly/gitaly-#{i}.praefect.toml" }
+        path(:log_dir) { config.gdk_root.join('log', "praefect-gitaly-#{i}") }
+        string(:service_name) { "praefect-gitaly-#{i}" }
+        string(:storage) { "praefect-internal-#{i}" }
+        path(:storage_dir) { config.repositories_root }
+        path(:repository_storages) { config.repository_storages }
+        path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
+        settings_array :__storages, size: 1 do |j|
+          string(:name) { parent.parent.storage }
+          path(:path) { i.zero? && j.zero? ? parent.parent.storage_dir : File.join(parent.parent.repository_storages, parent.parent.service_name, name) }
         end
       end
     end

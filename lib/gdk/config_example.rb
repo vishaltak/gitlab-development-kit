@@ -7,6 +7,16 @@ module GDK
   class ConfigExample < Config
     # Module that stubs reading from the environment
     module Stubbed
+      def self.prepended(base)
+        base.extend ClassMethods
+      end
+
+      module ClassMethods
+        def settings_klass
+          ::GDK::ConfigExample::Settings
+        end
+      end
+
       def cmd!(_cmd)
         nil
       end
@@ -30,10 +40,6 @@ module GDK
       def sanitized_read!(_filename)
         raise Errno::ENOENT
       end
-
-      def settings_klass
-        ::GDK::ConfigExample::Settings
-      end
     end
 
     # Environment stubbed GDK::ConfigSettings subclass
@@ -45,12 +51,10 @@ module GDK
 
     GDK_ROOT = '/home/git/gdk'
 
-    def username
-      'git'
-    end
+    # Avoid messing up the superclass (i.e. `GDK::Config`)
+    @attributes = superclass.attributes.dup
 
-    def git_repositories
-      []
-    end
+    string(:username) { 'git' }
+    array(:git_repositories) { [] }
   end
 end

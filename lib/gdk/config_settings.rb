@@ -2,12 +2,15 @@
 
 require 'yaml'
 require 'mkmf'
+require 'forwardable'
 require_relative 'config_type/anything'
 require_relative 'config_type/array'
 require_relative 'config_type/bool'
 require_relative 'config_type/hash'
 require_relative 'config_type/integer'
 require_relative 'config_type/path'
+require_relative 'config_type/settings'
+require_relative 'config_type/settings_array'
 require_relative 'config_type/string'
 
 MakeMakefile::Logging.quiet = true
@@ -15,114 +18,95 @@ MakeMakefile::Logging.logfile(File::NULL)
 
 module GDK
   class ConfigSettings
+    extend ::Forwardable
+
     SettingUndefined = Class.new(StandardError)
 
-    attr_reader :parent, :yaml, :slug
+    attr_reader :parent, :yaml, :key
+
+    def_delegators :'self.class', :attributes, :settings_klass
 
     class << self
-      def anything(name, &blk)
-        setting(name, ConfigType::Anything, &blk)
+      attr_accessor :attributes
+
+      def settings_klass
+        ::GDK::ConfigSettings
       end
 
-      def array(name, merge: false, &blk)
-        custom_value_block = if merge
-                               proc do |yaml_value|
-                                 instance_eval(&blk) + Array(yaml_value)
-                               end
-                             end
-
-        setting(name, ConfigType::Array, custom_value_block: custom_value_block, &blk)
+      def anything(key, &blk)
+        def_attribute(key, ConfigType::Anything, &blk)
       end
 
-      def hash_setting(name, merge: false, &blk)
-        custom_value_block = if merge
-                               proc do |yaml_value|
-                                 stringified_default_value = Hash[instance_eval(&blk).transform_keys(&:to_s)]
-                                 yaml_value.merge(stringified_default_value)
-                               end
-                             end
-
-        setting(name, ConfigType::Hash, custom_value_block: custom_value_block, &blk)
+      def array(key, merge: false, &blk)
+        def_attribute(key, ConfigType::Array, merge: merge, &blk)
       end
 
-      def bool(name, &blk)
-        setting(name, ConfigType::Bool, &blk)
-        alias_method "#{name}?", name
+      def hash_setting(key, merge: false, &blk)
+        def_attribute(key, ConfigType::Hash, merge: merge, &blk)
       end
 
-      def integer(name, &blk)
-        setting(name, ConfigType::Integer, &blk)
+      def bool(key, &blk)
+        def_attribute(key, ConfigType::Bool, &blk)
+        alias_method "#{key}?", key
       end
 
-      def path(name, &blk)
-        setting(name, ConfigType::Path, &blk)
+      def integer(key, &blk)
+        def_attribute(key, ConfigType::Integer, &blk)
       end
 
-      def string(name, &blk)
-        setting(name, ConfigType::String, &blk)
+      def path(key, &blk)
+        def_attribute(key, ConfigType::Path, &blk)
       end
 
-      def settings(name, &blk)
-        define_method(name) do
-          subconfig!(name, &blk)
-        end
+      def string(key, &blk)
+        def_attribute(key, ConfigType::String, &blk)
+      end
+
+      def settings(key, &blk)
+        def_attribute(key, ConfigType::Settings, &blk)
+      end
+
+      def settings_array(key, size:, &blk)
+        def_attribute(key, ConfigType::SettingsArray, size: size, &blk)
       end
 
       private
 
-      def setting(name, config_type, custom_value_block: nil, &blk)
-        define_method(name) do
-          value = if custom_value_block
-                    custom_value_block.call(yaml.fetch(name.to_s, nil))
-                  else
-                    yaml.fetch(name.to_s, instance_eval(&blk))
-                  end
+      def def_attribute(key, klass, **kwargs, &blk)
+        key = key.to_s
+        self.attributes ||= {} # Using a hash to ensure uniqueness on key
+        self.attributes[key] = klass.new(kwargs.merge(key: key), &blk)
 
-          config_type.new(value, slug: slug_for(name)).value
+        define_method(key) do
+          instanciate(key).value
         end
       end
     end
 
-    def initialize(parent: nil, yaml: nil, slug: nil)
+    def initialize(key: nil, parent: nil, yaml: nil)
+      @key = key
       @parent = parent
-      @slug = slug
       @yaml = yaml || load_yaml!
     end
 
     def validate!
-      our_methods.each do |method|
-        next if ignore_method?(method.to_s)
+      attributes.each_value do |attribute|
+        next if attribute.ignore?
 
-        value = fetch(method)
-        if value.is_a?(ConfigSettings)
-          value.validate!
-        elsif value.is_a?(Enumerable) && value.first.is_a?(ConfigSettings)
-          value.each(&:validate!)
-        end
+        attribute.instanciate(parent: self).validate!
       end
 
       nil
     end
 
     def dump!(file = nil)
-      yaml = our_methods.each_with_object({}) do |method, hash|
-        method_name = method.to_s
-
+      yaml = attributes.values.sort_by(&:key).each_with_object({}) do |attribute, result|
         # We don't dump a config if it:
         #  - starts with a double underscore (intended for internal use)
         #  - is a ? method (always has a non-? counterpart)
-        next if ignore_method?(method_name)
+        next if attribute.ignore?
 
-        value = fetch(method)
-        hash[method_name] = if value.is_a?(ConfigSettings)
-                              value.dump!
-                            elsif value.is_a?(Enumerable) && value.first.is_a?(ConfigSettings)
-                              value.map(&:dump!)
-                            elsif value.is_a?(Pathname)
-                              value.to_s
-                            else
-                              value
-                            end
+        result[attribute.key] = attribute.instanciate(parent: self).dump!
       end
 
       file&.puts(yaml.to_yaml)
@@ -155,17 +139,6 @@ module GDK
       value
     end
 
-    # Create an array of settings with self as parent
-    #
-    # @param count [Integer] the number of settings in the array
-    def settings_array!(count, &blk)
-      Array.new(count) do |i|
-        subconfig!(i) do
-          instance_exec(i, &blk)
-        end
-      end
-    end
-
     def fetch(slug, *args)
       raise ::ArgumentError, %[Wrong number of arguments (#{args.count + 1} for 1..2)] if args.count > 1
 
@@ -196,18 +169,28 @@ module GDK
       gdk.protected_config_files&.any? { |pattern| File.fnmatch(pattern, target) }
     end
 
+    def slug
+      return nil unless parent
+
+      [parent.slug, key].compact.join('.')
+    end
+
     def root
       parent&.root || self
     end
     alias_method :config, :root
 
     def inspect
+      return "#<#{self.class.name}>" if self.class.name
+
       "#<GDK::ConfigSettings slug:#{slug}>"
     end
 
     def to_s
       dump!.to_yaml
     end
+
+    alias_method :value, :itself
 
     # Provide a shorter form for `config.setting.enabled` as `config.setting?`
     def method_missing(method_name, *args, &blk)
@@ -224,16 +207,12 @@ module GDK
 
     private
 
-    def ignore_method?(method_name)
-      method_name.start_with?('__') || method_name.end_with?('?')
+    def attribute(key)
+      attributes[key]
     end
 
-    def our_methods
-      @our_methods ||= (methods - settings_klass.new.methods).sort
-    end
-
-    def slug_for(name)
-      [slug, name].compact.join('.')
+    def instanciate(key)
+      attribute(key).instanciate(parent: self)
     end
 
     def enabled_value(method_name)
@@ -241,12 +220,6 @@ module GDK
 
       chopped_name = method_name.to_s.chop.to_sym
       fetch(chopped_name, nil)&.fetch(:enabled, nil)
-    end
-
-    def subconfig!(name, &blk)
-      sub = Class.new(settings_klass)
-      sub.class_eval(&blk)
-      sub.new(parent: self, yaml: yaml.fetch(name.to_s, {}), slug: slug_for(name))
     end
 
     def load_yaml!
@@ -262,10 +235,6 @@ module GDK
 
     def sanitized_read!(filename)
       File.read(GDK.root.join(filename)).chomp
-    end
-
-    def settings_klass
-      ::GDK::ConfigSettings
     end
   end
 end

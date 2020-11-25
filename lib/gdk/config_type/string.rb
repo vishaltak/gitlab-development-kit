@@ -5,10 +5,14 @@ require_relative 'base'
 module GDK
   module ConfigType
     class String < Base
-      def parse
-        return if value.nil?
+      class Instance < Base::Instance
+        def parse
+          return false if value.nil?
 
-        self.value = value.to_s
+          self.value = value.to_s
+
+          true
+        end
       end
     end
   end

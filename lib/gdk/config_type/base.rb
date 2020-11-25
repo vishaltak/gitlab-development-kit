@@ -2,39 +2,62 @@
 
 module GDK
   module ConfigType
-    TypeError = Class.new(StandardError)
-
     class Base
-      attr_accessor :value
-      attr_reader :slug
+      class Instance
+        attr_reader :key, :parent
+        attr_accessor :value
 
-      def initialize(value, slug:)
-        @value = value
-        @slug = slug
+        def initialize(value, key:, parent:)
+          @value = value
+          @key = key
+          @parent = parent
 
-        validate!
+          validate!
+        end
+
+        def validate!
+          orig_value = value
+
+          return if parse
+
+          raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+        end
+
+        def dump!
+          value
+        end
+
+        def slug
+          [parent.slug, key].compact.join('.')
+        end
+
+        def root
+          parent&.root || self
+        end
+        alias_method :config, :root
+
+        private
+
+        def type
+          self.class.name.split('::').last(2).first.downcase
+        end
       end
 
-      def validate!
-        orig_value = value
+      attr_reader :key, :blk
 
-        return if parse
-
-        raise TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+      def initialize(key:, &blk)
+        @key = key
+        @blk = blk
       end
 
-      def dump!
-        value
+      def ignore?
+        key.start_with?('__') || key.end_with?('?')
       end
 
-      private
+      def instanciate(parent:)
+        value = parent.yaml.fetch(key, parent.instance_eval(&blk))
 
-      def type
-        self.class.name.split('::').last.downcase
-      end
-
-      def value_respond_to?(method_name)
-        value.respond_to?(method_name)
+        self.class::Instance.new(value, key: key, parent: parent)
       end
     end
   end
