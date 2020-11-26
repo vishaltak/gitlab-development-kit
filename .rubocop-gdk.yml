@@ -29,6 +29,7 @@ AllCops:
     - 'services/**/*'
     - 'sv/**/*'
     - 'tmp/**/*'
+    - 'vendor/**/*'
 
 CodeReuse/ActiveRecord:
   Enabled: false

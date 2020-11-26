@@ -4,24 +4,24 @@ docs_lint:
   stage: test
   needs: []
   script:
-    # Lint prose
-    - vale --minAlertLevel error doc
-    # Lint Markdown
-    - markdownlint --config .markdownlint.json 'doc/**/*.md'
+    - make lint
 
 rubocop:
   extends: .rules:code-changes
   stage: test
+  variables:
+    BUNDLE_ARGS: "--path vendor/bundle"
   script:
-    - bundle install --jobs 4
     - make rubocop
 
 rspec:
   extends: .rules:code-changes
   stage: test
+  variables:
+    RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
+    BUNDLE_ARGS: "--path vendor/bundle"
   script:
-    - bundle install --jobs 4 --path vendor/bundle
-    - bundle exec rspec --format progress --format RspecJunitFormatter --out rspec.xml
+    - make rspec
   cache:
     key: "ruby-2.7-bundle"
     paths:
@@ -76,8 +76,10 @@ shellcheck:
   stage: test
   extends: .rules:code-changes
   image: koalaman/shellcheck-alpine:stable
+  before_script:
+    - apk add make
   script:
-    - support/shellcheck
+    - make shellcheck SHELL=/bin/sh
 
 yard:
   stage: test
@@ -93,8 +95,8 @@ yard:
     paths:
       - yard/*
 
-gdk_example_yml:
+verify_gdk_example_yml:
   extends: .rules:code-changes
   stage: test
   script:
-    - support/ci/gdk_example_yml
+    - make verify_gdk_example_yml

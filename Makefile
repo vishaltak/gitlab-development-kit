@@ -19,7 +19,7 @@ REQUIRED_BUNDLER_VERSION := $(shell grep -A1 'BUNDLED WITH' Gemfile.lock | tail 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
 
-NO_RUBY_REQUIRED := bootstrap lint
+NO_RUBY_REQUIRED := bootstrap lint shellcheck
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
@@ -51,7 +51,7 @@ gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commit
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_without_production_cmd = ${BUNDLE} config set without 'production'
-bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag}
+bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
@@ -927,15 +927,15 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 ##############################################################
 
 .PHONY: test
-test: lint shellcheck rubocop rspec gdk_example_yml
+test: lint shellcheck rubocop rspec verify_gdk_example_yml
 
 .PHONY: rubocop
 rubocop:
-ifeq ($(and $(BUNDLE)),)
+ifeq ($(BUNDLE),)
 	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
-ifeq ($(and $(RUBOCOP)),)
+ifeq ($(RUBOCOP),)
 	@echo "INFO: Installing RuboCop.."
 	$(Q)${bundle_install_cmd} ${QQ}
 endif
@@ -945,16 +945,16 @@ endif
 
 .PHONY: rspec
 rspec:
-ifeq ($(and $(BUNDLE)),)
+ifeq ($(BUNDLE),)
 	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
-ifeq ($(and $(RSPEC)),)
+ifeq ($(RSPEC),)
 	@echo "INFO: Installing RSpec.."
 	$(Q)${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RSpec: "
-	@${BUNDLE} exec $@
+	@${BUNDLE} exec $@ ${RSPEC_ARGS}
 endif
 
 .PHONY: lint
@@ -962,11 +962,11 @@ lint: vale markdownlint
 
 .PHONY: vale-install
 vale-install:
-ifeq ($(and $(GOLANG)),)
+ifeq ($(VALE),)
+ifeq ($(GOLANG),)
 	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
-ifeq ($(and $(VALE)),)
 	@echo "INFO: Installing vale.."
 	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale/v2 ${QQ}
 endif
@@ -984,7 +984,7 @@ ifeq ($(or $(NPM),$(YARN)),)
 	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
 	@false
 else
-ifeq ($(and $(MARKDOWNLINT)),)
+ifeq ($(MARKDOWNLINT),)
 	@echo "INFO: Installing markdownlint.."
 	@([[ "${YARN}" ]] && ${YARN} global add markdownlint-cli@0.23.2 ${QQ}) || ([[ "${NPM}" ]] && ${NPM} install -g markdownlint-cli@0.23.2 ${QQ})
 endif
@@ -999,7 +999,7 @@ markdownlint: markdownlint-install
 
 .PHONY: shellcheck-install
 shellcheck-install:
-ifeq ($(and $(SHELLCHECK)),)
+ifeq ($(SHELLCHECK),)
 ifeq ($(platform),macos)
 	@echo "INFO: Installing Shellcheck.."
 	$(Q)brew install shellcheck ${QQ}
@@ -1014,10 +1014,10 @@ shellcheck: shellcheck-install
 	@echo -n "Shellcheck: "
 	@support/shellcheck && echo "OK"
 
-.PHONY: gdk_example_yml
-gdk_example_yml:
+.PHONY: verify_gdk_example_yml
+verify_gdk_example_yml:
 	@echo -n "Checking gdk.example.yml: "
-	@support/ci/gdk_example_yml && echo "OK"
+	@support/ci/verify_gdk_example_yml && echo "OK"
 
 ##############################################################
 # Misc
