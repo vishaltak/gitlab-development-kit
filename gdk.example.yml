@@ -30,10 +30,12 @@ gdk:
     before: []
   stop_hooks:
     after: []
-    before: []
+    before:
+    - cd gitlab && bin/spring stop || true
   update_hooks:
     after: []
-    before: []
+    before:
+    - cd gitlab && bin/spring stop || true
 gdk_root: "/home/git/gdk"
 geo:
   enabled: false
