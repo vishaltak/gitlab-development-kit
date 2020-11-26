@@ -919,7 +919,7 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jae
 ##############################################################
 
 .PHONY: test
-test: lint shellcheck rubocop rspec gdk_example_yml
+test: lint shellcheck rubocop rspec verify_gdk_example_yml
 
 .PHONY: rubocop
 rubocop:
@@ -1006,10 +1006,10 @@ shellcheck: shellcheck-install
 	@echo -n "Shellcheck: "
 	@support/shellcheck && echo "OK"
 
-.PHONY: gdk_example_yml
-gdk_example_yml:
+.PHONY: verify_gdk_example_yml
+verify_gdk_example_yml:
 	@echo -n "Checking gdk.example.yml: "
-	@support/ci/gdk_example_yml && echo "OK"
+	@support/ci/verify_gdk_example_yml && echo "OK"
 
 ##############################################################
 # Misc
