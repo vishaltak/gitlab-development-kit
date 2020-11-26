@@ -96,6 +96,7 @@ It's possible:
   `node`.
 - That your system provides a dependency also (for example, macOS comes with Ruby itself). Don't
   try to remove these because `asdf` is less likely to conflict with these.
+- That in order for `asdf` to successfully install nodejs, you may need to import [nodejs release keys](https://github.com/nodejs/node#release-keys) into gpg.
 
 ## Install and set up GDK
 
