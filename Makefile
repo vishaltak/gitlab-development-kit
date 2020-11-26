@@ -191,6 +191,10 @@ rake:
 
 .PHONY: ensure-databases-running
 ensure-databases-running: Procfile postgresql/data gitaly-setup
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Ensuring necessary data services are running"
+	@echo "${DIVIDER}"
 	$(Q)gdk start rails-migration-dependencies
 
 ##############################################################
@@ -914,8 +918,8 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one:
 
 	$(Q)mkdir -p jaeger-artifacts
 
-	# To save disk space, delete old versions of the download,
-	# but to save bandwidth keep the current version....
+	@# To save disk space, delete old versions of the download,
+	@# but to save bandwidth keep the current version....
 	$(Q)find jaeger-artifacts ! -path "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz" -type f -exec rm -f {} + -print
 
 	$(Q)./support/download-jaeger "${jaeger_version}" "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz"
