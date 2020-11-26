@@ -19,6 +19,20 @@ RSpec.describe GDK::ConfigSettings do
     end
   end
 
+  describe '.hash_setting' do
+    it 'accepts a hash' do
+      described_class.hash_setting(:foo) { { a: 'A' } }
+
+      expect { config.foo }.not_to raise_error
+    end
+
+    it 'fails on non-array value' do
+      described_class.hash_setting(:foo) { %q(a b) }
+
+      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+    end
+  end
+
   describe '.bool' do
     it 'accepts a bool' do
       described_class.bool(:foo) { 'false' }
