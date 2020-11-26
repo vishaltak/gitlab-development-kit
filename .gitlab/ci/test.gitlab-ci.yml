@@ -9,15 +9,17 @@ docs_lint:
 rubocop:
   extends: .rules:code-changes
   stage: test
+  variables:
+    BUNDLE_ARGS: "--path vendor/bundle"
   script:
-    - BUNDLE_ARGS="--path vendor/bundle" make rubocop
+    - make rubocop
 
 rspec:
   extends: .rules:code-changes
   stage: test
   variables:
-    - RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
-    - BUNDLE_ARGS: "--path vendor/bundle"
+    RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
+    BUNDLE_ARGS: "--path vendor/bundle"
   script:
     - make rspec
   cache:
@@ -75,7 +77,7 @@ shellcheck:
   extends: .rules:code-changes
   image: koalaman/shellcheck-alpine:stable
   variables:
-    - SHELL: /bin/sh
+    SHELL: /bin/sh
   before_script:
     - apk add make
   script:
