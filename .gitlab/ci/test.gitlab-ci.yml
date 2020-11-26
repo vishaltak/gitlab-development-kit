@@ -76,12 +76,10 @@ shellcheck:
   stage: test
   extends: .rules:code-changes
   image: koalaman/shellcheck-alpine:stable
-  variables:
-    SHELL: /bin/sh
   before_script:
     - apk add make
   script:
-    - make shellcheck
+    - make shellcheck SHELL=/bin/sh
 
 yard:
   stage: test
