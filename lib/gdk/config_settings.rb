@@ -28,7 +28,7 @@ module GDK
         setting(name, ConfigType::Array, &blk)
       end
 
-      def hash(name, &blk)
+      def hash_setting(name, &blk)
         setting(name, ConfigType::Hash, &blk)
       end
 

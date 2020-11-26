@@ -239,7 +239,7 @@ module GDK
       bool(:enabled) { read!('object_store_enabled') || false }
       string(:host) { config.listen_address }
       integer(:port) { read!('object_store_port') || 9000 }
-      hash(:connection) do
+      hash_setting(:connection) do
         {
           'provider' => 'AWS',
           'aws_access_key_id' => 'minio',
@@ -249,7 +249,7 @@ module GDK
           'path_style' => true
         }
       end
-      hash(:objects) do
+      hash_setting(:objects) do
         {
           'artifacts' => { 'bucket' => 'artifacts' },
           'external_diffs' => { 'bucket' => 'external-diffs' },
