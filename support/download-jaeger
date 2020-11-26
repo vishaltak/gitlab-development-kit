@@ -12,11 +12,26 @@ function sha_for_url() {
   # SHA can be generated with:
   # curl -C - -L --fail "<url>"|shasum -a1
   case "$1" in
+    #
+    # 1.10.1
+    #
     https://github.com/jaegertracing/jaeger/releases/download/v1.10.1/jaeger-1.10.1-linux-amd64.tar.gz)
       echo 667f14a528077ca6c346831cd69c295439f071da
       ;;
     https://github.com/jaegertracing/jaeger/releases/download/v1.10.1/jaeger-1.10.1-darwin-amd64.tar.gz)
       echo ce5b8610f73caf625b75a50ed27b0ab45bfe1dbe
+      ;;
+    #
+    # 1.18.1
+    #
+    https://github.com/jaegertracing/jaeger/releases/download/v1.18.1/jaeger-1.18.1-linux-amd64.tar.gz)
+      echo ea221ab60bdad17f51cc1b588a00a35c3b3c58ee
+      ;;
+    https://github.com/jaegertracing/jaeger/releases/download/v1.18.1/jaeger-1.18.1-darwin-amd64.tar.gz)
+      echo 088796e232fa5ded2681811ea257ce33e140ae20
+      ;;
+    https://github.com/jaegertracing/jaeger/releases/download/v1.18.1/jaeger-1.18.1-linux-arm64.tar.gz)
+      echo 6180a357d932fca59321b026e7b21d6563537f97
       ;;
     *)
       >&2 echo "Unable to determine sha for url ${1}"
@@ -24,19 +39,41 @@ function sha_for_url() {
   esac
 }
 
-function url_for_version() {
-  # Add new architectures/operating systems in here as needed
+function os_type() {
   case "$OSTYPE" in
     linux-gnu|linux-musl)
-      echo "https://github.com/jaegertracing/jaeger/releases/download/v${1}/jaeger-${1}-linux-amd64.tar.gz"
+      echo "linux"
       ;;
     darwin*)
-      echo "https://github.com/jaegertracing/jaeger/releases/download/v${1}/jaeger-${1}-darwin-amd64.tar.gz"
+      echo "darwin"
       ;;
     *)
-    >&2 echo "cannot download jaeger binary: unable to determine operation system."
+    >&2 echo "unable to determine operation system."
     return 1
   esac
+}
+
+function machine_type() {
+  case "$MACHTYPE" in
+    x86_64*)
+      echo "amd64"
+      ;;
+    aarch64*)
+      echo "arm64"
+      ;;
+    *)
+    >&2 echo "unable to determine machine type."
+    return 1
+  esac
+}
+
+function url_for_version() {
+  local os_type
+  local machine_type
+  os_type=$(os_type)
+  machine_type=$(machine_type)
+
+  echo "https://github.com/jaegertracing/jaeger/releases/download/v${1}/jaeger-${1}-${os_type}-${machine_type}.tar.gz"
 }
 
 url=$(url_for_version "${jaeger_version}")
