@@ -28,40 +28,16 @@ GDK supports macOS 10.13 (High Sierra) and later. To install dependencies for ma
 1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating), and configure it for your
    shell.
 
-## Ubuntu
+## Ubuntu and Debian
 
-NOTE: These instructions don't account for using `asdf` for managing some dependencies.
-
-To install dependencies for Ubuntu, assuming you're using an active LTS release
-(16.04, 18.04, 20.04) or higher:
-
-1. Install **Yarn** from the [Yarn Debian package repository](https://yarnpkg.com/lang/en/docs/install/#debian-stable).
-1. Install remaining dependencies. Modify the `GDK_GO_VERSION` with the
-   major.minor version number (currently 1.14) as needed:
-
-   ```shell
-   # Add apt-add-repository helper script
-   sudo apt-get update
-   sudo apt-get install software-properties-common
-   [[ $(lsb_release -sr) < "18.04" ]] && sudo apt-get install python-software-properties
-   # This PPA contains an up-to-date version of git
-   sudo add-apt-repository ppa:git-core/ppa
-   sudo apt-get install libpq-dev libicu-dev cmake g++ libre2-dev libkrb5-dev \
-     libsqlite3-dev libreadline-dev libz-dev pkg-config graphicsmagick libimage-exiftool-perl \
-     libssl-dev libpcre2-dev git git-lfs rsync runit curl tzdata
-   [[ $(lsb_release -sr) < "18.10" ]] && sudo apt-get install g++-8
-   ```
-
-   > ℹ️ Ubuntu 18.04 (Bionic Beaver) and beyond doesn't have `python-software-properties` as a separate package.
-
-## Debian
-
-The following are instructions for Debian users that don't want
+The following are instructions for Ubuntu and Debian users that don't want
 [GDK to manage their dependencies](index.md#install-dependencies).
 
-To install Debian dependencies you manage yourself:
+These instructions help you install dependencies for Ubuntu, assuming you're using an active
+LTS release (16.04, 18.04, 20.04) or higher, and Debian:
 
 1. [Install `git` and `make`](index.md#install-git-and-make).
+1. Install [Yarn](https://classic.yarnpkg.com/en/docs/install#debian-stable).
 1. Run `make bootstrap-packages`. This is a light subset of `make bootstrap` that runs
    `apt-get update` and then `apt-get install` on the packages found in `packages_debian.txt`.
 
@@ -78,12 +54,14 @@ To install Debian dependencies you manage yourself:
    ```
 
 1. Check the required Go version in `.tool-versions`. You may be able to install the required
-   version using `apt`. Check [the available versions](https://packages.debian.org/search?keywords=golang-go).
+   version using `apt`. Check the available versions for:
+    - [Ubuntu](https://packages.ubuntu.com/search?keywords=golang-go).
+    - [Debian](https://packages.debian.org/search?keywords=golang-go).
 1. Install Go using one of the following methods:
-   - If available for your version of Debian, run `sudo apt-get install golang`.
-   - If the required version is only available [as a backport](https://backports.debian.org/Instructions/#index2h2),
-     use the backport package. You may need to update your `$PATH`. For example, `export PATH=/usr/lib/go-1.14/bin:$PATH`
-     when using 1.14 from `buster-backports` to get 1.14 instead of the 1.15 from `stable`.
+   - If available for your version of Ubuntu or Debian, run `sudo apt install golang`.
+   - If the required version is only available as a backport in [Ubuntu](https://help.ubuntu.com/community/UbuntuBackports),
+     or [Debian](https://backports.debian.org/Instructions/#index2h2), use the backport package. You
+     may need to update your `$PATH` so the backported version of Go is used.
    - If unavailable, install it manually. See the official [Go installation](https://golang.org/doc/install#install)
      instructions.
 
@@ -103,11 +81,11 @@ To install Debian dependencies you manage yourself:
    - You need to select the Ruby version instead of your distributions default one (if any). See the
      [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
      `echo 2.7.2 >~/.rbenv/version`.
+1. [Complete](../index.md#install-and-set-up-gdk) GDK installation.
 
-## Install other Linux dependencies
+## Install dependencies for other Linux distributions
 
-The process for installing dependencies on Linux depends on your Linux
-distribution.
+The process for installing dependencies on Linux depends on your Linux distribution.
 
 Unless already set, you might have to increase the watches limit of
 `inotify` for frontend development tools such as `webpack` to effectively track
