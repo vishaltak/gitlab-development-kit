@@ -161,7 +161,6 @@ touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \
 	gitlab-workhorse/config.toml.example \
-	gitlab/config/puma.example.development.rb \
 	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
 	grafana/grafana.ini.example \
@@ -257,14 +256,9 @@ gitlab/config/gitlab.yml:
 gitlab/config/database.yml:
 	$(Q)rake $@
 
-# Versions older than GitLab 11.5 won't have this file
-gitlab/config/puma.example.development.rb:
-	$(Q)touch $@
-
-gitlab/config/puma.rb: gitlab/config/puma.example.development.rb
-	$(Q)support/safe-sed "$@" \
-		-e "s|/home/git|${gitlab_development_root}|g" \
-		"$<"
+.PHONY: gitlab/config/puma.rb
+gitlab/config/puma.rb:
+	$(Q)rake $@
 
 # Versions older than GitLab 12.9 won't have this file
 gitlab/config/puma_actioncable.example.development.rb:

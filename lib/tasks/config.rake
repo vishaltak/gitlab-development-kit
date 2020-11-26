@@ -86,6 +86,11 @@ file 'gitlab/config/gitlab.yml' => ['support/templates/gitlab.yml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
+desc 'Generate the puma.rb config file'
+file 'gitlab/config/puma.rb' => ['support/templates/puma.rb.erb'] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end
+
 desc 'Generate the gitlab-shell config.yml file'
 file 'gitlab-shell/config.yml' => ['support/templates/gitlab-shell.config.yml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!

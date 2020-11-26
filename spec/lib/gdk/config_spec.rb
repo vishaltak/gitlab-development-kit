@@ -672,15 +672,49 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#__socket_file' do
-      it 'returns the GitLab socket path' do
-        expect(config.gitlab.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.socket'))
+    describe 'rails' do
+      describe '#__socket_file' do
+        it 'returns the GitLab socket path' do
+          expect(config.gitlab.rails.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.socket'))
+        end
       end
-    end
 
-    describe '#__socket_file_escaped' do
-      it 'returns the GitLab socket path CGI escaped' do
-        expect(config.gitlab.__socket_file_escaped.to_s).to eq('%2Fhome%2Fgit%2Fgdk%2Fgitlab.socket')
+      describe '#__socket_file_escaped' do
+        it 'returns the GitLab socket path CGI escaped' do
+          expect(config.gitlab.rails.__socket_file_escaped.to_s).to eq('%2Fhome%2Fgit%2Fgdk%2Fgitlab.socket')
+        end
+      end
+
+      describe '#listen_settings' do
+        it 'defaults to UNIX socket' do
+          expect(config.gitlab.rails.address).to eq('')
+          expect(config.gitlab.rails.__bind).to eq('unix:///home/git/gdk/gitlab.socket')
+          expect(config.gitlab.rails.__workhorse_url).to eq('/home/git/gdk/gitlab.socket')
+          expect(config.gitlab.rails.__listen_settings.__protocol).to eq('unix')
+          expect(config.gitlab.rails.__listen_settings.__address).to eq('/home/git/gdk/gitlab.socket')
+          expect(config.workhorse.__listen_settings.__type).to eq('authSocket')
+          expect(config.workhorse.__listen_settings.__address).to eq('/home/git/gdk/gitlab.socket')
+        end
+      end
+
+      context 'with TCP address' do
+        before do
+          yaml['gitlab'] = {
+            'rails' => {
+              'address' => 'localhost:3443'
+            }
+          }
+        end
+
+        it 'sets listen_settings to HTTP port' do
+          expect(config.gitlab.rails.address).to eq('localhost:3443')
+          expect(config.gitlab.rails.__bind).to eq('tcp://localhost:3443')
+          expect(config.gitlab.rails.__workhorse_url).to eq('http://localhost:3443')
+          expect(config.gitlab.rails.__listen_settings.__protocol).to eq('tcp')
+          expect(config.gitlab.rails.__listen_settings.__address).to eq('localhost:3443')
+          expect(config.workhorse.__listen_settings.__type).to eq('authBackend')
+          expect(config.workhorse.__listen_settings.__address).to eq('http://localhost:3443')
+        end
       end
     end
 

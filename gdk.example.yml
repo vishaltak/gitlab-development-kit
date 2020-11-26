@@ -61,6 +61,8 @@ gitlab:
   actioncable: {}
   cache_classes: false
   dir: "/home/git/gdk/gitlab"
+  rails:
+    address: ''
 gitlab_elasticsearch_indexer:
   auto_update: true
 gitlab_k8s_agent:
