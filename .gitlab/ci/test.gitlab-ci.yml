@@ -95,6 +95,7 @@ yard:
     paths:
       - yard/*
 
+verify_gdk_example_yml:
   extends: .rules:code-changes
   stage: test
   script:
