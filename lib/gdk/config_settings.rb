@@ -24,12 +24,25 @@ module GDK
         setting(name, ConfigType::Anything, &blk)
       end
 
-      def array(name, &blk)
-        setting(name, ConfigType::Array, &blk)
+      def array(name, merge: false, &blk)
+        custom_value_block = if merge
+                               proc do |yaml_value|
+                                 instance_eval(&blk) + Array(yaml_value)
+                               end
+                             end
+
+        setting(name, ConfigType::Array, custom_value_block: custom_value_block, &blk)
       end
 
-      def hash_setting(name, &blk)
-        setting(name, ConfigType::Hash, &blk)
+      def hash_setting(name, merge: false, &blk)
+        custom_value_block = if merge
+                               proc do |yaml_value|
+                                 stringified_default_value = Hash[instance_eval(&blk).transform_keys(&:to_s)]
+                                 yaml_value.merge(stringified_default_value)
+                               end
+                             end
+
+        setting(name, ConfigType::Hash, custom_value_block: custom_value_block, &blk)
       end
 
       def bool(name, &blk)
@@ -57,9 +70,15 @@ module GDK
 
       private
 
-      def setting(name, config_type, &blk)
+      def setting(name, config_type, custom_value_block: nil, &blk)
         define_method(name) do
-          config_type.new(yaml.fetch(name.to_s, instance_eval(&blk)), slug: slug_for(name)).value
+          value = if custom_value_block
+                    custom_value_block.call(yaml.fetch(name.to_s, nil))
+                  else
+                    yaml.fetch(name.to_s, instance_eval(&blk))
+                  end
+
+          config_type.new(value, slug: slug_for(name)).value
         end
       end
     end
