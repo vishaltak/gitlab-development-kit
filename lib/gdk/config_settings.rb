@@ -182,10 +182,6 @@ module GDK
     end
     alias_method :config, :root
 
-    def redis_socket
-      gdk_root.join('redis/redis.socket')
-    end
-
     def inspect
       "#<GDK::ConfigSettings slug:#{slug}>"
     end

@@ -88,7 +88,7 @@ module GDK
     when 'psql-geo'
       exec(GDK::PostgresqlGeo.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'redis-cli'
-      exec('redis-cli', '-s', config.redis_socket.to_s, *ARGV, chdir: GDK.root)
+      exec('redis-cli', '-s', config.redis.__socket_file.to_s, *ARGV, chdir: GDK.root)
     when 'env'
       GDK::Env.exec(ARGV)
     when 'status'
