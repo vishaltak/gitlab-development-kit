@@ -38,26 +38,33 @@ install, since it is much faster than a virtualized one. Due to heavy IO
 operations, a virtualized installation is much slower running the app and the
 tests.
 
-To do a native install:
+### Native install (recommended)
 
 1. [Install dependencies](doc/index.md#install-dependencies)
 1. [Install and set up GDK](doc/index.md#install-and-set-up-gdk)
 
-Or, if you want to use a slower virtualized installation with [Vagrant](https://www.vagrantup.com/),
-see the [instructions for using Vagrant with VirtualBox or Docker](doc/howto/vagrant.md).
+### Vagrant install
+
+You can install GDK under a
+[virtualized environment using Vagrant with Virtualbox or Docker](doc/howto/vagrant.md).
+
+### Minikube install
 
 You can also install GDK on [Minikube](https://github.com/kubernetes/minikube);
 see [Kubernetes docs](doc/howto/kubernetes.md).
 
+## How to use GDK
+
 After installation, [learn how to use GDK](doc/howto/index.md).
 
-If you have an old installation, [update your existing GDK installation](doc/index.md#update-gdk).
+## How to update GDK
+
+If you have an old installation, [learn how to update your existing GDK installation](doc/index.md#update-gdk).
 
 ## Design goals
 
 - Get the user started, and don't try to take care of everything.
 - Run everything as your 'desktop' user on your development computer.
-- GitLab Development Kit itself doesn't run `sudo` commands.
 - It's acceptable to leave some actions for the user to complete (for example,
   installing Ruby).
 
