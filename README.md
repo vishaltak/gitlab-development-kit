@@ -30,6 +30,17 @@ For help with the GDK:
 Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md)
 for more details.
 
+## System requirements
+
+The following are the supported systems and recommended hardware required to run GDK
+effectively:
+
+| Operating System | Architecture | Version(s) | RAM | Disk |
+| ---------------- | ------------ | ---------- | --- | ---- |
+| macOS            | amd64 | Big Sur (11), Catalina (10.15), Mojave (10.14) | 8GB | 12GB |
+| Ubuntu Linux     | amd64 | 20.10 (Groovy Gorilla), 20.04 LTS (Focal Fossa), 18.04 LTS (Bionic Beaver) | 8GB | 12GB |
+| Debian Linux     | amd64 | 10 (Buster), 9 (Stretch), 8 (Jessie) | 8GB | 12GB |
+
 ## Getting started
 
 The preferred way to use GitLab Development Kit is to install Ruby and its
