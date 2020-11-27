@@ -1,5 +1,5 @@
 [redis]
-URL = "unix:<%= config.redis_socket %>"
+URL = "unix:<%= config.redis.__socket_file %>"
 
 <%- if config.object_store.consolidated_form? && config.object_store.connection['provider'] -%>
 [object_storage]

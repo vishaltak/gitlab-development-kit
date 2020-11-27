@@ -552,5 +552,9 @@ module GDK
         end
       end
     end
+
+    settings :redis do
+      path(:__socket_file) { config.gdk_root.join('redis/redis.socket') }
+    end
   end
 end
