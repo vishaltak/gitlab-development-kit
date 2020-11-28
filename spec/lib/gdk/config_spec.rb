@@ -8,13 +8,14 @@ RSpec.describe GDK::Config do
   let(:group_saml_enabled) { false }
   let(:protected_config_files) { [] }
   let(:overwrite_changes) { false }
+  let(:omniauth_config) { { 'group_saml' => { 'enabled' => group_saml_enabled } } }
   let(:yaml) do
     {
       'auto_devops' => { 'enabled' => auto_devops_enabled },
       'gdk' => { 'protected_config_files' => protected_config_files, 'overwrite_changes' => overwrite_changes },
       'nginx' => { 'enabled' => nginx_enabled },
       'hostname' => 'gdk.example.com',
-      'omniauth' => { 'group_saml' => { 'enabled' => group_saml_enabled } }
+      'omniauth' => omniauth_config
     }
   end
 
@@ -957,6 +958,14 @@ RSpec.describe GDK::Config do
   end
 
   describe 'omniauth' do
+    context 'defaults' do
+      it 'returns false' do
+        expect(config.omniauth.google_oauth2.enabled).to eq('')
+        expect(config.omniauth.group_saml.enabled).to be false
+        expect(config.omniauth.github.enabled).to be false
+      end
+    end
+
     context 'when group SAML is disabled' do
       it 'returns false' do
         expect(config.omniauth.group_saml.enabled).to be false
@@ -968,6 +977,16 @@ RSpec.describe GDK::Config do
 
       it 'returns true' do
         expect(config.omniauth.group_saml.enabled).to be true
+      end
+    end
+
+    context 'when GitHub is enabled' do
+      let(:omniauth_config) { { 'github' => { 'enabled' => true, 'client_id' => '12345', 'client_secret' => 'mysecret' } } }
+
+      it 'returns true' do
+        expect(config.omniauth.github.enabled).to be true
+        expect(config.omniauth.github.client_id).to eq('12345')
+        expect(config.omniauth.github.client_secret).to eq('mysecret')
       end
     end
   end

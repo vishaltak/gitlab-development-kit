@@ -325,6 +325,11 @@ module GDK
         string(:client_id) { read!('google_oauth_client_id') || '' }
         string(:client_secret) { read!('google_oauth_client_secret') || '' }
       end
+      settings :github do
+        bool(:enabled) { false }
+        string(:client_id) { '' }
+        string(:client_secret) { '' }
+      end
       settings :group_saml do
         bool(:enabled) { false }
       end
