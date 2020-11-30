@@ -383,7 +383,7 @@ production: &base
   registry:
     enabled: <%= config.registry? %>
     host: <%= config.registry.host %>
-    port: <%= config.registry.external_port %>
+    port: <%= config.registry.port %>
     api_url: http://<%= config.registry.api_host %>:<%= config.registry.port %>
     key: ../localhost.key
     path: ../registry/storage/

@@ -75,25 +75,11 @@ module GDK
     path(:repository_storages) { config.gdk_root.join('repository_storages') }
 
     string(:listen_address) { '127.0.0.1' }
-
-    string :hostname do
-      next "#{config.auto_devops.gitlab.port}.qa-tunnel.gitlab.info" if config.auto_devops?
-
-      read!('hostname') || read!('host') || config.listen_address
-    end
-
-    integer :port do
-      next 443 if config.auto_devops?
-
-      read!('port') || 3000
-    end
+    string(:hostname) { read!('hostname') || read!('host') || config.listen_address }
+    integer(:port) { read!('port') || 3000 }
 
     settings :https do
-      bool :enabled do
-        next true if config.auto_devops?
-
-        read!('https_enabled') || false
-      end
+      bool(:enabled) { read!('https_enabled') || false }
     end
 
     string :relative_url_root do
@@ -115,11 +101,7 @@ module GDK
     end
 
     settings :webpack do
-      string :host do
-        next config.auto_devops.listen_address if config.auto_devops?
-
-        read!('webpack_host') || config.hostname
-      end
+      string(:host) { read!('webpack_host') || config.hostname }
       bool(:static) { false }
       bool(:vendor_dll) { false }
       bool(:sourcemaps) { true }
@@ -150,14 +132,10 @@ module GDK
         end
       end
 
-      string :__active_host do
-        next config.auto_devops.listen_address if config.auto_devops?
-
-        config.hostname
-      end
+      string(:__active_host) { config.hostname }
 
       integer :__active_port do
-        if config.auto_devops? || config.nginx?
+        if config.nginx?
           config.workhorse.configured_port
         else
           # Workhorse is the user-facing entry point whenever neither nginx nor
@@ -184,35 +162,10 @@ module GDK
     end
 
     settings :registry do
-      bool :enabled do
-        next true if config.auto_devops?
-
-        read!('registry_enabled') || false
-      end
-
-      string :host do
-        next "#{config.auto_devops.registry.port}.qa-tunnel.gitlab.info" if config.auto_devops?
-
-        config.hostname
-      end
-
-      string :listen_address do
-        config.listen_address
-      end
-
-      string :api_host do
-        next config.listen_address if config.auto_devops?
-
-        config.hostname
-      end
-
-      string :tunnel_host do
-        next config.listen_address if config.auto_devops?
-
-        config.hostname
-      end
-
-      integer(:tunnel_port) { 5000 }
+      bool(:enabled) { read!('registry_enabled') || false }
+      string(:host) { config.hostname }
+      string(:listen_address) { config.listen_address }
+      string(:api_host) { config.hostname }
 
       integer :port do
         read!('registry_port') || 5000
@@ -222,12 +175,6 @@ module GDK
         read!('registry_image') ||
           'registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:'\
         'v2.9.1-gitlab'
-      end
-
-      integer :external_port do
-        next 443 if config.auto_devops?
-
-        5000
       end
 
       bool(:self_signed) { false }
@@ -306,17 +253,6 @@ module GDK
       end
       string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }
       string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
-    end
-
-    settings :auto_devops do
-      bool(:enabled) { read!('auto_devops_enabled') || false }
-      string(:listen_address) { '0.0.0.0' }
-      settings :gitlab do
-        integer(:port) { read_or_write!('auto_devops_gitlab_port', rand(20_000..24_999)) }
-      end
-      settings :registry do
-        integer(:port) { read!('auto_devops_registry_port') || (config.auto_devops.gitlab.port + 5000) }
-      end
     end
 
     settings :omniauth do
@@ -506,9 +442,8 @@ module GDK
 
     settings :mattermost do
       bool(:enabled) { false }
-      integer(:port) { config.auto_devops.gitlab.port + 7000 }
+      integer(:port) { 8065 }
       string(:image) { 'mattermost/mattermost-preview' }
-      integer(:local_port) { 8065 }
     end
 
     settings :gitlab do

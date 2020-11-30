@@ -18,22 +18,20 @@ RSpec.describe GDK::ConfigExample do
     end
   end
 
-  describe '#auto_devops' do
-    let(:auto_devops) { config.auto_devops }
+  describe '#praefect' do
+    let(:praefect) { config.praefect }
 
     it 'returns a stubbed settings object' do
-      expect(auto_devops).to be_a(GDK::ConfigExample::Settings)
+      expect(praefect).to be_a(GDK::ConfigExample::Settings)
     end
 
-    describe '#gitlab' do
-      let(:gitlab) { auto_devops.gitlab }
+    describe '#database' do
+      let(:database) { praefect.database }
 
-      describe '#port' do
-        let(:port) { gitlab.port }
+      describe '#sslmode' do
+        let(:sslmode) { database.sslmode }
 
-        it 'returns the first port in random range' do
-          expect(port).to eq(20_000)
-        end
+        it { expect(sslmode).to eq('disable') }
       end
     end
   end

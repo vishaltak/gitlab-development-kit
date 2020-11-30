@@ -66,4 +66,4 @@ rails-web: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle
 
 # Mattermost
 #
-<%= '#' unless config.mattermost? %>mattermost: exec docker run --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.local_port %>:8065 <%= config.mattermost.image %>
+<%= '#' unless config.mattermost? %>mattermost: exec docker run --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.port %>:8065 <%= config.mattermost.image %>
