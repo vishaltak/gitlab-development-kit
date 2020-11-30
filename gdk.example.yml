@@ -135,6 +135,10 @@ object_store:
       bucket: pages
   port: 9000
 omniauth:
+  github:
+    client_id: ''
+    client_secret: ''
+    enabled: false
   google_oauth2:
     client_id: ''
     client_secret: ''

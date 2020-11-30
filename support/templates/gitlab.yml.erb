@@ -898,6 +898,12 @@ development:
         app_secret: '<%= config.omniauth.google_oauth2.client_secret %>',
         args: { access_type: 'offline', approval_prompt: '' } }
     <%- end -%>
+    <%- if config.omniauth.github.enabled -%>
+    - { name: 'github',
+        app_id: '<%= config.omniauth.github.client_id %>',
+        app_secret: '<%= config.omniauth.github.client_secret %>',
+        args: { scope: "user:email" } }
+    <%- end -%>
     <%- if config.omniauth.group_saml.enabled -%>
     - { name: 'group_saml' }
     <%- end -%>
