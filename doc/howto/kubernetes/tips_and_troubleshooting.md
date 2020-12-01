@@ -1,4 +1,4 @@
-# Auto DevOps - Tips and Troubleshooting
+# Kubernetes - tips and troubleshooting
 
 - [Tips](#tips)
 - [Troubleshooting](#troubleshooting)
@@ -31,42 +31,6 @@
 ### Configuration for Auto DevOps base domain
 
 Please refer to the [Auto DevOps Base Domain](https://docs.gitlab.com/ee/topics/autodevops/#auto-devops-base-domain) to learn more about it.
-
-## Development using localhost instead
-
-Consider not using the internet-facing URL for non Auto DevOps flows,
-but accessing your local GitLab instance via localhost. If you have
-followed the [Auto DevOps setup](index.md), edit the
-`config/gitlab.yml` file to the following:
-
-```yaml
-host_settings_auto: &gitlab_auto_devops
-  host: <PORT>.qa-tunnel.gitlab.info
-  port: 443
-  https: true
-
-host_settings_local: &gitlab_localhost
-  host: localhost
-  port: 80 # Set to 443 if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
-  https: false # Set to true if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
-
-production: &base
-  #
-  # 1. GitLab app settings
-  # ==========================
-
-  ## GitLab settings
-  gitlab:
-    ## Web server settings (note: host is the FQDN, do not include http://)
-    # <<: *gitlab_auto_devops
-    <<: *gitlab_localhost
-```
-
-This way you can switch between using `*gitlab_localhost` for other
-development and `*gitlab_auto_devops` for Auto-DevOps development.
-Remember to restart your GDK after editing `config/gitlab.yml`.
-
-NOTE: You must reapply these edits after each `gdk reconfigure` step.
 
 ## Using an external virtual machine for the development
 
@@ -120,55 +84,6 @@ ResponseError: code=403, message=Insufficient regional quota to satisfy request:
 this would indicate you have reached your limit of persistent disks. See [how
 to clean up unused persistent disks above](index.md#unused-persistent-disks).
 
-### 502 Bad Gateway
-
-You may receive a `502 Bad Gateway` response when opening the application using the
-tunnel URL. The following are possible solutions to some known problems.
-
-#### SSH requires a passphrase
-
-For GDK to run, it needs to be able to SSH into `qa-tunnel.gitlab.info` without user input. The following steps allow you to authenticate without entering your passphrase on future logins:
-
-1. Run [`ssh-add`](https://linux.die.net/man/1/ssh-add).
-1. Enter your passphrase.
-
-If not set up correctly, expect `502 Bad Gateway` responses when navigating to `<gitlab-number>.qa-tunnel.gitlab.info` and the string `Enter passphrase for key '/Users/username/.ssh/id_rsa'` to pepper the GDK logs.
-
-#### Procfile was not updated properly
-
-After following the steps indicated in the [Auto DevOps guide](index.md), the Procfile located in the root of the GDK installation won’t have the tunnel configuration. If the Procfile is correct, you should find these lines:
-
-```shell
-# Tunneling
-#
-tunnel_gitlab: ssh -N -R [PORT]:localhost:3333 -o ControlPath=none -o ControlMaster=no qa-tunnel.gitlab.info
-tunnel_registry: ssh -N -R [PORT]:localhost:5000 -o ControlPath=none -o ControlMaster=no qa-tunnel.gitlab.info
-```
-
-The `tunnel_gitlab` and `tunnel_registry` lines may be commented out. If that’s the case, you can either delete the Procfile file and run `gdk reconfigure` or uncomment those lines and replace `[PORT]` with the ports specified in the `auto_devops_gitlab_port` and `auto_devops_registry_port` files.
-
-#### registry/config.yml was not updated properly
-
-When deploying the Auto-DevOps project through the GitLab team member-only QA tunnel, if you see an error within the CI job logs like the following example:
-
-```plaintext
-dial tcp: lookup docker.for.mac.localhost on <ip_address>: no such host
-```
-
-The `registry/config.yml` file was not updated correctly and should look like:
-
-```yaml
-auth:
-  token:
-    realm: https://[PORT]:qa-tunnel.gitlab.info:443/jwt/auth
-```
-
-You can fix this by running:
-
-```shell
-rm registry/config.yml && make registry/config.yml
-```
-
 #### Docker daemon is not running
 
 You might see the following error being logged when GDK starts but jobs fail:
@@ -179,7 +94,7 @@ Error response from daemon: login attempt to `https://[PORT].qa-tunnel.gitlab.in
 
 The most likely scenario is that your Docker daemon is not running and therefore your
 registry tunnel is returning a 502. You can verify this by visiting the tunnel URL for
-your registry from your browser. 
+your registry from your browser.
 
 You can fix this by starting the Docker daemon by running:
 

@@ -1,4 +1,4 @@
-# Auto DevOps - Useful Commands
+# Kubernetes - useful commands
 
 This is a reference list of some useful commands one might need when contributing to Auto DevOps.
 
