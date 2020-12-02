@@ -191,6 +191,10 @@ rake:
 
 .PHONY: ensure-databases-running
 ensure-databases-running: Procfile postgresql/data gitaly-setup
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Ensuring necessary data services are running"
+	@echo "${DIVIDER}"
 	$(Q)gdk start rails-migration-dependencies
 
 ##############################################################
@@ -906,21 +910,22 @@ jaeger-setup:
 	@true
 endif
 
-jaeger-artifacts/jaeger-${jaeger_version}.tar.gz:
-	$(Q)mkdir -p $(@D)
-	$(Q)./support/download-jaeger "${jaeger_version}" "$@"
-	# To save disk space, delete old versions of the download,
-	# but to save bandwidth keep the current version....
-	$(Q)find jaeger-artifacts ! -path "$@" -type f -exec rm -f {} + -print
-
-jaeger/jaeger-${jaeger_version}/jaeger-all-in-one: jaeger-artifacts/jaeger-${jaeger_version}.tar.gz
+jaeger/jaeger-${jaeger_version}/jaeger-all-in-one:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Installing jaeger ${jaeger_version}"
 	@echo "${DIVIDER}"
 
+	$(Q)mkdir -p jaeger-artifacts
+
+	@# To save disk space, delete old versions of the download,
+	@# but to save bandwidth keep the current version....
+	$(Q)find jaeger-artifacts ! -path "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz" -type f -exec rm -f {} + -print
+
+	$(Q)./support/download-jaeger "${jaeger_version}" "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz"
+
 	$(Q)mkdir -p "jaeger/jaeger-${jaeger_version}"
-	$(Q)tar -xf "$<" -C "jaeger/jaeger-${jaeger_version}" --strip-components 1
+	$(Q)tar -xf "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz" -C "jaeger/jaeger-${jaeger_version}" --strip-components 1
 
 ##############################################################
 # Tests
