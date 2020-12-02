@@ -109,7 +109,7 @@ fi
 
 echo
 echo "INFO: Bootstrap successful!"
-echo "INFO: To make sure GDK commands are available, run:"
+echo "INFO: To make sure GDK commands are available in this shell, run:"
 echo
 echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
 echo

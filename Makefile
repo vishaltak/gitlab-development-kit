@@ -17,7 +17,6 @@ CHECKMAKE := $(shell command -v checkmake 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
-REQUIRED_BUNDLER_VERSION := $(shell grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
@@ -136,7 +135,8 @@ show-updated-at
 # This is used by `gdk reconfigure`
 #
 .PHONY: reconfigure
-reconfigure: touch-examples \
+reconfigure: ensure-required-ruby-bundlers-installed \
+touch-examples \
 unlock-dependency-installers \
 postgresql-sensible-defaults \
 all \
@@ -224,6 +224,14 @@ ensure-databases-running: Procfile postgresql/data gitaly-setup
 	@echo "Ensuring necessary data services are running"
 	@echo "${DIVIDER}"
 	$(Q)gdk start rails-migration-dependencies
+
+.PHONY: ensure-required-ruby-bundlers-installed
+ensure-required-ruby-bundlers-installed:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Ensuring all required versions of bundler are installed"
+	@echo "${DIVIDER}"
+	${Q}. ./support/bootstrap-common.sh ; ruby_install_required_bundlers
 
 ##############################################################
 # bootstrap
@@ -327,12 +335,11 @@ gitlab/config/resque.yml:
 gitlab/public/uploads:
 	$(Q)mkdir $@
 
-.gitlab-bundle:
+.gitlab-bundle: ensure-required-ruby-bundlers-installed
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) gem list bundler -i -v ">=${REQUIRED_BUNDLER_VERSION}" > /dev/null || gem install bundler -v ${REQUIRED_BUNDLER_VERSION}
 	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
 	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
