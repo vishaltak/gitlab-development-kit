@@ -1083,19 +1083,49 @@ RSpec.describe GDK::Config do
         it 'is an empty array by default' do
           expect(config.gdk.start_hooks.before).to eq([])
         end
+
+        context 'with custom hooks defined' do
+          let(:yaml) do
+            { 'gdk' => { 'start_hooks' => { 'before' => ['uptime'] } } }
+          end
+
+          it 'replaces hooks with ours' do
+            expect(config.gdk.start_hooks.before).to eq(['uptime'])
+          end
+        end
       end
 
       describe '#after' do
         it 'is an empty array by default' do
           expect(config.gdk.start_hooks.after).to eq([])
         end
+
+        context 'with custom hooks defined' do
+          let(:yaml) do
+            { 'gdk' => { 'start_hooks' => { 'after' => ['uptime'] } } }
+          end
+
+          it 'replaces hooks with ours' do
+            expect(config.gdk.start_hooks.after).to eq(['uptime'])
+          end
+        end
       end
     end
 
     describe '#stop_hooks' do
       describe '#before' do
-        it 'is an empty array by default' do
-          expect(config.gdk.stop_hooks.before).to eq([])
+        it 'has spring stop || true hook by default' do
+          expect(config.gdk.stop_hooks.before).to eq(['cd gitlab && bin/spring stop || true'])
+        end
+
+        context 'with custom hooks defined' do
+          let(:yaml) do
+            { 'gdk' => { 'stop_hooks' => { 'before' => ['uptime'] } } }
+          end
+
+          it 'has spring stop || true hook and then our hooks also' do
+            expect(config.gdk.stop_hooks.before).to eq(['cd gitlab && bin/spring stop || true', 'uptime'])
+          end
         end
       end
 
@@ -1103,19 +1133,49 @@ RSpec.describe GDK::Config do
         it 'is an empty array by default' do
           expect(config.gdk.stop_hooks.after).to eq([])
         end
+
+        context 'with custom hooks defined' do
+          let(:yaml) do
+            { 'gdk' => { 'stop_hooks' => { 'after' => ['uptime'] } } }
+          end
+
+          it 'replaces hooks with ours' do
+            expect(config.gdk.stop_hooks.after).to eq(['uptime'])
+          end
+        end
       end
     end
 
     describe '#update_hooks' do
       describe '#before' do
-        it 'is an empty array by default' do
-          expect(config.gdk.update_hooks.before).to eq([])
+        it 'has spring stop || true hook by default' do
+          expect(config.gdk.update_hooks.before).to eq(['cd gitlab && bin/spring stop || true'])
+        end
+
+        context 'with custom hooks defined' do
+          let(:yaml) do
+            { 'gdk' => { 'update_hooks' => { 'before' => ['uptime'] } } }
+          end
+
+          it 'has spring stop || true hook and then our hooks also' do
+            expect(config.gdk.update_hooks.before).to eq(['cd gitlab && bin/spring stop || true', 'uptime'])
+          end
         end
       end
 
       describe '#after' do
         it 'is an empty array by default' do
           expect(config.gdk.update_hooks.after).to eq([])
+        end
+
+        context 'with custom hooks defined' do
+          let(:yaml) do
+            { 'gdk' => { 'update_hooks' => { 'after' => ['uptime'] } } }
+          end
+
+          it 'replaces hooks with ours' do
+            expect(config.gdk.update_hooks.after).to eq(['uptime'])
+          end
         end
       end
     end

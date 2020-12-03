@@ -17,6 +17,52 @@ RSpec.describe GDK::ConfigSettings do
 
       expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
     end
+
+    context 'when there is YAML defined' do
+      # rubocop:disable RSpec/LeakyConstantDeclaration
+      class TestConfigArrayMergeSettings < described_class
+        FILE = 'tmp/foo.yml'
+
+        array(:foo, merge: true) { %w[a] }
+      end
+      # rubocop:enable RSpec/LeakyConstantDeclaration
+
+      subject(:config) { TestConfigArrayMergeSettings.new(yaml: { 'foo' => %w[b] }) }
+
+      it 'is mergeable' do
+        expect(config.foo).to eq(%w[a b])
+      end
+    end
+  end
+
+  describe '.hash_setting' do
+    it 'accepts a hash' do
+      described_class.hash_setting(:foo) { { a: 'A' } }
+
+      expect { config.foo }.not_to raise_error
+    end
+
+    it 'fails on non-array value' do
+      described_class.hash_setting(:foo) { %q(a b) }
+
+      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+    end
+
+    context 'when there is YAML defined' do
+      # rubocop:disable RSpec/LeakyConstantDeclaration
+      class TestConfigHashMergeSettings < described_class
+        FILE = 'tmp/foo.yml'
+
+        hash_setting(:foo, merge: true) { { a: 'A' } }
+      end
+      # rubocop:enable RSpec/LeakyConstantDeclaration
+
+      subject(:config) { TestConfigHashMergeSettings.new(yaml: { 'foo' => { 'b' => 'B' } }) }
+
+      it 'is mergeable' do
+        expect(config.foo).to eq({ 'a' => 'A', 'b' => 'B' })
+      end
+    end
   end
 
   describe '.bool' do
