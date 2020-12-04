@@ -16,9 +16,29 @@ Because GDK requires them, you must ensure `git` and `make` are available. If yo
 - macOS, `git` and `make` are installed by default.
 - Ubuntu/Debian, run the following to install `git` and `make`:
 
-   ```shell
-   sudo apt update && sudo apt install git make
-   ```
+  1. Update the list of available packages:
+
+     ```shell
+     sudo apt update
+     ```
+
+  1. Add an `apt` repository for the latest version of Git.
+
+     - For Ubuntu, install `add-apt-repository` and add a PPA repository:
+
+       ```shell
+       sudo apt install software-properties-common
+       sudo add-apt-repository ppa:git-core/ppa
+       ```
+
+     - For Debian, add a [backport repository](https://backports.debian.org/Instructions/) for your
+       Debian version.
+
+  1. Install Git and Make:
+
+     ```shell
+     sudo apt install git make
+     ```
 
 - Other systems, use your system's package manager to install them.
 
