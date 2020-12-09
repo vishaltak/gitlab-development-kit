@@ -204,8 +204,8 @@ RSpec.describe GDK do
     let(:pg_data_path) { root.join('postgresql', 'data') }
     let(:uploads_path) { root.join('gitlab', 'public', 'uploads') }
     let(:repo_path) { root.join('repositories') }
-    let!(:data_dirs) { [pg_data_path, uploads_path, repo_path] }
-    let!(:backup_data_dirs) { data_dirs.map { |dir| dir.to_s + '.old' } }
+    let(:data_dirs) { [pg_data_path, uploads_path, repo_path] }
+    let(:backup_data_dirs) { data_dirs.map { |dir| "#{dir}.old" } }
     let(:content) { 'Foo' }
 
     before do
@@ -221,10 +221,7 @@ RSpec.describe GDK do
 
     it 'resets data' do
       expect(Runit).to receive(:stop)
-      expect(described_class).to receive(:system).with(
-        described_class::MAKE,
-        chdir: root
-      )
+      expect(described_class).to receive(:make).and_return(true)
 
       data_dirs.each do |dir|
         ensure_directory_with_content(dir)

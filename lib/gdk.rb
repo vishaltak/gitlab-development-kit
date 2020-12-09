@@ -223,7 +223,14 @@ module GDK
 
     sh.run
 
-    system(MAKE, chdir: GDK.root)
+    result = make
+
+    unless result
+      GDK::Output.error('Failed to reset data.')
+      display_help_message
+    end
+
+    result
   end
 
   def self.print_url_ready_message
