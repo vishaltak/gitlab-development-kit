@@ -33,7 +33,8 @@ If you have never used Gitpod before, you must:
 1. Connect the Gitpod account to your GitLab account.
 
 After that is done, you just wait 7-8 minutes for the entire setup to finish, and
-you see the GDK UI pop up in the right sidebar.
+you see the GDK UI pop up in the right sidebar. If you see 504 Gateway Time-out error, 
+click the reload button in the right side bar.
 
 ![GDK in Gitpod](img/gdk-in-gitpod.png)
 
