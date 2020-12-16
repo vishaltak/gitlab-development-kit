@@ -62,7 +62,7 @@ You can install GDK under a
 ### Minikube install
 
 You can also install GDK on [Minikube](https://github.com/kubernetes/minikube);
-see [Kubernetes docs](doc/howto/kubernetes.md).
+see [Kubernetes docs](doc/howto/kubernetes/minikube.md).
 
 ## How to use GDK
 
