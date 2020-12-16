@@ -54,16 +54,10 @@ rails-web: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle
 <%= '#' unless config.nginx? %>nginx: exec <%= config.nginx.bin %> -p <%= config.gdk_root.join('nginx') %> -c conf/nginx.conf
 <%= '#' unless config.elasticsearch? %>elasticsearch: exec elasticsearch/bin/elasticsearch
 
-# Tunneling
-#
-<%= '#' unless config.auto_devops? %>tunnel_gitlab: exec ssh -N -o ControlPath=none -o ControlMaster=no -R <%= config.auto_devops.gitlab.port %>:localhost:<%= config.workhorse.__active_port %> qa-tunnel.gitlab.info
-<%= '#' unless config.auto_devops? %>tunnel_registry: exec ssh -N -o ControlPath=none -o ControlMaster=no -R <%= config.auto_devops.registry.port %>:<%= config.registry.tunnel_host %>:<%= config.registry.tunnel_port %> qa-tunnel.gitlab.info
-<%= '#' unless config.auto_devops? && config.mattermost? %>tunnel_mattermost: exec ssh -N -o ControlPath=none -o ControlMaster=no -R <%= config.mattermost.port %>:localhost:<%= config.mattermost.local_port %> qa-tunnel.gitlab.info
-
 # Gitlab Runner
 #
 <%= '#' unless config.runner? %>runner: exec <%= config.runner.bin %> --log-level debug run --config <%= config.runner.config_file %>
 
 # Mattermost
 #
-<%= '#' unless config.mattermost? %>mattermost: exec docker run --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.local_port %>:8065 <%= config.mattermost.image %>
+<%= '#' unless config.mattermost? %>mattermost: exec docker run --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.port %>:8065 <%= config.mattermost.image %>

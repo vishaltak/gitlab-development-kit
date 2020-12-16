@@ -2,13 +2,6 @@
 action_cable:
   in_app: true
   worker_pool_size: 4
-auto_devops:
-  enabled: false
-  gitlab:
-    port: 20000
-  listen_address: 0.0.0.0
-  registry:
-    port: 25000
 common:
   ca_path: ''
 elasticsearch:
@@ -93,8 +86,7 @@ load_balancing:
 mattermost:
   enabled: false
   image: mattermost/mattermost-preview
-  local_port: 8065
-  port: 27000
+  port: 8065
 nginx:
   bin: "/usr/local/bin/nginx"
   enabled: false
@@ -187,14 +179,11 @@ registry:
   api_host: 127.0.0.1
   auth_enabled: true
   enabled: false
-  external_port: 5000
   host: 127.0.0.1
   image: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v2.9.1-gitlab
   listen_address: 127.0.0.1
   port: 5000
   self_signed: false
-  tunnel_host: 127.0.0.1
-  tunnel_port: 5000
 relative_url_root: "/"
 repositories:
   gitaly: https://gitlab.com/gitlab-org/gitaly.git

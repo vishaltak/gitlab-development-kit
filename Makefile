@@ -643,15 +643,6 @@ performance-metrics-setup: Procfile grafana-setup
 ##############################################################
 
 support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
-ifeq ($(auto_devops_enabled),true)
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Tunnel URLs"
-	@echo
-	@echo "GitLab: https://${hostname}"
-	@echo "Registry: https://${registry_host}"
-	@echo "${DIVIDER}"
-endif
 
 ##############################################################
 # redis

@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Config do
-  let(:auto_devops_enabled) { false }
   let(:nginx_enabled) { false }
   let(:group_saml_enabled) { false }
   let(:protected_config_files) { [] }
@@ -11,7 +10,6 @@ RSpec.describe GDK::Config do
   let(:omniauth_config) { { 'group_saml' => { 'enabled' => group_saml_enabled } } }
   let(:yaml) do
     {
-      'auto_devops' => { 'enabled' => auto_devops_enabled },
       'gdk' => { 'protected_config_files' => protected_config_files, 'overwrite_changes' => overwrite_changes },
       'nginx' => { 'enabled' => nginx_enabled },
       'hostname' => 'gdk.example.com',
@@ -189,18 +187,8 @@ RSpec.describe GDK::Config do
 
   describe 'workhorse' do
     describe '#__active_host' do
-      context 'when AutoDevOps is not enabled' do
-        it 'returns the configured hostname' do
-          expect(config.workhorse.__active_host).to eq(config.hostname)
-        end
-      end
-
-      context 'when AutoDevOps is enabled' do
-        let(:auto_devops_enabled) { true }
-
-        it 'returns 0.0.0.0' do
-          expect(config.workhorse.__active_host).to eq('0.0.0.0')
-        end
+      it 'returns the configured hostname' do
+        expect(config.workhorse.__active_host).to eq(config.hostname)
       end
     end
 
@@ -212,17 +200,9 @@ RSpec.describe GDK::Config do
   end
 
   describe '#__active_port' do
-    context 'when AutoDevOps and nginx are not enabled' do
+    context 'when nginx is not enabled' do
       it 'returns 3000' do
         expect(config.workhorse.__active_port).to eq(3000)
-      end
-    end
-
-    context 'when AutoDevOps is enabled' do
-      let(:auto_devops_enabled) { true }
-
-      it 'returns 3333' do
-        expect(config.workhorse.__active_port).to eq(3333)
       end
     end
 
@@ -861,39 +841,9 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#external_port' do
-      it 'returns 5000' do
-        expect(config.registry.external_port).to eq(5000)
-      end
-    end
-
     describe '#api_host' do
-      context 'when AutoDevOps is not enabled' do
-        let(:auto_devops_enabled) { false }
-
-        it 'returns the default hostname' do
-          expect(config.registry.api_host).to eq('gdk.example.com')
-        end
-      end
-
-      context 'when AutoDevOps is enabled' do
-        let(:auto_devops_enabled) { true }
-
-        it 'returns the default local hostname' do
-          expect(config.registry.api_host).to eq('127.0.0.1')
-        end
-      end
-    end
-
-    describe '#tunnel_host' do
       it 'returns the default hostname' do
-        expect(config.registry.tunnel_host).to eq('gdk.example.com')
-      end
-    end
-
-    describe '#tunnel_port' do
-      it 'returns 5000' do
-        expect(config.registry.tunnel_port).to eq(5000)
+        expect(config.registry.api_host).to eq('gdk.example.com')
       end
     end
 
