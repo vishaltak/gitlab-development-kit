@@ -148,6 +148,10 @@ setup_platform_macos() {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   fi
 
+  if ! brew tap homebrew/cask; then
+    return 1
+  fi
+
   if ! brew bundle; then
     return 1
   fi
