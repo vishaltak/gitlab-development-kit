@@ -256,9 +256,6 @@ Below is a table of all the settings that can be set this way:
 | `postgresql_port`            | number       | `5432`                                                                               |
 | `postgresql_geo_port`        | number       | `5432`                                                                               |
 | `gitlab_pages_port`          | number       | `3010`                                                                               |
-| `auto_devops_enabled`        | boolean      | `false`                                                                              |
-| `auto_devops_gitlab_port`    | number       | `rand(20000..24999)`                                                                 |
-| `auto_devops_registry_port`  | number       | `auto_devops_gitlab_port + 5000`                                                     |
 | `google_oauth_client_secret` | ?            | ?                                                                                    |
 | `google_oauth_client_id`     | ?            | ?                                                                                    |
 
