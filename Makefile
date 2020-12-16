@@ -240,7 +240,8 @@ gitlab/.git/pull: gitlab/git-restore
 	@echo "${DIVIDER}"
 	$(Q)$(gitlab_git_cmd) stash ${QQ}
 	$(Q)$(gitlab_git_cmd) checkout master ${QQ}
-	$(Q)$(gitlab_git_cmd) pull --ff-only ${QQ}
+	# GIT_CURL_VERBOSE=1 added to troubleshoot intermittent failure
+	$(Q)GIT_CURL_VERBOSE=1 $(gitlab_git_cmd) pull --ff-only ${QQ}
 
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running

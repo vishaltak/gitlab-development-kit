@@ -27,7 +27,9 @@ git_remote_add_upstream ${gitlab}
 
 git remote set-url --push "${remote_name}" none # make 'upstream' fetch-only
 echo "Fetching master from ${remote_name}..."
-git fetch "${remote_name}" master
+
+# GIT_CURL_VERBOSE=1 added to troubleshoot intermittent failure
+GIT_CURL_VERBOSE=1 git fetch "${remote_name}" master
 
 # check if the 'master' branch already exists
 if git show-ref --verify --quiet refs/heads/master; then
