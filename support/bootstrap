@@ -26,7 +26,7 @@ asdf_add_initializer() {
   [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/${2}" >> "${1}"
 }
 
-asdf_install_plugins() {
+asdf_install_update_plugins() {
   cut -d ' ' -f 1 .tool-versions | grep -v '^#' | while IFS= read -r plugin
   do
     asdf plugin update "${plugin}" || asdf plugin add "${plugin}"
@@ -70,8 +70,8 @@ if ! asdf_install; then
   error "Failed to install asdf." >&2
 fi
 
-echo "INFO: Installing asdf plugins.."
-if ! asdf_install_plugins; then
+echo "INFO: Installing/updating asdf plugins.."
+if ! asdf_install_update_plugins; then
   error "Failed to install some asdf plugins." >&2
 fi
 

@@ -90,7 +90,8 @@ ensure_supported_platform() {
 }
 
 common_preflight_checks() {
-  echo "INFO: Performing common preflight checks."
+  echo "INFO: Performing common preflight checks.."
+
   if ! ensure_supported_platform; then
     echo
     echo "ERROR: Unsupported platform. Only macOS, Ubuntu, and Debian supported." >&2
