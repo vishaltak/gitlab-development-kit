@@ -30,7 +30,7 @@ GDK supports macOS 10.13 (High Sierra) and later. To install dependencies for ma
 1. Workaround [`thin` installation issues on macOS](https://github.com/macournoyer/thin/issues/365) by running:
 
    ```shell
-   bundle config --local build.development.thin --with-cflags="-Wno-error=implicit-function-declaration"
+   bundle config --local build.thin --with-cflags='"-Wno-error=implicit-function-declaration"'
    ```
 
 ## Ubuntu and Debian
