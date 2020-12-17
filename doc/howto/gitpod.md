@@ -1,6 +1,6 @@
 # GDK with Gitpod
 
-GDK can be used with [Gitpod](https://www.gitpod.io) using GitLab's
+GDK can be used with [Gitpod](https://www.gitpod.io) using the GitLab
 [Gitpod integration](https://docs.gitlab.com/ee/integration/gitpod.html).
 
 The main advantage of running the GDK in Gitpod is that you don't have to worry about

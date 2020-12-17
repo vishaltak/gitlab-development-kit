@@ -1,6 +1,6 @@
 # SSH
 
-If you want to work on GitLab's SSH integration then uncomment the
+If you want to work on the GitLab SSH integration then uncomment the
 'sshd:' line in your `<gdk-root>/Procfile`. Next time you run `gdk start` or `gdk start sshd`,
 you get an unprivileged SSH daemon process running on
 `localhost:2222`, integrated with `gitlab-shell`.

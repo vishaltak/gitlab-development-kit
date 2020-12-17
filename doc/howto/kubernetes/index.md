@@ -41,7 +41,8 @@ Next, install `kubectl` as a component of `gcloud` :
 gcloud components install kubectl
 ```
 
-NOTE: If you have installed `gcloud` via Homebrew Cask, as described
+NOTE:
+If you have installed `gcloud` via Homebrew Cask, as described
 above, you need to add the following lines in your `~/.bash_profile`
 to set the correct PATH to be able to run the `kubectl` binary.
 
@@ -160,7 +161,8 @@ You can find and delete any unused persistent disks following these steps:
   the name you are expecting and they are not in use it is safe to delete
   them.
 
-NOTE: When [running the integration test](#run-the-integration-test) it is
+NOTE:
+When [running the integration test](#run-the-integration-test) it is
 creating clusters named `qa-cluster-<timestamp>-<random-suffix>`. As such it is
 actually safe and encouraged for you to also delete unused persistent disks
 created by these automated tests. The disk name starts with

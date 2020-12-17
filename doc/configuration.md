@@ -188,7 +188,8 @@ There are also a few settings that configure the behavior of GDK itself:
 
 Before and after hooks are supported for `gdk start`, `gdk stop`, and `gdk update`.
 
-NOTE: Hooks are executed with the GDK root directory as the working directory. Execution halts if a command completes with a non-zero exit code.
+NOTE:
+Hooks are executed with the GDK root directory as the working directory. Execution halts if a command completes with a non-zero exit code.
 
 | Setting                    | Default | Description                                                         |
 |----------------------------|---------|---------------------------------------------------------------------|
@@ -199,7 +200,8 @@ NOTE: Hooks are executed with the GDK root directory as the working directory. E
 | `gdk.update_hooks.before`  | `[]`    | Array of commands to be executed sequentially before `gdk update`.  |
 | `gdk.update_hooks.after`   | `[]`    | Array of commands to be executed sequentially after `gdk update`.   |
 
-NOTE: When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed before restarting and `gdk.start_hooks` (both before & after) are executed after restarting.
+NOTE:
+When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed before restarting and `gdk.start_hooks` (both before & after) are executed after restarting.
 
 ##### Experimental GDK settings
 

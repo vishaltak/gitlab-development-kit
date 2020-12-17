@@ -3,8 +3,8 @@
 Steps to configure Prometheus Alert with the GitLab managed Prometheus.
 
 1. Create a Kubernetes cluster on Google Kubernetes Engine (GKE).
-    1. Navigate to [GKE](https://cloud.google.com/kubernetes-engine), then use your GitLab account (for GitLabbers) to sign in, then click "Go to console" button.
-    1. Select "monitoring-development" project (for GitLabbers)
+    1. Navigate to [GKE](https://cloud.google.com/kubernetes-engine), then use your GitLab account (for GitLab team members) to sign in, then click "Go to console" button.
+    1. Select "monitoring-development" project (for GitLab team members)
     1. Create a new Kubernetes cluster
 1. Install the [`kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [`gcloud`](https://cloud.google.com/sdk/docs#install_the_latest_cloud_tools_version_cloudsdk_current_version) command-line tools.
 1. Click "Connect" next to your cluster in GKE and copy and run `gcloud` command.

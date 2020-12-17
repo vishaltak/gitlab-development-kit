@@ -94,7 +94,8 @@ for details and instructions about how to apply this change.
 
 ### Arch Linux
 
-NOTE: These instructions don't account for using `asdf` for managing some dependencies.
+NOTE:
+These instructions don't account for using `asdf` for managing some dependencies.
 
 To install dependencies for Arch Linux:
 
@@ -116,7 +117,8 @@ pikaur -S runit-systemd
 
 ### Fedora
 
-NOTE: These instructions don't account for using `asdf` for managing some dependencies.
+NOTE:
+These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using Fedora >= 31.
 
@@ -137,7 +139,7 @@ sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel \
   git git-lfs ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
   postgresql-contrib re2 GraphicsMagick re2-devel sqlite-devel perl-Digest-SHA \
   perl-Image-ExifTool rsync
-sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
+sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 ```
 
@@ -167,7 +169,8 @@ before continuing.
 
 ### CentOS
 
-NOTE: These instructions don't account for using `asdf` for managing some dependencies.
+NOTE:
+These instructions don't account for using `asdf` for managing some dependencies.
 
 We assume you are using CentOS >= 8.
 
@@ -180,7 +183,7 @@ sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cma
   gcc-c++ go redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
   libstdc++.so.6 npm re2 re2-devel GraphicsMagick perl-Image-ExifTool \
   rsync sqlite-devel
-sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
+sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
 # This example uses Ruby 2.7.2. Substitute with the current version if different.
@@ -195,12 +198,14 @@ You need to follow [runit install instruction](#runit) to install it manually.
 
 ### OpenSUSE
 
-NOTE: These instructions don't account for using `asdf` for managing some dependencies.
+NOTE:
+These instructions don't account for using `asdf` for managing some dependencies.
 
 This was tested on `openSUSE Tumbleweed (20200628)`.
 
-> NOTE: OpenSUSE LEAP is currently not supported, because since a8e2f74d PostgreSQL 11+
-> is required, but `LEAP 15.1` includes PostgreSQL 10 only.
+NOTE:
+OpenSUSE LEAP is currently not supported, because since a8e2f74d PostgreSQL 11+
+is required, but `LEAP 15.1` includes PostgreSQL 10 only.
 
 To install dependencies for OpenSUSE:
 
@@ -213,14 +218,14 @@ sudo zypper install libxslt-devel postgresql postgresql-devel libpqxx-devel redi
         libxml2-devel libxml2-devel-32bit findutils-locate GraphicsMagick \
         exiftool rsync sqlite3-devel postgresql-server-devel \
         libgpg-error-devel libqgpgme-devel yarn curl wget re2-devel
-sudo curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio
+sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 ```
 
 Install `go` manually using [Go](https://golang.org/doc/install) official installation instructions, for example:
 
 ```shell
-curl -O https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
+curl -O "https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz"
 sudo tar xpzf go1.14.4.linux-amd64.tar.gz -C /usr/local
 ```
 
@@ -247,7 +252,7 @@ Setup local Ruby 2.6 environment (see [Ruby](#ruby) for details), for example
 using [RVM](https://rvm.io/):
 
 ```shell
-curl -sSL -o setup_rvm.sh https://get.rvm.io
+curl -sSL -o setup_rvm.sh "https://get.rvm.io"
 chmod a+rx setup_rvm.sh
 ./setup_rvm.sh
 source  /home/ansible/.rvm/scripts/rvm

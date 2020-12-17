@@ -80,7 +80,7 @@ log settings to log every query. To do this you need to send a request to
 Elasticsearch to change the settings for the `gitlab-development` index:
 
 ```shell
-curl -H 'Content-Type: application/json' -XPUT 'http://localhost:9200/gitlab-development/_settings' -d '{
+curl -H 'Content-Type: application/json' -XPUT "http://localhost:9200/gitlab-development/_settings" -d '{
 "index.indexing.slowlog.threshold.index.debug" : "0s",
 "index.search.slowlog.threshold.fetch.debug" : "0s",
 "index.search.slowlog.threshold.query.debug" : "0s"

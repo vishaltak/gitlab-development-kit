@@ -22,6 +22,7 @@ When you have finished debugging, remove the `binding.pry` breakpoint and go
 back to using Puma/Unicorn. Terminate `gdk thin` by pressing Ctrl-C
 and run `gdk start`.
 
-NOTE: It's not possible to submit commits from the web without at least two `puma/unicorn` server
+NOTE:
+It's not possible to submit commits from the web without at least two `puma/unicorn` server
 threads running. This means when running `thin` for debugging, actions such as creating a file from
 the web time out. See [Use GitLab with only 1 Unicorn worker?](https://gitlab.com/gitlab-org/gitlab/issues/14546)

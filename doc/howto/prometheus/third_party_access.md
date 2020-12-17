@@ -25,7 +25,8 @@ Prerequisites:
 1. Click **Save**. The UI opens a page for the load balancer service. The external
    IP address and port are visible under the **External endpoints** field.
 
-   Note: It may take several minutes for the load balancer to become operational.
+   NOTE:
+   It may take several minutes for the load balancer to become operational.
 
 Once complete, you may access the Prometheus server at the IP address and port shown.
 You can test this by accessing the `/graph` endpoint. The Prometheus UI should be
