@@ -43,12 +43,19 @@ start() {
   gdk start
 }
 
+stop() {
+  gdk stop || true
+}
+
 restart() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Restarting GDK.."
-  # gdk restart
 
-  gdk stop
+  stop
+  sleep 5
+  stop
+  sleep 5
+
   gdk status
    # shellcheck disable=SC2009
   ps -ef | grep runsv
