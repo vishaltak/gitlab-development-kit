@@ -9,7 +9,7 @@ require_relative '../lib/shellout'
 MakeMakefile::Logging.quiet = true
 MakeMakefile::Logging.logfile(File::NULL)
 
-POSTGRESQL_VERSIONS = [11, 10, 9.6].freeze
+POSTGRESQL_VERSIONS = [12, 11, 10, 9.6].freeze
 
 def brew_linked_discover
   dirname_if_exists_for(find_executable('postgres'))

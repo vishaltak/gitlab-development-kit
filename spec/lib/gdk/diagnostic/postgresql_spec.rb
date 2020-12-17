@@ -5,7 +5,7 @@ require 'tempfile'
 
 RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   before do
-    @tmp_file = stub_data_version(11)
+    @tmp_file = stub_data_version(12)
   end
 
   after do
@@ -22,7 +22,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
     let(:psql_success) { true }
 
     before do
-      stub_psql_version('psql (PostgreSQL) 11.9', success: psql_success)
+      stub_psql_version('psql (PostgreSQL) 12.4', success: psql_success)
     end
 
     context 'when psql --version matches PG_VERSION' do
@@ -33,7 +33,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
     context 'when psql --version differs' do
       before do
-        stub_psql_version('psql (PostgreSQL) 12.8', success: psql_success)
+        stub_psql_version('psql (PostgreSQL) 11.9', success: psql_success)
       end
 
       it 'returns false' do

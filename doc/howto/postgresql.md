@@ -102,21 +102,21 @@ verson:
    ```
 
 1. Upgrade your PostgreSQL installation to a newer version. For example, to upgrade to
-   PostgreSQL 11 on macOS using Homebrew:
+   PostgreSQL 12 on macOS using Homebrew:
 
    ```shell
-   brew install postgresql@11
+   brew install postgresql@12
    ```
 
-   Or, if you use [`asdf`](https://github.com/asdf-vm/asdf), upgrade to PostgreSQL 11.7 by
+   Or, if you use [`asdf`](https://github.com/asdf-vm/asdf), upgrade to PostgreSQL 12.4 by
    executing:
 
    ```shell
-   # Install PostgreSQL 11.7
-   asdf install postgres 11.7
+   # Install PostgreSQL 12.4
+   asdf install postgres 12.4
 
-   # Set the GDK folder to use PostgreSQL 11.7
-   echo "postgres 11.7" >> .tool-versions
+   # Set the GDK folder to use PostgreSQL 12.4
+   echo "postgres 12.4" >> .tool-versions
    ```
 
 1. Initialize a new data folder with the new version of PostgreSQL by running `make`:

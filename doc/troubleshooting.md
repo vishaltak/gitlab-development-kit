@@ -539,7 +539,7 @@ If the Rails server cannot connect to PostgreSQL and you see the following when 
 ```plaintext
 2020-07-06_00:26:20.51557 postgresql            : support/postgresql-signal-wrapper:16:in `<main>': undefined method `exitstatus' for nil:NilClass (NoMethodError)
 2020-07-06_00:26:21.62892 postgresql            : dyld: Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.66.dylib
-2020-07-06_00:26:21.62896 postgresql            :   Referenced from: /usr/local/opt/postgresql@11/bin/postgres
+2020-07-06_00:26:21.62896 postgresql            :   Referenced from: /usr/local/opt/postgresql@12/bin/postgres
 2020-07-06_00:26:21.62897 postgresql            :   Reason: image not found
 ```
 
@@ -550,7 +550,7 @@ by PostgreSQL.
 To resolve this, reinstall PostgreSQL with:
 
 ```shell
-brew reinstall postgresql@11
+brew reinstall postgresql@12
 ```
 
 ### ActiveRecord::PendingMigrationError at /
@@ -606,15 +606,15 @@ cd gitlab-development-kit
 cat postgresql/data/PG_VERSION
 ```
 
-If the content of the `PG_VERSION` file is `10`, your data folder is compatible
-with PostgreSQL 10.
+If the content of the `PG_VERSION` file is `11`, your data folder is compatible
+with PostgreSQL 11.
 
 Downgrade your PostgreSQL to the compatible version. For example, to downgrade to
-PostgreSQL 10 on macOS using Homebrew:
+PostgreSQL 11 on macOS using Homebrew:
 
 ```shell
-brew install postgresql@10
-brew link --force postgresql@10
+brew install postgresql@11
+brew link --force postgresql@11
 ```
 
 You also need to update your `Procfile` to use the downgraded PostgreSQL binaries:
