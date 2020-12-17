@@ -51,7 +51,7 @@ Some other options for avoiding buying a domain name include:
   is the domain of your function in the serverless tab or CI output.
 - There is another way to trick your computer to call to a specific domain for
   a Knative function using curl which is that you can make a request to the
-  function like `curl -H 'Host: <blah>.example.com' http://<ip-address>` and
+  function like `curl -H 'Host: <blah>.example.com' "http://<ip-address>"` and
   this should also end up executing the function for you. This ensures the
   request reaches the IP address of your Knative Ingress and setting the `Host`
   header ensures that the Knative Ingress knows which function to forward the

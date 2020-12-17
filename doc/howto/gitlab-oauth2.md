@@ -57,4 +57,5 @@ GitLab.com generates an application ID and secret key for you to use.
 You should now be able to import projects from GitLab.com, as well as sign in to your
 instance with a GitLab.com account.
 
-NOTE: Running `gdk reconfigure` removes your provider and you need to re-add it.
+NOTE:
+Running `gdk reconfigure` removes your provider and you need to re-add it.

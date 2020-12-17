@@ -17,7 +17,7 @@ Because of this, you need to either:
 - Run a local Kubernetes cluster.
 - Use a service like the [Google Container Engine (GKE)](https://cloud.google.com/kubernetes-engine).
 
-GKE is recommended for GitLabbers who intend to frequently develop against this setup. For
+GKE is recommended for GitLab team members who intend to frequently develop against this setup. For
 infrequent use or while waiting for GKE access, Minikube is a good option.
 
 Setting it up locally with [Minikube](https://github.com/kubernetes/minikube)
@@ -36,10 +36,10 @@ The following steps help you set up Minikube locally.
 
    ```shell
    ## For macOS
-   curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+   curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s "https://storage.googleapis.com/kubernetes-release/release/stable.txt")/bin/darwin/amd64/kubectl"
 
    ## For Linux
-   curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+   curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s "https://storage.googleapis.com/kubernetes-release/release/stable.txt")/bin/linux/amd64/kubectl"
    ```
 
 1. Then, add it to your path:
@@ -57,10 +57,10 @@ For macOS with homebrew, run `brew install minikube`. You may need to `brew link
 
    ```shell
    ## For macOS
-   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+   curl -Lo minikube "https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64"
 
    ## For Linux
-   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+   curl -Lo minikube "https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
    ```
 
 1. Then, add it to your path:
@@ -116,7 +116,7 @@ minikube dashboard
 Follow [the instructions](../local_network.md) to make your GDK
 accessible to other devices in the local network.
 
-### Edit GitLab's `gitlab.yml`
+### Edit the GitLab `gitlab.yml` file
 
 We need to configure GDK to inform it of the real IP address of your computer.
 This is because GDK returns this information to the Runner and if it is wrong, pipelines fail.
