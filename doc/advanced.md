@@ -27,6 +27,11 @@ GDK supports macOS 10.13 (High Sierra) and later. To install dependencies for ma
 1. [Configure `rbenv`](https://github.com/rbenv/rbenv#homebrew-on-macos) for your shell.
 1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating), and configure it for your
    shell.
+1. Workaround [`thin` installation issues on macOS](https://github.com/macournoyer/thin/issues/365) by running:
+
+   ```shell
+   bundle config --local build.thin --with-cflags='"-Wno-error=implicit-function-declaration"'
+   ```
 
 ## Ubuntu and Debian
 
