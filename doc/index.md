@@ -96,7 +96,7 @@ installed self-managed dependencies so that they don't conflict with `asdf`:
   use should be indicated by the output. For more information, see:
   - [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
   - [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
-- Uninstall your Node dependency manager (usually `nvm` or `brew`). If you're unsure which Ruby
+- Uninstall your Node dependency manager (usually `nvm` or `brew`). If you're unsure which Node
   dependency manager you were using, run `which node` at the command line. The dependency manager in
   use should be indicated by the output:
   - If using `nvm`, see [uninstalling `nvm` documentation](https://github.com/nvm-sh/nvm#uninstalling--removal).
