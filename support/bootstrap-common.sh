@@ -7,6 +7,8 @@ export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
 REQUIRED_BUNDLER_VERSION=$(grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
 
+CPU_TYPE=$(uname -m)
+
 error() {
   echo
   echo "ERROR: ${1}" >&2
@@ -77,6 +79,17 @@ ensure_not_root() {
 
 ensure_supported_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
+    if [[ "${CPU_TYPE}" == "arm64" ]]; then
+      echo "INFO:" >&2
+      echo "INFO: Running the GDK on Apple M1 hardware currently requires running under" >&2
+      echo "INFO: Rosetta 2 until asdf and Homebrew offer native versions of required" >&2
+      echo "INFO: software. For more information on Rosetta 2, please visit:" >&2
+      echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
+      echo "INFO:" >&2
+      echo "INFO: Press [ENTER] to continue." >&2
+      read -r
+    fi
+
     return 0
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
@@ -146,7 +159,7 @@ setup_platform_linux_with() {
 }
 
 setup_platform_macos() {
-  local shell_file ruby_configure_opts
+  local shell_file ruby_configure_opts brew_opts
 
   if [ -z "$(command -v brew)" ]; then
     echo "INFO: Installing Homebrew."
@@ -157,7 +170,14 @@ setup_platform_macos() {
     return 1
   fi
 
-  if ! brew bundle; then
+  # Support running brew under Rosetta 2 on Apple M1 machines
+  if [[ "${CPU_TYPE}" == "arm64" ]]; then
+    brew_opts="arch -x86_64"
+  else
+    brew_opts=""
+  fi
+
+  if ! ${brew_opts} brew bundle; then
     return 1
   fi
 
@@ -179,18 +199,18 @@ setup_platform_macos() {
   esac
 
   icu4c_pkgconfig_path="export PKG_CONFIG_PATH=\"/usr/local/opt/icu4c/lib/pkgconfig:\${PKG_CONFIG_PATH}\""
-  if ! grep -Fxq "${icu4c_pkgconfig_path}" "${shell_file}"; then
+  if ! grep -Fxq "${icu4c_pkgconfig_path}" "${shell_file}" 2> /dev/null; then
     echo -e "\n# Added by GDK bootstrap\n${icu4c_pkgconfig_path}" >> "${shell_file}"
   fi
 
   ruby_configure_opts="export $(ruby_configure_opts)"
-  if ! grep -Fxq "${ruby_configure_opts}" "${shell_file}"; then
+  if ! grep -Fxq "${ruby_configure_opts}" "${shell_file}" 2> /dev/null; then
     echo -e "\n# Added by GDK bootstrap\n${ruby_configure_opts}" >> "${shell_file}"
   fi
 
   if [[ ! -d "/Applications/Google Chrome.app" ]]; then
     if ! brew list --cask google-chrome > /dev/null 2>&1; then
-      if ! brew install google-chrome; then
+      if ! ${brew_opts} brew install google-chrome; then
         return 1
       fi
     fi
