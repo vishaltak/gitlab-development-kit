@@ -10,7 +10,11 @@ shared_buffers = '256MB'
 wal_level = hot_standby
 max_replication_slots = 1
 max_wal_senders = 10
+<% if pg_version >= 13 %>
+wal_keep_size = 160
+<% else %>
 wal_keep_segments = 10
+<% end %>
 hot_standby = on
 
 <% if config.root.geo.secondary? && pg_version >= 12 %>
