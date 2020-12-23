@@ -2,7 +2,7 @@
 
 rake gdk.example.yml
 
-git diff --exit-code gdk.example.yml
+git diff --ignore-space-at-eol --exit-code gdk.example.yml
 result=$?
 
 if [[ ${result} != 0 ]]; then
