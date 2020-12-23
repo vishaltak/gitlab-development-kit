@@ -13,7 +13,7 @@ def main
   postgresql = GDK::Postgresql.new
   abort 'Cannot connect to postgres' unless postgresql.ready?
 
-  exit if postgresql.db_exists?('gitlabhq_development')
+  exit if postgresql.db_exists?
 
   success = true
 

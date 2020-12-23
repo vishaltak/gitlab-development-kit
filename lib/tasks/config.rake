@@ -63,7 +63,9 @@ end
 
 desc 'Generate the database.yml config file'
 file 'gitlab/config/database.yml' => ['support/templates/database.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+  postgresql = GDK::Postgresql.new
+
+  GDK::ErbRenderer.new(t.source, t.name, config: config, postgresql: postgresql).safe_render!
 end
 
 desc 'Generate the cable.yml config file'
@@ -78,7 +80,9 @@ end
 
 desc 'Generate the database_geo.yml config file'
 file 'gitlab/config/database_geo.yml' => ['support/templates/database_geo.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+  postgresql = GDK::PostgresqlGeo.new
+
+  GDK::ErbRenderer.new(t.source, t.name, config: config, postgresql: postgresql).safe_render!
 end
 
 desc 'Generate the gitlab.yml config file'

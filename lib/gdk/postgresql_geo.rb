@@ -6,8 +6,6 @@ module GDK
       postgresql_config.bin_dir
     end
 
-    private
-
     def config
       @config ||= GDK.config.postgresql.geo
     end

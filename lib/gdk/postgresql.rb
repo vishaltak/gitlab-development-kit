@@ -35,7 +35,7 @@ module GDK
       !config.host.start_with?('/')
     end
 
-    def db_exists?(dbname)
+    def db_exists?(dbname = default_database)
       Shellout.new(pg_cmd(database: dbname)).tap(&:try_run).success?
     end
 
