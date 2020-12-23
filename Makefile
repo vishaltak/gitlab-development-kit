@@ -100,7 +100,7 @@ install: all show-installed-at start
 #
 # Pull gitlab directory first since dependencies are linked from there.
 update: asdf-update \
-ensure-databases-running \
+ensure-migration-deps-running \
 unlock-dependency-installers \
 gettext-unlock \
 gitlab/.git/pull \
@@ -192,13 +192,17 @@ preflight-checks: rake
 rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
-.PHONY: ensure-databases-running
-ensure-databases-running: Procfile postgresql/data gitaly-setup
+.PHONY: ensure-migration-deps-running
+ensure-migration-deps-running: Procfile postgresql/data gitaly-setup
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Ensuring necessary data services are running"
 	@echo "${DIVIDER}"
 	$(Q)gdk start rails-migration-dependencies
+
+.PHONY: ensure-db-running
+ensure-db-running: Procfile postgresql/data
+	$(Q)gdk start db
 
 ##############################################################
 # bootstrap
@@ -230,7 +234,7 @@ endif
 
 gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
-gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate
+gitlab-update: ensure-migration-deps-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate
 
 .PHONY: gitlab/git-restore
 gitlab/git-restore:
@@ -247,7 +251,7 @@ gitlab/.git/pull: gitlab/git-restore
 	$(Q)GIT_CURL_VERBOSE=1 $(gitlab_git_cmd) pull --ff-only ${QQ}
 
 .PHONY: gitlab-db-migrate
-gitlab-db-migrate: ensure-databases-running
+gitlab-db-migrate: ensure-migration-deps-running
 	@echo
 	$(Q)rake gitlab_rails:db:migrate
 
@@ -472,13 +476,13 @@ else
 endif
 
 .PHONY: geo-primary-migrate
-geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore diff-config
+geo-primary-migrate: ensure-migration-deps-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore diff-config
 
 .PHONY: geo-primary-update
 geo-primary-update: update geo-primary-migrate diff-config
 
 .PHONY: geo-secondary-migrate
-geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore
+geo-secondary-migrate: ensure-migration-deps-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore
 
 .PHONY: geo-secondary-update
 geo-secondary-update: update geo-secondary-migrate diff-config
@@ -711,11 +715,11 @@ postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
 
 .PHONY: postgresql/seed-rails
-postgresql/seed-rails: postgresql/data ensure-databases-running
+postgresql/seed-rails: postgresql/data ensure-migration-deps-running | postgresql/seed-praefect
 	$(Q)support/bootstrap-rails
 
 .PHONY: postgresql/seed-praefect
-postgresql/seed-praefect: postgresql/data ensure-databases-running | postgresql/seed-rails
+postgresql/seed-praefect: postgresql/data ensure-db-running
 	$(Q)support/bootstrap-praefect
 
 .PHONY: postgresql/reconfigure
@@ -768,7 +772,7 @@ else
 endif
 
 .PHONY: postgresql-geo/seed-data
-postgresql-geo/seed-data: postgresql-geo/data ensure-databases-running
+postgresql-geo/seed-data: postgresql-geo/data ensure-migration-deps-running
 	$(Q)support/bootstrap-geo
 
 ##############################################################
