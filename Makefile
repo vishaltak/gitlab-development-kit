@@ -705,7 +705,7 @@ redis/redis.conf:
 # postgresql
 ##############################################################
 
-postgresql: postgresql/data postgresql/reconfigure postgresql/seed-rails postgresql/seed-praefect
+postgresql: postgresql/data postgresql/reconfigure postgresql/seed-praefect postgresql/seed-rails
 
 postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
@@ -715,7 +715,7 @@ postgresql/seed-rails: postgresql/data ensure-databases-running
 	$(Q)support/bootstrap-rails
 
 .PHONY: postgresql/seed-praefect
-postgresql/seed-praefect: postgresql/data ensure-databases-running
+postgresql/seed-praefect: postgresql/data ensure-databases-running | postgresql/seed-rails
 	$(Q)support/bootstrap-praefect
 
 .PHONY: postgresql/reconfigure
