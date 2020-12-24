@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-MAINTAINER GitLab.com
+LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab-development-kit/-/graphs/master"
 
 ENV DEBIAN_FRONTEND noninteractive
 
