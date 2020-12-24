@@ -190,7 +190,7 @@ setup_platform_macos() {
 
   if [[ ! -d "/Applications/Google Chrome.app" ]]; then
     if ! brew list --cask google-chrome > /dev/null 2>&1; then
-      if ! brew cask install google-chrome; then
+      if ! brew install google-chrome; then
         return 1
       fi
     fi
