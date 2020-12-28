@@ -857,8 +857,8 @@ production: &base
       address: <%= config.hostname %>
       port: <%= config.prometheus.sidekiq_exporter_port %>
   prometheus:
-    enable: <%= config.prometheus.enabled? %>
-    listen_address: '<%= config.hostname %>:<%= config.prometheus.port %>'
+    enabled: <%= config.prometheus.enabled? %>
+    server_address: '<%= config.hostname %>:<%= config.prometheus.port %>'
   #
   # 5. Extra customization
   # ==========================
