@@ -42,8 +42,17 @@ asdf_install_update_plugins() {
 
 asdf_install_tools() {
   # Install all tools specified in .tool-versions
+  local asdf_opts
+
+  if [[ "${OSTYPE}" == "darwin"* && "${CPU_TYPE}" == "arm64" ]]; then
+    # Support running brew under Rosetta 2 on Apple M1 machines
+    asdf_opts="arch -x86_64"
+  else
+    asdf_opts=""
+  fi
+
   ruby_configure_opts=$(ruby_configure_opts)
-  bash -c "MAKELEVEL=0 ${ruby_configure_opts} asdf install"
+  bash -c "MAKELEVEL=0 ${ruby_configure_opts} ${asdf_opts} asdf install"
 
   return $?
 }
