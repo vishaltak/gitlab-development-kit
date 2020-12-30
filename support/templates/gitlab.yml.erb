@@ -385,8 +385,8 @@ production: &base
     host: <%= config.registry.host %>
     port: <%= config.registry.port %>
     api_url: http://<%= config.registry.api_host %>:<%= config.registry.port %>
-    key: ../localhost.key
-    path: ../registry/storage/
+    key: <%= config.gdk_root %>/localhost.key
+    path: <%= config.gdk_root %>/registry/storage/
     issuer: gitlab-issuer
     # notification_secret: '' # Notification secret, use the same secret you use in registry/config.yml
 
