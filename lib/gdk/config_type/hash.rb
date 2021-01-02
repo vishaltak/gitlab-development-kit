@@ -9,15 +9,13 @@ module GDK
     class Hash < Base
       include Mergable
 
-      class Instance < Base::Instance
-        def parse
-          value.is_a?(::Hash)
-        end
+      def parse
+        value.is_a?(::Hash)
       end
 
       private
 
-      def do_merge(fetched, default)
+      def mergable_merge(fetched, default)
         Hash(fetched).merge(default.transform_keys(&:to_s))
       end
     end

@@ -3,6 +3,7 @@
 require 'yaml'
 require 'mkmf'
 require 'forwardable'
+require_relative 'config_type/builder'
 require_relative 'config_type/anything'
 require_relative 'config_type/array'
 require_relative 'config_type/bool'
@@ -75,10 +76,10 @@ module GDK
       def def_attribute(key, klass, **kwargs, &blk)
         key = key.to_s
         self.attributes ||= {} # Using a hash to ensure uniqueness on key
-        self.attributes[key] = klass.new(kwargs.merge(key: key), &blk)
+        self.attributes[key] = ConfigType::Builder.new(key: key, klass: klass, **kwargs, &blk)
 
         define_method(key) do
-          instanciate(key).value
+          build(key).value
         end
       end
     end
@@ -93,7 +94,7 @@ module GDK
       attributes.each_value do |attribute|
         next if attribute.ignore?
 
-        attribute.instanciate(parent: self).validate!
+        attribute.build(parent: self).validate!
       end
 
       nil
@@ -106,7 +107,7 @@ module GDK
         #  - is a ? method (always has a non-? counterpart)
         next if attribute.ignore?
 
-        result[attribute.key] = attribute.instanciate(parent: self).dump!
+        result[attribute.key] = attribute.build(parent: self).dump!
       end
 
       file&.puts(yaml.to_yaml)
@@ -211,8 +212,8 @@ module GDK
       attributes[key]
     end
 
-    def instanciate(key)
-      attribute(key).instanciate(parent: self)
+    def build(key)
+      attribute(key).build(parent: self)
     end
 
     def enabled_value(method_name)

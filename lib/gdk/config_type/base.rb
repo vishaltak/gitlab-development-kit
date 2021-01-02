@@ -3,61 +3,55 @@
 module GDK
   module ConfigType
     class Base
-      class Instance
-        attr_reader :key, :parent
-        attr_accessor :value
+      extend ::Forwardable
 
-        def initialize(value, key:, parent:)
-          @value = value
-          @key = key
-          @parent = parent
+      attr_reader :builder, :parent, :value, :user_value
+      alias_method :dump!, :value
 
-          validate!
-        end
+      def_delegators :builder, :key, :blk
 
-        def validate!
-          orig_value = value
+      def initialize(parent:, builder:)
+        @parent = parent
+        @builder = builder
 
-          return if parse
+        read_value
 
-          raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
-        end
-
-        def dump!
-          value
-        end
-
-        def slug
-          [parent.slug, key].compact.join('.')
-        end
-
-        def root
-          parent&.root || self
-        end
-        alias_method :config, :root
-
-        private
-
-        def type
-          self.class.name.split('::').last(2).first.downcase
-        end
+        validate!
       end
 
-      attr_reader :key, :blk
-
-      def initialize(key:, &blk)
-        @key = key
-        @blk = blk
+      def read_value
+        @value = @user_value = parent.yaml.fetch(key)
+      rescue KeyError
+        @value = default_value
       end
 
-      def ignore?
-        key.start_with?('__') || key.end_with?('?')
+      def default_value
+        parent.instance_eval(&blk)
       end
 
-      def instanciate(parent:)
-        value = parent.yaml.fetch(key, parent.instance_eval(&blk))
+      def validate!
+        orig_value = value
 
-        self.class::Instance.new(value, key: key, parent: parent)
+        return if parse
+
+        raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+      end
+
+      def slug
+        [parent.slug, key].compact.join('.')
+      end
+
+      def root
+        parent&.root || self
+      end
+      alias_method :config, :root
+
+      private
+
+      attr_writer :value
+
+      def type
+        self.class.name.split('::').last.downcase
       end
     end
   end

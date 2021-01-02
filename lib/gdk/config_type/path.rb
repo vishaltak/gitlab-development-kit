@@ -6,18 +6,16 @@ require 'pathname'
 module GDK
   module ConfigType
     class Path < Base
-      class Instance < Base::Instance
-        def dump!
-          value.to_s
-        end
+      def dump!
+        value.to_s
+      end
 
-        def parse
-          self.value = Pathname.new(value)
+      def parse
+        self.value = Pathname.new(value)
 
-          true
-        rescue ::TypeError
-          false
-        end
+        true
+      rescue ::TypeError
+        false
       end
     end
   end

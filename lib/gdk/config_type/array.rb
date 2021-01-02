@@ -8,15 +8,13 @@ module GDK
     class Array < Base
       include Mergable
 
-      class Instance < Base::Instance
-        def parse
-          value.is_a?(::Array)
-        end
+      def parse
+        value.is_a?(::Array)
       end
 
       private
 
-      def do_merge(fetched, default)
+      def mergable_merge(fetched, default)
         default + Array(fetched)
       end
     end

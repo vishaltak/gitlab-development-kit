@@ -5,13 +5,11 @@ require_relative 'base'
 module GDK
   module ConfigType
     class Integer < Base
-      class Instance < Base::Instance
-        def parse
-          orig_value = value
-          self.value = value.to_i
+      def parse
+        orig_value = value
+        self.value = value.to_i
 
-          value.to_s == orig_value.to_s
-        end
+        value.to_s == orig_value.to_s
       end
     end
   end

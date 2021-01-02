@@ -5,22 +5,16 @@ module GDK
     module Mergable
       attr_reader :merge
 
-      def initialize(key:, merge: false, &blk)
-        super(key: key, &blk)
-
+      def initialize(parent:, builder:, merge: false)
         @merge = merge
+
+        super(parent: parent, builder: builder)
       end
 
-      def instanciate(parent:)
-        default = parent.instance_eval(&blk)
+      def read_value
+        super
 
-        value = if merge
-                  do_merge(parent.yaml.fetch(key, nil), default)
-                else
-                  parent.yaml.fetch(key, default)
-                end
-
-        self.class::Instance.new(value, key: key, parent: parent)
+        @value = mergable_merge(user_value, default_value) if merge
       end
     end
   end
