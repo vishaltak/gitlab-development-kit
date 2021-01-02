@@ -25,14 +25,10 @@ module GDK
 
     attr_reader :parent, :yaml, :key
 
-    def_delegators :'self.class', :attributes, :settings_klass
+    def_delegators :'self.class', :attributes
 
     class << self
       attr_accessor :attributes
-
-      def settings_klass
-        ::GDK::ConfigSettings
-      end
 
       def anything(key, &blk)
         def_attribute(key, ConfigType::Anything, &blk)
@@ -204,6 +200,10 @@ module GDK
 
     def respond_to_missing?(method_name, include_private = false)
       !enabled_value(method_name).nil? || super
+    end
+
+    def settings_klass
+      ::GDK::ConfigSettings
     end
 
     private

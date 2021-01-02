@@ -7,16 +7,6 @@ module GDK
   class ConfigExample < Config
     # Module that stubs reading from the environment
     module Stubbed
-      def self.prepended(base)
-        base.extend ClassMethods
-      end
-
-      module ClassMethods
-        def settings_klass
-          ::GDK::ConfigExample::Settings
-        end
-      end
-
       def cmd!(_cmd)
         nil
       end
@@ -29,6 +19,10 @@ module GDK
         return max.first if max.is_a?(Range)
 
         0
+      end
+
+      def settings_klass
+        ::GDK::ConfigExample::Settings
       end
 
       private
