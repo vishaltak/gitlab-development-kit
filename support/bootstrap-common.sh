@@ -6,8 +6,7 @@ CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-$CURRENT_ASDF_DIR}"
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
 REQUIRED_BUNDLER_VERSION=$(grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
-
-CPU_TYPE=$(uname -m)
+CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
 error() {
   echo
