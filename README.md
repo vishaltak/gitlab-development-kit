@@ -64,6 +64,10 @@ You can install GDK under a
 You can also install GDK on [Minikube](https://github.com/kubernetes/minikube);
 see [Kubernetes docs](doc/howto/kubernetes/minikube.md).
 
+### Gitpod integration
+
+Alternatively, you can use [GDK with Gitpod](/doc/howto/gitpod.md) to run a pre-configured GDK instance in the cloud.
+
 ## How to use GDK
 
 After installation, [learn how to use GDK](doc/howto/index.md).
