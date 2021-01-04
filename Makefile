@@ -850,7 +850,7 @@ registry-setup: registry/storage registry/config.yml localhost.crt
 localhost.crt: localhost.key
 
 localhost.key:
-	$(Q)${OPENSSL} req -new -subj "/CN=${registry_host}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "localhost.key" -out "localhost.crt"
+	$(Q)${OPENSSL} req -new -subj "/CN=${hostname}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "localhost.key" -out "localhost.crt"
 	$(Q)chmod 600 $@
 
 registry_host.crt: registry_host.key
