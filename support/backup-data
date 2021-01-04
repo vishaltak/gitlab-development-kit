@@ -8,16 +8,16 @@ echo "INFO: Are you sure?" >&2
 echo "INFO:" >&2
 echo "INFO: Press [ENTER] to continue." >&2
 read -r
-rm -rf postgresql/data.old
-postgresql_backup_dir=$(date +postgresql/data.old.%Y-%m-%d_%H.%M.%S)
 
-echo "INFO: Moving PostgreSQL data into ${postgresql_backup_dir}.." >&2
-mv postgresql/data ${postgresql_backup_dir}
+timestamp=$(date +%Y-%m-%d_%H.%M.%S)
 
-rm -rf gitlab/public/uploads.old
-mv gitlab/public/uploads gitlab/public/uploads.old
+echo "INFO: Moving PostgreSQL data into postgresql/data.${timestamp}.." >&2
+mv postgresql/data postgresql/data.${timestamp}
 
-rm -rf repositories.old
-mv repositories repositories.old
+echo "INFO: Moving uploads data into gitlab/public/uploads.${timestamp}.." >&2
+mv gitlab/public/uploads gitlab/public/uploads.${timestamp}
+
+echo "INFO: Moving repository data into repositories.${timestamp}.." >&2
+mv repositories repositories.${timestamp}
 mkdir repositories
-mv repositories.old/.gitkeep repositories/
+mv repositories.${timestamp}/.gitkeep repositories/

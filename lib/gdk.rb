@@ -65,7 +65,7 @@ module GDK
       GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
       GDK::Command::Reconfigure.new.run
-    when 'reset_data'
+    when 'reset-data'
       reset_data
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
@@ -228,7 +228,7 @@ module GDK
     if result
       GDK::Output.puts
       GDK::Output.notice("Successfully reset data!")
-      start(nil)
+      start([])
     else
       GDK::Output.error('Failed to reset data.')
       display_help_message
