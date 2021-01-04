@@ -1,9 +1,18 @@
 #!/usr/bin/env sh
 
 set -e
-
+echo "INFO:" >&2
+echo "INFO: We're about to remove PostgreSQL data, Rails uploads and" >&2
+echo "INFO: git repository data." >&2
+echo "INFO: Are you sure?" >&2
+echo "INFO:" >&2
+echo "INFO: Press [ENTER] to continue." >&2
+read -r
 rm -rf postgresql/data.old
-mv postgresql/data postgresql/data.old
+postgresql_backup_dir=$(date +postgresql/data.old.%Y-%m-%d_%H.%M.%S)
+
+echo "INFO: Moving PostgreSQL data into ${postgresql_backup_dir}.." >&2
+mv postgresql/data ${postgresql_backup_dir}
 
 rm -rf gitlab/public/uploads.old
 mv gitlab/public/uploads gitlab/public/uploads.old

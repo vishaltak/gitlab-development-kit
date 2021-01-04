@@ -225,7 +225,11 @@ module GDK
 
     result = make
 
-    unless result
+    if result
+      GDK::Output.puts
+      GDK::Output.notice("Successfully reset data!")
+      start(nil)
+    else
       GDK::Output.error('Failed to reset data.')
       display_help_message
     end
