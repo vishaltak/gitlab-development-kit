@@ -42,8 +42,8 @@ module GDK
         end
       end
 
-      def dump!
-        elems.map(&:dump!)
+      def dump!(user_only: false)
+        elems.map { |e| e.dump!(user_only: user_only) }
       end
 
       def parse

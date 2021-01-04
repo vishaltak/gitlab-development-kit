@@ -96,14 +96,17 @@ module GDK
       nil
     end
 
-    def dump!(file = nil)
+    def dump!(file = nil, user_only: false)
       yaml = attributes.values.sort_by(&:key).each_with_object({}) do |attribute, result|
         # We don't dump a config if it:
         #  - starts with a double underscore (intended for internal use)
         #  - is a ? method (always has a non-? counterpart)
         next if attribute.ignore?
 
-        result[attribute.key] = attribute.build(parent: self).dump!
+        attr_value = attribute.build(parent: self)
+        next if user_only && !attr_value.user_defined?
+
+        result[attribute.key] = attr_value.dump!(user_only: user_only)
       end
 
       file&.puts(yaml.to_yaml)
@@ -134,6 +137,10 @@ module GDK
     rescue Errno::ENOENT
       File.write(GDK.root.join(filename), value)
       value
+    end
+
+    def user_defined?
+      yaml&.any?
     end
 
     def fetch(slug, *args)

@@ -6,7 +6,6 @@ module GDK
       extend ::Forwardable
 
       attr_reader :builder, :parent, :value, :user_value
-      alias_method :dump!, :value
 
       def_delegators :builder, :key, :blk
 
@@ -29,12 +28,20 @@ module GDK
         parent.instance_eval(&blk)
       end
 
+      def user_defined?
+        !!defined?(@user_value)
+      end
+
       def validate!
         orig_value = value
 
         return if parse
 
         raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+      end
+
+      def dump!(user_only: false)
+        value
       end
 
       def slug
