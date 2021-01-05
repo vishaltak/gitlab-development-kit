@@ -115,6 +115,16 @@ module GDK
     when 'measure'
       GDK::Command::Measure.new(ARGV).run
       true
+    when 'kill'
+      p "ps -aef | grep #{$gdk_root} | grep -v grep | awk '{print $2}'"
+      pids = `ps -aef | grep #{$gdk_root} | grep -v grep | awk '{print $2}'`.split(' ')
+
+      pids.each do |pid|
+        puts "Killing #{pid}"
+        #Process.kill('KILL', pid.to_i)
+      end
+
+      true
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run
       true
