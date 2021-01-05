@@ -7,7 +7,7 @@ distributed by GitLab B.V., You reserve all right, title, and interest in and to
 Your Contributions. All Contributions are subject to the following DCO + License
 terms.
 
-[DCO + License](https://gitlab.com/gitlab-org/dco/blob/master/README.md)
+[DCO + License](https://gitlab.com/gitlab-org/dco/blob/main/README.md)
 
 All Documentation content that resides under the [doc/ directory](/doc) of this
 repository is licensed under Creative Commons:
