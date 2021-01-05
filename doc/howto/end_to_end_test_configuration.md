@@ -19,7 +19,7 @@ repository. The URL can always be modified to point to any GitLab instance for t
 changed to use the GitLab repository instead of the GDK.
 
 All environment variables mentioned should be entered as a semicolon seperated list. The full list of
-[supported GitLab environment variables](https://gitlab.com/gitlab-org/gitlab-qa/-/blob/master/docs/what_tests_can_be_run.md#supported-gitlab-environment-variables)
+[supported GitLab environment variables](https://gitlab.com/gitlab-org/gitlab-qa/-/blob/main/docs/what_tests_can_be_run.md#supported-gitlab-environment-variables)
  can be used when setting up either of the RSpec configurations.
 
 Both sets of instructions require that you select the Ruby SDK **qa**. If this option is not available, you need to
