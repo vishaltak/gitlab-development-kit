@@ -76,11 +76,11 @@ This also performs any possible migrations.
 You can run `gdk doctor` to ensure the update left GDK in a good state. If it reports any issues,
 you should address them as soon as possible.
 
-If there are changes in the local repositories, or a different branch than `master` is checked out,
+If there are changes in the local repositories, or a different branch than `main` is checked out,
 the `gdk update` command:
 
 - Stashes any uncommitted changes.
-- Changes to `master` branch.
+- Changes to `main` branch.
 
 It then updates the remote repositories.
 
@@ -244,4 +244,4 @@ After the changes are applied to GitLab:
    review, follow the process for submitting a merge request for a `gitlab` branch from the command
    line.
 1. Once the work is completed, we recommend [updating GDK](#update-gdk) again. This means that the
-   next time you want to run it, GDK is based on `master` and not on the changed branch.
+   next time you want to run it, GDK is based on `main` and not on the changed branch.
