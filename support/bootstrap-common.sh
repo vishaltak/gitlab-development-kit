@@ -85,8 +85,8 @@ ensure_supported_platform() {
       echo "INFO: software. For more information on Rosetta 2, please visit:" >&2
       echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
       echo "INFO:" >&2
-      echo "INFO: Press [ENTER] to continue." >&2
-      read -r
+      echo "INFO: Resuming in 3 seconds.." >&2
+      sleep 3
     fi
 
     return 0
