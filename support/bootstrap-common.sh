@@ -112,7 +112,7 @@ common_preflight_checks() {
     for platform in macOS Ubuntu Debian PopOS PureOS ; do
       echo "INFO: - $platform" >&2
     done
-    echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/advanced.md to bootstrap manually." >&2
+    echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md to bootstrap manually." >&2
     return 1
   fi
 

@@ -4,7 +4,7 @@
 # frozen_string_literal: true
 
 # Please see the Vagrant section in the docs for caveats and tips
-# https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/vagrant.md
+# https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/vagrant.md
 
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"

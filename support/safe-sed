@@ -41,7 +41,7 @@ if [[ -f "$dest_file" ]]; then
       echo "  cp -f '${backup_file}' '${dest_file}'"
       echo
       echo 'If you want to protect this file from being overwritten, see:'
-      echo 'https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/howto/configuration.md#overwriting-config-files'
+      echo 'https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/howto/configuration.md#overwriting-config-files'
       echo "-------------------------------------------------------------------------------------------------------------"
     else
       echo "The changes have not been applied."
