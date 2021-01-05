@@ -2,7 +2,7 @@
 
 GitLab uses [Gitaly](https://docs.gitlab.com/ee/administration/gitaly/index.html) to abstract all
 Git calls. To work on local changes to `gitaly`, please refer to the
-[Beginner's guide to Gitaly contributions](https://gitlab.com/gitlab-org/gitaly/blob/master/doc/beginners_guide.md).
+[Beginner's guide to Gitaly contributions](https://gitlab.com/gitlab-org/gitaly/blob/main/doc/beginners_guide.md).
 
 For more information on Praefect, refer to
 [Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html).
