@@ -2,7 +2,7 @@
 
 This page contains information about developing GitLab Pages inside the GDK. This method allows you test GitLab Pages from deployment to visiting your static site.
 
-If you would like to develop Pages *outside* of the GDK, see [Getting started with development](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/master/doc/development.md) in the `gitlab-pages` repository.
+If you would like to develop Pages *outside* of the GDK, see [Getting started with development](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/main/doc/development.md) in the `gitlab-pages` repository.
 
 ## Port
 
