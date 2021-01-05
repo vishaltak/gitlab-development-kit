@@ -766,10 +766,10 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   ```
 
   This is likely because you have not updated your GitLab CE/EE repository to
-  the latest master yet. It has a template for `gitlab.yml` in it which the GDK
+  the latest main yet. It has a template for `gitlab.yml` in it which the GDK
   needs to update. The `gdk update` step should have taken care of this for
   you, but you can also manually go to your GitLab ce/ee directory and run
-  `git checkout master && git pull origin master`
+  `git checkout main && git pull origin main`
 
     ---
 
@@ -804,10 +804,10 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   ...
   ```
 
-  This means your GitLab CE or EE instance is not running the current master
-  branch. If you are running a branch which hasn't been rebased on master
-  since Saturday, Feb 4th then you should rebase it on master. If you are
-  running the master branch, ensure it is up to date (`git pull`).
+  This means your GitLab CE or EE instance is not running the current main
+  branch. If you are running a branch which hasn't been rebased on main
+  since Saturday, Feb 4th then you should rebase it on main. If you are
+  running the main branch, ensure it is up to date (`git pull`).
 
   ---
 
@@ -876,7 +876,7 @@ create an exception for it as documented in the [macOS documentation](https://su
 Another issue can be that your test environment's database schema has
 diverged from what the GitLab app expects. This can happen if you tested
 a branch locally that changed the database in some way, and have now
-switched back to `master` without
+switched back to `main` without
 [rolling back](https://edgeguides.rubyonrails.org/active_record_migrations.html#rolling-back)
 the migrations locally first.
 

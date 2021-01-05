@@ -211,7 +211,7 @@ To apply changes someone else made:
       This displays a procedure.
    1. Copy the commands from **Step 1.** of the procedure. This adds to the clipboard all the
       commands required to switch to the branch locally.
-   1. Go to your local `gitlab` directory and check you're on a clean checkout of `master`:
+   1. Go to your local `gitlab` directory and check you're on a clean checkout of `main`:
 
       ```shell
       cd <gdk-dir>/gitlab
