@@ -132,7 +132,7 @@ module GDK
 
     def cmd!(cmd)
       # Passing an array to IO.popen guards against sh -c.
-      # https://gitlab.com/gitlab-org/gitlab/blob/master/doc/development/shell_commands.md#bypass-the-shell-by-splitting-commands-into-separate-tokens
+      # https://gitlab.com/gitlab-org/gitlab/blob/main/doc/development/shell_commands.md#bypass-the-shell-by-splitting-commands-into-separate-tokens
       raise ::ArgumentError, 'Command must be an array' unless cmd.is_a?(Array)
 
       IO.popen(cmd, chdir: GDK.root, &:read).chomp
