@@ -23,7 +23,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
     #  - id: "some_project/name"
     ```
 
-   You can find information about supported configuration options in [the agent's documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/configuration_repository.md).
+   You can find information about supported configuration options in [the agent's documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/main/doc/configuration_repository.md).
 
 1. There is no [user interface to import a Kubernetes cluster](https://gitlab.com/gitlab-org/gitlab/-/issues/220908) yet, so we need to seed the database manually:
 
@@ -128,4 +128,4 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 ## (Optional) Run using Bazel instead of GDK
 
 If you want to run GitLab Kubernetes Agent Server and Agent locally with Bazel instead of GDK, see
-the [GitLab Kubernetes Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
+the [GitLab Kubernetes Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/main/doc/developing.md#running-the-agent-locally).
