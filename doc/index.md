@@ -269,6 +269,12 @@ documentation steps and GDK tools. To set up `gdk.test` as a hostname:
    gdk reconfigure
    ```
 
+1. Restart GDK to use the new configuration:
+
+   ```shell
+   gdk restart
+   ```
+
 ## Resolve installation errors
 
 During the `gdk install` process, you may encounter some dependency-related
