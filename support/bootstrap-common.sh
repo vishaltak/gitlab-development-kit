@@ -82,11 +82,13 @@ ensure_supported_platform() {
       echo "INFO:" >&2
       echo "INFO: Running the GDK on Apple M1 hardware currently requires running under" >&2
       echo "INFO: Rosetta 2 until asdf and Homebrew offer native versions of required" >&2
-      echo "INFO: software. For more information on Rosetta 2, please visit:" >&2
+      echo "INFO: software." >&2
+      echo "INFO:" >&2
+      echo "INFO: To learn more about Rosetta 2, please visit:" >&2
       echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
       echo "INFO:" >&2
-      echo "INFO: Press [ENTER] to continue." >&2
-      read -r
+      echo "INFO: Resuming in 3 seconds.." >&2
+      sleep 3
     fi
 
     return 0
