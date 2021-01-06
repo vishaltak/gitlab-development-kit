@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-$CURRENT_ASDF_DIR}"
+CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
@@ -55,7 +55,7 @@ configure_ruby_bundler() {
   local current_postgres_version
   current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
 
-  bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
+  bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 }
 
