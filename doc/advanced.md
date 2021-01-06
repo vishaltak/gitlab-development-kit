@@ -142,8 +142,8 @@ To install dependencies for Fedora:
 ```shell
 sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel \
   git git-lfs ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
-  postgresql-contrib re2 GraphicsMagick re2-devel sqlite-devel perl-Digest-SHA \
-  perl-Image-ExifTool rsync
+  postgresql-contrib postgresql-devel re2 GraphicsMagick re2-devel sqlite-devel \
+  perl-Digest-SHA perl-Image-ExifTool rsync
 sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 ```
