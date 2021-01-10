@@ -15,7 +15,7 @@ install_gem() {
 
 checkout() {
   cd "${GDK_CHECKOUT_PATH}" || exit
-  git remote set-url origin "${CI_REPOSITORY_URL}"
+  git remote set-url origin "${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git"
   git fetch
   git checkout "${1}"
 }
