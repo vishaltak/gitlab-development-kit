@@ -72,9 +72,8 @@ For those manually managing their dependencies, [advanced instructions](advanced
 available, including instructions for:
 
 - [macOS](advanced.md#macos)
-- [Ubuntu](advanced.md#ubuntu)
-- [Debian](advanced.md#debian)
-- [Other Linux distributions](advanced.md#install-other-linux-dependencies)
+- [Ubuntu and Debian](advanced.md#ubuntu-and-debian)
+- [Other Linux distributions](advanced.md#install-dependencies-for-other-linux-distributions)
 - [FreeBSD](advanced.md#install-freebsd-dependencies)
 - [Windows 10](advanced.md#install-windows-10-dependencies)
 
