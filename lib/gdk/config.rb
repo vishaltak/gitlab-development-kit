@@ -480,6 +480,8 @@ module GDK
             end
           end
         end
+
+        bool(:sherlock) { false }
       end
 
       settings :actioncable do

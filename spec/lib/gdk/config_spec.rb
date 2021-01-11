@@ -697,6 +697,12 @@ RSpec.describe GDK::Config do
           expect(config.workhorse.__listen_settings.__address).to eq('http://localhost:3443')
         end
       end
+
+      describe 'sherlock' do
+        it 'is disabled by default' do
+          expect(config.gitlab.rails.sherlock).to be(false)
+        end
+      end
     end
 
     describe 'actioncable' do

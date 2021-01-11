@@ -58,6 +58,7 @@ gitlab:
   dir: "/home/git/gdk/gitlab"
   rails:
     address: ''
+    sherlock: false
 gitlab_elasticsearch_indexer:
   auto_update: true
 gitlab_k8s_agent:
