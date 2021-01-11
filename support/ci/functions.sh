@@ -15,7 +15,10 @@ install_gem() {
 
 checkout() {
   cd "${GDK_CHECKOUT_PATH}" || exit
-  git remote set-url origin "${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git"
+  # $CI_MERGE_REQUEST_SOURCE_PROJECT_URL only exists in pipelines generated in merge requests.
+  if [ -n "${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}" ]; then
+    git remote set-url origin "${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git"
+  fi
   git fetch
   git checkout "${1}"
 }
