@@ -51,3 +51,4 @@ to learn how to contribute to GitLab.
 - [Lefthook](lefthook.md)
 - [GDK in Gitpod](gitpod.md)
 - [Kerberos](kerberos.md)
+- [Sherlock](sherlock.md)

@@ -216,8 +216,9 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `gitlab.cache_classes` | `false` | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
-| `gitlab.rails.address` | `''`    | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do NOT include `http://`. |
+| `gitlab.cache_classes` | `false`  | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
+| `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do NOT include `http://`. |
+| `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
 
 ### NGINX settings
 
