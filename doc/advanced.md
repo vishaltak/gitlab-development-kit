@@ -86,7 +86,7 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
    - You need to select the Ruby version instead of your distributions default one (if any). See the
      [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
      `echo 2.7.2 >~/.rbenv/version`.
-1. [Complete](../index.md#install-and-set-up-gdk) GDK installation.
+1. [Complete](index.md#install-and-set-up-gdk) GDK installation.
 
 ## Install dependencies for other Linux distributions
 
