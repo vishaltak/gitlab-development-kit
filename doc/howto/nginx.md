@@ -88,7 +88,7 @@ for all the different platforms.
 On macOS, install with `brew`:
 
 ```shell
-brew install mkcert
+brew install mkcert nss
 mkcert -install
 ```
 
