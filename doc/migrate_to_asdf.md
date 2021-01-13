@@ -15,26 +15,26 @@ installed self-managed dependencies so that they don't conflict with `asdf`:
    dependency manager you were using, run `which ruby` at the command line. The dependency manager in
    use should be indicated by the output. For more information, see:
 
-    - [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
-    - [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
+   - [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
+   - [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
 
 1. Uninstall your Node dependency manager (usually `nvm` or `brew`). If you're unsure which Node
    dependency manager you were using, run `which node` at the command line. The dependency manager in
    use should be indicated by the output:
 
-    - If using `nvm`, see [uninstalling `nvm` documentation](https://github.com/nvm-sh/nvm#uninstalling--removal).
-    - If not using `nvm`, try running `brew uninstall node`.
+   - If using `nvm`, see [uninstalling `nvm` documentation](https://github.com/nvm-sh/nvm#uninstalling--removal).
+   - If not using `nvm`, try running `brew uninstall node`.
 
 1. Remove configuration from your home directory relating to these dependency managers. For example:
 
-    - `~/.rvm`.
-    - `~/.rbenv`.
-    - `~/.nvm`.
+   - `~/.rvm`.
+   - `~/.rbenv`.
+   - `~/.nvm`.
 
 1. Remove shell-related configuration settings related to your dependency managers in files such as:
 
-    - `.bashrc` for `bash`.
-    - `.zshrc` for `zsh`.
+   - `.bashrc` for `bash`.
+   - `.zshrc` for `zsh`.
 
 It's possible:
 
@@ -43,4 +43,5 @@ It's possible:
   `node`.
 - That your system provides a dependency also (for example, macOS comes with Ruby itself). Don't
   try to remove these because `asdf` is less likely to conflict with these.
-- That in order for `asdf` to successfully install nodejs, you may need to import [nodejs release keys](https://github.com/nodejs/node#release-keys) into gpg.
+- That in order for `asdf` to successfully install Node.js, you may need to import
+  [Node.js release keys](https://github.com/nodejs/node#release-keys) into GPG.

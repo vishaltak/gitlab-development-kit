@@ -1,6 +1,11 @@
-# Install alternatives
+# Alternative GDK installation methods
+
+In addition to the [primary GDK installation process](index.md#install-gdk), you can install GDK
+using alternative methods.
 
 ## Install GDK to alternative platforms
+
+Instead of installing GDK locally, you can install GDK to other platforms.
 
 ### Vagrant install
 
@@ -16,9 +21,10 @@ see [Kubernetes docs](doc/howto/kubernetes/minikube.md).
 
 Alternatively, you can use [GDK with Gitpod](/doc/howto/gitpod.md) to run a pre-configured GDK instance in the cloud.
 
----
-
 ## Install GDK using alternative projects
+
+Instead of installing GDK from the default GitLab project, you can install GDK from other GitLab
+projects.
 
 ### Install using GitLab FOSS project
 
