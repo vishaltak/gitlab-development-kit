@@ -36,7 +36,7 @@ effectively:
 
 The default method of installing GDK is [on your native operating system](doc/index.md).
 
-The GDK can also be installed via [Vagrant, Minikube, and Gitpod](doc/install_alternatives.md#install-gdk-using-alternative-methods).
+The GDK can also be installed via [Vagrant](doc/howto/vagrant.md), [Minikube](doc/howto/kubernetes/minikube.md), and [Gitpod](doc/howto/gitpod.md).
 
 ### How to use GDK
 
