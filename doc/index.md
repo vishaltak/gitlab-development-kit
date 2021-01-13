@@ -1,20 +1,17 @@
-# GDK documentation
+# Install GDK
 
 GitLab Development Kit (GDK) provides a local environment for developing GitLab
 and related projects.
 
-Setting up GDK involves:
+## Install prerequisites
 
-- [Installing Git and Make](#install-git-and-make).
-- [Installing dependencies](#install-dependencies).
-- [Installing and setting up GDK](#install-and-set-up-gdk).
+Installation requires `git` and `make` are installed.
 
-## Install Git and Make
+### macOS
 
-Because GDK requires them, you must ensure `git` and `make` are available. If you're on:
+`git` and `make` are installed by default, proceed to the next section.
 
-- macOS, `git` and `make` are installed by default.
-- Ubuntu/Debian, run the following to install `git` and `make`:
+### Ubuntu/Debian
 
   1. Update the list of available packages:
 
@@ -40,145 +37,93 @@ Because GDK requires them, you must ensure `git` and `make` are available. If yo
      sudo apt install git make
      ```
 
-- Other systems, use your system's package manager to install them.
+### Other
 
-## Install dependencies
+Install via your system's package manager.
+
+## Install dependencies and GDK
+
+### Install dependencies
 
 Before [setting up GDK](#install-and-set-up-gdk), your local environment must
-have prerequisite third-party software installed and configured. GDK dependencies are:
+have third-party software installed and configured. These can be installed and
+managed automatically [using `asdf`](#automatically-using-asdf) or [manually](#manually).
 
-- [Git](https://git-scm.com)
-- [Go](https://golang.org)
-- [MinIO](https://min.io)
-- [Node.js](https://nodejs.org)
-- [PostgreSQL](https://www.postgresql.org)
-- [Redis](https://redis.io)
-- [Ruby](https://www.ruby-lang.org)
-- [Yarn](https://yarnpkg.com)
+#### Automatically using asdf
 
-These can be installed and managed:
+Installing and managing dependencies automatically lets GDK manage dependencies for you using
+[`asdf`](https://asdf-vm.com/#/core-manage-asdf):
 
-- The recommended way by letting GDK manage dependencies for you using
-  [`asdf`](https://asdf-vm.com/#/core-manage-asdf). The following platforms are supported:
-  - macOS
-  - Ubuntu
-  - Debian
-- By you using your operating system's package manager. You should regularly keep these
-  dependencies up to date. Generally, the latest versions of these dependencies work fine. Install,
-  configure, and update all of these dependencies as a non-root user. If you don't know what a root
-  user is, you very likely run everything as a non-root user already.
+1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't
+   previously:
+
+    ```shell
+    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
+    ```
+
+1. Change into the GDK project directory:
+
+    ```shell
+    cd gitlab-development-kit
+    ```
+
+1. Install all dependencies via `asdf`:
+
+    ```shell
+    make bootstrap
+    ```
+
+#### Manually
+
+By using your operating system's package manager. You should regularly keep these
+dependencies up to date. Generally, the latest versions of these dependencies work fine. Install,
+configure, and update all of these dependencies as a non-root user. If you don't know what a root
+user is, you very likely run everything as a non-root user already.
 
 For those manually managing their dependencies, [advanced instructions](advanced.md) are also
-available, including instructions for:
+available, including instructions for, macOS, Ubuntu and Debian (and other Linux distributions),
+FreeBSD, and Windows 10.
 
-- [macOS](advanced.md#macos)
-- [Ubuntu and Debian](advanced.md#ubuntu-and-debian)
-- [Other Linux distributions](advanced.md#install-dependencies-for-other-linux-distributions)
-- [FreeBSD](advanced.md#install-freebsd-dependencies)
-- [Windows 10](advanced.md#install-windows-10-dependencies)
+1. Install the `gitlab-development-kit` gem:
 
-### From self-managed dependencies to GDK-managed dependencies using `asdf`
+    ```shell
+    gem install gitlab-development-kit
+    ```
 
-If you've previously [managed your own dependencies](advanced.md), you might want to let GDK manage
-dependencies for you using `asdf`. The following are instructions to help you remove previously
-installed self-managed dependencies so that they don't conflict with `asdf`:
+1. Initialize a GDK directory (this also checks out the project) by running the following in your
+    preferred location:
 
-1. Uninstall dependencies you installed with your operating system's package manager. For example,
-   for macOS:
+    ```shell
+    gdk init
+    ```
 
-   ```shell
-   brew uninstall go postgresql@12 minio/stable/minio redis yarn
-   ```
+    The default directory created is `gitlab-development-kit`. This can be customized by appending
+    a different directory name to the command.
 
-- Uninstall your Ruby dependency manager, usually `rvm` or `rbenv`. If you're unsure which Ruby
-  dependency manager you were using, run `which ruby` at the command line. The dependency manager in
-  use should be indicated by the output. For more information, see:
-  - [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
-  - [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
-- Uninstall your Node dependency manager (usually `nvm` or `brew`). If you're unsure which Node
-  dependency manager you were using, run `which node` at the command line. The dependency manager in
-  use should be indicated by the output:
-  - If using `nvm`, see [uninstalling `nvm` documentation](https://github.com/nvm-sh/nvm#uninstalling--removal).
-  - If not using `nvm`, try running `brew uninstall node`.
-- Remove configuration from your home directory relating to these dependency managers. For example:
-  - `~/.rvm`.
-  - `~/.rbenv`.
-  - `~/.nvm`.
-- Remove shell-related configuration settings related to your dependency managers in files such as:
-  - `.bashrc` for `bash`.
-  - `.zshrc` for `zsh`.
+1. Change into the GDK project directory:
 
-It's possible:
+    ```shell
+    cd gitlab-development-kit
+    ```
 
-- You have more than one dependency manager handling the same dependency. In this case, repeat the
-  process for each. For example, removing an `nvm`-managed `node` might reveal a `brew`-managed
-  `node`.
-- That your system provides a dependency also (for example, macOS comes with Ruby itself). Don't
-  try to remove these because `asdf` is less likely to conflict with these.
-- That in order for `asdf` to successfully install nodejs, you may need to import [nodejs release keys](https://github.com/nodejs/node#release-keys) into gpg.
+#### From self-managed dependencies to GDK-managed dependencies using `asdf`
 
-## Install and set up GDK
+If you've previously [managed your own dependencies](advanced.md), you might want to let
+[GDK manage dependencies for you using `asdf`](migrate_to_asdf.md).
 
-Before attempting to use these steps:
+### Install GDK
 
-- Ensure [`git` and `make` are installed](#install-git-and-make).
-- Ensure you have [installed dependencies](#install-dependencies), if necessary.
-
-To install GDK:
-
-- With GDK managing your dependencies using `asdf`:
-
-  1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't
-     previously:
-
-     ```shell
-     git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
-     ```
-
-  1. Change into the GDK project directory:
-
-     ```shell
-     cd gitlab-development-kit
-     ```
-
-  1. Run:
-
-     ```shell
-     make bootstrap
-     ```
-
-- Having managed your own dependencies:
-
-  1. Install the `gitlab-development-kit` gem:
-
-     ```shell
-     gem install gitlab-development-kit
-     ```
-
-  1. Initialize a GDK directory (this also checks out the project) by running the following in your
-     preferred location:
-
-     ```shell
-     gdk init
-     ```
-
-     The default directory created is `gitlab-development-kit`. This can be customized by appending
-     a different directory name to the command.
-
-  1. Change into the newly-created GDK directory.
-
-Complete GDK installation by cloning and configuring GitLab and other projects
-using `gdk install`. Use one of the following methods:
+Install GDK by cloning and configuring GitLab and other projects using
+`gdk install`. Use one of the following methods:
 
 - For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org) we
-  recommend developing against the GitLab project (the default). To:
-  - Clone `gitlab` using SSH (recommended), run:
+  recommend installing via SSH:
 
     ```shell
     gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
     ```
 
-  - Clone `gitlab` using HTTPS, run:
+- Otherwise:
 
     ```shell
     gdk install
@@ -187,63 +132,13 @@ using `gdk install`. Use one of the following methods:
   Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space.
   The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 
-- Other options, in order of recommendation:
-  - Install using [a GitLab fork](#install-using-your-own-gitlab-fork).
-  - Install using [the GitLab FOSS project](#install-using-gitlab-foss-project).
+### Install GDK using GitLab FOSS project
 
-### Install using GitLab FOSS project
+Install GDK using [the GitLab FOSS project](doc/install_alternatives.md#install-using-gitlab-foss-project).
 
-> Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
-> of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
+### Install GDK using your own GitLab fork
 
-After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
-
-- Clone `gitlab-foss` using SSH, run:
-
-  ```shell
-  gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab-foss.git
-  ```
-
-- Clone `gitlab-foss` using HTTPS, run:
-
-  ```shell
-  gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
-  ```
-
-Use `gdk install shallow_clone=true` for a faster clone that consumes less disk
-space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
-
-### Install using your own GitLab fork
-
-> Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
-> of [GitLab](https://gitlab.com/gitlab-org/gitlab).
-
-After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
-
-- Clone your `gitlab` fork using SSH, run:
-
-  ```shell
-  # Replace <YOUR-NAMESPACE> with your namespace
-  gdk install gitlab_repo=git@gitlab.com:<YOUR-NAMESPACE>/gitlab.git
-  support/set-gitlab-upstream
-  ```
-
-- Clone your `gitlab` fork using HTTPS, run:
-
-  ```shell
-  # Replace <YOUR-NAMESPACE> with your namespace
-  gdk install gitlab_repo=https://gitlab.com/<YOUR-NAMESPACE>/gitlab.git
-  support/set-gitlab-upstream
-  ```
-
-The `set-gitlab-upstream` script creates a remote named `upstream` for
-[the canonical GitLab repository](https://gitlab.com/gitlab-org/gitlab). It also
-modifies `gdk update` (See [Update GitLab](gdk_commands.md#update-gitlab))
-to pull down from the upstream repository instead of your fork, making it easier
-to keep up-to-date with the project.
-
-If you want to push changes from upstream to your fork, run `gdk update` and then
-`git push origin` from the `gitlab` directory.
+Install GDK using [your own GitLab fork](doc/install_alternatives.md#install-using-your-own-gitlab-fork).
 
 ## Set up `gdk.test` hostname
 
