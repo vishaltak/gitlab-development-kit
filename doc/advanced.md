@@ -1,7 +1,7 @@
 # Advanced dependency instructions
 
 The following are dependency installation instructions for systems other than
-those covered in the [main dependency installation instructions](index.md#install-git-and-make).
+those covered in the [main dependency installation instructions](index.md#install-prerequisites).
 
 These instructions may contain advanced configuration options.
 
@@ -41,7 +41,7 @@ The following are instructions for Ubuntu and Debian users that don't want
 These instructions help you install dependencies for Ubuntu, assuming you're using an active
 LTS release (16.04, 18.04, 20.04) or higher, and Debian:
 
-1. [Install `git` and `make`](index.md#install-git-and-make).
+1. [Install `git` and `make`](index.md#install-prerequisites).
 1. Install [Yarn](https://classic.yarnpkg.com/en/docs/install#debian-stable).
 1. Run `make bootstrap-packages`. This is a light subset of `make bootstrap` that runs
    `apt-get update` and then `apt-get install` on the packages found in `packages_debian.txt`.
