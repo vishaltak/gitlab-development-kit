@@ -32,10 +32,18 @@ RSpec.describe GDK::Command::Measure do
       context "when GDK isn't running " do
         let(:urls) { urls_default }
 
-        it 'aborts' do
-          stub_gdk_check(http_code: 404)
+        context 'when GDK is not running' do
+          it 'aborts' do
+            expect { subject.run }.to raise_error(/ERROR: GDK is not running locally/)
+          end
+        end
 
-          expect { subject.run }.to raise_error(/ERROR: GDK is not running locally/)
+        context 'when GDK is not ready' do
+          it 'aborts' do
+            stub_gdk_check(http_code: 502)
+
+            expect { subject.run }.to raise_error(/ERROR: GDK is not running locally/)
+          end
         end
       end
     end

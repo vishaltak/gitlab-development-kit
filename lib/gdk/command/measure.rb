@@ -31,6 +31,8 @@ module GDK
 
       def gdk_running?
         %w[200 302].include?(Net::HTTP.get_response(GDK.config.__uri).code)
+      rescue StandardError
+        false
       end
 
       def docker_running?
