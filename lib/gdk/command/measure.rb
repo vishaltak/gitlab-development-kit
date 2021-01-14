@@ -56,7 +56,7 @@ module GDK
       end
 
       def has_local_url?
-        @has_local_url ||= urls.detect { |url| url_is_local?(url) }
+        @has_local_url ||= urls.any? { |url| url_is_local?(url) }
       end
 
       def report_folder_name
