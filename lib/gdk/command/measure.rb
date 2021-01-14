@@ -11,11 +11,11 @@ module GDK
       end
 
       def run
-        abort('Please add URL(s) as an argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
-        abort('ERROR: Docker is not installed or running!') unless docker_running?
+        GDK::Output.abort('Please add URL(s) as an argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
+        GDK::Output.abort('Docker is not installed or running!') unless docker_running?
 
         # Check if GDK is running if local URL
-        abort("ERROR: GDK is not running locally on #{GDK.config.__uri}!") if has_local_url? && !gdk_running?
+        GDK::Output.abort("GDK is not running locally on #{GDK.config.__uri}!") if has_local_url? && !gdk_running?
 
         GDK::Output.notice "Starting Sitespeed measurements for #{local_urls.join(', ')}"
         run_sitespeed

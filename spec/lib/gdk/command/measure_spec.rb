@@ -9,13 +9,19 @@ RSpec.describe GDK::Command::Measure do
 
   subject { described_class.new(urls) }
 
+  before do
+    stub_tty(false)
+  end
+
   describe '#run' do
     context 'with some requirements lacking' do
       context 'when an empty urls is provided' do
         let(:urls) { [] }
 
         it 'aborts' do
-          expect { subject.run }.to raise_error(/Please add URL\(s\) as an argument/)
+          expected_error = 'ERROR: Please add URL(s) as an argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)'
+
+          expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
         end
       end
 
@@ -25,7 +31,9 @@ RSpec.describe GDK::Command::Measure do
         it 'aborts' do
           stub_docker_check(success: false)
 
-          expect { subject.run }.to raise_error(/ERROR: Docker is not installed or running!/)
+          expected_error = 'ERROR: Docker is not installed or running!'
+
+          expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
         end
       end
 
@@ -34,7 +42,9 @@ RSpec.describe GDK::Command::Measure do
 
         context 'when GDK is not running' do
           it 'aborts' do
-            expect { subject.run }.to raise_error(/ERROR: GDK is not running locally/)
+            expected_error = 'ERROR: GDK is not running locally on http://127.0.0.1:3000!'
+
+            expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
           end
         end
 
@@ -42,7 +52,9 @@ RSpec.describe GDK::Command::Measure do
           it 'aborts' do
             stub_gdk_check(http_code: 502)
 
-            expect { subject.run }.to raise_error(/ERROR: GDK is not running locally/)
+            expected_error = 'ERROR: GDK is not running locally on http://127.0.0.1:3000!'
+
+            expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
           end
         end
       end
@@ -51,7 +63,7 @@ RSpec.describe GDK::Command::Measure do
     context 'with all requirements present' do
       let(:urls) { urls_default }
 
-      it 'runs sitespeed via Docker' do
+      it 'runs sitespeed via Docker', :hide_stdout do
         current_time = Time.now
         current_time_formatted = current_time.strftime('%F-%H-%M-%S')
         branch_name = 'some-branch-name'
