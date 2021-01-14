@@ -15,7 +15,7 @@ RSpec.describe GDK::Command::Measure do
         let(:urls) { [] }
 
         it 'aborts' do
-          expect { subject.run }.to raise_error(/Please add a URL as argument/)
+          expect { subject.run }.to raise_error(/Please add URL\(s\) as an argument/)
         end
       end
 

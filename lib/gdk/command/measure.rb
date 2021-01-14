@@ -11,7 +11,7 @@ module GDK
       end
 
       def run
-        abort('Please add a URL as argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
+        abort('Please add URL(s) as an argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
         abort('ERROR: Docker is not installed or running!') unless docker_running?
 
         # Check if GDK is running if local URL
