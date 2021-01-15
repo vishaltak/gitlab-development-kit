@@ -178,9 +178,9 @@ To set up `gdk.test` as a hostname (assumes `172.16.123.1` is available):
 
 ### Create loopback interface for GDK
 
-Some functionality may not work if GDK processes listen on `localhost` or
-`127.0.0.1` (for example, services running under Docker),
-so an IP address on a different private network should be used.
+Some functionality may not work if GDK processes listen on `localhost` or `127.0.0.1` (for example,
+services running under Docker). Therefore, an IP address on a different private network should be
+used.
 
 `172.16.123.1` is a useful [private network address](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses)
 that can avoid clashes with `localhost` and `127.0.0.1`. To configure a loopback interface for this
@@ -273,10 +273,9 @@ For information about updating GDK, see [Update GDK](gdk_commands.md#update-gdk)
 
 ## Create new GDK
 
-After you have set up GDK initially, you can create new *fresh installations*.
-You might do this if you have problems with existing installation that are
-complicated to fix, and you just need to get up and running quickly. To create a
-fresh installation:
+After you have set up GDK initially, you can create new *fresh installations*. You might do this if
+you have problems with existing installation that are complicated to fix. You can get up and running
+quickly again by:
 
 1. In the parent folder for GDK, run
    [`gdk init <new directory>`](#initialize-a-new-gdk-directory).
