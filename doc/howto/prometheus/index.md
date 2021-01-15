@@ -1,7 +1,9 @@
 # Using Prometheus with GDK
 
-This page details how to work with the [Prometheus integration](#prometheus-integration) in GDK as well as
-how to [monitor the GDK with Prometheus](#monitoring-the-gdk-with-prometheus).
+This page details how to:
+
+- Work with the [Prometheus integration](#prometheus-integration) in GDK.
+- [Monitor the GDK with Prometheus](#monitoring-the-gdk-with-prometheus).
 
 ## Prometheus integration
 
@@ -257,7 +259,11 @@ If you just want to [monitor GitLab with
 Prometheus](https://docs.gitlab.com/ee/administration/monitoring/prometheus/) in
 the GDK, the process is simpler:
 
-1. [Download Prometheus](https://prometheus.io/download/).
+1. Either:
+   - [Download Prometheus](https://prometheus.io/download/) and install it yourself.
+   - Use the GDK-bundled Prometheus service. Because it runs inside Docker, you may need to
+     [create loopback interface for GDK](../index.md#create-loopback-interface-for-gdk) if you plan
+     to access it from external processes (for example, [Grafana](https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html)).
 1. If you want to scrape metrics from Sidekiq, ensure
    `monitoring.sidekiq_exporter` is `enabled` in `config/gitlab.yml`.
 1. Add this to the included `prometheus.yml` under the `scrape_configs`
@@ -278,14 +284,15 @@ the GDK, the process is simpler:
        - targets: ['localhost:8082']
    ```
 
-1. Start Prometheus.
-1. Once Prometheus has started (on port 9090 by default), you can see the scrape
-   status at
-   [http://localhost:9090/targets](http://localhost:9090/targets). Once the
-   `gitlab` target has been scraped once, its metrics are ready for querying.
+1. Start Prometheus or if you are using the bundled service, have GDK start it for you by enabling
+   it in `gdk.yml`.
+1. Once Prometheus has started (on port 9090 by default), you can see the scrape status at
+   `http://<configured-hostname>:9090/targets`. After the `gitlab` target has been scraped once,
+   its metrics are ready for querying (for example, using Grafana).
 
 ## Third-party integrations
 
-We support metric integrations from third-parties, such as Grafana. [Product documentation](https://docs.gitlab.com/ee/operations/metrics/embed_grafana.html#embedding-grafana-charts-core).
+We support metric integrations from third parties, such as
+[Grafana](https://docs.gitlab.com/ee/operations/metrics/embed_grafana.html#embedding-grafana-charts-core).
 
 For instructions of how to use this functionality in GDK, see [Accessing Prometheus via external services](third_party_access.md).
