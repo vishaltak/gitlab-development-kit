@@ -214,63 +214,16 @@ for the fourth item.
 The trick described above is a bit of a hack and only works for Docker
 for Mac, but the "proper" way to support a Docker executor is to use an
 internal, dummy interface that can be used by both the host and the
-container. Here's how:
+container:
 
-1. Create an internal interface. On macOS, this adds an alias IP
-   172.16.123.1 to the loopback adapter:
-
-   ```shell
-   sudo ifconfig lo0 alias 172.16.123.1
-   ```
-
-   On Linux, you can create a dummy interface:
-
-   ```shell
-   sudo ip link add dummy0 type dummy
-   sudo ip address add 172.16.123.1 dev dummy0
-   sudo ip link set dummy0 up
-   ```
-
-1. In `config/gitlab.yml`, set the `host` parameter to `172.16.123.1`.
-
-1. In the GitLab Runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
-   URL with this hostname:
+1. [Create a loopback interface](../index.md#create-loopback-interface-for-gdk) for a new private
+   network.
+1. In the GitLab Runner configuration (for example, `~/.gitlab-runner/config.toml`), set the
+   coordinator URL with an IP on this private network:
 
    ```toml
     url = "http://172.16.123.1:3001/"
    ```
-
-Note that for this to work across reboots, the aliased IP in step 1 needs to be run
-at startup. To do this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/` containing:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>org.gitlab1.ifconfig</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>Nice</key>
-    <integer>10</integer>
-    <key>ProgramArguments</key>
-    <array>
-      <string>/sbin/ifconfig</string>
-      <string>lo0</string>
-      <string>alias</string>
-      <string>172.16.123.1</string>
-    </array>
-</dict>
-</plist>
-```
-
-The method to persist this dummy interface on Linux varies between distributions. On
-Ubuntu 20.04, you can run:
-
-```shell
-sudo nmcli connection add type dummy ifname dummy0 ip4 172.16.123.1
-```
 
 ##### Use custom hostname
 

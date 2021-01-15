@@ -49,8 +49,9 @@ or lack of internet access, then you can use a local registry:
       auth_enabled: true # or false, see below for details (default is true)
     ```
 
-    where `gdk.test` is configured according to [Obtaining a usable hostname](#obtaining-a-usable-hostname),
-    and `172.16.123.1` is the corresponding loopback alias.
+    Here, `gdk.test` is configured according to
+    [Obtaining a usable hostname](#obtaining-a-usable-hostname), and `172.16.123.1` is the
+    corresponding loopback alias.
 
 1. Run `gdk reconfigure` to update the configuration and generate certificate files
    for the local registry (`registry_host.crt` and `registry_host.key`) if needed.
@@ -75,29 +76,24 @@ section for examples of how to query the registry manually using `curl`.
 
 ## Tips and Tricks
 
+Here are some tips and tricks for using the GitLab registry with GDK.
+
 ### Obtaining a usable hostname
 
-Since `localhost` and `127.0.0.1` have different meanings inside a Docker-based runner
-than from your computer, a different host is required to access your GitLab instance and your registry.
+Because `localhost` and `127.0.0.1` have different meanings inside a Docker-based runner, a
+different host is required to access your GitLab instance and your registry.
 
 One solution is to bind `gdk.test` to a loopback IP *alias* (*not*
 `127.0.0.1`) in `/etc/hosts`. A loopback IP alias is like `127.0.0.1` (requests go
 straight to your computer) but this IP remains accessible from within a container
 (unlike `127.0.0.1`). To set this up:
 
-1. Follow the instructions to [set up an internal dummy interface](runner.md#using-an-internal-dummy-interface).
-1. Point `gdk.test` to this new IP in your `/etc/hosts` file. For example:
+1. [Create a loopback interface for GDK](../index.md#create-loopback-interface-for-gdk).
+1. [Point `gdk.test` to this new IP](../index.md#set-up-gdktest-hostname) in your `/etc/hosts` file.
 
-   ```plaintext
-   # Local network loopback alias
-   #
-   # create alias: sudo ifconfig lo0 alias 172.16.123.1
-   # remove alias: sudo ifconfig lo0 -alias 172.16.123.1
-   172.16.123.1 gdk.test
-   ```
-
-**Warning:** If for some reason you end up on a network with the loopback alias as
-your local network IP, your GDK becomes accessible on the local network.
+WARNING:
+If you end up on a network with the loopback alias as your local network IP, your GDK becomes
+accessible on the local network.
 
 NOTE:
 If you're using `docker-machine`, you must replace this IP address with the one returned from
