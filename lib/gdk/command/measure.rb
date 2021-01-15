@@ -7,7 +7,7 @@ module GDK
   module Command
     class Measure
       def initialize(urls)
-        @urls = urls
+        @urls = Array(urls)
       end
 
       def run
