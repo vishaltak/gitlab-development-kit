@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'timecop'
 
 RSpec.describe GDK::Command::Measure do
   let(:urls) { nil }
@@ -64,15 +63,16 @@ RSpec.describe GDK::Command::Measure do
       let(:urls) { urls_default }
 
       it 'runs sitespeed via Docker', :hide_stdout do
-        current_time = Time.now
-        current_time_formatted = current_time.strftime('%F-%H-%M-%S')
         branch_name = 'some-branch-name'
 
         stub_docker_check(success: true)
         stub_gdk_check(http_code: 200)
         stub_git_rev_parse(branch_name: branch_name)
 
-        Timecop.freeze(current_time) do
+        freeze_time do
+          current_time = Time.now
+          current_time_formatted = current_time.strftime('%F-%H-%M-%S')
+
           shellout_docker_run_double = double('Shellout', stream: '')
           allow(Shellout).to receive(:new).with(%[docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:15.9.0 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --outputFolder sitespeed-result/some-branch-name_#{current_time_formatted} http://host.docker.internal:3000/explore]).and_return(shellout_docker_run_double)
 

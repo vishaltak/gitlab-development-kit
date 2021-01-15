@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'active_support/testing/time_helpers'
 require 'simplecov-cobertura'
 
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
@@ -18,6 +19,7 @@ RSpec.configure do |config|
   end
 
   config.disable_monkey_patching
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 def spec_path

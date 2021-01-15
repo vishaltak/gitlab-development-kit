@@ -14,5 +14,4 @@ group :test do
   gem 'rspec', '~> 3.10.0', require: false
   gem 'rspec_junit_formatter', '~> 0.4.0', require: false
   gem 'simplecov-cobertura', '~> 1.4.0', require: false
-  gem 'timecop', '~> 0.9', require: false
 end
