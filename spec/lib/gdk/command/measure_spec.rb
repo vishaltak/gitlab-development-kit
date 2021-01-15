@@ -6,6 +6,8 @@ RSpec.describe GDK::Command::Measure do
   let(:urls) { nil }
   let(:urls_default) { ['/explore'] }
 
+  let(:docker_running) { nil }
+
   subject { described_class.new(urls) }
 
   before do
@@ -13,7 +15,11 @@ RSpec.describe GDK::Command::Measure do
   end
 
   describe '#run' do
-    context 'when an empty urls is provided' do
+    before do
+      stub_docker_check(is_running: docker_running)
+    end
+
+    context 'when an empty URL array is provided' do
       let(:urls) { [] }
 
       it 'aborts' do
@@ -25,18 +31,18 @@ RSpec.describe GDK::Command::Measure do
 
     context "when Docker isn't installed or running " do
       let(:urls) { urls_default }
+      let(:docker_running) { false }
 
       it 'aborts' do
-        stub_docker_check(success: false)
-
         expected_error = 'ERROR: Docker is not installed or running!'
 
         expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
       end
     end
 
-    context "when GDK isn't running " do
+    context "when GDK isn't running or ready" do
       let(:urls) { urls_default }
+      let(:docker_running) { true }
 
       context 'when GDK is not running' do
         it 'aborts' do
@@ -61,8 +67,8 @@ RSpec.describe GDK::Command::Measure do
 
     it 'runs sitespeed via Docker', :hide_stdout do
       branch_name = 'some-branch-name'
+      let(:docker_running) { true }
 
-      stub_docker_check(success: true)
       stub_gdk_check(http_code: 200)
       stub_git_rev_parse(branch_name: branch_name)
 
@@ -86,8 +92,8 @@ RSpec.describe GDK::Command::Measure do
     allow(Shellout).to receive(:new).with('git rev-parse --abbrev-ref HEAD', chdir: GDK.config.gitlab.dir).and_return(shellout_double)
   end
 
-  def stub_docker_check(success:)
     shellout_double = double('Shellout', run: true, success?: success)
+  def stub_docker_check(is_running:)
     allow(Shellout).to receive(:new).with('docker info').and_return(shellout_double)
   end
 
