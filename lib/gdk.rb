@@ -33,6 +33,7 @@ module GDK
   autoload :Logo, 'gdk/logo'
   autoload :Postgresql, 'gdk/postgresql'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
+  autoload :HTTPHelper, 'gdk/http_helper'
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
