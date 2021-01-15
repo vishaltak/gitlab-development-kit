@@ -137,12 +137,12 @@ process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Docu
 ### Install GDK using GitLab FOSS project
 
 If you want to run GitLab FOSS, install GDK using
-[the GitLab FOSS project](doc/install_alternatives.md#install-using-gitlab-foss-project).
+[the GitLab FOSS project](install_alternatives.md#install-using-gitlab-foss-project).
 
 ### Install GDK using your own GitLab fork
 
 If you want to run GitLab from your own fork, install GDK using
-[your own GitLab fork](doc/install_alternatives.md#install-using-your-own-gitlab-fork).
+[your own GitLab fork](install_alternatives.md#install-using-your-own-gitlab-fork).
 
 ## Set up `gdk.test` hostname
 
