@@ -95,7 +95,7 @@ ensure_supported_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" ]]; then
+    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" || "$os_id" == "fedora" ]]; then
       return 0
     fi
   fi
@@ -110,7 +110,7 @@ common_preflight_checks() {
     echo
     echo "ERROR: Unsupported platform." >&2
     echo "INFO: The list of supported platforms is:" >&2
-    for platform in macOS Ubuntu Debian PopOS PureOS ; do
+    for platform in macOS Ubuntu Debian PopOS PureOS Fedora ; do
       echo "INFO: - $platform" >&2
     done
     echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/advanced.md to bootstrap manually." >&2
