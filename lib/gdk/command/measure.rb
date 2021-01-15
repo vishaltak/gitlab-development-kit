@@ -30,9 +30,7 @@ module GDK
       attr_reader :urls
 
       def gdk_running?
-        %w[200 302].include?(Net::HTTP.get_response(GDK.config.__uri).code)
-      rescue StandardError
-        false
+        GDK::HTTPHelper.new(GDK.config.__uri).up?
       end
 
       def docker_running?
