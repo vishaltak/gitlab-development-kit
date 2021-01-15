@@ -88,12 +88,12 @@ RSpec.describe GDK::Command::Measure do
   end
 
   def stub_git_rev_parse(branch_name:)
-    shellout_double = double('Shellout', run: branch_name)
+    shellout_double = instance_double(Shellout, run: branch_name)
     allow(Shellout).to receive(:new).with('git rev-parse --abbrev-ref HEAD', chdir: GDK.config.gitlab.dir).and_return(shellout_double)
   end
 
-    shellout_double = double('Shellout', run: true, success?: success)
   def stub_docker_check(is_running:)
+    shellout_double = instance_double(Shellout, run: true, success?: is_running)
     allow(Shellout).to receive(:new).with('docker info').and_return(shellout_double)
   end
 
