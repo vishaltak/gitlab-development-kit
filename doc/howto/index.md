@@ -52,3 +52,4 @@ to learn how to contribute to GitLab.
 - [GDK in Gitpod](gitpod.md)
 - [Kerberos](kerberos.md)
 - [Sherlock](sherlock.md)
+- [Database load balancing](database_load_balancing.md)
