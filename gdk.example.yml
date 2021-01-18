@@ -223,6 +223,9 @@ webpack:
   incremental: false
   live_reload: true
   port: 3808
+  public_host: 127.0.0.1
+  public_https: false
+  public_port: 3808
   sourcemaps: true
   static: false
   vendor_dll: false
