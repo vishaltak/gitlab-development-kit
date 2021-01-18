@@ -103,13 +103,20 @@ module GDK
 
     settings :webpack do
       string(:host) { read!('webpack_host') || config.hostname }
+      integer(:port) { read!('webpack_port') || 3808 }
       bool(:static) { false }
       bool(:vendor_dll) { false }
       bool(:incremental) { false }
       bool(:sourcemaps) { true }
       bool(:live_reload) { !config.https? }
-
-      integer(:port) { read!('webpack_port') || 3808 }
+      bool(:disable_host_check) { false }
+      bool(:public_https) { config.https? }
+      string(:public_host) { config.listen_address }
+      integer(:public_port) { config.webpack.port }
+      string(:__public_addr) do
+        klass = config.webpack.public_https? ? URI::HTTPS : URI::HTTP
+        klass.build(host: config.webpack.public_host, port: config.webpack.public_port)
+      end
     end
 
     settings :action_cable do

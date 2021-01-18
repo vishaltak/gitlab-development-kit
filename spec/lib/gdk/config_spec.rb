@@ -850,6 +850,38 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#disable_host_check' do
+      it 'is disabled by default' do
+        expect(config.webpack.disable_host_check).to be(false)
+        expect(config.webpack.disable_host_check?).to be(false)
+      end
+    end
+
+    describe '#public_https' do
+      it 'is disabled by default' do
+        expect(config.webpack.public_https).to be(false)
+        expect(config.webpack.public_https?).to be(false)
+      end
+    end
+
+    describe '#public_host' do
+      it 'is 127.0.0.1 by default' do
+        expect(config.webpack.public_host).to eq('127.0.0.1')
+      end
+    end
+
+    describe '#public_port' do
+      it 'is 3808 by default' do
+        expect(config.webpack.public_port).to eq(3808)
+      end
+    end
+
+    describe '#__public_addr' do
+      it 'is http://127.0.0.1:3808 by default' do
+        expect(config.webpack.__public_addr).to eq('http://127.0.0.1:3808')
+      end
+    end
   end
 
   describe 'action_cable' do
