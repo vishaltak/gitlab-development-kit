@@ -100,7 +100,7 @@ a workaround is to:
 
 ## Enabling S/MIME delivery
 
-You can follow the [official S/MIME emails documentation](https://docs.gitlab.com/ce/administration/smime_signing_email.html)
+You can follow the [official S/MIME emails documentation](https://docs.gitlab.com/ee/administration/smime_signing_email.html)
 and combine it with the SMTP configuration above to test actual delivery of
 signed messages.
 
