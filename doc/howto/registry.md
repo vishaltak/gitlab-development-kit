@@ -20,18 +20,7 @@ the `gdk restart rails` command.
 
 ## Configuring the registry
 
-### With the Auto DevOps QA tunnel
-
-If you've previously followed the [Auto DevOps configuration steps](auto_devops/index.md),
-you have a secure registry *accessible from the internet* after you run the
-`gdk restart tunnel` command.
-
-Since the registry is on the internet, it should work with any runner registered with your GDK without additional steps.
-
-### Configuring a local-only registry
-
-If you do not want to use the tunnel-based workflow due to bandwidth restrictions
-or lack of internet access, then you can use a local registry:
+To configure a local registry:
 
 1. Update `gdk.yml` as follows:
 

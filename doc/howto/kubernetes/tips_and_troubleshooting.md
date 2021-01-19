@@ -83,21 +83,3 @@ ResponseError: code=403, message=Insufficient regional quota to satisfy request:
 
 this would indicate you have reached your limit of persistent disks. See [how
 to clean up unused persistent disks above](index.md#unused-persistent-disks).
-
-#### Docker daemon is not running
-
-You might see the following error being logged when GDK starts but jobs fail:
-
-```plaintext
-Error response from daemon: login attempt to `https://[PORT].qa-tunnel.gitlab.info:443/v2/` failed with status: 502 Bad Gateway
-```
-
-The most likely scenario is that your Docker daemon is not running and therefore your
-registry tunnel is returning a 502. You can verify this by visiting the tunnel URL for
-your registry from your browser.
-
-You can fix this by starting the Docker daemon by running:
-
-```shell
-open --hide --background -a Docker
-```
