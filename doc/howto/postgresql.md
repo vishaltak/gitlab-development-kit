@@ -4,6 +4,8 @@ GDK users often need to interact with PostgreSQL.
 
 ## Access PostgreSQL
 
+### Command-line access
+
 GDK uses the PostgreSQL binaries installed on your system (see [install](../index.md) section),
 but keeps the data files within the GDK directory structure, under `gitlab-development-kit/postgresql/data`.
 
@@ -36,12 +38,16 @@ bundle exec rails dbconsole
 bundle exec rails dbconsole -e test
 ```
 
-To access the database using an external SQL editor, such as [pgAdmin](https://www.pgadmin.org/),
-provide the following:
+### GUI access
 
-- Data file path: for example, `gitlab-development-kit/postgresql`.
+To access the database using an [GUI SQL client](https://wiki.postgresql.org/wiki/PostgreSQL_Clients) provide the following:
+
+- Host Name (path to data file): for example, `gitlab-development-kit/postgresql`.
 - Database port: for example, `5432`.
 - Database name: for example, `gitlabhq_development` or `gitlabhq_test`.
+- Username and Password should be left blank
+
+The CLI client is more capable. Not all GUI clients support a blank username or the use of a local file as the host name.
 
 ## Upgrade PostgreSQL
 
