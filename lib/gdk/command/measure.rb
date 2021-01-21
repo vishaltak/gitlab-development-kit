@@ -7,15 +7,15 @@ module GDK
   module Command
     class Measure
       def initialize(urls)
-        @urls = urls
+        @urls = Array(urls)
       end
 
       def run
-        abort('Please add a URL as argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
-        abort('ERROR: Docker is not installed or running!') unless docker_running?
+        GDK::Output.abort('Please add URL(s) as an argument (e.g. http://localhost:3000/explore, /explore or https://gitlab.com/explore)') if urls.empty?
+        GDK::Output.abort('Docker is not installed or running!') unless docker_running?
 
         # Check if GDK is running if local URL
-        abort("ERROR: GDK is not running locally on #{GDK.config.__uri}!") if has_local_url? && !gdk_running?
+        GDK::Output.abort("GDK is not running locally on #{GDK.config.__uri}!") if has_local_url? && !gdk_running?
 
         GDK::Output.notice "Starting Sitespeed measurements for #{local_urls.join(', ')}"
         run_sitespeed
@@ -30,7 +30,7 @@ module GDK
       attr_reader :urls
 
       def gdk_running?
-        %w[200 302].include?(Net::HTTP.get_response(GDK.config.__uri).code)
+        GDK::HTTPHelper.new(GDK.config.__uri).up?
       end
 
       def docker_running?
@@ -56,7 +56,7 @@ module GDK
       end
 
       def has_local_url?
-        @has_local_url ||= urls.detect { |url| url_is_local?(url) }
+        @has_local_url ||= urls.any? { |url| url_is_local?(url) }
       end
 
       def report_folder_name
