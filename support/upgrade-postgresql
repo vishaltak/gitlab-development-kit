@@ -87,13 +87,19 @@ class PostgresUpgrader
 
   def available_versions
     @available_versions ||=
-      if brew?
+      if asdf?
+        asdf_available_versions
+      elsif brew?
         brew_cellar_available_versions
       elsif apt?
         apt_available_versions
       else
-        abort "Only Homebrew and apt based Linux systems supported."
+        abort 'Only Homebrew, asdf and apt based Linux systems supported.'
       end
+  end
+
+  def asdf?
+    Shellout.new(%w[asdf help]).try_run != ''
   end
 
   def brew?
@@ -102,6 +108,19 @@ class PostgresUpgrader
 
   def apt?
     Shellout.new(%w[apt-cache help]).try_run != ''
+  end
+
+  def asdf_available_versions
+    lines = Shellout.new(%w[asdf list postgres]).try_run
+    return {} if lines.empty?
+
+    current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{ENV['HOME']}/.asdf")
+
+    lines.split.each_with_object({}) do |version, paths|
+      version.chomp!
+
+      paths[version.to_i] = "#{current_asdf_data_dir}/installs/postgres/#{version}/bin"
+    end
   end
 
   def brew_cellar_available_versions
