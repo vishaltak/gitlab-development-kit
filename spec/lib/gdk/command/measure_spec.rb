@@ -44,22 +44,12 @@ RSpec.describe GDK::Command::Measure do
       let(:urls) { urls_default }
       let(:docker_running) { true }
 
-      context 'when GDK is not running' do
-        it 'aborts' do
-          expected_error = 'ERROR: GDK is not running locally on http://127.0.0.1:3000!'
+      it 'aborts' do
+        stub_gdk_check(is_running: false)
 
-          expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
-        end
-      end
+        expected_error = 'ERROR: GDK is not running locally on http://127.0.0.1:3000!'
 
-      context 'when GDK is not ready' do
-        it 'aborts' do
-          stub_gdk_check(is_running: false)
-
-          expected_error = 'ERROR: GDK is not running locally on http://127.0.0.1:3000!'
-
-          expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
-        end
+        expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
       end
     end
 
