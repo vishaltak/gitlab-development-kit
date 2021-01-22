@@ -19,6 +19,9 @@ RSpec.describe GDK::HTTPHelper do
   describe '#up?' do
     context 'when URI is down because its not running' do
       it 'returns false' do
+        http_client_double = stub_http_get
+        allow(http_client_double).to receive(:get).with(path).and_raise(Errno::ECONNREFUSED)
+
         expect(subject.up?).to be(false)
       end
     end
