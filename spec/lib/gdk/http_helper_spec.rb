@@ -16,13 +16,13 @@ RSpec.describe GDK::HTTPHelper do
   subject { described_class.new(uri) }
 
   describe '#up?' do
-    context 'when uri is down because its not running' do
+    context 'when URI is down because its not running' do
       it 'returns false' do
         expect(subject.up?).to be(false)
       end
     end
 
-    context 'when uri is down because it returns a non successful HTTP code' do
+    context 'when URI is down because it returns a non successful HTTP code' do
       it 'returns false' do
         stub_http_get(http_code: 502)
 
@@ -30,7 +30,7 @@ RSpec.describe GDK::HTTPHelper do
       end
     end
 
-    context 'when uri is up' do
+    context 'when URI is up' do
       it 'returns true' do
         stub_http_get(http_code: 200)
 
