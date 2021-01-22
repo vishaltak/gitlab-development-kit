@@ -542,3 +542,73 @@ To test development versions of the container registry against GDK:
    CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
    bc6c0efa5582        registry:dev        "registry serve /etc…"   7 seconds ago       Up 6 seconds                            romantic_nash
    ```
+
+### Use local GitLab container registry with AutoDevops pipelines
+
+When testing AutoDevops pipelines with a local registry, you can receive errors in the build step:
+
+- If a registry with self-signed certificate is used:
+
+  ```shell
+  $ /build/build.sh
+  Logging to GitLab Container Registry with CI credentials...
+  Error response from daemon: Get https://gdk.test:5000/v2/: x509: certificate signed by unknown authority
+  ERROR: Job failed: command terminated with exit code 1
+  ```
+
+- If a registry with insecure registry is used:
+
+  ```shell
+  $ /build/build.sh
+  Logging to GitLab Container Registry with CI credentials...
+  Error response from daemon: Get https://gdk.test:5000/v2/: http: server gave HTTP response to HTTPS client
+  ERROR: Job failed: command terminated with exit code 1
+  ```
+
+To fix such issues, you can customize your `build` job as a part of an AutoDevOps pipeline,
+by adding the following to your `.gitlab-ci.yml`:
+
+```yaml
+include:
+  - template: Auto-DevOps.gitlab-ci.yml
+
+build:
+  services:
+    - name: docker:stable-dind
+      # Only required if the registry is insecure or used self signed certificate
+      command: ["--insecure-registry=gdk.test:5000"]
+```
+
+And for example, if you have Minikube as a Kubernetes runner
+and you configured a self-signed registry, you can add a generated certificate to Docker inside of Minikube:
+
+1. Run the following on your GDK instance:
+
+   ```shell
+   $ cat ~/.docker/certs.d/gdk.test\:5000/ca.crt 
+   -----BEGIN CERTIFICATE-----
+   ...
+   -----END CERTIFICATE-----
+   ```
+
+1. Copy this certificate to Minikube:
+
+   ```shell
+   $ minikube ssh
+   $ sudo mkdir -p /etc/docker/certs.d/gdk.test\:5000
+   $ sudo tee /etc/docker/certs.d/gdk.test\:5000/ca.crt > /dev/null <<EOT
+   -----BEGIN CERTIFICATE-----
+   ...
+   -----END CERTIFICATE-----
+   EOT
+   $ sudo systemctl restart docker
+   $ logout
+   ```
+
+Or if you are using insecure registry, you can run Minikube with command like:
+
+```shell
+minikube start --insecure-registry="gdk.test:5000"
+```
+
+Then the AutoDevOps pipeline should be able to build images and run them inside of Kubernetes.
