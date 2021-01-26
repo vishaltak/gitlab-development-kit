@@ -783,6 +783,12 @@ RSpec.describe GDK::Config do
   end
 
   describe 'webpack' do
+    describe '#incremental' do
+      it 'is false by default' do
+        expect(config.webpack.incremental).to be false
+      end
+    end
+
     describe '#vendor_dll' do
       it 'is false by default' do
         expect(config.webpack.vendor_dll).to be false

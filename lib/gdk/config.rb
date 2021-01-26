@@ -104,6 +104,7 @@ module GDK
       string(:host) { read!('webpack_host') || config.hostname }
       bool(:static) { false }
       bool(:vendor_dll) { false }
+      bool(:incremental) { false }
       bool(:sourcemaps) { true }
       bool(:live_reload) { !config.https? }
 
