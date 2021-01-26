@@ -75,6 +75,7 @@ module Runit
         export relative_url_root=#{GDK.config.relative_url_root}
         export cache_classes=#{GDK.config.gitlab.cache_classes}
         export bundle_gemfile=#{File.join(GDK.config.gitlab.dir, 'Gemfile')}
+        export ENABLE_PUMA_NAKAYOSHI_FORK='true'
       RUN_ENV
 
       if GDK.config.tracer.jaeger?
