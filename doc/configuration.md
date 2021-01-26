@@ -358,6 +358,7 @@ webpack:
   port: 3808
   static: false
   vendor_dll: false
+  incremental: false
 ```
 
 | Setting | Default | Description |
@@ -366,6 +367,7 @@ webpack:
 | `port` | `3808` | The port your webpack development server is running on. You should change this if you are running multiple GDKs |
 | `static` | `false` | Setting this to `true` replaces the webpack development server with a lightweight Ruby server with. See below for more information |
 | `vendor_dll` | `false` | Setting this to `true` moves certain dependencies to a webpack DLL. See below for more information |
+| `incremental` | `false` | Setting this to `true` enables incremental webpack rendering. See below for more information |
 | `sourcemaps` | `true` | Setting this to `false` disables source maps. This reduces memory consumption for those who do not need to debug frontend code. |
 | `live_reload` | `true` | Setting this to `false` disables hot module replacement when changes are detected. This feature uses sockets and is currently incompatible with SSL, so it is disabled by default when SSL is enabled. |
 
@@ -383,6 +385,10 @@ or where GDK is running in lower-memory environments. To lower the memory requir
 - Set `webpack.vendor_dll: true` in your `gdk.yml`. This mode is an alternate memory saving mode,
   which takes infrequently updated dependencies and combines them into one long-lived bundle that is
   written to disk and does not reside in memory. You may see 200 to 300 MB in memory savings.
+- Set `webpack.incremental: true` in your `gdk.yml`. This enables incremental compilation of webpack
+  assets and only the JavaScript for pages you visit during development will get compiled.
+  If you visit a previously unvisited page, you will see an overlay informing you that the recompilation
+  happens. A page reload will then serve the correct assets (either manually or via `live_reload`)
 
 This means you pay a high upfront cost of a single memory- and CPU-intenstive compile. However, if
 you do not change any frontend files, you just have a lightweight Ruby server running.
