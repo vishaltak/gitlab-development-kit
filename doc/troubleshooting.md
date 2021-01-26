@@ -33,6 +33,7 @@ GDK troubleshooting information is available for the following:
 - [Elasticsearch](#elasticsearch)
 - [Homebrew](#homebrew)
 - [Live reloading](#live-reloading)
+- [Praefect](#praefect)
 
 If you can't solve your problem in these areas, or if you have a problem in another area, open an
 issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
@@ -1104,3 +1105,16 @@ have any effect in development until you recompile the assets manually.
 
 To re-enable live reloading of CSS in development, remove the `public/assets/` directory and restart
 GDK.
+
+## Praefect
+
+### get shard for "default": primary is not healthy
+
+From the GDK's root directory:
+
+```shell
+cd gitaly/ruby
+bundle install
+```
+
+You may need to run a `gdk restart` for the changes to take effect.
