@@ -1027,7 +1027,7 @@ RSpec.describe GDK::Config do
     end
 
     describe '#sidekiq_exporter_port' do
-      it 'defaults to ' do
+      it 'defaults to' do
         expect(config.prometheus.sidekiq_exporter_port).to eq(3807)
       end
     end
