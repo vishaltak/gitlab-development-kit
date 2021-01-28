@@ -19,15 +19,13 @@ RSpec.describe GDK::ConfigSettings do
     end
 
     context 'when there is YAML defined' do
-      # rubocop:disable RSpec/LeakyConstantDeclaration
-      class TestConfigArrayMergeSettings < described_class
-        FILE = 'tmp/foo.yml'
-
-        array(:foo, merge: true) { %w[a] }
+      let(:test_klass) do
+        new_test_klass do |s|
+          s.array(:foo, merge: true) { %w[a] }
+        end
       end
-      # rubocop:enable RSpec/LeakyConstantDeclaration
 
-      subject(:config) { TestConfigArrayMergeSettings.new(yaml: { 'foo' => %w[b] }) }
+      subject(:config) { test_klass.new(yaml: { 'foo' => %w[b] }) }
 
       it 'is mergeable' do
         expect(config.foo).to eq(%w[a b])
@@ -49,15 +47,13 @@ RSpec.describe GDK::ConfigSettings do
     end
 
     context 'when there is YAML defined' do
-      # rubocop:disable RSpec/LeakyConstantDeclaration
-      class TestConfigHashMergeSettings < described_class
-        FILE = 'tmp/foo.yml'
-
-        hash_setting(:foo, merge: true) { { a: 'A' } }
+      let(:test_klass) do
+        new_test_klass do |s|
+          s.hash_setting(:foo, merge: true) { { a: 'A' } }
+        end
       end
-      # rubocop:enable RSpec/LeakyConstantDeclaration
 
-      subject(:config) { TestConfigHashMergeSettings.new(yaml: { 'foo' => { 'b' => 'B' } }) }
+      subject(:config) { test_klass.new(yaml: { 'foo' => { 'b' => 'B' } }) }
 
       it 'is mergeable' do
         expect(config.foo).to eq({ 'a' => 'A', 'b' => 'B' })
@@ -134,15 +130,13 @@ RSpec.describe GDK::ConfigSettings do
   end
 
   describe 'dynamic setting' do
-    # rubocop:disable RSpec/LeakyConstantDeclaration
-    class TestConfigSettings < described_class
-      FILE = 'tmp/foo.yml'
-
-      string(:bar) { 'hello' }
+    let(:test_klass) do
+      new_test_klass do |s|
+        s.string(:bar) { 'hello' }
+      end
     end
-    # rubocop:enable RSpec/LeakyConstantDeclaration
 
-    subject(:config) { TestConfigSettings.new }
+    subject(:config) { test_klass.new }
 
     it 'can read a setting' do
       expect(config.bar).to eq('hello')
@@ -188,6 +182,13 @@ RSpec.describe GDK::ConfigSettings do
   describe '#cmd!' do
     it 'executes command with the chdir being GDK.root' do
       expect(config.cmd!(%w[pwd])).to eql(GDK.root.to_s)
+    end
+  end
+
+  def new_test_klass
+    Class.new(described_class) do
+      yield(self)
+      const_set(:FILE, 'tmp/foo.yml')
     end
   end
 end

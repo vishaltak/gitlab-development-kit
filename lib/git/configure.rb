@@ -72,7 +72,8 @@ module Git
       # https://gitlab.com/gitlab-org/gitlab/blob/master/doc/development/shell_commands.md#bypass-the-shell-by-splitting-commands-into-separate-tokens
       raise 'command must be an array' unless args.is_a?(Array)
 
-      args = args.unshift('git')
+      args.unshift('git')
+
       if repo_path
         system(*args, chdir: repo_path)
       else
