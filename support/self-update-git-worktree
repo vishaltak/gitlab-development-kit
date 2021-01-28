@@ -2,9 +2,43 @@
 #
 # frozen_string_literal: true
 
+require 'open3'
+
+def log(msg)
+  puts "(support/self-update-git-worktree) > #{msg}"
+end
+
 def run(cmd)
-  puts "(support/self-update-git-worktree) > #{cmd.join(' ')}"
+  log cmd.join(' ')
   system(*cmd)
+end
+
+def has_remote_branch(branch_name)
+  begin
+    # We do not care for the output
+    Open3.capture3(%W[git rev-parse --verify origin/#{branch_name}])
+  rescue StandardError
+    return false
+  end
+  true
+end
+
+def determine_default_branch
+  log 'Determining default branch...'
+  begin
+    return 'master' unless has_remote_branch 'main'
+
+    return 'main' unless has_remote_branch 'master'
+
+    # Check whether origin/main is ahead of master
+    # to guard against people switching too early
+    stdout = Open3.capture3('git rev-list --count origin/main..origin/master')
+    return 'main' if stdout.to_i.positive?
+  rescue StandardError
+    log 'Something bad has happened'
+    log StandardError
+  end
+  'master'
 end
 
 ci_project_dir = ENV['CI_PROJECT_DIR']
@@ -19,5 +53,12 @@ end
 if ci_sha
   run(%W[git checkout #{ci_sha}])
 else
-  run(%w[git merge --ff-only origin/master])
+  run(%w[git fetch])
+
+  default_branch = determine_default_branch
+  log "Default Branch: #{default_branch}"
+
+  run(%W[git checkout #{default_branch}])
+
+  run(%W[git merge --ff-only origin/#{default_branch}])
 end
