@@ -23,17 +23,22 @@ end
 
 def determine_default_branch
   log 'Determining default branch...'
+
   return 'master' unless remote_branch?('main')
-  return 'main' unless remote_branch?('master')
-
-  # Check whether origin/main is ahead of master
-  # to guard against people switching too early
-  stdout, status = Open3.capture2e('git rev-list --count origin/main..origin/master')
-  return 'main' if status.success? && stdout.to_i.positive?
+  return 'main' if !remote_branch?('master') || main_ahead_of_master?
 
   'master'
+end
+
+def main_ahead_of_master?
+  # Check whether origin/main is ahead of master to guard against people
+  # switching too early
+  return false unless remote_branch_exists?('main')
+
+  stdout, status = Open3.capture2e('git rev-list --count origin/master..origin/main')
+  status.success? && stdout.to_i.positive?
 rescue StandardError
-  'master'
+  false
 end
 
 ci_project_dir = ENV['CI_PROJECT_DIR']
