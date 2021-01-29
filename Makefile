@@ -357,7 +357,7 @@ gitlab-shell/config.yml: ${gitlab_shell_clone_dir}/.git
 	$(Q)touch $@
 
 gitlab-shell/.gitlab_shell_secret:
-	$(Q)ln -s ${gitlab_development_root}/gitlab/.gitlab_shell_secret $@
+	$(Q)ln -nfs ${gitlab_development_root}/gitlab/.gitlab_shell_secret $@
 
 ##############################################################
 # gitaly
