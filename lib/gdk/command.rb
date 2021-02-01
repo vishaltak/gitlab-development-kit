@@ -9,5 +9,6 @@ module GDK
     autoload :Measure, 'gdk/command/measure'
     autoload :Help, 'gdk/command/help'
     autoload :Reconfigure, 'gdk/command/reconfigure'
+    autoload :Run, 'gdk/command/run'
   end
 end

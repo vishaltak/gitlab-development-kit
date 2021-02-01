@@ -52,11 +52,7 @@ module GDK
 
     case subcommand = ARGV.shift
     when 'run'
-      abort <<~GDK_RUN_NO_MORE
-        'gdk run' is no longer available; see doc/runit.md.
-
-        Use 'gdk start', 'gdk stop', and 'gdk tail' instead.
-      GDK_RUN_NO_MORE
+      GDK::Command::Run.new.run
     when 'install'
       GDK::Command::Install.new.run(ARGV)
     when 'update'
