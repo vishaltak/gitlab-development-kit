@@ -23,8 +23,7 @@ gdk:
     before: []
   stop_hooks:
     after: []
-    before:
-    - cd gitlab && bin/spring stop || true
+    before: []
   update_hooks:
     after: []
     before:
