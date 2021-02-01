@@ -58,7 +58,7 @@ module GDK
         Use 'gdk start', 'gdk stop', and 'gdk tail' instead.
       GDK_RUN_NO_MORE
     when 'install'
-      install
+      GDK::Command::Install.new.run(ARGV)
     when 'update'
       update_result = update
       return false unless update_result
@@ -226,18 +226,6 @@ module GDK
   def self.restart(argv)
     stop(argv)
     start(argv)
-  end
-
-  # Called when running `gdk install`
-  def self.install
-    result = make('install', *ARGV)
-
-    unless result
-      GDK::Output.error('Failed to install.')
-      display_help_message
-    end
-
-    result
   end
 
   # Called when running `gdk update`
