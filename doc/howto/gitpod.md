@@ -105,8 +105,10 @@ advanced features.
 1. Go to **Admin Area > Runners** in the GitLab UI running in GDK.
 1. In the terminal, switch to the GDK directory `(cd ../gitlab-development-kit)`
 1. Run `gitlab-runner register --run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
-   and enter the information from the GitLab UI running in GDK.
-1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
+1. As prompted, first enter the URL and then the registration token provided from the GitLab UI running in GDK.
+1. The description and tags are optional, you can just press Enter to skip those.
+1. When prompted for the executor, type `shell` and press Enter.
+1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
 
 Your runner is ready to pick up jobs for you! If you create a new project, the
 **Pages/Plain HTML** template contains a super simple and tiny pipeline that's great to
