@@ -73,15 +73,7 @@ module GDK
 
       true
     when 'config'
-      config_command = ARGV.shift
-      abort 'Usage: gdk config get <configuration value>' if config_command != 'get' || ARGV.empty?
-
-      begin
-        puts config.dig(*ARGV)
-        true
-      rescue GDK::ConfigSettings::SettingUndefined
-        abort "Cannot get config for #{ARGV.join('.')}"
-      end
+      GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
       reconfigure
     when 'psql'
