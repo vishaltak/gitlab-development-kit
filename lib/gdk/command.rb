@@ -7,5 +7,6 @@ module GDK
     autoload :Doctor, 'gdk/command/doctor'
     autoload :Measure, 'gdk/command/measure'
     autoload :Help, 'gdk/command/help'
+    autoload :Reconfigure, 'gdk/command/reconfigure'
   end
 end

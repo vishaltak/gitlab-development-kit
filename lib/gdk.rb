@@ -75,7 +75,7 @@ module GDK
     when 'config'
       GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
-      reconfigure
+      GDK::Command::Reconfigure.new.run
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'psql-geo'
@@ -249,20 +249,6 @@ module GDK
 
     unless result
       GDK::Output.error('Failed to update.')
-      display_help_message
-    end
-
-    result
-  end
-
-  # Called when running `gdk reconfigure`
-  def self.reconfigure
-    remember!(GDK.root)
-
-    result = make('reconfigure')
-
-    unless result
-      GDK::Output.error('Failed to reconfigure.')
       display_help_message
     end
 
