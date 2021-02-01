@@ -194,8 +194,9 @@ function gitlab-helm() {
 }
 ```
 
-**Warning:** *The credentials should be cleared when switching `kubectl`
-contexts*, to avoid performing Helm operations on the wrong cluster:
+WARNING:
+The credentials should be cleared when switching `kubectl`
+contexts, to avoid performing Helm operations on the wrong cluster:
 
 ```shell
 function gitlab-helm-purge-credentials() {
