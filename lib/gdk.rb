@@ -56,14 +56,7 @@ module GDK
     when 'install'
       GDK::Command::Install.new.run(ARGV)
     when 'update'
-      update_result = update
-      return false unless update_result
-
-      if config.gdk.experimental.auto_reconfigure?
-        reconfigure
-      else
-        update_result
-      end
+      GDK::Command::Update.new.run
     when 'diff-config'
       GDK::Command::DiffConfig.new.run
 
@@ -222,21 +215,6 @@ module GDK
   def self.restart(argv)
     stop(argv)
     start(argv)
-  end
-
-  # Called when running `gdk update`
-  def self.update
-    result = with_hooks(config.gdk.update_hooks, 'gdk update') do
-      make('self-update')
-      make('self-update', 'update')
-    end
-
-    unless result
-      GDK::Output.error('Failed to update.')
-      display_help_message
-    end
-
-    result
   end
 
   def self.print_url_ready_message
