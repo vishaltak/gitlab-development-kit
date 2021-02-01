@@ -26,10 +26,10 @@ install:
   script:
     - support/ci/verify_install
 
-update_from_master:
+update_from_default_branch:
   extends: .verify_job
   script:
-    - support/ci/verify_update master
+    - support/ci/verify_update $CI_DEFAULT_BRANCH
 
 update_from_mr_branch:
   extends: .verify_job
