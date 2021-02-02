@@ -40,7 +40,17 @@ Reference documentation:
 ## Connecting Grafana to a GitLab-managed Prometheus instance
 
 1. Get a Grafana instance. _Note: The Grafana instance must be network-accessible from the GDK, and your Prometheus must be network-accessible from the Grafana instance._
-   1. Create a local instance. Run `docker run -d -p 3000:3000 grafana/grafana` to spin up a local Grafana instance (default username/password: `admin`/`admin`).
+   1. Create a local instance. Either:
+      - Run `docker run -d -p 4000:3000 grafana/grafana` to spin up a local Grafana instance (default username/password: `admin`/`admin`).
+      - Install a local version by:
+        1. [Configuring the `grafana` service](../../configuration.md#grafana-settings) in `gdk.yml`:
+
+            ```yaml
+            grafana:
+               enabled: true
+            ```
+
+        1. Running `gdk reconfigure` from the GDK root directory.
    1. Create a cloud instance, ensuring that visibility is set to 'public'. See [instructions](#configuring-a-hosted-grafana-instance).
 1. Add a DataSource of type **Prometheus**.
 1. In the URL field, add `http://<ip>:<port>` as detailed in
