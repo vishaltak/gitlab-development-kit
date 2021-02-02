@@ -1033,6 +1033,21 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'grafana' do
+    describe '#enabled' do
+      it 'defaults to false' do
+        expect(config.grafana.enabled).to eq(false)
+        expect(config.grafana.enabled?).to eq(false)
+      end
+    end
+
+    describe '#port' do
+      it 'defaults to 4000' do
+        expect(config.grafana.port).to eq(4000)
+      end
+    end
+  end
+
   describe 'gdk' do
     describe '#runit_wait_secs' do
       it 'is 10 secs by default' do

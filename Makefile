@@ -87,7 +87,8 @@ gitaly-setup \
 geo-config \
 prom-setup \
 object-storage-setup \
-gitlab-elasticsearch-indexer-setup
+gitlab-elasticsearch-indexer-setup \
+grafana-setup
 
 # This is used by `gdk install`
 #
@@ -109,6 +110,7 @@ gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
 object-storage-update \
+grafana-update \
 show-updated-at
 
 # This is used by `gdk reconfigure`
@@ -164,7 +166,6 @@ touch-examples:
 	gitlab-workhorse/config.toml.example \
 	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
-	grafana/grafana.ini.example \
 	support/templates/**/*.erb \
 	support/templates/*.erb
 
@@ -793,24 +794,26 @@ prometheus/prometheus.yml:
 # grafana
 ##############################################################
 
-grafana-setup: grafana/grafana.ini grafana/bin/grafana-server grafana/gdk-pg-created grafana/gdk-data-source-created
+ifeq ($(grafana_enabled),true)
+grafana-setup: grafana/grafana.ini grafana/grafana/bin/grafana-server grafana/gdk-pg-created
+else
+grafana-setup:
+	@true
+endif
 
-grafana/bin/grafana-server:
+grafana/grafana/bin/grafana-server:
 	$(Q)cd grafana && ${MAKE} ${QQ}
 
-grafana/grafana.ini: grafana/grafana.ini.example
-	$(Q)support/safe-sed "$@" \
-		-e "s|/home/git|${gitlab_development_root}|g" \
-		-e "s/GDK_USERNAME/${username}/g" \
-		"$<"
+.PHONY: Procfile
+grafana/grafana.ini:
+	$(Q)rake $@
 
 grafana/gdk-pg-created:
 	$(Q)support/create-grafana-db
 	$(Q)touch $@
 
-grafana/gdk-data-source-created:
-	$(Q)grep '^grafana:' Procfile || (printf ',s/^#grafana/grafana/\nwq\n' | ed -s Procfile)
-	$(Q)touch $@
+grafana-update:
+	@true
 
 ##############################################################
 # openssh

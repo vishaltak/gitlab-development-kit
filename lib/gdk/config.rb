@@ -427,6 +427,7 @@ module GDK
 
     settings :grafana do
       bool(:enabled) { false }
+      integer(:port) { 4000 }
     end
 
     settings :prometheus do

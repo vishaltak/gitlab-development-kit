@@ -437,3 +437,18 @@ savings since we don't need to start another process that boots the whole GitLab
 
 When this is set to `false`, a separate Puma process starts to handle ActionCable requests and workhorse is
 configured to proxy to this process.
+
+## Grafana settings
+
+Under the `grafana` key you can define the following settings with their defaults:
+
+```yaml
+grafana:
+  enabled: false
+  port: 4000
+```
+
+| Setting   | Default | Description |
+|-----------|---------|-------------|
+| `enabled` | `false` | Set this to `true` to enable the `grafana` service. |
+| `port`    | `4000`  | Set your preferred TCP port for the `grafana` service. |
