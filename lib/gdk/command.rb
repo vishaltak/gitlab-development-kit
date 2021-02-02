@@ -10,6 +10,7 @@ module GDK
     autoload :Help, 'gdk/command/help'
     autoload :Reconfigure, 'gdk/command/reconfigure'
     autoload :Run, 'gdk/command/run'
+    autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
   end
 end

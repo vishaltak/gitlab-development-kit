@@ -84,13 +84,7 @@ module GDK
     when 'tail'
       Runit.tail(ARGV)
     when 'thin'
-      # We cannot use Runit.sv because that calls Kernel#exec. Use system instead.
-      system('gdk', 'stop', 'rails-web')
-      exec(
-        { 'RAILS_ENV' => 'development' },
-        *thin_command,
-        chdir: GDK.root.join('gitlab')
-      )
+      GDK::Command::Thin.new.run
     when 'doctor'
       GDK::Command::Doctor.new.run
       true
@@ -230,17 +224,5 @@ module GDK
     GDK::Output.error("Your gdk.yml is invalid.\n\n")
     GDK::Output.puts(e.message, stderr: true)
     abort('')
-  end
-
-  def self.thin_command
-    args =
-      if config.gitlab.rails.__listen_settings.__protocol == 'unix'
-        %W[--socket #{config.gitlab.rails.__socket_file}]
-      else
-        url = URI(config.gitlab.rails.__bind)
-        %W[--address #{url.host} --port #{url.port}]
-      end
-
-    %w[bundle exec thin] + args + %w[start]
   end
 end
