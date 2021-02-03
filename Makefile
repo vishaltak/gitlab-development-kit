@@ -664,7 +664,7 @@ gitlab-ui/.git/pull:
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-ui to master"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" master
+	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" main
 
 .PHONY: gitlab-ui-clean
 gitlab-ui-clean:
