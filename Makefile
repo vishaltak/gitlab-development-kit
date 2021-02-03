@@ -41,6 +41,7 @@ gitlab_workhorse_clone_dir = gitlab-workhorse
 gitaly_clone_dir = gitaly
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
+gitlab_ui_clone_dir = gitlab-ui
 
 workhorse_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
 gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
@@ -88,7 +89,8 @@ geo-config \
 prom-setup \
 object-storage-setup \
 gitlab-elasticsearch-indexer-setup \
-grafana-setup
+grafana-setup \
+gitlab-ui-setup
 
 # This is used by `gdk install`
 #
@@ -111,6 +113,7 @@ gitlab-update \
 gitlab-elasticsearch-indexer-update \
 object-storage-update \
 grafana-update \
+gitlab-ui-update \
 show-updated-at
 
 # This is used by `gdk reconfigure`
@@ -173,7 +176,8 @@ unlock-dependency-installers:
 	$(Q)rm -f \
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
-	.gitlab-yarn
+	.gitlab-yarn \
+	.gitlab-ui-yarn
 
 gdk.yml:
 	$(Q)touch $@
@@ -632,6 +636,53 @@ gitlab-k8s-agent/.git/pull:
 	@echo "Updating gitlab-org/cluster-integration/gitlab-agent to ${gitlab_k8s_agent_version}"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_k8s_agent "${gitlab_k8s_agent_clone_dir}" "${gitlab_k8s_agent_version}"
+
+##############################################################
+# gitlab-ui
+##############################################################
+
+.PHONY: gitlab-ui-setup
+ifeq ($(gitlab_ui_enabled),true)
+gitlab-ui-setup: gitlab-ui/.git .gitlab-ui-yarn
+else
+gitlab-ui-setup:
+	@true
+endif
+
+.PHONY: gitlab-ui-update
+ifeq ($(gitlab_ui_enabled),true)
+gitlab-ui-update: gitlab-ui/.git gitlab-ui/.git/pull gitlab-ui-clean .gitlab-ui-yarn
+else
+gitlab-ui-update:
+	@true
+endif
+
+gitlab-ui/.git:
+	$(Q)git clone ${git_depth_param} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
+
+gitlab-ui/.git/pull:
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/gitlab-ui to master"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" main
+
+.PHONY: gitlab-ui-clean
+gitlab-ui-clean:
+	@rm -f .gitlab-ui-yarn
+
+.gitlab-ui-yarn:
+ifeq ($(YARN),)
+	@echo "ERROR: YARN is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
+	@false
+else
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing gitlab-org/gitlab-ui Node.js packages"
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitlab_development_root}/gitlab-ui && ${YARN} install --silent ${QQ}
+	$(Q)cd ${gitlab_development_root}/gitlab-ui && ${YARN} build --silent ${QQ}
+	$(Q)touch $@
+endif
 
 ##############################################################
 # gitlab performance metrics

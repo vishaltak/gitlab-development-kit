@@ -15,6 +15,7 @@
 /.gitlab-bundle
 /.gitlab-npm
 /.gitlab-shell-bundle
+/.gitlab-ui-yarn
 /.gitlab-yarn
 /.node-version
 /.ruby-gemset
@@ -43,6 +44,7 @@
 /gitlab-runner-config.toml
 /gitlab-shell
 /gitlab-shell/
+/gitlab-ui
 /gitlab-workhorse
 /gitlab-workhorse/.cache
 /gitlab-workhorse/config.toml
