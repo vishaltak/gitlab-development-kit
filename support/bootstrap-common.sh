@@ -80,11 +80,12 @@ ensure_supported_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
     if [[ "${CPU_TYPE}" == "arm64" ]]; then
       echo "INFO:" >&2
-      echo "INFO: Running the GDK on Apple M1 hardware currently requires running under" >&2
-      echo "INFO: Rosetta 2 until asdf and Homebrew offer native versions of required" >&2
-      echo "INFO: software." >&2
+      echo "INFO: GDK currently runs on Apple Silicon hardware using Rosetta 2." >&2
       echo "INFO:" >&2
-      echo "INFO: To learn more about Rosetta 2, please visit:" >&2
+      echo "INFO: To see the latest on running the GDK natively on Apple Silicon, visit:"
+      echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159"
+      echo "INFO:" >&2
+      echo "INFO: To learn more about Rosetta 2, visit:" >&2
       echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
       echo "INFO:" >&2
       echo "INFO: Resuming in 3 seconds.." >&2

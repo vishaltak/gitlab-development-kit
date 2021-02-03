@@ -45,7 +45,7 @@ asdf_install_tools() {
   local asdf_opts
 
   if [[ "${OSTYPE}" == "darwin"* && "${CPU_TYPE}" == "arm64" ]]; then
-    # Support running brew under Rosetta 2 on Apple M1 machines
+    # Support running brew under Rosetta 2 on Apple Silicon machines
     asdf_opts="arch -x86_64"
   else
     asdf_opts=""
