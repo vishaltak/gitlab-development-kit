@@ -52,38 +52,19 @@ module GDK
 
     case subcommand = ARGV.shift
     when 'run'
-      abort <<~GDK_RUN_NO_MORE
-        'gdk run' is no longer available; see doc/runit.md.
-
-        Use 'gdk start', 'gdk stop', and 'gdk tail' instead.
-      GDK_RUN_NO_MORE
+      GDK::Command::Run.new.run
     when 'install'
-      install
+      GDK::Command::Install.new.run(ARGV)
     when 'update'
-      update_result = update
-      return false unless update_result
-
-      if config.gdk.experimental.auto_reconfigure?
-        reconfigure
-      else
-        update_result
-      end
+      GDK::Command::Update.new.run
     when 'diff-config'
       GDK::Command::DiffConfig.new.run
 
       true
     when 'config'
-      config_command = ARGV.shift
-      abort 'Usage: gdk config get <configuration value>' if config_command != 'get' || ARGV.empty?
-
-      begin
-        puts config.dig(*ARGV)
-        true
-      rescue GDK::ConfigSettings::SettingUndefined
-        abort "Cannot get config for #{ARGV.join('.')}"
-      end
+      GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
-      reconfigure
+      GDK::Command::Reconfigure.new.run
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'psql-geo'
@@ -103,13 +84,7 @@ module GDK
     when 'tail'
       Runit.tail(ARGV)
     when 'thin'
-      # We cannot use Runit.sv because that calls Kernel#exec. Use system instead.
-      system('gdk', 'stop', 'rails-web')
-      exec(
-        { 'RAILS_ENV' => 'development' },
-        *thin_command,
-        chdir: GDK.root.join('gitlab')
-      )
+      GDK::Command::Thin.new.run
     when 'doctor'
       GDK::Command::Doctor.new.run
       true
@@ -236,47 +211,6 @@ module GDK
     start(argv)
   end
 
-  # Called when running `gdk install`
-  def self.install
-    result = make('install', *ARGV)
-
-    unless result
-      GDK::Output.error('Failed to install.')
-      display_help_message
-    end
-
-    result
-  end
-
-  # Called when running `gdk update`
-  def self.update
-    result = with_hooks(config.gdk.update_hooks, 'gdk update') do
-      make('self-update')
-      make('self-update', 'update')
-    end
-
-    unless result
-      GDK::Output.error('Failed to update.')
-      display_help_message
-    end
-
-    result
-  end
-
-  # Called when running `gdk reconfigure`
-  def self.reconfigure
-    remember!(GDK.root)
-
-    result = make('reconfigure')
-
-    unless result
-      GDK::Output.error('Failed to reconfigure.')
-      display_help_message
-    end
-
-    result
-  end
-
   def self.print_url_ready_message
     GDK::Output.puts
     GDK::Output.notice("GitLab will be available at #{config.__uri} shortly.")
@@ -290,17 +224,5 @@ module GDK
     GDK::Output.error("Your gdk.yml is invalid.\n\n")
     GDK::Output.puts(e.message, stderr: true)
     abort('')
-  end
-
-  def self.thin_command
-    args =
-      if config.gitlab.rails.__listen_settings.__protocol == 'unix'
-        %W[--socket #{config.gitlab.rails.__socket_file}]
-      else
-        url = URI(config.gitlab.rails.__bind)
-        %W[--address #{url.host} --port #{url.port}]
-      end
-
-    %w[bundle exec thin] + args + %w[start]
   end
 end

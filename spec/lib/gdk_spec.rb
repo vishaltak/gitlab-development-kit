@@ -132,18 +132,6 @@ RSpec.describe GDK do
     end
   end
 
-  describe '.update' do
-    it 'executes hooks and performs update' do
-      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.update_hooks').and_return(hooks)
-
-      expect(described_class).to receive(:with_hooks).with(hooks, 'gdk update').and_yield
-      expect(described_class).to receive(:make).with('self-update').and_return(true)
-      expect(described_class).to receive(:make).with('self-update', 'update').and_return(true)
-
-      described_class.update
-    end
-  end
-
   describe '.execute_hooks' do
     it 'calls execute_hook_cmd for each cmd and returns true' do
       cmd = 'echo'
