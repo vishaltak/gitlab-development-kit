@@ -26,7 +26,7 @@ checkout() {
 install() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Installing GDK.."
-  gdk install shallow_clone=true
+  gdk install
   support/set-gitlab-upstream
 }
 
