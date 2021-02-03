@@ -22,8 +22,6 @@ rescue StandardError
 end
 
 def determine_default_branch
-  log 'Determining default branch...'
-
   return 'master' unless remote_branch?('main')
   return 'main' if !remote_branch?('master') || main_ahead_of_master?
 
