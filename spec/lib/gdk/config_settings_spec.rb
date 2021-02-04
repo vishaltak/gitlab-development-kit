@@ -15,7 +15,7 @@ RSpec.describe GDK::ConfigSettings do
     it 'fails on non-array value' do
       described_class.array(:foo) { %q(a b) }
 
-      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+      expect { config.foo }.to raise_error(TypeError)
     end
 
     context 'when there is YAML defined' do
@@ -43,7 +43,7 @@ RSpec.describe GDK::ConfigSettings do
     it 'fails on non-array value' do
       described_class.hash_setting(:foo) { %q(a b) }
 
-      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+      expect { config.foo }.to raise_error(TypeError)
     end
 
     context 'when there is YAML defined' do
@@ -79,7 +79,7 @@ RSpec.describe GDK::ConfigSettings do
     it 'fails on non-bool value' do
       described_class.bool(:foo) { 'hello' }
 
-      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+      expect { config.foo }.to raise_error(TypeError)
     end
   end
 
@@ -94,7 +94,7 @@ RSpec.describe GDK::ConfigSettings do
     it 'fails on non-integer value' do
       described_class.integer(:foo) { '33d' }
 
-      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+      expect { config.foo }.to raise_error(TypeError)
     end
   end
 
@@ -110,7 +110,7 @@ RSpec.describe GDK::ConfigSettings do
     it 'fails on non-path' do
       described_class.path(:foo) { nil }
 
-      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+      expect { config.foo }.to raise_error(TypeError)
     end
   end
 
@@ -125,7 +125,7 @@ RSpec.describe GDK::ConfigSettings do
     it 'fails on non-string' do
       described_class.string(:foo) { nil }
 
-      expect { config.foo }.to raise_error(GDK::ConfigType::TypeError)
+      expect { config.foo }.to raise_error(TypeError)
     end
   end
 
@@ -157,21 +157,36 @@ RSpec.describe GDK::ConfigSettings do
     end
   end
 
-  describe '#settings_array!' do
-    it 'creates an array of the desired number of settings' do
-      expect(config.settings_array!(3, &proc { nil }).count).to eq(3)
+  describe '.settings_array' do
+    it 'creates an array of the desired size' do
+      described_class.settings_array(:foo, size: 3) { nil }
+
+      expect(config.foo.count).to eq(3)
     end
 
-    it 'creates settings with self as parent' do
-      expect(config.settings_array!(1, &proc { nil }).first.parent).to eq(config)
+    it 'creates an array of the desired size using block' do
+      described_class.integer(:baz) { 'four'.length }
+      described_class.settings_array(:foo, size: -> { baz }) { nil }
+
+      expect(config.foo.count).to eq(4)
+    end
+
+    it 'creates array with self as parent' do
+      described_class.settings_array(:foo, size: 1) { nil }
+
+      expect(config.foo.parent).to eq(config)
+    end
+
+    it 'creates array of settings with self as grandparent' do
+      described_class.settings_array(:foo, size: 1) { nil }
+
+      expect(config.foo.first.parent.parent).to eq(config)
     end
 
     it 'attributes are available through root config' do
       config = Class.new(GDK::ConfigSettings) do
-        array(:arrrr) do
-          settings_array!(3) do |i|
-            string(:buz) { "sub #{i}" }
-          end
+        settings_array(:arrrr, size: 3) do |i|
+          string(:buz) { "sub #{i}" }
         end
       end.new
 

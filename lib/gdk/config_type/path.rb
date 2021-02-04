@@ -6,14 +6,16 @@ require 'pathname'
 module GDK
   module ConfigType
     class Path < Base
-      def dump!
+      def dump!(user_only: false)
         value.to_s
       end
 
       def parse
-        return if value.nil?
-
         self.value = Pathname.new(value)
+
+        true
+      rescue ::TypeError
+        false
       end
     end
   end

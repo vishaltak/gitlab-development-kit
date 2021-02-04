@@ -6,9 +6,11 @@ module GDK
   module ConfigType
     class String < Base
       def parse
-        return if value.nil?
+        return false if value.nil?
 
         self.value = value.to_s
+
+        true
       end
     end
   end

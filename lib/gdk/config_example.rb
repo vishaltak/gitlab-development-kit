@@ -21,6 +21,10 @@ module GDK
         0
       end
 
+      def settings_klass
+        ::GDK::ConfigExample::Settings
+      end
+
       private
 
       def load_yaml!
@@ -29,10 +33,6 @@ module GDK
 
       def sanitized_read!(_filename)
         raise Errno::ENOENT
-      end
-
-      def settings_klass
-        ::GDK::ConfigExample::Settings
       end
     end
 
@@ -45,12 +45,10 @@ module GDK
 
     GDK_ROOT = '/home/git/gdk'
 
-    def username
-      'git'
-    end
+    # Avoid messing up the superclass (i.e. `GDK::Config`)
+    @attributes = superclass.attributes.dup
 
-    def git_repositories
-      []
-    end
+    string(:username) { 'git' }
+    array(:git_repositories) { [] }
   end
 end
