@@ -22,12 +22,7 @@ module GDK
           return false
         end
 
-        reset_data
-      end
-
-      private
-
-      def reset_data
+        # reset data
         if GDK.make
           GDK::Output.notice('Successfully reset data!')
           GDK.start([])
@@ -38,11 +33,77 @@ module GDK
         end
       end
 
+      private
+
       def backup_data
-        path = GDK.root.join('./support/backup-data')
-        sh = Shellout.new(path.to_s, chdir: GDK.root)
-        sh.run
-        sh.success?
+        move_postgres_data && move_rails_uploads && move_git_repository_data
+      end
+
+      def current_timestamp
+        @current_timestamp ||= Time.now.strftime('%Y-%m-%d_%H.%M.%S')
+      end
+
+      def create_directory(directory)
+        directory = gdk_root_pathed(directory)
+        Dir.mkdir(directory) unless directory.exist?
+
+        true
+      rescue Errno::ENOENT => e
+        GDK::Output.error("Failed to create directory '#{directory}' - #{e}")
+        false
+      end
+
+      def rename_directory(message, directory)
+        new_directory = gdk_root_pathed_timestamped(directory)
+        directory = gdk_root_pathed(directory)
+        return true unless directory.exist?
+
+        GDK::Output.notice("Moving #{message} from '#{directory}' to '#{new_directory}'")
+        File.rename(directory, new_directory)
+
+        true
+      rescue SystemCallError => e
+        GDK::Output.error("Failed to rename directory '#{directory}' to '#{new_directory}' - #{e}")
+        false
+      end
+
+      def gdk_root_pathed_timestamped(path)
+        gdk_root_pathed("#{path}.#{current_timestamp}")
+      end
+
+      def gdk_root_pathed(path)
+        GDK.root.join(path)
+      end
+
+      def move_postgres_data
+        rename_directory('PostgreSQL data', 'postgresql/data')
+      end
+
+      def move_rails_uploads
+        rename_directory('Rails uploads', 'gitlab/public/uploads')
+        create_directory('gitlab/public/uploads')
+      end
+
+      def move_git_repository_data
+        rename_directory('git repository data', 'repositories') && \
+          fix_repository_data_gitkeep_file
+      end
+
+      def fix_repository_data_gitkeep_file
+        return false unless create_directory('repositories')
+
+        repositories_gitkeep_file = gdk_root_pathed('repositories').join('.gitkeep')
+        timestamped_repositories_gitkeep_file = gdk_root_pathed_timestamped('repositories').join('.gitkeep')
+
+        timestamped_repositories_gitkeep_file.unlink if timestamped_repositories_gitkeep_file.exist?
+        touch_file(repositories_gitkeep_file)
+      end
+
+      def touch_file(file)
+        File.open(file, 'w') {}
+        true
+      rescue SystemCallError
+        false
       end
     end
   end
