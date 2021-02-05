@@ -12,5 +12,6 @@ module GDK
     autoload :Run, 'gdk/command/run'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
+    autoload :ResetData, 'gdk/command/reset_data'
   end
 end

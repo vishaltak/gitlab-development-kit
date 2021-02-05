@@ -1,13 +1,6 @@
 #!/usr/bin/env sh
 
 set -e
-echo "INFO:" >&2
-echo "INFO: We're about to remove PostgreSQL data, Rails uploads and" >&2
-echo "INFO: git repository data." >&2
-echo "INFO: Are you sure?" >&2
-echo "INFO:" >&2
-echo "INFO: Press [ENTER] to continue." >&2
-read -r
 
 timestamp=$(date +%Y-%m-%d_%H.%M.%S)
 

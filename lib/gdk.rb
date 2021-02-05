@@ -59,14 +59,13 @@ module GDK
       GDK::Command::Update.new.run
     when 'diff-config'
       GDK::Command::DiffConfig.new.run
-
       true
     when 'config'
       GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
       GDK::Command::Reconfigure.new.run
     when 'reset-data'
-      reset_data
+      GDK::Command::ResetData.new.run
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'psql-geo'
@@ -211,30 +210,6 @@ module GDK
   def self.restart(argv)
     stop(argv)
     start(argv)
-  end
-
-  # Called when running `gdk reset_data`
-  def self.reset_data
-    path = Pathname.getwd.join('./support/backup-data')
-    sh = Shellout.new(path.to_s, chdir: GDK.root)
-    Runit.stop
-
-    remember!(GDK.root)
-
-    sh.run
-
-    result = make
-
-    if result
-      GDK::Output.puts
-      GDK::Output.notice("Successfully reset data!")
-      start([])
-    else
-      GDK::Output.error('Failed to reset data.')
-      display_help_message
-    end
-
-    result
   end
 
   def self.print_url_ready_message
