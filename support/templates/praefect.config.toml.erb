@@ -9,8 +9,8 @@ socket_path = "<%= config.praefect.address %>"
 <%= '#' unless config.prometheus.enabled? %>prometheus_listen_addr = "<%= config.hostname %>:<%= config.prometheus.praefect_exporter_port %>"
 
 # # You can optionally configure Praefect to output JSON-formatted log messages to stdout
-# [logging]
-#   format = "json"
+[logging]
+format = "json"
 # # Optional: Set log level to only log entries with that severity or above
 # # One of, in order: debug, info, warn, errror, fatal, panic
 # # Defaults to "info"
