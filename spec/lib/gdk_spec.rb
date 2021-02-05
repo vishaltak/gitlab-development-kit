@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'fileutils'
 
 RSpec.describe GDK do
   let(:hooks) { %w[date] }
