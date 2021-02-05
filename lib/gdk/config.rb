@@ -485,6 +485,17 @@ module GDK
         end
 
         bool(:sherlock) { false }
+
+        settings :puma do
+          bool(:single_mode) { false }
+
+          integer(:threads_max) { 4 }
+          integer(:threads_min) { 1 }
+          integer(:__threads_min) { config.gitlab.rails.puma.single_mode? ? config.gitlab.rails.puma.threads_max : config.gitlab.rails.puma.threads_min }
+
+          integer(:workers) { 2 }
+          integer(:__workers) { config.gitlab.rails.puma.single_mode? ? 0 : config.gitlab.rails.puma.workers }
+        end
       end
 
       settings :actioncable do
