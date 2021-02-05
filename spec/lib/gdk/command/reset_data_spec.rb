@@ -13,6 +13,35 @@ RSpec.describe GDK::Command::ResetData do
 
   subject { described_class.new }
 
+  describe '.prompt_and_run' do
+    let(:are_you_sure) { nil }
+
+    before do
+      allow(GDK::Output).to receive(:warn).with("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
+      allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(are_you_sure)
+    end
+
+    context 'when the user does not accept / aborts the prompt' do
+      let(:are_you_sure) { 'n' }
+
+      it 'does not run' do
+        expect(described_class).to_not receive(:new)
+
+        described_class.prompt_and_run
+      end
+    end
+
+    context 'when the user accepts the prompt' do
+      let(:are_you_sure) { 'y' }
+
+      it 'runs' do
+        expect(described_class).to receive_message_chain(:new, :run)
+
+        described_class.prompt_and_run
+      end
+    end
+  end
+
   describe '#run' do
     let(:backup_script_shellout) { nil }
 

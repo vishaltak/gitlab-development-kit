@@ -65,7 +65,7 @@ module GDK
     when 'reconfigure'
       GDK::Command::Reconfigure.new.run
     when 'reset-data'
-      GDK::Command::ResetData.new.run
+      GDK::Command::ResetData.prompt_and_run
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'psql-geo'

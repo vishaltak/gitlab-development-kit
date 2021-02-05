@@ -4,6 +4,14 @@ module GDK
   module Command
     # Handles `gdk reset-data` command execution
     class ResetData
+      def self.prompt_and_run
+        GDK::Output.warn("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
+        accepted = GDK::Output.prompt('Are you sure? [y/N]')
+        return false unless accepted.match?(/\Ay(?:es)*\z/i)
+
+        new.run
+      end
+
       def run
         GDK.remember!(GDK.root)
         Runit.stop
@@ -11,7 +19,7 @@ module GDK
         unless backup_data
           GDK::Output.error('Failed to backup data.')
           GDK.display_help_message
-          return
+          return false
         end
 
         reset_data
