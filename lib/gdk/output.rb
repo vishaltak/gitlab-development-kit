@@ -91,5 +91,10 @@ module GDK
     def self.colorize?
       STDOUT.isatty && ENV.fetch('NO_COLOR', '').empty? # rubocop:disable Style/GlobalStdStream
     end
+
+    def self.prompt(message)
+      Kernel.print("#{message}: ")
+      ARGF.gets.chomp
+    end
   end
 end

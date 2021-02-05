@@ -231,4 +231,16 @@ RSpec.describe GDK::Output do
       end
     end
   end
+
+  describe '.prompt' do
+    it 'returns user input' do
+      response = 'n'
+      message = 'Are you sure? [y/N]'
+
+      expect(Kernel).to receive(:print).with("#{message}: ")
+      expect(ARGF).to receive_message_chain(:gets, :chomp).and_return(response)
+
+      expect(described_class.prompt(message)).to eq(response)
+    end
+  end
 end
