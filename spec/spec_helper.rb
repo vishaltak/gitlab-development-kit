@@ -3,7 +3,14 @@
 require 'active_support/testing/time_helpers'
 require 'simplecov-cobertura'
 
-SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+# rubocop:disable Layout/FirstArrayElementIndentation
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::SimpleFormatter,
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::CoberturaFormatter
+])
+# rubocop:enable Layout/FirstArrayElementIndentation
+
 SimpleCov.start
 
 require_relative '../lib/gdk'
