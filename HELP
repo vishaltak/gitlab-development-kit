@@ -38,7 +38,9 @@ Manage GDK:
 
   gdk reset-data                            # Backs up and creates fresh git
                                             #  repository, PostgreSQL data and
-                                            #  Rails upload directory.
+                                            #  Rails upload directory
+  gdk pristine                              # Restore your GDK to a pristine
+                                            #  state
 
   gdk doctor                                # Run diagnostics on GDK
   gdk version                               # Print current GDK version

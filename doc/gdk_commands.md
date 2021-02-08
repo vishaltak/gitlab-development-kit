@@ -104,6 +104,16 @@ wish to proceed:
 gdk reset-data
 ```
 
+## GDK pristine
+
+If you want to return your GDK instance to a pristine state which will install
+Ruby gems and Node modules from scratch for GitLab, Gitaly, cleaning tmp
+directories and cleaning the global golang cache.
+
+```shell
+gdk pristine
+```
+
 ## Measure performance
 
 You can easily create a Sitespeed report for local `gdk` URLs or online URLs with our standardized

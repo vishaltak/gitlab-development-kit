@@ -95,6 +95,8 @@ module GDK
     when 'measure-workflow'
       GDK::Command::MeasureWorkflow.new(ARGV).run
       true
+    when 'pristine'
+      GDK::Command::Pristine.new.run
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run
       true
@@ -123,11 +125,14 @@ module GDK
       You can try the following that may be of assistance:
 
       - Run 'gdk doctor'.
+
       - Visit the troubleshooting documentation:
         https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/troubleshooting.md.
       - Visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues to
         see if there are known issues.
+
       - Run 'gdk reset-data' if appropriate.
+      - Run 'gdk pristine' which will restore your GDK to a pristine state.
     HELP_MESSAGE
   end
 

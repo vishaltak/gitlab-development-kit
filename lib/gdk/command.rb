@@ -15,5 +15,6 @@ module GDK
     autoload :Run, 'gdk/command/run'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
+    autoload :Pristine, 'gdk/command/pristine'
   end
 end
