@@ -11,6 +11,7 @@ RSpec.describe GDK::Command::Update do
   describe '#run' do
     context 'when update fails' do
       it 'displays an error message' do
+        stub_no_color_env('true')
         allow(subject).to receive(:update!)
 
         expect { subject.run }.to output(/ERROR: Failed to update/).to_stderr.and output(/You can try the following that may be of assistance/).to_stdout
