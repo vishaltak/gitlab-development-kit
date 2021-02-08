@@ -71,6 +71,7 @@ gitlab_k8s_agent:
   listen_address: 127.0.0.1:8150
   listen_network: tcp
 gitlab_pages:
+  access_control: false
   auto_update: true
   enabled: true
   host: 127.0.0.1.nip.io

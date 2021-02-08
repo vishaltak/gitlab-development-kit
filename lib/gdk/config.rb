@@ -226,6 +226,7 @@ module GDK
       bool(:auto_update) { true }
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
       bool(:verbose) { false }
+      bool(:access_control) { false }
     end
 
     settings :gitlab_k8s_agent do

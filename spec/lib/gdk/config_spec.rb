@@ -1106,6 +1106,24 @@ RSpec.describe GDK::Config do
         expect(config.gitlab_pages.__uri.to_s).to eq('127.0.0.1.nip.io:3010')
       end
     end
+
+    describe '#access_control' do
+      it 'defaults to false' do
+        expect(config.gitlab_pages.access_control).to eq(false)
+      end
+
+      context 'when access_control is enabled' do
+        let(:yaml) do
+          {
+            'gitlab_pages' => { 'access_control' => true }
+          }
+        end
+
+        it 'returns true' do
+          expect(config.gitlab_pages.access_control).to eq(true)
+        end
+      end
+    end
   end
 
   describe 'prometheus' do
