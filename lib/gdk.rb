@@ -113,10 +113,10 @@ module GDK
   end
 
   def self.puts_separator(msg = nil)
-    puts '-------------------------------------------------------'
+    GDK::Output.puts('-------------------------------------------------------')
     return unless msg
 
-    puts msg
+    GDK::Output.puts(msg)
     puts_separator
   end
 
