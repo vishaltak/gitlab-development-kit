@@ -364,6 +364,33 @@ wsl -l
 wsl --set-version <your subsystem name here>
 ```
 
+## Apply custom patches for Ruby
+
+Some functions (and specs) require a special Ruby installed with additional [patches](https://gitlab.com/gitlab-org/gitlab-build-images/-/tree/master/patches/ruby).
+These patches are already applied when running on GitLab CI or when using GitLab Compose Kit,
+but since GitLab Development Kit uses `asdf` they need to be manually enabled.
+
+To recompile Ruby with adding additional patches do the following:
+
+```shell
+asdf uninstall ruby
+
+# Compile Ruby 2.7.2
+export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.2/thread-memory-allocations-2.7.patch
+asdf install ruby 2.7.2
+
+# Compile Ruby 3.0.0
+export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.0/thread-memory-allocations-3.0.patch
+asdf install ruby 3.0.0
+```
+
+You can later verify that patches were properly applied:
+
+```shell
+$ ruby -e 'puts Thread.trace_memory_allocations'
+false
+```
+
 ## Next Steps
 
 After you've completed the steps on this page, [install and set up
