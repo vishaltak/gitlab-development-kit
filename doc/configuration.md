@@ -183,6 +183,7 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.overwrite_changes`           | `false` | When set to `true`, `gdk reconfigure` overwrites files and move the old version to `.backups`.|
 | `gdk.protected_config_files`      | `[]`    | Contains file names / globs of configuration files GDK should not overwrite. |
 | `gdk.runit_wait_secs`             | `10`    | The number of seconds `runit` waits. `runit` is used behind the scenes for `gdk stop/start/restart` and waits for 7 secs by default. |
+| `gdk.quiet`                  | `true`  | Set this to `false` to increase the level of output when updating the GDK. |
 
 ##### Hooks
 
@@ -209,7 +210,6 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `gdk.experimental.quiet` | `false` | Set this to `true` to reduce the level of output when updating the GDK. |
 | `gdk.experimental.auto_reconfigure` | `false` | Set this to `true` to automatically run a `gdk reconfigure` after a successful `gdk update`. |
 
 ### GitLab settings

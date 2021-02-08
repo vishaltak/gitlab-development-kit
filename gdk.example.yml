@@ -14,9 +14,10 @@ gdk:
   debug: false
   experimental:
     auto_reconfigure: false
-    quiet: false
+    quiet: true
   overwrite_changes: false
   protected_config_files: []
+  quiet: true
   runit_wait_secs: 10
   start_hooks:
     after: []

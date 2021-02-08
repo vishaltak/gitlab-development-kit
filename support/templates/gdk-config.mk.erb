@@ -4,7 +4,7 @@ elasticsearch_mac_tar_gz_sha512 = <%= config.elasticsearch.mac_checksum %>
 elasticsearch_version = <%= config.elasticsearch.version %>
 gdk_ask_to_restart_after_update = <%= config.gdk.ask_to_restart_after_update %>
 gdk_debug = <%= config.gdk.debug || ENV['GDK_DEBUG'] == 'true' %>
-gdk_quiet = <%= config.gdk.experimental.quiet? %>
+gdk_quiet = <%= config.gdk.quiet? %>
 geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
