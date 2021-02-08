@@ -130,8 +130,6 @@ self-update: unlock-dependency-installers
 	@echo "Running self-update on GDK"
 	@echo "${DIVIDER}"
 	$(Q)git stash ${QQ}
-	$(Q)git checkout master ${QQ}
-	$(Q)git fetch ${QQ}
 	$(Q)support/self-update-git-worktree ${QQ}
 
 clean-config:
