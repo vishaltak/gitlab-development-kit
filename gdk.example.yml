@@ -46,10 +46,12 @@ gitaly:
   auth_token: ''
   auto_update: true
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
+  dir: "/home/git/gdk/gitaly"
   enabled: false
   internal_socket_dir: "/home/git/gdk/tmp/gitaly"
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
+  ruby_dir: "/home/git/gdk/gitaly/ruby"
   storage_count: 1
   storage_dir: "/home/git/gdk/repositories"
 gitlab:

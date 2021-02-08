@@ -370,10 +370,12 @@ module GDK
     end
 
     settings :gitaly do
+      path(:dir) { config.gdk_root.join('gitaly') }
+      path(:ruby_dir) { config.gitaly.dir.join('ruby') }
       bool(:enabled) { !config.praefect? || storage_count > 1 }
       path(:address) { config.gdk_root.join('gitaly.socket') }
-      path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
-      path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
+      path(:assembly_dir) { config.gitaly.dir.join('assembly') }
+      path(:config_file) { config.gitaly.dir.join('gitaly.config.toml') }
       path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
       path(:storage_dir) { config.repositories_root }
       path(:repository_storages) { config.repository_storages }
@@ -395,7 +397,7 @@ module GDK
 
     settings :praefect do
       path(:address) { config.gdk_root.join('praefect.socket') }
-      path(:config_file) { config.gdk_root.join('gitaly', 'praefect.config.toml') }
+      path(:config_file) { config.gitaly.dir.join('praefect.config.toml') }
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       settings :database do
