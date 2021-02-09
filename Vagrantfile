@@ -23,7 +23,7 @@ end
 def running_in_admin_mode?
   return false unless Vagrant::Util::Platform.windows?
 
-  `reg query HKU\\S-1-5-19 2>&1`.include?('ERROR')
+  !`reg query HKU\\S-1-5-19 2>&1`.include?('ERROR')
 end
 
 raise Vagrant::Errors::VagrantError.new, "You must run the GitLab Vagrant from an elevated command prompt" if Vagrant::Util::Platform.windows? && !running_in_admin_mode?
