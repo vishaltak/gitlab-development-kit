@@ -51,6 +51,13 @@ ruby_configure_opts() {
   return 0
 }
 
+ruby_apply_version_patches() {
+  # https://github.com/asdf-vm/asdf-ruby#use
+  echo "RUBY_APPLY_VERSION_PATCHES=\"2.7.2=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.2/thread-memory-allocations-2.7.patch\n3.0.0=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.0/thread-memory-allocations-3.0.patch\""
+
+  return 0
+}
+
 configure_ruby_bundler() {
   local current_postgres_version
   current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
