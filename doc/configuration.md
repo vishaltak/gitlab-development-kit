@@ -33,6 +33,7 @@ all applied settings in a YAML structure.
 
 - [Notable settings](#notable-settings)
 - [GDK settings](#gdk-settings)
+- [GitLab settings](#gitlab-settings)
 - [NGINX settings](#nginx-settings)
 - [Webpack settings](#webpack-settings)
 - [ActionCable settings](#actioncable-settings)
@@ -89,6 +90,7 @@ Here are a few settings worth mentioning:
 | `object_store.connection`        | See `gdk.example.yml` | Specify the [object storage connection settings](https://docs.gitlab.com/ee/administration/object_storage.html#connection-settings).
 | `registry.enabled`               | `false`               | Set this to `true` to enable container registry.                                           |
 | `geo.enabled`                    | `false`               | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
+| `gitlab.rails.puma.single_mode`  | `false`               | Set this to `true` to run Puma (webserver) in a [Single Mode](https://github.com/puma/puma/blob/master/docs/architecture.md). It provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 
 For example, to change the port GDK is accessible on, you can set this in your `gdk.yml`:
 
@@ -219,6 +221,7 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 | `gitlab.cache_classes` | `false`  | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
 | `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do NOT include `http://`. |
 | `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
+| `gitlab.rails.puma.single_mode` | `false`  | Set this to `true` to run Puma (webserver) in a [Single Mode](https://github.com/puma/puma/blob/master/docs/architecture.md). It provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 
 ### NGINX settings
 
