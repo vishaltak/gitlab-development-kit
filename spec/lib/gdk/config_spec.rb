@@ -711,6 +711,93 @@ RSpec.describe GDK::Config do
           expect(config.gitlab.rails.sherlock).to be(false)
         end
       end
+
+      describe 'puma' do
+        describe 'single_mode' do
+          it 'is disabled by default' do
+            expect(config.gitlab.rails.puma.single_mode).to be(false)
+            expect(config.gitlab.rails.puma.single_mode?).to be(false)
+          end
+        end
+
+        describe 'threads_min' do
+          it 'is 1 by default' do
+            expect(config.gitlab.rails.puma.threads_min).to be(1)
+          end
+        end
+
+        describe '__threads_min' do
+          let(:single_mode) { nil }
+
+          before do
+            yaml['gitlab'] = {
+              'rails' => {
+                'puma' => {
+                  'single_mode' => single_mode
+                }
+              }
+            }
+          end
+
+          context 'when single_mode disabled' do
+            let(:single_mode) { false }
+
+            it 'is 1 by default' do
+              expect(config.gitlab.rails.puma.__threads_min).to be(1)
+            end
+          end
+
+          context 'when single_mode enabled' do
+            let(:single_mode) { true }
+
+            it 'is equal to threads_max' do
+              expect(config.gitlab.rails.puma.__threads_min).to be(config.gitlab.rails.puma.threads_max)
+            end
+          end
+        end
+
+        describe 'threads_max' do
+          it 'is 4 by default' do
+            expect(config.gitlab.rails.puma.threads_max).to be(4)
+          end
+        end
+
+        describe 'workers' do
+          it 'is 2 by default' do
+            expect(config.gitlab.rails.puma.workers).to be(2)
+          end
+        end
+
+        describe '__workers' do
+          let(:single_mode) { nil }
+
+          before do
+            yaml['gitlab'] = {
+              'rails' => {
+                'puma' => {
+                  'single_mode' => single_mode
+                }
+              }
+            }
+          end
+
+          context 'when single_mode disabled' do
+            let(:single_mode) { false }
+
+            it 'is equal to workers' do
+              expect(config.gitlab.rails.puma.__workers).to be(config.gitlab.rails.puma.workers)
+            end
+          end
+
+          context 'when single_mode enabled' do
+            let(:single_mode) { true }
+
+            it 'is equal to 0' do
+              expect(config.gitlab.rails.puma.__workers).to be(0)
+            end
+          end
+        end
+      end
     end
 
     describe 'actioncable' do
