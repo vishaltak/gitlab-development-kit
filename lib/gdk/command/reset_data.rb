@@ -53,7 +53,7 @@ module GDK
         false
       end
 
-      def rename_directory(message, directory)
+      def backup_directory(message, directory)
         new_directory = gdk_root_pathed_timestamped(directory)
         directory = gdk_root_pathed(directory)
         return true unless directory.exist?
@@ -76,16 +76,16 @@ module GDK
       end
 
       def move_postgres_data
-        rename_directory('PostgreSQL data', 'postgresql/data')
+        backup_directory('PostgreSQL data', 'postgresql/data')
       end
 
       def move_rails_uploads
-        rename_directory('Rails uploads', 'gitlab/public/uploads')
+        backup_directory('Rails uploads', 'gitlab/public/uploads')
         create_directory('gitlab/public/uploads')
       end
 
       def move_git_repository_data
-        rename_directory('git repository data', 'repositories') && \
+        backup_directory('git repository data', 'repositories') && \
           fix_repository_data_gitkeep_file
       end
 
