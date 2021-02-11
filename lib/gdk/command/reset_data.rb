@@ -81,7 +81,6 @@ module GDK
 
       def move_rails_uploads
         backup_directory('Rails uploads', 'gitlab/public/uploads')
-        create_directory('gitlab/public/uploads')
       end
 
       def move_git_repository_data
