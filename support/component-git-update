@@ -16,11 +16,15 @@ def main(component, worktree, revision)
 
   Dir.chdir(worktree)
 
-  [
+  commands = [
     [%w[git stash], false],
     [%w[git fetch --all --tags --prune], true],
     [%W[git checkout #{revision}], true]
-  ].each do |cmd, print_stdout|
+  ]
+
+  commands << [%w[git pull --ff-only], true] if %w[master main].include?(revision)
+
+  commands.each do |cmd, print_stdout|
     out = print_stdout ? $stdout : :close
     next if system(*cmd, out: out)
 
