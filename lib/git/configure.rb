@@ -59,7 +59,7 @@ module Git
 
     def set_config(key, value)
       if @global
-        run_git(%w[config --global key value])
+        run_git(%W[config --global #{key} #{value}])
       else
         gdk_repositories.each do |repo|
           run_git(%W[config #{key} #{value}], repo_path: repo)
@@ -77,7 +77,7 @@ module Git
       if repo_path
         system(*args, chdir: repo_path)
       else
-        system(*cmd)
+        system(*args)
       end
     end
   end
