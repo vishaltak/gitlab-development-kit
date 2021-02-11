@@ -4,8 +4,10 @@ module GDK
   module Command
     # Handles `gdk pristine` command execution
     class Pristine
+      GO_CLEAN_CACHE_CMD = 'go clean -cache'
       BUNDLE_INSTALL_CMD = 'bundle install --jobs 4 --quiet'
       BUNDLE_PRISTINE_CMD = 'bundle pristine'
+      YARN_CLEAN_CMD = 'yarn clean'
 
       def run
         if go_clean_cache && gdk_bundle && gitlab_bundle && gitaly_bundle && gitlab_yarn_clean
@@ -26,7 +28,7 @@ module GDK
 
       def go_clean_cache
         notice('Cleaning go cache..')
-        shellout('go clean -cache')
+        shellout(GO_CLEAN_CACHE_CMD)
       end
 
       def gdk_bundle
@@ -57,7 +59,7 @@ module GDK
 
       def gitlab_yarn_clean
         notice('Cleaning GitLab yarn cache..')
-        shellout('yarn clean', chdir: config.gitlab.dir)
+        shellout(YARN_CLEAN_CMD, chdir: config.gitlab.dir)
       end
 
       def gitaly_bundle

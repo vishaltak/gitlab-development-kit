@@ -28,12 +28,12 @@ RSpec.describe GDK::Command::Pristine do
       it 'displays an informational message and returns true', :hide_stdout do
         shellout_double = instance_double(Shellout, stream: nil, 'success?': true)
 
-        expect_shellout_command('go clean -cache', config.gdk_root).and_return(shellout_double)
+        expect_shellout_command(described_class::GO_CLEAN_CACHE_CMD, config.gdk_root).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gdk_root).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gdk_root).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gitlab.dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitlab.dir).and_return(shellout_double)
-        expect_shellout_command('yarn clean', config.gitlab.dir).and_return(shellout_double)
+        expect_shellout_command(described_class::YARN_CLEAN_CMD, config.gitlab.dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gitaly.ruby_dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitaly.ruby_dir).and_return(shellout_double)
 
