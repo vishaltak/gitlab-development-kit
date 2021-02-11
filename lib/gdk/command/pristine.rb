@@ -46,10 +46,10 @@ module GDK
 
       def gitlab_bundle
         notice('Ensuring gitlab/ Ruby gems are installed and pristine..')
-        gitlab_bundle_intstall && gitlab_bundle_pristine
+        gitlab_bundle_install && gitlab_bundle_pristine
       end
 
-      def gitlab_bundle_intstall
+      def gitlab_bundle_install
         shellout(BUNDLE_INSTALL_CMD, chdir: config.gitlab.dir)
       end
 
