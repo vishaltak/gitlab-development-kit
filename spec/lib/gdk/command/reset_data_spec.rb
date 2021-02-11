@@ -126,15 +126,13 @@ RSpec.describe GDK::Command::ResetData do
     end
 
     def stub_git_repository_data_move
-      repositories_gitkeep_file = git_repository_data_directory.join('.gitkeep')
-
       allow(root).to receive(:join).with('repositories').and_return(git_repository_data_directory)
       allow(root).to receive(:join).with("repositories.#{current_timestamp}").and_return(new_git_repository_data_directory)
 
       allow(git_repository_data_directory).to receive(:exist?).and_return(true)
 
-      allow(File).to receive(:open).and_call_original
-      expect(File).to receive(:open).with(repositories_gitkeep_file, 'w').and_return(true)
+      git_restore_repositoriess_double = instance_double(Shellout, try_run: '', success?: true)
+      expect(Shellout).to receive(:new).with('git restore repositories', chdir: root).and_return(git_restore_repositoriess_double)
     end
   end
 end

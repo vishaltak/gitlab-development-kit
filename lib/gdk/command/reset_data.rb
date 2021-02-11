@@ -85,15 +85,16 @@ module GDK
       end
 
       def move_git_repository_data
-        backup_directory('git repository data', 'repositories') && \
+        backup_directory('git repository data', 'repositories') &&
           fix_repository_data_gitkeep_file
       end
 
       def fix_repository_data_gitkeep_file
         return false unless create_directory('repositories')
 
-        repositories_gitkeep_file = gdk_root_pathed('repositories').join('.gitkeep')
-        touch_file(repositories_gitkeep_file)
+        sh = Shellout.new('git restore repositories', chdir: GDK.root)
+        sh.try_run
+        sh.success?
       end
 
       def touch_file(file)
