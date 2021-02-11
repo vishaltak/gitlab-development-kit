@@ -30,30 +30,28 @@ module GDK
       end
 
       def gdk_bundle
+        notice('Ensuring GDK Ruby gems are installed and pristine..')
         gdk_bundle_install && gdk_bundle_pristine
       end
 
       def gdk_bundle_install
-        notice('Ensuring GDK Ruby gems are installed..')
         shellout(BUNDLE_INSTALL_CMD, chdir: config.gdk_root)
       end
 
       def gdk_bundle_pristine
-        notice('Ensuring GDK Ruby gems are pristine..')
         shellout(BUNDLE_PRISTINE_CMD, chdir: config.gdk_root)
       end
 
       def gitlab_bundle
+        notice('Ensuring gitlab/ Ruby gems are installed and pristine..')
         gitlab_bundle_intstall && gitlab_bundle_pristine
       end
 
       def gitlab_bundle_intstall
-        notice('Ensuring gitlab/ Ruby gems are installed..')
         shellout(BUNDLE_INSTALL_CMD, chdir: config.gitlab.dir)
       end
 
       def gitlab_bundle_pristine
-        notice('Ensuring gitlab/ Ruby gems are pristine..')
         shellout(BUNDLE_PRISTINE_CMD, chdir: config.gitlab.dir)
       end
 
@@ -63,16 +61,15 @@ module GDK
       end
 
       def gitaly_bundle
+        notice('Ensuring gitaly/ruby/ Ruby gems are installed and pristine..')
         gitaly_bundle_install && gitaly_bundle_pristine
       end
 
       def gitaly_bundle_install
-        notice('Ensuring gitaly/ruby/ Ruby gems are installed..')
         shellout(BUNDLE_INSTALL_CMD, chdir: config.gitaly.ruby_dir)
       end
 
       def gitaly_bundle_pristine
-        notice('Ensuring gitaly/ruby/ Ruby gems are pristine..')
         shellout(BUNDLE_PRISTINE_CMD, chdir: config.gitaly.ruby_dir)
       end
 
