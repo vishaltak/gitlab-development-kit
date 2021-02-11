@@ -6,11 +6,8 @@ LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install packages
-COPY packages.txt /
-RUN apt-get update && apt-get install -y software-properties-common \
+RUN apt-get update && apt-get install -y sudo make software-properties-common \
     && add-apt-repository ppa:git-core/ppa -y \
-    && apt-get install -y $(sed -e 's/#.*//' /packages.txt) \
     && apt-get purge software-properties-common -y \
     && apt-get autoremove -y \
     && rm -rf /tmp/*
@@ -18,18 +15,14 @@ RUN apt-get update && apt-get install -y software-properties-common \
 RUN useradd --user-group --create-home --groups sudo gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk_no_password
 
-WORKDIR /home/gdk
 USER gdk
+WORKDIR /home/gdk/gitlab-development-kit
+COPY --chown=gdk . .
 
-# Install asdf, plugins and correct versions
 ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
-COPY --chown=gdk .tool-versions .
-RUN git clone https://github.com/asdf-vm/asdf.git /home/gdk/.asdf --branch v0.8.0 && \
-  for plugin in $(grep -v '#' .tool-versions | cut -f1 -d" "); do \
-  echo "Installing asdf plugin '$plugin' and install current version" ; \
-  asdf plugin add $plugin; \
-  NODEJS_CHECK_SIGNATURES=no asdf install ; done \
+
+RUN make bootstrap \
   # simple tests that tools work
   && bash -lec "asdf version; yarn --version; node --version; ruby --version" \
   # clear tmp caches e.g. from postgres compilation
-  && rm -rf /tmp/*
+  && rm -rf /tmp/* ~/.asdf/tmp/*
