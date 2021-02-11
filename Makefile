@@ -53,8 +53,8 @@ gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commit
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_without_production_cmd = ${BUNDLE} config set without 'production'
 bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
-in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
-gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
+in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir)
+gitlab_rake_cmd = $(in_gitlab) nix develop --command bundle exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
 psql := $(postgresql_bin_dir)/psql
@@ -298,9 +298,6 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) gem list bundler -i -v ">=${REQUIRED_BUNDLER_VERSION}" > /dev/null || gem install bundler -v ${REQUIRED_BUNDLER_VERSION}
-	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
-	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
 .gitlab-yarn:
@@ -308,7 +305,7 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Node.js packages"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) ${YARN} install --pure-lockfile ${QQ}
+	$(Q)$(in_gitlab) nix develop --command yarn install --pure-lockfile ${QQ}
 	$(Q)touch $@
 
 
@@ -324,7 +321,7 @@ gettext-update: gettext-unlock .gettext
 	@echo "${DIVIDER}"
 	@echo "Generating gitlab-org/gitlab Rails translations"
 	@echo "${DIVIDER}"
-	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
+	$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
 	$(Q)$(gitlab_git_cmd) checkout locale/*/gitlab.po
 	$(Q)touch $@
 

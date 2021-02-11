@@ -41,22 +41,22 @@ gdk_install_gem() {
 }
 
 ruby_configure_opts() {
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
-    brew_openssl_dir=$(brew --prefix openssl)
-    brew_readline_dir=$(brew --prefix readline)
+  # if [[ "${OSTYPE}" == "darwin"* ]]; then
+  #   brew_openssl_dir=$(brew --prefix openssl)
+  #   brew_readline_dir=$(brew --prefix readline)
 
-    echo "RUBY_CONFIGURE_OPTS=\"--with-openssl-dir=${brew_openssl_dir} --with-readline-dir=${brew_readline_dir}\""
-  fi
+  #   echo "RUBY_CONFIGURE_OPTS=\"--with-openssl-dir=${brew_openssl_dir} --with-readline-dir=${brew_readline_dir}\""
+  # fi
 
   return 0
 }
 
 configure_ruby_bundler() {
-  local current_postgres_version
-  current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
+  # local current_postgres_version
+  # current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
 
-  bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
-  bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+  # bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
+  # bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 }
 
 ensure_sudo_available() {
