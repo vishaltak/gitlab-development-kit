@@ -93,9 +93,6 @@ module GDK
         return false unless create_directory('repositories')
 
         repositories_gitkeep_file = gdk_root_pathed('repositories').join('.gitkeep')
-        timestamped_repositories_gitkeep_file = gdk_root_pathed_timestamped('repositories').join('.gitkeep')
-
-        timestamped_repositories_gitkeep_file.unlink if timestamped_repositories_gitkeep_file.exist?
         touch_file(repositories_gitkeep_file)
       end
 
