@@ -10,11 +10,11 @@ module GDK
     autoload :MeasureBase, 'gdk/command/measure_base'
     autoload :MeasureUrl, 'gdk/command/measure_url'
     autoload :MeasureWorkflow, 'gdk/command/measure_workflow'
+    autoload :Pristine, 'gdk/command/pristine'
     autoload :Reconfigure, 'gdk/command/reconfigure'
     autoload :ResetData, 'gdk/command/reset_data'
     autoload :Run, 'gdk/command/run'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
-    autoload :Pristine, 'gdk/command/pristine'
   end
 end
