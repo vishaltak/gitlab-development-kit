@@ -137,7 +137,7 @@ RSpec.describe GDK::Config do
 
     describe '#version' do
       it 'has a default value' do
-        expect(config.elasticsearch.version).to match(/\d.\d.\d/)
+        expect(config.elasticsearch.version).to match(/\d+.\d+.\d+/)
       end
 
       context 'when specified in config file' do
