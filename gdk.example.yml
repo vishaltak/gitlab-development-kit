@@ -59,7 +59,6 @@ gitlab:
   rails:
     address: ''
     puma:
-      single_mode: false
       threads_max: 4
       threads_min: 1
       workers: 2

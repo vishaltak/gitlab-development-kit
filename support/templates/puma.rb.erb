@@ -27,7 +27,7 @@ state_path '<%= config.gitlab.dir %>/tmp/pids/puma.state'
 #
 # The default is "0, 16".
 #
-threads <%= config.gitlab.rails.puma.__threads_min %>, <%= config.gitlab.rails.puma.threads_max %>
+threads <%= config.gitlab.rails.puma.__threads_min %>, <%= config.gitlab.rails.puma.__threads_max %>
 
 # By default, workers accept all requests and queue them to pass to handlers.
 # When false, workers accept the number of simultaneous requests configured.
@@ -43,7 +43,7 @@ queue_requests false
 # accepted protocols.
 bind '<%= config.gitlab.rails.__bind %>'
 
-workers <%= config.gitlab.rails.puma.__workers %>
+workers <%= config.gitlab.rails.puma.workers %>
 
 require_relative "<%= config.gitlab.dir %>/lib/gitlab/cluster/lifecycle_events"
 
