@@ -107,8 +107,8 @@ gdk reconfigure
 ##### Object storage config
 
 The following examples are a quick guide for configuring object storage
-for external S3 providers or Microsoft Azure. See the [object storage
-settings](https://docs.gitlab.com/ee/administration/object_storage.html).
+for external S3 providers, Google Cloud Storage, or Microsoft Azure.
+See the [object storage settings](https://docs.gitlab.com/ee/administration/object_storage.html).
 Note that we recommend enabling `consolidated_form` to `true`.
 
 In development, you may also use a single bucket for testing.
@@ -123,6 +123,35 @@ object_store:
     provider: 'AWS'
     aws_access_key_id: '<YOUR AWS ACCESS KEY ID>'
     aws_secret_access_key: '<YOUR AWS SECRET ACCESS KEY>'
+  objects:
+    artifacts:
+      bucket: artifacts
+    external_diffs:
+      bucket: external-diffs
+    lfs:
+      bucket: lfs-objects
+    uploads:
+      bucket: uploads
+    packages:
+      bucket: packages
+    dependency_proxy:
+      bucket: dependency_proxy
+    terraform_state:
+      bucket: terraform
+    pages:
+      bucket: pages
+```
+
+###### Google Cloud Storage
+
+```yaml
+object_store:
+  enabled: true
+  consolidated_form: true
+  connection:
+    provider: 'Google'
+    google_project: '<YOUR GOOGLE PROJECT ID>'
+    google_json_key_location: '<YOUR PATH TO GCS CREDENTIALS>'
   objects:
     artifacts:
       bucket: artifacts
