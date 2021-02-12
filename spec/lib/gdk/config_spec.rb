@@ -713,13 +713,6 @@ RSpec.describe GDK::Config do
       end
 
       describe 'puma' do
-        describe 'single_mode' do
-          it 'is disabled by default' do
-            expect(config.gitlab.rails.puma.single_mode).to be(false)
-            expect(config.gitlab.rails.puma.single_mode?).to be(false)
-          end
-        end
-
         describe 'threads_min' do
           it 'is 1 by default' do
             expect(config.gitlab.rails.puma.threads_min).to be(1)
@@ -727,28 +720,32 @@ RSpec.describe GDK::Config do
         end
 
         describe '__threads_min' do
-          let(:single_mode) { nil }
-
-          before do
-            yaml['gitlab'] = {
-              'rails' => {
-                'puma' => {
-                  'single_mode' => single_mode
+          context 'when running in clustered mode (workers > 0)' do
+            before do
+              yaml['gitlab'] = {
+                'rails' => {
+                  'puma' => {
+                    'workers' => 2
+                  }
                 }
               }
-            }
-          end
-
-          context 'when single_mode disabled' do
-            let(:single_mode) { false }
+            end
 
             it 'is 1 by default' do
               expect(config.gitlab.rails.puma.__threads_min).to be(1)
             end
           end
 
-          context 'when single_mode enabled' do
-            let(:single_mode) { true }
+          context 'when running in single mode (workers == 0)' do
+            before do
+              yaml['gitlab'] = {
+                'rails' => {
+                  'puma' => {
+                    'workers' => 0
+                  }
+                }
+              }
+            end
 
             it 'is equal to threads_max' do
               expect(config.gitlab.rails.puma.__threads_min).to be(config.gitlab.rails.puma.threads_max)
@@ -762,39 +759,40 @@ RSpec.describe GDK::Config do
           end
         end
 
-        describe 'workers' do
-          it 'is 2 by default' do
-            expect(config.gitlab.rails.puma.workers).to be(2)
-          end
-        end
-
-        describe '__workers' do
-          let(:single_mode) { nil }
+        describe '__threads_max' do
+          let(:threads_max) { nil }
 
           before do
             yaml['gitlab'] = {
               'rails' => {
                 'puma' => {
-                  'single_mode' => single_mode
+                  'threads_min' => 2,
+                  'threads_max' => threads_max
                 }
               }
             }
           end
 
-          context 'when single_mode disabled' do
-            let(:single_mode) { false }
+          context 'when threads_max > threads_min' do
+            let(:threads_max) { 3 }
 
-            it 'is equal to workers' do
-              expect(config.gitlab.rails.puma.__workers).to be(config.gitlab.rails.puma.workers)
+            it 'is equal to threads_max' do
+              expect(config.gitlab.rails.puma.__threads_max).to be(config.gitlab.rails.puma.threads_max)
             end
           end
 
-          context 'when single_mode enabled' do
-            let(:single_mode) { true }
+          context 'when threads_max < threads_min' do
+            let(:threads_max) { 1 }
 
-            it 'is equal to 0' do
-              expect(config.gitlab.rails.puma.__workers).to be(0)
+            it 'is equal to threads_min' do
+              expect(config.gitlab.rails.puma.__threads_max).to be(config.gitlab.rails.puma.threads_min)
             end
+          end
+        end
+
+        describe 'workers' do
+          it 'is 2 by default' do
+            expect(config.gitlab.rails.puma.workers).to be(2)
           end
         end
       end
