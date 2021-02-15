@@ -7,7 +7,6 @@ log-verbose=<%= config.gitlab_pages.verbose %>
 <%- if config.gitlab_pages.access_control? -%>
 auth-client-id=<%= config.gitlab_pages.auth_client_id %>
 auth-client-secret=<%= config.gitlab_pages.auth_client_secret %>
-# random 32-byte string
-auth-secret=<%= rand(36**32).to_s(36) %>
-auth-redirect-uri=<%= 'http://'+config.gitlab_pages.__uri+'/auth' %>
+auth-secret=<%= config.gitlab_pages.auth_secret %>
+auth-redirect-uri=<%= config.gitlab_pages.__auth_redirect_uri %>
 <%- end -%>

@@ -74,6 +74,7 @@ gitlab_pages:
   access_control: false
   auth_client_id: ''
   auth_client_secret: ''
+  auth_secret: '0'
   auto_update: true
   enabled: true
   host: 127.0.0.1.nip.io

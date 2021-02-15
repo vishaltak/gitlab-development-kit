@@ -229,6 +229,9 @@ module GDK
       bool(:access_control) { false }
       string(:auth_client_id) { '' }
       string(:auth_client_secret) { '' }
+      # random 32-byte string
+      string(:auth_secret) { rand(36**32).to_s(36) }
+      string(:__auth_redirect_uri) { "http://#{config.gitlab_pages.__uri}/auth" }
     end
 
     settings :gitlab_k8s_agent do
