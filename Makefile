@@ -666,8 +666,9 @@ gitlab-ui/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
 
 gitlab-ui/.git/pull:
+	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-ui to master"
+	@echo "Updating gitlab-org/gitlab-ui to main"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" main
 
