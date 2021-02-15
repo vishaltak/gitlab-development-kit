@@ -1109,7 +1109,7 @@ RSpec.describe GDK::Config do
 
     describe '#access_control' do
       it 'defaults to false' do
-        expect(config.gitlab_pages.access_control).to eq(false)
+        expect(config.gitlab_pages.access_control?).to eq(false)
       end
 
       context 'when access_control is enabled' do
@@ -1120,7 +1120,7 @@ RSpec.describe GDK::Config do
         end
 
         it 'configures auth correctly' do
-          expect(config.gitlab_pages.access_control).to eq(true)
+          expect(config.gitlab_pages.access_control?).to eq(true)
           expect(config.gitlab_pages.auth_client_id).to eq('client_id')
           expect(config.gitlab_pages.auth_client_secret).to eq('client_secret')
         end

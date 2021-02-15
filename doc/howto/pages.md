@@ -66,3 +66,9 @@ to create an OAuth application for GitLab Pages.
    ```shell
    gdk reconfigure
    ```
+
+1. Restart GDK
+
+   ```shell
+   gdk restart
+   ```
