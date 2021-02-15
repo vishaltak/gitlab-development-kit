@@ -37,7 +37,7 @@ Installation requires `git` and `make` are installed.
      sudo apt install git make
      ```
 
-### Arch and Manjaro
+### Arch and Manjaro Linux
 
 Update the list of available packages and install Git and Make:
 

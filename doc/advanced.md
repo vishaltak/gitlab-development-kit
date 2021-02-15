@@ -97,17 +97,16 @@ Unless already set, you might have to increase the watches limit of
 file changes. See [Inotify Watches Limit](https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit)
 for details and instructions about how to apply this change.
 
-### Arch Linux
-
-NOTE:
-These instructions don't account for using `asdf` for managing some dependencies.
+### Arch and Manjaro Linux
 
 The following are instructions for Arch and Manjaro users that don't want
 [GDK to manage their dependencies with `asdf`](index.md#install-dependencies).
+These steps should also work for other
+[Arch-based distribution](https://wiki.archlinux.org/index.php/Arch-based_distributions) that use systemd.
 
 To install dependencies for Arch Linux:
 
-1. [Install `git` and `make`](index.md#install-prerequisites)
+1. [Install `git` and `make`](index.md#arch-and-manjaro-linux)
 
 1. In the root of the `gitlab-development-kit` directory, run:
 
@@ -115,9 +114,9 @@ To install dependencies for Arch Linux:
    sudo pacman -S $(sed -e 's/#.*//' packages_arch.txt)
    ```
 
-1. [Install runit-systemd](#install-runit-on-arch-linux).
+1. [Install runit-systemd](#install-runit-on-arch-and-manjaro-linux).
 
-#### Install runit on Arch Linux
+#### Install runit on Arch and Manjaro Linux
 
 The Arch Linux core repository no longer contains the `runit` package. You must
 install [`runit-systemd`](https://aur.archlinux.org/packages/runit-systemd/) from the Arch User Repository (AUR).
