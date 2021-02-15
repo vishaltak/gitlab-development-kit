@@ -96,7 +96,7 @@ ensure_supported_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" || "$os_id" == "fedora" ]]; then
+    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" || "$os_id" == "fedora"|| "$os_id" == "arch" || "$os_id" == "manjaro" ]]; then
       return 0
     fi
   fi
@@ -111,9 +111,10 @@ common_preflight_checks() {
     echo
     echo "ERROR: Unsupported platform." >&2
     echo "INFO: The list of supported platforms is:" >&2
-    for platform in macOS Ubuntu Debian PopOS PureOS Fedora ; do
+    for platform in macOS Ubuntu Debian PopOS PureOS Fedora Arch Manjaro; do
       echo "INFO: - $platform" >&2
     done
+    echo "INFO: If you want to add your platform to this list, you're welcome to edit bootstrap-common.sh and open a merge request or open an issue in the GDK project." >&2
     echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/advanced.md to bootstrap manually." >&2
     return 1
   fi
@@ -143,6 +144,10 @@ setup_platform() {
       if ! setup_platform_linux_with "packages_debian.txt"; then
         return 1
       fi
+    elif [[ "${os_id}" == "arch" || "$os_id" == "manjaro" ]]; then
+      if ! setup_platform_linux_arch_like_with "packages_arch.txt"; then
+        return 1
+      fi
     fi
   fi
 }
@@ -155,6 +160,27 @@ setup_platform_linux_with() {
   # shellcheck disable=SC2046
   if ! sudo apt-get install -y $(sed -e 's/#.*//' "${1}"); then
     return 1
+  fi
+
+  return 0
+}
+
+setup_platform_linux_arch_like_with() {
+  if ! echo_if_unsuccessful sudo pacman -Syy; then
+    return 1
+  fi
+
+  # shellcheck disable=SC2046
+  if ! sudo pacman -S --noconfirm $(sed -e 's/#.*//' "${1}"); then
+    return 1
+  fi
+
+  # Check for runit, which needs to be manually installed from AUR.
+  if ! echo_if_unsuccessful which runit; then
+    cd /tmp || return 1
+    git clone --depth 1 https://aur.archlinux.org/runit-systemd.git
+    cd runit-systemd || return 1
+    makepkg -sri --noconfirm
   fi
 
   return 0

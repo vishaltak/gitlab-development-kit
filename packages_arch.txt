@@ -1,0 +1,27 @@
+# Keep the file list alphabetically sorted, makes diffs and merges easier
+#
+binutils
+cmake
+ed
+fakeroot
+gcc
+git
+git-lfs
+go
+graphicsmagick
+icu
+minio
+npm
+openssh
+perl-image-exiftool
+pkg-config
+postgresql
+postgresql-libs
+python2
+re2
+redis
+rsync
+sqlite
+unzip
+which
+yarn

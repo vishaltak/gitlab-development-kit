@@ -37,6 +37,14 @@ Installation requires `git` and `make` are installed.
      sudo apt install git make
      ```
 
+### Arch and Manjaro
+
+Update the list of available packages and install Git and Make:
+
+```shell
+sudo pacman -Syu git make
+```
+
 ### Other
 
 Install using your system's package manager.
