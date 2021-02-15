@@ -44,7 +44,7 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
 1. [Install `git` and `make`](index.md#install-prerequisites).
 1. Install [Yarn](https://classic.yarnpkg.com/en/docs/install#debian-stable).
 1. Run `make bootstrap-packages`. This is a light subset of `make bootstrap` that runs
-   `apt-get update` and then `apt-get install` on the packages found in `packages_debian.txt`.
+   `apt-get update` and then `apt-get install` on the packages found in [`packages_debian.txt`](../packages_debian.txt).
 
    ```shell
    make bootstrap-packages
@@ -102,23 +102,48 @@ for details and instructions about how to apply this change.
 NOTE:
 These instructions don't account for using `asdf` for managing some dependencies.
 
+The following are instructions for Arch and Manjaro users that don't want
+[GDK to manage their dependencies with `asdf`](index.md#install-dependencies).
+
 To install dependencies for Arch Linux:
 
-```shell
-pacman -S postgresql redis postgresql-libs icu npm ed cmake openssh git git-lfs go re2 \
-  unzip graphicsmagick perl-image-exiftool rsync yarn minio sqlite python2
-```
+1. [Install `git` and `make`](index.md#install-prerequisites)
 
-NOTE:
+1. In the root of the `gitlab-development-kit` directory, run:
+
+   ```shell
+   sudo pacman -S $(sed -e 's/#.*//' packages_arch.txt)
+   ```
+
+1. [Install runit-systemd](#install-runit-on-arch-linux).
+
+#### Install runit on Arch Linux
+
 The Arch Linux core repository no longer contains the `runit` package. You must
-install `runit-systemd` from the Arch User Repository (AUR) with an AUR package
-manager, such as `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur))
-or `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)).
-For more information, see [Arch Linux Wiki page AUR_helpers](https://wiki.archlinux.org/index.php/AUR_helpers).
+install [`runit-systemd`](https://aur.archlinux.org/packages/runit-systemd/) from the Arch User Repository (AUR).
 
-```shell
-pikaur -S runit-systemd
-```
+If you're installing dependencies with [`asdf`](index.md#install-dependencies), `runit-systemd` is
+installed as part of the `make bootstrap` command.
+
+You can use an [AUR package helper](https://wiki.archlinux.org/index.php/AUR_helpers):
+
+- For `pacaur` ([https://github.com/E5ten/pacaur](https://github.com/E5ten/pacaur)):
+
+  ```shell
+  pacaur -S runit-systemd
+  ```
+
+- For `pikaur` ([https://github.com/actionless/pikaur](https://github.com/actionless/pikaur)):
+
+  ```shell
+  pikaur -S runit-systemd
+  ```
+
+- For [`yay`](https://github.com/Jguer/yay):
+
+  ```shell
+  yay -S runit-systemd
+  ```
 
 ### Fedora
 
