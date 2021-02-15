@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 module GDK
   module Command
     # Handles `gdk pristine` command execution
@@ -8,9 +10,12 @@ module GDK
       BUNDLE_INSTALL_CMD = 'bundle install --jobs 4 --quiet'
       BUNDLE_PRISTINE_CMD = 'bundle pristine'
       YARN_CLEAN_CMD = 'yarn clean'
+      GIT_CLEAN_TMP_CMD = 'git clean -fX --t tmp/'
 
       def run
-        if go_clean_cache && gdk_bundle && gitlab_bundle && gitaly_bundle && gitlab_yarn_clean
+        if gdk_stop && gdk_tmp_clean && go_clean_cache && gdk_bundle &&
+            gitlab_bundle && gitaly_bundle && gitlab_tmp_clean &&
+            gitlab_yarn_clean
           GDK::Output.success("Successfully ran 'gdk pristine'!")
           true
         else
@@ -24,6 +29,16 @@ module GDK
 
       def notice(msg)
         GDK::Output.notice(msg)
+      end
+
+      def gdk_stop
+        notice('Stopping GDK..')
+        Runit.stop
+      end
+
+      def gdk_tmp_clean
+        notice('Cleaning GDK tmp/ ..')
+        shellout(GIT_CLEAN_TMP_CMD, chdir: config.gdk_root)
       end
 
       def go_clean_cache
@@ -58,8 +73,13 @@ module GDK
       end
 
       def gitlab_yarn_clean
-        notice('Cleaning GitLab yarn cache..')
+        notice('Cleaning gitlab/ Yarn cache..')
         shellout(YARN_CLEAN_CMD, chdir: config.gitlab.dir)
+      end
+
+      def gitlab_tmp_clean
+        notice('Cleaning gitlab/tmp/ ..')
+        shellout(GIT_CLEAN_TMP_CMD, chdir: config.gitlab.dir)
       end
 
       def gitaly_bundle
