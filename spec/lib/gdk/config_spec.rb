@@ -1115,12 +1115,14 @@ RSpec.describe GDK::Config do
       context 'when access_control is enabled' do
         let(:yaml) do
           {
-            'gitlab_pages' => { 'access_control' => true }
+            'gitlab_pages' => { 'access_control' => true, 'auth_client_id' => 'client_id', 'auth_client_secret' => 'client_secret' }
           }
         end
 
-        it 'returns true' do
+        it 'configures auth correctly' do
           expect(config.gitlab_pages.access_control).to eq(true)
+          expect(config.gitlab_pages.auth_client_id).to eq('client_id')
+          expect(config.gitlab_pages.auth_client_secret).to eq('client_secret')
         end
       end
     end

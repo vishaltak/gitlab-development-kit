@@ -227,6 +227,8 @@ module GDK
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
       bool(:verbose) { false }
       bool(:access_control) { false }
+      string(:auth_client_id) { '' }
+      string(:auth_client_secret) { '' }
     end
 
     settings :gitlab_k8s_agent do

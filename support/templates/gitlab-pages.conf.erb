@@ -5,11 +5,9 @@ pages-domain=<%= config.gitlab_pages.host %>
 api-secret-key=<%= config.gitlab_pages.secret_file %>
 log-verbose=<%= config.gitlab_pages.verbose %>
 <% if config.gitlab_pages.access_control %>
-# Create an OAuth application for GitLab Pages under <%= config.__uri.merge('admin/applications') %>
-# and fill in these values
-# For more information see https://gitlab.com/gitlab-org/gitlab-pages/-/blob/4f07314b781e387183b29dff7d7ad62b9c111f26/doc/development.md#enable-access-control
-auth-client-id=
-auth-client-secret=
-auth-secret=<%= rand(36**32).to_s(36) %> # random 32-byte string
-auth-redirect-uril=<%= 'http://'+config.gitlab_pages.__uri+'/auth' %>
+auth-client-id=<%= config.gitlab_pages.auth_client_id %>
+auth-client-secret=<%= config.gitlab_pages.auth_client_secret %>
+# random 32-byte string
+auth-secret=<%= rand(36**32).to_s(36) %>
+auth-redirect-uri=<%= 'http://'+config.gitlab_pages.__uri+'/auth' %>
 <% end %>

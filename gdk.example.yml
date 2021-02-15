@@ -72,6 +72,8 @@ gitlab_k8s_agent:
   listen_network: tcp
 gitlab_pages:
   access_control: false
+  auth_client_id: ''
+  auth_client_secret: ''
   auto_update: true
   enabled: true
   host: 127.0.0.1.nip.io
