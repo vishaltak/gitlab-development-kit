@@ -178,7 +178,9 @@ module GDK
       end
 
       def check_minio_installed
-        @error_messages << missing_dependency('MinIO') unless system("minio --help >/dev/null 2>&1")
+        return unless config.object_store.enabled?
+
+        @error_messages << missing_dependency('MinIO') unless system('minio --help >/dev/null 2>&1')
       end
 
       def check_runit_installed
@@ -196,6 +198,10 @@ module GDK
       end
 
       private
+
+      def config
+        @config ||= GDK.config
+      end
 
       def expected_bundler_version
         @expected_bundler_version ||= GitLabVersions.new.bundler_version.freeze
