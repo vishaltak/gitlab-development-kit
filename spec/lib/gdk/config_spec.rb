@@ -1123,7 +1123,7 @@ RSpec.describe GDK::Config do
           expect(config.gitlab_pages.access_control?).to eq(true)
           expect(config.gitlab_pages.auth_client_id).to eq('client_id')
           expect(config.gitlab_pages.auth_client_secret).to eq('client_secret')
-          expect(config.gitlab_pages.auth_secret.length).to eq(32)
+          expect(config.gitlab_pages.__auth_secret.length).to eq(32)
           expect(config.gitlab_pages.__auth_redirect_uri).to eq('http://127.0.0.1.nip.io:3010/auth')
         end
       end
