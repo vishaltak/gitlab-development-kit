@@ -1,6 +1,8 @@
 # Pages
 
 This page contains information about developing GitLab Pages inside the GDK. This method allows you test GitLab Pages from deployment to visiting your static site.
+For further examples check the [Developing inside the GDK](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/master/doc/development.md#developing-inside-the-gdk)
+section of the GitLab Pages documentation.
 
 If you would like to develop Pages *outside* of the GDK, see [Getting started with development](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/master/doc/development.md) in the `gitlab-pages` repository.
 
@@ -44,3 +46,29 @@ following to `/etc/hosts`:
 That is because `/etc/hosts` does not support wildcard hostnames.
 An alternative is to use [`dnsmasq`](https://wiki.debian.org/dnsmasq)
 to handle wildcard hostnames.
+
+## Enable access control
+
+1. Follow steps 3-6 of [this guide](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/master/doc/development.md#enable-access-control)
+to create an OAuth application for GitLab Pages.
+
+1. Add the following to `gdk.yml`
+
+   ```yaml
+   gitlab_pages:
+     access_control: true
+     auth_client_id: 'YOUR_CLIENT_ID' # replace with OAuth Client ID generated above
+     auth_client_secret: 'YOUR_CLIENT_SECRET' # replace with OAuth Client Secret generated above
+   ```
+
+1. Reconfigure GDK
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Restart GDK
+
+   ```shell
+   gdk restart
+   ```

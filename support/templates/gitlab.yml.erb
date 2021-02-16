@@ -302,7 +302,7 @@ production: &base
   ## GitLab Pages
   pages:
     enabled: true
-    access_control: false
+    access_control: <%= config.gitlab_pages.access_control? %>
     host: <%= config.gitlab_pages.host %>
     port: <%= config.gitlab_pages.port %>
     https: false # Set to true if you serve the pages with HTTPS
