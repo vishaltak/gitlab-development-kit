@@ -60,7 +60,7 @@
               gdk
               postgresql
               yarn
-              nodejs-12_x
+              nodejs-14_x
               go
               redis
             ] ++ gitlab;
