@@ -230,7 +230,7 @@ module GDK
       string(:auth_client_id) { '' }
       string(:auth_client_secret) { '' }
       # random 32-byte string
-      string(:__auth_secret) { rand(36**32).to_s(36) }
+      string(:__auth_secret) { SecureRandom.alphanumeric(32) }
       string(:__auth_redirect_uri) { "http://#{config.gitlab_pages.__uri}/auth" }
     end
 
