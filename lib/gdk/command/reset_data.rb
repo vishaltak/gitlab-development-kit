@@ -85,12 +85,10 @@ module GDK
 
       def move_git_repository_data
         backup_directory('git repository data', 'repositories') &&
-          fix_repository_data_gitkeep_file
+          restore_repository_data_dir
       end
 
-      def fix_repository_data_gitkeep_file
-        return false unless create_directory('repositories')
-
+      def restore_repository_data_dir
         sh = Shellout.new('git restore repositories', chdir: GDK.root)
         sh.try_run
         sh.success?
