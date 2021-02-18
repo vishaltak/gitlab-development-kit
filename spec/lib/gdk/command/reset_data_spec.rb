@@ -3,6 +3,9 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Command::ResetData do
+  let!(:root) { GDK.root }
+  let!(:backup_base_dir) { root.join('.backups') }
+
   subject { described_class.new }
 
   describe '.prompt_and_run' do
@@ -10,6 +13,7 @@ RSpec.describe GDK::Command::ResetData do
 
     before do
       allow(GDK::Output).to receive(:warn).with("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
+      allow(GDK::Output).to receive(:warn).with("Backups will be made in '#{backup_base_dir}', just in case!")
       allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(are_you_sure)
     end
 
@@ -35,7 +39,6 @@ RSpec.describe GDK::Command::ResetData do
   end
 
   describe '#run' do
-    let!(:root) { GDK.root }
     let!(:time_now) { Time.now }
     let!(:current_timestamp) { time_now.strftime('%Y-%m-%d_%H.%M.%S') }
     let!(:postgresql_data_directory) { root.join('postgresql/data') }

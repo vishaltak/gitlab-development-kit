@@ -6,6 +6,7 @@ module GDK
     class ResetData
       def self.prompt_and_run
         GDK::Output.warn("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
+        GDK::Output.warn("Backups will be made in '#{GDK.root.join('.backups')}', just in case!")
         accepted = GDK::Output.prompt('Are you sure? [y/N]')
         return false unless accepted.match?(/\Ay(?:es)*\z/i)
 
