@@ -45,7 +45,7 @@ module GDK
       EXPECTED_GO_VERSION = '1.14'
       EXPECTED_YARN_VERSION = '1.22.5'
       EXPECTED_NODEJS_VERSION = '12.18.3'
-      EXPECTED_POSTGRESQL_VERSION = '11.9'
+      EXPECTED_POSTGRESQL_VERSION = GDK::Postgresql::TARGET_VERSION.to_s
 
       attr_reader :error_messages
 

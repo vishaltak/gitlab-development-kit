@@ -83,7 +83,7 @@
 /postgresql-replica/.s.*
 /postgresql-replica/data
 /postgresql/.s.*
-/postgresql/data
+/postgresql/data*
 /postgresql_geo_port
 /postgresql_port
 /prometheus/prometheus.yml

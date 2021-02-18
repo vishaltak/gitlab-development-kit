@@ -11,6 +11,19 @@ RSpec.describe GDK::Postgresql do
     stub_gdk_yaml(yaml)
   end
 
+  describe '::TARGET_VERSION' do
+    it 'is 11.9 by default' do
+      expect(described_class::TARGET_VERSION).to be_instance_of(Gem::Version)
+      expect(described_class::TARGET_VERSION).to eq(Gem::Version.new('11.9'))
+    end
+  end
+
+  describe '.target_version_major' do
+    it 'is 11 by default' do
+      expect(described_class.target_version_major).to eq(11)
+    end
+  end
+
   describe '#use_tcp?' do
     context 'with host defined to a path' do
       let(:yaml) do
@@ -84,5 +97,76 @@ RSpec.describe GDK::Postgresql do
 
       expect(subject).not_to be_in_recovery
     end
+  end
+
+  describe '#current_data_dir' do
+    it 'returns the path to the postgresql data directory' do
+      expect(subject.current_data_dir).to eq('/home/git/gdk/postgresql/data')
+    end
+  end
+
+  describe '#current_version' do
+    it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
+      stub_current_version('12')
+
+      expect(subject.current_version).to eq(12)
+    end
+  end
+
+  describe '#upgrade_needed?' do
+    context 'when current version is 11' do
+      before do
+        stub_current_version('11')
+      end
+
+      context 'and target version is 9.6' do
+        it 'returns false' do
+          expect(subject.upgrade_needed?(9.6)).to be(false)
+          expect(subject.upgrade_needed?('9.6')).to be(false)
+        end
+      end
+
+      context 'and target version is 11' do
+        it 'returns false' do
+          expect(subject.upgrade_needed?(11)).to be(false)
+          expect(subject.upgrade_needed?('11')).to be(false)
+        end
+      end
+
+      context 'and target version is the default' do
+        it 'returns false' do
+          expect(subject.upgrade_needed?).to be(false)
+        end
+      end
+
+      context 'and target version is 13' do
+        it 'returns true' do
+          expect(subject.upgrade_needed?(13)).to be(true)
+          expect(subject.upgrade_needed?('13')).to be(true)
+        end
+      end
+    end
+
+    it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
+      pg_version_file = '/home/git/gdk/postgresql/data/PG_VERSION'
+
+      allow(File).to receive(:read).and_call_original
+      allow(File).to receive(:exist?).and_call_original
+
+      allow(File).to receive(:exist?).with(pg_version_file).and_return(true)
+      allow(File).to receive(:read).with(pg_version_file).and_return('12')
+
+      expect(subject.current_version).to eq(12)
+    end
+  end
+
+  def stub_current_version(version)
+    pg_version_file = '/home/git/gdk/postgresql/data/PG_VERSION'
+
+    allow(File).to receive(:read).and_call_original
+    allow(File).to receive(:exist?).and_call_original
+
+    allow(File).to receive(:exist?).with(pg_version_file).and_return(true)
+    allow(File).to receive(:read).with(pg_version_file).and_return(version)
   end
 end

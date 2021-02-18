@@ -2,10 +2,36 @@
 
 module GDK
   class Postgresql
+    TARGET_VERSION = Gem::Version.new(11.9)
+
+    def self.target_version_major
+      TARGET_VERSION.canonical_segments[0]
+    end
+
     def psql_cmd(args)
       database = args.empty? ? default_database : nil
 
       pg_cmd(args, database: database).join(" ")
+    end
+
+    def current_data_dir
+      @current_data_dir ||= begin
+        config = GDK::Config.new
+        File.join(config.postgresql.dir, 'data')
+      end
+    end
+
+    def current_version
+      @current_version ||= begin
+        path = File.join(current_data_dir, 'PG_VERSION')
+
+        raise "PG_VERSION not found in #{path}. Is PostgreSQL initialized?" unless File.exist?(path)
+
+        version = File.read(path).to_f
+
+        # After PostgreSQL 9.6, PG_VERSION uses a single integer (10, 11, 12, etc.)
+        version >= 10 ? version.to_i : version
+      end
     end
 
     def ready?
@@ -28,6 +54,10 @@ module GDK
 
     def use_tcp?
       !config.host.start_with?('/')
+    end
+
+    def upgrade_needed?(target_version = self.class.target_version_major)
+      current_version < target_version.to_f
     end
 
     def db_exists?(dbname)
