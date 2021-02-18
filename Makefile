@@ -99,7 +99,8 @@ install: all show-installed-at start
 # This is used by `gdk update`
 #
 # Pull gitlab directory first since dependencies are linked from there.
-update: asdf-update \
+update: preflight-update-checks \
+asdf-update \
 ensure-databases-running \
 unlock-dependency-installers \
 gettext-unlock \
@@ -186,6 +187,10 @@ Procfile:
 
 .PHONY: preflight-checks
 preflight-checks: rake
+	$(Q)rake $@
+
+.PHONY: preflight-update-checks
+preflight-update-checks: rake
 	$(Q)rake $@
 
 .PHONY: rake

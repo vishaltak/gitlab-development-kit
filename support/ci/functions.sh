@@ -63,6 +63,20 @@ restart() {
    # shellcheck disable=SC2009
   ps -ef | grep runsv
   gdk start
+
+  echo "> Upgrading PostgreSQL data directory if necessary.."
+  support/upgrade-postgresql
+
+  echo "> Restarting GDK.."
+  stop
+  sleep 5
+  stop
+  sleep 5
+
+  gdk status
+   # shellcheck disable=SC2009
+  ps -ef | grep runsv
+  gdk start
 }
 
 doctor() {
