@@ -10,22 +10,36 @@ module GDK
       BUNDLE_INSTALL_CMD = 'bundle install --jobs 4 --quiet'
       BUNDLE_PRISTINE_CMD = 'bundle pristine'
       YARN_CLEAN_CMD = 'yarn clean'
-      GIT_CLEAN_TMP_CMD = 'git clean -fX --t tmp/'
+      GIT_CLEAN_TMP_CMD = 'git clean -fX -- tmp/'
 
       def run
-        if gdk_stop && gdk_tmp_clean && go_clean_cache && gdk_bundle &&
-            gitlab_bundle && gitaly_bundle && gitlab_tmp_clean &&
-            gitlab_yarn_clean
-          GDK::Output.success("Successfully ran 'gdk pristine'!")
-          true
-        else
-          GDK::Output.error("Failed to complete running 'gdk pristine'.")
-          GDK.display_help_message
-          false
+        %i[
+          gdk_stop
+          gdk_tmp_clean
+          go_clean_cache
+          gdk_bundle
+          gitlab_bundle
+          gitaly_bundle
+          gitlab_tmp_clean
+          gitlab_yarn_clean
+        ].each do |task_name|
+          run_task(task_name)
         end
+
+        GDK::Output.success("Successfully ran 'gdk pristine'!")
+        true
+      rescue StandardError => e
+        GDK::Output.error("Failed to run 'gdk pristine' - #{e.message}.")
+        GDK.display_help_message
+        false
       end
 
       private
+
+      def run_task(method_name)
+        send(method_name) || # rubocop:disable GitlabSecurity/PublicSend
+          raise("Had an issue with '#{method_name}'")
+      end
 
       def notice(msg)
         GDK::Output.notice(msg)
