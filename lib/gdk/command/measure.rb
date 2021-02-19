@@ -94,7 +94,7 @@ module GDK
 
       def run_sitespeed
         # Start Sitespeed through docker
-        docker_command = 'docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.0 -b chrome '
+        docker_command = 'docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.1 -b chrome '
         # 4 repetitions
         docker_command += '-n 4 '
         # Limit Cable Connection
