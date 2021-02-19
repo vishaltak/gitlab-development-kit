@@ -247,8 +247,7 @@ must get the values from the secondary, and then manually add the node.
    in your browser.
 1. Click the **New node** button.
 1. Fill in the **Name** and **URL** fields for the **secondary** node, using the *exact* values from step 2.
-1. **Do not** check the box 'This is a primary node'.
-1. Click the **Add node** button.
+1. Click the **Save changes** button.
 
 ![Adding a secondary node](img/adding_a_secondary_node.png)
 
