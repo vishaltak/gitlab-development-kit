@@ -33,7 +33,7 @@ If you have never used Gitpod before, you must:
 1. Connect the Gitpod account to your GitLab account.
 
 After that is done, you just wait 7-8 minutes for the entire setup to finish, and
-you see the GDK UI pop up in the right sidebar. If you see 504 Gateway Time-out error, 
+you see the GDK UI pop up in the right sidebar. If you see 504 Gateway Time-out error,
 click the reload button in the right side bar.
 
 ![GDK in Gitpod](img/gdk-in-gitpod.png)
@@ -124,3 +124,26 @@ To enable feature flags:
 1. Run `Feature.enable(:feature_flag)`, replacing `feature_flag` with the name of the
    feature flag you want to enable.
 1. Leave the console by typing `exit` and hitting Enter.
+
+### Use Advanced Search
+
+To use Advanced Search, you must:
+
+- Have a premium or higher license registered in the GDK.
+- Enable Elasticsearch.
+
+To enable Elasticsearch:
+
+1. From the command line, navigate to `/workspace/gitlab-development-kit` and open
+   `gdk.yml` for editing by using `cd /workspace/gitlab-development-kit && gp open gdk.yml`.
+   The file might be empty.
+
+1. Add the following lines and save the file:
+
+   ```yaml
+   elasticsearch:
+      enabled: true
+   ```
+
+1. Run `gdk reconfigure`.
+1. Run `gdk start elasticsearch`.
