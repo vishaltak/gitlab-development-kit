@@ -6,6 +6,8 @@ require 'net/http'
 module GDK
   module Command
     class Measure
+      WORKFLOW_SCRIPTS_FOLDER = 'support/measure_scripts/'
+
       def initialize(urls)
         @urls = Array(urls)
       end
@@ -55,16 +57,32 @@ module GDK
         url.start_with?('/')
       end
 
-      def url_is_spa_script?(url)
-        return true
+      def workflow_scripts
+        @workflow_scripts ||= begin
+          Dir["#{WORKFLOW_SCRIPTS_FOLDER}**.js"].map do |file_name|
+            File.basename(file_name).gsub('.js', '')
+          end
+        end
+      end
+
+      def workflow_script_paths
+        @script_paths ||= begin
+          urls.map do |path|
+            "#{WORKFLOW_SCRIPTS_FOLDER}#{path}.js"
+          end
+        end
+      end
+
+      def url_is_workflow_script?(script_name)
+        workflow_scripts.include? script_name
       end
 
       def has_local_url?
         @has_local_url ||= urls.any? { |url| url_is_local?(url) }
       end
 
-      def has_spa_script?
-        @has_local_url ||= urls.any? { |url| url_is_spa_script?(url) }
+      def has_workflow_script?
+        @has_workflow_script ||= urls.any? { |url| url_is_workflow_script?(url) }
       end
 
       def report_folder_name
@@ -83,14 +101,14 @@ module GDK
         docker_command += '-c cable '
         # Deactivate the performance bar as it slows the measurements down
         docker_command += '--cookie perf_bar_enabled=false '
-        
-        docker_command += '--multi --spa ' if has_spa_script?
-      
+
+        docker_command += '--multi --spa ' if has_workflow_script?
+
         docker_command += "--outputFolder sitespeed-result/#{report_folder_name} "
 
         docker_command += '--cpu '
 
-        docker_command += local_urls.join(' ')
+        docker_command += has_workflow_script? ? workflow_script_paths.join(' ') : local_urls.join(' ')
 
         Shellout.new(docker_command).stream
       end
