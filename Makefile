@@ -237,7 +237,6 @@ gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
 gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
 
-
 .PHONY: gitlab/git-restore
 gitlab/git-restore:
 	$(Q)$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --
@@ -249,7 +248,7 @@ gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) bundle exec rake gitlab:graphql:schema:dump ${QQ}
 
-gitlab/.git/pull: gitlab/git-restore
+gitlab/.git/pull: gitlab/.git gitlab/git-restore
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab to current master"
