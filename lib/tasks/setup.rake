@@ -14,7 +14,7 @@ end
 desc 'Preflight Update checks'
 task 'preflight-update-checks' do
   postgresql = GDK::Postgresql.new
-  if postgresql.upgrade_needed?
+  if postgresql.installed? && postgresql.upgrade_needed?
     message = <<~MESSAGE
       PostgreSQL data directory is version #{postgresql.current_version} and must be upgraded to version #{postgresql.class::TARGET_VERSION} before GDK can be updated.
 

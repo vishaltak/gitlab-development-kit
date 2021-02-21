@@ -5,6 +5,7 @@ require 'spec_helper'
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
   let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) }
+  let(:pg_version_file) { '/home/git/gdk/postgresql/data/PG_VERSION' }
 
   before do
     stub_pg_bindir
@@ -21,6 +22,31 @@ RSpec.describe GDK::Postgresql do
   describe '.target_version_major' do
     it 'is 11 by default' do
       expect(described_class.target_version_major).to eq(11)
+    end
+  end
+
+  describe '#installed?' do
+    let(:pg_version_file_exists) { nil }
+
+    before do
+      allow(File).to receive(:exist?).and_call_original
+      allow(File).to receive(:exist?).with(pg_version_file).and_return(pg_version_file_exists)
+    end
+
+    context 'when postgresql/data/PG_VERSION does not exist' do
+      let(:pg_version_file_exists) { false }
+
+      it 'returns false' do
+        expect(subject.installed?).to be(false)
+      end
+    end
+
+    context 'when postgresql/data/PG_VERSION exists' do
+      let(:pg_version_file_exists) { true }
+
+      it 'returns true' do
+        expect(subject.installed?).to be(true)
+      end
     end
   end
 
@@ -148,8 +174,6 @@ RSpec.describe GDK::Postgresql do
     end
 
     it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
-      pg_version_file = '/home/git/gdk/postgresql/data/PG_VERSION'
-
       allow(File).to receive(:read).and_call_original
       allow(File).to receive(:exist?).and_call_original
 
@@ -161,8 +185,6 @@ RSpec.describe GDK::Postgresql do
   end
 
   def stub_current_version(version)
-    pg_version_file = '/home/git/gdk/postgresql/data/PG_VERSION'
-
     allow(File).to receive(:read).and_call_original
     allow(File).to receive(:exist?).and_call_original
 
