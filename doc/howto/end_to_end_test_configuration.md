@@ -18,7 +18,7 @@ The different setup instructions below are written from the perspective of runni
 repository. The URL can always be modified to point to any GitLab instance for testing and the local paths could be
 changed to use the GitLab repository instead of the GDK.
 
-All environment variables mentioned should be entered as a semicolon seperated list. The full list of
+All environment variables mentioned should be entered as a semicolon separated list. The full list of
 [supported GitLab environment variables](https://gitlab.com/gitlab-org/gitlab-qa/-/blob/master/docs/what_tests_can_be_run.md#supported-gitlab-environment-variables)
  can be used when setting up either of the RSpec configurations.
 
