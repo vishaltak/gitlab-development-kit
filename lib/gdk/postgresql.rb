@@ -23,15 +23,17 @@ module GDK
 
     def current_version
       @current_version ||= begin
-        path = File.join(current_data_dir, 'PG_VERSION')
+        raise "PG_VERSION not found in #{pg_version_file}. Is PostgreSQL initialized?" unless installed?
 
-        raise "PG_VERSION not found in #{path}. Is PostgreSQL initialized?" unless File.exist?(path)
-
-        version = File.read(path).to_f
+        version = File.read(pg_version_file).to_f
 
         # After PostgreSQL 9.6, PG_VERSION uses a single integer (10, 11, 12, etc.)
         version >= 10 ? version.to_i : version
       end
+    end
+
+    def installed?
+      File.exist?(pg_version_file)
     end
 
     def ready?
@@ -90,6 +92,10 @@ module GDK
 
     def port
       config.port.to_s
+    end
+
+    def pg_version_file
+      @pg_version_file ||= File.join(current_data_dir, 'PG_VERSION')
     end
 
     def pg_cmd(*args, program: 'psql', database: nil, command: nil)
