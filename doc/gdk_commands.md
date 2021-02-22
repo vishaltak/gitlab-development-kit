@@ -229,6 +229,27 @@ To apply changes someone else made:
       git log
       ```
 
+### Start the Rails console
+
+To start the Rails console in GDK, change to the `gitlab` directory and run:
+
+```shell
+bundle exec rails console
+```
+
+To exit the console, type: `quit` and press Enter.
+
+### Enable or disable GitLab feature flags
+
+Some work-in-progress features are introduced behind [feature flags](https://docs.gitlab.com/ee/development/feature_flags/index.html).
+To preview features behind disabled flags, you need to first enable the appropriate flag.
+
+To enable a feature flag in your GDK instance:
+
+1. [Start the Rails console](#start-the-rails-console).
+1. [Enable or disable desired flags](https://docs.gitlab.com/ee/administration/feature_flags.html#enable-or-disable-the-feature).
+1. Exit the Rails console by running `quit`.
+
 ### Preview changes
 
 After the changes are applied to GitLab:
