@@ -348,7 +348,7 @@ gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitl
 
 gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
 
-gitlab-shell/.git/pull:
+gitlab-shell/.git/pull: gitlab-shell/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-shell to ${gitlab_shell_version}"
