@@ -55,7 +55,7 @@ gdk measure /explore http://127.0.0.1/explore https://gitlab.com/explore
 gdk measure repo_browser
 ```
 
-All workflow scripts are located in `support/measure_scripts/`, for example repo_browser to measaure a 
+All workflow scripts are located in `support/measure_scripts/`, for example `repo_browser` to measure the
 basic workflow in the repository.
 
 The reports are stored in `<gdk-root>/sitespeed-result` as `<branch>_YYYY-MM-DD-HH-MM-SS`. This
