@@ -85,6 +85,10 @@ module GDK
         @has_workflow_script ||= urls.any? { |url| url_is_workflow_script?(url) }
       end
 
+      def urls_or_scripts
+        has_workflow_script? ? workflow_script_paths.join(' ') : local_urls.join(' ')
+      end
+
       def report_folder_name
         @report_folder_name ||= begin
           folder_name = @has_local_url ? Shellout.new('git rev-parse --abbrev-ref HEAD', chdir: GDK.config.gitlab.dir).run : 'external'
@@ -108,7 +112,7 @@ module GDK
 
         docker_command += '--cpu '
 
-        docker_command += has_workflow_script? ? workflow_script_paths.join(' ') : local_urls.join(' ')
+        docker_command += urls_or_scripts
 
         Shellout.new(docker_command).stream
       end
