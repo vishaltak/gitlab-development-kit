@@ -258,7 +258,7 @@ gitlab/.git/pull: gitlab/.git gitlab/git-restore
 	$(Q)if [ -n "${GIT_CURL_VERBOSE}" ]; then GIT_CURL_VERBOSE=1 $(gitlab_git_cmd) pull --ff-only ${QQ}; else $(gitlab_git_cmd) pull --ff-only ${QQ}; fi
 
 .PHONY: gitlab-db-migrate
-gitlab-db-migrate: ensure-databases-running
+gitlab-db-migrate: ensure-databases-running gitlab-config
 	@echo
 	$(Q)rake gitlab_rails:db:migrate
 
