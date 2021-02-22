@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe GDK::Command::Measure do
   let(:urls) { nil }
-  let(:urls_default) { ['/explore'] }
+  let(:urls_default) { %w[/explore] }
 
   let(:docker_running) { nil }
 
@@ -54,26 +54,50 @@ RSpec.describe GDK::Command::Measure do
     end
 
     context 'when GDK is running' do
-      let(:urls) { urls_default }
+      let(:urls) { nil }
       let(:docker_running) { true }
       let(:branch_name) { 'some-branch-name' }
+      let(:report_file_path) { nil }
+      let!(:current_time_formatted) { Time.now.strftime('%F-%H-%M-%S') }
+      let(:default_docker_args) { 'docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.1' }
+      let(:default_sitespeed_args) { "-b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path}" }
 
       before do
         stub_gdk_check(is_running: true)
         stub_git_rev_parse(branch_name: branch_name)
       end
 
-      it 'runs sitespeed via Docker', :hide_stdout do
-        freeze_time do
-          current_time_formatted = Time.now.strftime('%F-%H-%M-%S')
+      context 'when argument is a URL' do
+        let(:urls) { urls_default }
+        let(:report_file_path) { "sitespeed-result/#{branch_name}_#{current_time_formatted}" }
 
-          shellout_docker_run_double = double('Shellout', stream: '')
-          allow(Shellout).to receive(:new).with(%[docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.1 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --outputFolder sitespeed-result/some-branch-name_#{current_time_formatted} http://host.docker.internal:3000/explore]).and_return(shellout_docker_run_double)
+        it 'runs sitespeed via Docker for the given URL', :hide_stdout do
+          freeze_time do
+            shellout_docker_run_double = double('Shellout', stream: '')
+            expect(Shellout).to receive(:new).with(%(#{default_docker_args} #{default_sitespeed_args} http://host.docker.internal:3000/explore)).and_return(shellout_docker_run_double)
 
-          shellout_open_double = double('Shellout', run: true)
-          expect(Shellout).to receive(:new).with("open ./sitespeed-result/#{branch_name}_#{current_time_formatted}/index.html").and_return(shellout_open_double)
+            shellout_open_double = double('Shellout', run: true)
+            expect(Shellout).to receive(:new).with("open ./#{report_file_path}/index.html").and_return(shellout_open_double)
 
-          subject.run
+            subject.run
+          end
+        end
+      end
+
+      context 'when argument is local script' do
+        let(:urls) { %w[repo_browser] }
+        let(:report_file_path) { "sitespeed-result/external_#{current_time_formatted}" }
+
+        it 'runs sitespeed via Docker for the given script', :hide_stdout do
+          freeze_time do
+            shellout_docker_run_double = double('Shellout', stream: '')
+            expect(Shellout).to receive(:new).with(%(#{default_docker_args} #{default_sitespeed_args} --multi --spa support/measure_scripts/repo_browser.js)).and_return(shellout_docker_run_double)
+
+            shellout_open_double = double('Shellout', run: true)
+            expect(Shellout).to receive(:new).with("open ./#{report_file_path}/index.html").and_return(shellout_open_double)
+
+            subject.run
+          end
         end
       end
     end

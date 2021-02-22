@@ -105,13 +105,13 @@ module GDK
         docker_command += '-c cable '
         # Deactivate the performance bar as it slows the measurements down
         docker_command += '--cookie perf_bar_enabled=false '
-
-        docker_command += '--multi --spa ' if has_workflow_script?
-
-        docker_command += "--outputFolder sitespeed-result/#{report_folder_name} "
-
+        # Track CPU metrics
         docker_command += '--cpu '
-
+        # Write report to outputFolder
+        docker_command += "--outputFolder sitespeed-result/#{report_folder_name} "
+        # Support testing a Single Page Application
+        docker_command += '--multi --spa ' if has_workflow_script?
+        # Support testing URLs or executing local scripts
         docker_command += urls_or_scripts
 
         Shellout.new(docker_command).stream
