@@ -66,7 +66,7 @@ module GDK
       end
 
       def workflow_script_paths
-        @script_paths ||= begin
+        @workflow_script_paths ||= begin
           urls.map do |path|
             "#{WORKFLOW_SCRIPTS_FOLDER}#{path}.js"
           end
@@ -74,7 +74,7 @@ module GDK
       end
 
       def url_is_workflow_script?(script_name)
-        workflow_scripts.include? script_name
+        workflow_scripts.include?(script_name)
       end
 
       def has_local_url?
