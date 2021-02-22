@@ -277,7 +277,7 @@ sed -i -E 's/ -static$//g' src/Makefile
 sudo ./package/install
 ```
 
-Setup local Ruby 2.6 environment (see [Ruby](#ruby) for details), for example
+Set up local Ruby 2.7 environment (see [Ruby](#ruby) for details), for example
 using [RVM](https://rvm.io/):
 
 ```shell
@@ -285,7 +285,7 @@ curl -sSL -o setup_rvm.sh "https://get.rvm.io"
 chmod a+rx setup_rvm.sh
 ./setup_rvm.sh
 source  /home/ansible/.rvm/scripts/rvm
-rvm install 2.6
+rvm install 2.7.2
 ```
 
 Append these lines to your `~/.bashrc`:
