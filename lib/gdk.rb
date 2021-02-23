@@ -90,7 +90,10 @@ module GDK
       GDK::Command::Doctor.new.run
       true
     when 'measure'
-      GDK::Command::Measure.new(ARGV).run
+      GDK::Command::MeasureUrl.new(ARGV).run
+      true
+    when 'measure-workflow'
+      GDK::Command::MeasureWorkflow.new(ARGV).run
       true
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run

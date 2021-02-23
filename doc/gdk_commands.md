@@ -52,7 +52,7 @@ gdk measure /explore http://127.0.0.1/explore https://gitlab.com/explore
 ### Measure Workflows performance
 
 ```shell
-gdk measure repo_browser
+gdk measure-workflow repo_browser
 ```
 
 All workflow scripts are located in `support/measure_scripts/`, for example `repo_browser` to measure the

@@ -19,7 +19,8 @@ Manage services:
   gdk psql [-d gitlabhq_development]        # Run Postgres console
   gdk redis-cli                             # Run Redis console
 
-  gdk measure                               # Generate a sitespeed.io report
+  gdk measure                               # Generate a sitespeed.io report for given URL(s)
+  gdk measure-workflow                      # Generate a sitespeed.io report for given workflow(s)
 
 Manage GDK:
 
