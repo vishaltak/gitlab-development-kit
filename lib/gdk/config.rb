@@ -255,6 +255,18 @@ module GDK
           raise "Unsupported listen network #{config.gitlab_k8s_agent.listen_network}"
         end
       end
+      string(:internal_api_listen_network) { 'tcp' }
+      string(:internal_api_listen_address) { "#{config.listen_address}:8153" }
+      string(:__internal_api_url) do
+        case config.gitlab_k8s_agent.internal_api_listen_network
+        when 'tcp'
+          "grcp://#{internal_api_listen_address}"
+        when 'unix'
+          "unix://#{internal_api_listen_address}"
+        else
+          raise "Unsupported listen network #{config.gitlab_k8s_agent.internal_api_listen_network}"
+        end
+      end
       bool :__listen_websocket do
         if config.nginx?
           # nginx's grpc_pass requires HTTP/2 enabled which requires TLS.
