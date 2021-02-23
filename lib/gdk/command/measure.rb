@@ -6,7 +6,7 @@ require 'net/http'
 module GDK
   module Command
     class Measure
-      WORKFLOW_SCRIPTS_FOLDER = 'support/measure_scripts/'
+      WORKFLOW_SCRIPTS_FOLDER = 'support/measure_scripts'
 
       def initialize(urls)
         @urls = Array(urls)
@@ -59,7 +59,7 @@ module GDK
 
       def workflow_scripts
         @workflow_scripts ||= begin
-          Dir["#{WORKFLOW_SCRIPTS_FOLDER}**.js"].map do |file_name|
+          Dir["#{WORKFLOW_SCRIPTS_FOLDER}/**.js"].map do |file_name|
             File.basename(file_name).gsub('.js', '')
           end
         end
@@ -68,7 +68,7 @@ module GDK
       def workflow_script_paths
         @workflow_script_paths ||= begin
           urls.map do |path|
-            "#{WORKFLOW_SCRIPTS_FOLDER}#{path}.js"
+            "#{WORKFLOW_SCRIPTS_FOLDER}/#{path}.js"
           end
         end
       end

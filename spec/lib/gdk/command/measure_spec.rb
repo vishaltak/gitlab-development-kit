@@ -59,8 +59,6 @@ RSpec.describe GDK::Command::Measure do
       let(:branch_name) { 'some-branch-name' }
       let(:report_file_path) { nil }
       let!(:current_time_formatted) { Time.now.strftime('%F-%H-%M-%S') }
-      let(:default_docker_args) { 'docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.1' }
-      let(:default_sitespeed_args) { "-b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path}" }
 
       before do
         stub_gdk_check(is_running: true)
@@ -74,7 +72,7 @@ RSpec.describe GDK::Command::Measure do
         it 'runs sitespeed via Docker for the given URL', :hide_stdout do
           freeze_time do
             shellout_docker_run_double = double('Shellout', stream: '')
-            expect(Shellout).to receive(:new).with(%(#{default_docker_args} #{default_sitespeed_args} http://host.docker.internal:3000/explore)).and_return(shellout_docker_run_double)
+            expect(Shellout).to receive(:new).with(%(docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.1 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path} http://host.docker.internal:3000/explore)).and_return(shellout_docker_run_double)
 
             shellout_open_double = double('Shellout', run: true)
             expect(Shellout).to receive(:new).with("open ./#{report_file_path}/index.html").and_return(shellout_open_double)
@@ -84,14 +82,14 @@ RSpec.describe GDK::Command::Measure do
         end
       end
 
-      context 'when argument is local script' do
+      context 'when argument is predefined workflow' do
         let(:urls) { %w[repo_browser] }
         let(:report_file_path) { "sitespeed-result/external_#{current_time_formatted}" }
 
         it 'runs sitespeed via Docker for the given script', :hide_stdout do
           freeze_time do
             shellout_docker_run_double = double('Shellout', stream: '')
-            expect(Shellout).to receive(:new).with(%(#{default_docker_args} #{default_sitespeed_args} --multi --spa support/measure_scripts/repo_browser.js)).and_return(shellout_docker_run_double)
+            expect(Shellout).to receive(:new).with(%(docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:16.8.1 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path} --multi --spa support/measure_scripts/repo_browser.js)).and_return(shellout_docker_run_double)
 
             shellout_open_double = double('Shellout', run: true)
             expect(Shellout).to receive(:new).with("open ./#{report_file_path}/index.html").and_return(shellout_open_double)
