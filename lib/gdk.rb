@@ -59,12 +59,13 @@ module GDK
       GDK::Command::Update.new.run
     when 'diff-config'
       GDK::Command::DiffConfig.new.run
-
       true
     when 'config'
       GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
       GDK::Command::Reconfigure.new.run
+    when 'reset-data'
+      GDK::Command::ResetData.prompt_and_run
     when 'psql'
       exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
     when 'psql-geo'
