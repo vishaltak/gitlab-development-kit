@@ -213,10 +213,6 @@ setup_platform_macos() {
     return 1
   fi
 
-  if ! echo_if_unsuccessful brew pin libffi icu4c readline re2; then
-    return 1
-  fi
-
   case $SHELL in
   */zsh)
     shell_file="${HOME}/.zshrc"
