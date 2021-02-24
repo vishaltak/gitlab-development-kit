@@ -319,6 +319,7 @@ module GDK
       settings :jaeger do
         bool(:enabled) { true }
         string(:version) { '1.18.1' }
+        string(:listen_address) { config.hostname }
       end
     end
 
