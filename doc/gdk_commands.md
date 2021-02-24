@@ -42,12 +42,21 @@ gdk start postgresql redis
 ## Measure performance
 
 You can easily create a Sitespeed report for local `gdk` URLs or online URLs with our standardized
-Sitespeed settings. We support local relative and absolute URLs as arguments. As soon as the report
-is generated, it is automatically opened in your browser.
+Sitespeed settings. We support local relative, absolute URLs as arguments and also predefined workflows.
+As soon as the report is generated, it is automatically opened in your browser.
 
 ```shell
 gdk measure /explore http://127.0.0.1/explore https://gitlab.com/explore
 ```
+
+### Measure Workflows performance
+
+```shell
+gdk measure-workflow repo_browser
+```
+
+All workflow scripts are located in `support/measure_scripts/`, for example `repo_browser` to measure the
+basic workflow in the repository.
 
 The reports are stored in `<gdk-root>/sitespeed-result` as `<branch>_YYYY-MM-DD-HH-MM-SS`. This
 requires Docker installed and running.
