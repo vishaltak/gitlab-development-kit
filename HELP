@@ -15,7 +15,8 @@ Manage services:
   gdk tail                                  # Tail all logs
   gdk tail redis postgresql                 # Tail specific logs
 
-  gdk thin                                  # Run Rails web server with thin in foreground
+  gdk thin                                  # Run Rails web server with thin in
+                                            #  foreground
   gdk psql [-d gitlabhq_development]        # Run Postgres console
   gdk redis-cli                             # Run Redis console
 
@@ -27,11 +28,17 @@ Manage GDK:
   gdk init                                  # Initialize GDK
   gdk install gitlab_repo=https://my-fork   # Install everything
   gdk update                                # Pull application changes from Git
-  gdk reconfigure                           # Delete and regenerate all config files created by GDK
+  gdk reconfigure                           # Delete and regenerate all config
+                                            #  files created by GDK
 
   gdk config get postgresql.port            # Get configuration values
-  gdk diff-config                           # Print difference between current and new configuration values
+  gdk diff-config                           # Print difference between current
+                                            #  and new configuration values
   gdk trust /path/to/gdk                    # Mark an existing GDK as trusted
+
+  gdk reset-data                            # Backs up and creates fresh git
+                                            #  repository, PostgreSQL data and
+                                            #  Rails upload directory.
 
   gdk doctor                                # Run diagnostics on GDK
   gdk version                               # Print current GDK version

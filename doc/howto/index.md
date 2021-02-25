@@ -13,7 +13,7 @@ to learn how to contribute to GitLab.
 - [GitLab developer documentation](https://docs.gitlab.com/ee/development/README.html)
 - [GDK commands](../gdk_commands.md)
 - [Installation, configuration and development troubleshooting](../troubleshooting.md)
-- [Cheat sheet](../../HELP): `cat HELP`
+- [Cheat sheet](../../HELP): `gdk help`
 
 ## Tips and tricks
 

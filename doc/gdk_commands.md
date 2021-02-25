@@ -94,6 +94,16 @@ you should address them as soon as possible.
 gdk doctor
 ```
 
+## Reset data
+
+There may come a time where you wish to reset the data within your GDK. Backups
+of any reset data will be taken prior and you will be prompted to confirm you
+wish to proceed:
+
+```shell
+gdk reset-data
+```
+
 ## Measure performance
 
 You can easily create a Sitespeed report for local `gdk` URLs or online URLs with our standardized
