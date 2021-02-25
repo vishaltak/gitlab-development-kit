@@ -843,6 +843,105 @@ RSpec.describe GDK::Config do
         expect(config.gitlab_k8s_agent.auto_update).to be(true)
       end
     end
+
+    describe 'listen_network' do
+      it 'is tcp by default' do
+        expect(config.gitlab_k8s_agent.listen_network).to eq('tcp')
+      end
+    end
+
+    describe 'listen_address' do
+      it 'is 127.0.0.1:8150 by default' do
+        expect(config.gitlab_k8s_agent.listen_address).to eq('127.0.0.1:8150')
+      end
+    end
+
+    describe '__listen_url_path' do
+      it 'is /-/kubernetes-agent by default' do
+        expect(config.gitlab_k8s_agent.__listen_url_path).to eq('/-/kubernetes-agent')
+      end
+    end
+
+    describe '__gitlab_address' do
+      it 'is http://gdk.example.com:3000 by default' do
+        expect(config.gitlab_k8s_agent.__gitlab_address).to eq('http://gdk.example.com:3000')
+      end
+    end
+
+    describe '__url_for_agentk' do
+      let(:https_enabled) { nil }
+
+      let(:yaml) do
+        {
+          'nginx' => { 'enabled' => nginx_enabled },
+          'https' => { 'enabled' => https_enabled }
+        }
+      end
+
+      context 'when nginx is not enabled' do
+        let(:nginx_enabled) { false }
+
+        it 'is grpc://127.0.0.1:8150' do
+          expect(config.gitlab_k8s_agent.__url_for_agentk).to eq('grpc://127.0.0.1:8150')
+        end
+      end
+
+      context 'when nginx is enabled' do
+        let(:nginx_enabled) { true }
+
+        context 'but https is not enabled' do
+          let(:https_enabled) { false }
+
+          it 'is ws://127.0.0.1:3000/-/kubernetes-agent' do
+            expect(config.gitlab_k8s_agent.__url_for_agentk).to eq('ws://127.0.0.1:3000/-/kubernetes-agent')
+          end
+        end
+
+        context 'and https is enabled' do
+          let(:https_enabled) { true }
+
+          it 'is wss://127.0.0.1:3000/-/kubernetes-agent' do
+            expect(config.gitlab_k8s_agent.__url_for_agentk).to eq('wss://127.0.0.1:3000/-/kubernetes-agent')
+          end
+        end
+      end
+    end
+
+    describe 'internal_api_listen_network' do
+      it 'is tcp by default' do
+        expect(config.gitlab_k8s_agent.internal_api_listen_network).to eq('tcp')
+      end
+    end
+
+    describe 'internal_api_listen_address' do
+      it 'is 127.0.0.1:8153 by default' do
+        expect(config.gitlab_k8s_agent.internal_api_listen_address).to eq('127.0.0.1:8153')
+      end
+    end
+
+    describe '__internal_api_url' do
+      let(:yaml) do
+        {
+          'gitlab_k8s_agent' => { 'internal_api_listen_network' => internal_api_listen_network }
+        }
+      end
+
+      context 'when internal_api_listen_network is tcp' do
+        let(:internal_api_listen_network) { 'tcp' }
+
+        it 'is grpc://127.0.0.1:8153' do
+          expect(config.gitlab_k8s_agent.__internal_api_url).to eq('grpc://127.0.0.1:8153')
+        end
+      end
+
+      context 'when internal_api_listen_network is unix' do
+        let(:internal_api_listen_network) { 'unix' }
+
+        it 'is unix://127.0.0.1:8153' do
+          expect(config.gitlab_k8s_agent.__internal_api_url).to eq('unix://127.0.0.1:8153')
+        end
+      end
+    end
   end
 
   describe 'nginx' do
