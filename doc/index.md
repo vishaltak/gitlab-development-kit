@@ -253,6 +253,7 @@ errors. If these errors occur:
 - Run `gdk doctor`, which can detect problems and offer possible solutions.
 - Refer to the [troubleshooting page](troubleshooting.md).
 - [Open an issue in the GDK tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
+- Run `gdk pristine` to restore your GDK to a pristine state.
 
 ## Use GitLab Enterprise features
 
