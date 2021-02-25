@@ -94,9 +94,9 @@ ensure_supported_platform() {
 
     return 0
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" || "$os_id" == "fedora"|| "$os_id" == "arch" || "$os_id" == "manjaro" ]]; then
+    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" || "$os_id" == "fedora"|| "$os_id" == "arch" || "$os_id" == "manjaro" || "$os_id" == "rhel" ]]; then
       return 0
     fi
   fi
@@ -134,7 +134,7 @@ setup_platform() {
       return 1
     fi
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    os_id=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
     if [[ "${os_id}" == "ubuntu" ]]; then
       if ! setup_platform_linux_with "packages.txt"; then
