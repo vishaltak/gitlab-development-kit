@@ -127,6 +127,7 @@ module GDK
         https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/troubleshooting.md.
       - Visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues to
         see if there are known issues.
+      - Run 'gdk reset-data' if appropriate.
     HELP_MESSAGE
   end
 
