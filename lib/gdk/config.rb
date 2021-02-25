@@ -260,7 +260,7 @@ module GDK
       string(:__internal_api_url) do
         case config.gitlab_k8s_agent.internal_api_listen_network
         when 'tcp'
-          "grcp://#{internal_api_listen_address}"
+          "grpc://#{internal_api_listen_address}"
         when 'unix'
           "unix://#{internal_api_listen_address}"
         else
