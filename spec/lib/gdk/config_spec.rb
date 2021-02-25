@@ -1305,4 +1305,32 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'tracer' do
+    describe 'build_tags' do
+      it "is 'tracer_static tracer_static_jaeger' by default" do
+        expect(config.tracer.build_tags).to eq('tracer_static tracer_static_jaeger')
+      end
+    end
+
+    describe 'jaeger' do
+      describe 'enabled' do
+        it 'is enabled by default' do
+          expect(config.tracer.jaeger.enabled).to be(true)
+        end
+      end
+
+      describe 'version' do
+        it 'is 1.18.1 by default' do
+          expect(config.tracer.jaeger.version).to eq('1.18.1')
+        end
+      end
+
+      describe 'listen_address' do
+        it 'is config.hostname by default' do
+          expect(config.tracer.jaeger.listen_address).to eq(config.hostname)
+        end
+      end
+    end
+  end
 end

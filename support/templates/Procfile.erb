@@ -46,7 +46,7 @@ rails-web: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle
 #
 <%= '#' unless config.grafana? %>grafana: exec support/exec-cd grafana grafana/bin/grafana-server -homepath grafana -config grafana.ini
 <%= '#' unless config.prometheus? %>prometheus: exec docker run -p <%= config.prometheus.port %>:<%= config.prometheus.port %> -v <%= config.gdk_root.join('prometheus', 'prometheus.yml') %>:/etc/prometheus/prometheus.yml prom/prometheus:v2.25.0
-<%= '#' unless config.tracer.jaeger? %>jaeger: exec jaeger/jaeger-<%= config.tracer.jaeger.version %>/jaeger-all-in-one --memory.max-traces 512
+<%= '#' unless config.tracer.jaeger? %>jaeger: exec jaeger/jaeger-<%= config.tracer.jaeger.version %>/jaeger-all-in-one --memory.max-traces 512 --http-server.host-port "<%= config.tracer.jaeger.listen_address %>:5778" --processor.jaeger-binary.server-host-port "<%= config.tracer.jaeger.listen_address %>:6832" --processor.jaeger-compact.server-host-port "<%= config.tracer.jaeger.listen_address %>:6831" --processor.zipkin-compact.server-host-port "<%= config.tracer.jaeger.listen_address %>:5775" --admin.http.host-port "<%= config.tracer.jaeger.listen_address %>:14269" --query.host-port "<%= config.tracer.jaeger.listen_address %>:16686" --collector.http-server.host-port "<%= config.tracer.jaeger.listen_address %>:14268" --collector.grpc-server.host-port "<%= config.tracer.jaeger.listen_address %>:14250" --collector.zipkin.host-port "<%= config.tracer.jaeger.listen_address %>:5555"
 
 # Additional services
 #
