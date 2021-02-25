@@ -4,6 +4,16 @@ This Changelog tracks major changes to the GitLab Development Kit,
 such as dependency updates (those not handled by Bundler) and new
 features.
 
+## 2020-02-26
+
+- Add `gdk pristine` command !1811
+- Enable `nakayoshi_fork` for Puma by default !1832
+- Tidy up gdk commands docs !1844
+- Add `gdk measure-workflow` command !1828
+- Add KAS URL configuration !1842
+- Add `gdk reset-data` command !1174
+- Add steps to enable Rails console and toggle flags !1833
+
 ## 2018-01-11
 
 - Added ChromeDriver to deprecate PhantomJS. !423 !380
