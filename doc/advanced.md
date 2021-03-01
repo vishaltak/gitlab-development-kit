@@ -336,7 +336,7 @@ Now you can proceed to [set up GDK](index.md).
 To run GDK on Void you need to install `ruby` with development headers, gem binary dependencies, `go`,
  `postgresql` with client, development headers and shared libraries, `sqlite`, `redis`:
 
- ```bash
+ ```shell
 sudo xbps-install -Su
 sudo xbps-install ruby ruby-devel minio re2 re2-devel icu icu-libs icu-devel \
   go redis yarn GraphicsMagick sqlite sqlite-devel  pkg-config \
