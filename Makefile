@@ -113,6 +113,7 @@ gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
 object-storage-update \
+jaeger-update \
 grafana-update \
 gitlab-ui-update \
 show-updated-at
@@ -983,6 +984,8 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one:
 
 	$(Q)mkdir -p "jaeger/jaeger-${jaeger_version}"
 	$(Q)tar -xf "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz" -C "jaeger/jaeger-${jaeger_version}" --strip-components 1
+
+jaeger-update: jaeger-setup
 
 ##############################################################
 # Tests
