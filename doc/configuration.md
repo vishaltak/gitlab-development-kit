@@ -378,6 +378,15 @@ When you add a new setting:
 1. Run `rake gdk.example.yml` to regenerate this file.
 1. Commit both files.
 
+## Runner settings
+
+Under the runner key you can define the following settings for the [GitLab Runner](https://docs.gitlab.com/runner/):
+
+| Setting | Default | Description |
+| --- | ------ | ----- |
+| `enabled` | `false` | Set this to `true` to enable the `runner` service. |
+| `network_mode_host` | `false` | Set this to `true` to set `network_mode = "host"` for the `[runners.docker]` section (only on Linux). |
+
 ## Webpack settings
 
 ### Webpack `gdk.yml` settings

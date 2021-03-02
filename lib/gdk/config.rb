@@ -445,6 +445,12 @@ module GDK
       array(:extra_hosts) { [] }
       string(:token) { 'DEFAULT TOKEN: Register your runner to get a valid token' }
       path(:bin) { find_executable!('gitlab-runner') || '/usr/local/bin/gitlab-runner' }
+      bool(:network_mode_host) { false }
+      bool(:__network_mode_host) do
+        raise UnsupportedConfiguration, 'runner.network_mode_host is only supported on Linux' if config.runner.network_mode_host && config.__platform != 'linux'
+
+        config.runner.network_mode_host
+      end
     end
 
     settings :grafana do
