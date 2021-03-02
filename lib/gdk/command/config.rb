@@ -9,13 +9,14 @@ module GDK
     class Config
       def run(args)
         config_command = args.shift
-        abort 'Usage: gdk config get <configuration value>' if config_command != 'get' || args.empty?
+        GDK::Output.abort('Usage: gdk config get <configuration value>') if config_command != 'get' || args.empty?
 
         begin
           puts GDK.config.dig(*args)
           true
         rescue GDK::ConfigSettings::SettingUndefined
-          abort "Cannot get config for #{args.join('.')}"
+          GDK::Output.abort("Cannot get config for #{args.join('.')}")
+          false
         end
       end
     end
