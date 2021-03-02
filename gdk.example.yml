@@ -2,6 +2,8 @@
 action_cable:
   in_app: true
   worker_pool_size: 4
+asdf:
+  opt_out: false
 common:
   ca_path: ''
 elasticsearch:

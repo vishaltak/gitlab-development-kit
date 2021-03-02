@@ -1432,4 +1432,13 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'asdf' do
+    describe 'opt_out' do
+      it 'is disabled by default' do
+        expect(config.asdf.opt_out).to be(false)
+        expect(config.asdf.opt_out?).to be(false)
+      end
+    end
+  end
 end
