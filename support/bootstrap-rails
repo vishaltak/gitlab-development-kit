@@ -14,7 +14,7 @@ def main
   abort 'Cannot connect to postgres' unless postgresql.ready?
 
   if postgresql.db_exists?('gitlabhq_development')
-    puts 'INFO: gitlabhq_development exists, exiting.'
+    puts 'INFO: gitlabhq_development exists, nothing to do here.'
     exit
   end
 
