@@ -17,6 +17,9 @@ module GDK
         rescue GDK::ConfigSettings::SettingUndefined
           GDK::Output.abort("Cannot get config for #{args.join('.')}")
           false
+        rescue GDK::ConfigSettings::UnsupportedConfiguration => e
+          GDK::Output.abort("#{e.message}.")
+          false
         end
       end
     end

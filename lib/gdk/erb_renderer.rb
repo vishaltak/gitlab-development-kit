@@ -25,6 +25,9 @@ module GDK
       result = ERB.new(str, trim_mode: '-').result_with_hash(@args)
 
       File.write(target, result)
+    rescue GDK::ConfigSettings::UnsupportedConfiguration => e
+      GDK::Output.abort("#{e.message}.")
+      false
     end
 
     def safe_render!
@@ -48,6 +51,9 @@ module GDK
       end
 
       FileUtils.mv(temp_file.path, target)
+    rescue GDK::ConfigSettings::UnsupportedConfiguration => e
+      GDK::Output.abort("#{e.message}.")
+      false
     ensure
       temp_file.close
     end
