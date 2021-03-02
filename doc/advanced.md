@@ -330,7 +330,6 @@ bundle config build.gpgme --use-system-libraries
 
 Now you can proceed to [set up GDK](index.md).
 
-
 ### Void linux
 
 To run GDK on Void you need to install `ruby` with development headers, gem binary dependencies, `go`,
