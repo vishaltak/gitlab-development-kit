@@ -20,14 +20,12 @@ def main
 
   success = true
 
-  begin
-    FileUtils.rm_f(LOG_FILE)
+  FileUtils.rm_f(LOG_FILE)
 
-    try_connect!(config.praefect? ? 'praefect' : 'gitaly')
+  try_connect!(config.praefect? ? 'praefect' : 'gitaly')
 
-    bootstrap_commands.each do |cmd|
-      success &&= system({ 'force' => 'yes', 'BOOTSTRAP' => '1' }, *cmd)
-    end
+  bootstrap_commands.each do |cmd|
+    success &&= system({ 'force' => 'yes', 'BOOTSTRAP' => '1' }, *cmd)
   end
 
   exit true if success
