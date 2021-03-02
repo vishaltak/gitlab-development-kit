@@ -131,6 +131,28 @@ to your `gdk.yml`. For example, for `gdk.test`:
     extra_hosts: ["gdk.test:172.16.123.1"]
   ```
 
+### Alternative method for Linux
+
+An alternative to creating the dummy interface described above is to add `network_mode = host`
+to the `gitlab-runner-config.toml` file:
+
+```toml
+[[runners]]
+  [runners.docker]
+    ...
+    network_mode = "host"
+```
+
+Note that this method:
+
+- [Only works with Linux hosts](https://docs.docker.com/network/host/).
+- Exposes your local network stack to the Docker container, which may be a security issue. Use
+  it only to run jobs on projects that you trust.
+- Is disabled if you run `gdk reconfigure`, because GDK removes the line from the `.toml`
+  file. You must add it back in after `gdk reconfigure` finishes.
+- Won't work with Docker containers running in Kubernetes because Kubernetes uses its own
+  internal network stack.
+
 ### Set up a runner
 
 To set up a runner in Docker,
