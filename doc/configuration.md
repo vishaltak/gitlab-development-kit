@@ -2,6 +2,12 @@
 
 This document describes how you can configure your GDK environment.
 
+- [Git configuration](#git-configuration)
+- [GDK configuration](#gdk-configuration)
+- [Webpack settings](#webpack-settings)
+- [Webpack settings](#webpack-settings)
+- [Grafana settings](#grafana-settings)
+
 ## Git configuration
 
 Git has features which are disabled by default, and would be great to enable to
@@ -35,8 +41,6 @@ all applied settings in a YAML structure.
 - [GDK settings](#gdk-settings)
 - [GitLab settings](#gitlab-settings)
 - [NGINX settings](#nginx-settings)
-- [Webpack settings](#webpack-settings)
-- [ActionCable settings](#actioncable-settings)
 
 #### Run GitLab and GitLab FOSS concurrently
 
