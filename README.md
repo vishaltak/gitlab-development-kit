@@ -21,14 +21,17 @@ up the time it takes to make successful contributions.
 
 ## System requirements
 
-The following are the supported systems and recommended hardware required to run GDK
-effectively:
+[Simple installation of dependencies](doc/index.md) is available for these operating systems:
 
 | Operating System | Architecture | Version(s) | RAM | Disk |
 | ---------------- | ------------ | ---------- | --- | ---- |
 | macOS            | <ul><li>amd64</li><li>arm64 (Apple Silicon, under Rosetta 2)</li></ul> | <ul><li>Big Sur (11)</li><li>Catalina (10.15)</li><li>Mojave (10.14)</li><ul> | 8GB | 12GB |
 | Ubuntu Linux     | <ul><li>amd64</li></ul> | <ul><li>20.10 (Groovy Gorilla)</li><li>20.04 LTS (Focal Fossa)</li><li>18.04 LTS (Bionic Beaver)</li><ul> | 8GB | 12GB |
 | Debian Linux     | <ul><li>amd64</li></ul> | <ul><li>10 (Buster)</li><li>9 (Stretch)</li><ul> | 8GB | 12GB |
+| Arch Linux     | <ul><li>amd64</li></ul> | <ul><li>latest</li> | 8GB | 12GB |
+| Manjaro Linux     | <ul><li>amd64</li></ul> | <ul><li>latest</li> | 8GB | 12GB |
+
+[Advanced installation of dependencies](doc/advanced.md) is available for these systems, and may be available for other systems.
 
 ## Getting started
 
