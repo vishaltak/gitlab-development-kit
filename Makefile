@@ -169,8 +169,7 @@ touch-examples:
 	gitlab-workhorse/config.toml.example \
 	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
-	support/templates/**/*.erb \
-	support/templates/*.erb
+	$$(find support/templates -name "*.erb")
 
 unlock-dependency-installers:
 	$(Q)rm -f \
