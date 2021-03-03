@@ -101,10 +101,10 @@ install: all show-installed-at start
 # Pull gitlab directory first since dependencies are linked from there.
 update: preflight-update-checks \
 asdf-update \
+gitlab/.git/pull \
 ensure-databases-running \
 unlock-dependency-installers \
 gettext-unlock \
-gitlab/.git/pull \
 gitlab-shell-update \
 gitlab-workhorse-update \
 gitlab-pages-update \
@@ -237,7 +237,6 @@ endif
 gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gettext
 
 gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
-
 
 .PHONY: gitlab/git-restore
 gitlab/git-restore:
