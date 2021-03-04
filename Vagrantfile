@@ -54,7 +54,7 @@ $apt_reqs = <<COMMANDS # rubocop:disable Style/GlobalVars
   apt-add-repository -y ppa:ubuntu-lxc/lxd-stable
   add-apt-repository -y ppa:longsleep/golang-backports
   add-apt-repository -y ppa:git-core/ppa
-  wget -qO- https://deb.nodesource.com/setup_12.x | bash -
+  wget -qO- https://deb.nodesource.com/setup_14.x | bash -
   wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
   wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
   wget -qO-  https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
