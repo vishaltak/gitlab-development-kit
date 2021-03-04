@@ -252,7 +252,7 @@ module GDK
         elsif config.gitlab_k8s_agent.listen_network == 'tcp'
           "grpc://#{config.gitlab_k8s_agent.listen_address}"
         else
-          raise "Unsupported listen network #{config.gitlab_k8s_agent.listen_network}"
+          raise UnsupportedConfiguration, "Unsupported listen network #{config.gitlab_k8s_agent.listen_network}"
         end
       end
       string(:internal_api_listen_network) { 'tcp' }
@@ -264,7 +264,7 @@ module GDK
         when 'unix'
           "unix://#{internal_api_listen_address}"
         else
-          raise "Unsupported listen network #{config.gitlab_k8s_agent.internal_api_listen_network}"
+          raise UnsupportedConfiguration, "Unsupported listen network #{config.gitlab_k8s_agent.internal_api_listen_network}"
         end
       end
       bool :__listen_websocket do

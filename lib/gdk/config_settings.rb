@@ -22,6 +22,7 @@ module GDK
     extend ::Forwardable
 
     SettingUndefined = Class.new(StandardError)
+    UnsupportedConfiguration = Class.new(StandardError)
 
     attr_reader :parent, :yaml, :key
 
