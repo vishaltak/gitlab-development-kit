@@ -233,7 +233,7 @@ tracer:
   jaeger:
     enabled: true
     listen_address: 127.0.0.1
-    version: 1.18.1
+    version: 1.21.0
 username: git
 webpack:
   host: 127.0.0.1
