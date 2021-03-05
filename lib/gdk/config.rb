@@ -537,5 +537,9 @@ module GDK
     settings :redis do
       path(:__socket_file) { config.gdk_root.join('redis/redis.socket') }
     end
+
+    settings :asdf do
+      bool(:opt_out) { false }
+    end
   end
 end

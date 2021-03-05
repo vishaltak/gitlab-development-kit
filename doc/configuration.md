@@ -2,6 +2,13 @@
 
 This document describes how you can configure your GDK environment.
 
+- [Git configuration](#git-configuration)
+- [GDK configuration](#gdk-configuration)
+- [Webpack settings](#webpack-settings)
+- [Webpack settings](#webpack-settings)
+- [Grafana settings](#grafana-settings)
+- [asdf settings](#asdf-settings)
+
 ## Git configuration
 
 Git has features which are disabled by default, and would be great to enable to
@@ -35,8 +42,6 @@ all applied settings in a YAML structure.
 - [GDK settings](#gdk-settings)
 - [GitLab settings](#gitlab-settings)
 - [NGINX settings](#nginx-settings)
-- [Webpack settings](#webpack-settings)
-- [ActionCable settings](#actioncable-settings)
 
 #### Run GitLab and GitLab FOSS concurrently
 
@@ -493,3 +498,16 @@ grafana:
 |-----------|---------|-------------|
 | `enabled` | `false` | Set this to `true` to enable the `grafana` service. |
 | `port`    | `4000`  | Set your preferred TCP port for the `grafana` service. |
+
+## asdf settings
+
+Under the asdf key you can define the following settings with their defaults:
+
+```yaml
+asdf:
+  opt_out: false
+```
+
+| Setting   | Default | Description |
+|-----------|---------|-------------|
+| `opt_out` | `false` | Set this to `true` to tell GDK to _not_ use asdf, even if it's installed. |
