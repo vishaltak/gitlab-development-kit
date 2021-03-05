@@ -5,15 +5,15 @@
 
 # Datasources
 #
-redis: exec redis-server <%= config.gdk_root.join('redis', 'redis.conf') %>
+redis: exec nix develop --command redis-server <%= config.gdk_root.join('redis', 'redis.conf') %>
 <%= '#' unless config.object_store? %>minio: exec env MINIO_REGION=gdk MINIO_ACCESS_KEY=minio MINIO_SECRET_KEY=gdk-minio minio server -C minio/config --address "<%= config.object_store.host %>:<%= config.object_store.port %>" --compat minio/data
-postgresql: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.data_dir %> -k <%= config.postgresql.dir %> -h '<%= config.postgresql.__active_host %>'
-<%= '#' unless config.postgresql.replica? %>postgresql-replica: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.replica_dir.join('data') %> -k <%= config.postgresql.replica_dir %> -h ''
+postgresql: exec support/postgresql-signal-wrapper nix develop --command postgres -D <%= config.postgresql.data_dir %> -k <%= config.postgresql.dir %> -h '<%= config.postgresql.__active_host %>'
+<%= '#' unless config.postgresql.replica? %>postgresql-replica: exec support/postgresql-signal-wrapper nix develop --command postgres -D <%= config.postgresql.replica_dir.join('data') %> -k <%= config.postgresql.replica_dir %> -h ''
 <%= '#' unless config.openldap? %>openldap: exec support/exec-cd gitlab-openldap libexec/slapd -F slapd.d -d2 -h "ldap://<%= config.hostname %>:3890"
 
 # Geo
 #
-<%= '#' unless config.geo? %>postgresql-geo: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.geo.dir.join('data') %> -k <%= config.postgresql.geo.dir %> -h '<%= config.postgresql.geo.__active_host %>'
+<%= '#' unless config.geo? %>postgresql-geo: exec support/postgresql-signal-wrapper nix develop --command postgres -D <%= config.postgresql.geo.dir.join('data') %> -k <%= config.postgresql.geo.dir %> -h '<%= config.postgresql.geo.__active_host %>'
 <%= '#' unless config.geo? %>geo-cursor: exec /usr/bin/env RAILS_ENV=development RAILS_RELATIVE_URL_ROOT=$relative_url_root support/geo-logcursor
 
 # Backend services

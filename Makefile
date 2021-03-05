@@ -55,9 +55,9 @@ bundle_without_production_cmd = ${BUNDLE} config set without 'production'
 bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir)
 gitlab_rake_cmd = $(in_gitlab) nix develop --command bundle exec rake
-gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
+gitlab_git_cmd = nix develop --command git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 
-psql := $(postgresql_bin_dir)/psql
+psql := nix develop --command psql
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
