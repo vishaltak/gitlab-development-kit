@@ -11,6 +11,7 @@ check_interval = 0
   executor = "docker"
   [runners.custom_build_dir]
   [runners.docker]
+<%= "    network_mode = \"host\"\n" if config.runner.__network_mode_host? -%>
     tls_verify = false
     image = "alpine:latest"
     privileged = true

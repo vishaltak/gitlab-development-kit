@@ -610,6 +610,46 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe 'network_mode_host' do
+      it 'is disabled by default' do
+        expect(config.runner.network_mode_host).to be(false)
+      end
+    end
+
+    describe '__network_mode_host' do
+      context 'when not set in gdk.yml' do
+        it 'is disabled by default' do
+          expect(config.runner.__network_mode_host).to be(false)
+        end
+      end
+
+      context 'when enabled in gdk.yml' do
+        before do
+          yaml['runner'] = {
+            'network_mode_host' => 'true'
+          }
+
+          allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+        end
+
+        context 'on a macOS system' do
+          let(:host_os) { 'macos' }
+
+          it 'raise an exception' do
+            expect { config.runner.__network_mode_host }.to raise_error('runner.network_mode_host is only supported on Linux')
+          end
+        end
+
+        context 'on a Linux system' do
+          let(:host_os) { 'linux' }
+
+          it 'returns true' do
+            expect(config.runner.__network_mode_host).to be(true)
+          end
+        end
+      end
+    end
+
     context 'when config_file exists' do
       let(:file_contents) do
         <<~CONTENTS
@@ -640,16 +680,20 @@ RSpec.describe GDK::Config do
         CONTENTS
       end
 
-      it 'returns true' do
-        expect(config.runner.enabled).to be true
+      describe 'enabled' do
+        it 'returns true' do
+          expect(config.runner.enabled).to be(true)
+        end
       end
     end
 
     context 'when config_file does not exist' do
       let(:file_contents) { nil }
 
-      it 'returns false' do
-        expect(config.runner.enabled).to be false
+      describe 'enabled' do
+        it 'is disabled by default' do
+          expect(config.runner.enabled).to be(false)
+        end
       end
     end
   end
