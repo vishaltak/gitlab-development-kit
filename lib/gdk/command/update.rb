@@ -14,7 +14,7 @@ module GDK
           return false
         end
 
-        return reconfigure! if GDK.config.gdk.experimental.auto_reconfigure?
+        return reconfigure! if GDK.config.gdk.auto_reconfigure?
 
         update_result
       end
