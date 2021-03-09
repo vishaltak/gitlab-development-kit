@@ -317,7 +317,7 @@ module GDK
     settings :tracer do
       string(:build_tags) { 'tracer_static tracer_static_jaeger' }
       settings :jaeger do
-        bool(:enabled) { true }
+        bool(:enabled) { false }
         string(:version) { '1.21.0' }
         string(:listen_address) { config.hostname }
       end
