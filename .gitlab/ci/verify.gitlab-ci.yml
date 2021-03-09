@@ -1,4 +1,4 @@
-.verify_job:
+.verify-job:
   stage: verify
   extends: .rules:code-changes
   image: ${VERIFY_IMAGE}
@@ -22,16 +22,16 @@
       - .bundle
 
 install:
-  extends: .verify_job
+  extends: .verify-job
   script:
-    - support/ci/verify_install
+    - support/ci/verify-install
 
-update_from_default_branch:
-  extends: .verify_job
+update-from-default-branch:
+  extends: .verify-job
   script:
-    - support/ci/verify_update $CI_DEFAULT_BRANCH
+    - support/ci/verify-update $CI_DEFAULT_BRANCH
 
-update_from_mr_branch:
-  extends: .verify_job
+update-from-mr-branch:
+  extends: .verify-job
   script:
-    - support/ci/verify_update
+    - support/ci/verify-update

@@ -1,4 +1,4 @@
-docs_lint:
+docs-lint:
   extends: .rules:docs-changes
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.12-vale-2.8.0-markdownlint-0.26.0"
   stage: test
@@ -36,7 +36,7 @@ rspec:
 include:
   - template: Code-Quality.gitlab-ci.yml
 
-code_quality:
+code-quality:
   extends:
     - .rules:code-changes
     - .docker:use-docker-in-docker
@@ -48,7 +48,7 @@ code_quality:
     # For tags, create a pipeline.
     - if: '$CI_COMMIT_TAG'
 
-container_scanning:
+container-scanning:
   extends:
     - .rules:code-changes
     - .docker:use-docker-in-docker
@@ -95,11 +95,11 @@ yard:
     paths:
       - yard/*
 
-verify_gdk_example_yml:
+verify-gdk-example-yml:
   extends: .rules:code-changes
   stage: test
   script:
-    - make verify_gdk_example_yml
+    - make verify-gdk-example-yml
 
 danger-review:
   extends:
