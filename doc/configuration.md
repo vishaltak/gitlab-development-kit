@@ -2,12 +2,11 @@
 
 This document describes how you can configure your GDK environment.
 
-- [Git configuration](#git-configuration)
-- [GDK configuration](#gdk-configuration)
-- [Webpack settings](#webpack-settings)
-- [Webpack settings](#webpack-settings)
-- [Grafana settings](#grafana-settings)
-- [asdf settings](#asdf-settings)
+- [Git configuration](#git-configuration).
+- [GDK configuration](#gdk-configuration).
+- [Webpack settings](#webpack-settings).
+- [Grafana settings](#grafana-settings).
+- [`asdf` settings](#asdf-settings).
 
 ## Git configuration
 
@@ -109,7 +108,7 @@ And run the following command to apply the change:
 gdk reconfigure
 ```
 
-##### Object storage config
+##### Object storage configuration
 
 The following examples are a quick guide for configuring object storage
 for external S3 providers, Google Cloud Storage, or Microsoft Azure.
@@ -253,7 +252,7 @@ Experimental settings may be promoted to stable settings or they may be deprecat
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `gitlab.cache_classes` | `false`  | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
-| `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do NOT include `http://`. |
+| `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do **not** include `http://`. |
 | `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 
@@ -432,9 +431,9 @@ or where GDK is running in lower-memory environments. To lower the memory requir
   which takes infrequently updated dependencies and combines them into one long-lived bundle that is
   written to disk and does not reside in memory. You may see 200 to 300 MB in memory savings.
 - Set `webpack.incremental: true` in your `gdk.yml`. This enables incremental compilation of webpack
-  assets and only the JavaScript for pages you visit during development will get compiled.
-  If you visit a previously unvisited page, you will see an overlay informing you that the recompilation
-  happens. A page reload will then serve the correct assets (either manually or via `live_reload`)
+  assets and only the JavaScript for pages you visit during development are compiled.
+  If you visit a previously unvisited page, you see an overlay informing you that the recompilation
+  happens. A page reload then serves the correct assets (either manually or via `live_reload`).
 
 This means you pay a high upfront cost of a single memory- and CPU-intenstive compile. However, if
 you do not change any frontend files, you just have a lightweight Ruby server running.
@@ -446,10 +445,10 @@ If you experience any problems with one of the modes, you can quickly change the
 gdk reconfigure
 ```
 
-### Webpack ENV variables
+### Webpack environment variables
 
 The GitLab application exposes various configuration options for webpack via
-ENV variables. These can be modified to improve performance or enable debugging.
+environment variables. These can be modified to improve performance or enable debugging.
 
 These settings can be configured using [`env.runit`](runit.md#modifying-environment-configuration-for-services).
 
@@ -499,9 +498,9 @@ grafana:
 | `enabled` | `false` | Set this to `true` to enable the `grafana` service. |
 | `port`    | `4000`  | Set your preferred TCP port for the `grafana` service. |
 
-## asdf settings
+## `asdf` settings
 
-Under the asdf key you can define the following settings with their defaults:
+Under the `asdf` key you can define the following settings with their defaults:
 
 ```yaml
 asdf:
@@ -510,4 +509,4 @@ asdf:
 
 | Setting   | Default | Description |
 |-----------|---------|-------------|
-| `opt_out` | `false` | Set this to `true` to tell GDK to _not_ use asdf, even if it's installed. |
+| `opt_out` | `false` | Set this to `true` to tell GDK to _not_ use `asdf`, even if it's installed. |
