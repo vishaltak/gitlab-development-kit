@@ -225,6 +225,41 @@ sudo usermod -a -G rvm <username>
 
 You need to follow [runit install instruction](#runit) to install it manually.
 
+### Red Hat Enterprise Linux
+
+NOTE:
+These instructions don't account for using `asdf` for managing some dependencies, and
+were tested on RHEL 8.3.
+
+To install dependencies for RHEL:
+
+```shell
+sudo subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo dnf module install postgresql:12 redis:5 nodejs:14 go-toolset
+sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cmake \
+  gcc-c++ go redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
+  libstdc++.so.6 npm re2 re2-devel GraphicsMagick perl-Image-ExifTool \
+  rsync sqlite-devel
+sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
+sudo chmod +x /usr/local/bin/minio
+
+# This example uses Ruby 2.7.2. Substitute with the current version if different.
+sudo rvm install 2.7.2
+sudo rvm use 2.7.2
+#Ensure your user is in rvm group
+sudo usermod -a -G rvm <username>
+#add iptables exceptions, or sudo service stop iptables
+```
+
+You need to follow [runit install instruction](#runit) to install it manually.
+
+NOTE:
+Although RHEL8 has a FIPS-compliant mode and GitLab can be installed with it
+enabled, GitLab is not FIPS-compliant and will not run correctly with it
+enabled. [Epic &5104](https://gitlab.com/groups/gitlab-org/-/epics/5104) tracks
+the status of GitLab FIPS compliance.
+
 ### OpenSUSE
 
 NOTE:
