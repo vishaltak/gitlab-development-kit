@@ -7,12 +7,14 @@ AllCops:
   TargetRubyVersion: 2.7.2
   Exclude:
     - 'Brewfile'
+    - 'Dangerfile'
+    - 'danger/**/*'
     - 'elasticsearch/**/*'
     - 'gitaly/**/*'
     - 'gitlab-docs/**/*'
     - 'gitlab-elasticsearch-indexer/**/*'
-    - 'gitlab-pages/**/*'
     - 'gitlab-k8s-agent/**/*'
+    - 'gitlab-pages/**/*'
     - 'gitlab-runner/**/*'
     - 'gitlab-shell/**/*'
     - 'gitlab-ui/**/*'
@@ -23,13 +25,14 @@ AllCops:
     - 'influxdb/**/*'
     - 'jaeger/**/*'
     - 'log/**/*'
-    - 'postgresql/**/*'
     - 'postgresql-geo/**/*'
     - 'postgresql-primary/**/*'
+    - 'postgresql/**/*'
     - 'repositories/**/*'
     - 'services/**/*'
     - 'sv/**/*'
     - 'tmp/**/*'
+    - 'tooling/**/*'
     - 'vendor/**/*'
 
 CodeReuse/ActiveRecord:
