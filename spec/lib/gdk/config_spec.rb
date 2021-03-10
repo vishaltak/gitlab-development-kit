@@ -1458,8 +1458,9 @@ RSpec.describe GDK::Config do
 
     describe 'jaeger' do
       describe 'enabled' do
-        it 'is enabled by default' do
-          expect(config.tracer.jaeger.enabled).to be(true)
+        it 'is disabled by default' do
+          expect(config.tracer.jaeger.enabled).to be(false)
+          expect(config.tracer.jaeger.enabled?).to be(false)
         end
       end
 

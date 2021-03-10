@@ -234,7 +234,7 @@ sshd:
 tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:
-    enabled: true
+    enabled: false
     listen_address: 127.0.0.1
     version: 1.21.0
 username: git

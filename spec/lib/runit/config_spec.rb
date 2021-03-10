@@ -38,21 +38,20 @@ RSpec.describe Runit::Config do
     end
 
     it 'exports GITLAB_TRACING related env variables when jaeger is enabled' do
+      yaml = {
+        'tracer' => {
+          'jaeger' => {
+            'enabled' => true
+          }
+        }
+      }
+      stub_gdk_yaml(yaml)
+
       expect(subject.run_env).to match(/GITLAB_TRACING=/)
       expect(subject.run_env).to match(/GITLAB_TRACING_URL=/)
     end
 
     it 'doesnt include GITLAB_TRACING related env variables when jaeger is disabled' do
-      yaml = {
-        'tracer' => {
-          'jaeger' => {
-            'enabled' => false
-          }
-
-        }
-      }
-      stub_gdk_yaml(yaml)
-
       expect(subject.run_env).not_to match(/GITLAB_TRACING=/)
       expect(subject.run_env).not_to match(/GITLAB_TRACING_URL=/)
     end
