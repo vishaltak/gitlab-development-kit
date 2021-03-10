@@ -36,7 +36,7 @@ rspec:
 include:
   - template: Code-Quality.gitlab-ci.yml
 
-code-quality:
+code_quality:
   extends:
     - .rules:code-changes
     - .docker:use-docker-in-docker
