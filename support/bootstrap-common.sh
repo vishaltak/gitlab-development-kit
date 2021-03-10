@@ -82,7 +82,7 @@ ensure_supported_platform() {
       echo "INFO:" >&2
       echo "INFO: GDK currently runs on Apple Silicon hardware using Rosetta 2." >&2
       echo "INFO:" >&2
-      echo "INFO: To see the latest on running the GDK natively on Apple Silicon, visit:"
+      echo "INFO: To see the latest on running the GDK natively on Apple Silicon, visit:" >&2
       echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159" >&2
       echo "INFO:" >&2
       echo "INFO: To learn more about Rosetta 2, visit:" >&2
