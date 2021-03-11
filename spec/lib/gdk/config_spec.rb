@@ -1340,6 +1340,13 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#auto_reconfigure' do
+      it 'defaults to true' do
+        expect(config.gdk.auto_reconfigure).to eq(true)
+        expect(config.gdk.auto_reconfigure?).to eq(true)
+      end
+    end
+
     describe '#runit_wait_secs' do
       it 'is 10 secs by default' do
         expect(config.gdk.runit_wait_secs).to eq(10)

@@ -13,9 +13,10 @@ elasticsearch:
   version: 7.10.2
 gdk:
   ask_to_restart_after_update: true
+  auto_reconfigure: true
   debug: false
   experimental:
-    auto_reconfigure: false
+    auto_reconfigure: true
     quiet: true
   overwrite_changes: false
   protected_config_files: []

@@ -18,28 +18,26 @@ RSpec.describe GDK::Command::Update do
       end
     end
 
-    it 'delegates to #update! and executess with success' do
+    it 'delegates to #update! and executes with success' do
       expect(subject).to receive(:update!).and_return('some content')
-      expect(subject).not_to receive(:reconfigure!)
+      expect(subject).to receive(:reconfigure!)
 
       subject.run
     end
 
-    context 'when gdk.experimental.auto_reconfigure flag is enabled' do
+    context 'when gdk.auto_reconfigure flag is disabled' do
       before do
         yaml = {
           'gdk' => {
-            'experimental' => {
-              'auto_reconfigure' => true
-            }
+            'auto_reconfigure' => false
           }
         }
         stub_gdk_yaml(yaml)
       end
 
-      it 'executes executes reconfigure command after update' do
+      it 'does not execute reconfigure command after update' do
         expect(subject).to receive(:update!).and_return('some content')
-        expect(subject).to receive(:reconfigure!)
+        expect(subject).not_to receive(:reconfigure!)
 
         subject.run
       end

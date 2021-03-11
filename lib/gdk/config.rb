@@ -53,9 +53,10 @@ module GDK
       bool(:debug) { false }
       integer(:runit_wait_secs) { 10 }
       bool(:quiet) { true }
+      bool(:auto_reconfigure) { true }
       settings :experimental do
         bool(:quiet) { config.gdk.quiet? }
-        bool(:auto_reconfigure) { false }
+        bool(:auto_reconfigure) { config.gdk.auto_reconfigure? }
       end
       bool(:overwrite_changes) { false }
       array(:protected_config_files) { [] }
