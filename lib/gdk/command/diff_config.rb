@@ -14,7 +14,7 @@ module GDK
           gitlab-runner-config.toml
           gitlab-shell/.gitlab_shell_secret
           gitlab-shell/config.yml
-          gitlab-workhorse/config.toml
+          gitlab/workhorse/config.toml
           gitlab/config/cable.yml
           gitlab/config/database.yml
           gitlab/config/database_geo.yml

@@ -37,13 +37,11 @@ endif
 
 gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
-gitlab_workhorse_clone_dir = gitlab-workhorse
 gitaly_clone_dir = gitaly
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 gitlab_ui_clone_dir = gitlab-ui
 
-workhorse_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_WORKHORSE_VERSION")
 gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
 pages_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
@@ -144,7 +142,7 @@ clean-config:
 	gitlab-runner-config.toml \
 	gitlab-shell/.gitlab_shell_secret \
 	gitlab-shell/config.yml \
-	gitlab-workhorse/config.toml \
+	gitlab/workhorse/config.toml \
 	gitlab/config/cable.yml \
 	gitlab/config/database.yml \
 	gitlab/config/database_geo.yml \
@@ -166,7 +164,7 @@ clean-config:
 touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \
-	gitlab-workhorse/config.toml.example \
+	gitlab/workhorse/config.toml.example \
 	gitlab/config/puma_actioncable.example.development.rb \
 	gitlab/config/unicorn.rb.example.development \
 	$$(find support/templates -name "*.erb")
@@ -510,31 +508,20 @@ diff-config:
 # gitlab-workhorse
 ##############################################################
 
-gitlab-workhorse-setup: gitlab-workhorse/gitlab-workhorse gitlab-workhorse/config.toml
+gitlab-workhorse-setup: gitlab/workhorse/gitlab-workhorse gitlab/workhorse/config.toml
 
-.PHONY: gitlab-workhorse/config.toml
-gitlab-workhorse/config.toml:
+.PHONY: gitlab/workhorse/config.toml
+gitlab/workhorse/config.toml:
 	$(Q)rake $@
 
-gitlab-workhorse-update: ${gitlab_workhorse_clone_dir}/.git gitlab-workhorse/.git/pull gitlab-workhorse-clean-bin gitlab-workhorse-setup
+gitlab-workhorse-update: gitlab-workhorse-clean-bin gitlab-workhorse-setup
 
 gitlab-workhorse-clean-bin:
-	$(Q)$(MAKE) -C ${gitlab_workhorse_clone_dir} clean
+	$(Q)$(MAKE) -C gitlab/workhorse clean
 
-.PHONY: gitlab-workhorse/gitlab-workhorse
-gitlab-workhorse/gitlab-workhorse: ${gitlab_workhorse_clone_dir}/.git
-	$(Q)$(MAKE) -C ${gitlab_workhorse_clone_dir} ${QQ}
-
-${gitlab_workhorse_clone_dir}/.git:
-	$(Q)support/move-existing-workhorse-directory || git clone --quiet --branch "${workhorse_version}" ${git_depth_param} ${gitlab_workhorse_repo} ${gitlab_workhorse_clone_dir}
-
-gitlab-workhorse/.git/pull:
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-workhorse to ${workhorse_version}"
-	@echo "${DIVIDER}"
-	$(Q)support/remove-empty-file gitlab-workhorse/config.toml.example
-	$(Q)support/component-git-update workhorse "${gitlab_workhorse_clone_dir}" "${workhorse_version}"
+.PHONY: gitlab/workhorse/gitlab-workhorse
+gitlab/workhorse/gitlab-workhorse:
+	$(Q)$(MAKE) -C gitlab/workhorse ${QQ}
 
 ##############################################################
 # gitlab-elasticsearch

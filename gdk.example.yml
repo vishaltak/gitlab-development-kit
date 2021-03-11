@@ -212,7 +212,6 @@ repositories:
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
   gitlab_ui: https://gitlab.com/gitlab-org/gitlab-ui.git
-  gitlab_workhorse: https://gitlab.com/gitlab-org/gitlab-workhorse.git
 repositories_root: "/home/git/gdk/repositories"
 repository_storages: "/home/git/gdk/repository_storages"
 runner:
@@ -247,5 +246,4 @@ webpack:
   static: false
   vendor_dll: false
 workhorse:
-  auto_update: true
   configured_port: 3333

@@ -97,7 +97,7 @@ file 'gitlab-shell/config.yml' => ['support/templates/gitlab-shell.config.yml.er
 end
 
 desc 'Generate the gitlab-workhorse config file'
-file 'gitlab-workhorse/config.toml' => ['support/templates/gitlab-workhorse.config.toml.erb'] do |t|
+file 'gitlab/workhorse/config.toml' => ['support/templates/gitlab-workhorse.config.toml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
