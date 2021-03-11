@@ -1,14 +1,18 @@
-# Overview
+## Overview
 
-<!-- Details of the issue.  If relevant, include steps to replicate and any console output or screenshots -->
+<!-- Details of the issue.  Include any console output or screenshots. -->
 
-# Proposal (optional)
+## Steps to replicate (optional)
 
-<!-- Description of any proposal you might have> -->
+<!-- Clear steps of how to replicate the issue. -->
 
-# Environment (optional)
+## Proposal (optional)
 
-- Operating System: Windows/macOS/Linux
+<!-- Description of any proposal you might have. -->
+
+## Environment (optional)
+
+- Operating system: macOS/Linux/etc
 - The contents of your `gdk.yml`
 - Ruby version: `<!-- output of `ruby --version` -->`
 - GDK version: `<!-- output of `git rev-parse --short HEAD` -->`
