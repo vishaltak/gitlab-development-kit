@@ -46,8 +46,6 @@
 /gitlab-shell/
 /gitlab-ui
 /gitlab-workhorse
-/gitlab-workhorse/.cache
-/gitlab-workhorse/config.toml
 /gitlab/
 /gitlab_pages_port
 /google_oauth_client_id

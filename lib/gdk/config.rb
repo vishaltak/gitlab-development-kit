@@ -29,7 +29,6 @@ module GDK
     settings :repositories do
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
-      string(:gitlab_workhorse) { 'https://gitlab.com/gitlab-org/gitlab-workhorse.git' }
       string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }
       string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
       string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
@@ -151,8 +150,6 @@ module GDK
       string :__listen_address do
         "#{config.workhorse.__active_host}:#{config.workhorse.__active_port}"
       end
-
-      bool(:auto_update) { true }
     end
 
     settings :gitlab_shell do

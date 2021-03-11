@@ -17,7 +17,6 @@ def enable_shares(config, nfs)
   config.vm.synced_folder "gitlab/", "/vagrant/gitlab", create: true, nfs: nfs
   config.vm.synced_folder "go-gitlab-shell/", "/vagrant/go-gitlab-shell", create: true, nfs: nfs
   config.vm.synced_folder "gitlab-runner/", "/vagrant/gitlab-runner", create: true, nfs: nfs
-  config.vm.synced_folder "gitlab-workhorse/", "/vagrant/gitlab-workhorse", create: true, nfs: nfs
 end
 
 def running_in_admin_mode?
