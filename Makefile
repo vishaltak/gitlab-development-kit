@@ -995,7 +995,7 @@ jaeger-update: jaeger-setup
 ##############################################################
 
 .PHONY: test
-test: lint shellcheck rubocop rspec verify_gdk_example_yml
+test: lint shellcheck rubocop rspec verify-gdk-example-yml
 
 .PHONY: rubocop
 rubocop:
@@ -1082,10 +1082,10 @@ shellcheck: shellcheck-install
 	@echo -n "Shellcheck: "
 	@support/shellcheck && echo "OK"
 
-.PHONY: verify_gdk_example_yml
-verify_gdk_example_yml:
+.PHONY: verify-gdk-example-yml
+verify-gdk-example-yml:
 	@echo -n "Checking gdk.example.yml: "
-	@support/ci/verify_gdk_example_yml && echo "OK"
+	@support/ci/verify-gdk-example-yml && echo "OK"
 
 ##############################################################
 # Misc
