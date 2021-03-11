@@ -4,13 +4,13 @@ This Changelog tracks major changes to the GitLab Development Kit,
 such as dependency updates (those not handled by Bundler) and new
 features.
 
-## 2020-03-05
+## 2021-03-05
 
 - New asdf.opt_out setting !1862
 - Make jaeger 1.21.0 the default !1865
 - Add Arch and Manjaro to supported OS list !1855
 
-## 2020-02-26
+## 2021-02-26
 
 - Add `gdk pristine` command !1811
 - Enable `nakayoshi_fork` for Puma by default !1832
