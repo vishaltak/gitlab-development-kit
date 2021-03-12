@@ -4,6 +4,14 @@ This Changelog tracks major changes to the GitLab Development Kit,
 such as dependency updates (those not handled by Bundler) and new
 features.
 
+## 2021-03-12
+
+- Promote auto_reconfigure to stable and default enabled !1873
+- Run workhorse from gitlab/workhorse !1808
+- Add Reviewer Roulette for the GDK project !1863
+- Make jaeger no longer enabled by default !1874
+- Add advanced install instructions for RHEL 8 !1852
+
 ## 2021-03-05
 
 - New asdf.opt_out setting !1862
