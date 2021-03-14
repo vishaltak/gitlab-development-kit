@@ -388,8 +388,6 @@ redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio 
 
 ## Install Windows 10 dependencies
 
-> 🚨 Support for Windows 10 became stable with the introduction of the Windows Subsystem for Linux 2 (WSL2) in version 2004.
-
 **Setting up the Windows Subsystem for Linux:**
 
 Open PowerShell as Administrator and run:

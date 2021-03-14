@@ -19,35 +19,31 @@ GitLab team member or a member of the wider community. It allows you to test
 your changes locally on your workstation in an isolated manner. This can speed
 up the time it takes to make successful contributions.
 
-## System requirements
-
-[Simple installation of dependencies](doc/index.md) is available for these operating systems:
-
-| Operating System | Architecture | Version(s) | RAM | Disk |
-| ---------------- | ------------ | ---------- | --- | ---- |
-| macOS            | <ul><li>amd64</li><li>arm64 (Apple Silicon, under Rosetta 2)</li></ul> | <ul><li>Big Sur (11)</li><li>Catalina (10.15)</li><li>Mojave (10.14)</li><ul> | 8GB | 12GB |
-| Ubuntu Linux     | <ul><li>amd64</li></ul> | <ul><li>20.10 (Groovy Gorilla)</li><li>20.04 LTS (Focal Fossa)</li><li>18.04 LTS (Bionic Beaver)</li><ul> | 8GB | 12GB |
-| Debian Linux     | <ul><li>amd64</li></ul> | <ul><li>10 (Buster)</li><li>9 (Stretch)</li><ul> | 8GB | 12GB |
-| Arch Linux     | <ul><li>amd64</li></ul> | <ul><li>latest</li> | 8GB | 12GB |
-| Manjaro Linux     | <ul><li>amd64</li></ul> | <ul><li>latest</li> | 8GB | 12GB |
-
-[Advanced installation of dependencies](doc/advanced.md) is available for these systems, and may be available for other systems.
-
 ## Getting started
 
-### How to install GDK
+The following methods for installing GDK are available:
 
-The default method of installing GDK is [on your native operating system](doc/index.md).
+- [Simple installation](doc/index.md) on your local system. Requires at least
+  8GB RAM and 12GB disk space. Available for:
 
-The GDK can also be installed via [Vagrant](doc/howto/vagrant.md), [Minikube](doc/howto/kubernetes/minikube.md), and [Gitpod](doc/howto/gitpod.md).
+  | Operating system | Versions            |
+  |:-----------------|:--------------------|
+  | macOS            | 11, 10.5, 10.4      |
+  | Ubuntu           | 20.10, 20.04, 18.04 |
+  | Debian           | 10, 9               |
+  | Arch             | latest              |
+  | Manjaro          | latest              |
+  
+- [Advanced installation](doc/advanced.md) on your local system. Requires at least
+  8GB RAM and 12GB disk space.
+- [Gitpod](doc/howto/gitpod.md).
+- [Vagrant](doc/howto/vagrant.md).
+- [Minikube](doc/howto/kubernetes/minikube.md).
 
-### How to use GDK
+After installation, learn how to:
 
-After installation, [learn how to use GDK](doc/howto/index.md).
-
-### How to update GDK
-
-If you have an old installation, [learn how to update your existing GDK installation](doc/index.md#update-gdk).
+- [Use GDK](doc/howto/index.md).
+- [Update an existing installation](doc/index.md#update-gdk).
 
 ## Getting help
 
