@@ -63,8 +63,8 @@ script fails for some reason.
 
 ## Run the upgrade script
 
-For [supported platforms](../../README.md#system-requirements) there is a convenient script that automatically runs `pg_upgrade`
-with the right parameters:
+For [systems that support simple installation](../../README.md#getting-started),
+there is a convenient script that automatically runs `pg_upgrade` with the correct parameters:
 
 ```shell
 support/upgrade-postgresql
