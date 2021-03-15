@@ -10,6 +10,12 @@ version_size=${#version}
 if [[ ${version_size} == 40 ]]; then
   echo "${version}"
   exit
+elif [[ ${version} == 'master' ]]; then
+  echo "${version}"
+  exit
+elif [[ ${version} == 'main' ]]; then
+  echo "${version}"
+  exit
 fi
 
 case "$version" in
