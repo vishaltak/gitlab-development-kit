@@ -162,8 +162,8 @@ You can find and delete any unused persistent disks following these steps:
   them.
 
 NOTE:
-When [running the integration test](#run-the-integration-test) it is
-creating clusters named `qa-cluster-<timestamp>-<random-suffix>`. As such it is
+When running the integration tests, it creates clusters named
+`qa-cluster-<timestamp>-<random-suffix>`. As such it is
 actually safe and encouraged for you to also delete unused persistent disks
 created by these automated tests. The disk name starts with
 `gke-qa-cluster-`. Also note there can be many such disks here as our

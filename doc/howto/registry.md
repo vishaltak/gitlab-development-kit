@@ -77,8 +77,8 @@ One solution is to bind `gdk.test` to a loopback IP *alias* (*not*
 straight to your computer) but this IP remains accessible from within a container
 (unlike `127.0.0.1`). To set this up:
 
-1. [Create a loopback interface for GDK](../index.md#create-loopback-interface-for-gdk).
-1. [Point `gdk.test` to this new IP](../index.md#set-up-gdktest-hostname) in your `/etc/hosts` file.
+1. [Create a loopback interface for GDK](local_network.md#create-loopback-interface).
+1. [Point `gdk.test` to this new IP](local_network.md) in your `/etc/hosts` file.
 
 WARNING:
 If you end up on a network with the loopback alias as your local network IP, your GDK becomes
@@ -455,7 +455,8 @@ container_scanning:
 NOTE:
 The contents of the above `.gitlab-ci.yml` file differs depending on how the container registry has been configured:
 
-1. When the local container registry is insecure because `registry.self_signed: false` has been [configured](#configuring-a-local-only-registry), the above `.gitlab-ci.yml` file can be used.
+1. When the local container registry is insecure because `registry.self_signed: false` has been
+   configured, the above `.gitlab-ci.yml` file can be used.
 
    It's necessary to set `REGISTRY_INSECURE: "true"` in the `container_scanning` job because the
    [container scanning tool](https://gitlab.com/gitlab-org/security-products/analyzers/klar/) uses
@@ -465,7 +466,10 @@ The contents of the above `.gitlab-ci.yml` file differs depending on how the con
    and also in the GitLab container scanning repo [here](https://gitlab.com/gitlab-org/security-products/analyzers/klar/#environment-variables)
    forces the `klar` tool to use `HTTP` when fetching the container image from our insecure registry.
 
-1. When the registry is secure because `registry.self_signed: true` has been [configured](#configuring-a-local-only-registry), but we haven't referenced the self-signed certificate, then the following `services` and `container_scanning` sections of the above `.gitlab-ci.yml` must be used (the rest of the file has been omitted for brevity):
+1. When the registry is secure because `registry.self_signed: true` has been configured, but we
+   haven't referenced the self-signed certificate, then the following `services` and
+   `container_scanning` sections of the above `.gitlab-ci.yml` must be used (the rest of the file
+   has been omitted for brevity):
 
    ```yaml
    services:
@@ -478,7 +482,10 @@ The contents of the above `.gitlab-ci.yml` file differs depending on how the con
 
    Since the local container registry is now running securely over an `HTTPS` connection, we no longer need to use `REGISTRY_INSECURE: "true"`. However, we need to set the `DOCKER_INSECURE: "true"` option to instruct [klar](https://github.com/optiopay/klar) (and [clair](https://github.com/coreos/clair)) to accept a self-signed certificate.
 
-1. When the registry is secure because `registry.self_signed: true` has been [configured](#configuring-a-local-only-registry), **and** we reference the self-signed certificate, then the following `services` and `container_scanning` sections of the above `.gitlab-ci.yml` must be used (the rest of the file has been omitted for brevity):
+1. When the registry is secure because `registry.self_signed: true` has been configured, **and** we
+  reference the self-signed certificate, then the following `services` and `container_scanning`
+  sections of the above `.gitlab-ci.yml` must be used (the rest of the file has been omitted for
+  brevity):
 
    ```yaml
    services:
@@ -585,7 +592,7 @@ and you configured a self-signed registry, you can add a generated certificate t
 1. Run the following on your GDK instance:
 
    ```shell
-   $ cat ~/.docker/certs.d/gdk.test\:5000/ca.crt 
+   $ cat ~/.docker/certs.d/gdk.test\:5000/ca.crt
    -----BEGIN CERTIFICATE-----
    ...
    -----END CERTIFICATE-----

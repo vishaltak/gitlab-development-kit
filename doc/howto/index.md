@@ -1,7 +1,6 @@
 # How to use GitLab Development Kit
 
-See the [top level README](../../README.md#getting-started) for GDK
-installation instructions.
+Before using the GDK features below, see [install instructions](../index.md).
 
 Main purpose of GitLab Development Kit is to make GitLab development easier.
 Please see [GitLab Contributor documentation](https://docs.gitlab.com/ee/development/README.html)
@@ -17,7 +16,6 @@ to learn how to contribute to GitLab.
 
 ## Tips and tricks
 
-- [GitLab performance metrics](performance_metrics.md)
 - [Local network binding](local_network.md)
 - [Load testing](load_testing.md)
 - [Configuration](../configuration.md)
@@ -40,7 +38,7 @@ to learn how to contribute to GitLab.
 - [Google OAuth2](google-oauth2.md)
 - [HTTPS](nginx.md)
 - [Kerberos](kerberos.md)
-- [Kubernetes](auto_devops/index.md)
+- [Kubernetes](kubernetes/index.md)
 - [LDAP](ldap.md)
 - [Lefthook](lefthook.md)
 - [NFS](nfs.md)
@@ -53,6 +51,7 @@ to learn how to contribute to GitLab.
 - [Sherlock](sherlock.md)
 - [Simulate slow or broken repository storage](simulate_storage.md)
 - [Start a Rails console](rails_console.md)
+- [Tracing and Jaeger](https://docs.gitlab.com/ee/development/distributed_tracing.html#using-jaeger-in-the-gitlab-development-kit)
 - [Unicorn](unicorn.md)
 - [Update external dependencies](update_external_dependencies.md)
 - [Use Container Registry with GDK](registry.md)

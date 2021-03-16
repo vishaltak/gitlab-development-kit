@@ -15,7 +15,7 @@ GitLab.com generates an application ID and secret key for you to use.
 
    - Name: This can be anything. Consider something descriptive such as "Local GitLab.com OAuth".
    - Redirect URI: Make sure this matches what you have set for your localhost (for example,
-     [`gdk.test:3000`](../index.md#set-up-gdktest-hostname)):
+     [`gdk.test:3000`](local_network.md)):
 
      ```plaintext
      http://gdk.test:3000/import/gitlab/callback

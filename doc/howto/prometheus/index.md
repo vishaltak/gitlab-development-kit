@@ -115,8 +115,8 @@ minikube dashboard
 
 ### Configure GDK to listen to more than localhost
 
-Follow [the instructions](../local_network.md) to make your GDK
-accessible to other devices in the local network.
+Follow [the instructions](../local_network.md) to make your GDK accessible to other devices in the
+local network.
 
 ### Edit the GitLab `gitlab.yml` file
 
@@ -262,7 +262,7 @@ the GDK, the process is simpler:
 1. Either:
    - [Download Prometheus](https://prometheus.io/download/) and install it yourself.
    - Use the GDK-bundled Prometheus service. Because it runs inside Docker, you may need to
-     [create loopback interface for GDK](../index.md#create-loopback-interface-for-gdk) if you plan
+     [create loopback interface for GDK](../local_network.md#create-loopback-interface) if you plan
      to access it from external processes (for example, [Grafana](https://docs.gitlab.com/ee/administration/monitoring/performance/grafana_configuration.html)).
 1. If you want to scrape metrics from Sidekiq, ensure
    `monitoring.sidekiq_exporter` is `enabled` in `config/gitlab.yml`.

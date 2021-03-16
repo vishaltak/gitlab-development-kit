@@ -7,7 +7,8 @@
 
 ### Useful Commands
 
-- Besides this list of tips and troubleshooting, be sure to check out our list of [Useful Commands](useful_commands.md)
+Besides this list of tips and troubleshooting, see our list of
+[useful commands](useful_commands.md).
 
 ### QA
 
@@ -26,7 +27,8 @@
 
 ### Helm/Tiller Communication
 
-- One can run manual Helm commands from your local machine and communicate to our remote Tiller running on GKE. Check our [Useful Commands - Talking to Tiller](useful_commands.md#talking-to-tiller) to know how to achieve it.
+One can run manual Helm commands from your local machine and communicate to our remote Tiller
+running on GKE. See [Local Tiller](useful_commands.md#local-tiller) to know how to achieve it.
 
 ### Configuration for Auto DevOps base domain
 

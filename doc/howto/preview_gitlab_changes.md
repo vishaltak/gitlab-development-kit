@@ -28,7 +28,7 @@ To prepare GDK for previewing GDK changes:
 1. Go to your local GitLab in your web browser and sign in (by default, [`http://localhost:3000`](http://localhost:3000)).
    Verify that GitLab runs properly.
 1. Verify the current behavior of the feature affected by the changes. For Enterprise Edition
-   features, you may need to [perform additional tasks](index.md#use-gitlab-enterprise-features).
+   features, you may need to [perform additional tasks](../index.md#use-gitlab-enterprise-features).
 
 ## Make changes to GitLab
 
@@ -86,7 +86,7 @@ To preview features behind disabled flags, you need to first enable the appropri
 
 To enable a feature flag in your GDK instance:
 
-1. [Start the Rails console](../gdk_commands.md#start-the-rails-console).
+1. [Start the Rails console](rails_console.md).
 1. [Enable or disable desired flags](https://docs.gitlab.com/ee/administration/feature_flags.html#enable-or-disable-the-feature).
 1. Exit the Rails console by running `quit`.
 

@@ -88,7 +88,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
    k3d cluster create
    ```
 
-1. Set up a [loopback alias IP](runner.md#using-an-internal-dummy-interface). We can use it as the
+1. Set up a [loopback alias IP](local_network.md#create-loopback-interface). We can use it as the
    listen address so that `agentk` can reach your local GitLab and KAS. Let's assume this is `172.16.123.1`.
    We recommend you also bind your hostname to this address in `/etc/hosts`, by adding the line
    `172.16.123.1 gdk.test` to `/etc/hosts`
