@@ -29,7 +29,7 @@ token = "<%= config.gitaly.auth_token %>"
 
 # # Git settings
 [git]
-bin_path = "<%= config.git.bin %>"
+bin_path = "<%= config.gitaly.git_bin_path %>"
 catfile_cache_size = 10
 
 <%- node.__storages.each do |storage| -%>
