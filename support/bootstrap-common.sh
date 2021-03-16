@@ -115,7 +115,7 @@ common_preflight_checks() {
       echo "INFO: - $platform" >&2
     done
     echo "INFO: If you want to add your platform to this list, you're welcome to edit bootstrap-common.sh and open a merge request or open an issue in the GDK project." >&2
-    echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/advanced.md to bootstrap manually." >&2
+    echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md to bootstrap manually." >&2
     return 1
   fi
 

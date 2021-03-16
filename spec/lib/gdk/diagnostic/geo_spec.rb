@@ -76,7 +76,7 @@ RSpec.describe GDK::Diagnostic::Geo do
         Either update your gdk.yml to set geo.enabled to true or remove
         #{database_geo_yml_file}
 
-        https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/howto/geo.md
+        https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/howto/geo.md
       MESSAGE
 
       expect(subject.detail).to eq(expected_detail)

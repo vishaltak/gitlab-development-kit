@@ -27,7 +27,7 @@ praefect:
 ```
 
 For other GDK Gitaly and Praefect options, refer to the `gitaly:` and `praefect:` sections of the
-[`gdk.example.yml`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/gdk.example.yml).
+[`gdk.example.yml`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/gdk.example.yml).
 
 ## Add Gitaly nodes
 

@@ -208,7 +208,7 @@ Once you have installed the Runner via the cluster screen (known as a GitLab man
 Now that we have a Runner configured, we need to kick off a Pipeline. This is
 because the Prometheus integration only looks for environments which GitLab
 knows about and have a successful deploy. To do this, go into Pipelines and run
-a new Pipeline off `master`.
+a new Pipeline off `main`.
 
 You can validate the deploy worked by looking at the Kubernetes dashboard, or
 accessing the URL.

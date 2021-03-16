@@ -633,7 +633,7 @@ gitlab-k8s-agent/bazel: /usr/local/bin/bazelisk
 else
 .PHONY: gitlab-k8s-agent/bazel
 gitlab-k8s-agent/bazel:
-	@echo "INFO: To install bazel, please consult the docs at https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/howto/kubernetes_agent.md"
+	@echo "INFO: To install bazel, please consult the docs at https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/kubernetes_agent.md"
 endif
 
 /usr/local/bin/bazelisk:
@@ -685,7 +685,7 @@ gitlab-ui-clean:
 
 .gitlab-ui-yarn:
 ifeq ($(YARN),)
-	@echo "ERROR: YARN is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
+	@echo "ERROR: YARN is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
 	@echo
@@ -998,7 +998,7 @@ test: lint shellcheck rubocop rspec verify-gdk-example-yml
 .PHONY: rubocop
 rubocop:
 ifeq ($(BUNDLE),)
-	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
+	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
 ifeq ($(RUBOCOP),)
@@ -1012,7 +1012,7 @@ endif
 .PHONY: rspec
 rspec:
 ifeq ($(BUNDLE),)
-	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
+	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
 ifeq ($(RSPEC),)
@@ -1030,7 +1030,7 @@ lint: vale markdownlint
 vale-install:
 ifeq ($(VALE),)
 ifeq ($(GOLANG),)
-	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
+	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
 	@echo "INFO: Installing vale.."
@@ -1047,7 +1047,7 @@ vale: vale-install
 .PHONY: markdownlint-install
 markdownlint-install:
 ifeq ($(or $(NPM),$(YARN)),)
-	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md for more details"
+	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
 ifeq ($(MARKDOWNLINT),)

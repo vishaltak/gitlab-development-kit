@@ -27,7 +27,7 @@ module GDK
         <<~MESSAGE
           `psql` is version #{cmd_version}, but your PostgreSQL data dir is using version #{data_version}.
           Check that your PATH is pointing to the right PostgreSQL version, or see the PostgreSQL upgrade guide:
-          https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/howto/postgresql.md#upgrade-postgresql
+          https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/postgresql.md#upgrade-postgresql
         MESSAGE
       end
 

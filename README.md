@@ -1,6 +1,6 @@
 # GitLab Development Kit (GDK)
 
-[![build status](https://gitlab.com/gitlab-org/gitlab-development-kit/badges/master/pipeline.svg)](https://gitlab.com/gitlab-org/gitlab-development-kit/pipelines)
+[![build status](https://gitlab.com/gitlab-org/gitlab-development-kit/badges/main/pipeline.svg)](https://gitlab.com/gitlab-org/gitlab-development-kit/pipelines)
 
 Configure and manage a [GitLab](https://about.gitlab.com) development
 environment.

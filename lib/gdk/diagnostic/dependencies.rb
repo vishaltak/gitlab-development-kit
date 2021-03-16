@@ -23,7 +23,7 @@ module GDK
 
           For details on how to install, please visit:
 
-          https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/index.md
+          https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md
         MESSAGE
       end
     end

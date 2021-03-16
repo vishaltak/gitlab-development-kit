@@ -42,7 +42,7 @@ module GDK
       end
 
       def geo_howto_url
-        'https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/howto/geo.md'
+        'https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/howto/geo.md'
       end
     end
   end

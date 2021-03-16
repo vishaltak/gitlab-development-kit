@@ -6,6 +6,7 @@ gitlab_base_url="https://gitlab.com"
 gitlab="gitlab"
 gitlab_org="gitlab-org"
 remote_name="upstream"
+default_branch="main"
 
 cd ./gitlab
 
@@ -28,17 +29,17 @@ fi
 git_remote_add_upstream ${gitlab}
 
 git remote set-url --push "${remote_name}" none # make 'upstream' fetch-only
-echo "Fetching master from ${remote_name}..."
+echo "Fetching ${default_branch} from ${remote_name}..."
 
 if [ -n "${GIT_CURL_VERBOSE}" ]; then
-  GIT_CURL_VERBOSE=1 git fetch "${remote_name}" master
+  GIT_CURL_VERBOSE=1 git fetch "${remote_name}" ${default_branch}
 else
-  git fetch "${remote_name}" master
+  git fetch "${remote_name}" ${default_branch}
 fi
 
-# check if the 'master' branch already exists
-if git show-ref --verify --quiet refs/heads/master; then
-  git branch --set-upstream-to="${remote_name}/master" master
+# check if the default branch already exists
+if git show-ref --verify --quiet refs/heads/${default_branch}; then
+  git branch --set-upstream-to="${remote_name}/${default_branch}" ${default_branch}
 else
-  git branch master "${remote_name}/master"
+  git branch ${default_branch} "${remote_name}/${default_branch}"
 fi
