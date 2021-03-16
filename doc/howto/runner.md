@@ -113,7 +113,7 @@ instead of `127.0.0.1`. Without this step, builds fail with a `connection refuse
 The easiest and most universal way to set this up is by using an internal, dummy interface that can
 be used by both the host and the Docker container.
 
-1. [Create a loopback interface](../index.md#create-loopback-interface-for-gdk) for a new private network.
+1. [Create a loopback interface](local_network.md#create-loopback-interface) for a new private network.
 1. In the GitLab Runner configuration (for example, `~/.gitlab-runner/config.toml`), set the coordinator
    URL with an IP on this private network:
 
@@ -122,7 +122,7 @@ be used by both the host and the Docker container.
   ```
 
 This can also be combined with a custom hostname by following these
-[instructions for setting up `gdk.test`](../index.md#set-up-gdktest-hostname) but using the `172.16.123.1`
+[instructions for setting up `gdk.test`](local_network.md) but using the `172.16.123.1`
 instead of `127.0.0.1`. Then set up your runner to resolve the hostname by adding `runner.extra_hosts`
 to your `gdk.yml`. For example, for `gdk.test`:
 

@@ -10,16 +10,16 @@ Instead of installing GDK locally, you can install GDK to other platforms.
 ### Vagrant install
 
 You can install GDK under a
-[virtualized environment using Vagrant with Virtualbox or Docker](doc/howto/vagrant.md).
+[virtualized environment using Vagrant with Virtualbox or Docker](howto/vagrant.md).
 
 ### Minikube install
 
 You can also install GDK on [Minikube](https://github.com/kubernetes/minikube);
-see [Kubernetes docs](doc/howto/kubernetes/minikube.md).
+see [Kubernetes docs](howto/kubernetes/minikube.md).
 
 ### Gitpod integration
 
-Alternatively, you can use [GDK with Gitpod](/doc/howto/gitpod.md) to run a pre-configured GDK instance in the cloud.
+Alternatively, you can use [GDK with Gitpod](howto/gitpod.md) to run a pre-configured GDK instance in the cloud.
 
 ## Install GDK using alternative projects
 

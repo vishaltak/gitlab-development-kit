@@ -54,7 +54,7 @@ The CLI client is more capable. Not all GUI clients support a blank username or 
 There are two ways to upgrade PostgreSQL:
 
 1. [Run the upgrade script](#run-the-upgrade-script)
-1. [Dump and restore](#using-pg-dump-and-restore)
+1. [Dump and restore](#dump-and-restore)
 
 macOS users with Homebrew may find it easiest to use the first approach
 since there is a convenient script that makes upgrading a single-line
@@ -63,8 +63,8 @@ script fails for some reason.
 
 ## Run the upgrade script
 
-For [systems that support simple installation](../../README.md#getting-started),
-there is a convenient script that automatically runs `pg_upgrade` with the correct parameters:
+For [systems that support simple installation](../index.md), there is a convenient script that
+automatically runs `pg_upgrade` with the correct parameters:
 
 ```shell
 support/upgrade-postgresql

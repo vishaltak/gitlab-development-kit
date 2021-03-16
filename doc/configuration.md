@@ -304,8 +304,7 @@ configuration method to use:
 
 To print settings from the configuration you can use `gdk config get <setting>`.
 
-More information on the available `gdk` commands is found in
-[GDK commands](gdk_commands.md#configuration).
+More information on the available `gdk` commands is found in [GDK commands](gdk_commands.md).
 
 ### Implementation detail
 

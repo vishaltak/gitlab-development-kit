@@ -10,8 +10,9 @@ instances. For more, see
 
 ## Prerequisites
 
-Development on GitLab Geo requires two GDK instances running side-by-side.
-You can use an existing `gdk` instance based on the [Set up GDK](../index.md#develop-against-the-gitlab-project-default) documentation as the primary node.
+Development on GitLab Geo requires two GDK instances running side-by-side. You can use an existing
+`gdk` instance based on the [install GDK](../index.md#install-gdk) documentation as the primary
+node.
 
 ### Primary
 

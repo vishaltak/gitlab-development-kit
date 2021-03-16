@@ -2,12 +2,12 @@
 
 This document instructs you to set up a working GitLab instance that can
 deploy Serverless applications (that is, Knative services) to a Kubernetes cluster
-via GitLab CI.
+via GitLab CI/CD.
 
 ## Prerequisites
 
-Please follow all the instructions for [setting up Auto
-DevOps](auto_devops/index.md) before following any steps in here.
+Please follow all the instructions for [setting up Kubernetes](kubernetes/index.md) before following
+any steps in here.
 
 ## Minimal getting started guide
 
@@ -26,7 +26,7 @@ DevOps](auto_devops/index.md) before following any steps in here.
 1. Assuming you used a domain name that you own, you then need to setup a
   wildcard DNS record that points to the IP address of the Knative Ingress.
   Once the IP address finishes fetching (usually a few minutes after Knative
-  intall finishes) then go to your DNS provider and set up a wildcard A record
+  install finishes) then go to your DNS provider and set up a wildcard A record
   pointing to this IP address. Assuming you used `example.com` as the domain
   for Knative and the IP address is `1.2.3.4` then you need to create an `A`
   record like `*.example.com -> 1.2.3.4`.

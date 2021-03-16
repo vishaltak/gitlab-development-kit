@@ -15,7 +15,7 @@ GDK supports macOS 10.13 (High Sierra) and later. To install dependencies for ma
    [`Brewfile`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/Brewfile).
    You can:
      - Reuse an existing checkout if you have one, but make sure it's up to date.
-     - Use this check out again when you [install and set up GDK](index.md#install-and-set-up-gdk).
+     - Use this check out again when you [install GDK](index.md#install-gdk).
 1. In the `gitlab-development-kit` checkout, run the following `brew` commands:
 
    ```shell
@@ -86,7 +86,7 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
    - You need to select the Ruby version instead of your distributions default one (if any). See the
      [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
      `echo 2.7.2 >~/.rbenv/version`.
-1. [Complete](index.md#install-and-set-up-gdk) GDK installation.
+1. [Install GDK](index.md#install-gdk).
 
 ## Install dependencies for other Linux distributions
 
@@ -312,8 +312,7 @@ sed -i -E 's/ -static$//g' src/Makefile
 sudo ./package/install
 ```
 
-Set up local Ruby 2.7 environment (see [Ruby](#ruby) for details), for example
-using [RVM](https://rvm.io/):
+Set up local Ruby 2.7 environment, for example using [RVM](https://rvm.io/):
 
 ```shell
 curl -sSL -o setup_rvm.sh "https://get.rvm.io"
@@ -436,7 +435,7 @@ wsl --set-version <your subsystem name here>
 ## Apply custom patches for Ruby
 
 Some functions (and specs) require a special Ruby installed with additional [patches](https://gitlab.com/gitlab-org/gitlab-build-images/-/tree/master/patches/ruby).
-These patches are already applied when running on GitLab CI or when using GitLab Compose Kit,
+These patches are already applied when running on GitLab CI/CD or when using GitLab Compose Kit,
 but since GitLab Development Kit uses `asdf` they need to be manually enabled.
 
 To recompile Ruby with adding additional patches do the following:
@@ -462,5 +461,4 @@ false
 
 ## Next Steps
 
-After you've completed the steps on this page, [install and set up
-GDK](index.md#install-and-set-up-gdk).
+After you've completed the steps on this page, [install GDK](index.md#install-gdk).
