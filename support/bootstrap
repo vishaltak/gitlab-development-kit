@@ -58,8 +58,6 @@ asdf_install_tools() {
 }
 
 gdk_prepare_directory() {
-  gdk trust . > /dev/null 2>&1
-
   [[ ! -f ".gdk-install-root"  ]] && echo "${PWD}" > .gdk-install-root
 
   return 0

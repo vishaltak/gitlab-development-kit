@@ -22,7 +22,6 @@ rspec:
     BUNDLE_ARGS: "--path vendor/bundle"
   script:
     - pwd > .gdk-install-root
-    - gem/bin/gdk trust .
     - make rspec
   cache:
     key: "ruby-2.7-bundle"

@@ -26,6 +26,7 @@ module GDK
     autoload :Stop, 'gdk/command/stop'
     autoload :Tail, 'gdk/command/tail'
     autoload :Thin, 'gdk/command/thin'
+    autoload :Trust, 'gdk/command/trust'
     autoload :Update, 'gdk/command/update'
     autoload :Version, 'gdk/command/version'
 
@@ -49,6 +50,7 @@ module GDK
       'run' => -> { GDK::Command::Run },
       'tail' => -> { GDK::Command::Tail },
       'thin' => -> { GDK::Command::Thin },
+      'trust' => -> { GDK::Command::Trust },
       'update' => -> { GDK::Command::Update },
       'version' => -> { GDK::Command::Version }
     }.freeze
