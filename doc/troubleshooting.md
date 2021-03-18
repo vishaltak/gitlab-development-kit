@@ -767,9 +767,9 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   ```
 
   This is likely because you have not updated your GitLab CE/EE repository to
-  the latest main yet. It has a template for `gitlab.yml` in it which the GDK
-  needs to update. The `gdk update` step should have taken care of this for
-  you, but you can also manually go to your GitLab ce/ee directory and run
+  the latest default branch yet. It has a template for `gitlab.yml` in it which
+  the GDK needs to update. The `gdk update` step should have taken care of this
+  for you, but you can also manually go to your GitLab directory and run
   `git checkout main && git pull origin main`
 
     ---
@@ -805,10 +805,11 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   ...
   ```
 
-  This means your GitLab CE or EE instance is not running the current main
-  branch. If you are running a branch which hasn't been rebased on main
-  since Saturday, Feb 4th then you should rebase it on main. If you are
-  running the main branch, ensure it is up to date (`git pull`).
+  This means your GitLab CE or EE instance is not running the current default
+  branch. If you are running a branch which hasn't been rebased against the
+  default branch since Saturday, Feb 4th then you should rebase it against the
+  default branch. If you are running the default branch, ensure it is up to date
+  with `git pull`.
 
   ---
 
@@ -1025,7 +1026,7 @@ Check which version of Git you're running with `git --version`, and compare it a
 might be running an unsupported version.
 
 If the supported version is not available for you from pre-compiled packages, try following the
-instructions for [Ubuntu/Debian](#ubuntudebian) or [Arch/Manjaro](#arch-and-manjaro-linux). If 
+instructions for [Ubuntu/Debian](#ubuntudebian) or [Arch/Manjaro](#arch-and-manjaro-linux). If
 that doesn't give you the supported version, you might need to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
 
 ## Elasticsearch
