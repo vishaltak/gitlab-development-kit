@@ -387,6 +387,7 @@ module GDK
       string(:auth_token) { '' }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
+      path(:git_bin_path) { config.gitaly.dir.join('_build', 'deps', 'git', 'install', 'bin', 'git') }
       settings_array :__storages, size: -> { storage_count } do |i|
         string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
         path(:path) do

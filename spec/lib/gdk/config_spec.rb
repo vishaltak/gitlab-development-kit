@@ -497,6 +497,12 @@ RSpec.describe GDK::Config do
         expect(config.gitaly.auth_token).to be('')
       end
     end
+
+    describe '#git_bin_path' do
+      it 'returns the path to the gitaly compiled git binary' do
+        expect(config.gitaly.git_bin_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/deps/git/install/bin/git'))
+      end
+    end
   end
 
   context 'geo' do
