@@ -43,7 +43,7 @@ asdf_update_tools() {
 if ! ensure_supported_platform; then
   echo
   echo "ERROR: Unsupported platform. Only macOS, Ubuntu, and Debian supported." >&2
-  echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/master/doc/advanced.md to bootstrap manually." >&2
+  echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md to bootstrap manually." >&2
   exit 1
 fi
 

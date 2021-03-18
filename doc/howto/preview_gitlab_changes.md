@@ -106,4 +106,4 @@ After the changes are applied to GitLab:
    review, follow the process for submitting a merge request for a `gitlab` branch from the command
    line.
 1. Once the work is completed, we recommend [updating GDK](../gdk_commands.md#update-gdk) again. This means that the
-   next time you want to run it, GDK is based on `master` and not on the changed branch.
+   next time you want to run it, GDK is based on the default branch for GitLab and not on the changed branch.

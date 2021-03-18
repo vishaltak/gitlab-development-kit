@@ -4,17 +4,18 @@ module GDK
   module Diagnostic
     class Version < Base
       TITLE = 'GDK Version'
+      DEFAULT_BRANCH = 'main'
 
       def diagnose
         fetch
       end
 
       def success?
-        !behind_origin_master?
+        !behind_origin_default_branch?
       end
 
       def detail
-        "An update for GDK is available."
+        'An update for GDK is available.'
       end
 
       private
@@ -23,8 +24,8 @@ module GDK
         run(%w[git fetch])
       end
 
-      def behind_origin_master?
-        run(%w[git rev-list --left-only --count origin/master...@]).to_i.positive?
+      def behind_origin_default_branch?
+        run(%W[git rev-list --left-only --count origin/#{DEFAULT_BRANCH}...@]).to_i.positive?
       end
 
       def run(cmd)

@@ -58,11 +58,11 @@ gdk update
 
 This also performs any possible database migrations.
 
-If there are changes in the local repositories, or a different branch than `master` is checked out,
+If there are changes in the local repositories, or a different branch than `main` is checked out,
 the `gdk update` command:
 
 - Stashes any uncommitted changes.
-- Changes to `master` branch.
+- Changes to `main` branch.
 
 It then updates the remote repositories.
 
