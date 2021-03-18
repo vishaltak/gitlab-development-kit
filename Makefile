@@ -38,7 +38,7 @@ endif
 gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
 gitaly_clone_dir = gitaly
-gitaly_docs_clone_dir = gitlab-docs
+gitlab_docs_clone_dir = gitlab-docs
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 gitlab_ui_clone_dir = gitlab-ui
@@ -441,7 +441,7 @@ gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-docs to current default branch"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_docs "${gitaly_docs_clone_dir}" $(shell git remote show ${gitlab_docs_repo} | grep 'HEAD branch' | cut -d' ' -f5) ${QQ}
+	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" $(shell git remote show ${gitlab_docs_repo} | grep 'HEAD branch' | cut -d' ' -f5) ${QQ}
 
 .PHONY: gitlab-docs-deps
 gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs gitlab-docs/nanoc.yaml
