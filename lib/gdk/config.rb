@@ -162,6 +162,11 @@ module GDK
       bool(:auto_update) { true }
     end
 
+    settings :gitlab_docs do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+    end
+
     settings :gitlab_elasticsearch_indexer do
       bool(:auto_update) { true }
       path(:__dir) { config.gdk_root.join('gitlab-elasticsearch-indexer') }
@@ -475,6 +480,7 @@ module GDK
     end
 
     settings :gitlab do
+      bool(:auto_update) { true }
       path(:dir) { config.gdk_root.join('gitlab') }
       bool(:cache_classes) { false }
 

@@ -38,6 +38,7 @@ endif
 gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
 gitaly_clone_dir = gitaly
+gitaly_docs_clone_dir = gitlab-docs
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 gitlab_ui_clone_dir = gitlab-ui
@@ -88,7 +89,8 @@ prom-setup \
 object-storage-setup \
 gitlab-elasticsearch-indexer-setup \
 grafana-setup \
-gitlab-ui-setup
+gitlab-ui-setup \
+gitlab-docs-setup
 
 # This is used by `gdk install`
 #
@@ -114,6 +116,7 @@ object-storage-update \
 jaeger-update \
 grafana-update \
 gitlab-ui-update \
+gitlab-docs-update \
 show-updated-at
 
 # This is used by `gdk reconfigure`
@@ -254,11 +257,9 @@ gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 gitlab/.git/pull: gitlab/git-restore
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab to current master"
+	@echo "Updating gitlab-org/gitlab to current default branch"
 	@echo "${DIVIDER}"
-	$(Q)$(gitlab_git_cmd) stash ${QQ}
-	$(Q)$(gitlab_git_cmd) checkout master ${QQ}
-	$(Q)if [ -n "${GIT_CURL_VERBOSE}" ]; then GIT_CURL_VERBOSE=1 $(gitlab_git_cmd) pull --ff-only ${QQ}; else $(gitlab_git_cmd) pull --ff-only ${QQ}; fi
+	$(Q)GIT_CURL_VERBOSE=${GIT_CURL_VERBOSE} support/component-git-update gitlab "${gitlab_clone_dir}" $(shell git remote show ${gitlab_repo} | grep 'HEAD branch' | cut -d' ' -f5) false ${QQ}
 
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
@@ -425,22 +426,27 @@ praefect-migrate: postgresql-seed-praefect
 # gitlab-docs
 ##############################################################
 
-gitlab-docs-setup: gitlab-docs/.git gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs
+ifeq ($(gitlab_docs_enabled),true)
+gitlab-docs-setup: gitlab-docs/.git gitlab-docs-deps
+else
+gitlab-docs-setup:
+	@true
+endif
 
 gitlab-docs/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
 
-gitlab-docs/.git/pull:
+gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-docs to master"
+	@echo "Updating gitlab-org/gitlab-docs to current default branch"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
-		git stash ${QQ} && \
-		git checkout master ${QQ} &&\
-		git pull --ff-only ${QQ}
+	$(Q)support/component-git-update gitlab_docs "${gitaly_docs_clone_dir}" $(shell git remote show ${gitlab_docs_repo} | grep 'HEAD branch' | cut -d' ' -f5) ${QQ}
 
-gitlab-docs/nanoc.yaml: gitlab-docs/rm-nanoc.yaml
+.PHONY: gitlab-docs-deps
+gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs gitlab-docs/nanoc.yaml
+
+gitlab-docs/nanoc.yaml:
 	$(Q)cp nanoc.yaml.example $@
 
 gitlab-docs-bundle:
@@ -452,7 +458,12 @@ gitlab-docs-yarn:
 symlink-gitlab-docs:
 	$(Q)support/symlink ${gitlab_development_root}/gitlab-docs/content/ee ${gitlab_development_root}/gitlab/doc
 
-gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-bundle gitlab-docs/nanoc.yaml
+ifeq ($(gitlab_docs_enabled),true)
+gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-deps
+else
+gitlab-docs-update:
+	@true
+endif
 
 gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
@@ -664,7 +675,7 @@ gitlab-ui/.git:
 gitlab-ui/.git/pull:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-ui to main"
+	@echo "Updating gitlab-org/gitlab-ui to default branch"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" main
 

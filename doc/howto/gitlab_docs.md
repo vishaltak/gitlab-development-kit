@@ -3,11 +3,14 @@
 Our CI/CD pipelines include [some documentation checks](https://docs.gitlab.com/ee/development/documentation/index.html#testing)
 for the documentation in GitLab. To run the links checks locally or preview the changes:
 
-1. Pull the [`gitlab-docs`](https://gitlab.com/gitlab-org/gitlab-docs) repository from within your GDK directory and build dependencies:
+1. Add the following settings in your `gdk.yml`:
 
-   ```shell
-   make gitlab-docs-setup
-   ```
+    ```yaml
+    gitlab_docs:
+      enabled: true
+    ```
+
+1. Run `gdk update`
 
 1. Change directory:
 

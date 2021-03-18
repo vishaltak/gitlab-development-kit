@@ -705,6 +705,13 @@ RSpec.describe GDK::Config do
   end
 
   describe 'gitlab' do
+    describe 'auto_update' do
+      it 'is enabled by default' do
+        expect(config.gitlab.auto_update).to be(true)
+        expect(config.gitlab.auto_update?).to be(true)
+      end
+    end
+
     describe '#dir' do
       it 'returns the GitLab directory' do
         expect(config.gitlab.dir).to eq(Pathname.new('/home/git/gdk/gitlab'))
@@ -1490,6 +1497,23 @@ RSpec.describe GDK::Config do
       it 'is disabled by default' do
         expect(config.asdf.opt_out).to be(false)
         expect(config.asdf.opt_out?).to be(false)
+      end
+    end
+  end
+
+  describe 'gitlab_docs' do
+    describe 'enabled' do
+      it 'is disabled by default' do
+        expect(config.gitlab_docs.enabled).to be(false)
+        expect(config.gitlab_docs.enabled?).to be(false)
+        expect(config.gitlab_docs?).to be(false)
+      end
+    end
+
+    describe 'auto_update' do
+      it 'is enabled by default' do
+        expect(config.gitlab_docs.auto_update).to be(true)
+        expect(config.gitlab_docs.auto_update?).to be(true)
       end
     end
   end
