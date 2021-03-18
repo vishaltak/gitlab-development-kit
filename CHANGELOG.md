@@ -7,7 +7,7 @@ features.
 ## 2021-03-19
 
 - Replace GDK master refs with main !1885
-- Do foundational work to support to support gitlab-org/gitlab default branch !1890
+- Do foundational work to support gitlab-org/gitlab default branch !1890
 - Improve our default new Merge Request template !1879
 
 ## 2021-03-12
