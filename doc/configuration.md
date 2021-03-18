@@ -40,6 +40,7 @@ all applied settings in a YAML structure.
 - [Notable settings](#notable-settings)
 - [GDK settings](#gdk-settings)
 - [GitLab settings](#gitlab-settings)
+- [GitLab Docs settings](#gitlab-docs-settings)
 - [NGINX settings](#nginx-settings)
 
 #### Run GitLab and GitLab FOSS concurrently
@@ -248,6 +249,21 @@ When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed 
 | `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do **not** include `http://`. |
 | `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
+
+### GitLab Docs settings
+
+Under the `gitlab_docs` key you can define the following settings with their defaults:
+
+```yaml
+gitlab_docs:
+  enabled: false
+  auto_update: true
+```
+
+| Setting       | Default | Description |
+|---------------|---------|-------------|
+| `enabled`     | `false` | Set this to `true` to enable Git cloning the [GitLab Docs project](https://gitlab.com/gitlab-org/gitlab-docs) |
+| `auto_update` | `true`  | Set this to `false` to disable updating the GitLab Docs Git clone. |
 
 ### NGINX settings
 

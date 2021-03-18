@@ -5,7 +5,7 @@ require_relative '../lib/gdk'
 
 PROGNAME = File.basename(__FILE__)
 
-def main(component, worktree, revision)
+def main(component, worktree, revision, fetch = true)
   config = GDK::Config.new[component]
   abort "unknown component: #{component.inspect}" unless config
 
@@ -15,16 +15,16 @@ def main(component, worktree, revision)
   end
 
   Dir.chdir(worktree)
+  fetch = fetch != 'false'
 
-  commands = [
-    [%w[git stash], false],
-    [%w[git fetch --all --tags --prune], true],
-    [%W[git checkout #{revision}], true]
-  ]
-
+  commands = [[%w[git stash], false]]
+  commands << [%w[git fetch --all --tags --prune], true] if fetch
+  commands << [%W[git checkout #{revision}], true]
   commands << [%w[git pull --ff-only], true] if %w[master main].include?(revision)
 
   commands.each do |cmd, print_stdout|
+    warn "DEBUG: cmd=[#{cmd}]" if debug?
+
     out = print_stdout ? $stdout : :close
     next if system(*cmd, out: out)
 
@@ -36,6 +36,6 @@ def debug?
   ENV.fetch('GDK_DEBUG', 'false') == 'true'
 end
 
-abort "usage: #{PROGNAME} COMPONENT WORKTREE REVISION" if ARGV.count != 3
+abort "usage: #{PROGNAME} COMPONENT WORKTREE REVISION [FETCH]" if ARGV.count < 3
 
 main(*ARGV)
