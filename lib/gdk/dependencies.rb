@@ -42,7 +42,7 @@ module GDK
     end
 
     class Checker
-      EXPECTED_GIT_VERSION = GDK::Diagnostic::Git::MINIMUM_VERSION.to_s
+      EXPECTED_GIT_VERSION = '2.29.0'
       EXPECTED_GO_VERSION = '1.14'
       EXPECTED_YARN_VERSION = '1.22.5'
       EXPECTED_NODEJS_VERSION = '12.18.3'
@@ -82,7 +82,8 @@ module GDK
       def check_git_version
         return unless check_binary('git')
 
-        current_version = Gem::Version.new(Checker.parse_version(`git --version`))
+        raw_git_version = Shellout.new('git --version').run
+        current_version = Gem::Version.new(Checker.parse_version(raw_git_version))
         expected_version = Gem::Version.new(EXPECTED_GIT_VERSION)
 
         @error_messages << require_minimum_version('Git', current_version, expected_version) if current_version < expected_version

@@ -7,7 +7,6 @@ require_relative 'diagnostic/status'
 require_relative 'diagnostic/pending_migrations'
 require_relative 'diagnostic/configuration'
 require_relative 'diagnostic/geo'
-require_relative 'diagnostic/git'
 require_relative 'diagnostic/postgresql'
 require_relative 'diagnostic/ruby_gems'
 require_relative 'diagnostic/re2'
@@ -21,7 +20,6 @@ module GDK
         RubyGems
         Version
         Configuration
-        Git
         Dependencies
         PendingMigrations
         PostgreSQL

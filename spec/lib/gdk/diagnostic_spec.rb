@@ -13,7 +13,6 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::RubyGems,
         GDK::Diagnostic::Version,
         GDK::Diagnostic::Configuration,
-        GDK::Diagnostic::Git,
         GDK::Diagnostic::Dependencies,
         GDK::Diagnostic::PendingMigrations,
         GDK::Diagnostic::PostgreSQL,
