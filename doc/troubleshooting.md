@@ -1011,6 +1011,23 @@ rm -rf gitaly
 
 Now rerun `gdk update`.
 
+### `libegit2.a Error 129`
+
+If you see the following error when running a `gdk install` or a `gdk update`:
+
+```shell
+make[1]: Entering directory '/home/user/gitlab-development-kit/gitaly; error: unknown option `initial-branch=master'
+make[1]: *** [Makefile:424: /home/user/gitlab-development-kit/gitaly/_build/deps/libgit2/install/lib/libgit2.a] Error 129
+```
+
+Check which version of Git you're running with `git --version`, and compare it against
+[GitLab requirements](https://docs.gitlab.com/ee/install/requirements.html#git-versions). You
+might be running an unsupported version.
+
+If the supported version is not available for you from pre-compiled packages, try following the
+instructions for [Ubuntu/Debian](#ubuntudebian) or [Arch/Manjaro](#arch-and-manjaro-linux). If 
+that doesn't give you the supported version, you might need to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
+
 ## Elasticsearch
 
 Running a spec locally may give you something like the following:
