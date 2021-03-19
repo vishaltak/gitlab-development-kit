@@ -99,7 +99,8 @@ install: all show-installed-at start
 # This is used by `gdk update`
 #
 # Pull gitlab directory first since dependencies are linked from there.
-update: preflight-update-checks \
+update: preflight-checks \
+preflight-update-checks \
 asdf-update \
 gitlab/.git/pull \
 ensure-databases-running \

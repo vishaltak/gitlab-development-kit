@@ -42,6 +42,7 @@ module GDK
     end
 
     class Checker
+      EXPECTED_GIT_VERSION = '2.29.0'
       EXPECTED_GO_VERSION = '1.14'
       EXPECTED_YARN_VERSION = '1.22.5'
       EXPECTED_NODEJS_VERSION = '12.18.3'
@@ -58,6 +59,7 @@ module GDK
       end
 
       def check_all
+        check_git_version
         check_ruby_version
         check_bundler_version
         check_go_version
@@ -75,6 +77,16 @@ module GDK
         find_executable(binary).tap do |result|
           @error_messages << missing_dependency(name) unless result
         end
+      end
+
+      def check_git_version
+        return unless check_binary('git')
+
+        raw_git_version = Shellout.new('git --version').run
+        current_version = Gem::Version.new(Checker.parse_version(raw_git_version))
+        expected_version = Gem::Version.new(EXPECTED_GIT_VERSION)
+
+        @error_messages << require_minimum_version('Git', current_version, expected_version) if current_version < expected_version
       end
 
       def check_ruby_version
