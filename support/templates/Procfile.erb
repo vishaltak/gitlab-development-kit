@@ -54,6 +54,10 @@ rails-web: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle
 <%= '#' unless config.nginx? %>nginx: exec <%= config.nginx.bin %> -p <%= config.gdk_root.join('nginx') %> -c conf/nginx.conf
 <%= '#' unless config.elasticsearch? %>elasticsearch: exec elasticsearch/bin/elasticsearch
 
+# Gitlab Docs
+#
+<%= '#' unless config.gitlab_docs? %>gitlab-docs: exec support/exec-cd gitlab-docs bundle exec nanoc live --host "<%= config.hostname %>" --port <%= config.gitlab_docs.port %>
+
 # Gitlab Runner
 #
 <%= '#' unless config.runner? %>runner: exec <%= config.runner.bin %> --log-level debug run --config <%= config.runner.config_file %>

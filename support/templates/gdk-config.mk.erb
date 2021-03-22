@@ -10,7 +10,7 @@ geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
 gitlab_development_root = <%= config.gdk_root %>
-gitlab_docs_enabled = <%= config.gitlab_docs? %>
+gitlab_docs_enabled = <%= config.gitlab_docs.enabled? %>
 gitlab_docs_repo = <%= config.repositories.gitlab_docs %>
 gitlab_elasticsearch_indexer_repo = <%= config.repositories.gitlab_elasticsearch_indexer %>
 gitlab_k8s_agent_enabled = <%= config.gitlab_k8s_agent? %>

@@ -19,6 +19,9 @@ REQUIRED_BUNDLER_VERSION := $(shell grep -A1 'BUNDLED WITH' Gemfile.lock | tail 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
 
+# Silence Rollup when building GitLab Docs with nanoc
+export ROLLUP_OPTIONS = --silent
+
 NO_RUBY_REQUIRED := bootstrap lint shellcheck
 
 # Generate a Makefile from Ruby and include it
@@ -55,6 +58,7 @@ bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_AR
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
+nanoc_cmd = ${BUNDLE} exec nanoc
 
 psql := $(postgresql_bin_dir)/psql
 
@@ -467,8 +471,11 @@ gitlab-docs-yarn:
 symlink-gitlab-docs:
 	$(Q)support/symlink ${gitlab_development_root}/gitlab-docs/content/ee ${gitlab_development_root}/gitlab/doc
 
+gitlab-docs-build:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(nanoc_cmd)
+
 ifeq ($(gitlab_docs_enabled),true)
-gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-deps
+gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-deps gitlab-docs-build
 else
 gitlab-docs-update:
 	@true
@@ -476,9 +483,8 @@ endif
 
 gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
-		bundle exec nanoc && \
-		bundle exec nanoc check internal_links && \
-		bundle exec nanoc check internal_anchors
+		$(nanoc_cmd) check internal_links && \
+		$(nanoc_cmd) check internal_anchors
 
 ##############################################################
 # gitlab geo
