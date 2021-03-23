@@ -15,7 +15,7 @@ def main(component, worktree, revision, fetch = true)
   end
 
   Dir.chdir(worktree)
-  fetch = fetch.to_s.casecmp('false').zero?
+  fetch = !fetch.to_s.casecmp('false').zero?
 
   commands = [[%w[git stash], false]]
   commands << [%w[git fetch --all --tags --prune], true] if fetch
