@@ -260,7 +260,7 @@ gitlab/.git/pull: gitlab/git-restore
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab to current default branch"
 	@echo "${DIVIDER}"
-	$(Q)GIT_CURL_VERBOSE=${GIT_CURL_VERBOSE} support/component-git-update gitlab "${gitlab_clone_dir}" $(shell git remote show ${gitlab_repo} | grep 'HEAD branch' | cut -d' ' -f5) false ${QQ}
+	$(Q)GIT_CURL_VERBOSE=${GIT_CURL_VERBOSE} support/component-git-update gitlab "${gitlab_clone_dir}" HEAD false ${QQ}
 
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
@@ -450,7 +450,7 @@ gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-docs to current default branch"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" $(shell git remote show ${gitlab_docs_repo} | grep 'HEAD branch' | cut -d' ' -f5) ${QQ}
+	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" HEAD ${QQ}
 
 .PHONY: gitlab-docs-deps
 gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs gitlab-docs/nanoc.yaml

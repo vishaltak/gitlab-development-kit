@@ -16,6 +16,7 @@ def main(component, worktree, revision, fetch = true)
 
   Dir.chdir(worktree)
   fetch = !fetch.to_s.casecmp('false').zero?
+  revision = parse_revision(revision)
 
   commands = [[%w[git stash], false]]
   commands << [%w[git fetch --all --tags --prune], true] if fetch
@@ -34,6 +35,21 @@ end
 
 def debug?
   ENV.fetch('GDK_DEBUG', 'false') == 'true'
+end
+
+def parse_revision(revision)
+  return revision unless revision == 'HEAD'
+
+  sh = Shellout.new(%w[git ls-remote --symref --quiet])
+  output = sh.readlines(1).first
+
+  abort "failed to get default branch" if !sh.success? || !output
+
+  rev = output.match(%r{refs/heads/(\S+)})&.captures&.first
+
+  abort "failed to read default branch from '#{output}'" unless rev
+
+  rev
 end
 
 abort "usage: #{PROGNAME} COMPONENT WORKTREE REVISION [FETCH]" if ARGV.count < 3
