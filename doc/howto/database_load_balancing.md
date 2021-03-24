@@ -40,12 +40,14 @@ make postgresql-replication-primary
     pg_basebackup -h /full/path/to/gdk-root/postgresql -D /full/path/to/gdk-root/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
     ```
 
-1. Create `postgresql-replica/data/recovery.conf`:
+1. For PostgreSQL 12, add the following line to `postgresql-replica/data/postgresql.conf`:
 
-   ```shell
-   standby_mode          = 'on'
+   ```plaintext
    primary_conninfo      = 'host=/full/path/to/gdk-root/postgresql port=5432 user=gitlab_replication'
    ```
+
+   Older versions of PostgreSQL stored this information in `recovery.conf`, and that file
+   needs to be deleted for PostgreSQL 12 to function.
 
 ## Configure GDK
 
@@ -175,3 +177,12 @@ log_statement = 'all'                        # none, ddl, mod, all
 ```
 
 Once done, restart the instances with GDK and tail their logs.
+
+### Simulating replication delay
+
+You can simulate replication delay by adding a minimum delay. The
+following setting delays replication by at least 1 minute:
+
+```plaintext
+recovery_min_apply_delay = '1min'
+```
