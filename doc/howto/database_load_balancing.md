@@ -37,17 +37,12 @@ make postgresql-replication-primary
 1. Copy data from primary to secondary with `pg_basebackup`:
 
     ```shell
-    pg_basebackup -h /full/path/to/gdk-root/postgresql -D /full/path/to/gdk-root/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
+    pg_basebackup -R -h /full/path/to/gdk-root/postgresql -D /full/path/to/gdk-root/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
     ```
 
-1. For PostgreSQL 12, add the following line to `postgresql-replica/data/postgresql.conf`:
-
-   ```plaintext
-   primary_conninfo      = 'host=/full/path/to/gdk-root/postgresql port=5432 user=gitlab_replication'
-   ```
-
-   Older versions of PostgreSQL stored this information in `recovery.conf`, and that file
-   needs to be deleted for PostgreSQL 12 to function.
+   This automatically creates `postgresql.auto.conf` in the PostgreSQL data directory. Older
+   versions stored this information in `recovery.conf`, a file that must be deleted for
+   PostgreSQL 12 to function.
 
 ## Configure GDK
 
