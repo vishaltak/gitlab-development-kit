@@ -15,7 +15,18 @@ Alternatively, if you are using Homebrew on MacOS, you can install
 `gcloud` with :
 
 ```shell
-brew cask install google-cloud-sdk
+brew install --cask google-cloud-sdk
+```
+
+NOTE:
+If you have installed `gcloud` via Homebrew Cask, as described
+above, you need to add the following lines in your `~/.bash_profile`
+to set the correct PATH to be able to run `gcloud` and the `kubectl` binary below.
+
+```shell
+# Add to ~/.bash_profile
+source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
+source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
 ```
 
 After you have installed `gcloud`, run the
@@ -39,17 +50,6 @@ Next, install `kubectl` as a component of `gcloud` :
 
 ```shell
 gcloud components install kubectl
-```
-
-NOTE:
-If you have installed `gcloud` via Homebrew Cask, as described
-above, you need to add the following lines in your `~/.bash_profile`
-to set the correct PATH to be able to run the `kubectl` binary.
-
-```shell
-# Add to ~/.bash_profile
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
 ```
 
 Make sure to close and reopen your terminal after making these changes.
