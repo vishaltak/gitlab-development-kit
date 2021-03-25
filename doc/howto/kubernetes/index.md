@@ -44,7 +44,10 @@ To continue, you must log in. Would you like to log in (Y/n)? Y
 ```
 
 After you have logged in, select your default project and zone.
-Developers should use the GCP project called `gitlab-internal-153318` for development and testing.
+After you have logged in, select your default project and zone. Use one of the following GCP projects:
+
+- `gitlab-internal-153318`: Use this project for general development and testing.
+- `gitlab-qa-resources`: Use this project for composing and running the [Auto DevOps](https://gitlab.com/gitlab-org/gitlab/-/tree/master/qa/qa/specs/features/browser_ui/7_configure/auto_devops) tests.
 
 Next, install `kubectl` as a component of `gcloud` :
 
