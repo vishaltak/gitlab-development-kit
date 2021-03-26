@@ -769,10 +769,10 @@ postgresql-replication-secondary: postgresql-replication/data postgresql-replica
 postgresql-replication-primary-create-slot: postgresql-replication/slot
 
 postgresql-replication/data:
-	${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
+	${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_replica_data_dir}
 
 postgresql-replication/access:
-	$(Q)cat support/pg_hba.conf.add >> ${postgresql_data_dir}/pg_hba.conf
+	$(Q)cat support/pg_hba.conf.add >> ${postgresql_replica_data_dir}/pg_hba.conf
 
 postgresql-replication/role:
 	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"

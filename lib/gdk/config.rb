@@ -363,6 +363,7 @@ module GDK
       string(:host) { config.postgresql.dir.to_s }
       string(:__active_host) { GDK::Postgresql.new.use_tcp? ? config.postgresql.host : '' }
       path(:replica_dir) { config.gdk_root.join('postgresql-replica') }
+      path(:replica_data_dir) { config.postgresql.replica_dir.join('data') }
       settings :replica do
         bool(:enabled) { false }
       end

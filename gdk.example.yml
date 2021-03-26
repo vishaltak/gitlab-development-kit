@@ -180,6 +180,7 @@ postgresql:
   port: 5432
   replica:
     enabled: false
+  replica_data_dir: "/home/git/gdk/postgresql-replica/data"
   replica_dir: "/home/git/gdk/postgresql-replica"
   replication_user: gitlab_replication
 praefect:
