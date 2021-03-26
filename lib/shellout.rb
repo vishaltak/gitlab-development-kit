@@ -28,6 +28,25 @@ class Shellout
     read_stdout
   end
 
+  def readlines(limit)
+    @stdout_str = ''
+    @stderr_str = ''
+    lines = []
+
+    Open3.popen2(*args, opts) do |_stdin, stdout, thread|
+      stdout.each_line do |line|
+        lines << line.chomp if lines.count < limit
+      end
+
+      thread.join
+      @status = thread.value
+    end
+
+    @stdout_str = lines.join("\n")
+
+    lines
+  end
+
   def run
     capture
     read_stdout

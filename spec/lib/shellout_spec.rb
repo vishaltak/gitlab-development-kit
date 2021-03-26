@@ -82,6 +82,14 @@ RSpec.describe Shellout do
     end
   end
 
+  describe '#readlines' do
+    let(:command) { 'env' }
+
+    it 'reads the number of lines given' do
+      expect(subject.readlines(3).count).to eq(3)
+    end
+  end
+
   describe '#run' do
     it 'returns output of shell command' do
       expect(subject.run).to eq('foo')
