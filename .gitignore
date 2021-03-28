@@ -86,6 +86,7 @@
 /postgresql_port
 /prometheus/prometheus.yml
 /redis/*.conf
+/redis/dump.rdb
 /registry/config.yml
 /registry/storage/
 /registry_enabled
