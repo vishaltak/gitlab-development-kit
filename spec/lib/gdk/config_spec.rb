@@ -1554,5 +1554,74 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe 'gitlab_runner' do
+      describe 'enabled' do
+        it 'is disabled by default' do
+          expect(config.gitlab_runner.enabled).to be(false)
+          expect(config.gitlab_runner.enabled?).to be(false)
+        end
+      end
+
+      describe 'auto_update' do
+        it 'is enabled by default' do
+          expect(config.gitlab_runner.auto_update).to be(true)
+          expect(config.gitlab_runner.auto_update?).to be(true)
+        end
+      end
+
+      describe 'docs_enabled' do
+        it 'is disabled by default' do
+          expect(config.gitlab_runner.docs_enabled).to be(false)
+          expect(config.gitlab_runner.docs_enabled?).to be(false)
+        end
+      end
+    end
+
+    describe 'omnibus_gitlab' do
+      describe 'enabled' do
+        it 'is disabled by default' do
+          expect(config.omnibus_gitlab.enabled).to be(false)
+          expect(config.omnibus_gitlab.enabled?).to be(false)
+        end
+      end
+
+      describe 'auto_update' do
+        it 'is enabled by default' do
+          expect(config.omnibus_gitlab.auto_update).to be(true)
+          expect(config.omnibus_gitlab.auto_update?).to be(true)
+        end
+      end
+
+      describe 'docs_enabled' do
+        it 'is disabled by default' do
+          expect(config.omnibus_gitlab.docs_enabled).to be(false)
+          expect(config.omnibus_gitlab.docs_enabled?).to be(false)
+        end
+      end
+    end
+
+    describe 'charts_gitlab' do
+      describe 'enabled' do
+        it 'is disabled by default' do
+          expect(config.charts_gitlab.enabled).to be(false)
+          expect(config.charts_gitlab.enabled?).to be(false)
+        end
+      end
+
+      describe 'auto_update' do
+        it 'is enabled by default' do
+          expect(config.charts_gitlab.auto_update).to be(true)
+          expect(config.charts_gitlab.auto_update?).to be(true)
+        end
+      end
+
+      describe 'docs_enabled' do
+        it 'is disabled by default' do
+          expect(config.charts_gitlab.docs_enabled).to be(false)
+          expect(config.charts_gitlab.docs_enabled?).to be(false)
+        end
+      end
+    end
   end
 end

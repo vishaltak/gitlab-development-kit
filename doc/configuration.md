@@ -252,15 +252,43 @@ When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed 
 
 ### GitLab Docs settings
 
-Under the `gitlab_docs` key you can define the following settings with their defaults:
+Under the `gitlab_docs` key, you can define the following settings:
 
 | Setting                   | Default | Description                                                                                              |
 |:--------------------------|:--------|:---------------------------------------------------------------------------------------------------------|
 | `gitlab_docs.enabled`     | `false` | Set to `true` to enable [`gitlab-docs`](https://gitlab.com/gitlab-org/gitlab-docs) to be managed by GDK. |
 | `gitlab_docs.auto_update` | `true`  | Set to `false` to disable updating the `gitlab-docs` checkout.                                           |
-| `gitlab_docs.port`        | `3005`  | The port for `nanoc` to listen on.                                                           |
+| `gitlab_docs.port`        | `3005`  | The port for `nanoc` to listen on.                                                                       |
 
 For more information on using GitLab Docs with GDK, see the [GitLab Docs how to](howto/gitlab_docs.md).
+
+### Additional projects
+
+You can have GDK manage checkouts for `gitlab-runner`, `omnibus-gitlab`, and `charts/gitlab` projects.
+
+Under the `gitlab_runner` key, you can define the following settings:
+
+| Setting                      | Default | Description                                                                                                  |
+|:-----------------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
+| `gitlab_runner.enabled`      | `false` | Set to `true` to enable [`gitlab-runner`](https://gitlab.com/gitlab-org/gitlab-runner) to be managed by GDK. |
+| `gitlab_runner.auto_update`  | `true`  | Set to `false` to disable updating the `gitlab-runner` checkout.                                             |
+| `gitlab_runner.docs_enabled` | `false` | Set to `true` to include `gitlab-runner/docs` in [documentation builds](howto/gitlab_docs.md).               |
+
+Under the `omnibus_gitlab` key, you can define the following settings:
+
+| Setting                       | Default | Description                                                                                                    |
+|:------------------------------|:--------|:---------------------------------------------------------------------------------------------------------------|
+| `omnibus_gitlab.enabled`      | `false` | Set to `true` to enable [`omnibus-gitlab`](https://gitlab.com/gitlab-org/omnibus-gitlab) to be managed by GDK. |
+| `omnibus_gitlab.auto_update`  | `true`  | Set to `false` to disable updating the `omnibus-gitlab` checkout.                                              |
+| `omnibus_gitlab.docs_enabled` | `false` | Set to `true` to include `omnibus-gitlab/doc` in [documentation builds](howto/gitlab_docs.md).                 |
+
+Under the `charts_gitlab` key, you can define the following settings:
+
+| Setting                      | Default | Description                                                                                                  |
+|:-----------------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
+| `charts_gitlab.enabled`      | `false` | Set to `true` to enable [`charts/gitlab`](https://gitlab.com/gitlab-org/charts/gitlab) to be managed by GDK. |
+| `charts_gitlab.auto_update`  | `true`  | Set to `false` to disable updating the `charts/gitlab` checkout.                                             |
+| `charts_gitlab.docs_enabled` | `false` | Set to `true` to include `charts/gitlab/doc` in [documentation builds](howto/gitlab_docs.md).                |
 
 ### NGINX settings
 

@@ -4,6 +4,10 @@ action_cable:
   worker_pool_size: 4
 asdf:
   opt_out: false
+charts_gitlab:
+  auto_update: true
+  docs_enabled: false
+  enabled: false
 common:
   ca_path: ''
 elasticsearch:
@@ -93,6 +97,10 @@ gitlab_pages:
   port: 3010
   secret_file: "/home/git/gdk/gitlab-pages-secret"
   verbose: false
+gitlab_runner:
+  auto_update: true
+  docs_enabled: false
+  enabled: false
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
@@ -164,6 +172,10 @@ omniauth:
     enabled: ''
   group_saml:
     enabled: false
+omnibus_gitlab:
+  auto_update: true
+  docs_enabled: false
+  enabled: false
 openldap:
   enabled: false
 port: 3000
@@ -215,14 +227,17 @@ registry:
   uid: ''
 relative_url_root: "/"
 repositories:
+  charts_gitlab: https://gitlab.com/gitlab-org/charts/gitlab.git
   gitaly: https://gitlab.com/gitlab-org/gitaly.git
   gitlab: https://gitlab.com/gitlab-org/gitlab.git
   gitlab_docs: https://gitlab.com/gitlab-com/gitlab-docs.git
   gitlab_elasticsearch_indexer: https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git
   gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
+  gitlab_runner: https://gitlab.com/gitlab-org/gitlab-runner.git
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
   gitlab_ui: https://gitlab.com/gitlab-org/gitlab-ui.git
+  omnibus_gitlab: https://gitlab.com/gitlab-org/omnibus-gitlab.git
 repositories_root: "/home/git/gdk/repositories"
 repository_storages: "/home/git/gdk/repository_storages"
 runner:

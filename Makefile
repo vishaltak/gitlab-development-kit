@@ -44,6 +44,9 @@ gitlab_clone_dir = gitlab
 gitlab_shell_clone_dir = gitlab-shell
 gitaly_clone_dir = gitaly
 gitlab_docs_clone_dir = gitlab-docs
+gitlab_runner_clone_dir = gitlab-runner
+omnibus_gitlab_clone_dir = omnibus-gitlab
+charts_gitlab_clone_dir = charts-gitlab
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
 gitlab_ui_clone_dir = gitlab-ui
@@ -438,13 +441,55 @@ praefect-migrate: postgresql-seed-praefect
 	$(Q)support/migrate-praefect
 
 ##############################################################
-# gitlab-docs
+# GitLab Docs
 ##############################################################
 
 ifeq ($(gitlab_docs_enabled),true)
-gitlab-docs-setup: gitlab-docs/.git gitlab-docs-deps
+gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-docs-deps
 else
 gitlab-docs-setup:
+	@true
+endif
+
+ifeq ($(gitlab_runner_enabled),true)
+gitlab-runner: gitlab-runner/.git
+else
+gitlab-runner:
+	@true
+endif
+
+ifeq ($(gitlab_runner_enabled),true)
+gitlab-runner-pull: gitlab-runner/.git/pull
+else
+gitlab-runner-pull:
+	@true
+endif
+
+ifeq ($(omnibus_gitlab_enabled),true)
+omnibus-gitlab: omnibus-gitlab/.git
+else
+omnibus-gitlab:
+	@true
+endif
+
+ifeq ($(omnibus_gitlab_enabled),true)
+omnibus-gitlab-pull: omnibus-gitlab/.git/pull
+else
+omnibus-gitlab-pull:
+	@true
+endif
+
+ifeq ($(charts_gitlab_enabled),true)
+charts-gitlab: charts-gitlab/.git
+else
+charts-gitlab:
+	@true
+endif
+
+ifeq ($(charts_gitlab_enabled),true)
+charts-gitlab-pull: charts-gitlab/.git/pull
+else
+charts-gitlab-pull:
 	@true
 endif
 
@@ -458,9 +503,38 @@ gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" HEAD ${QQ}
 
-.PHONY: gitlab-docs-deps
-gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs gitlab-docs/nanoc.yaml
+gitlab-runner/.git:
+	$(Q)git clone ${git_depth_param} ${gitlab_runner_repo} gitlab-runner
 
+gitlab-runner/.git/pull: gitlab-runner/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/gitlab-runner to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" HEAD ${QQ}
+
+omnibus-gitlab/.git:
+	$(Q)git clone ${git_depth_param} ${omnibus_gitlab_repo} omnibus-gitlab
+
+omnibus-gitlab/.git/pull: omnibus-gitlab/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/omnibus-gitlab to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" HEAD ${QQ}
+
+charts-gitlab/.git:
+	$(Q)git clone ${git_depth_param} ${charts_gitlab_repo} charts-gitlab
+
+charts-gitlab/.git/pull: charts-gitlab/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/charts/gitlab to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" HEAD ${QQ}
+
+.PHONY: gitlab-docs-deps
+gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs
 
 gitlab-docs-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
@@ -469,22 +543,77 @@ gitlab-docs-yarn:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
 
 symlink-gitlab-docs:
-	$(Q)support/symlink ${gitlab_development_root}/gitlab-docs/content/ee ${gitlab_development_root}/gitlab/doc
+	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/ee ${gitlab_development_root}/${gitlab_clone_dir}/doc
+ifeq ($(gitlab_runner_docs_enabled),true)
+	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/runner ${gitlab_development_root}/${gitlab_runner_clone_dir}/docs
+endif
+ifneq ($(gitlab_runner_docs_enabled),true)
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/runner
+endif
+ifeq ($(omnibus_gitlab_docs_enabled),true)
+	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/omnibus ${gitlab_development_root}/${omnibus_gitlab_clone_dir}/doc
+endif
+ifneq ($(omnibus_gitlab_docs_enabled),true)
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/omnibus
+endif
+ifeq ($(charts_gitlab_docs_enabled),true)
+	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/charts ${gitlab_development_root}/${charts_gitlab_clone_dir}/doc
+endif
+ifneq ($(charts_gitlab_docs_enabled),true)
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/charts
+endif
+
+gitlab-docs-clean:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && rm -rf tmp
 
 gitlab-docs-build:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(nanoc_cmd)
 
 ifeq ($(gitlab_docs_enabled),true)
-gitlab-docs-update: gitlab-docs/.git/pull gitlab-docs-deps gitlab-docs-build
+gitlab-docs-update: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-pull charts-gitlab-pull gitlab-docs-deps gitlab-docs-build
 else
 gitlab-docs-update:
 	@true
 endif
 
-gitlab-docs-check: gitlab-docs-setup gitlab-docs-update
+# Internal links and anchors checks for documentation
+ifeq ($(gitlab_docs_enabled),true)
+gitlab-docs-check: gitlab-runner-docs-check omnibus-gitlab-docs-check charts-gitlab-docs-check gitlab-docs-build
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
 		$(nanoc_cmd) check internal_links && \
 		$(nanoc_cmd) check internal_anchors
+else
+gitlab-docs-check:
+	@echo "ERROR: gitlab_docs is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+endif
+
+ifneq ($(gitlab_runner_docs_enabled),true)
+gitlab-runner-docs-check:
+	@echo "ERROR: gitlab_runner documentation is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+gitlab-runner-docs-check:
+	@true
+endif
+
+ifneq ($(omnibus_gitlab_docs_enabled),true)
+omnibus-gitlab-docs-check:
+	@echo "ERROR: omnibus_gitlab documentation is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+omnibus-gitlab-docs-check:
+	@true
+endif
+
+ifneq ($(charts_gitlab_docs_enabled),true)
+charts-gitlab-docs-check:
+	@echo "ERROR: charts_gitlab documentation is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+charts-gitlab-docs-check:
+	@true
+endif
 
 ##############################################################
 # gitlab geo
