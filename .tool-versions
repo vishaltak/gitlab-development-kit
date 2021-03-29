@@ -5,7 +5,7 @@
 #
 # <default-version> <other-version>
 ruby 2.7.2 3.0.0
-golang 1.15.5
+golang 1.15.5 1.16.2
 nodejs 14.15.4
 yarn 1.22.5
 minio 2021-02-01T22-56-52Z
