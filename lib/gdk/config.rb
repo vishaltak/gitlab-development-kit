@@ -165,6 +165,7 @@ module GDK
     settings :gitlab_docs do
       bool(:enabled) { false }
       bool(:auto_update) { true }
+      integer(:port) { 3005 }
     end
 
     settings :gitlab_elasticsearch_indexer do

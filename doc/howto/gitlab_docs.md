@@ -1,47 +1,80 @@
-# Set up GitLab Docs
+# GitLab Docs in GDK
 
-Our CI/CD pipelines include [some documentation checks](https://docs.gitlab.com/ee/development/documentation/index.html#testing)
-for the documentation in GitLab. To run the links checks locally or preview the changes:
+You can use the GDK to develop GitLab documentation. The GDK can:
 
-1. Add the following settings in your `gdk.yml`:
+- Maintain a clone of the [`gitlab-docs`](https://gitlab.com/gitlab-org/gitlab-docs) repository
+  for work on changes to that project.
+- Preview changes made in the GDK-managed `gitlab/doc` directory.
+- Run linting tasks that require `gitlab-docs`, including internal link and anchor checks.
 
-    ```yaml
-    gitlab_docs:
-      enabled: true
-    ```
+## Enable GitLab Docs
 
-1. Run `gdk update`
+To enable GDK to manage `gitlab-docs`:
 
-1. Change directory:
+1. Add the following to your `gdk.yml` file:
 
-   ```shell
-   cd gitlab-docs/
+   ```yaml
+   gitlab_docs:
+     enabled: true
    ```
 
-1. (Optionally) Preview the docs site locally:
+   The default port is `3005` but this can be customized. For example:
 
-   ```shell
-   bundle exec nanoc live -p 3005
+   ```yaml
+   gitlab_docs:
+     enabled: true
+     port: 4005
    ```
 
-   Visit <http://127.0.0.1:3005/ee/README.html>.
-
-   If you see the following message, another process is already listening on port `3005`:
+1. Run `gdk update` to:
+   - Clone `gitlab-docs` for the first time, or update an existing local copy.
+   - Compile a published version of the contents the `gitlab/doc` directory.
+1. Start GDK, which also starts the `gitlab-docs` service when enabled:
 
    ```shell
-   Address already in use - bind(2) for 127.0.0.1:3005 (Errno::EADDRINUSE)`
+   gdk start
    ```
 
-   Select another port and try again.
+1. Go to the URL shown in the terminal to ensure the site loads correctly. If the site doesn't
+   load correctly, `tail` the `gitlab-docs` logs:
 
-## Check documentation links
+   ```shell
+   gdk tail gitlab-docs
+   ```
 
-If you've moved or renamed any sections within the documentation, to verify your
-changes to internal links and anchors, either:
+## Make documentation changes
 
-- Use your editor's "Follow Link" or "Go To Declaration/Usage/Implementation" function (or similar).
-- Run the following:
+You can preview documentation changes as they would appear when published on
+[GitLab Docs](https://docs.gitlab.com).
 
-  ```shell
-  make gitlab-docs-check
-  ```
+To make changes to GitLab documentation and preview them:
+
+1. Start GDK and ensure you can preview the documentation site:
+
+   ```shell
+   gdk start
+   ```
+
+1. Make the necessary changes to the files in `<path_to_gdk>/gitlab/doc`.
+1. Restart the `gitlab-docs` service to recompile the published version of the documentation with
+   the new changes:
+
+   ```shell
+   gdk restart gitlab-docs
+   ```
+
+After recompilation, the preview is automatically refreshed with the changes.
+
+NOTE:
+These instructions work for all users, but the restart step might not be needed for non-macOS users.
+The copy of `gitlab-docs` managed by GDK symlinks to the `gitlab/doc` directory,
+which affects the ability to "hot reload" the documentation preview on macOS.
+
+### Check links
+
+If you move or rename any sections within the documentation, you can verify your changes
+don't break any links by running:
+
+```shell
+make gitlab-docs-check
+```

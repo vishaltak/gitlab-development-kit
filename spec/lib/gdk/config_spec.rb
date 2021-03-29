@@ -1522,5 +1522,25 @@ RSpec.describe GDK::Config do
         expect(config.gitlab_docs.auto_update?).to be(true)
       end
     end
+
+    describe '#port' do
+      context 'when port is not specified' do
+        it 'returns the default port' do
+          expect(config.gitlab_docs.port).to eq(3005)
+        end
+      end
+
+      context 'when port is specified' do
+        let(:yaml) do
+          {
+            'gitlab_docs' => { 'port' => 5555 }
+          }
+        end
+
+        it 'returns the configured port' do
+          expect(config.gitlab_docs.port).to eq(5555)
+        end
+      end
+    end
   end
 end

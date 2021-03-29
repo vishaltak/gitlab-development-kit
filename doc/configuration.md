@@ -254,16 +254,13 @@ When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed 
 
 Under the `gitlab_docs` key you can define the following settings with their defaults:
 
-```yaml
-gitlab_docs:
-  enabled: false
-  auto_update: true
-```
+| Setting                   | Default | Description                                                                                              |
+|:--------------------------|:--------|:---------------------------------------------------------------------------------------------------------|
+| `gitlab_docs.enabled`     | `false` | Set to `true` to enable [`gitlab-docs`](https://gitlab.com/gitlab-org/gitlab-docs) to be managed by GDK. |
+| `gitlab_docs.auto_update` | `true`  | Set to `false` to disable updating the `gitlab-docs` checkout.                                           |
+| `gitlab_docs.port`        | `3005`  | The port for `nanoc` to listen on.                                                           |
 
-| Setting       | Default | Description |
-|---------------|---------|-------------|
-| `enabled`     | `false` | Set this to `true` to enable Git cloning the [GitLab Docs project](https://gitlab.com/gitlab-org/gitlab-docs) |
-| `auto_update` | `true`  | Set this to `false` to disable updating the GitLab Docs Git clone. |
+For more information on using GitLab Docs with GDK, see the [GitLab Docs how to](howto/gitlab_docs.md).
 
 ### NGINX settings
 
