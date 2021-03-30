@@ -1120,7 +1120,7 @@ RSpec.describe GDK::Config do
   end
 
   describe 'registry' do
-    describe 'image' do
+    describe '#image' do
       context 'when no image is specified' do
         it 'returns the default image' do
           expect(config.registry.image).to eq('registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v2.9.1-gitlab')
@@ -1137,6 +1137,18 @@ RSpec.describe GDK::Config do
     describe '#listen_address' do
       it 'returns 127.0.0.1 by default' do
         expect(config.registry.listen_address).to eq('127.0.0.1')
+      end
+    end
+
+    describe '#uid' do
+      it 'returns an empty string' do
+        expect(config.registry.uid).to eq('')
+      end
+    end
+
+    describe '#gid' do
+      it 'returns an empty string' do
+        expect(config.registry.gid).to eq('')
       end
     end
   end

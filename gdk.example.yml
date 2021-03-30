@@ -205,11 +205,13 @@ registry:
   api_host: 127.0.0.1
   auth_enabled: true
   enabled: false
+  gid: ''
   host: 127.0.0.1
   image: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v2.9.1-gitlab
   listen_address: 127.0.0.1
   port: 5000
   self_signed: false
+  uid: ''
 relative_url_root: "/"
 repositories:
   gitaly: https://gitlab.com/gitlab-org/gitaly.git

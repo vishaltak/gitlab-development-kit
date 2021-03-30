@@ -191,6 +191,9 @@ module GDK
 
       bool(:self_signed) { false }
       bool(:auth_enabled) { true }
+
+      string(:uid) { '' }
+      string(:gid) { '' }
     end
 
     settings :object_store do

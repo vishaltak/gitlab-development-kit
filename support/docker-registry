@@ -8,6 +8,10 @@ registry_enabled=$(gdk config get registry.enabled 2>/dev/null)
 registry_listen_address=$(gdk config get registry.listen_address 2>/dev/null)
 registry_port=$(gdk config get registry.port 2>/dev/null)
 registry_port=${registry_port:-5000}
+registry_uid=$(gdk config get registry.uid 2>/dev/null)
+registry_uid=${registry_uid:-$(id -u)}
+registry_gid=$(gdk config get registry.gid 2>/dev/null)
+registry_gid=${registry_gid:-$(id -g)}
 registry_image=$(gdk config get registry.image 2>/dev/null)
 
 run_opts=()
@@ -17,7 +21,7 @@ if [[ "${registry_enabled}" == "true" ]]; then
   fi
 
   exec docker run --rm -p "${registry_listen_address}:${registry_port}:${registry_port}" "${run_opts[@]}" \
-      -u "$(id -u)":"$(id -g)" \
+      -u "${registry_uid}":"${registry_gid}" \
       -v "${gdk_root}/registry/config.yml:/etc/docker/registry/config.yml:ro" \
       -v "${gdk_root}/registry/storage:/var/lib/registry" \
       -v "${gdk_root}/localhost.crt:/etc/docker/registry/localhost.crt:ro" \
