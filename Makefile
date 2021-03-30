@@ -553,9 +553,19 @@ gitlab/workhorse/gitlab-workhorse:
 # gitlab-elasticsearch
 ##############################################################
 
+ifeq ($(gitlab_elasticsearch_indexer_enabled),true)
 gitlab-elasticsearch-indexer-setup: gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
+else
+gitlab-elasticsearch-indexer-setup:
+	@true
+endif
 
+ifeq ($(gitlab_elasticsearch_indexer_enabled),true)
 gitlab-elasticsearch-indexer-update: gitlab-elasticsearch-indexer/.git/pull gitlab-elasticsearch-indexer-clean-bin gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
+else
+gitlab-elasticsearch-indexer-update:
+	@true
+endif
 
 gitlab-elasticsearch-indexer-clean-bin:
 	$(Q)rm -rf gitlab-elasticsearch-indexer/bin
