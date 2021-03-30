@@ -16,8 +16,11 @@ desc 'Generate an example config file with all the defaults'
 file 'gdk.example.yml' => 'clobber:gdk.example.yml' do |t|
   require 'gdk/config_example'
 
-  File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY) do |file|
-    GDK::ConfigExample.new.dump!(file)
+  begin
+    contents = GDK::ConfigExample.new.dump!.to_yaml
+    File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY).write(contents)
+  rescue TypeError => e
+    GDK::Output.abort(e)
   end
 end
 
