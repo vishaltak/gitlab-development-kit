@@ -9,6 +9,7 @@ require_relative 'diagnostic/pending_migrations'
 require_relative 'diagnostic/postgresql'
 require_relative 'diagnostic/re2'
 require_relative 'diagnostic/ruby_gems'
+require_relative 'diagnostic/rvm_and_asdf'
 require_relative 'diagnostic/stale_services'
 require_relative 'diagnostic/status'
 require_relative 'diagnostic/version'
@@ -17,6 +18,7 @@ module GDK
   module Diagnostic
     def self.all
       klasses = %i[
+        RvmAndAsdf
         RubyGems
         Version
         Configuration
