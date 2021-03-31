@@ -41,6 +41,16 @@ def temp_path
   spec_path.parent.join('tmp')
 end
 
+def stub_env_lookups
+  allow(ENV).to receive(:fetch).and_call_original
+  allow(ENV).to receive(:[]).and_call_original
+end
+
+def stub_env(var, value)
+  allow(ENV).to receive(:fetch).with(var, '').and_return(value)
+  allow(ENV).to receive(:[]).with(var).and_return(value)
+end
+
 def stub_gdk_yaml(yaml)
   allow(GDK).to receive(:config) { GDK::Config.new(yaml: yaml) }
 end
@@ -60,6 +70,5 @@ def stub_no_color_env(res)
 
   # res needs to be of type String as we're simulating what's coming from
   # the shell command line.
-  allow(ENV).to receive(:fetch).and_call_original
-  allow(ENV).to receive(:fetch).with('NO_COLOR', '').and_return(res)
+  stub_env('NO_COLOR', res)
 end
