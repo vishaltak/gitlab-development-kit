@@ -1,5 +1,7 @@
 .NOTPARALLEL:
 
+START_TIME := $(shell date "+%s")
+
 DIVIDER = "--------------------------------------------------------------------------------"
 
 SHELL = /bin/bash
@@ -1128,14 +1130,14 @@ ask-to-restart:
 .PHONY: show-installed-at
 show-installed-at:
 	@echo
-	@echo "> Installed as of $$(date +"%Y-%m-%d %T")"
+	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: show-updated-at
 show-updated-at:
 	@echo
-	@echo "> Updated as of $$(date +"%Y-%m-%d %T")"
+	@echo "> Updated as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: show-reconfigured-at
 show-reconfigured-at:
 	@echo
-	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T")"
+	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
