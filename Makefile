@@ -13,6 +13,7 @@ BUNDLE := $(shell command -v bundle 2> /dev/null)
 RUBOCOP := $(shell command -v rubocop 2> /dev/null)
 RSPEC := $(shell command -v rspec 2> /dev/null)
 SHELLCHECK := $(shell command -v shellcheck 2> /dev/null)
+CHECKMAKE := $(shell command -v checkmake 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
@@ -1233,6 +1234,24 @@ endif
 shellcheck: shellcheck-install
 	@echo -n "Shellcheck: "
 	@support/shellcheck && echo "OK"
+
+.PHONY: checkmake
+checkmake: checkmake-install
+	@echo -n "Checkmake: "
+	$(eval CHECKMAKE := $(shell command -v checkmake 2> /dev/null))
+	@${CHECKMAKE} Makefile && echo -e "\b\bOK"
+
+.PHONY: checkmake-install
+checkmake-install:
+ifeq ($(CHECKMAKE),)
+ifeq ($(GOLANG),)
+	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
+	@false
+else
+	@echo "INFO: Installing checkmake.."
+	@${GOLANG} get github.com/mrtazz/checkmake ${QQ}
+endif
+endif
 
 .PHONY: verify-gdk-example-yml
 verify-gdk-example-yml:
