@@ -9,7 +9,7 @@ end
 
 desc 'Dump the configured settings'
 task 'dump_config' do
-  puts GDK::Config.new.dump!.to_yaml
+  puts GDK::Config.new.dump_as_yaml
 end
 
 desc 'Generate an example config file with all the defaults'
@@ -17,8 +17,8 @@ file 'gdk.example.yml' => 'clobber:gdk.example.yml' do |t|
   require 'gdk/config_example'
 
   begin
-    contents = GDK::ConfigExample.new.dump!.to_yaml
-    File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY).write(contents)
+    yaml = GDK::ConfigExample.new.dump_as_yaml
+    File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY).write(yaml)
   rescue TypeError => e
     GDK::Output.abort(e)
   end
