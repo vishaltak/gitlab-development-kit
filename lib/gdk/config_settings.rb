@@ -97,8 +97,8 @@ module GDK
       nil
     end
 
-    def dump!(file = nil, user_only: false)
-      yaml = attributes.values.sort_by(&:key).each_with_object({}) do |attribute, result|
+    def dump!(user_only: false)
+      attributes.values.sort_by(&:key).each_with_object({}) do |attribute, result|
         # We don't dump a config if it:
         #  - starts with a double underscore (intended for internal use)
         #  - is a ? method (always has a non-? counterpart)
@@ -109,10 +109,10 @@ module GDK
 
         result[attribute.key] = attr_value.dump!(user_only: user_only)
       end
+    end
 
-      file&.puts(yaml.to_yaml)
-
-      yaml
+    def dump_as_yaml
+      dump!.to_yaml
     end
 
     def cmd!(cmd)
