@@ -86,6 +86,7 @@ endif
 
 # This is used by `gdk install` and `gdk reconfigure`
 #
+.PHONY: all
 all: preflight-checks \
 gitlab-setup \
 gitlab-shell-setup \
@@ -104,11 +105,13 @@ gitlab-docs-setup
 
 # This is used by `gdk install`
 #
+.PHONY: install
 install: all show-installed-at start
 
 # This is used by `gdk update`
 #
 # Pull gitlab directory first since dependencies are linked from there.
+.PHONY: update
 update: preflight-checks \
 preflight-update-checks \
 asdf-update \
@@ -132,11 +135,16 @@ show-updated-at
 
 # This is used by `gdk reconfigure`
 #
+.PHONY: reconfigure
 reconfigure: touch-examples \
 unlock-dependency-installers \
 postgresql-sensible-defaults \
 all \
 show-reconfigured-at
+
+.PHONY: clean
+clean:
+	@true
 
 self-update: unlock-dependency-installers
 	@echo
@@ -868,6 +876,7 @@ support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup
 # redis
 ##############################################################
 
+.PHONY: redis
 redis: redis/redis.conf
 
 .PHONY: redis/redis.conf
@@ -878,6 +887,7 @@ redis/redis.conf:
 # postgresql
 ##############################################################
 
+.PHONY: postgresql
 postgresql: postgresql/data postgresql/port postgresql-seed-rails postgresql-seed-praefect
 
 postgresql/data:
