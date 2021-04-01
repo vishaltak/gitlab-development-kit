@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require_relative 'diagnostic/base'
-require_relative 'diagnostic/configuration'
-require_relative 'diagnostic/dependencies'
-require_relative 'diagnostic/geo'
-require_relative 'diagnostic/golang'
-require_relative 'diagnostic/pending_migrations'
-require_relative 'diagnostic/postgresql'
-require_relative 'diagnostic/re2'
-require_relative 'diagnostic/ruby_gems'
-require_relative 'diagnostic/rvm_and_asdf'
-require_relative 'diagnostic/stale_services'
-require_relative 'diagnostic/status'
-require_relative 'diagnostic/version'
-
 module GDK
   module Diagnostic
+    autoload :Base, 'gdk/diagnostic/base'
+    autoload :Configuration, 'gdk/diagnostic/configuration'
+    autoload :Dependencies, 'gdk/diagnostic/dependencies'
+    autoload :Geo, 'gdk/diagnostic/geo'
+    autoload :Golang, 'gdk/diagnostic/golang'
+    autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
+    autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
+    autoload :Re2, 'gdk/diagnostic/re2'
+    autoload :RubyGems, 'gdk/diagnostic/ruby_gems'
+    autoload :RvmAndAsdf, 'gdk/diagnostic/rvm_and_asdf'
+    autoload :StaleServices, 'gdk/diagnostic/stale_services'
+    autoload :Status, 'gdk/diagnostic/status'
+    autoload :Version, 'gdk/diagnostic/version'
+
     def self.all
       klasses = %i[
         RvmAndAsdf
