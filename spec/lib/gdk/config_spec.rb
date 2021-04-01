@@ -289,6 +289,14 @@ RSpec.describe GDK::Config do
         expect(described_class.new['gdk_root'].to_s).to eq('/tmp/gdk')
       end
     end
+
+    context 'when looking up a multiple slugs' do
+      let(:raw_yaml) { "---\ngdk:\n  debug: true" }
+
+      it 'is not designed to return a value' do
+        expect(described_class.new['gdk.debug'].to_s).to eq('')
+      end
+    end
   end
 
   describe '#username' do
