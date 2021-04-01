@@ -1158,7 +1158,7 @@ jaeger-update: jaeger-setup
 ##############################################################
 
 .PHONY: test
-test: lint shellcheck rubocop rspec verify-gdk-example-yml
+test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml
 
 .PHONY: rubocop
 rubocop:
