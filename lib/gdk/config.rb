@@ -218,6 +218,8 @@ module GDK
 
       string(:uid) { '' }
       string(:gid) { '' }
+
+      bool(:compatibility_schema1_enabled) { false }
     end
 
     settings :object_store do
