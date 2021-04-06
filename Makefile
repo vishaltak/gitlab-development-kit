@@ -461,8 +461,6 @@ gitlab-docs/.git/pull: gitlab-docs/.git
 .PHONY: gitlab-docs-deps
 gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs gitlab-docs/nanoc.yaml
 
-gitlab-docs/nanoc.yaml:
-	$(Q)cp nanoc.yaml.example $@
 
 gitlab-docs-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
