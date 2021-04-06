@@ -5,8 +5,8 @@ module GDK
     # Handles `gdk run` command execution
     #
     # @deprecated GDK run command has been deprecated should be removed in a future update
-    class Run
-      def run
+    class Run < BaseCommand
+      def run(args = [])
         abort <<~GDK_RUN_NO_MORE
           'gdk run' is no longer available; see doc/runit.md.
 

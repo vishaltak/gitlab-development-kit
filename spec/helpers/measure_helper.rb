@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module MeasureHelper
-  shared_examples 'it checks if Docker and GDK are running' do
+  shared_examples 'it checks if Docker and GDK are running' do |args|
     context "when Docker isn't installed or running " do
       let(:docker_running) { false }
 
       it 'aborts' do
         expected_error = 'ERROR: Docker is not installed or running!'
 
-        expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
+        expect { subject.run(args) }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
       end
     end
 
@@ -20,7 +20,7 @@ module MeasureHelper
 
         expected_error = 'ERROR: GDK is not running locally on http://127.0.0.1:3000!'
 
-        expect { subject.run }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
+        expect { subject.run(args) }.to raise_error(expected_error).and output("#{expected_error}\n").to_stderr
       end
     end
   end

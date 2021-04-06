@@ -5,7 +5,7 @@ require 'fileutils'
 module GDK
   module Command
     # Handles `gdk pristine` command execution
-    class Pristine
+    class Pristine < BaseCommand
       GO_CLEAN_CACHE_CMD = 'go clean -cache'
       BUNDLE_INSTALL_CMD = 'bundle install --jobs 4 --quiet'
       BUNDLE_PRISTINE_CMD = 'bundle pristine'

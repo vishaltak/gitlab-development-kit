@@ -3,8 +3,8 @@
 module GDK
   module Command
     # Handles `gdk update` command execution
-    class Update
-      def run
+    class Update < BaseCommand
+      def run(args = [])
         update_result = update!
 
         unless update_result

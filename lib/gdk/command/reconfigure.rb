@@ -3,8 +3,8 @@
 module GDK
   module Command
     # Handles `gdk reconfigure` command execution
-    class Reconfigure
-      def run
+    class Reconfigure < BaseCommand
+      def run(args = [])
         GDK.remember!(GDK.root)
 
         result = GDK.make('reconfigure')

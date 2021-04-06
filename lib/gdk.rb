@@ -52,18 +52,17 @@ module GDK
 
     case subcommand = ARGV.shift
     when 'run'
-      GDK::Command::Run.new.run
+      GDK::Command::Run.new.run(ARGV)
     when 'install'
       GDK::Command::Install.new.run(ARGV)
     when 'update'
-      GDK::Command::Update.new.run
+      GDK::Command::Update.new.run(ARGV)
     when 'diff-config'
-      GDK::Command::DiffConfig.new.run
-      true
+      GDK::Command::DiffConfig.new.run(ARGV)
     when 'config'
       GDK::Command::Config.new.run(ARGV)
     when 'reconfigure'
-      GDK::Command::Reconfigure.new.run
+      GDK::Command::Reconfigure.new.run(ARGV)
     when 'reset-data'
       GDK::Command::ResetData.prompt_and_run
     when 'psql'
@@ -85,21 +84,17 @@ module GDK
     when 'tail'
       Runit.tail(ARGV)
     when 'thin'
-      GDK::Command::Thin.new.run
+      GDK::Command::Thin.new.run(ARGV)
     when 'doctor'
-      GDK::Command::Doctor.new.run
-      true
+      GDK::Command::Doctor.new.run(ARGV)
     when 'measure'
-      GDK::Command::MeasureUrl.new(ARGV).run
-      true
+      GDK::Command::MeasureUrl.new.run(ARGV)
     when 'measure-workflow'
-      GDK::Command::MeasureWorkflow.new(ARGV).run
-      true
+      GDK::Command::MeasureWorkflow.new.run(ARGV)
     when 'pristine'
-      GDK::Command::Pristine.new.run
+      GDK::Command::Pristine.new.run(ARGV)
     when /-{0,2}help/, '-h', nil
-      GDK::Command::Help.new.run
-      true
+      GDK::Command::Help.new.run(ARGV)
     else
       GDK::Output.notice "gdk: #{subcommand} is not a gdk command."
       GDK::Output.notice "See 'gdk help' for more detail."

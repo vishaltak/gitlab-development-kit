@@ -6,8 +6,8 @@ module GDK
     #
     # This command accepts the following subcommands:
     # - get <config keys separated by space>
-    class Config
-      def run(args)
+    class Config < BaseCommand
+      def run(args = [])
         config_command = args.shift
         GDK::Output.abort('Usage: gdk config get <configuration value>') if config_command != 'get' || args.empty?
 

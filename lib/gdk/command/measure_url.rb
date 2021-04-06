@@ -3,8 +3,10 @@
 module GDK
   module Command
     class MeasureUrl < MeasureBase
-      def initialize(urls_or_paths)
+      def run(urls_or_paths)
         @urls_or_paths = Array(urls_or_paths)
+
+        super
       end
 
       private

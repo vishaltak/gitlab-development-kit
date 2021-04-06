@@ -2,6 +2,7 @@
 
 module GDK
   module Command
+    autoload :BaseCommand, 'gdk/command/base_command'
     autoload :Config, 'gdk/command/config'
     autoload :DiffConfig, 'gdk/command/diff_config'
     autoload :Doctor, 'gdk/command/doctor'

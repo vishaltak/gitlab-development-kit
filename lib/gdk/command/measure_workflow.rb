@@ -5,8 +5,10 @@ module GDK
     class MeasureWorkflow < MeasureBase
       WORKFLOW_SCRIPTS_FOLDER = 'support/measure_scripts'
 
-      def initialize(workflows)
+      def run(workflows)
         @workflows = Array(workflows)
+
+        super
       end
 
       private
@@ -15,6 +17,7 @@ module GDK
 
       def check!
         GDK::Output.abort('Please add a valid workflow(s) as an argument (e.g. repo_browser)') if workflow_script_paths.empty?
+
         super
       end
 
