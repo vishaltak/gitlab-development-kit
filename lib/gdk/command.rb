@@ -12,6 +12,8 @@ module GDK
     autoload :MeasureUrl, 'gdk/command/measure_url'
     autoload :MeasureWorkflow, 'gdk/command/measure_workflow'
     autoload :Pristine, 'gdk/command/pristine'
+    autoload :Psql, 'gdk/command/psql'
+    autoload :PsqlGeo, 'gdk/command/psql_geo'
     autoload :Reconfigure, 'gdk/command/reconfigure'
     autoload :ResetData, 'gdk/command/reset_data'
     autoload :Run, 'gdk/command/run'

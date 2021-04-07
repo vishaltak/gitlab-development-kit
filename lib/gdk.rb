@@ -66,9 +66,9 @@ module GDK
     when 'reset-data'
       GDK::Command::ResetData.prompt_and_run
     when 'psql'
-      exec(GDK::Postgresql.new.psql_cmd(ARGV), chdir: GDK.root)
+      GDK::Command::Psql.new.run(ARGV)
     when 'psql-geo'
-      exec(GDK::PostgresqlGeo.new.psql_cmd(ARGV), chdir: GDK.root)
+      GDK::Command::PsqlGeo.new.run(ARGV)
     when 'redis-cli'
       exec('redis-cli', '-s', config.redis.__socket_file.to_s, *ARGV, chdir: GDK.root)
     when 'env'
