@@ -82,7 +82,7 @@ module GDK
     when 'stop'
       exit(GDK::Command::Stop.new.run(ARGV))
     when 'tail'
-      Runit.tail(ARGV)
+      GDK::Command::Tail.new.run(ARGV)
     when 'thin'
       GDK::Command::Thin.new.run(ARGV)
     when 'doctor'

@@ -22,6 +22,7 @@ module GDK
     autoload :Start, 'gdk/command/start'
     autoload :Status, 'gdk/command/status'
     autoload :Stop, 'gdk/command/stop'
+    autoload :Tail, 'gdk/command/tail'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
   end
