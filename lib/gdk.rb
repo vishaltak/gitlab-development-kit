@@ -74,7 +74,7 @@ module GDK
     when 'env'
       GDK::Env.exec(ARGV)
     when 'status'
-      exit(Runit.sv(subcommand, ARGV))
+      exit(GDK::Command::Status.new.run(ARGV))
     when 'start'
       exit(GDK::Command::Start.new.run(ARGV))
     when 'restart'

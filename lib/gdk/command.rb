@@ -20,6 +20,7 @@ module GDK
     autoload :ResetData, 'gdk/command/reset_data'
     autoload :Run, 'gdk/command/run'
     autoload :Start, 'gdk/command/start'
+    autoload :Status, 'gdk/command/status'
     autoload :Stop, 'gdk/command/stop'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
