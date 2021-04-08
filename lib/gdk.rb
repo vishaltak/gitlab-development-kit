@@ -23,7 +23,6 @@ module GDK
   # and load only what it really needs
   autoload :Shellout, 'shellout'
   autoload :Output, 'gdk/output'
-  autoload :Env, 'gdk/env'
   autoload :Config, 'gdk/config'
   autoload :Command, 'gdk/command'
   autoload :Dependencies, 'gdk/dependencies'
@@ -72,7 +71,7 @@ module GDK
     when 'redis-cli'
       GDK::Command::RedisCLI.new.run(ARGV)
     when 'env'
-      GDK::Env.exec(ARGV)
+      GDK::Command::Env.new.run(ARGV)
     when 'status'
       exit(GDK::Command::Status.new.run(ARGV))
     when 'start'
