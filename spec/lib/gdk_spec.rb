@@ -56,56 +56,6 @@ RSpec.describe GDK do
     end
   end
 
-  describe '.start' do
-    it 'executes hooks and starts services' do
-      services = %w[rails-web]
-
-      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.start_hooks').and_return(hooks)
-
-      expect(described_class).to receive(:with_hooks).with(hooks, 'gdk start').and_yield
-      expect(Runit).to receive(:sv).with('start', services).and_return(true)
-
-      described_class.start(services)
-    end
-  end
-
-  describe '.stop' do
-    before do
-      allow_any_instance_of(GDK::Config).to receive_message_chain('gdk.stop_hooks').and_return(hooks)
-    end
-
-    context 'all services' do
-      it 'executes hooks and stops all services' do
-        expect(Runit).to receive(:stop).and_return(true)
-        expect(described_class).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
-
-        described_class.stop([])
-      end
-    end
-
-    context 'some services' do
-      it 'executes hooks and stops some services' do
-        services = %w[rails-web]
-
-        expect(Runit).to receive(:sv).with('force-stop', services).and_return(true)
-        expect(described_class).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
-
-        described_class.stop(services)
-      end
-    end
-  end
-
-  describe '.restart' do
-    it 'calls stop then start' do
-      services = %w[rails-web]
-
-      expect(described_class).to receive(:stop).with(services)
-      expect(described_class).to receive(:start).with(services)
-
-      described_class.restart(services)
-    end
-  end
-
   describe '.execute_hooks' do
     it 'calls execute_hook_cmd for each cmd and returns true' do
       cmd = 'echo'

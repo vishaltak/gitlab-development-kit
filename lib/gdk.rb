@@ -76,11 +76,11 @@ module GDK
     when 'status'
       exit(Runit.sv(subcommand, ARGV))
     when 'start'
-      exit(start(ARGV))
+      exit(GDK::Command::Start.new.run(ARGV))
     when 'restart'
-      exit(restart(ARGV))
+      exit(GDK::Command::Restart.new.run(ARGV))
     when 'stop'
-      exit(stop(ARGV))
+      exit(GDK::Command::Stop.new.run(ARGV))
     when 'tail'
       Runit.tail(ARGV)
     when 'thin'
@@ -181,46 +181,6 @@ module GDK
     execute_hooks(hooks[:after], "#{name}: after")
 
     result
-  end
-
-  # Called when running `gdk start`
-  def self.start(argv)
-    result = with_hooks(config.gdk.start_hooks, 'gdk start') do
-      Runit.sv('start', argv)
-    end
-
-    # Only print if run like `gdk start`, not e.g. `gdk start rails-web`
-    print_url_ready_message if argv.empty?
-
-    result
-  end
-
-  # Called when running `gdk stop`
-  def self.stop(argv)
-    with_hooks(config.gdk.stop_hooks, 'gdk stop') do
-      if argv.empty?
-        # Runit.stop will stop all services and stop Runit (runsvdir) itself.
-        # This is only safe if all services are shut down; this is why we have
-        # an integrated method for this.
-        Runit.stop
-      else
-        # Stop the requested services, but leave Runit itself running.
-        Runit.sv('force-stop', argv)
-      end
-    end
-  end
-
-  # Called when running `gdk restart`
-  def self.restart(argv)
-    stop(argv)
-    start(argv)
-  end
-
-  def self.print_url_ready_message
-    GDK::Output.puts
-    GDK::Output.notice("GitLab will be available at #{config.__uri} shortly.")
-    GDK::Output.notice("GitLab Docs will be available at http://#{config.hostname}:#{config.gitlab_docs.port} shortly.") if config.gitlab_docs.enabled?
-    GDK::Output.notice("GitLab Kubernetes Agent Server available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
   end
 
   def self.validate_yaml!
