@@ -11,7 +11,7 @@ RSpec.describe GDK::Command::Start do
 
   context 'with no extra arguments' do
     it 'executes hooks and starts all enabled services' do
-      expect(GDK).to receive(:with_hooks).with(hooks, 'gdk start').and_yield
+      expect(GDK::Hooks).to receive(:with_hooks).with(hooks, 'gdk start').and_yield
       expect_runit_to_execute(command: 'start', args: [])
 
       expect { subject.run }.to output(/GitLab will be available at/).to_stdout
@@ -22,7 +22,7 @@ RSpec.describe GDK::Command::Start do
     it 'executes hooks and starts specified services' do
       services = %w[rails-web]
 
-      expect(GDK).to receive(:with_hooks).with(hooks, 'gdk start').and_yield
+      expect(GDK::Hooks).to receive(:with_hooks).with(hooks, 'gdk start').and_yield
       expect_runit_to_execute(command: 'start', args: services)
 
       subject.run(services)

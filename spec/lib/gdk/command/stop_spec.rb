@@ -11,7 +11,7 @@ RSpec.describe GDK::Command::Stop do
 
   context 'with no extra arguments' do
     it 'executes hooks and stops all enabled services' do
-      expect(GDK).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
+      expect(GDK::Hooks).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
       expect(Runit).to receive(:stop).and_return(true)
 
       subject.run
@@ -22,7 +22,7 @@ RSpec.describe GDK::Command::Stop do
     it 'executes hooks and stops specified services' do
       services = %w[rails-web]
 
-      expect(GDK).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
+      expect(GDK::Hooks).to receive(:with_hooks).with(hooks, 'gdk stop').and_yield
       expect_runit_to_execute(command: 'force-stop', args: services)
 
       subject.run(services)

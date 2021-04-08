@@ -5,7 +5,7 @@ module GDK
     # Start all enabled services or specified ones only
     class Start < BaseCommand
       def run(args = [])
-        result = GDK.with_hooks(GDK.config.gdk.start_hooks, 'gdk start') do
+        result = GDK::Hooks.with_hooks(GDK.config.gdk.start_hooks, 'gdk start') do
           Runit.sv('start', args)
         end
 

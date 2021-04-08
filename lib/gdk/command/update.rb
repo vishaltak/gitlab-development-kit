@@ -22,7 +22,7 @@ module GDK
       private
 
       def update!
-        GDK.with_hooks(GDK.config.gdk.update_hooks, 'gdk update') do
+        GDK::Hooks.with_hooks(GDK.config.gdk.update_hooks, 'gdk update') do
           GDK.make('self-update')
           GDK.make('self-update', 'update')
         end

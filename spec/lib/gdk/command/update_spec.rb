@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe GDK::Command::Update do
   before do
-    allow(GDK).to receive(:execute_hooks)
+    allow(GDK::Hooks).to receive(:execute_hooks)
     allow(GDK).to receive(:make)
   end
 
