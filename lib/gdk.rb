@@ -12,6 +12,7 @@ require 'securerandom'
 require_relative 'runit'
 autoload :Shellout, 'shellout'
 
+# GitLab Development Kit
 module GDK
   HookCommandError = Class.new(StandardError)
 
@@ -21,7 +22,6 @@ module GDK
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`
   # and load only what it really needs
-  autoload :Shellout, 'shellout'
   autoload :Output, 'gdk/output'
   autoload :Config, 'gdk/config'
   autoload :Command, 'gdk/command'
@@ -37,8 +37,7 @@ module GDK
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
-  # rubocop:disable Metrics/AbcSize
-  def self.main # rubocop:disable Metrics/CyclomaticComplexity
+  def self.main
     if !install_root_ok? && ARGV.first != 'reconfigure'
       puts <<~GDK_MOVED
         According to #{ROOT_CHECK_FILE} this gitlab-development-kit
@@ -75,7 +74,6 @@ module GDK
       false
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def self.config
     @config ||= GDK::Config.new
