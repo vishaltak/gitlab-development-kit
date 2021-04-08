@@ -64,7 +64,7 @@ and follow the prompts. Use:
 
 - **executor**
 
-  Since we are running directy on the host computer in this simple configuration, choose `shell`.
+  Since we are running directly on the host computer in this simple configuration, choose `shell`.
 
 The Runner writes its configuration file to `gitlab-runner-config.toml`,
 which is in GDK's `.gitignore` file.
