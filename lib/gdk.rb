@@ -88,22 +88,6 @@ module GDK
     puts_separator
   end
 
-  def self.display_help_message
-    puts_separator <<~HELP_MESSAGE
-      You can try the following that may be of assistance:
-
-      - Run 'gdk doctor'.
-
-      - Visit the troubleshooting documentation:
-        https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/troubleshooting.md.
-      - Visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues to
-        see if there are known issues.
-
-      - Run 'gdk reset-data' if appropriate.
-      - Run 'gdk pristine' which will restore your GDK to a pristine state.
-    HELP_MESSAGE
-  end
-
   def self.install_root_ok?
     expected_root = GDK.root.join(ROOT_CHECK_FILE).read.chomp
     Pathname.new(expected_root).realpath == GDK.root

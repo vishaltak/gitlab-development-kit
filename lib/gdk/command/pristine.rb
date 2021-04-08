@@ -27,10 +27,12 @@ module GDK
         end
 
         GDK::Output.success("Successfully ran 'gdk pristine'!")
+
         true
       rescue StandardError => e
         GDK::Output.error("Failed to run 'gdk pristine' - #{e.message}.")
-        GDK.display_help_message
+        display_help_message
+
         false
       end
 

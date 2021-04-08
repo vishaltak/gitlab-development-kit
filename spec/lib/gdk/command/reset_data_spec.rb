@@ -59,7 +59,7 @@ RSpec.describe GDK::Command::ResetData do
 
           expect(GDK::Output).to receive(:error).with("Failed to rename directory '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}' - No such file or directory")
           expect(GDK::Output).to receive(:error).with('Failed to backup data.')
-          expect(GDK).to receive(:display_help_message)
+          expect(subject).to receive(:display_help_message)
           expect(GDK).not_to receive(:make)
 
           subject.run

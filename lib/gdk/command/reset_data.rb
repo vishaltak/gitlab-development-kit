@@ -20,7 +20,7 @@ module GDK
         return true if backup_data
 
         GDK::Output.error('Failed to backup data.')
-        GDK.display_help_message
+        display_help_message
 
         false
       end
