@@ -63,7 +63,7 @@ module GDK
     when 'reconfigure'
       GDK::Command::Reconfigure.new.run(ARGV)
     when 'reset-data'
-      GDK::Command::ResetData.prompt_and_run
+      GDK::Command::ResetData.new.run(ARGV)
     when 'psql'
       GDK::Command::Psql.new.run(ARGV)
     when 'psql-geo'

@@ -6,9 +6,7 @@ RSpec.describe GDK::Command::ResetData do
   let!(:root) { GDK.root }
   let!(:backup_base_dir) { root.join('.backups') }
 
-  subject { described_class.new }
-
-  describe '.prompt_and_run' do
+  context 'prompt behavior' do
     let(:are_you_sure) { nil }
 
     before do
@@ -21,9 +19,10 @@ RSpec.describe GDK::Command::ResetData do
       let(:are_you_sure) { 'n' }
 
       it 'does not run' do
-        expect(described_class).not_to receive(:new)
+        expect(subject).not_to receive(:stop_and_backup!)
+        expect(subject).not_to receive(:reset_data!)
 
-        described_class.prompt_and_run
+        subject.run
       end
     end
 
@@ -31,14 +30,15 @@ RSpec.describe GDK::Command::ResetData do
       let(:are_you_sure) { 'y' }
 
       it 'runs' do
-        expect(described_class).to receive_message_chain(:new, :run)
+        expect(subject).to receive(:stop_and_backup!).and_return(true)
+        expect(subject).to receive(:reset_data!).and_return(true)
 
-        described_class.prompt_and_run
+        subject.run
       end
     end
   end
 
-  describe '#run' do
+  context 'backup behavior' do
     let!(:time_now) { Time.now }
     let!(:current_timestamp) { time_now.strftime('%Y-%m-%d_%H.%M.%S') }
     let!(:postgresql_data_directory) { root.join('postgresql', 'data') }
@@ -48,6 +48,7 @@ RSpec.describe GDK::Command::ResetData do
       allow(GDK).to receive(:remember!)
       allow(Runit).to receive(:stop)
       allow(GDK).to receive(:root).and_return(root)
+      allow(subject).to receive(:prompt_and_return_acceptance).and_return(true)
     end
 
     context 'when backup data script fails' do
