@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module GDK
+  # GDK Commands
   module Command
     autoload :BaseCommand, 'gdk/command/base_command'
     autoload :Config, 'gdk/command/config'
@@ -26,5 +27,28 @@ module GDK
     autoload :Tail, 'gdk/command/tail'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
+
+    # This is a list of existing supported commands and their associated
+    # implementation class
+    COMMANDS = {
+      'config' => -> { GDK::Command::Config },
+      'diff-config' => -> { GDK::Command::DiffConfig },
+      'doctor' => -> { GDK::Command::Doctor },
+      'env' => -> { GDK::Command::Env },
+      'install' => -> { GDK::Command::Install },
+      'help' => -> { GDK::Command::Help },
+      'measure' => -> { GDK::Command::MeasureUrl },
+      'measure-workflow' => -> { GDK::Command::MeasureWorkflow },
+      'psql' => -> { GDK::Command::Psql },
+      'psql-geo' => -> { GDK::Command::PsqlGeo },
+      'pristine' => -> { GDK::Command::Pristine },
+      'reconfigure' => -> { GDK::Command::Reconfigure },
+      'redis-cli' => -> { GDK::Command::RedisCLI },
+      'reset-data' => -> { GDK::Command::ResetData },
+      'run' => -> { GDK::Command::Run },
+      'tail' => -> { GDK::Command::Tail },
+      'thin' => -> { GDK::Command::Thin },
+      'update' => -> { GDK::Command::Update }
+    }.freeze
   end
 end

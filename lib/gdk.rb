@@ -49,29 +49,15 @@ module GDK
 
     validate_yaml!
 
-    case subcommand = ARGV.shift
-    when 'run'
-      GDK::Command::Run.new.run(ARGV)
-    when 'install'
-      GDK::Command::Install.new.run(ARGV)
-    when 'update'
-      GDK::Command::Update.new.run(ARGV)
-    when 'diff-config'
-      GDK::Command::DiffConfig.new.run(ARGV)
-    when 'config'
-      GDK::Command::Config.new.run(ARGV)
-    when 'reconfigure'
-      GDK::Command::Reconfigure.new.run(ARGV)
-    when 'reset-data'
-      GDK::Command::ResetData.new.run(ARGV)
-    when 'psql'
-      GDK::Command::Psql.new.run(ARGV)
-    when 'psql-geo'
-      GDK::Command::PsqlGeo.new.run(ARGV)
-    when 'redis-cli'
-      GDK::Command::RedisCLI.new.run(ARGV)
-    when 'env'
-      GDK::Command::Env.new.run(ARGV)
+    subcommand = ARGV.shift
+
+    if ::GDK::Command::COMMANDS.key?(subcommand)
+      ::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV)
+
+      return true
+    end
+
+    case subcommand
     when 'status'
       exit(GDK::Command::Status.new.run(ARGV))
     when 'start'
@@ -80,18 +66,6 @@ module GDK
       exit(GDK::Command::Restart.new.run(ARGV))
     when 'stop'
       exit(GDK::Command::Stop.new.run(ARGV))
-    when 'tail'
-      GDK::Command::Tail.new.run(ARGV)
-    when 'thin'
-      GDK::Command::Thin.new.run(ARGV)
-    when 'doctor'
-      GDK::Command::Doctor.new.run(ARGV)
-    when 'measure'
-      GDK::Command::MeasureUrl.new.run(ARGV)
-    when 'measure-workflow'
-      GDK::Command::MeasureWorkflow.new.run(ARGV)
-    when 'pristine'
-      GDK::Command::Pristine.new.run(ARGV)
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run(ARGV)
     else

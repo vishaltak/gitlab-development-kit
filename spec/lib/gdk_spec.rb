@@ -17,6 +17,19 @@ RSpec.describe GDK do
     subject.main
   end
 
+  describe '.main' do
+    GDK::Command::COMMANDS.each do |command, command_class_proc|
+      context "when invoking 'gdk #{command}' from command-line" do
+        it "delegates execution to #{command_class_proc.call}" do
+          stub_const('ARGV', [command])
+
+          expect_any_instance_of(command_class_proc.call).to receive(:run)
+          described_class.main
+        end
+      end
+    end
+  end
+
   describe '.validate_yaml!' do
     let(:raw_yaml) { nil }
 
