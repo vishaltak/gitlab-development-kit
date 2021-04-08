@@ -15,6 +15,7 @@ module GDK
     autoload :Psql, 'gdk/command/psql'
     autoload :PsqlGeo, 'gdk/command/psql_geo'
     autoload :Reconfigure, 'gdk/command/reconfigure'
+    autoload :RedisCLI, 'gdk/command/redis_cli'
     autoload :ResetData, 'gdk/command/reset_data'
     autoload :Run, 'gdk/command/run'
     autoload :Thin, 'gdk/command/thin'
