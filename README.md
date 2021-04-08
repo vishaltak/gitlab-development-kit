@@ -28,7 +28,7 @@ The following methods for installing GDK are available:
 
   | Operating system | Versions            |
   |:-----------------|:--------------------|
-  | macOS            | 11, 10.5, 10.4      |
+  | macOS            | 11, 10.15, 10.14    |
   | Ubuntu           | 20.10, 20.04, 18.04 |
   | Debian           | 10, 9               |
   | Arch             | latest              |
