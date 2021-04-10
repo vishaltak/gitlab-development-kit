@@ -28,46 +28,22 @@ RSpec.describe GDK::Dependencies do
       end
     end
 
-    describe '#check_git_version' do
+    describe '#check_git_installed' do
       context 'when git is not installed' do
         it 'returns nil' do
           stub_check_binary('git', false)
 
-          expect(subject.check_git_version).to be_nil
+          expect(subject.check_git_installed).to be false
         end
       end
 
       context 'when git is installed' do
-        context 'but is not the required version' do
-          it 'returns an error message' do
-            installed_version = '2.28.0'
-            expected_error_messages = ['ERROR: Git version 2.28.0 detected, please install Git version 2.29.0 or higher.']
+        it 'returns nil' do
+          stub_check_binary('git', true)
 
-            stub_check_binary('git', true)
-            stub_git_version(installed_version)
-
-            expect(subject.check_git_version).to eql(expected_error_messages)
-            expect(subject.error_messages).to eql(expected_error_messages)
-          end
+          expect(subject.check_git_installed).to be true
+          expect(subject.error_messages).to be_empty
         end
-
-        context 'and is the required version' do
-          it 'returns nil' do
-            installed_version = described_class::EXPECTED_GIT_VERSION
-
-            stub_check_binary('git', true)
-            stub_git_version(installed_version)
-
-            expect(subject.check_git_version).to be_nil
-            expect(subject.error_messages).to be_empty
-          end
-        end
-      end
-
-      def stub_git_version(version)
-        git_version = "git version #{version}"
-        shellout_double = instance_double(Shellout, run: git_version)
-        allow(Shellout).to receive(:new).with('git --version').and_return(shellout_double)
       end
     end
   end
