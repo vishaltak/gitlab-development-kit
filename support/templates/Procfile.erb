@@ -24,7 +24,7 @@ rails-background-jobs: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEM
 <% if config.praefect? -%>
 praefect: exec gitaly/praefect -config <%= config.praefect.config_file %>
 <% config.praefect.__nodes.each_with_index do |praefect_node, index| -%>
-<%= praefect_node.service_name %>: exec gitaly/gitaly <%=config.gdk_root.join(praefect_node.config_file) %>
+<%= praefect_node.service_name %>: exec gitaly/gitaly <%= config.gdk_root.join(praefect_node.config_file) %>
 <% end -%>
 <% end -%>
 <% if config.gitaly? -%>
