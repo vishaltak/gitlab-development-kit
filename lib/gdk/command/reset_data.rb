@@ -3,7 +3,7 @@
 module GDK
   module Command
     # Handles `gdk reset-data` command execution
-    class ResetData
+    class ResetData < BaseCommand
       def run(args = [])
         return false unless prompt_and_return_acceptance
         return false unless stop_and_backup!
