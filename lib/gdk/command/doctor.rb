@@ -2,14 +2,14 @@
 
 module GDK
   module Command
-    class Doctor
-      def initialize(diagnostics: GDK::Diagnostic.all, stdout: $stdout, stderr: $stderr)
+    class Doctor < BaseCommand
+      def initialize(diagnostics: GDK::Diagnostic.all, **args)
         @diagnostics = diagnostics
-        @stdout = stdout
-        @stderr = stderr
+
+        super(**args)
       end
 
-      def run
+      def run(args = [])
         start_necessary_services
 
         if diagnostic_results.empty?

@@ -3,13 +3,13 @@
 module GDK
   module Command
     # Handles `gdk update` command execution
-    class Update
-      def run
+    class Update < BaseCommand
+      def run(args = [])
         update_result = update!
 
         unless update_result
           GDK::Output.error('Failed to update.')
-          GDK.display_help_message
+          display_help_message
 
           return false
         end
@@ -22,7 +22,7 @@ module GDK
       private
 
       def update!
-        GDK.with_hooks(GDK.config.gdk.update_hooks, 'gdk update') do
+        GDK::Hooks.with_hooks(GDK.config.gdk.update_hooks, 'gdk update') do
           GDK.make('self-update')
           GDK.make('self-update', 'update')
         end

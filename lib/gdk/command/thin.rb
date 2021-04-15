@@ -3,8 +3,8 @@
 module GDK
   module Command
     # Handles `gdk thin` command execution
-    class Thin
-      def run
+    class Thin < BaseCommand
+      def run(args = [])
         stop_rails_web!
 
         start_thin!

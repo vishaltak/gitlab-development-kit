@@ -11,7 +11,7 @@ module GDK
         out = StringIO.new
         err = StringIO.new
 
-        GDK::Command::DiffConfig.new.run(stdout: out, stderr: err)
+        GDK::Command::DiffConfig.new(stdout: out, stderr: err).run
 
         out.close
         err.close

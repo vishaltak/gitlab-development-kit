@@ -4,32 +4,32 @@ require 'fileutils'
 
 module GDK
   module Command
-    class DiffConfig
-      def run(stdout: $stdout, stderr: $stderr)
-        files = %w[
-          Procfile
-          gitaly/gitaly.config.toml
-          gitaly/praefect.config.toml
-          gitlab-pages/gitlab-pages.conf
-          gitlab-runner-config.toml
-          gitlab-shell/.gitlab_shell_secret
-          gitlab-shell/config.yml
-          gitlab/workhorse/config.toml
-          gitlab/config/cable.yml
-          gitlab/config/database.yml
-          gitlab/config/database_geo.yml
-          gitlab/config/gitlab.yml
-          gitlab/config/puma.rb
-          gitlab/config/resque.yml
-          gitlab/config/unicorn.rb
-          nginx/conf/nginx.conf
-          openssh/sshd_config
-          prometheus/prometheus.yml
-          redis/redis.conf
-          registry/config.yml
-        ]
+    class DiffConfig < BaseCommand
+      DIFFABLE_FILES = %w[
+        Procfile
+        gitaly/gitaly.config.toml
+        gitaly/praefect.config.toml
+        gitlab-pages/gitlab-pages.conf
+        gitlab-runner-config.toml
+        gitlab-shell/.gitlab_shell_secret
+        gitlab-shell/config.yml
+        gitlab/workhorse/config.toml
+        gitlab/config/cable.yml
+        gitlab/config/database.yml
+        gitlab/config/database_geo.yml
+        gitlab/config/gitlab.yml
+        gitlab/config/puma.rb
+        gitlab/config/resque.yml
+        gitlab/config/unicorn.rb
+        nginx/conf/nginx.conf
+        openssh/sshd_config
+        prometheus/prometheus.yml
+        redis/redis.conf
+        registry/config.yml
+      ].freeze
 
-        file_diffs = files.map do |file|
+      def run(args = [])
+        file_diffs = DIFFABLE_FILES.map do |file|
           ConfigDiff.new(file)
         end
 

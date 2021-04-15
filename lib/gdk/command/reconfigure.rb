@@ -3,15 +3,15 @@
 module GDK
   module Command
     # Handles `gdk reconfigure` command execution
-    class Reconfigure
-      def run
+    class Reconfigure < BaseCommand
+      def run(args = [])
         GDK.remember!(GDK.root)
 
         result = GDK.make('reconfigure')
 
         unless result
           GDK::Output.error('Failed to reconfigure.')
-          GDK.display_help_message
+          display_help_message
         end
 
         result
