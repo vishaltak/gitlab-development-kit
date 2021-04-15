@@ -114,8 +114,8 @@ file 'gitlab-pages-secret' => ['support/templates/gitlab-pages-secret.erb', GDK:
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
-desc "Generate gitaly config toml"
-file "gitaly/gitaly.config.toml" => ['support/templates/gitaly.config.toml.erb'] do |t|
+desc 'Generate gitaly config toml'
+file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly.config.toml.erb'] do |t|
   GDK::ErbRenderer.new(
     t.source,
     t.name,

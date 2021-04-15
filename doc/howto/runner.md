@@ -28,8 +28,9 @@ The runner can be installed using a pre-built binary or from source.
 To install from the binary, follow [the runner installation instructions](https://docs.gitlab.com/runner/install/)
 for your specific operation system.
 
-To build from source, you'll need to follow [the runner development instructions](https://docs.gitlab.com/runner/development/).
-The official GitLab Runner repository is [here](https://gitlab.com/gitlab-org/gitlab-runner).
+To build from source, you'll need to follow
+[the runner development instructions](https://docs.gitlab.com/runner/development/). The official
+GitLab Runner repository is [here](https://gitlab.com/gitlab-org/gitlab-runner).
 
 To specify a custom `gitlab-runner` binary, add the following to `gdk.yml`:
 
@@ -37,6 +38,9 @@ To specify a custom `gitlab-runner` binary, add the following to `gdk.yml`:
 runner:
   bin: <path_to_gitlab_runner_binary>/gitlab-runner-darwin-amd64
 ```
+
+NOTE:
+`runner` should not be confused with [`gitlab_runner`](gitlab_docs.md).
 
 ### Setting up a Runner
 

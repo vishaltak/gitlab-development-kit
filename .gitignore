@@ -24,6 +24,7 @@
 /Procfile
 /bootstrap-rails.log
 /builds
+/charts-gitlab
 /coverage
 /elasticsearch*
 /env.runit
@@ -41,6 +42,7 @@
 /gitlab-k8s-agent-config.yml
 /gitlab-pages
 /gitlab-pages-secret
+/gitlab-runner
 /gitlab-runner-config.toml
 /gitlab-shell
 /gitlab-shell/
@@ -72,6 +74,7 @@
 /nginx/uwsgi_temp
 /object_store_enabled
 /object_store_port
+/omnibus-gitlab
 /openssh/*.pub
 /openssh/*_key
 /openssh/sshd_config

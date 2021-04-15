@@ -10,8 +10,24 @@ geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
 gitlab_development_root = <%= config.gdk_root %>
+
+<%# GitLab Docs %>
 gitlab_docs_enabled = <%= config.gitlab_docs.enabled? %>
 gitlab_docs_repo = <%= config.repositories.gitlab_docs %>
+
+<%# See also runner_enabled %>
+gitlab_runner_enabled = <%= config.gitlab_runner.enabled? %>
+gitlab_runner_docs_enabled = <%= config.gitlab_runner.docs_enabled? %>
+gitlab_runner_repo = <%= config.repositories.gitlab_runner %>
+
+omnibus_gitlab_enabled = <%= config.omnibus_gitlab.enabled? %>
+omnibus_gitlab_docs_enabled = <%= config.omnibus_gitlab.docs_enabled? %>
+omnibus_gitlab_repo = <%= config.repositories.omnibus_gitlab %>
+
+charts_gitlab_enabled = <%= config.charts_gitlab.enabled? %>
+charts_gitlab_docs_enabled = <%= config.charts_gitlab.docs_enabled? %>
+charts_gitlab_repo = <%= config.repositories.charts_gitlab %>
+
 gitlab_elasticsearch_indexer_enabled = <%= config.elasticsearch.enabled %>
 gitlab_elasticsearch_indexer_repo = <%= config.repositories.gitlab_elasticsearch_indexer %>
 gitlab_k8s_agent_enabled = <%= config.gitlab_k8s_agent? %>
@@ -44,6 +60,9 @@ registry_enabled = <%= config.registry? %>
 registry_host = <%= config.registry.host %>
 registry_port = <%= config.registry.port %>
 relative_url_root = <%= config.relative_url_root %>
+
+<%# See also gitlab_runner_enabled %>
 runner_enabled = <%= config.runner.enabled %>
+
 sshd_bin = <%= config.sshd.bin %>
 username = <%= config.username %>

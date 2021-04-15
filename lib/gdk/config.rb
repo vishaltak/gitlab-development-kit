@@ -35,6 +35,9 @@ module GDK
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-com/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
       string(:gitlab_ui) { 'https://gitlab.com/gitlab-org/gitlab-ui.git' }
+      string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
+      string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
+      string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
     end
 
     array(:git_repositories) do
@@ -166,6 +169,24 @@ module GDK
       bool(:enabled) { false }
       bool(:auto_update) { true }
       integer(:port) { 3005 }
+    end
+
+    settings :gitlab_runner do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      bool(:docs_enabled) { false }
+    end
+
+    settings :omnibus_gitlab do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      bool(:docs_enabled) { false }
+    end
+
+    settings :charts_gitlab do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      bool(:docs_enabled) { false }
     end
 
     settings :gitlab_elasticsearch_indexer do
