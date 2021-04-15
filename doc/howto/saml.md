@@ -38,8 +38,8 @@ For example, an identity provider for the "zebra" group can be ran using the fol
 
 ```shell
 docker run --name=gitlab_saml_idp -p 8080:8080 -p 8443:8443 \
--e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:3443/groups/zebra \
--e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:3443/groups/zebra/-/saml/callback \
+-e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/<group-name> \
+-e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/<group-name>/-/saml/callback \
 -d jamedjo/test-saml-idp
 ```
 
@@ -55,7 +55,7 @@ From GitLab this would then be [configured](https://docs.gitlab.com/ee/user/grou
 ### Signing in
 
 Unlike instance-wide SAML, this doesn't add a button to the GitLab global `/users/sign_in` page.
-Instead you can use `https://<gitlab-host>:3443/groups/zebra/-/saml/sso` as displayed on the group configuration page.
+Instead you can use `https://<gitlab-host>:<gitlab-port>/<group-name>/-/saml/sso` as displayed on the group configuration page.
 
 Sign in can also be initiated from the identity provider at `https://localhost:8443/simplesaml/saml2/idp/SSOService.php?spentityid=https%3A%2F%2F<gitlab-host>%3A3443%2Fgroups%2Fzebra`
 
