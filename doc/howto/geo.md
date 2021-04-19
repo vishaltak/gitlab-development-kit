@@ -110,7 +110,7 @@ the server to pick up the change:
 # terminal window 1:
 cd gdk
 gdk start postgresql
-make postgresql-replication-primary
+make postgresql-geo-replication-primary
 gdk restart postgresql
 make postgresql-replication-primary-create-slot
 gdk restart postgresql
@@ -139,7 +139,7 @@ Initialize a secondary database and setup replication:
 
 ```shell
 # terminal window 2:
-make postgresql-replication-secondary
+make postgresql-geo-replication-secondary
 ```
 
 ### Running tests
