@@ -1,6 +1,6 @@
 # NGINX
 
-Installing and configuring NGINX allows you to enable HTTPS, HTTP/2 as
+Installing and configuring NGINX allows you to enable HTTPS (with SSL/TLS), HTTP/2 as
 well as greater flexibility around HTTP routing.
 
 ## Install dependencies
