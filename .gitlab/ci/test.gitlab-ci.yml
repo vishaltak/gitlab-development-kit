@@ -83,6 +83,12 @@ shellcheck:
   script:
     - make shellcheck SHELL=/bin/sh
 
+checkmake:
+  stage: test
+  extends: .rules:code-changes
+  script:
+    - PATH=${HOME}/go/bin:${PATH} make checkmake
+
 yard:
   stage: test
   script:
