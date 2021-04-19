@@ -55,7 +55,7 @@ RSpec.describe GDK::Diagnostic::Golang do
       let(:go_get_success) { false }
 
       it 'returns help message' do
-        expect(subject.detail).to eq("Golang is current unable to build binaries that use the icu4c package.\nYou can try the following to fix:\n\ngo clean -cache\n")
+        expect(subject.detail).to eq("Golang is currently unable to build binaries that use the icu4c package.\nYou can try the following to fix:\n\ngo clean -cache\n")
       end
     end
 

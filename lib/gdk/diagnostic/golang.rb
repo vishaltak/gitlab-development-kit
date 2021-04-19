@@ -39,7 +39,7 @@ module GDK
 
       def icu4c_issue_detail
         <<~MESSAGE
-          Golang is current unable to build binaries that use the icu4c package.
+          Golang is currently unable to build binaries that use the icu4c package.
           You can try the following to fix:
 
           go clean -cache
