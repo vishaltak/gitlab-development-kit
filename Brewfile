@@ -1,5 +1,6 @@
 brew "cmake"
 brew "coreutils"
+brew "dpkg"
 brew "exiftool"
 brew "git"
 brew "git-lfs"

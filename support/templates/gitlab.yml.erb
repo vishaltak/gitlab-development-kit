@@ -252,6 +252,7 @@ production: &base
   ## Packages (maven repository, npm registry, etc...)
   packages:
     enabled: true
+    dpkg_deb_path: <%= config.packages.dpkg_deb_path %>
     <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>

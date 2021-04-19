@@ -573,5 +573,15 @@ module GDK
     settings :asdf do
       bool(:opt_out) { false }
     end
+
+    settings :packages do
+      path(:dpkg_deb_path) do
+        if File.exist?('/usr/local/bin/dpkg-deb')
+          '/usr/local/bin/dpkg-deb'
+        else
+          '/usr/bin/dpkg-deb'
+        end
+      end
+    end
   end
 end
