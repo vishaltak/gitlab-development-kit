@@ -22,18 +22,20 @@ module GDK
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`
   # and load only what it really needs
-  autoload :Output, 'gdk/output'
-  autoload :Config, 'gdk/config'
   autoload :Command, 'gdk/command'
+  autoload :Config, 'gdk/config'
   autoload :Dependencies, 'gdk/dependencies'
   autoload :Diagnostic, 'gdk/diagnostic'
-  autoload :Services, 'gdk/services'
+  autoload :Env, 'gdk/env'
   autoload :ErbRenderer, 'gdk/erb_renderer'
   autoload :Hooks, 'gdk/hooks'
+  autoload :HTTPHelper, 'gdk/http_helper'
   autoload :Logo, 'gdk/logo'
+  autoload :Output, 'gdk/output'
   autoload :Postgresql, 'gdk/postgresql'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
-  autoload :HTTPHelper, 'gdk/http_helper'
+  autoload :Services, 'gdk/services'
+  autoload :Shellout, 'shellout'
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.

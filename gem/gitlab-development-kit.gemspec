@@ -17,5 +17,5 @@ Gem::Specification.new do |spec|
   spec.executables   = ['gdk']
 
   spec.required_ruby_version = '>= 2.7.2'
-  spec.add_dependency "rake", "> 12.0"
+  spec.add_dependency 'rake', '~> 12.0'
 end

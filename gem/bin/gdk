@@ -20,9 +20,6 @@ module GDK
 
   def self.launcher_main # rubocop:disable Metrics/CyclomaticComplexity
     case ARGV.first
-    when 'version'
-      puts "GitLab Development Kit gem version #{GDK::GEM_VERSION}"
-      true
     when 'init'
       if ARGV.count > 2 || (ARGV.count == 2 && (ARGV[1] == '-help' || ARGV[1] == '--help'))
         puts 'Usage: gdk init [DIR]'
@@ -48,37 +45,62 @@ module GDK
 
       trust!(ARGV[1])
     else
-      # rubocop:disable Style/GlobalVars
-      $gdk_root = find_root(Dir.pwd)
-      if $gdk_root.nil?
-        warn <<~NOT_A_GDK_DIR
+      if print_version?
+        puts VERSION
 
-          The current working directory is not inside a gitlab-development-kit
-          installation. Use 'cd' to go to your gitlab-development-kit or create
-          a new one with 'gdk init'.
+        return true
+      end
 
-          gdk init [DIRECTORY] # Default: #{DEFAULT_INIT_DIRECTORY}
+      unless gdk_dir?
+        warn_not_gdk_dir
 
-        NOT_A_GDK_DIR
         return false
       end
 
-      unless trusted?($gdk_root)
-        warn <<~NOT_A_TRUSTED_GDK_DIR
+      unless trusted?
+        warn_not_trusted_dir
 
-          This GitLab Development Kit root directory is not known to the "gdk"
-          command. To mark it as trusted run:
-
-          gdk trust #{$gdk_root}
-
-        NOT_A_TRUSTED_GDK_DIR
         return false
       end
 
-      load(File.join($gdk_root, 'lib/gdk.rb'))
-      # rubocop:enable Style/GlobalVars
+      load(File.join(gdk_root, 'lib/gdk.rb'))
       GDK.main
     end
+  end
+
+  def self.warn_not_gdk_dir
+    warn <<~NOT_A_GDK_DIR
+
+      The current working directory is not inside a gitlab-development-kit
+      installation. Use 'cd' to go to your gitlab-development-kit or create
+      a new one with 'gdk init'.
+
+      gdk init [DIRECTORY] # Default: #{DEFAULT_INIT_DIRECTORY}
+
+    NOT_A_GDK_DIR
+  end
+
+  def self.warn_not_trusted_dir
+    warn <<~NOT_A_TRUSTED_GDK_DIR
+
+      This GitLab Development Kit root directory is not known to the "gdk"
+      command. To mark it as trusted run:
+
+      gdk trust #{gdk_root}
+
+    NOT_A_TRUSTED_GDK_DIR
+  end
+
+  def self.gdk_root
+    @gdk_root ||= find_root(Dir.pwd)
+  end
+
+  def self.gdk_dir?
+    !gdk_root.nil?
+  end
+
+  def self.print_version?
+    %w[version --version].include?(ARGV.first) && !gdk_dir?
   end
 
   def self.find_root(current)
@@ -91,9 +113,9 @@ module GDK
     end
   end
 
-  def self.trusted?(directory)
+  def self.trusted?
     trusted_directories = load_dotfile[TRUSTED_KEY] || []
-    !!trusted_directories.include?(File.realpath(directory))
+    !!trusted_directories.include?(File.realpath(gdk_root))
   end
 
   def self.trust!(directory)

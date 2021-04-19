@@ -27,6 +27,7 @@ module GDK
     autoload :Tail, 'gdk/command/tail'
     autoload :Thin, 'gdk/command/thin'
     autoload :Update, 'gdk/command/update'
+    autoload :Version, 'gdk/command/version'
 
     # This is a list of existing supported commands and their associated
     # implementation class
@@ -48,7 +49,8 @@ module GDK
       'run' => -> { GDK::Command::Run },
       'tail' => -> { GDK::Command::Tail },
       'thin' => -> { GDK::Command::Thin },
-      'update' => -> { GDK::Command::Update }
+      'update' => -> { GDK::Command::Update },
+      'version' => -> { GDK::Command::Version }
     }.freeze
   end
 end
