@@ -276,6 +276,29 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe '#[]' do
+    before do
+      allow(File).to receive(:read).and_call_original
+      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+    end
+
+    context 'when looking up a single slug' do
+      let(:raw_yaml) { "---\ngdk_root: /tmp/gdk" }
+
+      it 'returns the value' do
+        expect(described_class.new['gdk_root'].to_s).to eq('/tmp/gdk')
+      end
+    end
+
+    context 'when looking up a multiple slugs' do
+      let(:raw_yaml) { "---\ngdk:\n  debug: true" }
+
+      it 'is not designed to return a value' do
+        expect(described_class.new['gdk.debug'].to_s).to eq('')
+      end
+    end
+  end
+
   describe '#username' do
     before do
       allow(Etc).to receive_message_chain(:getpwuid, :name) { 'iamfoo' }
