@@ -165,7 +165,7 @@ To install dependencies for Fedora:
 
 ```shell
 sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel \
-  git git-lfs ed cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
+  git git-lfs ed make cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
   postgresql-contrib postgresql-devel re2 GraphicsMagick re2-devel sqlite-devel \
   perl-Digest-SHA perl-Image-ExifTool rsync
 sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
@@ -211,7 +211,7 @@ sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noa
 sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cmake \
   gcc-c++ go redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
   libstdc++.so.6 npm re2 re2-devel GraphicsMagick perl-Image-ExifTool \
-  rsync sqlite-devel
+  rsync sqlite-devel make
 sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
@@ -240,7 +240,7 @@ sudo dnf module install postgresql:12 redis:5 nodejs:14 go-toolset
 sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cmake \
   gcc-c++ go redis ed fontconfig freetype libfreetype.so.6 libfontconfig.so.1 \
   libstdc++.so.6 npm re2 re2-devel GraphicsMagick perl-Image-ExifTool \
-  rsync sqlite-devel
+  rsync sqlite-devel make
 sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
