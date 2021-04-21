@@ -480,7 +480,7 @@ module GDK
       path(:bin) { find_executable!('gitlab-runner') || '/usr/local/bin/gitlab-runner' }
       bool(:network_mode_host) { false }
       bool(:__network_mode_host) do
-        raise UnsupportedConfiguration, 'runner.network_mode_host is only supported on Linux' if config.runner.network_mode_host && config.__platform != 'linux'
+        raise UnsupportedConfiguration, 'runner.network_mode_host is only supported on Linux' if config.runner.network_mode_host && !config.__platform_linux?
 
         config.runner.network_mode_host
       end
