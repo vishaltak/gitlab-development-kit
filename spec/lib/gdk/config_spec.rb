@@ -658,11 +658,12 @@ RSpec.describe GDK::Config do
             'network_mode_host' => 'true'
           }
 
+          allow(RbConfig::CONFIG).to receive(:[]).and_call_original
           allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
         end
 
         context 'on a macOS system' do
-          let(:host_os) { 'macos' }
+          let(:host_os) { 'darwin' }
 
           it 'raise an exception' do
             expect { config.runner.__network_mode_host }.to raise_error('runner.network_mode_host is only supported on Linux')
