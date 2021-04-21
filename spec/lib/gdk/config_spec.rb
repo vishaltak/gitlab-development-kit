@@ -1396,8 +1396,8 @@ RSpec.describe GDK::Config do
     end
 
     describe '#runit_wait_secs' do
-      it 'is 10 secs by default' do
-        expect(config.gdk.runit_wait_secs).to eq(10)
+      it 'is 20 secs by default' do
+        expect(config.gdk.runit_wait_secs).to eq(20)
       end
     end
 

@@ -25,7 +25,7 @@ gdk:
   overwrite_changes: false
   protected_config_files: []
   quiet: true
-  runit_wait_secs: 10
+  runit_wait_secs: 20
   start_hooks:
     after: []
     before: []
