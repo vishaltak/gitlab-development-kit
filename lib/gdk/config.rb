@@ -22,6 +22,9 @@ module GDK
       end
     end
 
+    bool(:__platform_linux) { config.__platform == 'linux' }
+    bool(:__platform_macos) { config.__platform == 'macos' }
+
     settings :common do
       string(:ca_path) { '' }
     end

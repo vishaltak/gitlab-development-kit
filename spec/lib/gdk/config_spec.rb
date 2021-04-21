@@ -74,6 +74,56 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe '__platform_linux' do
+    before do
+      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+    end
+
+    context 'on a non-Linux system' do
+      let(:host_os) { 'darwin' }
+
+      it 'returns false' do
+        expect(config.__platform_linux).to be(false)
+        expect(config.__platform_linux?).to be(false)
+      end
+    end
+
+    context 'on a Linux system' do
+      let(:host_os) { 'linux' }
+
+      it 'returns true' do
+        expect(config.__platform_linux).to be(true)
+        expect(config.__platform_linux?).to be(true)
+      end
+    end
+  end
+
+  describe '__platform_macos' do
+    before do
+      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+    end
+
+    context 'on a non-macOS system' do
+      let(:host_os) { 'linux' }
+
+      it 'returns false' do
+        expect(config.__platform_macos).to be(false)
+        expect(config.__platform_macos?).to be(false)
+      end
+    end
+
+    context 'on a macOS system' do
+      let(:host_os) { 'darwin' }
+
+      it 'returns true' do
+        expect(config.__platform_macos).to be(true)
+        expect(config.__platform_macos?).to be(true)
+      end
+    end
+  end
+
   describe '__uri' do
     context 'for defaults' do
       it 'returns http://gdk.example.com:3000' do
