@@ -1698,4 +1698,29 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'packages' do
+    describe '__dpkg_deb_path' do
+      before do
+        allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+        allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+      end
+
+      context 'on a macOS system' do
+        let(:host_os) { 'darwin' }
+
+        it 'returns /usr/local/bin/dpkg-deb' do
+          expect(config.packages.__dpkg_deb_path.to_s).to eq('/usr/local/bin/dpkg-deb')
+        end
+      end
+
+      context 'on a non-macOS system' do
+        let(:host_os) { 'linux' }
+
+        it 'returns /usr/bin/dpkg-deb' do
+          expect(config.packages.__dpkg_deb_path.to_s).to eq('/usr/bin/dpkg-deb')
+        end
+      end
+    end
+  end
 end

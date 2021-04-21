@@ -178,8 +178,7 @@ omnibus_gitlab:
   enabled: false
 openldap:
   enabled: false
-packages:
-  dpkg_deb_path: "/usr/bin/dpkg-deb"
+packages: {}
 port: 3000
 postgresql:
   bin: "/usr/local/bin/postgres"

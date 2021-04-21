@@ -578,8 +578,8 @@ module GDK
     end
 
     settings :packages do
-      path(:dpkg_deb_path) do
-        if File.exist?('/usr/local/bin/dpkg-deb')
+      path(:__dpkg_deb_path) do
+        if config.__platform_macos?
           '/usr/local/bin/dpkg-deb'
         else
           '/usr/bin/dpkg-deb'
