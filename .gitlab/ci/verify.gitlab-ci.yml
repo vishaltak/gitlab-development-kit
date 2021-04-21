@@ -30,6 +30,9 @@ update-from-default-branch:
   extends: .verify-job
   script:
     - support/ci/verify-update $CI_DEFAULT_BRANCH
+  tags:
+    - gitlab-org
+    - high-cpu
 
 update-from-mr-branch:
   extends: .verify-job
