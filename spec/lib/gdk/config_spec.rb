@@ -80,7 +80,7 @@ RSpec.describe GDK::Config do
       allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
     end
 
-    context 'on a non-Linux system' do
+    context 'on a macOS system' do
       let(:host_os) { 'darwin' }
 
       it 'returns false' do
@@ -105,7 +105,7 @@ RSpec.describe GDK::Config do
       allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
     end
 
-    context 'on a non-macOS system' do
+    context 'on a Linux system' do
       let(:host_os) { 'linux' }
 
       it 'returns false' do
@@ -1714,7 +1714,7 @@ RSpec.describe GDK::Config do
         end
       end
 
-      context 'on a non-macOS system' do
+      context 'on a Linux system' do
         let(:host_os) { 'linux' }
 
         it 'returns /usr/bin/dpkg-deb' do
