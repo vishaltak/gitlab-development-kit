@@ -19,6 +19,8 @@ module Runit
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
+  STOP_RETRY_COUNT = 3
+
   def self.start_runsvdir
     Dir.chdir(GDK.root)
 
@@ -100,20 +102,25 @@ module Runit
   end
 
   def self.stop
-    GDK::Output.notice "Shutting down all services: "
+    GDK::Output.notice('Stopping all services')
 
     # The first stop attempt may fail; ignore its return value.
     stopped = false
 
-    2.times do
+    STOP_RETRY_COUNT.times do |i|
+      # From http://smarden.org/runit/sv.8.html:
+      #
+      # down: If the service is running, send it the TERM signal, and the CONT signal. If ./run exits, start ./finish if it exists. After it stops, do not restart service.
+      # force-stop: Same as down, but wait up to (default) 7 seconds for the service to become down. Then report the status, and on timeout send the service the kill command.
+      #
       stopped = sv('force-stop', [])
       break if stopped
 
-      GDK::Output.notice 'retrying stop'
+      GDK::Output.notice("retrying stop (#{i + 1}/#{STOP_RETRY_COUNT})")
     end
 
     unless stopped
-      GDK::Output.error 'stop failed'
+      GDK::Output.error('stop failed')
 
       abort
     end
@@ -121,11 +128,11 @@ module Runit
     # Unload runsvdir: this is safe because we have just stopped all services.
     pid = runsvdir_pid(runsvdir_base_args)
 
-    GDK::Output.notice "Shutting down runsvdir (pid #{pid})"
+    GDK::Output.notice("Stopping runsvdir (pid #{pid})")
     Process.kill('HUP', pid)
 
     GDK::Output.puts
-    GDK::Output.success "All services have been shut down!"
+    GDK::Output.success('All services have been stopped!')
 
     true
   end
