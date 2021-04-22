@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Initialize asdf
+source "$HOME/.asdf/asdf.sh"
+
 # skip if gp is not installed
 hash gp 2>/dev/null || return
 
