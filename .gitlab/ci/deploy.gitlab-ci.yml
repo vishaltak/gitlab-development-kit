@@ -12,17 +12,13 @@ pages:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 deploy-gitpod-workspace-image:
-  stage: deploy
   extends:
-    - .docker:use-docker-in-docker
-  image: docker:git
-  before_script:
-    - apk add --no-cache jq curl
+    - .docker:build-docker-in-docker
+  stage: deploy
+  needs:
+    - build-gitpod-workspace-image
   script:
-    - ./support/docker ci-login
     - ./support/gitpod/docker-tag-image-as-stable
-  after_script:
-    - ./support/docker ci-logout
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: manual
