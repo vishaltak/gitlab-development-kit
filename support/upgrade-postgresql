@@ -37,6 +37,7 @@ class PostgresUpgrader
     rename_current_data_dir
     pg_upgrade
     promote_new_db
+    gdk_reconfigure
 
     GDK::Output.success "Upgraded '#{current_data_dir}' from PostgreSQL #{current_version} to #{target_version}."
   rescue StandardError => e
@@ -97,6 +98,11 @@ class PostgresUpgrader
   def promote_new_db
     GDK::Output.info "Promoting newly-creating database from '#{target_path}' to '#{current_data_dir}'"
     FileUtils.mv(target_path, current_data_dir)
+  end
+
+  def gdk_reconfigure
+    GDK::Output.info "Running 'gdk reconfigure'.."
+    run!('gdk reconfigure', config.gdk_root)
   end
 
   def initdb_bin(version)
