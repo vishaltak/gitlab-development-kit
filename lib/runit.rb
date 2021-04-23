@@ -102,8 +102,6 @@ module Runit
   end
 
   def self.stop
-    GDK::Output.notice('Stopping all services')
-
     # The first stop attempt may fail; ignore its return value.
     stopped = false
 
@@ -116,19 +114,18 @@ module Runit
       stopped = sv('force-stop', [])
       break if stopped
 
-      GDK::Output.notice("retrying stop (#{i + 1}/#{STOP_RETRY_COUNT})")
+      GDK::Output.notice("Retrying stop (#{i + 1}/#{STOP_RETRY_COUNT})")
     end
 
     unless stopped
-      GDK::Output.error('stop failed')
+      GDK::Output.puts
+      GDK::Output.error('Failed to stop every service.')
 
       abort
     end
 
     # Unload runsvdir: this is safe because we have just stopped all services.
     pid = runsvdir_pid(runsvdir_base_args)
-
-    GDK::Output.notice("Stopping runsvdir (pid #{pid})")
     Process.kill('HUP', pid)
 
     GDK::Output.puts
