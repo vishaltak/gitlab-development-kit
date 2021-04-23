@@ -62,7 +62,7 @@ class PostgresUpgrader
   end
 
   def gdk_stop
-    run!('gdk stop')
+    run!('gdk stop', config.gdk_root)
   end
 
   def init_db_in_target_path
