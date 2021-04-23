@@ -2,6 +2,8 @@
 # - all commands must start with 'exec'
 # - no inline shell scripts ('&&' or ';')
 #
+fake1: exec ruby fake_service1.rb
+fake2: exec ./fake_service2.sh
 
 # Datasources
 #
