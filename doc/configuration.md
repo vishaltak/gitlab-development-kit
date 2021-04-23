@@ -494,6 +494,7 @@ These settings can be configured using [`env.runit`](runit.md#modifying-environm
 | WEBPACK_CACHE_PATH    | `./tmp/cache` | Path string to temporary dir     |
 | WEBPACK_REPORT        | false       | Generates bundle analysis report |
 | WEBPACK_VENDOR_DLL    | false       | Reduce webpack-dev-server memory requirements when vendor bundle has been precompiled with `yarn webpack-vendor` |
+| GITLAB_UI_WATCH       | false | Use GDK's copy of `gitlab-ui` instead of the npm-installed version. |
 
 ## ActionCable settings
 
