@@ -9,6 +9,7 @@ docs-lint:
 rubocop:
   extends: .rules:code-changes
   stage: test
+  needs: []
   variables:
     BUNDLE_ARGS: "--path vendor/bundle"
   script:
@@ -17,6 +18,7 @@ rubocop:
 rspec:
   extends: .rules:code-changes
   stage: test
+  needs: []
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
     BUNDLE_ARGS: "--path vendor/bundle"
@@ -41,6 +43,7 @@ code_quality:
   extends:
     - .rules:code-changes
     - .docker:use-docker-in-docker
+  needs: []
   rules:
     # For merge requests, create a pipeline.
     - if: '$CI_MERGE_REQUEST_IID'
@@ -74,8 +77,9 @@ container-scanning:
     paths: [gl-sast-container-report.json]
 
 shellcheck:
-  stage: test
   extends: .rules:code-changes
+  stage: test
+  needs: []
   image: koalaman/shellcheck-alpine:stable
   before_script:
     - apk add make
@@ -84,12 +88,14 @@ shellcheck:
 
 checkmake:
   stage: test
+  needs: []
   extends: .rules:code-changes
   script:
     - PATH=${HOME}/go/bin:${PATH} make checkmake
 
 yard:
   stage: test
+  needs: []
   script:
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec yardoc
@@ -105,6 +111,7 @@ yard:
 verify-gdk-example-yml:
   extends: .rules:code-changes
   stage: test
+  needs: []
   script:
     - make verify-gdk-example-yml
 
@@ -113,5 +120,6 @@ danger-review:
     - .review:rules:danger
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
   stage: test
+  needs: []
   script:
     - danger --fail-on-errors=true --verbose
