@@ -80,8 +80,8 @@ RSpec.describe GDK::Command::ResetData do
           expect(GDK).to receive(:make).and_return(false)
 
           expect(GDK::Output).to receive(:error).with('Failed to reset data.')
-          expect(GDK).not_to receive(:start).with([])
-          expect(GDK).to receive(:display_help_message)
+          expect(GDK::Command::Start).not_to receive(:new)
+          expect(subject).to receive(:display_help_message)
 
           subject.run
         end
@@ -97,7 +97,7 @@ RSpec.describe GDK::Command::ResetData do
           expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory}' to '#{backup_rails_uploads_directory}'")
           expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repository_data_directory}' to '#{backup_git_repository_data_directory}'")
           expect(GDK::Output).to receive(:notice).with('Successfully reset data!')
-          expect(GDK).to receive(:start).with([])
+          expect_any_instance_of(GDK::Command::Start).to receive(:run)
 
           subject.run
         end
