@@ -12,7 +12,7 @@ module GDK
       YARN_CLEAN_CMD = 'yarn clean'
       GIT_CLEAN_TMP_CMD = 'git clean -fX -- tmp/'
 
-      def run
+      def run(_args = [])
         %i[
           gdk_stop
           gdk_tmp_clean
