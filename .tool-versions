@@ -6,8 +6,8 @@
 # <default-version> <other-version>
 ruby 2.7.2
 golang 1.15.5 1.16.2
-nodejs 14.15.4
-yarn 1.22.5
+nodejs 14.16.1 14.15.4
+yarn 1.22.10 1.22.5
 minio 2021-02-01T22-56-52Z
 postgres 11.9 12.4
 redis 6.0.10
