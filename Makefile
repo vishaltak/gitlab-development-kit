@@ -1006,6 +1006,7 @@ elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
 	$(Q)rm -rf elasticsearch
 	$(Q)tar zxf elasticsearch-${elasticsearch_version}.tar.gz
 	$(Q)mv elasticsearch-${elasticsearch_version} elasticsearch
+	$(Q)rm -f elasticsearch-${elasticsearch_version}.tar.gz
 	$(Q)touch $@
 
 elasticsearch-${elasticsearch_version}.tar.gz:
