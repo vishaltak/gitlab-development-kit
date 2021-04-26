@@ -1,20 +1,16 @@
 # Keep the file list alphabetically sorted, makes diffs and merges easier
 #
-binutils
+base-devel
 cmake
 ed
-fakeroot
-gcc
 git
 git-lfs
 go
 graphicsmagick
-icu
 minio
 npm
 openssh
 perl-image-exiftool
-pkg-config
 postgresql
 postgresql-libs
 python2

@@ -171,7 +171,7 @@ setup_platform_linux_arch_like_with() {
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo pacman -S --noconfirm $(sed -e 's/#.*//' "${1}"); then
+  if ! sudo pacman -S --needed --noconfirm $(sed -e 's/#.*//' "${1}"); then
     return 1
   fi
 
