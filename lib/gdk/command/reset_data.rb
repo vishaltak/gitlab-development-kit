@@ -28,10 +28,10 @@ module GDK
       def reset_data!
         if GDK.make
           GDK::Output.notice('Successfully reset data!')
-          GDK.start([])
+          GDK::Command::Start.new.run
         else
           GDK::Output.error('Failed to reset data.')
-          GDK.display_help_message
+          display_help_message
 
           false
         end
