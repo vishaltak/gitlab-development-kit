@@ -6,7 +6,7 @@ require 'net/http'
 module GDK
   module Command
     class MeasureBase < BaseCommand
-      def run(args = [])
+      def run(_ = [])
         check!
 
         if run_sitespeed
