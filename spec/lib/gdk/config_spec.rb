@@ -7,13 +7,16 @@ RSpec.describe GDK::Config do
   let(:group_saml_enabled) { false }
   let(:protected_config_files) { [] }
   let(:overwrite_changes) { false }
+  let(:use_gitlab_sshd) { true }
+  let(:listen_address) { '127.0.0.1' }
   let(:omniauth_config) { { 'group_saml' => { 'enabled' => group_saml_enabled } } }
   let(:yaml) do
     {
       'gdk' => { 'protected_config_files' => protected_config_files, 'overwrite_changes' => overwrite_changes },
       'nginx' => { 'enabled' => nginx_enabled },
       'hostname' => 'gdk.example.com',
-      'omniauth' => omniauth_config
+      'omniauth' => omniauth_config,
+      'sshd' => { 'use_gitlab_sshd' => use_gitlab_sshd, 'listen_address' => listen_address }
     }
   end
 
@@ -269,6 +272,62 @@ RSpec.describe GDK::Config do
 
       it 'returns 3333' do
         expect(config.workhorse.__active_port).to eq(3333)
+      end
+    end
+  end
+
+  describe 'sshd' do
+    describe '#__full_command' do
+      subject { config.sshd.__full_command }
+
+      context 'when gitlab-sshd is disabled' do
+        let(:use_gitlab_sshd) { false }
+
+        it { is_expected.to eq("#{config.sshd.bin} -e -D -f #{config.gdk_root.join('openssh', 'sshd_config')}") }
+      end
+
+      context 'when gitlab-sshd is enabled' do
+        let(:use_gitlab_sshd) { true }
+
+        it { is_expected.to eq("#{config.gitlab_shell.dir}/bin/gitlab-sshd -config-dir #{config.gitlab_shell.dir}") }
+      end
+    end
+
+    describe '#__log_file' do
+      subject { config.sshd.__log_file }
+
+      context 'when gitlab-sshd is disabled' do
+        let(:use_gitlab_sshd) { false }
+
+        it { is_expected.to eq("#{config.gitlab_shell.dir}/gitlab-shell.log") }
+      end
+
+      context 'when gitlab-sshd is enabled' do
+        let(:use_gitlab_sshd) { true }
+
+        it { is_expected.to eq('/dev/stdout') }
+      end
+    end
+
+    describe '#___listen' do
+      subject { config.sshd.__listen }
+
+      context 'when listen address is IPv4' do
+        let(:listen_address) { '127.0.0.1' }
+
+        it { is_expected.to eq('127.0.0.1:2222') }
+      end
+
+      context 'when listen address is IPv6' do
+        let(:listen_address) { '::1' }
+
+        it { is_expected.to eq('[::1]:2222') }
+      end
+
+      context 'when listen address is a hostname' do
+        let(:listen_address) { 'localhost' }
+
+        it { is_expected.to eq('localhost:2222') }
       end
     end
   end

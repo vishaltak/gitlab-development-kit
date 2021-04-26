@@ -252,11 +252,14 @@ sshd:
   additional_config: ''
   authorized_keys_file: "/home/git/gdk/.ssh/authorized_keys"
   bin: "/usr/local/sbin/sshd"
-  enabled: false
+  enabled: true
   host_key: "/home/git/gdk/openssh/ssh_host_rsa_key"
   listen_address: 127.0.0.1
   listen_port: 2222
+  proxy_protocol: false
+  use_gitlab_sshd: true
   user: git
+  web_listen: ''
 tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:
