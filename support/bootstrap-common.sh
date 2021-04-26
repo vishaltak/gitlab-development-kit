@@ -148,6 +148,10 @@ setup_platform() {
       if ! setup_platform_linux_arch_like_with "packages_arch.txt"; then
         return 1
       fi
+    elif [[ "${os_id}" == "fedora" ]]; then
+      if ! setup_platform_linux_fedora_like_with "packages_fedora.txt"; then
+        return 1
+      fi
     fi
   fi
 }
@@ -181,6 +185,33 @@ setup_platform_linux_arch_like_with() {
     git clone --depth 1 https://aur.archlinux.org/runit-systemd.git
     cd runit-systemd || return 1
     makepkg -sri --noconfirm
+  fi
+
+  return 0
+}
+
+setup_platform_linux_fedora_like_with() {
+  if ! echo_if_unsuccessful sudo dnf module enable postgresql:12 -y; then
+    return 1
+  fi
+
+  # shellcheck disable=SC2046
+  if ! sudo dnf install -y $(sed -e 's/#.*//' "${1}" | tr '\n' ' '); then
+    return 1
+  fi
+  
+  if ! echo_if_unsuccessful which runit; then
+    echo "INFO: Installing runit into /opt/runit/"
+    cd /tmp || return 1
+    wget http://smarden.org/runit/runit-2.1.2.tar.gz
+    tar xzf runit-2.1.2.tar.gz
+    cd admin/runit-2.1.2 || return 1
+    sed -i -E 's/ -static$//g' src/Makefile || return 1
+    ./package/compile || return 1
+    ./package/check || return 1
+    sudo mkdir -p /opt/runit || return 1
+    sudo mv command/* /opt/runit || return 1
+    sudo ln -s /opt/runit/* /usr/local/bin/ || return 1
   fi
 
   return 0
