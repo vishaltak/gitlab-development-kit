@@ -82,29 +82,21 @@ stop() {
 restart() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Restarting GDK.."
-
-  stop
-  sleep 5
-  stop
-  sleep 5
-
-  gdk status
-   # shellcheck disable=SC2009
-  ps -ef | grep runsv
-  gdk start
+  stop_start
 
   echo "> Upgrading PostgreSQL data directory if necessary.."
   support/upgrade-postgresql
 
   echo "> Restarting GDK.."
-  stop
-  sleep 5
-  stop
-  sleep 5
+  stop_start
+}
 
-  gdk status
+stop_start() {
+  stop
+
+  gdk status || true
    # shellcheck disable=SC2009
-  ps -ef | grep runsv
+  ps -ef | grep "[r]unsv"
   gdk start
 }
 
