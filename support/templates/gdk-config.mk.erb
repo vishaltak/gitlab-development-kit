@@ -9,6 +9,8 @@ gdk_quiet = <%= config.gdk.quiet? %>
 geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
+gitaly_build_bin_dir = <%= config.gitaly.__build_bin_path %>
+gitaly_build_deps_dir = <%= config.gitaly.__build_deps_path %>
 gitlab_development_root = <%= config.gdk_root %>
 
 <%# GitLab Docs %>

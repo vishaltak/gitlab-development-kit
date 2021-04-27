@@ -400,7 +400,7 @@ gitlab-shell/.gitlab_shell_secret:
 # gitaly
 ##############################################################
 
-gitaly-setup: gitaly/bin/gitaly gitaly/_build/deps/git/install/bin/git gitaly/gitaly.config.toml gitaly/praefect.config.toml
+gitaly-setup: ${gitaly_build_bin_dir}/gitaly ${gitaly_build_deps_dir}/git/install/bin/git gitaly/gitaly.config.toml gitaly/praefect.config.toml
 
 ${gitaly_clone_dir}/.git:
 	$(Q)if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi
@@ -420,8 +420,8 @@ gitaly/.git/pull: ${gitaly_clone_dir}/.git
 gitaly-clean:
 	$(Q)rm -rf gitlab/tmp/tests/gitaly
 
-.PHONY: gitaly/bin/gitaly
-gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
+.PHONY: ${gitaly_build_bin_dir}/gitaly
+${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"
@@ -429,8 +429,8 @@ gitaly/bin/gitaly: ${gitaly_clone_dir}/.git
 	$(Q)$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="tracer_static tracer_static_jaeger"
 	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(bundle_install_cmd)
 
-.PHONY: gitaly/_build/deps/git/install/bin/git
-gitaly/_build/deps/git/install/bin/git:
+.PHONY: ${gitaly_build_deps_dir}/git/install/bin/git
+${gitaly_build_deps_dir}/git/install/bin/git:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building git for gitlab-org/gitaly"
