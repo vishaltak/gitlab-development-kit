@@ -3,7 +3,7 @@
 socket_path = "<%= node.address %>"
 
 # The directory where Gitaly's executables are stored
-bin_dir = "<%= config.gdk_root.join('gitaly', '_build', 'bin') %>"
+bin_dir = "<%= config.gitaly.__build_bin_path %>"
 
 internal_socket_dir = "<%= node.internal_socket_dir %>"
 

@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-gitaly/_build/bin/praefect -config gitaly/praefect.config.toml sql-migrate
+$(gdk config get praefect.__praefect_build_bin_path) -config gitaly/praefect.config.toml sql-migrate
