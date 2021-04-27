@@ -10,3 +10,13 @@
   tags:
     # See https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/7019 for tag descriptions
     - gitlab-org-docker
+
+.docker:build-docker-in-docker:
+  extends:
+    - .docker:use-docker-in-docker
+  image: docker:git
+  before_script:
+    - apk add --no-cache jq curl
+    - ./support/docker ci-login
+  after_script:
+    - ./support/docker ci-logout

@@ -1,13 +1,19 @@
 release-image:
   extends:
     - .rules:code-changes
-    - .docker:use-docker-in-docker
-  image: docker:git
+    - .docker:build-docker-in-docker
   stage: build
-  before_script:
-    - apk add --no-cache jq curl
   script:
-    - ./support/docker ci-login
     - ./support/docker ci-build-if-necessary
-  after_script:
-    - ./support/docker ci-logout
+
+build-gitpod-workspace-image:
+  extends:
+    - .docker:build-docker-in-docker
+  stage: build
+  script:
+    - ./support/gitpod/docker-build
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_MERGE_REQUEST_IID'
+      changes:
+        - "support/gitpod/**/*"
