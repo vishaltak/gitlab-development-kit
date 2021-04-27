@@ -416,7 +416,11 @@ module GDK
       string(:auth_token) { '' }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
-      path(:git_bin_path) { config.gitaly.dir.join('_build', 'deps', 'git', 'install', 'bin', 'git') }
+      path(:__build_path) { config.gitaly.dir.join('_build') }
+      path(:__build_bin_path) { config.gitaly.__build_path.join('bin') }
+      path(:__build_deps_path) { config.gitaly.__build_path.join('deps') }
+      path(:__gitaly_build_bin_path) { config.gitaly.__build_bin_path.join('gitaly') }
+      path(:git_bin_path) { config.gitaly.__build_deps_path.join('git', 'install', 'bin', 'git') }
       settings_array :__storages, size: -> { storage_count } do |i|
         string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
         path(:path) do
@@ -434,6 +438,7 @@ module GDK
       path(:config_file) { config.gitaly.dir.join('praefect.config.toml') }
       bool(:enabled) { true }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
+      path(:__praefect_build_bin_path) { config.gitaly.__build_bin_path.join('praefect') }
       settings :database do
         string(:host) { config.geo.secondary? ? config.postgresql.geo.host : config.postgresql.host }
         integer(:port) { config.geo.secondary? ? config.postgresql.geo.port : config.postgresql.port }

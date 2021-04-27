@@ -447,6 +447,12 @@ RSpec.describe GDK::Config do
           expect(config.praefect.__nodes[2].__storages[0].path).to eq(Pathname.new('/home/git/gdk/repository_storages/praefect-gitaly-2/praefect-internal-2'))
         end
       end
+
+      describe '#__praefect_build_bin_path' do
+        it '/home/git/gdk/gitaly/_build/bin/praefect' do
+          expect(config.praefect.__praefect_build_bin_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/bin/praefect'))
+        end
+      end
     end
   end
 
@@ -574,6 +580,30 @@ RSpec.describe GDK::Config do
     describe '#git_bin_path' do
       it 'returns the path to the gitaly compiled git binary' do
         expect(config.gitaly.git_bin_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/deps/git/install/bin/git'))
+      end
+    end
+
+    describe '#__build_path' do
+      it '/home/git/gdk/gitaly/_build' do
+        expect(config.gitaly.__build_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build'))
+      end
+    end
+
+    describe '#__build_bin_path' do
+      it '/home/git/gdk/gitaly/_build/bin' do
+        expect(config.gitaly.__build_bin_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/bin'))
+      end
+    end
+
+    describe '#__build_deps_path' do
+      it '/home/git/gdk/gitaly/_build/deps' do
+        expect(config.gitaly.__build_deps_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/deps'))
+      end
+    end
+
+    describe '#__gitaly_build_bin_path' do
+      it '/home/git/gdk/gitaly/_build/bin/gitaly' do
+        expect(config.gitaly.__gitaly_build_bin_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/bin/gitaly'))
       end
     end
   end
