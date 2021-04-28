@@ -9,5 +9,5 @@ golang 1.15.5 1.16.2
 nodejs 14.16.1
 yarn 1.22.10
 minio 2021-02-07T01-31-02Z
-postgres 11.9 12.6
+postgres 12.6 11.9
 redis 6.0.10
