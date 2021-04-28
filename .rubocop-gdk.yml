@@ -3,6 +3,9 @@ inherit_gem:
   gitlab-styles:
     - rubocop-default.yml
 
+require:
+  - ./rubocop/rubocop
+
 AllCops:
   TargetRubyVersion: 2.7.2
   Exclude:
