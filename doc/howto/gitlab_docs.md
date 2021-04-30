@@ -109,9 +109,26 @@ To be able to make and preview changes to the additional documentation:
 NOTE:
 `gitlab_runner` should not be confused with [`runner`](runner.md).
 
-By default, the checked out versions of `gitlab_runner`, `omnibus_gitlab`, and `charts_gitlab` are
-updated automatically when `gdk update` is run. To disable this, set `auto_update: false` against
-whichever project to disable.
+By default, the cloned repositories of the `gitlab_runner`, `omnibus_gitlab`, and `charts_gitlab`
+components are:
+
+- Updated automatically when you run `gdk update`. To disable this, set `auto_update: false` against
+  whichever project to disable.
+- Cloned using HTTPS. If you originally [cloned `gitlab` using SSH](../index.md#install-gdk), you
+  might want to set these cloned repositories to SSH also. To set these repositories to SSH:
+
+  1. Go into each cloned repository and run `git remote -v` to review the current settings.
+  1. To switch to SSH, run `git remote set-url <remote name> git@gitlab.com:gitlab-org/<project path>.git`.
+     For example, to update your HTTPS-cloned `gitlab-runner` repository (with a `remote` called
+     `origin`), run:
+
+     ```shell
+     cd <GDK root path>/gitlab-runner
+     git remote set-url origin git@gitlab.com:gitlab-org/gitlab-runner.git
+     ```
+
+  1. Run `git remote -v` in each cloned repository to verify that you have successfully made the change from
+     HTTPS to SSH.
 
 ### Check links
 
