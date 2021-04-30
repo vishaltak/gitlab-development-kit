@@ -5,7 +5,6 @@ CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
-REQUIRED_BUNDLER_VERSION=$(grep -A1 'BUNDLED WITH' Gemfile.lock | tail -n1 | tr -d ' ')
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
 error() {
@@ -28,12 +27,43 @@ asdf_reshim() {
   asdf reshim
 }
 
+prefix_with_asdf_if_available() {
+  local command
+
+  command="${*}"
+
+  if asdf version > /dev/null 2>&1; then
+    eval "asdf exec ${command}"
+  else
+    eval "${command}"
+  fi
+}
+
+ruby_required_bundler_versions() {
+  find . -type f -name Gemfile.lock -exec awk '/BUNDLED WITH/{getline;print $NF;}' {} + 2> /dev/null | sort -r | uniq
+
+  return 0
+}
+
+ruby_install_required_bundlers() {
+  local required_versions
+
+  required_versions=$(ruby_required_bundler_versions)
+
+  for version in ${required_versions}
+  do
+    if ! bundle "_${version}_" --version > /dev/null 2>&1; then
+      prefix_with_asdf_if_available gem install bundler -v "=${version}"
+    fi
+  done
+}
+
 gdk_install_gem() {
-  if ! echo_if_unsuccessful asdf exec gem install bundler -v "= ${REQUIRED_BUNDLER_VERSION}"; then
+  if ! echo_if_unsuccessful ruby_install_required_bundlers; then
     return 1
   fi
 
-  if ! echo_if_unsuccessful asdf exec gem install gitlab-development-kit; then
+  if ! echo_if_unsuccessful prefix_with_asdf_if_available gem install gitlab-development-kit; then
     return 1
   fi
 
@@ -89,6 +119,7 @@ ensure_supported_platform() {
       echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
       echo "INFO:" >&2
       echo "INFO: Resuming in 3 seconds.." >&2
+
       sleep 3
     fi
 
@@ -199,7 +230,7 @@ setup_platform_linux_fedora_like_with() {
   if ! sudo dnf install -y $(sed -e 's/#.*//' "${1}" | tr '\n' ' '); then
     return 1
   fi
-  
+
   if ! echo_if_unsuccessful which runit; then
     echo "INFO: Installing runit into /opt/runit/"
     cd /tmp || return 1
