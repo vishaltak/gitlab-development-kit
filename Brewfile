@@ -13,5 +13,6 @@ brew "pkg-config"
 brew "re2"
 brew "runit"
 brew "sqlite"
+brew "node@14", link: true
 
 cask "chromedriver"
