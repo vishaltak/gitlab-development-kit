@@ -144,11 +144,11 @@ RSpec.describe GDK::ConfigSettings do
 
     context 'with foo.yml' do
       before do
-        File.write(temp_path.join('foo.yml'), { 'bar' => 'baz' }.to_yaml)
+        File.write(test_klass::FILE, { 'bar' => 'baz' }.to_yaml)
       end
 
       after do
-        File.unlink(temp_path.join('foo.yml'))
+        File.unlink(test_klass::FILE)
       end
 
       it 'reads settings from yaml' do
@@ -297,6 +297,38 @@ RSpec.describe GDK::ConfigSettings do
 
       expect { config.bury!('foo.name', 'ripper') }
         .to change(config, :yaml).to('foo' => { 'name' => 'ripper', 'location' => 'down under' })
+    end
+
+    context 'with foo.yml' do
+      before do
+        stub_backup
+
+        FileUtils.touch(test_klass::FILE)
+      end
+
+      after do
+        File.unlink(test_klass::FILE)
+      end
+
+      let(:test_klass) do
+        new_test_klass do |s|
+          s.integer(:port) { 3000 }
+        end
+      end
+
+      subject(:config) { test_klass.new }
+
+      it 'does not save to file on error' do
+        expect(File).not_to receive(:write)
+
+        expect { config.bury!('port', 'a-port') }.to raise_error(TypeError)
+      end
+
+      it 'saves to file' do
+        expect(File).to receive(:write)
+
+        expect { config.bury!('port', 1337) }.to change(config, :port).to(1337)
+      end
     end
   end
 
