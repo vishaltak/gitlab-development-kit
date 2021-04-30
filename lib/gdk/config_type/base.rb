@@ -9,6 +9,25 @@ module GDK
 
       def_delegators :builder, :key, :blk
 
+      def self.cast_value(value)
+        value.to_s
+      end
+
+      def self.parse(_)
+        true
+      end
+
+      def self.value_valid?(value)
+        parse(value)
+      end
+
+      def self.value_matches_type?(value)
+        cast_value(value)
+        true
+      rescue TypeError
+        false
+      end
+
       def initialize(parent:, builder:)
         @parent = parent
         @builder = builder
@@ -37,7 +56,7 @@ module GDK
 
         return if parse
 
-        raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+        raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}."
       end
 
       def dump!(user_only: false)

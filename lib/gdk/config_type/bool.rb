@@ -5,17 +5,23 @@ require_relative 'base'
 module GDK
   module ConfigType
     class Bool < Base
-      def parse
+      def self.cast_value(value)
         case value
         when 'true', true, 't', '1', 1
-          self.value = true
+          true
         when 'false', false, 'f', '0', 0
-          self.value = false
+          false
         else
-          return false
+          raise TypeError, "'#{value}' does not appear to be a valid Boolean."
         end
+      end
+
+      def parse
+        self.value = self.class.cast_value(value)
 
         true
+      rescue TypeError
+        false
       end
     end
   end

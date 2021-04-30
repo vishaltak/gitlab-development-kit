@@ -72,3 +72,16 @@ def stub_no_color_env(res)
   # the shell command line.
   stub_env('NO_COLOR', res)
 end
+
+def stub_gdk_yml_backup_and_save(now, expected_content)
+  file_name = 'gdk.example.yml'
+  backup_file_name = File.join(GDK.backup_dir, "#{file_name}.#{now.strftime('%Y%m%d%H%M%S')}")
+
+  expect(FileUtils).to receive(:mkdir_p).with(GDK.backup_dir)
+  expect(FileUtils).to receive(:cp).with(file_name, backup_file_name)
+
+  expect(GDK::Output).to receive(:warn).with("Your '#{file_name}' is about to be re-written.")
+  expect(GDK::Output).to receive(:info).with("A backup will be saved at '#{backup_file_name}'.")
+
+  expect(File).to receive(:write).with(file_name, expected_content)
+end

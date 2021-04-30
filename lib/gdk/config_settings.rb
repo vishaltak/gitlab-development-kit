@@ -24,13 +24,15 @@ module GDK
     SettingUndefined = Class.new(StandardError)
     UnsupportedConfiguration = Class.new(StandardError)
     SettingValueIsUnchanged = Class.new(StandardError)
+    SettingIsASettingsBlock = Class.new(StandardError)
+    SettingValueInvalid = Class.new(StandardError)
 
     attr_reader :parent, :yaml, :key
 
-    def_delegators :'self.class', :attributes
+    def_delegators :'self.class', :attributes, :values
 
     class << self
-      attr_accessor :attributes
+      attr_accessor :attributes, :values
 
       def anything(key, &blk)
         def_attribute(key, ConfigType::Anything, &blk)
@@ -169,29 +171,31 @@ module GDK
       value.dig(*slugs)
     end
 
-    def bury(key, value)
-      original_value = dig(key)
-      casted_original_value = original_value
-
+    def build_minimal_hash_from_keys_with(key, value)
       keys = key.split('.')
-      value_key = keys.pop
+      keys.reverse.inject(value) { |a, n| { n => a } }
+    end
 
-      hash_to_update = keys.empty? ? yaml : hash_to_update = dig(*keys).yaml
+    def bury(key, value)
+      keys = key.split('.')
+      main_object_keys = keys[0..-2]
+      value_key = keys[-1]
 
-      hash_to_update[value_key] = value
-      hash_to_update[value_key] = dig(key) # validate and sanitize
+      main_object = main_object_keys.empty? ? self : dig(*main_object_keys)
+      value_object = main_object.attributes[value_key]
 
-      if hash_to_update[value_key].is_a?(Pathname)
-        hash_to_update[value_key] = hash_to_update[value_key].to_s
-        casted_original_value = casted_original_value.to_s
-      end
+      raise SettingIsASettingsBlock if !value_object || value_object.klass == GDK::ConfigType::Settings
+      raise SettingValueInvalid unless value_object.klass.value_valid?(value)
 
-      raise SettingValueIsUnchanged if hash_to_update[value_key] == casted_original_value
+      casted_original_value = value_object.klass.cast_value(dig(key))
+      casted_value = value_object.klass.cast_value(value)
 
-      save_yaml!
-    rescue TypeError
-      hash_to_update[value_key] = original_value
-      raise
+      raise SettingValueIsUnchanged if casted_value == casted_original_value
+
+      minimal_new_yaml = build_minimal_hash_from_keys_with(key, casted_value)
+      new_yaml = deep_merge(yaml, minimal_new_yaml)
+
+      save_yaml!(new_yaml)
     end
 
     def config_file_protected?(target)
@@ -286,18 +290,11 @@ module GDK
       end
     end
 
-    def update_yaml_with!(new_hash)
-      current_yaml = yaml
-      new_yaml = deep_merge(current_yaml, new_hash)
-
-      save_yaml!(new_yaml)
-    end
-
-    def save_yaml!
+    def save_yaml!(new_yaml)
       return unless file_defined_and_exists?
 
       backup!
-      File.write(self.class::FILE, yaml.to_yaml)
+      File.write(self.class::FILE, new_yaml.to_yaml)
     end
 
     def backup!
@@ -309,7 +306,7 @@ module GDK
       FileUtils.mkdir_p(GDK.backup_dir)
 
       GDK::Output.warn("Your '#{file_name}' is about to be re-written.")
-      GDK::Output.info("A backup will been saved at '#{backup_file_name}'.")
+      GDK::Output.info("A backup will be saved at '#{backup_file_name}'.")
 
       FileUtils.cp(self.class::FILE, backup_file_name)
     end

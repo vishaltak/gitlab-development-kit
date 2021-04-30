@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe GDK::ConfigType::Integer do
+RSpec.describe GDK::ConfigType::Bool do
   let(:value) { nil }
   let(:key) { 'test_key' }
   let(:yaml) { { key => value } }
@@ -16,25 +16,25 @@ RSpec.describe GDK::ConfigType::Integer do
   end
 
   describe '#cast_value' do
-    context 'when value is a Integer' do
+    context 'when value is a Boolean' do
       it 'returns true' do
-        expect(described_class.cast_value(1)).to eq(1)
+        expect(described_class.cast_value(true)).to eq(true)
       end
     end
 
     context 'when value is a String' do
       it 'raises an exception' do
-        expect { described_class.cast_value('test') }.to raise_error(TypeError, "'test' does not appear to be a valid Integer.")
+        expect { described_class.cast_value('test') }.to raise_error(TypeError, "'test' does not appear to be a valid Boolean.")
       end
     end
   end
 
   describe '#parse' do
-    context 'when value is initialized with an Integer' do
-      let(:value) { 123 }
+    context 'when value is initialized with a Boolean' do
+      let(:value) { true }
 
       it 'returns true' do
-        expect(subject.parse).to be(true)
+        expect(subject.parse).to eq(true)
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe GDK::ConfigType::Integer do
       let(:value) { 'test' }
 
       it 'raises an exception' do
-        expect { subject.parse }.to raise_error(TypeError, "Value 'test' for #{key} is not a valid integer.")
+        expect { subject.parse }.to raise_error(TypeError, "Value 'test' for #{key} is not a valid bool.")
       end
     end
   end

@@ -1871,23 +1871,11 @@ RSpec.describe GDK::Config do
     it 'backs up and writes out a new YAML file' do
       key = 'port'
       new_port = 3001
-      file_name = 'gdk.example.yml'
 
       freeze_time do
-        now = Time.now
-        backup_file_name = File.join(GDK.backup_dir, "#{file_name}.#{now.strftime('%Y%m%d%H%M%S')}")
-
-        expect(FileUtils).to receive(:mkdir_p).with(GDK.backup_dir)
-        expect(FileUtils).to receive(:cp).with(file_name, backup_file_name)
-
-        expect(GDK::Output).to receive(:warn).with("Your '#{file_name}' is about to be re-written.")
-        expect(GDK::Output).to receive(:info).with("A backup will been saved at '#{backup_file_name}'.")
-
-        expect(File).to receive(:write).with(file_name, "---\nport: #{new_port}\n")
+        stub_gdk_yml_backup_and_save(Time.now, "---\nport: #{new_port}\n")
 
         config.bury(key, new_port)
-
-        expect(config.port).to eq(new_port)
       end
     end
   end

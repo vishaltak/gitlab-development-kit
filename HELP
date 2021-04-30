@@ -32,6 +32,7 @@ Manage GDK:
                                             #  files created by GDK
 
   gdk config get postgresql.port            # Get configuration values
+  gdk config set postgresql.port <port>     # Set configuration values
   gdk diff-config                           # Print difference between current
                                             #  and new configuration values
 

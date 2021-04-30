@@ -268,31 +268,28 @@ RSpec.describe GDK::ConfigSettings do
 
   describe '#bury' do
     context 'setting a block to a boolean' do
-      it 'does not update the internal yaml and does not update gdk.yml' do
+      it 'does not update gdk.yml' do
         key = 'gdk'
         described_class.hash_setting(key) { {} }
 
-        expect { config.bury(key, true) }.to raise_error(TypeError, "Value 'true' for #{key} is not a valid hash")
+        expect { config.bury(key, true) }.to raise_error(GDK::ConfigSettings::SettingValueInvalid)
       end
     end
 
     context 'setting port to a boolean' do
-      it 'does not update the internal yaml and does not update gdk.yml' do
+      it 'does not update gdk.yml' do
         key = 'port'
         described_class.integer(key) { 3000 }
-        current_port = config.port
         new_port = false
 
         expect(File).not_to receive(:write).with('tmp/foo.yml', "---\nport: #{new_port}\n")
 
-        expect { config.bury(key, new_port) }.to raise_error(TypeError, "Value 'false' for #{key} is not a valid integer")
-
-        expect(config.port).to eq(current_port)
+        expect { config.bury(key, new_port) }.to raise_error(TypeError, "'false' does not appear to be a valid Integer.")
       end
     end
 
     context 'setting port to the same value' do
-      it 'does not update the internal yaml and does not update gdk.yml' do
+      it 'does not update gdk.yml' do
         key = 'port'
         described_class.integer(key) { 3000 }
         current_port = config.port
@@ -301,20 +298,16 @@ RSpec.describe GDK::ConfigSettings do
         expect(File).not_to receive(:write).with('tmp/foo.yml', "---\nport: #{new_port}\n")
 
         expect { config.bury(key, new_port) }.to raise_error(GDK::ConfigSettings::SettingValueIsUnchanged)
-
-        expect(config.port).to eq(current_port)
       end
     end
 
     context 'setting port to an integer' do
-      it 'updates the internal yaml and updates gdk.yml' do
+      it 'updates gdk.yml' do
         key = 'port'
         described_class.integer(key) { 3000 }
         new_port = 3001
 
         config.bury(key, new_port)
-
-        expect(config.port).to eq(new_port)
       end
     end
   end
