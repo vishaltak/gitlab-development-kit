@@ -18,6 +18,7 @@ module GDK
 
   PROGNAME = 'gdk'
   MAKE = RUBY_PLATFORM.include?('bsd') ? 'gmake' : 'make'
+  BACKUP_DIR = '.backups'
 
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`
@@ -79,6 +80,10 @@ module GDK
 
   def self.config
     @config ||= GDK::Config.new
+  end
+
+  def self.backup_dir
+    @backup_dir ||= File.join(GDK.root, BACKUP_DIR)
   end
 
   def self.puts_separator(msg = nil)

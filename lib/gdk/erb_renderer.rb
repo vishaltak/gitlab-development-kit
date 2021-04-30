@@ -9,8 +9,6 @@ require_relative 'output'
 
 module GDK
   class ErbRenderer
-    BACKUP_DIR = '.backups'
-
     attr_reader :source, :target
 
     def initialize(source, target, args = {})
@@ -102,7 +100,7 @@ module GDK
     end
 
     def backup!
-      FileUtils.mkdir_p(BACKUP_DIR)
+      FileUtils.mkdir_p(GDK.backup_dir)
       FileUtils.mv(target, backup_file)
     end
 
@@ -116,7 +114,7 @@ module GDK
 
     def backup_file
       @backup_file ||=
-        File.join(BACKUP_DIR,
+        File.join(GDK.backup_dir,
                   target.gsub('/', '__').concat('.', Time.now.strftime('%Y%m%d%H%M%S')))
     end
 
