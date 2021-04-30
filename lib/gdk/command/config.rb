@@ -5,22 +5,54 @@ module GDK
     # Handles `gdk config` command execution
     #
     # This command accepts the following subcommands:
-    # - get <config keys separated by space>
+    # - get <config key>
+    # - set <config key> <value>
     class Config < BaseCommand
       def run(args = [])
-        config_command = args.shift
-        GDK::Output.abort('Usage: gdk config get <configuration value>') if config_command != 'get' || args.empty?
+        case args.shift
+        when 'get'
+          config_get(*args)
+        when 'set'
+          GDK::Output.abort('Usage: gdk config set <name> <value>') if args.length != 2
 
-        begin
-          puts config.dig(*args)
-          true
-        rescue GDK::ConfigSettings::SettingUndefined
-          GDK::Output.abort("Cannot get config for #{args.join('.')}")
-          false
-        rescue GDK::ConfigSettings::UnsupportedConfiguration => e
-          GDK::Output.abort("#{e.message}.")
-          false
+          config_set(*args)
+        else
+          GDK::Output.warn('Usage: gdk config [<get>|set] <name> [<value>]')
+          abort
         end
+      end
+
+      private
+
+      def config
+        @config ||= GDK.config
+      end
+
+      def config_get(*name)
+        GDK::Output.abort('Usage: gdk config get <name>') if name.empty?
+
+        GDK::Output.puts(config.dig(*name))
+
+        true
+      rescue GDK::ConfigSettings::SettingUndefined
+        GDK::Output.abort("Cannot get config for #{name.join('.')}")
+      rescue GDK::ConfigSettings::UnsupportedConfiguration => e
+        GDK::Output.abort("#{e.message}.")
+      end
+
+      def config_set(name, value)
+        old_value = config.dig(*name)
+        new_value = config.bury!(name, value)
+        GDK::Output.info("'#{name}' is now set to '#{new_value}' (previously '#{old_value}').")
+
+        true
+      rescue GDK::ConfigSettings::SettingUndefined
+        GDK::Output.abort("Cannot get config for '#{name}'.")
+      rescue TypeError => e
+        GDK::Output.abort(e.message)
+      rescue StandardError => e
+        GDK::Output.error(e.message)
+        abort
       end
     end
   end

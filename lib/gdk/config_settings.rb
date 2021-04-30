@@ -238,7 +238,9 @@ module GDK
     private
 
     def attribute(key)
-      attributes[key]
+      attributes.fetch(key) do |k|
+        raise SettingUndefined, %(Could not fetch attributes for '#{k}' in '#{slug || '<root>'}')
+      end
     end
 
     def build(key)
