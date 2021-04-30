@@ -11,11 +11,19 @@ module GDK
       end
 
       def parse
+        return unless string_like?
+
         self.value = Pathname.new(value)
 
         true
       rescue ::TypeError
         false
+      end
+
+      private
+
+      def string_like?
+        %w[String Pathname].include?(value.class.to_s)
       end
     end
   end

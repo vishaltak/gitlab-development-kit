@@ -23,5 +23,13 @@ RSpec.describe GDK::ConfigType::Path do
         expect(subject.parse).to be(true)
       end
     end
+
+    context 'when value is initialized with an integer' do
+      let(:value) { 123 }
+
+      it 'raises an exception' do
+        expect { subject.parse }.to raise_error(TypeError, "Value '123' for #{key} is not a valid path")
+      end
+    end
   end
 end
