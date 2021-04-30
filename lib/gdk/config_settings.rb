@@ -23,6 +23,7 @@ module GDK
 
     SettingUndefined = Class.new(StandardError)
     UnsupportedConfiguration = Class.new(StandardError)
+    SettingValueIsUnchanged = Class.new(StandardError)
 
     attr_reader :parent, :yaml, :key
 
@@ -168,6 +169,31 @@ module GDK
       value.dig(*slugs)
     end
 
+    def bury(key, value)
+      original_value = dig(key)
+      casted_original_value = original_value
+
+      keys = key.split('.')
+      value_key = keys.pop
+
+      hash_to_update = keys.empty? ? yaml : hash_to_update = dig(*keys).yaml
+
+      hash_to_update[value_key] = value
+      hash_to_update[value_key] = dig(key) # validate and sanitize
+
+      if hash_to_update[value_key].is_a?(Pathname)
+        hash_to_update[value_key] = hash_to_update[value_key].to_s
+        casted_original_value = casted_original_value.to_s
+      end
+
+      raise SettingValueIsUnchanged if hash_to_update[value_key] == casted_original_value
+
+      save_yaml!
+    rescue TypeError
+      hash_to_update[value_key] = original_value
+      raise
+    end
+
     def config_file_protected?(target)
       return false if gdk.overwrite_changes
 
@@ -244,6 +270,48 @@ module GDK
 
     def sanitized_read!(filename)
       File.read(GDK.root.join(filename)).chomp
+    end
+
+    def file_defined_and_exists?
+      self.class.const_defined?('FILE') && File.exist?(self.class::FILE)
+    end
+
+    def deep_merge(original_hash, replacement_hash)
+      original_hash.merge(replacement_hash) do |_, v1, v2|
+        if v1.is_a?(Hash) && v2.is_a?(Hash)
+          deep_merge(v1, v2)
+        else
+          v2
+        end
+      end
+    end
+
+    def update_yaml_with!(new_hash)
+      current_yaml = yaml
+      new_yaml = deep_merge(current_yaml, new_hash)
+
+      save_yaml!(new_yaml)
+    end
+
+    def save_yaml!
+      return unless file_defined_and_exists?
+
+      backup!
+      File.write(self.class::FILE, yaml.to_yaml)
+    end
+
+    def backup!
+      return unless file_defined_and_exists?
+
+      file_name = File.basename(self.class::FILE)
+      backup_file_name = File.join(GDK.backup_dir, "#{file_name}.#{Time.now.strftime('%Y%m%d%H%M%S')}")
+
+      FileUtils.mkdir_p(GDK.backup_dir)
+
+      GDK::Output.warn("Your '#{file_name}' is about to be re-written.")
+      GDK::Output.info("A backup will been saved at '#{backup_file_name}'.")
+
+      FileUtils.cp(self.class::FILE, backup_file_name)
     end
   end
 end
