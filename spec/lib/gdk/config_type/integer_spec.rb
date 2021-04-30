@@ -16,11 +16,19 @@ RSpec.describe GDK::ConfigType::Integer do
   end
 
   describe '#parse' do
-    context 'when value is an integer' do
+    context 'when value is initialized with an integer' do
       let(:value) { 123 }
 
       it 'returns true' do
         expect(subject.parse).to be(true)
+      end
+    end
+
+    context 'when value is initialized with a string' do
+      let(:value) { 'test' }
+
+      it 'raises an exception' do
+        expect { subject.parse }.to raise_error(TypeError, "Value 'test' for #{key} is not a valid integer")
       end
     end
   end
