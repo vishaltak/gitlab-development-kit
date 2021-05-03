@@ -373,7 +373,7 @@ gettext-update: gettext-unlock .gettext
 # gitlab-shell
 ##############################################################
 
-gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret
+gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret openssh/ssh_host_rsa_key
 	$(Q)make -C gitlab-shell build ${QQ}
 
 gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup

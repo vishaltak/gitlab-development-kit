@@ -45,6 +45,7 @@ production: &base
       #- 2001:0db8::/32
 
     user: <%= config.username %>
+    ssh_user: <%= config.sshd.user %>
 
     ## Date & Time settings
     # Uncomment and customize if you want to change the default time zone of GitLab application.

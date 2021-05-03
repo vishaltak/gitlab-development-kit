@@ -463,14 +463,50 @@ module GDK
     end
 
     settings :sshd do
-      bool(:enabled) { false }
-      path(:bin) { find_executable!('sshd') || '/usr/local/sbin/sshd' }
+      string(:__full_command) do
+        if config.sshd.use_gitlab_sshd?
+          "#{config.gitlab_shell.dir}/bin/gitlab-sshd -config-dir #{config.gitlab_shell.dir}"
+        else
+          "#{config.sshd.bin} -e -D -f #{config.gdk_root.join('openssh', 'sshd_config')}"
+        end
+      end
+
+      string(:__log_file) do
+        if config.sshd.use_gitlab_sshd?
+          "/dev/stdout"
+        else
+          "#{config.gitlab_shell.dir}/gitlab-shell.log"
+        end
+      end
+
+      string(:__listen) do
+        host = config.sshd.listen_address
+        host = "[#{host}]" if host.include?(':')
+
+        "#{host}:#{config.sshd.listen_port}"
+      end
+
+      bool(:enabled) { true }
+      bool(:use_gitlab_sshd) { true }
       string(:listen_address) { config.hostname }
       integer(:listen_port) { 2222 }
-      string(:user) { config.username }
-      path(:authorized_keys_file) { config.gdk_root.join('.ssh', 'authorized_keys') }
+      string(:user) do
+        if config.sshd.use_gitlab_sshd?
+          'git'
+        else
+          config.username
+        end
+      end
       path(:host_key) { config.gdk_root.join('openssh', 'ssh_host_rsa_key') }
+
+      # gitlab-sshd only
+      bool(:proxy_protocol) { false }
+      string(:web_listen) { '' }
+
+      # OpenSSH only
+      path(:bin) { find_executable!('sshd') || '/usr/local/sbin/sshd' }
       string(:additional_config) { '' }
+      path(:authorized_keys_file) { config.gdk_root.join('.ssh', 'authorized_keys') }
     end
 
     settings :git do

@@ -1,22 +1,17 @@
-# SSH
+# Configure and use SSH in GDK
 
-If you want to work on the GitLab SSH integration then:
+GitLab can provide access to its repositories over SSH instead of HTTPS. There
+are two ways to enable this in GDK. Either: 
 
-1. Add the following to your `<gdk-root>/gdk.yml` file:
+- Run the `gitlab-sshd` binary provided by [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell).
+  Using `gitlab-sshd` is better for multi-host deployments like GitLab.com and
+  development environments.
+- Integrate GitLab Shell with [OpenSSH](https://openssh.org). Because integrating
+  with OpenSSH allows GitLab to provide its services on the same port as the system's
+  SSH daemon, this is preferred option for most single-host deployments of GitLab.
 
-   ```yaml
-   ---
-   sshd:
-     enabled: true
-   ```
-
-1. Run `gdk reconfigure` or `make openssh-setup` to configure the `sshd` service.
-
-1. Run `gdk start sshd` to start the `sshd` service.
-
-You should now have an unprivileged SSH daemon process running on
-`127.0.0.1:2222`, integrated with `gitlab-shell`. If you are not working on
-GitLab SSH integration we recommend that you leave `sshd` service disabled.
+GDK enables the first option by default. Only engineers working on the GitLab
+OpenSSH integration need to use the second option.
 
 ## Change the listen port or other configuration
 
@@ -28,23 +23,63 @@ and adjust as needed. For example, to change the listen port to `2223`:
    ```yaml
    ---
    sshd:
-     enabled: true
      listen_port: 2223
    ```
 
-1. Run `gdk reconfigure` or `make openssh-setup` to configure the `sshd` service.
+1. Run `gdk reconfigure` to configure the `sshd` service.
 
-1. Run `gdk restart sshd` to restart the `sshd` service.
+1. Run `gdk restart` to restart the modified services.
+
+Note that some settings apply:
+
+- Only to `gitlab-sshd` mode:
+  - `additional_config`
+  - `authorized_keys_file`
+  - `bin`
+- Only to `gitlab-sshd` mode:
+  - `proxy_protocol`
+  - `web_listen`
+
+To switch from `gitlab-sshd` to OpenSSH, follow the
+instructions under [OpenSSH integration](#openssh-integration).
 
 ## Try it out
 
-You can check that SSH works by cloning any project (e.g. `Project.first.ssh_url_to_repo`).
+You can check that SSH works by cloning any project (for example, `Project.first.ssh_url_to_repo`).
 This also updates your `known_hosts` file.
 
-## SSH key lookup from database
+## OpenSSH integration
+
+In general, we recommend that you use `gitlab-sshd`. If you want to work on the
+GitLab OpenSSH integration specifically, you can switch to it:
+
+1. Add the following to your `<gdk-root>/gdk.yml` file:
+
+   ```yaml
+   ---
+   sshd:
+     use_gitlab_sshd: false
+   ```
+
+1. Run `gdk reconfigure` to switch from `gitlab-sshd` to OpenSSH.
+
+1. Run `gdk restart` to restart the modified services.
+
+You should now have an unprivileged OpenSSH daemon process running on
+`127.0.0.1:2222`, integrated with `gitlab-shell`.
+
+In unprivileged mode, OpenSSH can't change users, so you'll have to connect to
+it using your system username, rather than `git`. The Rails web interface will
+list the correct username whenever it gives you an example command, but you may
+have to use `git remote set-url` in any repositories you have already cloned
+from the instance to update them.
+
+### SSH key lookup from database
 
 For more information, see the
 [official documentation](https://docs.gitlab.com/ee/administration/operations/speed_up_ssh.html#the-solution).
+The `gitlab-sshd` approach uses SSH key lookup from database automatically, but
+when using OpenSSH instead, a few more steps are required.
 
 We'll create a wrapper script to invoke
 `<gdk-root>/gitlab-shell/bin/gitlab-shell-authorized-keys-check`. This wrapper is useful
