@@ -1344,7 +1344,7 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe 'pages' do
+  describe 'gitlab_pages' do
     describe '#host' do
       context 'when host is not specified' do
         it 'returns the default hostname' do
