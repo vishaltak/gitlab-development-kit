@@ -1346,9 +1346,9 @@ RSpec.describe GDK::Config do
 
   describe 'gitlab_pages' do
     describe '#enabled' do
-      it 'defaults to true' do
-        expect(config.gitlab_pages.enabled).to eq(true)
-        expect(config.gitlab_pages.enabled?).to eq(true)
+      it 'defaults to false' do
+        expect(config.gitlab_pages.enabled).to eq(false)
+        expect(config.gitlab_pages.enabled?).to eq(false)
       end
     end
 

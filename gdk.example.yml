@@ -92,7 +92,7 @@ gitlab_pages:
   auth_client_id: ''
   auth_client_secret: ''
   auto_update: true
-  enabled: true
+  enabled: false
   host: 127.0.0.1.nip.io
   port: 3010
   secret_file: "/home/git/gdk/gitlab-pages-secret"
