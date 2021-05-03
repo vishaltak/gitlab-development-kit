@@ -1345,6 +1345,13 @@ RSpec.describe GDK::Config do
   end
 
   describe 'gitlab_pages' do
+    describe '#enabled' do
+      it 'defaults to true' do
+        expect(config.gitlab_pages.enabled).to eq(true)
+        expect(config.gitlab_pages.enabled?).to eq(true)
+      end
+    end
+
     describe '#host' do
       context 'when host is not specified' do
         it 'returns the default hostname' do
