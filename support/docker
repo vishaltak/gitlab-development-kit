@@ -80,7 +80,7 @@ case "$1" in
 
         # Building the image is necessary
         echo "We need to build the image"
-        docker build . \
+        docker build . --squash \
           --tag "${VERIFY_IMAGE}" --tag "${cache_image}" \
           --label dependencySHA="${dependency_sha}"
         docker push "${cache_image}"
