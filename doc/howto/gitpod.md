@@ -9,6 +9,9 @@ Gitpod, you can run a pre-configured GDK instance in the cloud, which also makes
 possible to contribute, no matter how powerful your machine is. You could even just use
 an iPad!
 
+- [How to update the Gitpod GDK Docker image](#how-to-update-the-gitpod-gdk-docker-image)
+- [How to get started](#how-to-get-started)
+
 ## How to get started
 
 **If you are a GitLab team member**, either:
@@ -147,3 +150,33 @@ To enable Elasticsearch:
 
 1. Run `gdk reconfigure`.
 1. Run `gdk start elasticsearch`.
+
+## How to update the Gitpod GDK Docker image
+
+There are two Gitpod GDK Docker images that can be built:
+
+- `registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main`
+- `registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:stable`
+
+### `main` tag
+
+We automatically build a new Gitpod GDK Docker image every day that's tagged as
+`registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main`.
+The `main` tag is used because that's the name of the default Git branch for
+the GDK.
+
+### `stable` tag
+
+When running [Gitpod for GitLab](https://gitlab.com/gitlab-org/gitlab), it uses the
+[`registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:stable`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/.gitpod.yml#L1)
+Docker image which uses the `stable` tag.
+
+### Promote `main` tag to `stable`
+
+1. Visit the [GitPod Image Integration test MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/60384) which utilizes the `main` GDK Gitpod image.
+1. Rebase the [GitPod Image Integration test MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/60384) using the `/rebase` quick action.
+1. Once rebased, launch a new Gitpod instance by visiting the [GitPod Image Integration test Git branch](https://gitlab.com/gitlab-org/gitlab/-/tree/gdk-gitpod-integration-branch) and select the Gitpod button.
+1. Run some manual tests (manual login, `gdk update`, maybe some manual test runs of jest / RSpec).
+1. Once everything looks good, visit [GDK's scheduled CI pipelines](https://gitlab.com/gitlab-org/gitlab-development-kit/-/pipeline_schedules) and locate the last successful pipeline ID for the `Rebuild Gitpod workspace image` job.
+1. Create a new comment on [GitPod Image Integration test MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/60384) detailing you checked the GDK Gitpod `main` image created via the pipeline ID located in step 5.
+1. Using the pipeline located in step 5., promote the GDK Gitpod `main` image to `stable` by selecting **Run** on the manual `deploy-gitpod-workspace-image` job once it is available.
