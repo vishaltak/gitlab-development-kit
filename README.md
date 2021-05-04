@@ -2,12 +2,6 @@
 
 [![build status](https://gitlab.com/gitlab-org/gitlab-development-kit/badges/main/pipeline.svg)](https://gitlab.com/gitlab-org/gitlab-development-kit/pipelines)
 
-Configure and manage a [GitLab](https://about.gitlab.com) development
-environment.
-
-Read on for installation instructions, or skip to the
-[usage documentation](doc/howto/index.md).
-
 ## Overview
 
 The GitLab Development Kit (GDK) helps you install a GitLab instance on your
@@ -18,6 +12,13 @@ The GDK is recommended for anyone contributing to the GitLab codebase, whether a
 GitLab team member or a member of the wider community. It allows you to test
 your changes locally on your workstation in an isolated manner. This can speed
 up the time it takes to make successful contributions.
+
+## Goals
+
+- Provide developer tooling to install, update, and develop against a local GitLab instance.
+- Offer GDK users an automated method for installing [required software](https://docs.gitlab.com/ee/install/requirements.html#software-requirements).
+- Out of the box, only enable the services GitLab requires to operate.
+- Support native operating systems as listed below.
 
 ## Getting started
 
@@ -33,7 +34,7 @@ The following methods for installing GDK are available:
   | Debian           | 10, 9               |
   | Arch             | latest              |
   | Manjaro          | latest              |
-  
+
 - [Advanced installation](doc/advanced.md) on your local system. Requires at least
   8GB RAM and 12GB disk space.
 - [Gitpod](doc/howto/gitpod.md).
