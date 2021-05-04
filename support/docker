@@ -56,7 +56,7 @@ case "$1" in
     # because we cannot set a variable based on the contents of files. That is why we
     # use this algorithm:
     ci-build-if-necessary)
-        dependency_sha=$(cat Dockerfile packages.txt .tool-versions | sha256sum | cut -d ' ' -f 1)
+        dependency_sha=$(cat support/bootstrap support/bootstrap-common.sh Dockerfile packages.txt .tool-versions | sha256sum | cut -d ' ' -f 1)
         cache_image="${CI_REGISTRY_IMAGE}/asdf-cache:${dependency_sha}"
 
         # Check if a docker image for our branch exists, e.g. base_name/branch-name:latest

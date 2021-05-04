@@ -21,7 +21,7 @@ COPY --chown=gdk . .
 
 ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
 
-RUN make bootstrap \
+RUN bash ./support/bootstrap \
   # simple tests that tools work
   && bash -lec "asdf version; yarn --version; node --version; ruby --version" \
   # clear tmp caches e.g. from postgres compilation
