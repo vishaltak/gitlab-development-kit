@@ -7,6 +7,23 @@ export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
+# Add supported linux platform IDs extracted from /etc/os-release into the
+# appropriate varible variables below. SUPPORTED_PLATFORMS ends up containing
+# all supported platforms and is displayed to the user if their platform is not
+# supported, so you can format the ID to be 'Ubuntu' instead of 'ubuntu'
+# (which is how ID appears in /etc/os-release) so it's rendered nicely to the
+# user. When comparing the user's platform ID against SUPPORTED_PLATFORMS, we
+# ensure the check is not case sensitive which means we get the best of both
+# worlds.
+#
+SUPPORTED_UBUNTU_LIKE_PLATFORMS=('Ubuntu Pop')
+SUPPORTED_DEBIAN_LIKE_PLATFORMS=('Debian PureOS')
+SUPPORTED_ARCH_LIKE_PLATFORMS=('Arch Manjaro')
+SUPPORTED_FEDORA_LIKE_PLATFORMS=('Fedora RHEL')
+SUPPORTED_OTHER_PLATFORMS=('macOS')
+
+SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_PLATFORMS[@]}" "${SUPPORTED_DEBIAN_LIKE_PLATFORMS[@]}" "${SUPPORTED_ARCH_LIKE_PLATFORMS[@]}" "${SUPPORTED_FEDORA_LIKE_PLATFORMS[@]}")
+
 error() {
   echo
   echo "ERROR: ${1}" >&2
@@ -125,12 +142,17 @@ ensure_supported_platform() {
 
     return 0
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
+    shopt -s nocasematch
+
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
-    if [[ "$os_id" == "ubuntu" || "$os_id" == "debian"  || "$os_id" == "pop" || "$os_id" == "pureos" || "$os_id" == "fedora"|| "$os_id" == "arch" || "$os_id" == "manjaro" || "$os_id" == "rhel" ]]; then
+    if [[ ${SUPPORTED_PLATFORMS[*]} =~ ${os_id} ]]; then
+      shopt -u nocasematch
       return 0
     fi
   fi
+
+  shopt -u nocasematch
 
   return 1
 }
@@ -140,12 +162,14 @@ common_preflight_checks() {
 
   if ! ensure_supported_platform; then
     echo
-    echo "ERROR: Unsupported platform." >&2
-    echo "INFO: The list of supported platforms is:" >&2
-    for platform in macOS Ubuntu Debian PopOS PureOS Fedora Arch Manjaro; do
+    echo "ERROR: Unsupported platform. The list of supported platforms are:" >&2
+    echo "INFO:" >&2
+    for platform in "${SUPPORTED_PLATFORMS[@]}"; do
       echo "INFO: - $platform" >&2
     done
+    echo "INFO:" >&2
     echo "INFO: If you want to add your platform to this list, you're welcome to edit bootstrap-common.sh and open a merge request or open an issue in the GDK project." >&2
+    echo "INFO:" >&2
     echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md to bootstrap manually." >&2
     return 1
   fi
@@ -167,23 +191,30 @@ setup_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
-    if [[ "${os_id}" == "ubuntu" ]]; then
+    shopt -s nocasematch
+    if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
       if ! setup_platform_linux_with "packages.txt"; then
+        shopt -u nocasematch
         return 1
       fi
-    elif [[ "${os_id}" == "debian" ]]; then
+    elif [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
       if ! setup_platform_linux_with "packages_debian.txt"; then
+        shopt -u nocasematch
         return 1
       fi
-    elif [[ "${os_id}" == "arch" || "$os_id" == "manjaro" ]]; then
+    elif [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
       if ! setup_platform_linux_arch_like_with "packages_arch.txt"; then
+        shopt -u nocasematch
         return 1
       fi
-    elif [[ "${os_id}" == "fedora" ]]; then
+    elif [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
       if ! setup_platform_linux_fedora_like_with "packages_fedora.txt"; then
+        shopt -u nocasematch
         return 1
       fi
     fi
+
+    shopt -u nocasematch
   fi
 }
 
