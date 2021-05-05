@@ -168,6 +168,19 @@ module GDK
       value.dig(*slugs)
     end
 
+    def bury!(*slugs, new_value)
+      slugs = slugs.first.to_s.split('.') if slugs.one?
+      key = slugs.shift
+
+      if slugs.empty?
+        setting = build(key)
+        setting.value = new_value
+        yaml[key] = setting.value # Sanitize
+      else
+        fetch(key).bury!(*slugs, new_value)
+      end
+    end
+
     def config_file_protected?(target)
       return false if gdk.overwrite_changes
 

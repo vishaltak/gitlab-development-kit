@@ -266,6 +266,25 @@ RSpec.describe GDK::ConfigSettings do
     end
   end
 
+  describe '#bury!' do
+    it 'assigns value in the yaml' do
+      key = 'foo'
+      described_class.integer(key) { '333' }
+
+      expect { config.bury!(key, '444') }.to change(config, key).to(444)
+    end
+
+    it 'raises an error when burying a port to a boolean' do
+      key = 'foo'
+      described_class.integer(key) { '333' }
+      current_port = config[key]
+
+      expect { config.bury!(key, false) }.to raise_error(TypeError, "Value 'false' for #{key} is not a valid integer")
+
+      expect(config[key]).to eq(current_port)
+    end
+  end
+
   def new_test_klass
     Class.new(described_class) do
       yield(self)
