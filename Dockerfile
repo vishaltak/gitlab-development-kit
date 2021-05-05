@@ -27,6 +27,6 @@ RUN bash ./support/bootstrap \
   && sudo apt-get purge software-properties-common -y \
   && sudo apt-get autoremove -y \
   # clear tmp caches e.g. from postgres compilation
-  && rm -rf /tmp/* ~/.asdf/tmp/* \
+  && sudo rm -rf /tmp/* ~/.asdf/tmp/* \
   # Remove files we copied in
-  && rm -rf support/ .tool-versions packages.txt
+  && sudo rm -rf support/ .tool-versions packages.txt
