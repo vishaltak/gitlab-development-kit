@@ -13,19 +13,17 @@ module GDK
         @parent = parent
         @builder = builder
 
-        read_value
-
-        validate!
-      end
-
-      def read_value
-        @value = @user_value = parent.yaml.fetch(key)
-      rescue KeyError
-        @value = default_value
+        self.value = read_value
       end
 
       def default_value
         parent.instance_eval(&blk)
+      end
+
+      def value=(val)
+        @value = parse(val)
+      rescue ::TypeError, ::NoMethodError
+        raise ::TypeError, "Value '#{val}' for #{slug} is not a valid #{type}"
       end
 
       def user_defined?
@@ -33,11 +31,7 @@ module GDK
       end
 
       def validate!
-        orig_value = value
-
-        return if parse
-
-        raise ::TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+        true # Validated in #value=
       end
 
       def dump!(user_only: false)
@@ -55,7 +49,11 @@ module GDK
 
       private
 
-      attr_writer :value
+      def read_value
+        @user_value = parent.yaml.fetch(key)
+      rescue KeyError
+        default_value
+      end
 
       def type
         self.class.name.split('::').last.downcase

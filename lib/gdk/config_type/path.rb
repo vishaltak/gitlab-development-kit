@@ -10,14 +10,8 @@ module GDK
         value.to_s
       end
 
-      def parse
-        return unless string_like?
-
-        self.value = Pathname.new(value)
-
-        true
-      rescue ::TypeError
-        false
+      def parse(value)
+        Pathname.new(value)
       end
 
       private

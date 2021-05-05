@@ -46,8 +46,8 @@ module GDK
         elems.map { |e| e.dump!(user_only: user_only) }
       end
 
-      def parse
-        true # NOOP
+      def parse(value)
+        value
       end
 
       def inspect
