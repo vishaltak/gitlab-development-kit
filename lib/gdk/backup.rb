@@ -6,6 +6,8 @@ module GDK
   class Backup
     SourceFileOutsideOfGdk = Class.new(StandardError)
 
+    attr_reader :source_file
+
     def self.root
       GDK.root.join('.backups')
     end
@@ -30,9 +32,15 @@ module GDK
       end
     end
 
-    private
+    def relative_source_file
+      @relative_source_file ||= source_file.relative_path_from(GDK.root)
+    end
 
-    attr_reader :source_file
+    def relative_destination_file
+      @relative_destination_file ||= destination_file.relative_path_from(GDK.root)
+    end
+
+    private
 
     def validate!
       raise SourceFileOutsideOfGdk unless source_file.to_s.start_with?(GDK.root.to_s)
@@ -46,14 +54,6 @@ module GDK
 
     def ensure_backup_directory_exists
       root.mkpath
-    end
-
-    def relative_source_file
-      @relative_source_file ||= source_file.relative_path_from(GDK.root)
-    end
-
-    def relative_destination_file
-      @relative_destination_file ||= destination_file.relative_path_from(GDK.root)
     end
 
     def advise_user

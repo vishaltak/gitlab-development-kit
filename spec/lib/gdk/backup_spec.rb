@@ -49,6 +49,17 @@ RSpec.describe GDK::Backup do
     end
   end
 
+  describe '#source_file' do
+    it 'returns a fully qualified Pathname to the backup source file' do
+      fake_source_file = gdk_root_path.join('Procfile')
+      stub_source_file(fake_source_file)
+
+      stub_root
+
+      expect(described_class.new(fake_source_file).source_file.to_s).to eq(fake_source_file.to_s)
+    end
+  end
+
   describe '#destination_file' do
     it 'returns a fully qualified Pathname to the backup destination file' do
       fake_source_file = gdk_root_path.join('Procfile')
@@ -60,6 +71,33 @@ RSpec.describe GDK::Backup do
         fake_destination_file = backups_path.join('Procfile.20210506185031')
 
         expect(described_class.new(fake_source_file).destination_file.to_s).to eq(fake_destination_file.to_s)
+      end
+    end
+  end
+
+  describe '#relative_source_file' do
+    it 'returns a relative Pathname to the backup source file' do
+      fake_source_file_only = 'Procfile'
+      fake_source_file = gdk_root_path.join(fake_source_file_only)
+      stub_source_file(fake_source_file)
+
+      stub_root
+
+      expect(described_class.new(fake_source_file).relative_source_file.to_s).to eq(fake_source_file_only)
+    end
+  end
+
+  describe '#relative_destination_file' do
+    it 'returns a relative Pathname to the backup destination file' do
+      fake_source_file = gdk_root_path.join('Procfile')
+      stub_source_file(fake_source_file)
+
+      stub_root
+
+      travel_to(now) do
+        fake_destination_file_only = 'Procfile.20210506185031'
+
+        expect(described_class.new(fake_source_file).relative_destination_file.to_s).to eq(File.join(backups_path_only, fake_destination_file_only))
       end
     end
   end
