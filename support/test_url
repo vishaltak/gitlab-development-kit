@@ -18,10 +18,10 @@ display_duration() {
 
 if [[ "${QUIET}" == "false" ]]; then
   SLEEP_BETWEEN_ATTEMPTS=5
-  CURL_OPTIONS="--show-error"
+  CURL_OPTIONS=(--show-error)
 else
   SLEEP_BETWEEN_ATTEMPTS=1
-  CURL_OPTIONS="--output /dev/null"
+  CURL_OPTIONS=(--output /dev/null)
 fi
 
 for i in $(seq 1 ${MAX_ATTEMPTS})
@@ -32,7 +32,7 @@ do
     echo -n '.'
   fi
 
-  if curl --head --silent --fail --connect-timeout ${CURL_CONNECT_TIMEOUT} --max-time ${CURL_MAX_TIME} "${CURL_OPTIONS}" "${FULL_URL}"; then
+  if curl --head --silent --fail --connect-timeout ${CURL_CONNECT_TIMEOUT} --max-time ${CURL_MAX_TIME} "${CURL_OPTIONS[@]}" "${FULL_URL}"; then
     echo
     echo "${FULL_URL} is up! Took $(display_duration)."
     exit 0
