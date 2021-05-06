@@ -7,7 +7,7 @@ stages:
 
 variables:
   DEFAULT_IMAGE: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.7.2.patched-golang-1.14-git-2.29-lfs-2.9-chrome-87-node-14.15-yarn-1.22-postgresql-12-graphicsmagick-1.3.34
-  VERIFY_IMAGE: $CI_REGISTRY_IMAGE/asdf-verify:$CI_COMMIT_REF_SLUG
+  VERIFY_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:$CI_COMMIT_REF_SLUG
   GITPOD_WORKSPACE_IMAGE_BASE: $CI_REGISTRY_IMAGE/gitpod-workspace
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
   GDK_DEBUG: "true"

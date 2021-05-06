@@ -1,35 +1,32 @@
 FROM ubuntu:20.04
 LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab-development-kit/-/graphs/main"
 
-# Directions when writing this dockerfile:
-# Keep least changed directives first. This improves layers caching when rebuilding.
+## We are building this docker file with an experimental --squash in order
+## to reduce the resulting layer size: https://docs.docker.com/engine/reference/commandline/build/#squash-an-images-layers---squash-experimental
+##
+## The CI script that build this file can be found under: support/docker
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install packages
-COPY packages.txt /
-RUN apt-get update && apt-get install -y software-properties-common \
-    && add-apt-repository ppa:git-core/ppa -y \
-    && apt-get install -y $(sed -e 's/#.*//' /packages.txt) \
-    && apt-get purge software-properties-common -y \
-    && apt-get autoremove -y \
-    && rm -rf /tmp/*
+RUN apt-get update && apt-get install -y sudo software-properties-common \
+    && add-apt-repository ppa:git-core/ppa -y
 
 RUN useradd --user-group --create-home --groups sudo gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk_no_password
 
-WORKDIR /home/gdk
 USER gdk
+WORKDIR /home/gdk/gitlab-development-kit
+COPY --chown=gdk . .
 
-# Install asdf, plugins and correct versions
 ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
-COPY --chown=gdk .tool-versions .
-RUN git clone https://github.com/asdf-vm/asdf.git /home/gdk/.asdf --branch v0.8.0 && \
-  for plugin in $(grep -v '#' .tool-versions | cut -f1 -d" "); do \
-  echo "Installing asdf plugin '$plugin' and install current version" ; \
-  asdf plugin add $plugin; \
-  NODEJS_CHECK_SIGNATURES=no asdf install ; done \
+
+RUN bash ./support/bootstrap \
   # simple tests that tools work
   && bash -lec "asdf version; yarn --version; node --version; ruby --version" \
+  # Remove unneeded packages
+  && sudo apt-get purge software-properties-common -y \
+  && sudo apt-get autoremove -y \
   # clear tmp caches e.g. from postgres compilation
-  && rm -rf /tmp/*
+  && sudo rm -rf /tmp/* ~/.asdf/tmp/* \
+  # Remove files we copied in
+  && sudo rm -rf support/ .tool-versions packages.txt
