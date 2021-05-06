@@ -1,8 +1,6 @@
 #!/bin/bash
 
 MAX_ATTEMPTS=90
-CURL_CONNECT_TIMEOUT=3
-CURL_MAX_TIME=3
 START_TIME="$(date +%s)"
 
 QUIET="${QUIET:-true}"
@@ -32,7 +30,7 @@ do
     echo -n '.'
   fi
 
-  if curl --head --silent --fail --connect-timeout ${CURL_CONNECT_TIMEOUT} --max-time ${CURL_MAX_TIME} "${CURL_OPTIONS[@]}" "${FULL_URL}"; then
+  if curl --head --silent --fail "${CURL_OPTIONS[@]}" "${FULL_URL}"; then
     echo
     echo "${FULL_URL} is up! Took $(display_duration)."
     exit 0
