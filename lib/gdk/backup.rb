@@ -16,9 +16,9 @@ module GDK
       validate!
     end
 
-    def backup!(advise: true)
+    def backup!(copy: true, advise: true)
       ensure_backup_directory_exists
-      make_backup_of_source_file
+      make_backup_of_source_file(copy)
       advise_user if advise
 
       true
@@ -60,8 +60,9 @@ module GDK
       GDK::Output.info("A backup of '#{relative_source_file}' has been made at '#{relative_destination_file}'.")
     end
 
-    def make_backup_of_source_file
-      FileUtils.cp(source_file.to_s, destination_file.to_s)
+    def make_backup_of_source_file(copy)
+      action = copy ? :cp : :mv
+      FileUtils.public_send(action, source_file.to_s, destination_file.to_s) # rubocop:disable GitlabSecurity/PublicSend
     end
   end
 end
