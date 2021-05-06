@@ -18,4 +18,4 @@ install
 doctor
 start
 wait_for_boot
-"${parent_path}"/test_url
+QUIET=false "${parent_path}"/../test_url
