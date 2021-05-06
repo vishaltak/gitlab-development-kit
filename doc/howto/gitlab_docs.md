@@ -38,10 +38,10 @@ To enable GDK to manage `gitlab-docs`:
 1. Run `gdk update` to:
    - Clone `gitlab-docs` for the first time, or update an existing local copy.
    - Compile a published version of the contents of the `gitlab/doc` directory.
-1. Start GDK, which also starts the `gitlab-docs` service when enabled:
+1. Start the `gitlab-docs` service:
 
    ```shell
-   gdk start
+   gdk start gitlab-docs
    ```
 
 1. Go to the URL shown in the terminal to ensure the site loads correctly. If the site doesn't
@@ -58,10 +58,10 @@ You can preview documentation changes as they would appear when published on
 
 To make changes to GitLab documentation and preview them:
 
-1. Start GDK and ensure you can preview the documentation site:
+1. Start the `gitlab-docs` service and ensure you can preview the documentation site:
 
    ```shell
-   gdk start
+   gdk start gitlab-docs
    ```
 
 1. Make the necessary changes to the files in `<path_to_gdk>/gitlab/doc`.
@@ -105,6 +105,11 @@ To be able to make and preview changes to the additional documentation:
 1. Run `gdk update` to:
    - Clone the additional projects for the first time, or update existing local copies.
    - Compile a published version of the additional documentation.
+1. Start the `gitlab-docs` service if not already running:
+
+   ```shell
+   gdk start gitlab-docs
+   ```
 
 NOTE:
 `gitlab_runner` should not be confused with [`runner`](runner.md).
