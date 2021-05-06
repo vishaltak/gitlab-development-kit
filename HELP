@@ -39,7 +39,8 @@ Manage GDK:
                                             #  repository, PostgreSQL data and
                                             #  Rails upload directory
   gdk pristine                              # Restore your GDK to a pristine
-                                            #  state
+                                            #  state. Deletes caches, tmp files and
+                                            #  reinstalls dependencies. Does not delete data
 
   gdk doctor                                # Run diagnostics on GDK
   gdk version                               # Print current GDK version
