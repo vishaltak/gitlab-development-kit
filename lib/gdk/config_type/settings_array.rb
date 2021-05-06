@@ -30,7 +30,8 @@ module GDK
 
       def read_value
         @elems = ::Array.new(length) do |i|
-          yaml = parent.yaml.fetch(key, []).fetch(i, {})
+          arr = parent.yaml[key] ||= []
+          yaml = arr[i] ||= {}
 
           Class.new(parent.settings_klass).tap do |k|
             k.class_exec(i, &blk)

@@ -141,7 +141,11 @@ module GDK
     end
 
     def user_defined?
-      yaml&.any?
+      attributes.values.any? do |attribute|
+        next if attribute.ignore?
+
+        attribute.build(parent: self).user_defined?
+      end
     end
 
     def fetch(slug, *args)

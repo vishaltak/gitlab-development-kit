@@ -283,6 +283,21 @@ RSpec.describe GDK::ConfigSettings do
 
       expect(config[key]).to eq(current_port)
     end
+
+    it 'buries into non-existing subsettings' do
+      described_class.settings(:foo) { string(:name) { 'bonza' } }
+
+      expect { config.bury!('foo.name', 'ripper') }
+        .to change(config, :yaml).to('foo' => { 'name' => 'ripper' })
+    end
+
+    it 'buries next to existing subsettings' do
+      described_class.settings(:foo) { string(:name) { 'bonza' } }
+      config = described_class.new(yaml: { 'foo' => { 'location' => 'down under' } })
+
+      expect { config.bury!('foo.name', 'ripper') }
+        .to change(config, :yaml).to('foo' => { 'name' => 'ripper', 'location' => 'down under' })
+    end
   end
 
   def new_test_klass
