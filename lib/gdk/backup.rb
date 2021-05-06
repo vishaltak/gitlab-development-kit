@@ -16,10 +16,10 @@ module GDK
       validate!
     end
 
-    def backup!
+    def backup!(advise: true)
       ensure_backup_directory_exists
       make_backup_of_source_file
-      advise_user
+      advise_user if advise
 
       true
     end
