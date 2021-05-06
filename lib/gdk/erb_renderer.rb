@@ -9,8 +9,6 @@ require_relative 'output'
 
 module GDK
   class ErbRenderer
-    BACKUP_DIR = '.backups'
-
     attr_reader :source, :target
 
     def initialize(source, target, args = {})
@@ -85,7 +83,8 @@ module GDK
     def warn_overwritten!
       GDK::Output.warn "'#{target}' has been overwritten. To recover the previous version, run:"
       GDK::Output.puts <<~OVERWRITTEN
-        cp -f '#{backup_file}' '#{target}'
+
+        cp -f '#{backup.relative_destination_file}' '#{target}'
 
         If you want to protect this file from being overwritten, see:
         https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/configuration.md#overwriting-configuration-files
@@ -101,9 +100,12 @@ module GDK
       sleep 5
     end
 
+    def backup
+      @backup ||= Backup.new(target)
+    end
+
     def backup!
-      FileUtils.mkdir_p(BACKUP_DIR)
-      FileUtils.mv(target, backup_file)
+      backup.backup!(copy: false, advise: false)
     end
 
     def colors?
@@ -112,12 +114,6 @@ module GDK
 
     def colors_arg
       '--color' if colors?
-    end
-
-    def backup_file
-      @backup_file ||=
-        File.join(BACKUP_DIR,
-                  target.gsub('/', '__').concat('.', Time.now.strftime('%Y%m%d%H%M%S')))
     end
 
     def config
