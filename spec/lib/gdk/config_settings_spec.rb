@@ -194,6 +194,72 @@ RSpec.describe GDK::ConfigSettings do
     end
   end
 
+  describe '#validate!' do
+    context 'when valid' do
+      it 'returns nil' do
+        described_class.integer(:foo) { '333' }
+        described_class.string(:bar) { 'howdy' }
+
+        expect(config.validate!).to eq(nil)
+      end
+    end
+
+    context 'when invalid' do
+      it 'raises exception' do
+        described_class.integer(:foo) { 'a funny string' }
+        described_class.string(:bar) { 'howdy' }
+
+        expect { config.validate! }.to raise_error(TypeError)
+      end
+    end
+  end
+
+  describe '#dump!' do
+    it 'generates configs without ignored ones' do
+      described_class.integer(:foo) { '333' }
+      described_class.string(:bar) { 'howdy' }
+      described_class.settings_array(:baz, size: 1) { string(:name) { 'bonza' } }
+
+      described_class.integer(:__internal_foo) { '333' }
+      described_class.integer(:questionable_foo?) { '333' }
+
+      expect(config.dump!).to eq(
+        'foo' => 333,
+        'bar' => 'howdy',
+        'baz' => [{ 'name' => 'bonza' }]
+      )
+    end
+
+    context 'when includes user_only configs' do
+      let(:yaml) { { 'bar' => 'whassup dude' } }
+      let(:config) { described_class.new(yaml: yaml) }
+
+      it 'generates only user_only configs' do
+        described_class.integer(:foo) { '333' }
+        described_class.string(:bar) { 'howdy' }
+        described_class.settings_array(:baz, size: 1) { string(:name) { 'bonza' } }
+
+        expect(config.dump!(user_only: true)).to eq('bar' => 'whassup dude')
+      end
+    end
+  end
+
+  describe '#dump_as_yaml' do
+    it 'generates configs' do
+      described_class.integer(:foo) { '333' }
+      described_class.string(:bar) { 'howdy' }
+      described_class.settings_array(:baz, size: 1) { string(:name) { 'bonza' } }
+
+      expect(config.dump_as_yaml).to eq(<<~YAML)
+        ---
+        bar: howdy
+        baz:
+        - name: bonza
+        foo: 333
+      YAML
+    end
+  end
+
   describe '#cmd!' do
     it 'executes command with the chdir being GDK.root' do
       expect(config.cmd!(%w[pwd])).to eql(GDK.root.to_s)
