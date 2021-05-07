@@ -21,7 +21,7 @@ module GDK
 
       private
 
-      attr_reader :diagnostics, :stdout, :stderr
+      attr_reader :diagnostics
 
       def diagnostic_results
         @diagnostic_results ||= jobs.map { |x| x.join[:results] }.compact
@@ -45,13 +45,13 @@ module GDK
       end
 
       def show_healthy
-        stdout.puts 'GDK is healthy.'
+        GDK::Output.puts('GDK is healthy.')
       end
 
       def show_results
-        stdout.puts warning
+        GDK::Output.puts(warning)
         diagnostic_results.each do |result|
-          stdout.puts result
+          GDK::Output.puts(result)
         end
       end
 

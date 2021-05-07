@@ -39,7 +39,7 @@ module GDK
           output = diff.make_output.to_s.chomp
           next if output.empty?
 
-          stderr.puts(output)
+          GDK::Output.puts(output, stderr: true)
         end
 
         # Iterate over each file from files Array and print any output to
@@ -49,7 +49,7 @@ module GDK
         file_diffs.each do |diff| # rubocop:disable Style/CombinableLoops
           next if diff.output.to_s.empty?
 
-          stdout.puts(diff.output)
+          GDK::Output.puts(diff.output)
         end
       end
 
