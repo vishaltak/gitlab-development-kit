@@ -28,8 +28,8 @@ module GDK
         case get_project
         when 'gitaly'
           {
-            'PGHOST' => GDK.config.postgresql.dir.to_s,
-            'PGPORT' => GDK.config.postgresql.port.to_s
+            'PGHOST' => config.postgresql.dir.to_s,
+            'PGPORT' => config.postgresql.port.to_s
           }
         else
           {}

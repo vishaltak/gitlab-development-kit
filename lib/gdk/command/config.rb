@@ -12,7 +12,7 @@ module GDK
         GDK::Output.abort('Usage: gdk config get <configuration value>') if config_command != 'get' || args.empty?
 
         begin
-          puts GDK.config.dig(*args)
+          puts config.dig(*args)
           true
         rescue GDK::ConfigSettings::SettingUndefined
           GDK::Output.abort("Cannot get config for #{args.join('.')}")

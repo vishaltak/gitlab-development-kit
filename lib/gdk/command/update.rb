@@ -14,7 +14,7 @@ module GDK
           return false
         end
 
-        return reconfigure! if GDK.config.gdk.auto_reconfigure?
+        return reconfigure! if config.gdk.auto_reconfigure?
 
         update_result
       end
@@ -22,7 +22,7 @@ module GDK
       private
 
       def update!
-        GDK::Hooks.with_hooks(GDK.config.gdk.update_hooks, 'gdk update') do
+        GDK::Hooks.with_hooks(config.gdk.update_hooks, 'gdk update') do
           GDK.make('self-update')
           GDK.make('self-update', 'update')
         end

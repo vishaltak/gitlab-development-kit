@@ -32,7 +32,7 @@ module GDK
         @urls ||= begin
           urls_or_paths.map do |url|
             # Transform local relative URL's
-            url = "#{GDK.config.__uri}#{url}" if url_is_local?(url)
+            url = "#{config.__uri}#{url}" if url_is_local?(url)
 
             url = url.gsub('localhost', 'host.docker.internal')
             url.gsub('127.0.0.1', 'host.docker.internal')

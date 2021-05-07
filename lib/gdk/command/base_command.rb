@@ -17,6 +17,10 @@ module GDK
 
       protected
 
+      def config
+        @config ||= GDK.config
+      end
+
       def display_help_message
         GDK.puts_separator <<~HELP_MESSAGE
           You can try the following that may be of assistance:
