@@ -10,7 +10,7 @@ RSpec.describe GDK::Backup do
   let(:backups_path_only) { '.backups' }
   let(:backups_path) { gdk_root_path.join('.backups') }
 
-  let!(:now) { DateTime.parse('2021-05-06 18:50:31.279931 +1000').to_time }
+  let!(:now) { DateTime.parse('2021-05-06 18:50:31.279931 +0000').to_time }
 
   before do
     allow(GDK).to receive(:root).and_return(gdk_root_path)
