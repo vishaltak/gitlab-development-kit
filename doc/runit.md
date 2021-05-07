@@ -91,8 +91,10 @@ If you want to remove a service `foo`:
 
 ## Modifying environment configuration for services
 
-If you want to set environment variables for services, either edit the
-`Procfile` and restart the service, or create a file `env.runit` in the root directory with contents such as `export myvar=myvalue`.
+If you want to set environment variables for services, either:
+
+- Edit the `Procfile` and restart the service.
+- Create a file `env.runit` in the root directory with contents such as `export myvar=myvalue`.
 
 Example:
 
