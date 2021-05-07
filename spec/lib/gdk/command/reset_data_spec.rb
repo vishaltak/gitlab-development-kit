@@ -39,8 +39,8 @@ RSpec.describe GDK::Command::ResetData do
   end
 
   context 'backup behavior' do
-    let!(:time_now) { Time.now }
-    let!(:current_timestamp) { time_now.strftime('%Y-%m-%d_%H.%M.%S') }
+    let!(:now) { Time.now }
+    let!(:current_timestamp) { now.strftime('%Y-%m-%d_%H.%M.%S') }
     let!(:postgresql_data_directory) { root.join('postgresql', 'data') }
     let!(:backup_postgresql_data_directory) { backup_base_dir.join('postgresql', "data.#{current_timestamp}") }
 
@@ -53,7 +53,7 @@ RSpec.describe GDK::Command::ResetData do
 
     context 'when backup data script fails' do
       it 'errors out', :hide_stdout do
-        freeze_time do
+        travel_to(now) do
           stub_postgres_data_move
           allow(File).to receive(:rename).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
 
