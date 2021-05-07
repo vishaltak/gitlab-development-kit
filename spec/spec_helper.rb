@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'active_support/testing/time_helpers'
 require 'simplecov-cobertura'
+require 'tzinfo'
 
 # rubocop:disable Layout/FirstArrayElementIndentation
 SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
@@ -26,7 +26,28 @@ RSpec.configure do |config|
   end
 
   config.disable_monkey_patching
-  config.include ActiveSupport::Testing::TimeHelpers
+end
+
+def utc_now
+  TZInfo::Timezone.get('UTC').now
+end
+
+def freeze_time(&blk)
+  travel_to(&blk)
+end
+
+def travel_to(now = utc_now)
+  # Copied from https://github.com/rails/rails/blob/v6.1.3/activesupport/lib/active_support/testing/time_helpers.rb#L163-L165
+  #
+  allow(Time).to receive(:now).and_return(now)
+  allow(Date).to receive(:today).and_return(Date.jd(now.to_date.jd))
+  allow(DateTime).to receive(:now).and_return(DateTime.jd(now.to_date.jd, now.hour, now.min, now.sec, Rational(now.utc_offset, 86400)))
+
+  yield
+
+  allow(Time).to receive(:now).and_call_original
+  allow(Date).to receive(:today).and_call_original
+  allow(DateTime).to receive(:now).and_call_original
 end
 
 def spec_path
