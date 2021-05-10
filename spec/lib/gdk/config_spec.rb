@@ -1064,21 +1064,51 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe 'listen_network' do
+    describe 'agent_listen_network' do
       it 'is tcp by default' do
-        expect(config.gitlab_k8s_agent.listen_network).to eq('tcp')
+        expect(config.gitlab_k8s_agent.agent_listen_network).to eq('tcp')
       end
     end
 
-    describe 'listen_address' do
+    describe 'agent_listen_address' do
       it 'is 127.0.0.1:8150 by default' do
-        expect(config.gitlab_k8s_agent.listen_address).to eq('127.0.0.1:8150')
+        expect(config.gitlab_k8s_agent.agent_listen_address).to eq('127.0.0.1:8150')
       end
     end
 
-    describe '__listen_url_path' do
+    describe '__agent_listen_url_path' do
       it 'is /-/kubernetes-agent by default' do
-        expect(config.gitlab_k8s_agent.__listen_url_path).to eq('/-/kubernetes-agent')
+        expect(config.gitlab_k8s_agent.__agent_listen_url_path).to eq('/-/kubernetes-agent')
+      end
+    end
+
+    describe 'private_api_listen_network' do
+      it 'is tcp by default' do
+        expect(config.gitlab_k8s_agent.private_api_listen_network).to eq('tcp')
+      end
+    end
+
+    describe 'private_api_listen_address' do
+      it 'is 127.0.0.1:8155 by default' do
+        expect(config.gitlab_k8s_agent.private_api_listen_address).to eq('127.0.0.1:8155')
+      end
+    end
+
+    describe 'k8s_api_listen_network' do
+      it 'is tcp by default' do
+        expect(config.gitlab_k8s_agent.k8s_api_listen_network).to eq('tcp')
+      end
+    end
+
+    describe 'k8s_api_listen_address' do
+      it 'is 127.0.0.1:8154 by default' do
+        expect(config.gitlab_k8s_agent.k8s_api_listen_address).to eq('127.0.0.1:8154')
+      end
+    end
+
+    describe '__k8s_api_listen_url_path' do
+      it 'is /-/k8s-proxy by default' do
+        expect(config.gitlab_k8s_agent.__k8s_api_listen_url_path).to eq('/-/k8s-proxy')
       end
     end
 

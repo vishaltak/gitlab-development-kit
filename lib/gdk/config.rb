@@ -268,24 +268,44 @@ module GDK
     settings :gitlab_k8s_agent do
       bool(:enabled) { false }
       bool(:auto_update) { true }
-      string(:listen_network) { 'tcp' }
-      string(:listen_address) { "#{config.listen_address}:8150" }
-      string(:__listen_url_path) { '/-/kubernetes-agent' }
-      string(:__gitlab_address) { "http://#{config.workhorse.__listen_address}" }
+
+      string(:agent_listen_network) { 'tcp' }
+      string(:agent_listen_address) { "#{config.listen_address}:8150" }
+      string(:__agent_listen_url_path) { '/-/kubernetes-agent' }
+      bool :__agent_listen_websocket do
+        if config.nginx?
+          # nginx's grpc_pass requires HTTP/2 enabled which requires TLS.
+          # It's easier to use WebSockets than ask the user to generate
+          # TLS certificates.
+          true
+        else
+          false
+        end
+      end
       string :__url_for_agentk do
         if config.nginx?
           # kas is behind nginx
           if config.https?
-            "wss://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__listen_url_path}"
+            "wss://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__agent_listen_url_path}"
           else
-            "ws://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__listen_url_path}"
+            "ws://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__agent_listen_url_path}"
           end
-        elsif config.gitlab_k8s_agent.listen_network == 'tcp'
-          "grpc://#{config.gitlab_k8s_agent.listen_address}"
+        elsif config.gitlab_k8s_agent.agent_listen_network == 'tcp'
+          "grpc://#{config.gitlab_k8s_agent.agent_listen_address}"
         else
-          raise UnsupportedConfiguration, "Unsupported listen network #{config.gitlab_k8s_agent.listen_network}"
+          raise UnsupportedConfiguration, "Unsupported listen network #{config.gitlab_k8s_agent.agent_listen_network}"
         end
       end
+
+      string(:private_api_listen_network) { 'tcp' }
+      string(:private_api_listen_address) { "#{config.listen_address}:8155" }
+      string(:__private_api_secret_file) { config.gitlab_k8s_agent.__secret_file }
+      string(:__private_api_url) { "grpc://#{config.gitlab_k8s_agent.private_api_listen_address}" }
+
+      string(:k8s_api_listen_network) { 'tcp' }
+      string(:k8s_api_listen_address) { "#{config.listen_address}:8154" }
+      string(:__k8s_api_listen_url_path) { '/-/k8s-proxy' }
+
       string(:internal_api_listen_network) { 'tcp' }
       string(:internal_api_listen_address) { "#{config.listen_address}:8153" }
       string(:__internal_api_url) do
@@ -298,16 +318,8 @@ module GDK
           raise UnsupportedConfiguration, "Unsupported listen network #{config.gitlab_k8s_agent.internal_api_listen_network}"
         end
       end
-      bool :__listen_websocket do
-        if config.nginx?
-          # nginx's grpc_pass requires HTTP/2 enabled which requires TLS.
-          # It's easier to use WebSockets than ask the user to generate
-          # TLS certificates.
-          true
-        else
-          false
-        end
-      end
+
+      string(:__gitlab_address) { "http://#{config.workhorse.__listen_address}" }
       string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }
       string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
     end
