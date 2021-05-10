@@ -35,7 +35,7 @@ module GDK
       string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }
       string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
       string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
-      string(:gitlab_docs) { 'https://gitlab.com/gitlab-com/gitlab-docs.git' }
+      string(:gitlab_docs) { 'https://gitlab.com/gitlab-org/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
       string(:gitlab_ui) { 'https://gitlab.com/gitlab-org/gitlab-ui.git' }
       string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
