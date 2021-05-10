@@ -59,6 +59,9 @@ Before [installing GDK](#install-gdk), your local environment must have third-pa
 installed and configured. These can be installed and managed automatically
 [using `asdf`](#automatically-using-asdf) or [manually](#manually).
 
+If you've previously [managed your own dependencies](advanced.md), you can
+[migrate to `asdf`](migrate_to_asdf.md) to allow GDK to manage dependencies for you.
+
 #### Automatically using `asdf`
 
 Installing and managing dependencies automatically lets GDK manage dependencies for you using
@@ -115,11 +118,6 @@ After installing GDK dependencies:
    ```shell
    cd gitlab-development-kit
    ```
-
-#### Migrate to `asdf`-managed dependencies
-
-If you've previously [managed your own dependencies](advanced.md), there are steps you should follow
-to allow [GDK to manage dependencies for you using `asdf`](migrate_to_asdf.md).
 
 ### Install GDK
 
