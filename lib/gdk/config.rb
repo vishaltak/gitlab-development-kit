@@ -201,24 +201,27 @@ module GDK
       bool(:enabled) { false }
       bool(:auto_update) { true }
       integer(:port) { 3005 }
+
+      bool(:__all_configured?) { config.gitlab_docs.enabled? && config.gitlab_runner.enabled? && config.omnibus_gitlab.enabled? && config.charts_gitlab.enabled? }
+
+      string(:__nanoc_live_common) { "--host #{config.hostname} --port #{config.gitlab_docs.port}" }
+      string(:__nanoc_live_cmd) { "bundle exec nanoc live #{config.gitlab_docs.__nanoc_live_common}" }
+      string(:__nanoc_view_cmd) { "bundle exec nanoc compile && bundle exec nanoc view #{config.gitlab_docs.__nanoc_live_common}" }
     end
 
     settings :gitlab_runner do
       bool(:enabled) { false }
       bool(:auto_update) { true }
-      bool(:docs_enabled) { false }
     end
 
     settings :omnibus_gitlab do
       bool(:enabled) { false }
       bool(:auto_update) { true }
-      bool(:docs_enabled) { false }
     end
 
     settings :charts_gitlab do
       bool(:enabled) { false }
       bool(:auto_update) { true }
-      bool(:docs_enabled) { false }
     end
 
     settings :gitlab_elasticsearch_indexer do

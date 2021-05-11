@@ -6,7 +6,6 @@ asdf:
   opt_out: false
 charts_gitlab:
   auto_update: true
-  docs_enabled: false
   enabled: false
 common:
   ca_path: ''
@@ -109,7 +108,6 @@ gitlab_pages:
   verbose: false
 gitlab_runner:
   auto_update: true
-  docs_enabled: false
   enabled: false
 gitlab_shell:
   auto_update: true
@@ -184,7 +182,6 @@ omniauth:
     enabled: false
 omnibus_gitlab:
   auto_update: true
-  docs_enabled: false
   enabled: false
 openldap:
   enabled: false

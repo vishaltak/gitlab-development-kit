@@ -1774,6 +1774,64 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '__all_configured' do
+      context 'when all documentation projects enabled' do
+        let(:yaml) do
+          {
+            'gitlab_docs' => { 'enabled' => true },
+            'gitlab_runner' => { 'enabled' => true },
+            'omnibus_gitlab' => { 'enabled' => true },
+            'charts_gitlab' => { 'enabled' => true }
+          }
+        end
+
+        it 'returns true' do
+          expect(config.gitlab_docs.__all_configured?).to be(true)
+        end
+      end
+
+      context 'when all documentation projects not enabled' do
+        let(:yaml) do
+          {
+            'gitlab_docs' => { 'enabled' => true },
+            'gitlab_runner' => { 'enabled' => true },
+            'omnibus_gitlab' => { 'enabled' => false },
+            'charts_gitlab' => { 'enabled' => true }
+          }
+        end
+
+        it 'returns false' do
+          expect(config.gitlab_docs.__all_configured?).to be(false)
+        end
+      end
+
+      describe '__nanoc_live_common' do
+        context 'when GDK host and GitLab Docs port not configured' do
+          let(:yaml) do
+            {
+            }
+          end
+
+          it 'nanoc is passed default options' do
+            expect(config.gitlab_docs.__nanoc_live_common).to eq('--host 127.0.0.1 --port 3005')
+          end
+        end
+
+        context 'when GDK host and GitLab Docs port are configured' do
+          let(:yaml) do
+            {
+              'hostname' => 'gdk.test.com',
+              'gitlab_docs' => { 'port' => 5555 }
+            }
+          end
+
+          it 'nanoc is passed configured options' do
+            expect(config.gitlab_docs.__nanoc_live_common).to eq('--host gdk.test.com --port 5555')
+          end
+        end
+      end
+    end
+
     describe 'gitlab_runner' do
       describe 'enabled' do
         it 'is disabled by default' do
@@ -1786,13 +1844,6 @@ RSpec.describe GDK::Config do
         it 'is enabled by default' do
           expect(config.gitlab_runner.auto_update).to be(true)
           expect(config.gitlab_runner.auto_update?).to be(true)
-        end
-      end
-
-      describe 'docs_enabled' do
-        it 'is disabled by default' do
-          expect(config.gitlab_runner.docs_enabled).to be(false)
-          expect(config.gitlab_runner.docs_enabled?).to be(false)
         end
       end
     end
@@ -1811,13 +1862,6 @@ RSpec.describe GDK::Config do
           expect(config.omnibus_gitlab.auto_update?).to be(true)
         end
       end
-
-      describe 'docs_enabled' do
-        it 'is disabled by default' do
-          expect(config.omnibus_gitlab.docs_enabled).to be(false)
-          expect(config.omnibus_gitlab.docs_enabled?).to be(false)
-        end
-      end
     end
 
     describe 'charts_gitlab' do
@@ -1832,13 +1876,6 @@ RSpec.describe GDK::Config do
         it 'is enabled by default' do
           expect(config.charts_gitlab.auto_update).to be(true)
           expect(config.charts_gitlab.auto_update?).to be(true)
-        end
-      end
-
-      describe 'docs_enabled' do
-        it 'is disabled by default' do
-          expect(config.charts_gitlab.docs_enabled).to be(false)
-          expect(config.charts_gitlab.docs_enabled?).to be(false)
         end
       end
     end
