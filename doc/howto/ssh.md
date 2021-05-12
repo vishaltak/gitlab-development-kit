@@ -1,7 +1,7 @@
 # Configure and use SSH in GDK
 
 GitLab can provide access to its repositories over SSH instead of HTTPS. There
-are two ways to enable this in GDK. Either: 
+are two ways to enable this in GDK. Either:
 
 - Run the `gitlab-sshd` binary provided by [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell).
   Using `gitlab-sshd` is better for multi-host deployments like GitLab.com and
@@ -42,6 +42,16 @@ Note that some settings apply:
 
 To switch from `gitlab-sshd` to OpenSSH, follow the
 instructions under [OpenSSH integration](#openssh-integration).
+
+### Optional: Use privileged port
+
+On UNIX-like systems, only root users can bind to ports up to `1024`. If want GDK to run SSH
+on, for example, port `22`, you can provide it the necessary privileges with the following
+command:
+
+```shell
+sudo setcap 'cap_net_bind_service=+ep' gitlab-shell/bin/gitlab-sshd
+```
 
 ## Try it out
 
