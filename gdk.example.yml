@@ -231,7 +231,7 @@ repositories:
   charts_gitlab: https://gitlab.com/gitlab-org/charts/gitlab.git
   gitaly: https://gitlab.com/gitlab-org/gitaly.git
   gitlab: https://gitlab.com/gitlab-org/gitlab.git
-  gitlab_docs: https://gitlab.com/gitlab-com/gitlab-docs.git
+  gitlab_docs: https://gitlab.com/gitlab-org/gitlab-docs.git
   gitlab_elasticsearch_indexer: https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git
   gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
