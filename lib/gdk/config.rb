@@ -272,7 +272,7 @@ module GDK
       string(:agent_listen_network) { 'tcp' }
       string(:agent_listen_address) { "#{config.listen_address}:8150" }
       string(:__agent_listen_url_path) { '/-/kubernetes-agent' }
-      bool :__agent_listen_websocket do
+      bool(:__agent_listen_websocket) do
         if config.nginx?
           # nginx's grpc_pass requires HTTP/2 enabled which requires TLS.
           # It's easier to use WebSockets than ask the user to generate
@@ -282,7 +282,7 @@ module GDK
           false
         end
       end
-      string :__url_for_agentk do
+      string(:__url_for_agentk) do
         if config.nginx?
           # kas is behind nginx
           if config.https?
