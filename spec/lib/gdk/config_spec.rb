@@ -521,6 +521,7 @@ RSpec.describe GDK::Config do
         'postgresql' => {
           'host' => 'localhost',
           'port' => 1234,
+          'active_version' => '11.9',
           'geo' => {
             'host' => 'geo',
             'port' => 5678
@@ -542,6 +543,14 @@ RSpec.describe GDK::Config do
 
       it 'returns configured value' do
         expect(config.postgresql.port).to eq(1234)
+      end
+    end
+
+    describe '#active_version' do
+      it { expect(default_config.postgresql.active_version).to eq('12.6') }
+
+      it 'returns configured value' do
+        expect(config.postgresql.active_version).to eq('11.9')
       end
     end
 

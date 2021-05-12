@@ -13,15 +13,15 @@ RSpec.describe GDK::Postgresql do
   end
 
   describe '::TARGET_VERSION' do
-    it 'is 11.9 by default' do
+    it 'is 12.6 by default' do
       expect(described_class::TARGET_VERSION).to be_instance_of(Gem::Version)
-      expect(described_class::TARGET_VERSION).to eq(Gem::Version.new('11.9'))
+      expect(described_class::TARGET_VERSION).to eq(Gem::Version.new('12.6'))
     end
   end
 
   describe '.target_version_major' do
-    it 'is 11 by default' do
-      expect(described_class.target_version_major).to eq(11)
+    it 'is 12 by default' do
+      expect(described_class.target_version_major).to eq(12)
     end
   end
 
@@ -140,9 +140,9 @@ RSpec.describe GDK::Postgresql do
   end
 
   describe '#upgrade_needed?' do
-    context 'when current version is 11' do
+    context 'when current version is 12' do
       before do
-        stub_current_version('11')
+        stub_current_version('12')
       end
 
       context 'and target version is 9.6' do
