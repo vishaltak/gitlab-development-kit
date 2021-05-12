@@ -81,12 +81,16 @@ gitlab_docs:
 gitlab_elasticsearch_indexer:
   auto_update: true
 gitlab_k8s_agent:
+  agent_listen_address: 127.0.0.1:8150
+  agent_listen_network: tcp
   auto_update: true
   enabled: false
   internal_api_listen_address: 127.0.0.1:8153
   internal_api_listen_network: tcp
-  listen_address: 127.0.0.1:8150
-  listen_network: tcp
+  k8s_api_listen_address: 127.0.0.1:8154
+  k8s_api_listen_network: tcp
+  private_api_listen_address: 127.0.0.1:8155
+  private_api_listen_network: tcp
 gitlab_pages:
   access_control: false
   auth_client_id: ''

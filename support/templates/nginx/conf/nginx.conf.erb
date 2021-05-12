@@ -34,10 +34,10 @@ http {
 
 <%- if config.gitlab_k8s_agent? -%>
   upstream gitlab-k8s-agent {
-    <%- if config.gitlab_k8s_agent.listen_network == 'unix' -%>
-    server unix:<%= config.gitlab_k8s_agent.listen_address %> fail_timeout=0;
+    <%- if config.gitlab_k8s_agent.agent_listen_network == 'unix' -%>
+    server unix:<%= config.gitlab_k8s_agent.agent_listen_address %> fail_timeout=0;
     <%- else -%>
-    server <%= config.gitlab_k8s_agent.listen_address %> fail_timeout=0;
+    server <%= config.gitlab_k8s_agent.agent_listen_address %> fail_timeout=0;
     <%- end -%>
   }
 <%- end -%>
@@ -76,9 +76,14 @@ http {
     }
 <%- if config.gitlab_k8s_agent? -%>
 
-    location = <%= config.gitlab_k8s_agent.__listen_url_path %> {
+    location = <%= config.gitlab_k8s_agent.__agent_listen_url_path %> {
       proxy_pass http://gitlab-k8s-agent;
     }
+
+    location = <%= config.gitlab_k8s_agent.__k8s_api_listen_url_path %> {
+      proxy_pass http://gitlab-k8s-agent;
+    }
+
 <%- end -%>
   }
 <%- if config.https? -%>
