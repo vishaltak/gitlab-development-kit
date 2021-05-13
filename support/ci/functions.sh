@@ -13,6 +13,10 @@ install_gem() {
   gem install gitlab-development-kit-*.gem
 }
 
+test_gem() {
+  gdk
+}
+
 checkout() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   # $CI_MERGE_REQUEST_SOURCE_PROJECT_URL only exists in pipelines generated in merge requests.
@@ -56,6 +60,7 @@ install() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Installing GDK.."
   gdk install
+  test_gem
   set_gitlab_upstream
 }
 
