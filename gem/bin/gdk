@@ -13,7 +13,6 @@ require 'gitlab_development_kit'
 # installed outside the gitlab-development-kit repository with 'gem
 # install'. Edit lib/gdk.rb to define new commands.
 module GDK
-  ROOT_CHECK_FILE = '.gdk-install-root'
   DEFAULT_INIT_DIRECTORY = File.join(Dir.pwd, 'gitlab-development-kit')
 
   def self.launcher_main
@@ -34,7 +33,7 @@ module GDK
       end
 
       cmd = %W[git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git #{directory}]
-      system(*cmd) && remember!(directory)
+      system(*cmd)
     else
       if print_version?
         puts VERSION
@@ -91,16 +90,6 @@ module GDK
     File.open(DOTFILE, File::RDONLY | File::CREAT) do |f|
       YAML.safe_load(f)
     end || {}
-  end
-
-  def self.remember!(directory)
-    File.open("#{directory}/#{ROOT_CHECK_FILE}", 'w') do |f|
-      f.puts File.realpath(directory)
-    end
-    true
-  rescue StandardError => e
-    warn e
-    false
   end
 end
 

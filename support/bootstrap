@@ -57,12 +57,6 @@ asdf_install_tools() {
   return $?
 }
 
-gdk_prepare_directory() {
-  [[ ! -f ".gdk-install-root"  ]] && echo "${PWD}" > .gdk-install-root
-
-  return 0
-}
-
 ###############################################################################
 
 common_preflight_checks
@@ -95,11 +89,6 @@ fi
 echo "INFO: Installing gitlab-development-kit Ruby gem.."
 if ! gdk_install_gem; then
   error "Failed to install gitlab-development-kit Ruby gem." >&2
-fi
-
-echo "INFO: Preparing GDK directory.."
-if ! gdk_prepare_directory; then
-  error "Failed to prepare GDK directory." >&2
 fi
 
 echo "INFO: Configuring Ruby Bundler.."

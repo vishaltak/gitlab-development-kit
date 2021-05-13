@@ -23,7 +23,6 @@ rspec:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
     BUNDLE_ARGS: "--path vendor/bundle"
   script:
-    - pwd > .gdk-install-root
     - make rspec
   cache:
     key: "ruby-2.7-bundle"

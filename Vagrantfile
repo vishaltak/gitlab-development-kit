@@ -100,7 +100,6 @@ $user_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
   fi
 
   # set up gdk
-  echo '/vagrant' > /vagrant/.gdk-install-root
   sudo -u $DEV_USER -i bash -c "gem install gitlab-development-kit"
 COMMANDS
 
