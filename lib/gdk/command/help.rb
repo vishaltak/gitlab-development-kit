@@ -5,9 +5,9 @@ require 'fileutils'
 module GDK
   module Command
     class Help < BaseCommand
-      def run(args = [])
+      def run(_ = [])
         GDK::Logo.print
-        stdout.puts File.read(GDK.root.join('HELP'))
+        GDK::Output.puts(File.read(GDK.root.join('HELP')))
 
         true
       end
