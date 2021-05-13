@@ -152,6 +152,8 @@ This check requires:
 
 ### Troubleshooting
 
+#### Stale published documentation
+
 Sometimes the local published version of the documentation can fall out-of-date with the source
 content. In these cases, you can remove the data structure `nanoc` uses to keep track of changes
 with the following command:
@@ -161,3 +163,24 @@ make gitlab-docs-clean
 ```
 
 This causes `nanoc` to rebuild all documentation on the next run.
+
+#### `No preset version installed` error for `markdownlint`
+
+Sometimes the `./scripts/lint-doc.sh` script fails with an error similar to:
+
+  ```shell
+  No preset version installed for command markdownlint
+  Please install a version by running one of the following:
+
+  asdf install nodejs 14.16.1
+  ```
+
+The cause is unknown but you can try reinstalling `markdownlint` and reshiming:
+
+  ```shell
+  $ rm -f ~/.asdf/shims/markdownlint
+  $ make markdownlint-install
+
+  INFO: Installing markdownlint..
+  $ asdf reshim nodejs
+  ```
