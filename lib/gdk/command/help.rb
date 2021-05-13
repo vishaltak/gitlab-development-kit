@@ -8,6 +8,8 @@ module GDK
       def run(args = [])
         GDK::Logo.print
         stdout.puts File.read(GDK.root.join('HELP'))
+
+        true
       end
     end
   end
