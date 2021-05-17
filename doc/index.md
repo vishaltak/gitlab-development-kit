@@ -49,7 +49,25 @@ sudo pacman -Syu git make
 
 Install using your system's package manager.
 
-## Install dependencies and GDK
+## One-line installation
+
+Both `git` and `make` are required for the one-line installation to work, and 
+macOS comes with these already installed. For other operating systems, refer 
+to the [dependency installation instructions](index.md#install-prerequisites).
+
+```shell
+curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash -
+```
+
+The one-line installation:
+
+- Clones the GDK project into a new `gitlab-development-kit` directory in the current working
+  directory.
+- Installs `asdf` and necessary `asdf` plugins.
+- Runs `gdk install`.
+- Runs `gdk start`.
+
+## Simple Installation
 
 After prerequisites are installed, you can install GDK dependencies and GDK itself.
 

@@ -24,6 +24,12 @@ up the time it takes to make successful contributions.
 
 The following methods for installing GDK are available:
 
+- [One-line installation](doc/index.md#one-line-installation):
+
+  ```shell
+  curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash -
+  ```
+
 - [Simple installation](doc/index.md) on your local system. Requires at least
   8GB RAM and 12GB disk space. Available for:
 
