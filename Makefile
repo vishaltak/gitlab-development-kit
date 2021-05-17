@@ -905,7 +905,7 @@ postgresql-seed-rails: ensure-databases-running postgresql-seed-praefect
 	$(Q)support/bootstrap-rails
 
 .PHONY: postgresql-seed-praefect
-postgresql-seed-praefect: Procfile postgresql/data
+postgresql-seed-praefect: Procfile postgresql/data postgresql-geo/data postgresql/geo/port
 	$(Q)gdk start db
 	$(Q)support/bootstrap-praefect
 
@@ -923,7 +923,7 @@ postgresql-replication-primary: postgresql-replication/access postgresql-replica
 
 postgresql-replication-secondary: postgresql-replication/data postgresql-replication/access postgresql-replication/backup postgresql-replication/config
 
-postgresql-geo-replication-secondary: postgresql-geo-secondary-replication/data postgresql-replication/access postgresql-replication/backup postgresql-replication/config
+postgresql-geo-replication-secondary: postgresql-geo-secondary-replication/data postgresql-geo-replication/access postgresql-replication/backup postgresql-replication/config
 
 postgresql-replication-primary-create-slot: postgresql-replication/slot
 
