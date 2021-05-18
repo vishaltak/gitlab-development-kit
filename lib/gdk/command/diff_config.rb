@@ -99,7 +99,7 @@ module GDK
         end
 
         def run(*commands)
-          IO.popen(commands.join(' '), chdir: GDK.root, &:read).chomp
+          Shellout.new(commands, chdir: GDK.root).run
         end
       end
     end
