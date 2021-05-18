@@ -944,7 +944,7 @@ postgresql-replication/backup:
 	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_start_backup('base backup for streaming rep')"
 	$(Q)rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgresql_primary_dir}/data postgresql
 	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
-	$(Q)./support/recovery.conf ${postgresql_primary_host} ${postgresql_primary_port} > ${postgresql_data_dir}/recovery.conf
+	$(Q)./support/postgresql-standby-server ${postgresql_primary_host} ${postgresql_primary_port}
 	$(Q)$(MAKE) postgresql/port ${QQ}
 
 postgresql-replication/slot:
