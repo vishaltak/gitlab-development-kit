@@ -15,7 +15,6 @@ RSpec.describe GDK::Command::Doctor do
       help you when you encounter issues with GDK.
       If your GDK is working fine, you can safely ignore them. Thanks!
       ================================================================================
-
     WARNING
   end
 
@@ -41,7 +40,7 @@ RSpec.describe GDK::Command::Doctor do
     end
 
     it 'prints GDK is ready.' do
-      expect(GDK::Output).to receive(:puts).with('GDK is healthy.')
+      expect(GDK::Output).to receive(:success).with('GDK is healthy.')
 
       subject.run
     end
@@ -57,6 +56,9 @@ RSpec.describe GDK::Command::Doctor do
     end
 
     it 'prints a warning' do
+      expect(GDK::Output).to receive(:puts).with("\n").ordered
+      expect(GDK::Output).to receive(:warn).with('GDK may need attention:').ordered
+      expect(GDK::Output).to receive(:puts).with("\n").ordered
       expect(GDK::Output).to receive(:puts).with(warning_message).ordered
       expect(GDK::Output).to receive(:puts).with('check failed').ordered.twice
 
@@ -76,6 +78,9 @@ RSpec.describe GDK::Command::Doctor do
 
     it 'prints a message from failed diagnostics' do
       expect(failing_diagnostic).to receive(:message).twice
+      expect(GDK::Output).to receive(:puts).with("\n").ordered
+      expect(GDK::Output).to receive(:warn).with('GDK may need attention:').ordered
+      expect(GDK::Output).to receive(:puts).with("\n").ordered
       expect(GDK::Output).to receive(:puts).with(warning_message).ordered
       expect(GDK::Output).to receive(:puts).with('check failed').ordered.twice
 
