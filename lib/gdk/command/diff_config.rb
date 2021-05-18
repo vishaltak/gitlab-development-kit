@@ -91,7 +91,7 @@ module GDK
         end
 
         def update_config_file
-          run(GDK::MAKE, file)
+          run(GDK::MAKE, '--silent', file)
         end
 
         def diff_with_unchanged
