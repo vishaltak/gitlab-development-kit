@@ -20,9 +20,16 @@ up the time it takes to make successful contributions.
 - Out of the box, only enable the services GitLab requires to operate.
 - Support native operating systems as listed below.
 
-## Getting started
+## Installation
 
-The following methods for installing GDK are available:
+You can install GDK using the following methods. Some are:
+
+- Supported and frequently tested.
+- Not supported, but we welcome merge requests to improve them.
+
+### Supported methods
+
+The following installation methods are supported, actively maintained, and tested:
 
 - [One-line installation](doc/index.md#one-line-installation):
 
@@ -41,13 +48,19 @@ The following methods for installing GDK are available:
   | Arch             | latest              |
   | Manjaro          | latest              |
 
+- [Gitpod](doc/howto/gitpod.md).
+
+### Unsupported methods
+
+The following documentation is provided for those who can benefit from it, but aren't
+supported installation methods:
+
 - [Advanced installation](doc/advanced.md) on your local system. Requires at least
   8GB RAM and 12GB disk space.
-- [Gitpod](doc/howto/gitpod.md).
 - [Vagrant](doc/howto/vagrant.md).
 - [Minikube](doc/howto/kubernetes/minikube.md).
 
-After installation, learn how to:
+## Post-installation
 
 - [Use GDK](doc/howto/index.md).
 - [Update an existing installation](doc/index.md#update-gdk).

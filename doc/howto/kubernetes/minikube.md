@@ -2,7 +2,7 @@
 
 GDK can be deployed to Minikube / Kubernetes.
 
-Note that this setup is an experimental phase.
+Note that this setup is an experimental phase and [not officially supported](../../../README.md#installation).
 
 You can't develop GitLab using this strategy yet.
 

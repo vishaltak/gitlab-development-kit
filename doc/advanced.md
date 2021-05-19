@@ -3,7 +3,8 @@
 The following are dependency installation instructions for systems other than
 those covered in the [main dependency installation instructions](index.md#install-prerequisites).
 
-These instructions may contain advanced configuration options.
+These instructions may contain advanced configuration options that
+[may not be officially supported](../README.md#installation).
 
 ## macOS
 

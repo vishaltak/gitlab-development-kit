@@ -4,6 +4,8 @@ In this file we explain different methods of setting up a Vagrant
 virtual machine to do GitLab development in. Please see the [instructions](../index.md) on how to
 install GDK after you have set up your Vagrant machine.
 
+This method of installation is [not officially supported](../../README.md#installation)
+
 ## Clone the GitLab Development Kit
 
 Clone the GDK to you local machine. Enter that directory.
