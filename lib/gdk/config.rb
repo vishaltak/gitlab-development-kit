@@ -363,6 +363,17 @@ module GDK
         bool(:enabled) { false }
         string(:version) { '1.21.0' }
         string(:listen_address) { config.hostname }
+        string(:__tracer_url) do
+          http_endpoint = "http://#{config.tracer.jaeger.listen_address}:14268/api/traces"
+
+          "opentracing://jaeger?http_endpoint=#{CGI.escape(http_endpoint)}&sampler=const&sampler_param=1"
+        end
+
+        string(:__search_url) do
+          tags = CGI.escape('{"correlation_id":"__CID__"}').gsub('__CID__', '{{ correlation_id }}')
+
+          "http://#{config.tracer.jaeger.listen_address}:16686/search?service={{ service }}&tags=#{tags}"
+        end
       end
     end
 

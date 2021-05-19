@@ -1698,23 +1698,33 @@ RSpec.describe GDK::Config do
     end
 
     describe 'jaeger' do
+      subject(:jaeger) { config.tracer.jaeger }
+
       describe 'enabled' do
         it 'is disabled by default' do
-          expect(config.tracer.jaeger.enabled).to be(false)
-          expect(config.tracer.jaeger.enabled?).to be(false)
+          expect(jaeger.enabled).to be(false)
+          expect(jaeger.enabled?).to be(false)
         end
       end
 
       describe 'version' do
-        it 'is 1.18.1 by default' do
-          expect(config.tracer.jaeger.version).to eq('1.21.0')
+        it 'is 1.21.0 by default' do
+          expect(jaeger.version).to eq('1.21.0')
         end
       end
 
       describe 'listen_address' do
         it 'is config.hostname by default' do
-          expect(config.tracer.jaeger.listen_address).to eq(config.hostname)
+          expect(jaeger.listen_address).to eq(config.hostname)
         end
+      end
+
+      describe '__tracer_url' do
+        it { expect(jaeger.__tracer_url).to eq("opentracing://jaeger?http_endpoint=http%3A%2F%2F#{jaeger.listen_address}%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1") }
+      end
+
+      describe '__search_url' do
+        it { expect(jaeger.__search_url).to eq("http://#{jaeger.listen_address}:16686/search?service={{ service }}&tags=%7B%22correlation_id%22%3A%22{{ correlation_id }}%22%7D") }
       end
     end
   end

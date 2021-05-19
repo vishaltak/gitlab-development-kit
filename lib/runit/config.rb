@@ -79,8 +79,8 @@ module Runit
 
       if GDK.config.tracer.jaeger?
         run_env += <<~RUN_ENV
-          export GITLAB_TRACING='opentracing://jaeger?http_endpoint=http%3A%2F%2Flocalhost%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1'
-          export GITLAB_TRACING_URL='http://localhost:16686/search?service={{ service }}&tags=%7B"correlation_id"%3A"{{ correlation_id }}"%7D'
+          export GITLAB_TRACING='#{GDK.config.tracer.jaeger.__tracer_url}'
+          export GITLAB_TRACING_URL='#{GDK.config.tracer.jaeger.__search_url}'
         RUN_ENV
       end
 
