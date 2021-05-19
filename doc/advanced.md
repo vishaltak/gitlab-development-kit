@@ -20,7 +20,7 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 
    ```shell
    brew bundle
-   brew install git go postgresql@12 minio/stable/minio rbenv redis yarn
+   brew install go postgresql@12 minio/stable/minio rbenv redis yarn
    ```
 
 1. Add `/usr/local/opt/postgresql@12/bin` to your shell's `PATH` environment variable.
