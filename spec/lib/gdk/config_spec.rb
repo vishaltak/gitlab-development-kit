@@ -1708,7 +1708,7 @@ RSpec.describe GDK::Config do
       end
 
       describe 'version' do
-        it 'is 1.18.1 by default' do
+        it 'is 1.21.0 by default' do
           expect(jaeger.version).to eq('1.21.0')
         end
       end
