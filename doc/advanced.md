@@ -7,7 +7,7 @@ These instructions may contain advanced configuration options.
 
 ## macOS
 
-GDK supports macOS 10.13 (High Sierra) and later. To install dependencies for macOS:
+GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 
 1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for package management.
 1. Clone the [`gitlab-development-kit` project](https://gitlab.com/gitlab-org/gitlab-development-kit)
