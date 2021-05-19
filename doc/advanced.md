@@ -353,12 +353,10 @@ ruby 2.7.2p137 (2020-10-01 revision 5445e04352) [x86_64-linux]
 If it's different (for example Ruby 2.7 - system default in Tumbleweed), you
 must sign in again.
 
-The following `bundle config` options are recommended before you run
-`gdk install` to avoid problems with the embedded libraries inside `nokogiri`
-and `gpgme`:
+The following `bundle config` option is recommended before you run
+`gdk install` to avoid problems with the embedded library inside `gpgme`:
 
 ```shell
-bundle config build.nokogiri "--use-system-libraries" --global
 bundle config build.gpgme --use-system-libraries
 ```
 
