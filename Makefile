@@ -433,7 +433,7 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"
 	@echo "${DIVIDER}"
-	$(Q)$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment BUILD_TAGS="tracer_static tracer_static_jaeger"
+	$(Q)$(MAKE) -C ${gitaly_clone_dir} BUNDLE_FLAGS=--no-deployment
 	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(bundle_install_cmd)
 
 .PHONY: ${gitaly_build_deps_dir}/git/install/bin/git
