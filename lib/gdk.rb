@@ -22,6 +22,7 @@ module GDK
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`
   # and load only what it really needs
+  autoload :Backup, 'gdk/backup'
   autoload :Command, 'gdk/command'
   autoload :Config, 'gdk/config'
   autoload :Dependencies, 'gdk/dependencies'
