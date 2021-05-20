@@ -36,11 +36,15 @@ module GDK
       @relative_source_file ||= source_file.relative_path_from(GDK.root)
     end
 
-    def relative_destination_file
-      @relative_destination_file ||= destination_file.relative_path_from(GDK.root)
+    def recover_cmd_string
+      "cp -f '#{destination_file}' '#{source_file}'"
     end
 
     private
+
+    def relative_destination_file
+      @relative_destination_file ||= destination_file.relative_path_from(GDK.root)
+    end
 
     def validate!
       raise SourceFileOutsideOfGdk unless source_file.to_s.start_with?(GDK.root.to_s)

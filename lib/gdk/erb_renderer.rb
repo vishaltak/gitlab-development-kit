@@ -84,7 +84,7 @@ module GDK
       GDK::Output.warn "'#{target}' has been overwritten. To recover the previous version, run:"
       GDK::Output.puts <<~OVERWRITTEN
 
-        cp -f '#{backup.relative_destination_file}' '#{target}'
+        #{backup.recover_cmd_string}
 
         If you want to protect this file from being overwritten, see:
         https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/configuration.md#overwriting-configuration-files

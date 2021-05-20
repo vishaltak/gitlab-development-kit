@@ -87,17 +87,17 @@ RSpec.describe GDK::Backup do
     end
   end
 
-  describe '#relative_destination_file' do
-    it 'returns a relative Pathname to the backup destination file' do
+  describe '#recover_cmd_string' do
+    it 'returns the cp command that recovers a backed up file' do
       fake_source_file = gdk_root_path.join('Procfile')
       stub_source_file(fake_source_file)
 
       stub_backup_root
 
       travel_to(now) do
-        fake_destination_file_only = 'Procfile.20210506185031'
+        fake_destination_file = File.join(backups_path, 'Procfile.20210506185031')
 
-        expect(described_class.new(fake_source_file).relative_destination_file.to_s).to eq(File.join(backups_path_only, fake_destination_file_only))
+        expect(described_class.new(fake_source_file).recover_cmd_string).to eq("cp -f '#{fake_destination_file}' '#{fake_source_file}'")
       end
     end
   end
