@@ -259,6 +259,10 @@ Use the following commands to keep Geo-enabled GDK installations up to date.
 - `make geo-primary-update`, run on the primary GDK node.
 - `make geo-secondary-update`, run on any secondary GDK nodes.
 
+## Upgrading to Postgres 12
+
+Upgrading to Postgres 12 is not automated in GDK with Geo. It should be possible to manually accomplish an upgrade, but if you are not generally familiar with the process, it is recommended to set up your GDKs from scratch. The default version is now Postgres 12.
+
 ## Troubleshooting
 
 ### `postgresql-geo/data` exists but is not empty
