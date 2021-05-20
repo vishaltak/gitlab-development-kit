@@ -105,7 +105,7 @@ module GDK
     end
 
     def backup!
-      backup.backup!(copy: false, advise: false)
+      backup.backup!(advise: false)
     end
 
     def colors?

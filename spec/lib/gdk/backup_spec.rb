@@ -103,7 +103,7 @@ RSpec.describe GDK::Backup do
   end
 
   describe '#backup!' do
-    shared_examples 'a file to be backed up' do |fake_source_file, fake_destination_file, copy, advise|
+    shared_examples 'a file to be backed up' do |fake_source_file, fake_destination_file, advise|
       it 'and makes a backup' do
         fake_source_file_full = gdk_root_path.join(fake_source_file)
         stub_source_file(fake_source_file_full)
@@ -116,11 +116,7 @@ RSpec.describe GDK::Backup do
           fake_destination_file_full = File.join(gdk_root_dir, fake_destination_file)
 
           backup_params = [fake_source_file_full.to_s, fake_destination_file_full.to_s]
-          if copy
-            expect(FileUtils).to receive(:cp).with(*backup_params).and_return(true)
-          else
-            expect(FileUtils).to receive(:mv).with(*backup_params).and_return(true)
-          end
+          expect(FileUtils).to receive(:mv).with(*backup_params).and_return(true)
 
           advise_message = "A backup of '#{fake_source_file}' has been made at '#{fake_destination_file}'."
           if advise
@@ -129,19 +125,19 @@ RSpec.describe GDK::Backup do
             expect(GDK::Output).not_to receive(:info).with(advise_message)
           end
 
-          expect(described_class.new(fake_source_file_full).backup!(copy: copy, advise: advise)).to be(true)
+          expect(described_class.new(fake_source_file_full).backup!(advise: advise)).to be(true)
         end
       end
     end
 
     context 'is a file only' do
-      it_behaves_like 'a file to be backed up', 'Procfile', '.backups/Procfile.20210506185031', true, true
-      it_behaves_like 'a file to be backed up', 'Procfile', '.backups/Procfile.20210506185031', false, false
+      it_behaves_like 'a file to be backed up', 'Procfile', '.backups/Procfile.20210506185031', true
+      it_behaves_like 'a file to be backed up', 'Procfile', '.backups/Procfile.20210506185031', false
     end
 
     context 'is a file within a directory' do
-      it_behaves_like 'a file to be backed up', 'gitlab/config/gitlab.yml', '.backups/gitlab__config__gitlab.yml.20210506185031', true, true
-      it_behaves_like 'a file to be backed up', 'gitlab/config/gitlab.yml', '.backups/gitlab__config__gitlab.yml.20210506185031', false, false
+      it_behaves_like 'a file to be backed up', 'gitlab/config/gitlab.yml', '.backups/gitlab__config__gitlab.yml.20210506185031', true
+      it_behaves_like 'a file to be backed up', 'gitlab/config/gitlab.yml', '.backups/gitlab__config__gitlab.yml.20210506185031', false
     end
   end
 
