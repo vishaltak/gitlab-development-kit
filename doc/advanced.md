@@ -34,6 +34,12 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
    bundle config --local build.thin --with-cflags='"-Wno-error=implicit-function-declaration"'
    ```
 
+1. To ensure the `re2` gem is built correctly, explicitly set the directory where brew installed `re2`:
+
+   ```shell
+   bundle config --local build.re2 --with-re2-dir=$(brew --prefix re2)
+   ```
+
 ## Ubuntu and Debian
 
 The following are instructions for Ubuntu and Debian users that don't want
