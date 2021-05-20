@@ -8,7 +8,7 @@ module GDK
 
     attr_reader :source_file
 
-    def self.root
+    def self.backup_root
       GDK.root.join('.backups')
     end
 
@@ -28,7 +28,7 @@ module GDK
 
     def destination_file
       @destination_file ||= begin
-        root.join("#{relative_source_file.to_s.gsub('/', '__')}.#{Time.now.strftime('%Y%m%d%H%M%S')}")
+        backup_root.join("#{relative_source_file.to_s.gsub('/', '__')}.#{Time.now.strftime('%Y%m%d%H%M%S')}")
       end
     end
 
@@ -48,12 +48,12 @@ module GDK
       true
     end
 
-    def root
-      @root ||= self.class.root
+    def backup_root
+      @backup_root ||= self.class.backup_root
     end
 
     def ensure_backup_directory_exists
-      root.mkpath
+      backup_root.mkpath
     end
 
     def advise_user

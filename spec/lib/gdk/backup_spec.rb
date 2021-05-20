@@ -41,11 +41,11 @@ RSpec.describe GDK::Backup do
     end
   end
 
-  describe '.root' do
+  describe '.backup_root' do
     it 'is /Users/ash/src/gitlab/gitlab-development-kit/.backups' do
-      fake_root_pathname = stub_root
+      fake_root_pathname = stub_backup_root
 
-      expect(described_class.root).to be(fake_root_pathname)
+      expect(described_class.backup_root).to be(fake_root_pathname)
     end
   end
 
@@ -54,7 +54,7 @@ RSpec.describe GDK::Backup do
       fake_source_file = gdk_root_path.join('Procfile')
       stub_source_file(fake_source_file)
 
-      stub_root
+      stub_backup_root
 
       expect(described_class.new(fake_source_file).source_file.to_s).to eq(fake_source_file.to_s)
     end
@@ -65,7 +65,7 @@ RSpec.describe GDK::Backup do
       fake_source_file = gdk_root_path.join('Procfile')
       stub_source_file(fake_source_file)
 
-      stub_root
+      stub_backup_root
 
       travel_to(now) do
         fake_destination_file = backups_path.join('Procfile.20210506185031')
@@ -81,7 +81,7 @@ RSpec.describe GDK::Backup do
       fake_source_file = gdk_root_path.join(fake_source_file_only)
       stub_source_file(fake_source_file)
 
-      stub_root
+      stub_backup_root
 
       expect(described_class.new(fake_source_file).relative_source_file.to_s).to eq(fake_source_file_only)
     end
@@ -92,7 +92,7 @@ RSpec.describe GDK::Backup do
       fake_source_file = gdk_root_path.join('Procfile')
       stub_source_file(fake_source_file)
 
-      stub_root
+      stub_backup_root
 
       travel_to(now) do
         fake_destination_file_only = 'Procfile.20210506185031'
@@ -108,7 +108,7 @@ RSpec.describe GDK::Backup do
         fake_source_file_full = gdk_root_path.join(fake_source_file)
         stub_source_file(fake_source_file_full)
 
-        fake_root_pathname = stub_root
+        fake_root_pathname = stub_backup_root
 
         allow(fake_root_pathname).to receive(:mkpath).and_return(true)
 
@@ -145,7 +145,7 @@ RSpec.describe GDK::Backup do
     end
   end
 
-  def stub_root
+  def stub_backup_root
     fake_root_pathname = Pathname.new(gdk_root_dir).join(backups_path_only)
 
     allow(gdk_root_path).to receive(:join).with('.backups').and_return(fake_root_pathname)
