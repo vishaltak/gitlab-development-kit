@@ -20,7 +20,6 @@ module GDK
         gitlab/config/gitlab.yml
         gitlab/config/puma.rb
         gitlab/config/resque.yml
-        gitlab/config/unicorn.rb
         nginx/conf/nginx.conf
         openssh/sshd_config
         prometheus/prometheus.yml

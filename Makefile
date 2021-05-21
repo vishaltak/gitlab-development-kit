@@ -172,7 +172,6 @@ clean-config:
 	gitlab/config/puma.rb \
 	gitlab/config/puma_actioncable.rb \
 	gitlab/config/resque.yml \
-	gitlab/config/unicorn.rb \
 	jaeger \
 	localhost.crt \
 	localhost.key \
@@ -188,7 +187,6 @@ touch-examples:
 	gitlab-shell/config.yml.example \
 	gitlab/workhorse/config.toml.example \
 	gitlab/config/puma_actioncable.example.development.rb \
-	gitlab/config/unicorn.rb.example.development \
 	$$(find support/templates -name "*.erb")
 
 unlock-dependency-installers:
@@ -296,7 +294,7 @@ gitlab-db-migrate: ensure-databases-running
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/unicorn.rb gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb
+gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
@@ -315,11 +313,6 @@ gitlab/config/puma_actioncable.example.development.rb:
 	$(Q)touch $@
 
 gitlab/config/puma_actioncable.rb: gitlab/config/puma_actioncable.example.development.rb
-	$(Q)support/safe-sed "$@" \
-		-e "s|/home/git|${gitlab_development_root}|g" \
-		"$<"
-
-gitlab/config/unicorn.rb: gitlab/config/unicorn.rb.example.development
 	$(Q)support/safe-sed "$@" \
 		-e "s|/home/git|${gitlab_development_root}|g" \
 		"$<"
