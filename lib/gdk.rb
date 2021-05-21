@@ -37,6 +37,7 @@ module GDK
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
   autoload :Services, 'gdk/services'
   autoload :Shellout, 'shellout'
+  autoload :TestURL, 'gdk/test_url'
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
