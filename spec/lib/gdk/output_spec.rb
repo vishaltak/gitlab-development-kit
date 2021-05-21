@@ -3,6 +3,20 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Output do
+  describe '.print' do
+    context 'by default' do
+      it 'prints to stdout' do
+        expect { described_class.print('test') }.to output('test').to_stdout
+      end
+    end
+
+    context 'with stderr: true' do
+      it 'prints to stderr' do
+        expect { described_class.print('test', stderr: true) }.to output('test').to_stderr
+      end
+    end
+  end
+
   describe '.puts' do
     context 'by default' do
       it 'puts to stdout' do
@@ -14,6 +28,20 @@ RSpec.describe GDK::Output do
       it 'puts to stdout' do
         expect { described_class.puts('test', stderr: true) }.to output("test\n").to_stderr
       end
+    end
+  end
+
+  describe '.notice' do
+    it 'puts formatted message to stdout' do
+      stub_no_color_env('')
+
+      expect { described_class.notice('test') }.to output("=> test\n").to_stdout
+    end
+  end
+
+  describe '.notice_format' do
+    it 'returns formatted message' do
+      expect(described_class.notice_format('test')).to eq('=> test')
     end
   end
 
