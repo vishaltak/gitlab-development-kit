@@ -8,6 +8,7 @@
 .yardoc
 /*.log
 /.backups/
+/.elasticsearch_*_installed
 /.env
 /.gdk-install-root
 /.gettext
@@ -38,8 +39,8 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
-/gitlab-k8s-agent/
 /gitlab-k8s-agent-config.yml
+/gitlab-k8s-agent/
 /gitlab-pages
 /gitlab-pages-secret
 /gitlab-runner

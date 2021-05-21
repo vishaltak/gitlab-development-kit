@@ -1009,14 +1009,14 @@ influxdb-setup:
 
 elasticsearch-setup: elasticsearch/bin/elasticsearch
 
-elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
+elasticsearch/bin/elasticsearch: .elasticsearch_${elasticsearch_version}_installed
 	$(Q)rm -rf elasticsearch
-	$(Q)tar zxf elasticsearch-${elasticsearch_version}.tar.gz
+	$(Q)tar zxf .elasticsearch_${elasticsearch_version}_installed
 	$(Q)mv elasticsearch-${elasticsearch_version} elasticsearch
-	$(Q)rm -f elasticsearch-${elasticsearch_version}.tar.gz
-	$(Q)touch $@
+	$(Q)rm -f elasticsearch-${elasticsearch_version}.tar.gz .elasticsearch_*_installed
+	$(Q)touch $@ .elasticsearch_${elasticsearch_version}_installed
 
-elasticsearch-${elasticsearch_version}.tar.gz:
+.elasticsearch_${elasticsearch_version}_installed:
 	$(Q)./support/download-elasticsearch "${elasticsearch_version}" "$@" "${elasticsearch_mac_tar_gz_sha512}" "${elasticsearch_linux_tar_gz_sha512}"
 
 ##############################################################
