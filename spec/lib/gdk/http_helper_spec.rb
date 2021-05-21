@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rack'
 require 'spec_helper'
 
 RSpec.describe GDK::HTTPHelper do
@@ -23,6 +24,17 @@ RSpec.describe GDK::HTTPHelper do
         allow(http_client_double).to receive(:get).with(path).and_raise(Errno::ECONNREFUSED)
 
         expect(subject.up?).to be(false)
+        expect(subject.last_response_reason).to eq('Connection refused')
+      end
+    end
+
+    context 'when URI is times out' do
+      it 'returns false' do
+        http_client_double = stub_http_get
+        allow(http_client_double).to receive(:get).with(path).and_raise(Net::ReadTimeout)
+
+        expect(subject.up?).to be(false)
+        expect(subject.last_response_reason).to eq('Request timed out')
       end
     end
 
@@ -31,6 +43,21 @@ RSpec.describe GDK::HTTPHelper do
         stub_http_get_with_code(502)
 
         expect(subject.up?).to be(false)
+        expect(subject.last_response_reason).to eq('502 Bad Gateway')
+      end
+    end
+
+    context 'when URI is down initially, but then comes up' do
+      subject(:helper) { described_class.new(uri, cache_response: false) }
+
+      it 'returns true' do
+        stub_http_get_with_code(502)
+        expect(helper.up?).to be(false)
+        expect(helper.last_response_reason).to eq('502 Bad Gateway')
+
+        stub_http_get_with_code(200)
+        expect(helper.up?).to be(true)
+        expect(helper.last_response_reason).to eq('200 OK')
       end
     end
 
@@ -39,6 +66,7 @@ RSpec.describe GDK::HTTPHelper do
         stub_http_get_with_code(200)
 
         expect(subject.up?).to be(true)
+        expect(subject.last_response_reason).to eq('200 OK')
       end
     end
   end
@@ -54,7 +82,7 @@ RSpec.describe GDK::HTTPHelper do
   def stub_http_get_with_code(http_code)
     http_client_double = stub_http_get
 
-    http_response_double = double('Net::HTTPResponse', code: http_code.to_s)
+    http_response_double = double('Net::HTTPResponse', code: http_code.to_s, message: Rack::Utils::HTTP_STATUS_CODES[http_code])
     allow(http_client_double).to receive(:get).with(path).and_return(http_response_double)
   end
 end
