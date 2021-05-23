@@ -52,7 +52,6 @@ to learn how to contribute to GitLab.
 - [Simulate slow or broken repository storage](simulate_storage.md)
 - [Start a Rails console](rails_console.md)
 - [Tracing and Jaeger](https://docs.gitlab.com/ee/development/distributed_tracing.html#using-jaeger-in-the-gitlab-development-kit)
-- [Unicorn](unicorn.md)
 - [Update external dependencies](update_external_dependencies.md)
 - [Use Container Registry with GDK](registry.md)
 - [Use GitLab Runner with GDK](runner.md)

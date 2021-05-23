@@ -3,11 +3,6 @@
 This document describes how to enable the [dependency proxy](https://docs.gitlab.com/ee/user/packages/dependency_proxy/)
 in your GDK environment.
 
-## Enable Puma
-
-Puma is enabled by default, however, if you are using Unicorn, you need to
-[switch back to Puma](unicorn.md).
-
 ## License
 
 An [`Ultimate` license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee)

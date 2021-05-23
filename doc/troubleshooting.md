@@ -26,7 +26,7 @@ GDK troubleshooting information is available for the following:
 - [Git](#git)
 - [Webpack](#webpack)
 - [Running tests](#running-tests)
-- [Puma and Unicorn](#puma-and-unicorn)
+- [Puma](#puma)
 - [Sidekiq Cluster](#sidekiq-cluster)
 - [Jaeger](#jaeger)
 - [Gitaly](#gitaly)
@@ -910,11 +910,11 @@ To fix this, remove `tmp/tests/` in the `gitlab/` directory and regenerate the f
 rm -rf tmp/tests/ && bin/rake karma:fixtures
 ```
 
-## Puma and Unicorn
+## Puma
 
-The following are possible solutions to problems you might encounter with Puma, Unicorn, and GDK.
+The following are possible solutions to problems you might encounter with Puma and GDK.
 
-### Puma or Unicorn timeout
+### Puma timeout
 
 Browser shows `EOF`. Logs show a timeout:
 
@@ -922,21 +922,15 @@ Browser shows `EOF`. Logs show a timeout:
 error: GET "/users/sign_in": badgateway: failed after 62s: EOF
 ```
 
-Depending on the performance of your development environment, Puma/Unicorn may
+Depending on the performance of your development environment, Puma may
 time out. Increase the timeout as a workaround.
 
-For Puma: you can use environment variables to override the default timeout:
+Use environment variables to override the default timeout:
 
 Variable | Type | Description
 -------- | ---- | -----------
 `GITLAB_RAILS_RACK_TIMEOUT` | integer | Sets `service_timeout`
 `GITLAB_RAILS_WAIT_TIMEOUT` | integer | Sets `wait_timeout`
-
-For Unicorn: edit `gitlab/config/unicorn.rb`:
-
-```ruby
-timeout 3600
-```
 
 ## Sidekiq Cluster
 

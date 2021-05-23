@@ -101,5 +101,4 @@ Example:
 ```shell
 export CUSTOMER_PORTAL_URL=http://localhost:5000
 export IS_EE=true
-export USE_WEB_SERVER=unicorn
 ```

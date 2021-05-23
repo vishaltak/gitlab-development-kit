@@ -20,15 +20,15 @@ Start by kicking off the normal GDK processes via `gdk start`. Then open a new t
 gdk thin
 ```
 
-This kills the Puma/Unicorn server and starts a Thin server in its place. Once
+This kills the Puma server and starts a Thin server in its place. Once
 the `binding.pry` breakpoint has been reached, Pry prompts appear in the window
 that runs `gdk thin`.
 
 When you have finished debugging, remove the `binding.pry` breakpoint and go
-back to using Puma/Unicorn. Terminate `gdk thin` by pressing Ctrl-C
+back to using Puma. Terminate `gdk thin` by pressing Ctrl-C
 and run `gdk start`.
 
 NOTE:
-It's not possible to submit commits from the web without at least two `puma/unicorn` server
+It's not possible to submit commits from the web without at least two Puma server
 threads running. This means when running `thin` for debugging, actions such as creating a file from
-the web time out. See [Use GitLab with only 1 Unicorn worker?](https://gitlab.com/gitlab-org/gitlab/issues/14546)
+the web time out.
