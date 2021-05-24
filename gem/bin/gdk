@@ -87,12 +87,6 @@ module GDK
     end
   end
 
-  def self.load_dotfile
-    File.open(DOTFILE, File::RDONLY | File::CREAT) do |f|
-      YAML.safe_load(f)
-    end || {}
-  end
-
   def self.remember!(directory)
     File.open("#{directory}/#{ROOT_CHECK_FILE}", 'w') do |f|
       f.puts File.realpath(directory)
