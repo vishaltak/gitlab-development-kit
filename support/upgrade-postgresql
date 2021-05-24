@@ -171,14 +171,14 @@ class PostgresUpgrader
 
   def apt_available_versions
     versions = POSTGRESQL_VERSIONS.map { |ver| "postgresql-#{ver}" }
-    lines = run(%w[apt-cache madison] + versions)
+    lines = run(%w[apt search -o APT::Cache::Search::Version=1 ^postgresql-[0-9]*$])
 
     return {} if lines.empty?
 
     available_packages = Set.new
 
     lines.split("\n").each do |line|
-      package_data = line.strip.split('|')
+      package_data = line.strip.split(' ')
       available_packages << package_data.first.strip
     end
 
