@@ -35,7 +35,7 @@ GDK troubleshooting information is available for the following:
 - [Live reloading](#live-reloading)
 - [Praefect](#praefect)
 
-If you can't solve your problem in these areas, or if you have a problem in another area, open an
+If you can't solve your problem, or if you have a problem in another area, open an
 issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
 
 ## Ruby
@@ -123,7 +123,7 @@ bundle install
 
 See this [issue](https://github.com/macournoyer/thin/pull/364) for more details.
 
-### An error occurred while installing gpgme on macOS
+### An error occurred while installing `gpgme` on macOS
 
 Check if you have `gawk` installed >= 5.0.0 and uninstall it.
 

@@ -1246,7 +1246,7 @@ endif
 markdownlint: markdownlint-install
 	$(eval MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null))
 	@echo -n "MarkdownLint: "
-	@${MARKDOWNLINT} --config .markdownlint.json 'doc/**/*.md' && echo "OK"
+	@${MARKDOWNLINT} --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
 
 .PHONY: shellcheck-install
 shellcheck-install:
