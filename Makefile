@@ -33,7 +33,7 @@ include $(shell rake gdk-config.mk)
 endif
 endif
 
-ifeq ($(platform),macos)
+ifeq ($(platform),darwin)
 OPENSSL_PREFIX := $(shell brew --prefix openssl)
 OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
 else
@@ -790,7 +790,7 @@ gitlab-k8s-agent/build/gdk/bin/kas_race: ${gitlab_k8s_agent_clone_dir}/.git gitl
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
 
-ifeq ($(platform),macos)
+ifeq ($(platform),darwin)
 gitlab-k8s-agent/bazel: /usr/local/bin/bazelisk
 	$(Q)touch $@
 else
@@ -1249,7 +1249,7 @@ markdownlint: markdownlint-install
 .PHONY: shellcheck-install
 shellcheck-install:
 ifeq ($(SHELLCHECK),)
-ifeq ($(platform),macos)
+ifeq ($(platform),darwin)
 	@echo "INFO: Installing Shellcheck.."
 	$(Q)brew install shellcheck ${QQ}
 else
