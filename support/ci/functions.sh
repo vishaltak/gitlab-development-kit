@@ -4,7 +4,7 @@ GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
 
 init() {
   install_gem
-  gdk init "${GDK_CHECKOUT_PATH}"
+  git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
 }
 
 install_gem() {

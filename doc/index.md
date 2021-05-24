@@ -51,8 +51,8 @@ Install using your system's package manager.
 
 ## One-line installation
 
-Both `git` and `make` are required for the one-line installation to work, and 
-macOS comes with these already installed. For other operating systems, refer 
+Both `git` and `make` are required for the one-line installation to work, and
+macOS comes with these already installed. For other operating systems, refer
 to the [dependency installation instructions](index.md#install-prerequisites).
 
 ```shell
@@ -85,8 +85,7 @@ If you've previously [managed your own dependencies](advanced.md), you can
 Installing and managing dependencies automatically lets GDK manage dependencies for you using
 [`asdf`](https://asdf-vm.com/#/core-manage-asdf):
 
-1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't
-   previously:
+1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't previously:
 
    ```shell
    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
@@ -121,15 +120,13 @@ After installing GDK dependencies:
    gem install gitlab-development-kit
    ```
 
-1. Initialize a GDK directory (this also checks out the project) by running the following in your
-   preferred location:
+1. Clone the `gitlab-development-kit` repository into your preferred location:
 
    ```shell
-   gdk init
+   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
    ```
 
-   The default directory created is `gitlab-development-kit`. This can be customized by appending
-   a different directory name to the command.
+   The default directory created is `gitlab-development-kit`. This can be customized by appending a different directory name to the `git clone` command.
 
 1. Change into the GDK project directory:
 
@@ -214,5 +211,5 @@ After you have set up GDK initially, you can create new *fresh installations*. Y
 you have problems with existing installation that are complicated to fix. You can get up and running
 quickly again by:
 
-1. In the parent folder for GDK, run [`gdk init <new directory>`](#manually).
+1. In the parent folder for GDK, run [`git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git`](#manually).
 1. In the new directory, run [`gdk install`](#install-gdk).
