@@ -7,7 +7,6 @@ RSpec.describe GDK do
 
   before do
     stub_pg_bindir
-    allow(described_class).to receive(:install_root_ok?).and_return(true)
   end
 
   def expect_exec(input, cmdline)

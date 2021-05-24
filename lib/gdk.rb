@@ -42,15 +42,6 @@ module GDK
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
   def self.main
-    if !install_root_ok? && ARGV.first != 'reconfigure'
-      puts <<~GDK_MOVED
-        According to #{ROOT_CHECK_FILE} this gitlab-development-kit
-        installation was moved. Run 'gdk reconfigure' to update hard-coded
-        paths.
-      GDK_MOVED
-      return false
-    end
-
     validate_yaml!
 
     subcommand = ARGV.shift
@@ -89,14 +80,6 @@ module GDK
 
     GDK::Output.puts(msg)
     puts_separator
-  end
-
-  def self.install_root_ok?
-    expected_root = GDK.root.join(ROOT_CHECK_FILE).read.chomp
-    Pathname.new(expected_root).realpath == GDK.root
-  rescue StandardError => e
-    warn e
-    false
   end
 
   # Return the path to the GDK base path
