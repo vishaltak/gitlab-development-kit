@@ -18,6 +18,8 @@ module GDK
 
   PROGNAME = 'gdk'
   MAKE = RUBY_PLATFORM.include?('bsd') ? 'gmake' : 'make'
+  # TODO: Touching .gdk-install-root will be redundant shortly.
+  ROOT_CHECK_FILE = '.gdk-install-root' unless defined?(ROOT_CHECK_FILE)
 
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`

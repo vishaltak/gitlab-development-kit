@@ -5,6 +5,8 @@ GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
 init() {
   install_gem
   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
+  # TODO: Touching .gdk-install-root will be redundant shortly.
+  echo "${GDK_CHECKOUT_PATH}" > "${GDK_CHECKOUT_PATH}/.gdk-install-root"
 }
 
 install_gem() {
