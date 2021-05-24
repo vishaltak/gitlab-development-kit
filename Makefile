@@ -1000,7 +1000,12 @@ influxdb-setup:
 # elasticsearch
 ##############################################################
 
+ifeq ($(elasticsearch_enabled),true)
 elasticsearch-setup: elasticsearch/bin/elasticsearch
+else
+elasticsearch-setup:
+	@true
+endif
 
 elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
 	$(Q)rm -rf elasticsearch
