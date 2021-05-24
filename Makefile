@@ -1007,14 +1007,12 @@ elasticsearch-setup:
 	@true
 endif
 
-elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
-	$(Q)rm -rf elasticsearch
-	$(Q)tar zxf elasticsearch-${elasticsearch_version}.tar.gz
-	$(Q)mv elasticsearch-${elasticsearch_version} elasticsearch
-	$(Q)touch $@
+elasticsearch/bin/elasticsearch: .cache/.elasticsearch_${elasticsearch_version}_installed
 
-elasticsearch-${elasticsearch_version}.tar.gz:
-	$(Q)./support/download-elasticsearch "${elasticsearch_version}" "$@" "${elasticsearch_mac_tar_gz_sha512}" "${elasticsearch_linux_tar_gz_sha512}"
+.cache/.elasticsearch_${elasticsearch_version}_installed:
+	$(Q)rm -rf elasticsearch && mkdir -p elasticsearch
+	$(Q)curl -C - -L --fail "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${elasticsearch_version}-${platform}-x86_64.tar.gz" | tar xzf - --strip-components=1 -C elasticsearch
+	$(Q)mkdir -p .cache && touch $@
 
 ##############################################################
 # minio / object storage
