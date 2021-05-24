@@ -9,6 +9,7 @@ module GDK
     autoload :Env, 'gdk/command/env'
     autoload :Doctor, 'gdk/command/doctor'
     autoload :Help, 'gdk/command/help'
+    autoload :Init, 'gdk/command/init'
     autoload :Install, 'gdk/command/install'
     autoload :MeasureBase, 'gdk/command/measure_base'
     autoload :MeasureUrl, 'gdk/command/measure_url'
@@ -37,6 +38,7 @@ module GDK
       'diff-config' => -> { GDK::Command::DiffConfig },
       'doctor' => -> { GDK::Command::Doctor },
       'env' => -> { GDK::Command::Env },
+      'init' => -> { GDK::Command::Init },
       'install' => -> { GDK::Command::Install },
       'help' => -> { GDK::Command::Help },
       'measure' => -> { GDK::Command::MeasureUrl },
