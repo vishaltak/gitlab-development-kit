@@ -46,6 +46,10 @@ module GDK
       ansi(color_code) + message + reset_color
     end
 
+    def self.print(message = nil, stderr: false)
+      stderr ? $stderr.print(message) : $stdout.print(message)
+    end
+
     def self.puts(message = nil, stderr: false)
       stderr ? Kernel.warn(message) : $stdout.puts(message)
     end
@@ -55,7 +59,11 @@ module GDK
     end
 
     def self.notice(message)
-      puts("=> #{message}")
+      puts(notice_format(message))
+    end
+
+    def self.notice_format(message)
+      "=> #{message}"
     end
 
     def self.info(message)
