@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Use the unofficial bash strict mode: http://redsymbol.net/articles/unofficial-bash-strict-mode/
+
+set -euo pipefail; export FS=$'\n\t'
+
+function get_tool_versions() {
+  local dir="$1"
+  local remote="$2"
+  local target="tmp/tool_version/${dir}.tool-versions"
+
+  echo "Downloading .tool-versions for $dir"
+
+  curl --location --fail --silent "$remote" > "$target" ||
+    echo "could not download tool versions file for $dir"
+}
+
+function combine_tool_versions() {
+  echo "Combined tool-versions:"
+  tools=$(cat tmp/tool_version/*.tool-versions | grep -vE "^#" | cut -f1 -d" " | sort -u)
+
+  {
+    echo "# support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions"
+    echo "# files from GDK sub-projects."
+    echo "#"
+    echo "# Do not modify this file directly."
+
+    for tool in $tools; do
+      versions=$(awk 1 tmp/tool_version/*.tool-versions | grep -vE "^#" | grep "^$tool" | cut -f2- -d" " | tr " " "\n" | awk '!a[$0]++' | xargs)
+      echo "$tool $versions"
+    done
+  } | tee .tool-versions | sed 's/^/  /'
+}
+
+rm -rf "tmp/tool_version" .tool-versions
+mkdir -p "tmp/tool_version"
+
+echo "Copying .tool-versions of gdk"
+
+cp .tool-versions-gdk tmp/tool_version/00_gdk.tool-versions
+
+get_tool_versions gitlab-pages https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+get_tool_versions gitaly https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+get_tool_versions gitlab-ui https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
+get_tool_versions gitlab-docs https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+
+combine_tool_versions
+
+echo "Done"
