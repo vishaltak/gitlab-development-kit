@@ -21,7 +21,7 @@ module GDK
 
       private
 
-      attr_reader :diagnostics, :stdout, :stderr
+      attr_reader :diagnostics
 
       def diagnostic_results
         @diagnostic_results ||= jobs.map { |x| x.join[:results] }.compact
@@ -31,6 +31,7 @@ module GDK
         diagnostics.map do |diagnostic|
           Thread.new do
             Thread.current[:results] = perform_diagnosis_for(diagnostic)
+            stderr.print '.'
           end
         end
       end
@@ -45,13 +46,17 @@ module GDK
       end
 
       def show_healthy
-        stdout.puts 'GDK is healthy.'
+        GDK::Output.puts("\n")
+        GDK::Output.success('GDK is healthy.')
       end
 
       def show_results
-        stdout.puts warning
+        GDK::Output.puts("\n")
+        GDK::Output.warn('GDK may need attention:')
+        GDK::Output.puts("\n")
+        GDK::Output.puts(warning)
         diagnostic_results.each do |result|
-          stdout.puts result
+          GDK::Output.puts(result)
         end
       end
 
@@ -62,7 +67,6 @@ module GDK
           help you when you encounter issues with GDK.
           If your GDK is working fine, you can safely ignore them. Thanks!
           #{'=' * 80}
-
         WARNING
       end
     end

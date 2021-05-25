@@ -111,10 +111,6 @@ module GDK
         shellout(BUNDLE_PRISTINE_CMD, chdir: config.gitaly.ruby_dir)
       end
 
-      def config
-        @config ||= GDK.config
-      end
-
       def shellout(cmd, chdir: config.gdk_root)
         sh = Shellout.new(cmd, chdir: chdir)
         sh.stream

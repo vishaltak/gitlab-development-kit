@@ -27,29 +27,30 @@ module GDK
         registry/config.yml
       ].freeze
 
-      def run(args = [])
-        file_diffs = DIFFABLE_FILES.map do |file|
-          ConfigDiff.new(file)
-        end
+      def run(_ = [])
+        Shellout.new(GDK::MAKE, 'touch-examples').run
 
         # Iterate over each file from files Array and print any output to
         # stderr that may have come from running `make <file>`.
         #
-        file_diffs.each do |diff|
+        results = jobs.map { |x| x.join[:results] }.compact
+
+        results.each do |diff|
           output = diff.make_output.to_s.chomp
           next if output.empty?
 
-          stderr.puts(output)
+          GDK::Output.puts(output)
+          GDK::Output.puts("\n")
         end
+      end
 
-        # Iterate over each file from files Array and print any output to
-        # stdout that may have come from running `git diff <file>.unchanged`
-        # which is how we know what _would_ happen if we ran `gdk reconfigure`
-        #
-        file_diffs.each do |diff| # rubocop:disable Style/CombinableLoops
-          next if diff.output.to_s.empty?
+      private
 
-          stdout.puts(diff.output)
+      def jobs
+        DIFFABLE_FILES.map do |file|
+          Thread.new do
+            Thread.current[:results] = ConfigDiff.new(file)
+          end
         end
       end
 
@@ -91,7 +92,7 @@ module GDK
         end
 
         def update_config_file
-          run(GDK::MAKE, file)
+          run(GDK::MAKE, '--silent', file)
         end
 
         def diff_with_unchanged
@@ -99,7 +100,7 @@ module GDK
         end
 
         def run(*commands)
-          IO.popen(commands.join(' '), chdir: GDK.root, &:read).chomp
+          Shellout.new(commands, chdir: GDK.root).run
         end
       end
     end

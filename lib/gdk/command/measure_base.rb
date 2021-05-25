@@ -25,7 +25,7 @@ module GDK
 
       def check!
         GDK::Output.abort('Docker is not installed or running!') unless docker_running?
-        GDK::Output.abort("GDK is not running locally on #{GDK.config.__uri}!") unless gdk_ok?
+        GDK::Output.abort("GDK is not running locally on #{config.__uri}!") unless gdk_ok?
       end
 
       def use_git_branch_name?
@@ -41,7 +41,7 @@ module GDK
       end
 
       def gdk_running?
-        GDK::HTTPHelper.new(GDK.config.__uri).up?
+        GDK::HTTPHelper.new(config.__uri).up?
       end
 
       def docker_running?
@@ -52,7 +52,7 @@ module GDK
 
       def report_folder_name
         @report_folder_name ||= begin
-          folder_name = use_git_branch_name? ? Shellout.new('git rev-parse --abbrev-ref HEAD', chdir: GDK.config.gitlab.dir).run : 'external'
+          folder_name = use_git_branch_name? ? Shellout.new('git rev-parse --abbrev-ref HEAD', chdir: config.gitlab.dir).run : 'external'
           folder_name + "_#{Time.now.strftime('%F-%H-%M-%S')}"
         end
       end
