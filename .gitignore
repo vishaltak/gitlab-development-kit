@@ -4,6 +4,7 @@
 *.pem
 .DS_Store
 .bundle/
+.cache/
 .idea
 .yardoc
 /*.log

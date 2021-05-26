@@ -55,8 +55,8 @@ RSpec.describe GDK::Config do
     context 'when macOS' do
       let(:host_os) { 'Darwin' }
 
-      it 'returns macos' do
-        expect(config.__platform).to eq('macos')
+      it 'returns darwin' do
+        expect(config.__platform).to eq('darwin')
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe '__platform_macos' do
+  describe '__platform_darwin' do
     before do
       allow(RbConfig::CONFIG).to receive(:[]).and_call_original
       allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
@@ -112,8 +112,8 @@ RSpec.describe GDK::Config do
       let(:host_os) { 'linux' }
 
       it 'returns false' do
-        expect(config.__platform_macos).to be(false)
-        expect(config.__platform_macos?).to be(false)
+        expect(config.__platform_darwin).to be(false)
+        expect(config.__platform_darwin?).to be(false)
       end
     end
 
@@ -121,8 +121,8 @@ RSpec.describe GDK::Config do
       let(:host_os) { 'darwin' }
 
       it 'returns true' do
-        expect(config.__platform_macos).to be(true)
-        expect(config.__platform_macos?).to be(true)
+        expect(config.__platform_darwin).to be(true)
+        expect(config.__platform_darwin?).to be(true)
       end
     end
   end

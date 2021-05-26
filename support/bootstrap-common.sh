@@ -185,7 +185,7 @@ common_preflight_checks() {
 
 setup_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
-    if ! setup_platform_macos; then
+    if ! setup_platform_darwin; then
       return 1
     fi
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
@@ -279,7 +279,7 @@ setup_platform_linux_fedora_like_with() {
   return 0
 }
 
-setup_platform_macos() {
+setup_platform_darwin() {
   local shell_file ruby_configure_opts brew_opts
 
   if [ -z "$(command -v brew)" ]; then

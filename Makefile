@@ -33,7 +33,7 @@ include $(shell rake gdk-config.mk)
 endif
 endif
 
-ifeq ($(platform),macos)
+ifeq ($(platform),darwin)
 OPENSSL_PREFIX := $(shell brew --prefix openssl)
 OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
 else
@@ -790,7 +790,7 @@ gitlab-k8s-agent/build/gdk/bin/kas_race: ${gitlab_k8s_agent_clone_dir}/.git gitl
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
 	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
 
-ifeq ($(platform),macos)
+ifeq ($(platform),darwin)
 gitlab-k8s-agent/bazel: /usr/local/bin/bazelisk
 	$(Q)touch $@
 else
@@ -1000,16 +1000,19 @@ influxdb-setup:
 # elasticsearch
 ##############################################################
 
+ifeq ($(elasticsearch_enabled),true)
 elasticsearch-setup: elasticsearch/bin/elasticsearch
+else
+elasticsearch-setup:
+	@true
+endif
 
-elasticsearch/bin/elasticsearch: elasticsearch-${elasticsearch_version}.tar.gz
-	$(Q)rm -rf elasticsearch
-	$(Q)tar zxf elasticsearch-${elasticsearch_version}.tar.gz
-	$(Q)mv elasticsearch-${elasticsearch_version} elasticsearch
-	$(Q)touch $@
+elasticsearch/bin/elasticsearch: .cache/.elasticsearch_${elasticsearch_version}_installed
 
-elasticsearch-${elasticsearch_version}.tar.gz:
-	$(Q)./support/download-elasticsearch "${elasticsearch_version}" "$@" "${elasticsearch_mac_tar_gz_sha512}" "${elasticsearch_linux_tar_gz_sha512}"
+.cache/.elasticsearch_${elasticsearch_version}_installed:
+	$(Q)rm -rf elasticsearch && mkdir -p elasticsearch
+	$(Q)curl -C - -L --fail "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${elasticsearch_version}-${platform}-x86_64.tar.gz" | tar xzf - --strip-components=1 -C elasticsearch
+	$(Q)mkdir -p .cache && touch $@
 
 ##############################################################
 # minio / object storage
@@ -1244,7 +1247,7 @@ markdownlint: markdownlint-install
 .PHONY: shellcheck-install
 shellcheck-install:
 ifeq ($(SHELLCHECK),)
-ifeq ($(platform),macos)
+ifeq ($(platform),darwin)
 	@echo "INFO: Installing Shellcheck.."
 	$(Q)brew install shellcheck ${QQ}
 else

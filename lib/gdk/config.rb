@@ -14,7 +14,7 @@ module GDK
     string(:__platform) do
       case RbConfig::CONFIG['host_os']
       when /darwin/i
-        'macos'
+        'darwin'
       when /linux/i
         'linux'
       else
@@ -23,7 +23,7 @@ module GDK
     end
 
     bool(:__platform_linux) { config.__platform == 'linux' }
-    bool(:__platform_macos) { config.__platform == 'macos' }
+    bool(:__platform_darwin) { config.__platform == 'darwin' }
 
     settings :common do
       string(:ca_path) { '' }
@@ -644,7 +644,7 @@ module GDK
 
     settings :packages do
       path(:__dpkg_deb_path) do
-        if config.__platform_macos?
+        if config.__platform_darwin?
           '/usr/local/bin/dpkg-deb'
         else
           '/usr/bin/dpkg-deb'
