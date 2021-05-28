@@ -8,6 +8,7 @@ docs-lint:
 
 rubocop:
   extends: .rules:code-changes
+  image: ruby:2.7
   stage: test
   needs: []
   variables:
@@ -17,6 +18,7 @@ rubocop:
 
 rspec:
   extends: .rules:code-changes
+  image: ruby:2.7
   stage: test
   needs: []
   variables:
@@ -90,12 +92,15 @@ checkmake:
   stage: test
   needs: []
   extends: .rules:code-changes
+  # https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1234
+  image: golang:1.14
   script:
     - PATH=${HOME}/go/bin:${PATH} make checkmake
 
 yard:
   stage: test
   needs: []
+  image: ruby:2.7
   script:
     - bundle install --jobs 4 --path vendor/bundle
     - bundle exec yardoc
@@ -110,6 +115,7 @@ yard:
 
 verify-gdk-example-yml:
   extends: .rules:code-changes
+  image: ruby:2.7
   stage: test
   needs: []
   script:
