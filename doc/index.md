@@ -51,12 +51,12 @@ Install using your system's package manager.
 
 ## One-line installation
 
-Both `git` and `make` are required for the one-line installation to work, and 
-macOS comes with these already installed. For other operating systems, refer 
+Both `git` and `make` are required for the one-line installation to work, and
+macOS comes with these already installed. For other operating systems, refer
 to the [dependency installation instructions](index.md#install-prerequisites).
 
 ```shell
-curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash -
+curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
 ```
 
 The one-line installation:
