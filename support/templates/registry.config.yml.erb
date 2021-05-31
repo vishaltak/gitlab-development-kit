@@ -39,3 +39,8 @@ auth:
 <%- end -%>
 validation:
   disabled: true
+<%- if config.registry.compatibility_schema1_enabled %>
+compatibility:
+  schema1:
+    enabled: true
+<%- end -%>
