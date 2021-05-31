@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# This is the GDK one line installation. For more information, please visit:
+# https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/index.md#one-line-installation
+#
+# Wrap everything in a function to ensure a partially downloaded install script
+# is not executed. Inspired by https://install.sandstorm.io/
+_() {
+
 set -euo pipefail
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
@@ -9,7 +16,6 @@ GDK_INSTALL_DIR="gitlab-development-kit"
 REQUIRED_COMMANDS=(git make)
 
 error() {
-  echo
   echo "ERROR: ${1}" >&2
   exit 1
 }
@@ -56,9 +62,6 @@ echo "INFO:"
 echo "INFO: The source for the installation script can be viewed at:"
 echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/support/install"
 echo
-echo "source \"${ASDF_SH_PATH}\""
-echo "cd ${GDK_INSTALL_DIR}"
-echo
 
 if ! ensure_not_root; then
   error "Running as root is not supported."
@@ -77,3 +80,8 @@ echo
 echo "source \"${ASDF_SH_PATH}\""
 echo "cd ${GDK_INSTALL_DIR}"
 echo
+}
+
+# If we've reached here, the entire install script has been downloaded and
+# "should" be safe to execute.
+_ "$0" "$@"
