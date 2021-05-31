@@ -8,6 +8,12 @@ ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
 GDK_INSTALL_DIR="gitlab-development-kit"
 REQUIRED_COMMANDS=(git make)
 
+error() {
+  echo
+  echo "ERROR: ${1}" >&2
+  exit 1
+}
+
 ensure_required_commands_exist() {
   for command in "${REQUIRED_COMMANDS[@]}"; do
     if ! command -v "${command}" > /dev/null 2>&1; then
@@ -15,6 +21,14 @@ ensure_required_commands_exist() {
       exit 1
     fi
   done
+}
+
+ensure_not_root() {
+  if [[ ${EUID} -eq 0 ]]; then
+    return 1
+  fi
+
+  return 0
 }
 
 clone_gdk_if_needed() {
@@ -34,6 +48,10 @@ gdk_install() {
   source "${ASDF_SH_PATH}"
   gdk install
 }
+
+if ! ensure_not_root; then
+  error "Running as root is not supported."
+fi
 
 ensure_required_commands_exist
 clone_gdk_if_needed
