@@ -86,6 +86,8 @@ shellcheck:
   before_script:
     - apk add make
   script:
+    - nproc
+    - free -m
     - make shellcheck SHELL=/bin/sh
 
 checkmake:

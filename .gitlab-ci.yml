@@ -16,6 +16,9 @@ default:
   interruptible: true
   tags:
     - gitlab-org
+  before_script:
+    - nproc
+    - free -m
 
 include:
   - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
