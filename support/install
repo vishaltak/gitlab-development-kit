@@ -49,6 +49,17 @@ gdk_install() {
   gdk install
 }
 
+echo
+echo "INFO: This is the GDK one line installation. For more information, please visit:"
+echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/index.md#one-line-installation"
+echo "INFO:"
+echo "INFO: The source for the installation script can be viewed at:"
+echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/support/install"
+echo
+echo "source \"${ASDF_SH_PATH}\""
+echo "cd ${GDK_INSTALL_DIR}"
+echo
+
 if ! ensure_not_root; then
   error "Running as root is not supported."
 fi
