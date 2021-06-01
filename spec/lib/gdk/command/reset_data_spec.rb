@@ -75,31 +75,35 @@ RSpec.describe GDK::Command::ResetData do
 
       context 'but make command fails' do
         it 'errors out' do
-          stub_data_moves
+          travel_to(now) do
+            stub_data_moves
 
-          expect(GDK).to receive(:make).and_return(false)
+            expect(GDK).to receive(:make).and_return(false)
 
-          expect(GDK::Output).to receive(:error).with('Failed to reset data.')
-          expect(GDK::Command::Start).not_to receive(:new)
-          expect(subject).to receive(:display_help_message)
+            expect(GDK::Output).to receive(:error).with('Failed to reset data.')
+            expect(GDK::Command::Start).not_to receive(:new)
+            expect(subject).to receive(:display_help_message)
 
-          subject.run
+            subject.run
+          end
         end
       end
 
       context 'and make command succeeds also' do
         it 'resets data' do
-          stub_data_moves
+          travel_to(now) do
+            stub_data_moves
 
-          expect(GDK).to receive(:make).and_return(true)
+            expect(GDK).to receive(:make).and_return(true)
 
-          expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}'")
-          expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory}' to '#{backup_rails_uploads_directory}'")
-          expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repository_data_directory}' to '#{backup_git_repository_data_directory}'")
-          expect(GDK::Output).to receive(:notice).with('Successfully reset data!')
-          expect_any_instance_of(GDK::Command::Start).to receive(:run)
+            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}'")
+            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory}' to '#{backup_rails_uploads_directory}'")
+            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repository_data_directory}' to '#{backup_git_repository_data_directory}'")
+            expect(GDK::Output).to receive(:notice).with('Successfully reset data!')
+            expect_any_instance_of(GDK::Command::Start).to receive(:run)
 
-          subject.run
+            subject.run
+          end
         end
       end
     end
