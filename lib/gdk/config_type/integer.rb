@@ -10,6 +10,8 @@ module GDK
         self.value = value.to_i
 
         value.to_s == orig_value.to_s
+      rescue NoMethodError
+        false
       end
     end
   end
