@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'stringio'
 
-RSpec.describe GDK::Command::Doctor do
+RSpec.describe GDK::Command::Doctor, :hide_output do
   let(:successful_diagnostic) { double(GDK::Diagnostic, success?: true, diagnose: nil, message: nil) }
   let(:failing_diagnostic) { double(GDK::Diagnostic, success?: false, diagnose: 'error', message: 'check failed') }
   let(:diagnostics) { [] }
@@ -24,7 +24,7 @@ RSpec.describe GDK::Command::Doctor do
     allow(Shellout).to receive(:new).with('gdk start postgresql').and_return(shellout)
   end
 
-  it 'starts necessary services', :hide_stdout do
+  it 'starts necessary services' do
     expect(shellout).to receive(:run)
 
     subject.run
@@ -33,7 +33,7 @@ RSpec.describe GDK::Command::Doctor do
   context 'with passing diagnostics' do
     let(:diagnostics) { [successful_diagnostic, successful_diagnostic] }
 
-    it 'runs all diagnosis', :hide_stdout do
+    it 'runs all diagnosis' do
       expect(successful_diagnostic).to receive(:diagnose).twice
 
       subject.run
@@ -49,7 +49,7 @@ RSpec.describe GDK::Command::Doctor do
   context 'with failing diagnostics' do
     let(:diagnostics) { [failing_diagnostic, failing_diagnostic] }
 
-    it 'runs all diagnosis', :hide_stdout do
+    it 'runs all diagnosis' do
       expect(failing_diagnostic).to receive(:diagnose).twice
 
       subject.run
@@ -69,7 +69,7 @@ RSpec.describe GDK::Command::Doctor do
   context 'with partial failing diagnostics' do
     let(:diagnostics) { [failing_diagnostic, successful_diagnostic, failing_diagnostic] }
 
-    it 'runs all diagnosis', :hide_stdout do
+    it 'runs all diagnosis' do
       expect(failing_diagnostic).to receive(:diagnose).twice
       expect(successful_diagnostic).to receive(:diagnose).once
 
@@ -87,7 +87,7 @@ RSpec.describe GDK::Command::Doctor do
       subject.run
     end
 
-    it 'does not print a message from successful diagnostics', :hide_stdout do
+    it 'does not print a message from successful diagnostics' do
       expect(successful_diagnostic).not_to receive(:message)
 
       subject.run

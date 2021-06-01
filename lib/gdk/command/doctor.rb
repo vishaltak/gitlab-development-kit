@@ -31,7 +31,7 @@ module GDK
         diagnostics.map do |diagnostic|
           Thread.new do
             Thread.current[:results] = perform_diagnosis_for(diagnostic)
-            stderr.print '.'
+            GDK::Output.print('.', stderr: true)
           end
         end
       end
