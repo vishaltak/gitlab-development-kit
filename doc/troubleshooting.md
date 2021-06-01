@@ -740,7 +740,7 @@ git commit --allow-empty -m 'I can commit'
 
 ### `fatal: not a git repository`
 
-If `gdk init` or any other `gdk` command gives you the following error:
+If any `gdk` command gives you the following error:
 
 ```plaintext
 fatal: not a git repository (or any of the parent directories): .git

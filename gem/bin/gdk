@@ -13,44 +13,25 @@ require 'gitlab_development_kit'
 # installed outside the gitlab-development-kit repository with 'gem
 # install'. Edit lib/gdk.rb to define new commands.
 module GDK
+  # TODO: Touching .gdk-install-root will be redundant shortly.
   ROOT_CHECK_FILE = '.gdk-install-root'
   DEFAULT_INIT_DIRECTORY = File.join(Dir.pwd, 'gitlab-development-kit')
 
   def self.launcher_main
-    case ARGV.first
-    when 'init'
-      if ARGV.count > 2 || (ARGV.count == 2 && (ARGV[1] == '-help' || ARGV[1] == '--help'))
-        puts 'Usage: gdk init [DIR]'
-        return false
-      end
+    if print_version?
+      puts VERSION
 
-      directory = ARGV.count == 2 ? ARGV[1] : DEFAULT_INIT_DIRECTORY
-      if directory.start_with?('-')
-        warn <<~INVALID_GDK_DIR_NAME
-          The gdk directory cannot start with a dash ('-').  Did you mean:
-          gdk init #{directory.sub(/^-+/, '')}
-        INVALID_GDK_DIR_NAME
-        return false
-      end
-
-      cmd = %W[git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git #{directory}]
-      system(*cmd) && remember!(directory)
-    else
-      if print_version?
-        puts VERSION
-
-        return true
-      end
-
-      unless gdk_dir?
-        warn_not_gdk_dir
-
-        return false
-      end
-
-      load(File.join(gdk_root, 'lib/gdk.rb'))
-      GDK.main
+      return true
     end
+
+    unless gdk_dir?
+      warn_not_gdk_dir
+
+      return false
+    end
+
+    load(File.join(gdk_root, 'lib/gdk.rb'))
+    GDK.main
   end
 
   def self.warn_not_gdk_dir
@@ -85,22 +66,6 @@ module GDK
     else
       find_root(File.join(current, '..'))
     end
-  end
-
-  def self.load_dotfile
-    File.open(DOTFILE, File::RDONLY | File::CREAT) do |f|
-      YAML.safe_load(f)
-    end || {}
-  end
-
-  def self.remember!(directory)
-    File.open("#{directory}/#{ROOT_CHECK_FILE}", 'w') do |f|
-      f.puts File.realpath(directory)
-    end
-    true
-  rescue StandardError => e
-    warn e
-    false
   end
 end
 

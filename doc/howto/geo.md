@@ -40,7 +40,7 @@ a secondary node. We configure unique ports for the new instance so
 that it can run alongside the primary.
 
 ```shell
-gdk init gdk-geo
+git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git gdk-geo
 cd gdk-geo
 ```
 

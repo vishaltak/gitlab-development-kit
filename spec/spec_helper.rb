@@ -19,6 +19,16 @@ RSpec.configure do |config|
   config.before do |example|
     allow(GDK::Output).to receive(:puts) if example.metadata[:hide_stdout]
 
+    if example.metadata[:hide_output]
+      allow(GDK::Output).to receive(:print)
+      allow(GDK::Output).to receive(:puts)
+      allow(GDK::Output).to receive(:info)
+      allow(GDK::Output).to receive(:warn)
+      allow(GDK::Output).to receive(:error)
+      allow(GDK::Output).to receive(:abort)
+      allow(GDK::Output).to receive(:success)
+    end
+
     # isolate configs for the testing environment
     allow(GDK).to receive(:root) { Pathname.new(temp_path) }
     stub_const('GDK::Config::GDK_ROOT', '/home/git/gdk')

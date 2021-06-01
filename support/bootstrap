@@ -58,6 +58,7 @@ asdf_install_tools() {
 }
 
 gdk_prepare_directory() {
+  # TODO: Touching .gdk-install-root will be redundant shortly.
   [[ ! -f ".gdk-install-root"  ]] && echo "${PWD}" > .gdk-install-root
 
   return 0
