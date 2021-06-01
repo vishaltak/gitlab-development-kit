@@ -356,8 +356,7 @@ RSpec.describe GDK::Config do
 
   describe '#validate!' do
     before do
-      allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+      stub_raw_gdk_yaml(raw_yaml)
     end
 
     context 'when gdk.yml is valid' do
@@ -387,8 +386,7 @@ RSpec.describe GDK::Config do
 
   describe '#[]' do
     before do
-      allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+      stub_raw_gdk_yaml(raw_yaml)
     end
 
     context 'when looking up a single slug' do

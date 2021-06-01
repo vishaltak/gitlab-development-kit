@@ -86,6 +86,11 @@ def stub_gdk_yaml(yaml)
   allow(GDK).to receive(:config) { GDK::Config.new(yaml: yaml) }
 end
 
+def stub_raw_gdk_yaml(raw_yaml)
+  allow(File).to receive(:read).and_call_original
+  allow(File).to receive(:read).with(GDK::Config::FILE).and_return(raw_yaml)
+end
+
 def stub_pg_bindir
   fake_io = double('IO', read: '/usr/local/bin')
   allow(IO).to receive(:popen).and_call_original
@@ -102,4 +107,10 @@ def stub_no_color_env(res)
   # res needs to be of type String as we're simulating what's coming from
   # the shell command line.
   stub_env('NO_COLOR', res)
+end
+
+def stub_backup
+  instance_spy('gdk_backup').tap do |b|
+    allow(::GDK::Backup).to receive(:new).and_return(b)
+  end
 end

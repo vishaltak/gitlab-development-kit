@@ -34,8 +34,7 @@ RSpec.describe GDK do
 
     before do
       described_class.instance_variable_set(:@config, nil)
-      allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+      stub_raw_gdk_yaml(raw_yaml)
     end
 
     context 'with valid YAML' do
