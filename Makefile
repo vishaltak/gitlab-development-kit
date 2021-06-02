@@ -7,13 +7,14 @@ DIVIDER = "---------------------------------------------------------------------
 SHELL = /bin/bash
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
-MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
-RUBOCOP := $(shell command -v rubocop 2> /dev/null)
-RSPEC := $(shell command -v rspec 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
+
+MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+RUBOCOP := $(shell command -v rubocop 2> /dev/null)
+RSPEC := $(shell command -v rspec 2> /dev/null)
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
