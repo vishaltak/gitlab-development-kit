@@ -910,6 +910,20 @@ To fix this, remove `tmp/tests/` in the `gitlab/` directory and regenerate the f
 rm -rf tmp/tests/ && bin/rake karma:fixtures
 ```
 
+### TaskFailedError while setting up Gitaly
+
+In case of the following error, ensure that you don't have
+`GIT_TEMPLATE_DIR="$(overcommit --template-dir)"`
+[configured](https://github.com/sds/overcommit#automatically-install-overcommit-hooks).
+
+```plaintext
+==> Setting up Gitaly...
+rake aborted!
+Gitlab::TaskFailedError: Cloning into 'tmp/tests/gitaly'...
+This repository contains hooks installed by Overcommit, but the `overcommit` gem is not installed.
+Install it with `gem install overcommit`.
+```
+
 ## Puma
 
 The following are possible solutions to problems you might encounter with Puma and GDK.
