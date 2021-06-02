@@ -4,7 +4,7 @@ module GDK
   module Command
     # Handles `gdk version` command execution
     class Version < BaseCommand
-      def run(args = [])
+      def run(_ = [])
         GDK::Output.puts("#{GDK::VERSION} (#{git_revision})")
 
         true
