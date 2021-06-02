@@ -17,6 +17,7 @@ module GDK
       string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-com/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
+      string(:spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
     end
 
     array(:git_repositories) do
