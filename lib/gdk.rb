@@ -63,6 +63,8 @@ module GDK
       exit(GDK::Command::Restart.new.run(ARGV))
     when 'stop'
       exit(GDK::Command::Stop.new.run(ARGV))
+    when /-{0,2}version/
+      GDK::Command::Version.new.run(ARGV)
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run(ARGV)
     else

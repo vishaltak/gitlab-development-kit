@@ -17,56 +17,128 @@ module GDK
   ROOT_CHECK_FILE = '.gdk-install-root'
   DEFAULT_INIT_DIRECTORY = File.join(Dir.pwd, 'gitlab-development-kit')
 
-  def self.launcher_main
-    if print_version?
-      puts VERSION
+  module CommandBasic
+    class Main
+      def initialize(args)
+        @args = args
+      end
 
-      return true
+      def run
+        return GDK::CommandBasic::Version.new.run if gdk_version?
+        return GDK::CommandBasic::Init.new(args[1..]).run if gdk_init?
+
+        if gdk_dir?
+          require(File.join(gdk_root, 'lib/gdk.rb'))
+          GDK.main
+        else
+          warn_not_gdk_dir
+          false
+        end
+      end
+
+      private
+
+      attr_reader :args
+
+      def warn_not_gdk_dir
+        warn <<~NOT_A_GDK_DIR
+
+          The current working directory is not inside a gitlab-development-kit
+          installation. Use 'cd' to go to your gitlab-development-kit or create
+          a new one with 'gdk init'.
+
+          gdk init [DIRECTORY] # Default: #{DEFAULT_INIT_DIRECTORY}
+
+        NOT_A_GDK_DIR
+      end
+
+      def gdk_root
+        @gdk_root ||= find_root(Dir.pwd)
+      end
+
+      def gdk_dir?
+        !gdk_root.nil?
+      end
+
+      def gdk_version?
+        # If gdk_dir? == true, fall through to allow lib/gdk.rb to handle
+        %w[version --version].include?(args.first) && !gdk_dir?
+      end
+
+      def gdk_init?
+        args.first == 'init'
+      end
+
+      def find_root(current)
+        if File.exist?(File.join(current, 'GDK_ROOT'))
+          File.realpath(current)
+        elsif File.realpath(current) == '/'
+          nil
+        else
+          find_root(File.join(current, '..'))
+        end
+      end
     end
 
-    unless gdk_dir?
-      warn_not_gdk_dir
-
-      return false
+    class Version
+      def run
+        puts GDK::VERSION
+        true
+      end
     end
 
-    load(File.join(gdk_root, 'lib/gdk.rb'))
-    GDK.main
-  end
+    class Init
+      def initialize(args)
+        @args = args
+      end
 
-  def self.warn_not_gdk_dir
-    warn <<~NOT_A_GDK_DIR
+      def run
+        warn("INFO: 'gdk init' is deprecated and will be removed in a future update.")
 
-      The current working directory is not inside a gitlab-development-kit
-      installation. Use 'cd' to go to your gitlab-development-kit or create
-      a new one with 'gdk init'.
+        if show_help?
+          puts('Usage: gdk init [DIR]')
 
-      gdk init [DIRECTORY] # Default: #{DEFAULT_INIT_DIRECTORY}
+          return true
+        end
 
-    NOT_A_GDK_DIR
-  end
+        directory = new_gdk_directory
+        if new_gdk_directory_invalid?(directory)
+          warn("ERROR: The proposed new GDK directory '#{directory}' is invalid because it begins with a dash.")
 
-  def self.gdk_root
-    @gdk_root ||= find_root(Dir.pwd)
-  end
+          return false
+        end
 
-  def self.gdk_dir?
-    !gdk_root.nil?
-  end
+        if clone_gdk(directory)
+          puts("INFO: Successfully git cloned the GDK into '#{directory}'.")
+          true
+        else
+          warn("ERROR: An error occurred while attempting to git clone the GDK into '#{directory}'.")
+          false
+        end
+      end
 
-  def self.print_version?
-    %w[version --version].include?(ARGV.first) && !gdk_dir?
-  end
+      private
 
-  def self.find_root(current)
-    if File.exist?(File.join(current, 'GDK_ROOT'))
-      File.realpath(current)
-    elsif File.realpath(current) == '/'
-      nil
-    else
-      find_root(File.join(current, '..'))
+      attr_reader :args
+
+      def show_help?
+        args.count > 1 || (args & %w[-help --help]).any?
+      end
+
+      def new_gdk_directory_invalid?(directory)
+        directory.start_with?('-')
+      end
+
+      def new_gdk_directory
+        args.count == 1 ? args.first : GDK::DEFAULT_INIT_DIRECTORY
+      end
+
+      def clone_gdk(directory)
+        cmd = "git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git #{directory}"
+        system(*cmd)
+      end
     end
   end
 end
 
-exit(GDK.launcher_main)
+exit(GDK::CommandBasic::Main.new(ARGV).run)
