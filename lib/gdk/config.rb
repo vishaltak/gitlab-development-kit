@@ -54,6 +54,10 @@ module GDK
         false
       end
 
+      settings(:checkmake) do
+        path(:__binary) { config.dev.__bins.join('checkmake') }
+      end
+
       settings(:vale) do
         string(:version) { '2.10.3' }
         string(:__platform) { config.__platform == 'darwin' ? 'macos' : config.__platform }

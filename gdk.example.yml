@@ -11,6 +11,7 @@ charts_gitlab:
 common:
   ca_path: ''
 dev:
+  checkmake: {}
   shellcheck:
     version: 0.7.2
   vale:
