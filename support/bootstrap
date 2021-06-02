@@ -9,7 +9,6 @@ source "${parent_path}"/bootstrap-common.sh
 
 ASDF_VERSION_TO_INSTALL="v0.8.0"
 
-GDK_CACHE_DIR=$(realpath "${parent_path}/../.cache")
 GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
 
 asdf_install() {

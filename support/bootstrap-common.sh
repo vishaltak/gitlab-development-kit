@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+root_path=$(realpath "$(dirname "$0")"/..)
+
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 
@@ -23,6 +25,9 @@ SUPPORTED_FEDORA_LIKE_PLATFORMS=('Fedora RHEL')
 SUPPORTED_OTHER_PLATFORMS=('macOS')
 
 SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_PLATFORMS[@]}" "${SUPPORTED_DEBIAN_LIKE_PLATFORMS[@]}" "${SUPPORTED_ARCH_LIKE_PLATFORMS[@]}" "${SUPPORTED_FEDORA_LIKE_PLATFORMS[@]}")
+
+GDK_CACHE_DIR=$(realpath "${root_path}/.cache")
+GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
 
 error() {
   echo
@@ -183,7 +188,32 @@ common_preflight_checks() {
   fi
 }
 
+platform_files_checksum() {
+  echo -n "$(cd "${root_path}" && cat Brewfile packages*.txt | sha256sum | cut -d ' ' -f 1)"
+
+  return 0
+}
+
+platform_already_setup() {
+  if [[ -f "${GDK_PLATFORM_SETUP_FILE}" ]]; then
+    if [ "$(platform_files_checksum)" == "$(cat "${GDK_PLATFORM_SETUP_FILE}")" ] ;then
+      echo "INFO: This GDK has already had platform packages installed."
+      echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
+
+      return 0
+    else
+      return 1
+    fi
+  fi
+
+  return 1
+}
+
 setup_platform() {
+  if platform_already_setup; then
+    return 0
+  fi
+
   if [[ "${OSTYPE}" == "darwin"* ]]; then
     if ! setup_platform_darwin; then
       return 1
@@ -192,6 +222,7 @@ setup_platform() {
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
     shopt -s nocasematch
+
     if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
       if ! setup_platform_linux_with "packages.txt"; then
         shopt -u nocasematch
@@ -216,6 +247,16 @@ setup_platform() {
 
     shopt -u nocasematch
   fi
+
+  mark_platform_as_setup
+}
+
+mark_platform_as_setup() {
+  local checksum
+
+  mkdir -p "${GDK_CACHE_DIR}"
+  checksum=$(platform_files_checksum)
+  echo "${checksum}" > "${GDK_PLATFORM_SETUP_FILE}"
 }
 
 setup_platform_linux_with() {
