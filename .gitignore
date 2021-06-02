@@ -27,6 +27,7 @@
 /builds
 /charts-gitlab
 /coverage
+/dev/
 /elasticsearch*
 /env.runit
 /gdk-ce/**
