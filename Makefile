@@ -7,7 +7,6 @@ DIVIDER = "---------------------------------------------------------------------
 SHELL = /bin/bash
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
-VALE := $(shell command -v vale 2> /dev/null)
 MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
 RUBOCOP := $(shell command -v rubocop 2> /dev/null)
@@ -1206,23 +1205,13 @@ endif
 .PHONY: lint
 lint: vale markdownlint
 
-.PHONY: vale-install
-vale-install:
-ifeq ($(VALE),)
-ifeq ($(GOLANG),)
-	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
-	@false
-else
-	@echo "INFO: Installing vale.."
-	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale/v2 ${QQ}
-endif
-endif
+$(dev_vale_versioned_binary):
+	@support/dev/vale-install
 
 .PHONY: vale
-vale: vale-install
+vale: $(dev_vale_versioned_binary)
 	@echo -n "Vale: "
-	$(eval VALE := $(shell command -v vale 2> /dev/null))
-	@${VALE} --minAlertLevel error *.md doc
+	@${dev_vale_versioned_binary} --minAlertLevel error *.md doc
 
 .PHONY: markdownlint-install
 markdownlint-install:

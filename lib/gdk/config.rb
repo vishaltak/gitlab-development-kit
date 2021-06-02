@@ -54,6 +54,13 @@ module GDK
         false
       end
 
+      settings(:vale) do
+        string(:version) { '2.10.3' }
+        string(:__platform) { config.__platform == 'darwin' ? 'macos' : config.__platform }
+        path(:__binary) { config.dev.__bins.join('vale') }
+        path(:__versioned_binary) { config.dev.__bins.join("vale_#{config.dev.vale.version}") }
+      end
+
       settings(:shellcheck) do
         string(:version) { '0.7.2' }
         path(:__binary) { config.dev.__bins.join('shellcheck') }
