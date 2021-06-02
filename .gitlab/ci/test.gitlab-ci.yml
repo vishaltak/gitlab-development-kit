@@ -76,13 +76,9 @@ shellcheck:
   extends: .rules:code-changes
   stage: test
   needs: []
-  image: koalaman/shellcheck-alpine:stable
-  before_script:
-    - apk add make
+  image: ruby:2.7
   script:
-    - nproc
-    - free -m
-    - make shellcheck SHELL=/bin/sh
+    - make shellcheck
 
 checkmake:
   stage: test

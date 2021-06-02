@@ -1868,4 +1868,14 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'dev' do
+    describe 'shellcheck' do
+      describe 'version' do
+        it 'returns 0.7.2 by default' do
+          expect(config.dev.shellcheck.version).to eq('0.7.2')
+        end
+      end
+    end
+  end
 end

@@ -12,7 +12,6 @@ MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
 RUBOCOP := $(shell command -v rubocop 2> /dev/null)
 RSPEC := $(shell command -v rspec 2> /dev/null)
-SHELLCHECK := $(shell command -v shellcheck 2> /dev/null)
 CHECKMAKE := $(shell command -v checkmake 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
@@ -24,7 +23,7 @@ export GOPROXY ?= https://proxy.golang.org
 # Silence Rollup when building GitLab Docs with nanoc
 export ROLLUP_OPTIONS = --silent
 
-NO_RUBY_REQUIRED := bootstrap lint shellcheck
+NO_RUBY_REQUIRED := bootstrap lint
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
@@ -1244,22 +1243,13 @@ markdownlint: markdownlint-install
 	@echo -n "MarkdownLint: "
 	@${MARKDOWNLINT} --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
 
-.PHONY: shellcheck-install
-shellcheck-install:
-ifeq ($(SHELLCHECK),)
-ifeq ($(platform),darwin)
-	@echo "INFO: Installing Shellcheck.."
-	$(Q)brew install shellcheck ${QQ}
-else
-	@echo "INFO: To install shellcheck, please consult the docs at https://github.com/koalaman/shellcheck#installing"
-	@false
-endif
-endif
-
 .PHONY: shellcheck
-shellcheck: shellcheck-install
+shellcheck: ${dev_shellcheck_versioned_binary}
 	@echo -n "Shellcheck: "
-	@support/shellcheck && echo "OK"
+	@support/dev/shellcheck && echo "OK"
+
+${dev_shellcheck_versioned_binary}:
+	@support/dev/shellcheck-install
 
 .PHONY: checkmake
 checkmake: checkmake-install
