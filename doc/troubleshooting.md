@@ -912,7 +912,7 @@ rm -rf tmp/tests/ && bin/rake karma:fixtures
 
 ### TaskFailedError while setting up Gitaly
 
-In case of the following error, ensure that you don't have
+If you receive the error below, ensure that you don't have
 `GIT_TEMPLATE_DIR="$(overcommit --template-dir)"`
 [configured](https://github.com/sds/overcommit#automatically-install-overcommit-hooks).
 
