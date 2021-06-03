@@ -5,8 +5,6 @@ module GDK
     # Handles `gdk reconfigure` command execution
     class Reconfigure < BaseCommand
       def run(args = [])
-        GDK.remember!(GDK.root)
-
         result = GDK.make('reconfigure')
 
         unless result
