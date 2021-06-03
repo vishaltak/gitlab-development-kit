@@ -7,16 +7,14 @@ DIVIDER = "---------------------------------------------------------------------
 SHELL = /bin/bash
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
-VALE := $(shell command -v vale 2> /dev/null)
-MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
-RUBOCOP := $(shell command -v rubocop 2> /dev/null)
-RSPEC := $(shell command -v rspec 2> /dev/null)
-SHELLCHECK := $(shell command -v shellcheck 2> /dev/null)
-CHECKMAKE := $(shell command -v checkmake 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
+
+MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+RUBOCOP := $(shell command -v rubocop 2> /dev/null)
+RSPEC := $(shell command -v rspec 2> /dev/null)
 
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
@@ -24,7 +22,7 @@ export GOPROXY ?= https://proxy.golang.org
 # Silence Rollup when building GitLab Docs with nanoc
 export ROLLUP_OPTIONS = --silent
 
-NO_RUBY_REQUIRED := bootstrap lint shellcheck
+NO_RUBY_REQUIRED := bootstrap lint
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
@@ -1207,23 +1205,13 @@ endif
 .PHONY: lint
 lint: vale markdownlint
 
-.PHONY: vale-install
-vale-install:
-ifeq ($(VALE),)
-ifeq ($(GOLANG),)
-	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
-	@false
-else
-	@echo "INFO: Installing vale.."
-	@GO111MODULE=on ${GOLANG} get github.com/errata-ai/vale/v2 ${QQ}
-endif
-endif
+$(dev_vale_versioned_binary):
+	@support/dev/vale-install
 
 .PHONY: vale
-vale: vale-install
+vale: $(dev_vale_versioned_binary)
 	@echo -n "Vale: "
-	$(eval VALE := $(shell command -v vale 2> /dev/null))
-	@${VALE} --minAlertLevel error *.md doc
+	@${dev_vale_versioned_binary} --minAlertLevel error *.md doc
 
 .PHONY: markdownlint-install
 markdownlint-install:
@@ -1244,40 +1232,21 @@ markdownlint: markdownlint-install
 	@echo -n "MarkdownLint: "
 	@${MARKDOWNLINT} --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
 
-.PHONY: shellcheck-install
-shellcheck-install:
-ifeq ($(SHELLCHECK),)
-ifeq ($(platform),darwin)
-	@echo "INFO: Installing Shellcheck.."
-	$(Q)brew install shellcheck ${QQ}
-else
-	@echo "INFO: To install shellcheck, please consult the docs at https://github.com/koalaman/shellcheck#installing"
-	@false
-endif
-endif
-
 .PHONY: shellcheck
-shellcheck: shellcheck-install
+shellcheck: ${dev_shellcheck_versioned_binary}
 	@echo -n "Shellcheck: "
-	@support/shellcheck && echo "OK"
+	@support/dev/shellcheck && echo "OK"
+
+${dev_shellcheck_versioned_binary}:
+	@support/dev/shellcheck-install
 
 .PHONY: checkmake
-checkmake: checkmake-install
+checkmake: ${dev_checkmake_binary}
 	@echo -n "Checkmake: "
-	$(eval CHECKMAKE := $(shell command -v checkmake 2> /dev/null))
-	@${CHECKMAKE} Makefile && echo -e "\b\bOK"
+	@${dev_checkmake_binary} Makefile && echo -e "\b\bOK"
 
-.PHONY: checkmake-install
-checkmake-install:
-ifeq ($(CHECKMAKE),)
-ifeq ($(GOLANG),)
-	@echo "ERROR: Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
-	@false
-else
-	@echo "INFO: Installing checkmake.."
-	@${GOLANG} get github.com/mrtazz/checkmake ${QQ}
-endif
-endif
+${dev_checkmake_binary}:
+	@support/dev/checkmake-install
 
 .PHONY: verify-gdk-example-yml
 verify-gdk-example-yml:

@@ -24,6 +24,7 @@ module GDK
 
     bool(:__platform_linux) { config.__platform == 'linux' }
     bool(:__platform_darwin) { config.__platform == 'darwin' }
+    bool(:__platform_supported?) { config.__platform != 'unknown' }
 
     settings :common do
       string(:ca_path) { '' }
@@ -41,6 +42,34 @@ module GDK
       string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
       string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
       string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
+    end
+
+    settings :dev do
+      path(:__go_path) { GDK.root.join('dev') }
+      path(:__bins) { config.dev.__go_path.join('bin') }
+      path(:__go_binary) { MakeMakefile.find_executable('go') }
+      bool(:__go_binary_available?) do
+        !config.dev.__go_binary.nil?
+      rescue TypeError
+        false
+      end
+
+      settings(:checkmake) do
+        path(:__binary) { config.dev.__bins.join('checkmake') }
+      end
+
+      settings(:vale) do
+        string(:version) { '2.10.3' }
+        string(:__platform) { config.__platform == 'darwin' ? 'macos' : config.__platform }
+        path(:__binary) { config.dev.__bins.join('vale') }
+        path(:__versioned_binary) { config.dev.__bins.join("vale_#{config.dev.vale.version}") }
+      end
+
+      settings(:shellcheck) do
+        string(:version) { '0.7.2' }
+        path(:__binary) { config.dev.__bins.join('shellcheck') }
+        path(:__versioned_binary) { config.dev.__bins.join("shellcheck_#{config.dev.shellcheck.version}") }
+      end
     end
 
     array(:git_repositories) do

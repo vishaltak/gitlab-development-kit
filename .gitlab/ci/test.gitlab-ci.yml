@@ -76,22 +76,18 @@ shellcheck:
   extends: .rules:code-changes
   stage: test
   needs: []
-  image: koalaman/shellcheck-alpine:stable
-  before_script:
-    - apk add make
+  image: ruby:2.7
   script:
-    - nproc
-    - free -m
-    - make shellcheck SHELL=/bin/sh
+    - make shellcheck
 
 checkmake:
   stage: test
   needs: []
   extends: .rules:code-changes
   # https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1234
-  image: golang:1.14
+  image: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:main
   script:
-    - PATH=${HOME}/go/bin:${PATH} make checkmake
+    - make checkmake
 
 yard:
   stage: test
