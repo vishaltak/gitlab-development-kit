@@ -17,7 +17,7 @@ module GDK
       string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-com/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
-      string(:spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
+      string(:spamcheck) { 'https://gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck.git' }
     end
 
     array(:git_repositories) do
@@ -265,6 +265,15 @@ module GDK
       path(:address) { config.gdk_root.join('gitaly.socket') }
       path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
       path(:config_file) { config.gdk_root.join('gitaly', 'gitaly.config.toml') }
+      path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
+      path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
+      bool(:auto_update) { true }
+    end
+
+    settings :spamcheck do
+      path(:address) { config.gdk_root.join('gitaly.socket') }
+      path(:assembly_dir) { config.gdk_root.join('gitaly', 'assembly') }
+      path(:config_file) { config.gdk_root.join('spamcheck', 'config', 'config.toml') }
       path(:internal_socket_dir) { config.gdk_root.join('tmp', 'gitaly') }
       path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
       bool(:auto_update) { true }
