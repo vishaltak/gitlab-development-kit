@@ -1,7 +1,6 @@
 .verify-job:
   stage: verify
   extends: .rules:code-changes
-  image: ${VERIFY_IMAGE}
   needs:
     - release-image
   artifacts:
