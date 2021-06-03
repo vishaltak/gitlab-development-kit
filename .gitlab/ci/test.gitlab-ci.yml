@@ -58,11 +58,11 @@ code_quality:
 container_scanning:
   before_script:
     - export DOCKER_IMAGE=${VERIFY_IMAGE}
-  extends:
-    - .rules:code-changes
+  extends: .rules:code-changes
   stage: test
   needs:
-    - release-image
+    - job: release-image
+      optional: true
   rules:
     # For merge requests, create a pipeline.
     - if: '$CI_MERGE_REQUEST_IID'
@@ -70,7 +70,6 @@ container_scanning:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     # For tags, create a pipeline.
     - if: '$CI_COMMIT_TAG'
-
 
 shellcheck:
   extends: .rules:code-changes
