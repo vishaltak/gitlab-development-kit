@@ -17,8 +17,10 @@ RUN apt-get update && apt-get install -y sudo locales locales-all software-prope
 RUN useradd --user-group --create-home --groups sudo gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk_no_password
 
-USER gdk
 WORKDIR /home/gdk/gitlab-development-kit
+RUN chown gdk:gdk /home/gdk/gitlab-development-kit
+
+USER gdk
 COPY --chown=gdk . .
 
 ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
