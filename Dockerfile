@@ -7,8 +7,11 @@ LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab
 ## The CI script that build this file can be found under: support/docker
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 
-RUN apt-get update && apt-get install -y sudo software-properties-common \
+RUN apt-get update && apt-get install -y sudo locales locales-all software-properties-common \
     && add-apt-repository ppa:git-core/ppa -y
 
 RUN useradd --user-group --create-home --groups sudo gdk
