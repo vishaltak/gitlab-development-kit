@@ -242,6 +242,17 @@ Hooks are executed with the GDK root directory as the working directory. Executi
 NOTE:
 When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed before restarting and `gdk.start_hooks` (both before & after) are executed after restarting.
 
+For example, if you're left with changes in `gitlab/db/structure.sql` after a
+`gdk update` (see [gitlab#300251](https://gitlab.com/gitlab-org/gitlab/-/issues/300251)),
+you can use `gdk.update_hooks.after` in your `gdk.yml`:
+
+```yaml
+gdk:
+  update_hooks:
+    after:
+      - cd gitlab; git checkout db/structure.sql
+```
+
 ### GitLab settings
 
 | Setting | Default | Description |
