@@ -97,7 +97,11 @@ module GDK
     end
 
     def self.colorize?
-      STDOUT.isatty && ENV.fetch('NO_COLOR', '').empty? # rubocop:disable Style/GlobalStdStream
+      interactive? && ENV.fetch('NO_COLOR', '').empty?
+    end
+
+    def self.interactive?
+      STDOUT.isatty # rubocop:disable Style/GlobalStdStream
     end
 
     def self.prompt(message)

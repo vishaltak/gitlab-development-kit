@@ -260,6 +260,24 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.interactive?' do
+    context 'when we have a TTY' do
+      it 'returns true' do
+        stub_tty(true)
+
+        expect(described_class.interactive?).to be(true)
+      end
+    end
+
+    context "when we don't have a TTY" do
+      it 'returns false' do
+        stub_tty(false)
+
+        expect(described_class.interactive?).to be(false)
+      end
+    end
+  end
+
   describe '.prompt' do
     it 'returns user input' do
       response = 'n'
