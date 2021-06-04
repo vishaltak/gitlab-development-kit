@@ -10,10 +10,6 @@ module Runit
 
     Service = Struct.new(:name, :command)
 
-    TERM_SIGNAL = {
-      'webpack' => 'KILL'
-    }.freeze
-
     def initialize(gdk_root)
       @gdk_root = gdk_root
     end
@@ -135,21 +131,44 @@ module Runit
     end
 
     def create_runit_control_t(service)
-      term_signal = TERM_SIGNAL.fetch(service.name, 'TERM')
       control_t_template = <<~'TEMPLATE'
         #!/usr/bin/env ruby
 
-        signal = '<%= term_signal %>'
+        GIVE_PID_SECS_TO_DIE = 3
+
+        def kill(signal, pid)
+          puts "runit control/t: sending #{signal} to #{pid}"
+          Process.kill(signal, pid)
+        rescue Errno::ESRCH
+          nil
+        end
+
+        def pid?(pid)
+          Process.getpgid(pid)
+          true
+        rescue Errno::ESRCH
+          false
+        end
+
         pid = Integer(File.read('<%= File.join(dir(service), 'supervise/pid') %>'))
 
-        # Use - to signal the process group, not just a single PID.
-        pid_group = -pid
-        puts "runit control/t: sending #{signal} to #{pid_group}"
-        Process.kill(signal, pid_group)
+        # Kill PID group with TERM
+        kill('TERM', -pid)
 
-        # Kill process
-        puts "runit control/t: sending #{signal} to #{pid}"
-        Process.kill(signal, pid)
+        # Kill PID with TERM
+        kill('TERM', pid)
+
+        # Wait a few moments for pid to die.
+        1.upto(GIVE_PID_SECS_TO_DIE) do
+          exit(0) unless pid?(pid)
+          sleep 1
+        end
+
+        # Kill PID group with KILL
+        kill('KILL', -pid)
+
+        # Kill PID with KILL
+        kill('KILL', pid)
       TEMPLATE
       control_t_path = File.join(dir(service), 'control/t')
       write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
