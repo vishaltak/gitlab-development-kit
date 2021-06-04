@@ -15,6 +15,5 @@ fi
 
 install_gem
 install
-doctor
 stop_start
 test_url
