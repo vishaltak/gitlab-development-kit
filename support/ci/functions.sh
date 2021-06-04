@@ -76,6 +76,24 @@ update() {
   restart
 }
 
+reconfigure() {
+  cd "${GDK_CHECKOUT_PATH}" || exit
+  echo "> Running gdk reconfigure.."
+  gdk reconfigure
+}
+
+reset_data() {
+  cd "${GDK_CHECKOUT_PATH}" || exit
+  echo "> Running gdk reset-data.."
+  gdk reset-data
+}
+
+pristine() {
+  cd "${GDK_CHECKOUT_PATH}" || exit
+  echo "> Running gdk pristine.."
+  gdk pristine
+}
+
 start() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Starting up GDK.."

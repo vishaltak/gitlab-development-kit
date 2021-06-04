@@ -17,6 +17,26 @@ install:
   script:
     - support/ci/verify-install
 
+doctor:
+  extends: .verify-job
+  script:
+    - support/ci/verify-doctor
+
+reconfigure:
+  extends: .verify-job
+  script:
+    - support/ci/verify-reconfigure
+
+reset-data:
+  extends: .verify-job
+  script:
+    - support/ci/verify-reset-data
+
+pristine:
+  extends: .verify-job
+  script:
+    - support/ci/verify-pristine
+
 update-from-default-branch:
   extends: .verify-job
   script:
