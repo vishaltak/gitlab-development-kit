@@ -112,6 +112,14 @@ gitlab_runner:
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
+gitlab_spamcheck:
+  auto_update: true
+  enabled: false
+  external_port: 8080
+  inspector_url: http://127.0.0.1:8888/api/v1/isspam/issue
+  monitor_mode: false
+  output: stdout
+  port: 8001
 gitlab_ui:
   auto_update: true
   enabled: false
@@ -246,6 +254,7 @@ repositories:
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
   gitlab_runner: https://gitlab.com/gitlab-org/gitlab-runner.git
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
+  gitlab_spamcheck: https://gitlab.com/gitlab-org/spamcheck.git
   gitlab_ui: https://gitlab.com/gitlab-org/gitlab-ui.git
   omnibus_gitlab: https://gitlab.com/gitlab-org/omnibus-gitlab.git
 repositories_root: "/home/git/gdk/repositories"

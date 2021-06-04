@@ -1,0 +1,23 @@
+[grpc]
+port = "<%= config.gitlab_spamcheck.port %>"
+
+[rest]
+externalPort = "<%= config.gitlab_spamcheck.external_port %>"
+
+[inspector]
+inspectorUrl = "<%= config.gitlab_spamcheck.inspector_url %>"
+
+[logger]
+level = "info"
+format = "json"
+output = "<%= config.gitlab_spamcheck.output %>"
+
+[monitor]
+address = ":8003"
+
+[extraAttributes]
+monitorMode = "<%= config.gitlab_spamcheck.monitor_mode %>"
+
+[filter]
+allowList = {}
+denyList = {}

@@ -63,6 +63,10 @@ sshd: exec <%= config.sshd.__full_command %>
 #
 <%= '#' unless config.runner? %>runner: exec <%= config.runner.bin %> --log-level debug run --config <%= config.runner.config_file %>
 
+# Gitlab Spamcheck
+#
+<%= '#' unless config.gitlab_spamcheck? %>spamcheck: exec support/exec-cd gitlab-spamcheck ./spamcheck
+
 # Mattermost
 #
 <%= '#' unless config.mattermost? %>mattermost: exec docker run --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.port %>:8065 <%= config.mattermost.image %>
