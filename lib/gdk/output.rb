@@ -102,7 +102,7 @@ module GDK
 
     def self.prompt(message)
       Kernel.print("#{message}: ")
-      ARGF.gets.chomp
+      ARGF.gets.to_s.chomp
     end
   end
 end

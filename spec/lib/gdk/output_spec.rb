@@ -266,7 +266,7 @@ RSpec.describe GDK::Output do
       message = 'Are you sure? [y/N]'
 
       expect(Kernel).to receive(:print).with("#{message}: ")
-      expect(ARGF).to receive_message_chain(:gets, :chomp).and_return(response)
+      expect(ARGF).to receive_message_chain(:gets, :to_s, :chomp).and_return(response)
 
       expect(described_class.prompt(message)).to eq(response)
     end
