@@ -9,7 +9,6 @@ ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
-NPM := $(shell command -v npm 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
 
 MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
@@ -1215,22 +1214,17 @@ vale: $(dev_vale_versioned_binary)
 
 .PHONY: markdownlint-install
 markdownlint-install:
-ifeq ($(or $(NPM),$(YARN)),)
-	@echo "ERROR: NPM or YARN are not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
+ifeq ($(YARN)),)
+	@echo "ERROR: YARN is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
-ifeq ($(MARKDOWNLINT),)
-	@echo "INFO: Installing markdownlint.."
-	@([[ "${YARN}" ]] && ${YARN} global add markdownlint-cli@0.23.2 ${QQ}) || ([[ "${NPM}" ]] && ${NPM} install -g markdownlint-cli@0.23.2 ${QQ})
-endif
-	@([[ "${ASDF}" ]] && ${ASDF} reshim nodejs || true)
+	@[[ "${YARN}" ]] && ${YARN} install --silent --frozen-lockfile ${QQ}
 endif
 
 .PHONY: markdownlint
 markdownlint: markdownlint-install
-	$(eval MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null))
 	@echo -n "MarkdownLint: "
-	@${MARKDOWNLINT} --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
+	@${YARN} run --silent markdownlint --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
 
 .PHONY: shellcheck
 shellcheck: ${dev_shellcheck_versioned_binary}
