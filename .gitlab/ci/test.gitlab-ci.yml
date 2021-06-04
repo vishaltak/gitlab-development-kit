@@ -58,7 +58,6 @@ code_quality:
 container_scanning:
   before_script:
     - export DOCKER_IMAGE=${VERIFY_IMAGE}
-  extends: .rules:code-changes
   stage: test
   needs:
     - job: release-image
