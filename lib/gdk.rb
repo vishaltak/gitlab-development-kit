@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# IGNORE
+
 # GitLab Development Kit CLI parser / executor
 #
 # This file is loaded by the 'gdk' command in the gem. This file is NOT
