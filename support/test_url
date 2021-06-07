@@ -8,7 +8,7 @@ url = ARGV[0] || GDK::TestURL.default_url
 quiet = ENV['QUIET'] != 'false'
 
 begin
-  GDK::TestURL.new(url, quiet: quiet).wait
+  exit(GDK::TestURL.new(url, quiet: quiet).wait)
 rescue GDK::TestURL::UrlAppearsInvalid
   GDK::Output.error("'#{url}' does not appear to be a valid URL?")
 end
