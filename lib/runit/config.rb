@@ -10,6 +10,10 @@ module Runit
 
     Service = Struct.new(:name, :command)
 
+    TERM_SIGNAL = {
+      'webpack' => 'KILL'
+    }.freeze
+
     def initialize(gdk_root)
       @gdk_root = gdk_root
     end
@@ -131,6 +135,8 @@ module Runit
     end
 
     def create_runit_control_t(service)
+      term_signal = TERM_SIGNAL.fetch(service.name, 'TERM')
+
       control_t_template = <<~'TEMPLATE'
         #!/usr/bin/env ruby
 
@@ -161,11 +167,11 @@ module Runit
 
         exit(0) unless pid
 
-        # Kill PID group with TERM
-        kill('TERM', -pid)
+        # Kill PID group with <%= term_signal %>
+        kill('<%= term_signal %>', -pid)
 
-        # Kill PID with TERM
-        kill('TERM', pid)
+        # Kill PID with <%= term_signal %>
+        kill('<%= term_signal %>', pid)
 
         # Wait a few moments for pid to die.
         1.upto(GIVE_PID_SECS_TO_DIE) do
