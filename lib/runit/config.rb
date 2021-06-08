@@ -150,7 +150,16 @@ module Runit
           false
         end
 
-        pid = Integer(File.read('<%= File.join(dir(service), 'supervise/pid') %>'))
+        def pid
+          @pid ||= begin
+            p = File.read('<%= File.join(dir(service), 'supervise/pid') %>')
+            return if p.empty?
+
+            Integer(p)
+          end
+        end
+
+        exit(0) unless pid
 
         # Kill PID group with TERM
         kill('TERM', -pid)
