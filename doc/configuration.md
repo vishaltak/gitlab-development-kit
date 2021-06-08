@@ -284,7 +284,6 @@ Under the `gitlab_runner` key, you can define the following settings:
 |:-----------------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
 | `gitlab_runner.enabled`      | `false` | Set to `true` to enable [`gitlab-runner`](https://gitlab.com/gitlab-org/gitlab-runner) to be managed by GDK. |
 | `gitlab_runner.auto_update`  | `true`  | Set to `false` to disable updating the `gitlab-runner` checkout.                                             |
-| `gitlab_runner.docs_enabled` | `false` | Set to `true` to include `gitlab-runner/docs` in [documentation builds](howto/gitlab_docs.md).               |
 
 Under the `omnibus_gitlab` key, you can define the following settings:
 
@@ -292,7 +291,6 @@ Under the `omnibus_gitlab` key, you can define the following settings:
 |:------------------------------|:--------|:---------------------------------------------------------------------------------------------------------------|
 | `omnibus_gitlab.enabled`      | `false` | Set to `true` to enable [`omnibus-gitlab`](https://gitlab.com/gitlab-org/omnibus-gitlab) to be managed by GDK. |
 | `omnibus_gitlab.auto_update`  | `true`  | Set to `false` to disable updating the `omnibus-gitlab` checkout.                                              |
-| `omnibus_gitlab.docs_enabled` | `false` | Set to `true` to include `omnibus-gitlab/doc` in [documentation builds](howto/gitlab_docs.md).                 |
 
 Under the `charts_gitlab` key, you can define the following settings:
 
@@ -300,7 +298,10 @@ Under the `charts_gitlab` key, you can define the following settings:
 |:-----------------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
 | `charts_gitlab.enabled`      | `false` | Set to `true` to enable [`charts/gitlab`](https://gitlab.com/gitlab-org/charts/gitlab) to be managed by GDK. |
 | `charts_gitlab.auto_update`  | `true`  | Set to `false` to disable updating the `charts/gitlab` checkout.                                             |
-| `charts_gitlab.docs_enabled` | `false` | Set to `true` to include `charts/gitlab/doc` in [documentation builds](howto/gitlab_docs.md).                |
+
+NOTE:
+If you set `enabled` to `true` for all of these projects, you can
+[live preview documentation changes](howto/gitlab_docs.md#make-documentation-changes).
 
 ### NGINX settings
 

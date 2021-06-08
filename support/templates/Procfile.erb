@@ -57,7 +57,7 @@ sshd: exec <%= config.sshd.__full_command %>
 
 # Gitlab Docs
 #
-<%= '#' unless config.gitlab_docs? %>gitlab-docs: exec support/exec-cd gitlab-docs bundle exec nanoc live --host "<%= config.hostname %>" --port <%= config.gitlab_docs.port %>
+<%= '#' unless config.gitlab_docs? %>gitlab-docs: exec support/start-gitlab-docs-nanoc
 
 # Gitlab Runner
 #

@@ -540,7 +540,7 @@ charts-gitlab/.git/pull: charts-gitlab/.git
 	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" HEAD ${QQ}
 
 .PHONY: gitlab-docs-deps
-gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn symlink-gitlab-docs
+gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn rm-symlink-gitlab-docs
 
 gitlab-docs-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
@@ -548,26 +548,12 @@ gitlab-docs-bundle:
 gitlab-docs-yarn:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
 
-symlink-gitlab-docs:
-	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/ee ${gitlab_development_root}/${gitlab_clone_dir}/doc
-ifeq ($(gitlab_runner_docs_enabled),true)
-	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/runner ${gitlab_development_root}/${gitlab_runner_clone_dir}/docs
-endif
-ifneq ($(gitlab_runner_docs_enabled),true)
+# Ensure no legacy symlinks are in place
+rm-symlink-gitlab-docs:
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/ee
 	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/runner
-endif
-ifeq ($(omnibus_gitlab_docs_enabled),true)
-	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/omnibus ${gitlab_development_root}/${omnibus_gitlab_clone_dir}/doc
-endif
-ifneq ($(omnibus_gitlab_docs_enabled),true)
 	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/omnibus
-endif
-ifeq ($(charts_gitlab_docs_enabled),true)
-	$(Q)support/symlink ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/charts ${gitlab_development_root}/${charts_gitlab_clone_dir}/doc
-endif
-ifneq ($(charts_gitlab_docs_enabled),true)
 	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/charts
-endif
 
 gitlab-docs-clean:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && rm -rf tmp
@@ -594,27 +580,27 @@ gitlab-docs-check:
 	@false
 endif
 
-ifneq ($(gitlab_runner_docs_enabled),true)
+ifneq ($(gitlab_runner_enabled),true)
 gitlab-runner-docs-check:
-	@echo "ERROR: gitlab_runner documentation is not enabled. See doc/howto/gitlab_docs.md"
+	@echo "ERROR: gitlab_runner is not enabled. See doc/howto/gitlab_docs.md"
 	@false
 else
 gitlab-runner-docs-check:
 	@true
 endif
 
-ifneq ($(omnibus_gitlab_docs_enabled),true)
+ifneq ($(omnibus_gitlab_enabled),true)
 omnibus-gitlab-docs-check:
-	@echo "ERROR: omnibus_gitlab documentation is not enabled. See doc/howto/gitlab_docs.md"
+	@echo "ERROR: omnibus_gitlab is not enabled. See doc/howto/gitlab_docs.md"
 	@false
 else
 omnibus-gitlab-docs-check:
 	@true
 endif
 
-ifneq ($(charts_gitlab_docs_enabled),true)
+ifneq ($(charts_gitlab_enabled),true)
 charts-gitlab-docs-check:
-	@echo "ERROR: charts_gitlab documentation is not enabled. See doc/howto/gitlab_docs.md"
+	@echo "ERROR: charts_gitlab is not enabled. See doc/howto/gitlab_docs.md"
 	@false
 else
 charts-gitlab-docs-check:

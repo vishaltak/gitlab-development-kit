@@ -65,19 +65,15 @@ To make changes to GitLab documentation and preview them:
    ```
 
 1. Make the necessary changes to the files in `<path_to_gdk>/gitlab/doc`.
-1. Restart the `gitlab-docs` service to recompile the published version of the documentation with
-   the new changes:
+1. View the preview. If you:
+   - Enable [all documentation projects](#include-more-documentation), your preview automatically
+     reloads with the changes.
+   - Enable only some documentation projects, you must restart the `gitlab-docs` service to
+     recompile the published version of the documentation with the new changes:
 
-   ```shell
-   gdk restart gitlab-docs
-   ```
-
-After recompilation, the preview is automatically refreshed with the changes.
-
-NOTE:
-These instructions work for all users, but the restart step might not be needed for non-macOS users.
-The copy of `gitlab-docs` managed by GDK symlinks to the `gitlab/doc` directory,
-which affects the ability to "hot reload" the documentation preview on macOS.
+     ```shell
+     gdk restart gitlab-docs
+     ```
 
 ### Include more documentation
 
@@ -93,13 +89,10 @@ To be able to make and preview changes to the additional documentation:
      enabled: true
    gitlab_runner:
      enabled: true
-     docs_enabled: true
    omnibus_gitlab:
      enabled: true
-     docs_enabled: true
    charts_gitlab:
      enabled: true
-     docs_enabled: true
    ```
 
 1. Run `gdk update` to:
@@ -147,7 +140,7 @@ make gitlab-docs-check
 This check requires:
 
 - `gitlab_docs.enabled` is true.
-- `docs_enabled` is true for [all other projects](#include-additional-documentation) that provide
+- `enabled` is true for [all other projects](#include-additional-documentation) that provide
   documentation.
 
 ### Troubleshooting
@@ -164,23 +157,34 @@ make gitlab-docs-clean
 
 This causes `nanoc` to rebuild all documentation on the next run.
 
+#### Documentation from disabled projects appears in preview
+
+Disabling [additional documentation projects](#include-more-documentation) doesn't remove them
+from your file system and `nanoc` continues to use them as a source of documentation. When disabled,
+the projects aren't updated so `nanoc` is using old commits to preview the data from those projects.
+
+To ensure only enabled projects appear in the preview:
+
+1. Disable any projects you don't want previewed.
+1. Remove the cloned project directory from within GDK.
+
 #### `No preset version installed` error for `markdownlint`
 
 Sometimes the `./scripts/lint-doc.sh` script fails with an error similar to:
 
-  ```shell
-  No preset version installed for command markdownlint
-  Please install a version by running one of the following:
+```shell
+No preset version installed for command markdownlint
+Please install a version by running one of the following:
 
-  asdf install nodejs 14.16.1
-  ```
+asdf install nodejs 14.16.1
+```
 
 The cause is unknown but you can try reinstalling `markdownlint` and reshiming:
 
-  ```shell
-  $ rm -f ~/.asdf/shims/markdownlint
-  $ make markdownlint-install
+```shell
+$ rm -f ~/.asdf/shims/markdownlint
+$ make markdownlint-install
 
-  INFO: Installing markdownlint..
-  $ asdf reshim nodejs
-  ```
+INFO: Installing markdownlint..
+$ asdf reshim nodejs
+```
