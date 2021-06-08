@@ -1805,7 +1805,7 @@ RSpec.describe GDK::Config do
         end
       end
 
-      describe '__nanoc_live_common' do
+      describe '__nanoc_cmd_common' do
         context 'when GDK host and GitLab Docs port not configured' do
           let(:yaml) do
             {
@@ -1813,7 +1813,7 @@ RSpec.describe GDK::Config do
           end
 
           it 'nanoc is passed default options' do
-            expect(config.gitlab_docs.__nanoc_live_common).to eq('--host 127.0.0.1 --port 3005')
+            expect(config.gitlab_docs.__nanoc_cmd_common).to eq('--host 127.0.0.1 --port 3005')
           end
         end
 
@@ -1826,7 +1826,7 @@ RSpec.describe GDK::Config do
           end
 
           it 'nanoc is passed configured options' do
-            expect(config.gitlab_docs.__nanoc_live_common).to eq('--host gdk.test.com --port 5555')
+            expect(config.gitlab_docs.__nanoc_cmd_common).to eq('--host gdk.test.com --port 5555')
           end
         end
       end
