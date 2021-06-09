@@ -48,6 +48,7 @@ module GDK
         warn_overwritten!
       end
 
+      FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
       FileUtils.mv(temp_file.path, target)
     rescue GDK::ConfigSettings::UnsupportedConfiguration => e
       GDK::Output.abort("#{e.message}.")
