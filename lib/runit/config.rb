@@ -136,20 +136,54 @@ module Runit
 
     def create_runit_control_t(service)
       term_signal = TERM_SIGNAL.fetch(service.name, 'TERM')
+
       control_t_template = <<~'TEMPLATE'
         #!/usr/bin/env ruby
 
-        signal = '<%= term_signal %>'
-        pid = Integer(File.read('<%= File.join(dir(service), 'supervise/pid') %>'))
+        GIVE_PID_SECS_TO_DIE = 3
 
-        # Use - to signal the process group, not just a single PID.
-        pid_group = -pid
-        puts "runit control/t: sending #{signal} to #{pid_group}"
-        Process.kill(signal, pid_group)
+        def kill(signal, pid)
+          puts "runit control/t: sending #{signal} to #{pid}"
+          Process.kill(signal, pid)
+        rescue Errno::ESRCH
+          nil
+        end
 
-        # Kill process
-        puts "runit control/t: sending #{signal} to #{pid}"
-        Process.kill(signal, pid)
+        def pid?(pid)
+          Process.getpgid(pid)
+          true
+        rescue Errno::ESRCH
+          false
+        end
+
+        def pid
+          @pid ||= begin
+            p = File.read('<%= File.join(dir(service), 'supervise/pid') %>')
+            return if p.empty?
+
+            Integer(p)
+          end
+        end
+
+        exit(0) unless pid
+
+        # Kill PID group with <%= term_signal %>
+        kill('<%= term_signal %>', -pid)
+
+        # Kill PID with <%= term_signal %>
+        kill('<%= term_signal %>', pid)
+
+        # Wait a few moments for pid to die.
+        1.upto(GIVE_PID_SECS_TO_DIE) do
+          exit(0) unless pid?(pid)
+          sleep 1
+        end
+
+        # Kill PID group with KILL
+        kill('KILL', -pid)
+
+        # Kill PID with KILL
+        kill('KILL', pid)
       TEMPLATE
       control_t_path = File.join(dir(service), 'control/t')
       write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
