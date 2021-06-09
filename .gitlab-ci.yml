@@ -17,6 +17,7 @@ default:
   tags:
     - gitlab-org
   before_script:
+    - ulimit -a
     - nproc
     - free -m
 

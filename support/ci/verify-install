@@ -15,7 +15,7 @@ fi
 
 install_gem
 install
-doctor
-start
-wait_for_boot
-QUIET=false "${parent_path}"/../test_url
+# doctor
+# start
+# wait_for_boot
+# QUIET=false "${parent_path}"/../test_url

@@ -61,6 +61,15 @@ set_gitlab_upstream() {
 install() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Installing GDK.."
+
+  cat > gdk.yml << EOS
+---
+praefect:
+  enabled: false
+EOS
+
+  cat gdk.yml
+
   gdk install
   test_gem
   set_gitlab_upstream
