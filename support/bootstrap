@@ -9,6 +9,8 @@ source "${parent_path}"/bootstrap-common.sh
 
 ASDF_VERSION_TO_INSTALL="v0.8.0"
 
+GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
+
 asdf_install() {
   if [[ ! -d "${CURRENT_ASDF_DIR}" ]]; then
     git clone https://github.com/asdf-vm/asdf.git "${CURRENT_ASDF_DIR}" --branch ${ASDF_VERSION_TO_INSTALL}
@@ -64,7 +66,25 @@ gdk_prepare_directory() {
   return 0
 }
 
+gdk_mark_bootstrapped() {
+  mkdir -p "${GDK_CACHE_DIR}"
+  touch "${GDK_BOOTSTRAPPED_FILE}"
+
+  echo
+  echo "INFO: Bootstrap successful!"
+  echo "INFO: To make sure GDK commands are available in this shell, run:"
+  echo
+  echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
+  echo
+}
+
 ###############################################################################
+
+if [[ -f "${GDK_BOOTSTRAPPED_FILE}" ]]; then
+  echo "INFO: This GDK has already been bootstrapped."
+  echo "INFO: Remove '${GDK_BOOTSTRAPPED_FILE}' to re-bootstrap."
+  exit 0
+fi
 
 common_preflight_checks
 
@@ -108,9 +128,4 @@ if ! configure_ruby_bundler; then
   error "Failed to configure Ruby Bundler." >&2
 fi
 
-echo
-echo "INFO: Bootstrap successful!"
-echo "INFO: To make sure GDK commands are available in this shell, run:"
-echo
-echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
-echo
+gdk_mark_bootstrapped

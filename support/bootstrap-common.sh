@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+root_path=$(realpath "$(dirname "$0")"/..)
+
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 
@@ -23,6 +25,9 @@ SUPPORTED_FEDORA_LIKE_PLATFORMS=('Fedora RHEL')
 SUPPORTED_OTHER_PLATFORMS=('macOS')
 
 SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_PLATFORMS[@]}" "${SUPPORTED_DEBIAN_LIKE_PLATFORMS[@]}" "${SUPPORTED_ARCH_LIKE_PLATFORMS[@]}" "${SUPPORTED_FEDORA_LIKE_PLATFORMS[@]}")
+
+GDK_CACHE_DIR=$(realpath "${root_path}/.cache")
+GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
 
 error() {
   echo
@@ -184,38 +189,70 @@ common_preflight_checks() {
 }
 
 setup_platform() {
+  if platform_files_checksum_matches; then
+    echo "INFO: This GDK has already had platform packages installed."
+    echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
+
+    return 0
+  fi
+
   if [[ "${OSTYPE}" == "darwin"* ]]; then
-    if ! setup_platform_darwin; then
+    if setup_platform_darwin; then
+      mark_platform_as_setup "Brewfile"
+    else
       return 1
     fi
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
     shopt -s nocasematch
+
     if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
-      if ! setup_platform_linux_with "packages.txt"; then
+      if setup_platform_linux_with "packages.txt"; then
+        mark_platform_as_setup "packages.txt"
+      else
         shopt -u nocasematch
         return 1
       fi
     elif [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
-      if ! setup_platform_linux_with "packages_debian.txt"; then
+      if setup_platform_linux_with "packages_debian.txt"; then
+        mark_platform_as_setup "packages_debian.txt"
+      else
         shopt -u nocasematch
         return 1
       fi
     elif [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
-      if ! setup_platform_linux_arch_like_with "packages_arch.txt"; then
+      if setup_platform_linux_arch_like_with "packages_arch.txt"; then
+        mark_platform_as_setup "packages_arch.txt"
+      else
         shopt -u nocasematch
         return 1
       fi
     elif [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
-      if ! setup_platform_linux_fedora_like_with "packages_fedora.txt"; then
+      if setup_platform_linux_fedora_like_with "packages_fedora.txt"; then
+        mark_platform_as_setup "packages_fedora.txt"
+      else
         shopt -u nocasematch
         return 1
       fi
     fi
-
     shopt -u nocasematch
   fi
+}
+
+platform_files_checksum_matches() {
+  if [[ ! -f "${GDK_PLATFORM_SETUP_FILE}" ]]; then
+    return 1
+  fi
+
+  sha256sum --check --status "${GDK_PLATFORM_SETUP_FILE}"
+}
+
+mark_platform_as_setup() {
+  local platform_file="${1}"
+
+  mkdir -p "${GDK_CACHE_DIR}"
+  sha256sum "${platform_file}" > "${GDK_PLATFORM_SETUP_FILE}"
 }
 
 setup_platform_linux_with() {
