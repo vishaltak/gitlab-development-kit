@@ -661,7 +661,7 @@ gitlab-workhorse-setup: gitlab/workhorse/gitlab-workhorse gitlab/workhorse/confi
 gitlab/workhorse/config.toml:
 	$(Q)rake $@
 
-gitlab-workhorse-update: gitlab-workhorse-clean-bin gitlab-workhorse-setup
+gitlab-workhorse-update: gitlab-workhorse-clean-bin gitlab/workhorse/config.toml gitlab-workhorse-setup
 
 gitlab-workhorse-clean-bin:
 	$(Q)$(MAKE) -C gitlab/workhorse clean
