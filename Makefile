@@ -663,11 +663,19 @@ gitlab/workhorse/config.toml:
 
 gitlab-workhorse-update: gitlab-workhorse-clean-bin gitlab/workhorse/config.toml gitlab-workhorse-setup
 
-gitlab-workhorse-clean-bin:
+
+.PHONY: gitlab-workhorse-compile
+gitlab-workhorse-compile:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Compiling gitlab/workhorse/gitlab-workhorse"
+	@echo "${DIVIDER}"
+
+gitlab-workhorse-clean-bin: gitlab-workhorse-compile
 	$(Q)$(MAKE) -C gitlab/workhorse clean
 
 .PHONY: gitlab/workhorse/gitlab-workhorse
-gitlab/workhorse/gitlab-workhorse:
+gitlab/workhorse/gitlab-workhorse: gitlab-workhorse-compile
 	$(Q)$(MAKE) -C gitlab/workhorse ${QQ}
 
 ##############################################################
