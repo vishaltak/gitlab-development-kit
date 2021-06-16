@@ -28,6 +28,7 @@ AllCops:
     - 'influxdb/**/*'
     - 'jaeger/**/*'
     - 'log/**/*'
+    - 'node_modules/**/*'
     - 'postgresql-geo/**/*'
     - 'postgresql-primary/**/*'
     - 'postgresql/**/*'
