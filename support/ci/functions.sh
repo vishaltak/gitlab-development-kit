@@ -2,6 +2,8 @@
 
 GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
 
+source ${HOME}/.asdf/asdf.sh
+
 init() {
   install_gem
   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
