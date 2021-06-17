@@ -208,8 +208,8 @@ setup_platform() {
     shopt -s nocasematch
 
     if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
-      if setup_platform_linux_with "packages.txt"; then
-        mark_platform_as_setup "packages.txt"
+      if setup_platform_linux_with "packages_ubuntu.txt"; then
+        mark_platform_as_setup "packages_ubuntu.txt"
       else
         shopt -u nocasematch
         return 1
