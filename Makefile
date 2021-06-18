@@ -108,13 +108,14 @@ install: all show-installed-at start
 #
 # Pull gitlab directory first since dependencies are linked from there.
 .PHONY: update
-update: preflight-checks \
+update: update-start \
+preflight-checks \
 preflight-update-checks \
 asdf-update \
-gitlab/.git/pull \
+gitlab-git-pull \
 ensure-databases-running \
 unlock-dependency-installers \
-gettext-unlock \
+gitlab-translations-unlock \
 gitlab-shell-update \
 gitlab-workhorse-update \
 gitlab-pages-update \
@@ -127,7 +128,24 @@ jaeger-update \
 grafana-update \
 gitlab-ui-update \
 gitlab-docs-update \
-show-updated-at
+update-summarize
+
+.PHONY: update-start
+update-start:
+	@support/dev/makefile-timeit start
+
+.PHONY: update-summarize
+update-summarize:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Timings"
+	@echo "${DIVIDER}"
+	@echo
+	@support/dev/makefile-timeit summarize
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updated successfully as of $$(date +"%Y-%m-%d %T")"
+	@echo "${DIVIDER}"
 
 # This is used by `gdk reconfigure`
 #
@@ -201,12 +219,18 @@ Procfile:
 	$(Q)rake $@
 
 .PHONY: preflight-checks
-preflight-checks: rake
-	$(Q)rake $@
+preflight-checks: preflight-checks-timed
+
+.PHONY: preflight-checks-run
+preflight-checks-run: rake
+	$(Q)rake preflight-checks
 
 .PHONY: preflight-update-checks
-preflight-update-checks: rake
-	$(Q)rake $@
+preflight-update-checks: preflight-update-checks-timed
+
+.PHONY: preflight-update-checks-run
+preflight-update-checks-run: rake
+	$(Q)rake preflight-update-checks
 
 .PHONY: rake
 rake:
@@ -229,6 +253,22 @@ ensure-required-ruby-bundlers-installed:
 	${Q}. ./support/bootstrap-common.sh ; ruby_install_required_bundlers
 
 ##############################################################
+# timing
+##############################################################
+
+.PHONY: %-timed
+%-timed:
+	@make $(*F)-timing-start $(*F)-run $(*F)-timing-end
+
+.PHONY: %-timing-start
+%-timing-start:
+	@support/dev/makefile-timeit time-service-start $(*F)
+
+.PHONY: %-timing-end
+%-timing-end:
+	@support/dev/makefile-timeit time-service-end $(*F)
+
+##############################################################
 # bootstrap
 ##############################################################
 
@@ -245,7 +285,10 @@ bootstrap-packages:
 ##############################################################
 
 .PHONY: asdf-update
-asdf-update:
+asdf-update: asdf-update-timed
+
+.PHONY: asdf-update-run
+asdf-update-run:
 ifdef ASDF
 ifeq ($(asdf_opt_out),false)
 	@support/asdf-update
@@ -261,9 +304,13 @@ endif
 # GitLab
 ##############################################################
 
-gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gettext
+gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gitlab-translations
 
-gitlab-update: ensure-databases-running postgresql gitlab/.git/pull gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
+.PHONY: gitlab-update
+gitlab-update: gitlab-update-timed
+
+.PHONY: gitlab-update-run
+gitlab-update-run: ensure-databases-running postgresql gitlab-git-pull gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
 
 .PHONY: gitlab/git-restore
 gitlab/git-restore:
@@ -275,6 +322,12 @@ gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 	@echo "Generating gitlab GraphQL schema files"
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) bundle exec rake gitlab:graphql:schema:dump ${QQ}
+
+.PHONY: gitlab-git-pull
+gitlab-git-pull: gitlab-git-pull-timed
+
+.PHONY: gitlab-git-pull-run
+gitlab-git-pull-run: gitlab/.git/pull
 
 gitlab/.git/pull: gitlab/git-restore
 	@echo
@@ -343,14 +396,17 @@ gitlab/public/uploads:
 	$(Q)touch $@
 
 
-.PHONY: gettext-unlock
-gettext-unlock:
-	$(Q)rm -f .gettext
+.PHONY: gitlab-translations-unlock
+gitlab-translations-unlock:
+	$(Q)rm -f .gitlab-translations
 
-.PHONY: gettext-update
-gettext-update: gettext-unlock .gettext
+.PHONY: gitlab-translations
+gitlab-translations: gitlab-translations-timed
 
-.gettext:
+.PHONY: gitlab-translations-run
+gitlab-translations-run: .gitlab-translations
+
+.gitlab-translations:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Generating gitlab-org/gitlab Rails translations"
@@ -366,9 +422,17 @@ gettext-update: gettext-unlock .gettext
 gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret openssh/ssh_host_rsa_key
 	$(Q)make -C gitlab-shell build ${QQ}
 
-gitlab-shell-update: gitlab-shell/.git/pull gitlab-shell-setup
+.PHONY: gitlab-shell-update
+gitlab-shell-update: gitlab-shell-update-timed
 
-gitlab-shell/.git/pull:
+.PHONY: gitlab-shell-update-run
+gitlab-shell-update-run: gitlab-shell-git-pull gitlab-shell-setup
+
+.PHONY: gitlab-shell-git-pull
+gitlab-shell-git-pull: gitlab-shell-git-pull-timed
+
+.PHONY: gitlab-shell-git-pull-run
+gitlab-shell-git-pull-run:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-shell to ${gitlab_shell_version}"
@@ -404,10 +468,17 @@ ${gitaly_clone_dir}/.git:
 	$(Q)git clone --quiet ${gitaly_repo} ${gitaly_clone_dir}
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" ${QQ}
 
-gitaly-update: gitaly/.git/pull gitaly-clean gitaly-setup praefect-migrate
+.PHONY: gitaly-update
+gitaly-update: gitaly-update-timed
 
-.PHONY: gitaly/.git/pull
-gitaly/.git/pull: ${gitaly_clone_dir}/.git
+.PHONY: gitaly-update-run
+gitaly-update-run: gitaly-git-pull gitaly-clean gitaly-setup praefect-migrate
+
+.PHONY: gitaly-git-pull
+gitaly-git-pull: gitaly-git-pull-timed
+
+.PHONY: gitaly-git-pull-run
+gitaly-git-pull-run: ${gitaly_clone_dir}/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitaly to ${gitaly_version}"
@@ -561,12 +632,16 @@ gitlab-docs-clean:
 gitlab-docs-build:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(nanoc_cmd)
 
+.PHONY: gitlab-docs-update
 ifeq ($(gitlab_docs_enabled),true)
-gitlab-docs-update: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-pull charts-gitlab-pull gitlab-docs-deps gitlab-docs-build
+gitlab-docs-update: gitlab-docs-update-timed
 else
 gitlab-docs-update:
 	@true
 endif
+
+.PHONY: gitlab-docs-update-run
+gitlab-docs-update-run: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-pull charts-gitlab-pull gitlab-docs-deps gitlab-docs-build
 
 # Internal links and anchors checks for documentation
 ifeq ($(gitlab_docs_enabled),true)
@@ -636,7 +711,10 @@ else
 endif
 
 .PHONY: geo-primary-migrate
-geo-primary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore diff-config
+geo-primary-migrate: geo-primary-migrate-timed
+
+.PHONY: geo-primary-migrate-run
+geo-primary-migrate-run: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore diff-config
 
 .PHONY: geo-primary-update
 geo-primary-update: update geo-primary-migrate diff-config
@@ -645,7 +723,10 @@ geo-primary-update: update geo-primary-migrate diff-config
 geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore
 
 .PHONY: geo-secondary-update
-geo-secondary-update: update geo-secondary-migrate diff-config
+geo-secondary-update: geo-secondary-update-timed
+
+.PHONY: geo-secondary-update-run
+geo-secondary-update-run: update geo-secondary-migrate diff-config
 
 .PHONY: diff-config
 diff-config:
@@ -661,13 +742,24 @@ gitlab-workhorse-setup: gitlab/workhorse/gitlab-workhorse gitlab/workhorse/confi
 gitlab/workhorse/config.toml:
 	$(Q)rake $@
 
-gitlab-workhorse-update: gitlab-workhorse-clean-bin gitlab-workhorse-setup
+.PHONY: gitlab-workhorse-update
+gitlab-workhorse-update: gitlab-workhorse-update-timed
 
-gitlab-workhorse-clean-bin:
+.PHONY: gitlab-workhorse-run
+gitlab-workhorse-update-run: gitlab-workhorse-clean-bin gitlab/workhorse/config.toml gitlab-workhorse-setup
+
+.PHONY: gitlab-workhorse-compile
+gitlab-workhorse-compile:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Compiling gitlab/workhorse/gitlab-workhorse"
+	@echo "${DIVIDER}"
+
+gitlab-workhorse-clean-bin: gitlab-workhorse-compile
 	$(Q)$(MAKE) -C gitlab/workhorse clean
 
 .PHONY: gitlab/workhorse/gitlab-workhorse
-gitlab/workhorse/gitlab-workhorse:
+gitlab/workhorse/gitlab-workhorse: gitlab-workhorse-compile
 	$(Q)$(MAKE) -C gitlab/workhorse ${QQ}
 
 ##############################################################
@@ -681,12 +773,16 @@ gitlab-elasticsearch-indexer-setup:
 	@true
 endif
 
+.PHONY: gitlab-elasticsearch-indexer-update
 ifeq ($(gitlab_elasticsearch_indexer_enabled),true)
-gitlab-elasticsearch-indexer-update: gitlab-elasticsearch-indexer/.git/pull gitlab-elasticsearch-indexer-clean-bin gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
+gitlab-elasticsearch-indexer-update: gitlab-elasticsearch-indexer-update-timed
 else
 gitlab-elasticsearch-indexer-update:
 	@true
 endif
+
+.PHONY: gitlab-elasticsearch-indexer-update-run
+gitlab-elasticsearch-indexer-update-run: gitlab-elasticsearch-indexer/.git/pull gitlab-elasticsearch-indexer-clean-bin gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
 
 gitlab-elasticsearch-indexer-clean-bin:
 	$(Q)rm -rf gitlab-elasticsearch-indexer/bin
@@ -719,7 +815,11 @@ gitlab-pages-secret:
 gitlab-pages/gitlab-pages.conf: ${gitlab_pages_clone_dir}/.git
 	$(Q)rake $@
 
-gitlab-pages-update: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages gitlab-pages/gitlab-pages.conf
+.PHONY: gitlab-pages-update
+gitlab-pages-update: gitlab-pages-update-timed
+
+.PHONY: gitlab-pages-update-run
+gitlab-pages-update-run: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages gitlab-pages/gitlab-pages.conf
 
 gitlab-pages-clean-bin:
 	$(Q)rm -f gitlab-pages/bin/gitlab-pages
@@ -749,12 +849,16 @@ gitlab-k8s-agent-setup:
 	@true
 endif
 
+.PHONY: gitlab-k8s-agent-update
 ifeq ($(gitlab_k8s_agent_enabled),true)
-gitlab-k8s-agent-update: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/.git/pull gitlab-k8s-agent/build/gdk/bin/kas_race
+gitlab-k8s-agent-update: gitlab-k8s-agent-update-timed
 else
 gitlab-k8s-agent-update:
 	@true
 endif
+
+.PHONY: gitlab-k8s-agent-update-run
+gitlab-k8s-agent-update-run: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/.git/pull gitlab-k8s-agent/build/gdk/bin/kas_race
 
 .PHONY: gitlab-k8s-agent-config.yml
 gitlab-k8s-agent-config.yml:
@@ -809,11 +913,14 @@ endif
 
 .PHONY: gitlab-ui-update
 ifeq ($(gitlab_ui_enabled),true)
-gitlab-ui-update: gitlab-ui/.git gitlab-ui/.git/pull gitlab-ui-clean .gitlab-ui-yarn
+gitlab-ui-update: gitlab-ui-update-timed
 else
 gitlab-ui-update:
 	@true
 endif
+
+.PHONY: gitlab-ui-update-run
+gitlab-ui-update-run: gitlab-ui/.git gitlab-ui/.git/pull gitlab-ui-clean .gitlab-ui-yarn
 
 gitlab-ui/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
@@ -1001,7 +1108,11 @@ elasticsearch/bin/elasticsearch: .cache/.elasticsearch_${elasticsearch_version}_
 # minio / object storage
 ##############################################################
 
-object-storage-update: object-storage-setup
+.PHONY: object-storage-update
+object-storage-update: object-storage-update-timed
+
+.PHONY: object-storage-update-run
+object-storage-update-run: object-storage-setup
 
 object-storage-setup: minio/data/lfs-objects minio/data/artifacts minio/data/uploads minio/data/packages minio/data/terraform minio/data/pages minio/data/external-diffs
 
@@ -1150,7 +1261,11 @@ jaeger/jaeger-${jaeger_version}/jaeger-all-in-one:
 	$(Q)mkdir -p "jaeger/jaeger-${jaeger_version}"
 	$(Q)tar -xf "jaeger-artifacts/jaeger-${jaeger_version}.tar.gz" -C "jaeger/jaeger-${jaeger_version}" --strip-components 1
 
-jaeger-update: jaeger-setup
+.PHONY: jaeger-update
+jaeger-update: jaeger-update-timed
+
+.PHONY: jaeger-update-run
+jaeger-update-run: jaeger-setup
 
 ##############################################################
 # Tests
@@ -1252,11 +1367,6 @@ ask-to-restart:
 show-installed-at:
 	@echo
 	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
-
-.PHONY: show-updated-at
-show-updated-at:
-	@echo
-	@echo "> Updated as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: show-reconfigured-at
 show-reconfigured-at:

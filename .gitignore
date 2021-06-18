@@ -17,6 +17,7 @@ node_modules/
 /.gitlab-bundle
 /.gitlab-npm
 /.gitlab-shell-bundle
+/.gitlab-translations
 /.gitlab-ui-yarn
 /.gitlab-yarn
 /.node-version
