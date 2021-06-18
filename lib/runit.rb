@@ -172,7 +172,10 @@ module Runit
   end
 
   def self.all_service_names
-    Pathname.new(SERVICES_DIR).children.sort.select(&:directory?).map { |x| x.basename.to_s }
+    # praefect-gitaly-* services are stopped/started automatically.
+    Pathname.new(SERVICES_DIR).children.filter_map do |path|
+      path.basename.to_s if path.directory? && !path.to_s.start_with?('praefect-gitaly-')
+    end.sort
   end
 
   def self.service_args(services)
