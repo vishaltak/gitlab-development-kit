@@ -34,4 +34,4 @@ RUN bash ./support/bootstrap \
   # clear tmp caches e.g. from postgres compilation
   && sudo rm -rf /tmp/* ~/.asdf/tmp/* \
   # Remove files we copied in
-  && sudo rm -rf support/ .tool-versions packages.txt
+  && sudo rm -rf .cache .gdk-install-root .tool-versions packages.txt support/
