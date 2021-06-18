@@ -4,7 +4,8 @@
 #
 # https://github.com/koalaman/shellcheck/wiki/SC1071 - ShellCheck only supports sh/bash/dash/ksh scripts. Sorry!
 
-root="$(realpath "$(dirname "${0}")/../..")"
+root="$(cd "$(dirname "$0")/../.." || exit ; pwd -P)"
+
 shellcheck_binary="${root}/dev/bin/shellcheck"
 
 if ! command -v ${shellcheck_binary} > /dev/null 2>&1 ; then
