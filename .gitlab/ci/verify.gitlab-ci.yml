@@ -1,7 +1,8 @@
 .verify-job:
   stage: verify
   extends: .rules:code-changes
-  image: ${VERIFY_IMAGE}
+  # image: ${VERIFY_IMAGE}
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.7.2.patched-golang-1.14-git-2.29-lfs-2.9-chrome-87-node-14.15-yarn-1.22-postgresql-12-graphicsmagick-1.3.34
   needs:
     - release-image
   artifacts:
