@@ -19,6 +19,8 @@ module Runit
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
+  SERVICES_DIR = './services'
+
   STOP_RETRY_COUNT = 3
 
   def self.start_runsvdir
@@ -143,11 +145,12 @@ module Runit
     system('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services)
   end
 
+
   def self.service_args(services)
-    return Dir['./services/*'].sort if services.empty?
+    return Dir["#{SERVICES_DIR}/*"].sort if services.empty?
 
     services.flat_map do |svc|
-      service_shortcut(svc) || File.join('./services', svc)
+      service_shortcut(svc) || File.join(SERVICES_DIR, svc)
     end.uniq.sort
   end
 
@@ -161,7 +164,7 @@ module Runit
       abort
     end
 
-    Dir[File.join('./services', glob)]
+    Dir[File.join(SERVICES_DIR, glob)]
   end
 
   def self.wait_runsv!(dir)
