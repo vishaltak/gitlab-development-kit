@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mkmf'
+require 'pathname'
 
 require_relative 'shellout'
 require_relative 'runit/config'
@@ -145,6 +146,19 @@ module Runit
     system('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services)
   end
 
+  def self.data_oriented_service_names
+    %w[minio openldap gitaly praefect redis postgresql-geo postgresql].select do |x|
+      Dir.exist?(File.join(SERVICES_DIR, x))
+    end
+  end
+
+  def self.non_data_oriented_service_names
+    all_service_names - data_oriented_service_names
+  end
+
+  def self.all_service_names
+    Pathname.new(SERVICES_DIR).children.sort.select(&:directory?).map { |x| x.basename.to_s }
+  end
 
   def self.service_args(services)
     return Dir["#{SERVICES_DIR}/*"].sort if services.empty?
