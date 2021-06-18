@@ -127,14 +127,18 @@ module Runit
       abort
     end
 
-    # Unload runsvdir: this is safe because we have just stopped all services.
-    pid = runsvdir_pid(runsvdir_base_args)
-    Process.kill('HUP', pid)
+    unload_runsvdir!
 
     GDK::Output.puts
     GDK::Output.success('All services have been stopped!')
 
     true
+  end
+
+  def self.unload_runsvdir!
+    # Unload runsvdir: this is safe because we have just stopped all services.
+    pid = runsvdir_pid(runsvdir_base_args)
+    Process.kill('HUP', pid)
   end
 
   def self.sv(cmd, services)
