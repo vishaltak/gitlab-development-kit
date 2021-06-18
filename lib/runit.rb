@@ -104,6 +104,16 @@ module Runit
     end
   end
 
+  def self.start(args)
+    if args.empty?
+      # Redis, PostgresSQL, etc should be started first.
+      data_oriented_service_names.reverse_each { |service_name| sv('start', [service_name]) }
+      sv('start', non_data_oriented_service_names)
+    else
+      sv('start', args)
+    end
+  end
+
   def self.stop
     # Redis, PostgresSQL, etc should be stopped last.
     stop_services(non_data_oriented_service_names)

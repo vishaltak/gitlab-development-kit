@@ -22,7 +22,7 @@ RSpec.describe GDK::Command::Start do
         it 'executes hooks and starts all enabled services' do
           stub_gdk_start
 
-          expect_runit_to_execute(command: 'start', args: [])
+          expect_runit_start_to_execute([])
 
           expect { subject.run }.to output(/GitLab will be available at/).to_stdout
         end
@@ -32,7 +32,7 @@ RSpec.describe GDK::Command::Start do
         it 'executes hooks, starts all enabled services and waits until up' do
           stub_gdk_start
 
-          expect_runit_to_execute(command: 'start', args: [])
+          expect_runit_start_to_execute([])
 
           test_url_double = instance_double(GDK::TestURL, wait: true)
           expect(GDK::TestURL).to receive(:new).with(default_url).and_return(test_url_double)
@@ -48,7 +48,7 @@ RSpec.describe GDK::Command::Start do
           services = %w[rails-web]
 
           stub_gdk_start
-          expect_runit_to_execute(command: 'start', args: services)
+          expect_runit_start_to_execute(services)
 
           subject.run(services)
         end
@@ -59,7 +59,7 @@ RSpec.describe GDK::Command::Start do
           services = %w[rails-web]
 
           stub_gdk_start
-          expect_runit_to_execute(command: 'start', args: services)
+          expect_runit_start_to_execute(services)
           expect(GDK::TestURL).not_to receive(:new).with(default_url)
 
           subject.run(services + %w[--show-progress])
@@ -68,8 +68,8 @@ RSpec.describe GDK::Command::Start do
     end
   end
 
-  def expect_runit_to_execute(command:, args: [])
-    expect(Runit).to receive(:sv).with(command, args).and_return(true)
+  def expect_runit_start_to_execute(args = [])
+    expect(Runit).to receive(:start).with(args).and_return(true)
   end
 
   def stub_gdk_start
