@@ -9,7 +9,11 @@ Installation requires `git` and `make` are installed.
 
 ### macOS
 
-`git` and `make` are installed by default, proceed to the next section.
+`git` and `make` are installed by default.
+
+Additionally, you will need the `realpath` utility. [Homebrew](https://brew.sh/) users can type:
+
+`brew install coreutils`
 
 ### Ubuntu/Debian
 
