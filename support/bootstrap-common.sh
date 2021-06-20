@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-root_path=$(realpath "$(dirname "$0")"/..)
+root_path="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
@@ -26,7 +26,7 @@ SUPPORTED_OTHER_PLATFORMS=('macOS')
 
 SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_PLATFORMS[@]}" "${SUPPORTED_DEBIAN_LIKE_PLATFORMS[@]}" "${SUPPORTED_ARCH_LIKE_PLATFORMS[@]}" "${SUPPORTED_FEDORA_LIKE_PLATFORMS[@]}")
 
-GDK_CACHE_DIR=$(realpath "${root_path}/.cache")
+GDK_CACHE_DIR="${root_path}/.cache"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
 
 error() {

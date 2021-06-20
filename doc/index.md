@@ -11,10 +11,6 @@ Installation requires `git` and `make` are installed.
 
 `git` and `make` are installed by default.
 
-Additionally, you will need the `realpath` utility. [Homebrew](https://brew.sh/) users can type:
-
-`brew install coreutils`
-
 ### Ubuntu/Debian
 
   1. Update the list of available packages:
