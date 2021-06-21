@@ -20,7 +20,7 @@ module Runit
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
-  SERVICES_DIR = './services'
+  SERVICES_DIR = Pathname.new(__dir__).join("../services").expand_path
 
   STOP_RETRY_COUNT = 3
 
