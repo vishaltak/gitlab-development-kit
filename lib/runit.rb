@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mkmf'
+require 'pathname'
 
 require_relative 'shellout'
 require_relative 'runit/config'
@@ -18,6 +19,8 @@ module Runit
     'db' => '{redis,postgresql,postgresql-geo}',
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
+
+  SERVICES_DIR = './services'
 
   STOP_RETRY_COUNT = 3
 
@@ -101,7 +104,30 @@ module Runit
     end
   end
 
+  def self.start(args)
+    if args.empty?
+      # Redis, PostgresSQL, etc should be started first.
+      data_oriented_service_names.reverse_each { |service_name| sv('start', [service_name]) }
+      sv('start', non_data_oriented_service_names)
+    else
+      sv('start', args)
+    end
+  end
+
   def self.stop
+    # Redis, PostgresSQL, etc should be stopped last.
+    stop_services(non_data_oriented_service_names)
+    data_oriented_service_names.each { |service_name| stop_services([service_name]) }
+
+    unload_runsvdir!
+
+    GDK::Output.puts
+    GDK::Output.success('All services have been stopped!')
+
+    true
+  end
+
+  def self.stop_services(services)
     # The first stop attempt may fail; ignore its return value.
     stopped = false
 
@@ -111,27 +137,19 @@ module Runit
       # down: If the service is running, send it the TERM signal, and the CONT signal. If ./run exits, start ./finish if it exists. After it stops, do not restart service.
       # force-stop: Same as down, but wait up to (default) 7 seconds for the service to become down. Then report the status, and on timeout send the service the kill command.
       #
-      stopped = sv('force-stop', [])
+      stopped = sv('force-stop', services)
       break if stopped
 
       GDK::Output.notice("Retrying stop (#{i + 1}/#{STOP_RETRY_COUNT})")
     end
 
-    unless stopped
-      GDK::Output.puts
-      GDK::Output.error('Failed to stop every service.')
+    true
+  end
 
-      abort
-    end
-
+  def self.unload_runsvdir!
     # Unload runsvdir: this is safe because we have just stopped all services.
     pid = runsvdir_pid(runsvdir_base_args)
     Process.kill('HUP', pid)
-
-    GDK::Output.puts
-    GDK::Output.success('All services have been stopped!')
-
-    true
   end
 
   def self.sv(cmd, services)
@@ -143,11 +161,28 @@ module Runit
     system('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services)
   end
 
+  def self.data_oriented_service_names
+    %w[minio openldap gitaly praefect redis postgresql-geo postgresql].select do |x|
+      Dir.exist?(File.join(SERVICES_DIR, x))
+    end
+  end
+
+  def self.non_data_oriented_service_names
+    all_service_names - data_oriented_service_names
+  end
+
+  def self.all_service_names
+    # praefect-gitaly-* services are stopped/started automatically.
+    Pathname.new(SERVICES_DIR).children.filter_map do |path|
+      path.basename.to_s if path.directory? && !path.to_s.start_with?('praefect-gitaly-')
+    end.sort
+  end
+
   def self.service_args(services)
-    return Dir['./services/*'].sort if services.empty?
+    return Dir["#{SERVICES_DIR}/*"].sort if services.empty?
 
     services.flat_map do |svc|
-      service_shortcut(svc) || File.join('./services', svc)
+      service_shortcut(svc) || File.join(SERVICES_DIR, svc)
     end.uniq.sort
   end
 
@@ -161,7 +196,7 @@ module Runit
       abort
     end
 
-    Dir[File.join('./services', glob)]
+    Dir[File.join(SERVICES_DIR, glob)]
   end
 
   def self.wait_runsv!(dir)

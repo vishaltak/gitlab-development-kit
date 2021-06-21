@@ -13,7 +13,7 @@ module GDK
         show_progress = !args.delete('--show-progress').nil?
 
         result = GDK::Hooks.with_hooks(config.gdk.start_hooks, 'gdk start') do
-          Runit.sv('start', args)
+          Runit.start(args)
         end
 
         if args.empty?
