@@ -10,6 +10,8 @@ $LOAD_PATH.unshift(__dir__)
 require 'pathname'
 require 'securerandom'
 
+require_relative 'runit'
+
 # GitLab Development Kit
 module GDK
   HookCommandError = Class.new(StandardError)
@@ -35,7 +37,6 @@ module GDK
   autoload :Output, 'gdk/output'
   autoload :Postgresql, 'gdk/postgresql'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
-  autoload :Runit, 'runit'
   autoload :Services, 'gdk/services'
   autoload :Shellout, 'shellout'
   autoload :TestURL, 'gdk/test_url'

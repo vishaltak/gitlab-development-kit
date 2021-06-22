@@ -5,7 +5,6 @@ require 'pathname'
 
 require_relative 'shellout'
 require_relative 'runit/config'
-require_relative 'gdk/output'
 
 MakeMakefile::Logging.quiet = true
 MakeMakefile::Logging.logfile(File::NULL)
@@ -20,7 +19,8 @@ module Runit
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
-  SERVICES_DIR = Pathname.new(__dir__).join("../services").expand_path
+  SERVICES_DIR = GDK.root.join('services')
+  LOG_DIR = GDK.root.join('log')
 
   STOP_RETRY_COUNT = 3
 
@@ -152,13 +152,18 @@ module Runit
     Process.kill('HUP', pid)
   end
 
-  def self.sv(cmd, services)
-    Dir.chdir(GDK.root)
+  def self.sv(cmd, service_names)
     start_runsvdir
-    services = service_args(services)
-    services.each { |svc| wait_runsv!(svc) }
+    expanded_service_names = expand_service_names(service_names)
+    expanded_service_names.each { |service_name| wait_runsv!(service_name) }
 
-    system('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services)
+    shortened_service_names = expanded_service_names.map do |service_name|
+      "./#{service_name.each_filename.to_a.pop(2).join(File::SEPARATOR)}"
+    end
+
+    sh = Shellout.new('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *shortened_service_names, chdir: GDK.root)
+    sh.stream
+    sh.success?
   end
 
   def self.data_oriented_service_names
@@ -174,29 +179,43 @@ module Runit
   def self.all_service_names
     # praefect-gitaly-* services are stopped/started automatically.
     Pathname.new(SERVICES_DIR).children.filter_map do |path|
-      path.basename.to_s if path.directory? && !path.to_s.start_with?('praefect-gitaly-')
+      path.basename.to_s if path.directory? && !path.basename.to_s.start_with?('praefect-gitaly-')
     end.sort
   end
 
-  def self.service_args(services)
-    return Dir["#{SERVICES_DIR}/*"].sort if services.empty?
+  def self.expand_service_names(service_names)
+    return all_service_names if service_names.empty?
 
-    services.flat_map do |svc|
-      service_shortcut(svc) || File.join(SERVICES_DIR, svc)
+    service_names.flat_map do |service_name|
+      service_shortcut(service_name) || SERVICES_DIR.join(service_name)
     end.uniq.sort
   end
 
-  def self.service_shortcut(svc)
-    glob = SERVICE_SHORTCUTS[svc]
-    return unless glob
+  def self.shortcuts_for(service_name)
+    shortcuts = SERVICE_SHORTCUTS[service_name]
+    return unless shortcuts
 
-    if glob.include?('/')
-      GDK::Output.error "invalid service shortcut: #{svc} -> #{glob}"
+    if shortcuts.include?('/')
+      GDK::Output.error "invalid service shortcut: #{service_name} -> #{shortcuts}"
 
       abort
     end
 
-    Dir[File.join(SERVICES_DIR, glob)]
+    shortcuts
+  end
+
+  def self.service_shortcut(service_name)
+    shortcuts = shortcuts_for(service_name)
+    return unless shortcuts
+
+    SERVICES_DIR.glob(shortcuts)
+  end
+
+  def self.log_shortcut(service_name)
+    shortcuts = shortcuts_for(service_name)
+    return unless shortcuts
+
+    LOG_DIR.glob(service_name)
   end
 
   def self.wait_runsv!(dir)
@@ -258,19 +277,6 @@ module Runit
     services.flat_map do |svc|
       log_shortcut(svc) || File.join('log', svc, 'current')
     end.uniq
-  end
-
-  def self.log_shortcut(svc)
-    glob = SERVICE_SHORTCUTS[svc]
-    return unless glob
-
-    if glob.include?('/')
-      GDK::Output.error "invalid service shortcut: #{svc} -> #{glob}"
-
-      abort
-    end
-
-    Dir[File.join('./log', glob, 'current')]
   end
 
   def self.kill_processes(pids)
