@@ -41,6 +41,10 @@ RSpec.describe Runit do
       it 'returns all service names' do
         expect(all_service_names).to include(*data_service_names + non_data_service_names)
       end
+
+      it 'excludes praefect-gitaly-* service names' do
+        expect(all_service_names).not_to include('praefect-gitaly-0')
+      end
     end
 
     describe '.start' do
