@@ -22,7 +22,7 @@ RSpec.describe GDK do
         it "delegates execution to #{command_class_proc.call}" do
           stub_const('ARGV', [command])
 
-          expect_any_instance_of(command_class_proc.call).to receive(:run)
+          expect_any_instance_of(command_class_proc.call).to receive(:run).and_return(true)
           described_class.main
         end
       end

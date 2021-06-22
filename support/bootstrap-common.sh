@@ -179,9 +179,9 @@ common_preflight_checks() {
     return 1
   fi
 
-  if ! ensure_not_root; then
-    error "Running as root is not supported."
-  fi
+  #if ! ensure_not_root; then
+  #  error "Running as root is not supported."
+  #fi
 
   if ! ensure_sudo_available; then
     error "sudo is required, please install." >&2

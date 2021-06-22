@@ -5,6 +5,11 @@ parent_path=$(dirname "$0")
 # shellcheck source=support/ci/functions.sh
 source "${parent_path}"/functions.sh
 
+export PATH=/usr/local/go/bin:${PATH}
+
+apt update && apt install -y sudo make runit exiftool
+support/bootstrap-packages
+
 init
 
 if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
