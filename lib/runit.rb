@@ -162,8 +162,8 @@ module Runit
   end
 
   def self.data_oriented_service_names
-    %w[minio openldap gitaly praefect redis postgresql-geo postgresql].select do |x|
-      Dir.exist?(File.join(SERVICES_DIR, x))
+    %w[minio openldap gitaly praefect redis postgresql-geo postgresql].select do |service_name|
+      Dir.exist?(File.join(SERVICES_DIR, service_name))
     end
   end
 
