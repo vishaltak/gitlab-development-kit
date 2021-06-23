@@ -40,7 +40,7 @@ The steps below set up a new configuration with RubyMine that allows you to Run/
     log_in_spec.rb`
     - Working directory: `<Path to GDK folder>/gitlab/qa`
     - Environment variables: Optional
-        - If you'd like to see your script run; `CHROME_HEADLESS=false`
+        - If you'd like to see your script run; `WEBDRIVER_HEADLESS=false`
         - If you have a token to use, you can save time from creating one; `GITLAB_QA_ACCESS_TOKEN=<token>`
     - Ruby SDK: Use project SDK: `qa`
 1. Select the **Bundler** tab and check the box for **Run the script in context of the bundle**
@@ -87,7 +87,7 @@ need to alter the configuration after it is created.
     - Working directory: `<Path to GDK folder>/gitlab/qa`
     - Environment variables:
         - URL for GitLab, this is a mandatory variable; `GITLAB_URL=<GitLab URL>`
-        - If you'd like to see your script run; `CHROME_HEADLESS=false`
+        - If you'd like to see your script run; `WEBDRIVER_HEADLESS=false`
         - If you have a token to use, you can save time from creating one; `GITLAB_QA_ACCESS_TOKEN=<token>`
     - Ruby SDK: Use project SDK: `qa`
 1. Select the **Bundler** tab and check the box for **Run the script in context of the bundle**
