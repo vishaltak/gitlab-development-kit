@@ -11,8 +11,12 @@ module GDK
 
         if run_sitespeed
           open_report
+
+          true
         else
           GDK::Output.warn('sitespeed failed to complete.')
+
+          false
         end
       end
 

@@ -48,11 +48,7 @@ module GDK
 
     subcommand = ARGV.shift
 
-    if ::GDK::Command::COMMANDS.key?(subcommand)
-      ::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV)
-
-      return true
-    end
+    exit(::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV)) if ::GDK::Command::COMMANDS.key?(subcommand)
 
     case subcommand
     when 'status'

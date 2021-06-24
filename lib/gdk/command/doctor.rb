@@ -9,13 +9,17 @@ module GDK
         super(**args)
       end
 
-      def run(args = [])
+      def run(_ = [])
         start_necessary_services
 
         if diagnostic_results.empty?
           show_healthy
+
+          true
         else
           show_results
+
+          false
         end
       end
 
