@@ -42,6 +42,8 @@ module GDK
           GDK::Output.puts(output)
           GDK::Output.puts("\n")
         end
+
+        true
       end
 
       private
