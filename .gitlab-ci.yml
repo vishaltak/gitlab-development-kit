@@ -10,7 +10,6 @@ variables:
   GITPOD_WORKSPACE_IMAGE_BASE: $CI_REGISTRY_IMAGE/gitpod-workspace
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
   GDK_DEBUG: "false"
-  GIT_CURL_VERBOSE: 0
 
 default:
   interruptible: true

@@ -334,7 +334,7 @@ gitlab/.git/pull: gitlab/git-restore
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab to current default branch"
 	@echo "${DIVIDER}"
-	$(Q)GIT_CURL_VERBOSE=${GIT_CURL_VERBOSE} support/component-git-update gitlab "${gitlab_clone_dir}" HEAD false ${QQ}
+	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" HEAD false ${QQ}
 
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
