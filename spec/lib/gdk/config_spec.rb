@@ -1066,26 +1066,6 @@ RSpec.describe GDK::Config do
         end
       end
     end
-
-    describe 'actioncable' do
-      describe '#__socket_file' do
-        it 'returns the GitLab socket path' do
-          expect(config.gitlab.actioncable.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.socket'))
-        end
-
-        context 'when ActionCable in-app mode is disabled' do
-          let(:yaml) do
-            {
-              'action_cable' => { 'in_app' => false }
-            }
-          end
-
-          it 'returns the GitLab ActionCable socket path' do
-            expect(config.gitlab.actioncable.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.actioncable.socket'))
-          end
-        end
-      end
-    end
   end
 
   describe 'k8s_agent' do

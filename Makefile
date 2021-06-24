@@ -189,7 +189,6 @@ clean-config:
 	gitlab/config/database_geo.yml \
 	gitlab/config/gitlab.yml \
 	gitlab/config/puma.rb \
-	gitlab/config/puma_actioncable.rb \
 	gitlab/config/resque.yml \
 	jaeger \
 	localhost.crt \
@@ -205,7 +204,6 @@ touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \
 	gitlab/workhorse/config.toml.example \
-	gitlab/config/puma_actioncable.example.development.rb \
 	$$(find support/templates -name "*.erb")
 
 unlock-dependency-installers:
@@ -348,7 +346,7 @@ gitlab-db-migrate: ensure-databases-running
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb gitlab/config/puma_actioncable.rb
+gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
@@ -361,15 +359,6 @@ gitlab/config/database.yml:
 .PHONY: gitlab/config/puma.rb
 gitlab/config/puma.rb:
 	$(Q)rake $@
-
-# Versions older than GitLab 12.9 won't have this file
-gitlab/config/puma_actioncable.example.development.rb:
-	$(Q)touch $@
-
-gitlab/config/puma_actioncable.rb: gitlab/config/puma_actioncable.example.development.rb
-	$(Q)support/safe-sed "$@" \
-		-e "s|/home/git|${gitlab_development_root}|g" \
-		"$<"
 
 .PHONY: gitlab/config/cable.yml
 gitlab/config/cable.yml:
