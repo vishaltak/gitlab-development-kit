@@ -17,8 +17,10 @@ default:
   tags:
     - gitlab-org
   before_script:
+    - ulimit -a
     - nproc
     - free -m
+    - env
 
 include:
   - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
