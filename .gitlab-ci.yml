@@ -11,7 +11,7 @@ variables:
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
   GDK_DEBUG: "true"
   GIT_CURL_VERBOSE: 1
-  DOCKER_DRIVER: "devicemapper"
+  DOCKER_DRIVER: "aufs"
 
 default:
   interruptible: true
