@@ -11,4 +11,5 @@ begin
   exit(GDK::TestURL.new(url, quiet: quiet).wait)
 rescue GDK::TestURL::UrlAppearsInvalid
   GDK::Output.error("'#{url}' does not appear to be a valid URL?")
+  exit(1)
 end
