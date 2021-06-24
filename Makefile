@@ -985,7 +985,7 @@ postgresql/data:
 
 .PHONY: postgresql-seed-rails
 postgresql-seed-rails: ensure-databases-running postgresql-seed-praefect
-	$(Q)support/bootstrap-rails
+	@true
 
 .PHONY: postgresql-seed-praefect
 postgresql-seed-praefect: Procfile postgresql/data postgresql-geo/data postgresql/geo/port
