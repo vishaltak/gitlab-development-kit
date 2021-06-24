@@ -11,15 +11,6 @@
     expire_in: 2 days
     when: always
   retry: 1
-  variables:
-    BUNDLE_PATH: '$CI_PROJECT_DIR/.bundle'
-  cache:
-    key:
-      prefix: "gdk-verify"
-      files:
-        - .tool-versions
-    paths:
-      - .bundle
 
 install:
   extends: .verify-job
