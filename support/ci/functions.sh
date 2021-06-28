@@ -114,7 +114,7 @@ stop_start() {
 doctor() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Running gdk doctor.."
-  gdk doctor
+  gdk doctor || true
 }
 
 test_url() {
