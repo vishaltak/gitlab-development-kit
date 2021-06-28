@@ -75,7 +75,7 @@ strictly required. It saves you time by performing a local `git clone`
 instead of pulling from GitLab.com. In addition, a `git pull` in the
 `gitlab` directory updates from your local primary Git repository.
 
-After installation finishes run the following commands:
+After installation finishes, run the following commands:
 
 ```shell
 # Run this on your primary instance folder: (../gdk)
