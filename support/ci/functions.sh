@@ -117,7 +117,8 @@ doctor() {
   gdk doctor
 }
 
-wait_for_boot() {
-  echo "> Waiting 90 secs to give GDK a chance to boot up.."
-  sleep 90
+test_url() {
+  cd "${GDK_CHECKOUT_PATH}" || exit
+
+  QUIET=false support/test_url || QUIET=false support/test_url
 }
