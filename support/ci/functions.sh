@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
+GDK_CHECKOUT_PATH="$(pwd)/gdk"
 
 if [[ ${GDK_DEBUG} == "1" ]]; then
   export GIT_CURL_VERBOSE=1
