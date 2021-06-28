@@ -20,6 +20,7 @@ AllCops:
     - 'gitlab-pages/**/*'
     - 'gitlab-runner/**/*'
     - 'gitlab-shell/**/*'
+    - 'gitlab-spamcheck/**/*'
     - 'gitlab-ui/**/*'
     - 'gitlab-workhorse/**/*'
     - 'gitlab/**/*'

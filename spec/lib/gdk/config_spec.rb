@@ -1923,4 +1923,123 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'gitlab_spamcheck' do
+    describe 'enabled' do
+      it 'is disabled by default' do
+        expect(config.gitlab_spamcheck.enabled).to be(false)
+        expect(config.gitlab_spamcheck.enabled?).to be(false)
+        expect(config.gitlab_spamcheck?).to be(false)
+      end
+    end
+
+    describe 'auto_update' do
+      it 'is enabled by default' do
+        expect(config.gitlab_spamcheck.auto_update).to be(true)
+        expect(config.gitlab_spamcheck.auto_update?).to be(true)
+      end
+    end
+
+    describe '#port' do
+      context 'when port is not specified' do
+        it 'returns the default port' do
+          expect(config.gitlab_spamcheck.port).to eq(8001)
+        end
+      end
+
+      context 'when port is specified' do
+        let(:yaml) do
+          {
+            'gitlab_spamcheck' => { 'port' => 5555 }
+          }
+        end
+
+        it 'returns the configured port' do
+          expect(config.gitlab_spamcheck.port).to eq(5555)
+        end
+      end
+    end
+
+    describe '#external_port' do
+      context 'when external_port is not specified' do
+        it 'returns the default external_port' do
+          expect(config.gitlab_spamcheck.external_port).to eq(8080)
+        end
+      end
+
+      context 'when external_port is specified' do
+        let(:yaml) do
+          {
+            'gitlab_spamcheck' => { 'external_port' => 7777 }
+          }
+        end
+
+        it 'returns the configured external_port' do
+          expect(config.gitlab_spamcheck.external_port).to eq(7777)
+        end
+      end
+    end
+
+    describe '#inspector_url' do
+      context 'when inspector_url is not specified' do
+        it 'returns the default inspector_url' do
+          expect(config.gitlab_spamcheck.inspector_url).to eq('http://gdk.example.com:8888/api/v1/isspam/issue')
+        end
+      end
+
+      context 'when inspector_url is specified' do
+        let(:yaml) do
+          {
+            'gitlab_spamcheck' => { 'inspector_url' => 'http://localhost:8889/api/v1/isspam/issue' }
+          }
+        end
+
+        it 'returns the configured inspector_url' do
+          expect(config.gitlab_spamcheck.inspector_url).to eq('http://localhost:8889/api/v1/isspam/issue')
+        end
+      end
+    end
+
+    describe '#output' do
+      context 'when output is not specified' do
+        it 'returns the default output' do
+          expect(config.gitlab_spamcheck.output).to eq('stdout')
+        end
+      end
+
+      context 'when output is specified' do
+        let(:yaml) do
+          {
+            'gitlab_spamcheck' => { 'output' => 'json' }
+          }
+        end
+
+        it 'returns the configured output' do
+          expect(config.gitlab_spamcheck.output).to eq('json')
+        end
+      end
+    end
+
+    describe '#monitor_mode' do
+      context 'when monitor_mode is not specified' do
+        it 'returns the default monitor_mode' do
+          expect(config.gitlab_spamcheck.monitor_mode).to be(false)
+          expect(config.gitlab_spamcheck.monitor_mode?).to be(false)
+        end
+      end
+
+      context 'when monitor_mode is specified' do
+        let(:yaml) do
+          {
+            'gitlab_spamcheck' => { 'monitor_mode' => 'true' }
+          }
+        end
+
+        it 'returns the configured monitorMode' do
+          expect(config.gitlab_spamcheck.monitor_mode).to be(true)
+          expect(config.gitlab_spamcheck.monitor_mode?).to be(true)
+        end
+      end
+    end
+  end
 end

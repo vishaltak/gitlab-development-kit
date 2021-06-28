@@ -168,6 +168,10 @@ file 'prometheus/prometheus.yml' => ['support/templates/prometheus.yml.erb'] do 
   chmod('+r', t.name)
 end
 
+file 'gitlab-spamcheck/config/config.toml' => ['support/templates/gitlab-spamcheck/config.toml.erb'] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end
+
 file 'gitlab-k8s-agent-config.yml' => ['support/templates/gitlab-k8s-agent-config.yml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end

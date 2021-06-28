@@ -42,6 +42,7 @@ module GDK
       string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
       string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
       string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
+      string(:gitlab_spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
     end
 
     settings :dev do
@@ -207,6 +208,16 @@ module GDK
       string(:__nanoc_cmd_common) { "--host #{config.hostname} --port #{config.gitlab_docs.port}" }
       string(:__nanoc_live_cmd) { "bundle exec nanoc live #{config.gitlab_docs.__nanoc_cmd_common}" }
       string(:__nanoc_view_cmd) { "bundle exec nanoc compile && bundle exec nanoc view #{config.gitlab_docs.__nanoc_cmd_common}" }
+    end
+
+    settings :gitlab_spamcheck do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      integer(:port) { 8001 }
+      integer(:external_port) { 8080 }
+      string(:output) { 'stdout' }
+      bool(:monitor_mode) { false }
+      string(:inspector_url) { "http://#{config.hostname}:8888/api/v1/isspam/issue" }
     end
 
     settings :gitlab_runner do

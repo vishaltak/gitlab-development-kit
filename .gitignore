@@ -50,6 +50,7 @@ node_modules/
 /gitlab-runner-config.toml
 /gitlab-shell
 /gitlab-shell/
+/gitlab-spamcheck
 /gitlab-ui
 /gitlab-workhorse
 /gitlab/
