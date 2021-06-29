@@ -20,7 +20,7 @@ fi
 
 install_gem
 install
-start
+stop_start
 test_url
 
 # test GDK self-update
