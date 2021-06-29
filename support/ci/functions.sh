@@ -48,7 +48,7 @@ set_gitlab_upstream() {
   git remote set-url --push "${remote_name}" none # make 'upstream' fetch-only
   echo "Fetching ${default_branch} from ${remote_name}..."
 
-  GIT_CURL_VERBOSE=1 git fetch "${remote_name}" ${default_branch}
+  git fetch "${remote_name}" ${default_branch}
 
   # check if the default branch already exists
   if git show-ref --verify --quiet refs/heads/${default_branch}; then
