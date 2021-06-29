@@ -16,10 +16,7 @@ default:
   tags:
     - gitlab-org
   before_script:
-    - ulimit -a
-    - nproc
-    - free -m
-    - env
+    - support/ci/display_debugging
 
 include:
   - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
