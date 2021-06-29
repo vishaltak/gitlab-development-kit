@@ -16,7 +16,7 @@ default:
   tags:
     - gitlab-org
   before_script:
-    - support/ci/display_debugging
+    - test -f support/ci/display_debugging && support/ci/display_debugging
 
 include:
   - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
