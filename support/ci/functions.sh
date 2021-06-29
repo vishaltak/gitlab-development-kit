@@ -17,9 +17,6 @@ install_gem() {
   cd gem || exit
   gem build gitlab-development-kit.gemspec
   gem install gitlab-development-kit-*.gem
-}
-
-test_gem() {
   gdk
 }
 
@@ -66,7 +63,6 @@ install() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Installing GDK.."
   gdk install
-  test_gem
   set_gitlab_upstream
 }
 
