@@ -10,6 +10,9 @@ require_relative '../lib/gdk'
 LOG_FILE = 'bootstrap-rails.log'
 
 def main
+  # Skip database bootstrap when in a Geo secondary
+  exit if config.geo.secondary?
+
   postgresql = GDK::Postgresql.new
   abort 'Cannot connect to postgres' unless postgresql.ready?
 
