@@ -2,6 +2,10 @@
 
 GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
 
+if [[ ${GDK_DEBUG} == "1" ]]; then
+  export GIT_CURL_VERBOSE=1
+fi
+
 init() {
   install_gem
   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
