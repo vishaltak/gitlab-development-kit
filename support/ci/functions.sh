@@ -104,10 +104,17 @@ restart() {
 
 stop_start() {
   stop
+  sleep 5
+  # shellcheck disable=SC2009
+  ps -ef | grep "[r]unsv" || true
+
+  stop
+  sleep 5
+  # shellcheck disable=SC2009
+  ps -ef | grep "[r]unsv" || true
 
   gdk status || true
-   # shellcheck disable=SC2009
-  ps -ef | grep "[r]unsv"
+
   gdk start
 }
 
