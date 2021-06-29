@@ -74,6 +74,7 @@ gitlab:
   dir: "/home/git/gdk/gitlab"
   rails:
     address: ''
+    multiple_databases: false
     puma:
       threads_max: 4
       threads_min: 1
