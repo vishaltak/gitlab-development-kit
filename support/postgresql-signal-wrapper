@@ -14,5 +14,6 @@ end
 # rubocop:disable Style/GlobalVars
 $pid = spawn(*ARGV)
 Process.wait($pid)
+
 # rubocop:enable Style/GlobalVars
-exit $CHILD_STATUS.exitstatus
+exit($CHILD_STATUS&.exitstatus || 0)
