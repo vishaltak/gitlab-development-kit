@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 parent_path=$(dirname "$0")
 
@@ -16,6 +16,5 @@ fi
 install_gem
 install
 doctor
-start
-wait_for_boot
-QUIET=false "${parent_path}"/../test_url
+stop_start
+test_url

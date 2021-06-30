@@ -10,7 +10,6 @@
       - ./gitlab-development-kit/log
     expire_in: 2 days
     when: always
-  retry: 1
 
 install:
   extends: .verify-job

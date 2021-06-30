@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-GDK_CHECKOUT_PATH="$(pwd)/gitlab-development-kit"
+GDK_CHECKOUT_PATH="$(pwd)/gdk"
 
 if [[ ${GDK_DEBUG} == "1" ]]; then
   export GIT_CURL_VERBOSE=1
@@ -17,9 +17,6 @@ install_gem() {
   cd gem || exit
   gem build gitlab-development-kit.gemspec
   gem install gitlab-development-kit-*.gem
-}
-
-test_gem() {
   gdk
 }
 
@@ -66,7 +63,6 @@ install() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Installing GDK.."
   gdk install
-  test_gem
   set_gitlab_upstream
 }
 
@@ -104,20 +100,29 @@ restart() {
 
 stop_start() {
   stop
+  sleep 5
+  # shellcheck disable=SC2009
+  ps -ef | grep "[r]unsv" || true
+
+  stop
+  sleep 5
+  # shellcheck disable=SC2009
+  ps -ef | grep "[r]unsv" || true
 
   gdk status || true
-   # shellcheck disable=SC2009
-  ps -ef | grep "[r]unsv"
+
   gdk start
 }
 
 doctor() {
   cd "${GDK_CHECKOUT_PATH}" || exit
   echo "> Running gdk doctor.."
-  gdk doctor
+  gdk doctor || true
 }
 
-wait_for_boot() {
-  echo "> Waiting 90 secs to give GDK a chance to boot up.."
-  sleep 90
+test_url() {
+  cd "${GDK_CHECKOUT_PATH}" || exit
+
+  # QUIET=false support/test_url || QUIET=false support/test_url
+  support/ci/test_url
 }

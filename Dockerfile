@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y sudo locales locales-all software-prope
 RUN useradd --user-group --create-home --groups sudo gdk
 RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk_no_password
 
-WORKDIR /home/gdk/gitlab-development-kit
-RUN chown gdk:gdk /home/gdk/gitlab-development-kit
+WORKDIR /home/gdk/tmp
+RUN chown -R gdk:gdk /home/gdk
 
 USER gdk
 COPY --chown=gdk . .
@@ -34,4 +34,6 @@ RUN bash ./support/bootstrap \
   # clear tmp caches e.g. from postgres compilation
   && sudo rm -rf /tmp/* ~/.asdf/tmp/* \
   # Remove files we copied in
-  && sudo rm -rf .cache .gdk-install-root .tool-versions packages*.txt support/
+  && sudo rm -rf /home/gdk/tmp
+
+WORKDIR /home/gdk
