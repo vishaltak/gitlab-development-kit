@@ -16,7 +16,7 @@ module Tooling
         %r{\Adoc/.*(\.(md|png|gif|jpg))\z} => :docs,
         %r{\A(CONTRIBUTING|LICENSE|MAINTENANCE|PHILOSOPHY|PROCESS|README)(\.md)?\z} => :docs,
 
-        %r{.*} => nil
+        %r{.*} => [nil]
       }.freeze
 
       def changes_by_category
