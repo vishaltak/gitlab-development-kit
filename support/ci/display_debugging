@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
 execute_command() {
-  local command
-
   command="${*}"
 
   echo "${command}"
@@ -17,7 +15,7 @@ execute_command() {
   echo
 }
 
-if [[ "${GDK_DEBUG}" == "1" ]]; then
+if [ "${GDK_DEBUG}" = "1" ]; then
   execute_command ulimit -a
   execute_command nproc
   execute_command free -m
