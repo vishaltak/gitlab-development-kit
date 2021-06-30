@@ -123,6 +123,7 @@ doctor() {
 test_url() {
   cd "${GDK_CHECKOUT_PATH}" || exit
 
-  # QUIET=false support/test_url || QUIET=false support/test_url
-  support/ci/test_url
+  sleep 30
+  QUIET=false support/test_url || QUIET=false support/test_url
+  # support/ci/test_url
 }

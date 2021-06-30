@@ -31,7 +31,7 @@ RSpec.describe GDK::TestURL do
   describe '#wait' do
     shared_examples "a URL that's down" do
       it 'checks if the URL is up but returns false' do
-        allow(http_helper_double).to receive(:up?).and_return(false)
+        allow(http_helper_double).to receive(:head_up?).and_return(false)
 
         freeze_time do
           result = nil
@@ -45,7 +45,7 @@ RSpec.describe GDK::TestURL do
 
     shared_examples "a URL that's up" do
       it 'checks if the URL is up but returns true' do
-        allow(http_helper_double).to receive(:up?).and_return(true)
+        allow(http_helper_double).to receive(:head_up?).and_return(true)
 
         freeze_time do
           result = nil
@@ -114,7 +114,7 @@ RSpec.describe GDK::TestURL do
 
     uri = URI.parse(default_url)
     http_helper_double = instance_double(GDK::HTTPHelper, last_response_reason: last_response_reason)
-    allow(GDK::HTTPHelper).to receive(:new).with(uri, cache_response: false).and_return(http_helper_double)
+    allow(GDK::HTTPHelper).to receive(:new).with(uri, read_timeout: 60, open_timeout: 60, cache_response: false).and_return(http_helper_double)
 
     allow(URI).to receive(:parse).with(default_url).and_return(uri)
 

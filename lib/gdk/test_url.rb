@@ -46,7 +46,7 @@ module GDK
           GDK::Output.puts("> Testing attempt ##{i}..")
         end
 
-        return true if http_helper.up?
+        return true if http_helper.head_up?
 
         GDK::Output.puts(http_helper.last_response_reason) unless quiet
 
@@ -66,7 +66,7 @@ module GDK
     end
 
     def http_helper
-      @http_helper ||= GDK::HTTPHelper.new(uri, cache_response: false)
+      @http_helper ||= GDK::HTTPHelper.new(uri, read_timeout: 60, open_timeout: 60, cache_response: false)
     end
   end
 end
