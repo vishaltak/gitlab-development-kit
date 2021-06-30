@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'digest/md5'
-
 MESSAGE = <<MARKDOWN
 ## Reviewer roulette
 
@@ -29,14 +27,6 @@ normally would! Danger does not automatically notify them for you.
 
 | Category | Reviewer | Maintainer |
 | -------- | -------- | ---------- |
-MARKDOWN
-
-UNKNOWN_FILES_MESSAGE = <<MARKDOWN
-
-These files couldn't be categorised, so Danger was unable to suggest a reviewer.
-Please consider creating a merge request to
-[add support](https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/tooling/danger/helper.rb)
-for them.
 MARKDOWN
 
 OPTIONAL_REVIEW_TEMPLATE = '%{role} review is optional for %{category}'
@@ -67,15 +57,13 @@ def markdown_row_for_spins(category, spins_array)
   "| #{helper.label_for_category(category)} | #{reviewer_note} | #{maintainer_note} |"
 end
 
-changes = helper.changes_by_category
-
-# Ignore any files that are known but uncategorized. Prompt for any unknown files
-changes.delete(:none)
-
-categories = changes.keys - [:unknown]
+changes = project_helper.changes_by_category
 
 if changes.any?
-  project = helper.project_name
+  categories = changes.keys
+  # This allows to select any reviewer/maintainer regardless of the kind of change
+  categories[categories.index(:unknown)] = nil
+  project = project_helper.project_name
 
   random_roulette_spins = roulette.spin(project, categories, timezone_experiment: false)
 
@@ -85,7 +73,4 @@ if changes.any?
 
   markdown(MESSAGE)
   markdown(CATEGORY_TABLE_HEADER + rows.join("\n")) unless rows.empty?
-
-  unknown = changes.fetch(:unknown, [])
-  markdown(UNKNOWN_FILES_MESSAGE + helper.markdown_list(unknown)) unless unknown.empty?
 end
