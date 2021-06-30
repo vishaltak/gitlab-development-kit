@@ -61,8 +61,6 @@ changes = project_helper.changes_by_category
 
 if changes.any?
   categories = changes.keys
-  # This allows to select any reviewer/maintainer regardless of the kind of change
-  categories[categories.index(:unknown)] = nil
   project = project_helper.project_name
 
   random_roulette_spins = roulette.spin(project, categories, timezone_experiment: false)
