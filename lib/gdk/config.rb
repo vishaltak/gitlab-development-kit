@@ -669,6 +669,10 @@ module GDK
         end
       end
 
+      settings :rails_background_jobs do
+        integer(:timeout) { config.gdk.runit_wait_secs / 2 }
+      end
+
       settings :actioncable do
         path(:__socket_file) do
           if config.action_cable.in_app?

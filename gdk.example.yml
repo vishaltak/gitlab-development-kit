@@ -80,6 +80,8 @@ gitlab:
       threads_min: 1
       workers: 2
     sherlock: false
+  rails_background_jobs:
+    timeout: 10
 gitlab_docs:
   auto_update: true
   enabled: false

@@ -1045,6 +1045,28 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe 'rails_background_jobs' do
+      describe 'timeout' do
+        it 'is 10 (half of config.gdk.runit_wait_secs) by default' do
+          expect(config.gitlab.rails_background_jobs.timeout).to be(10)
+        end
+
+        context 'when customized' do
+          before do
+            yaml['gitlab'] = {
+              'rails_background_jobs' => {
+                'timeout' => 5
+              }
+            }
+          end
+
+          it 'is equal to 5' do
+            expect(config.gitlab.rails_background_jobs.timeout).to be(5)
+          end
+        end
+      end
+    end
+
     describe 'actioncable' do
       describe '#__socket_file' do
         it 'returns the GitLab socket path' do
