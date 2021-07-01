@@ -947,6 +947,12 @@ RSpec.describe GDK::Config do
         end
       end
 
+      describe 'multiple_databases' do
+        it 'is disabled by default' do
+          expect(config.gitlab.rails.multiple_databases).to be(false)
+        end
+      end
+
       describe 'sherlock' do
         it 'is disabled by default' do
           expect(config.gitlab.rails.sherlock).to be(false)

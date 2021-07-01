@@ -1,28 +1,56 @@
 development:
-  adapter: postgresql
-  encoding: unicode
-  database: gitlabhq_development
-  host: <%= config.postgresql.host %>
-  port: <%= config.postgresql.port %>
-  pool: 10
-  prepared_statements: false
-  variables:
-    statement_timeout: 120s
+  main:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_development
+    host: <%= config.postgresql.host %>
+    port: <%= config.postgresql.port %>
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
 <%- if config.load_balancing.enabled -%>
   <%- unless config.geo? -%>
-  load_balancing:
-    hosts:
-      - <%= config.postgresql.host %>
+    load_balancing:
+      hosts:
+        - <%= config.postgresql.host %>
   <%- end -%>
+<%- end -%>
+<%- if config.gitlab.rails.multiple_databases -%>
+  ci:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_development_ci
+    migrations_paths: db/ci_migrate
+    host: <%= config.postgresql.host %>
+    port: <%= config.postgresql.port %>
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
 <%- end -%>
 
 test: &test
-  adapter: postgresql
-  encoding: unicode
-  database: gitlabhq_test
-  host: <%= config.postgresql.host %>
-  port: <%= config.postgresql.port %>
-  pool: 10
-  prepared_statements: false
-  variables:
-    statement_timeout: 120s
+  main:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_test
+    host: <%= config.postgresql.host %>
+    port: <%= config.postgresql.port %>
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
+<%- if config.gitlab.rails.multiple_databases -%>
+  ci:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_test_ci
+    migrations_paths: db/ci_migrate
+    host: <%= config.postgresql.host %>
+    port: <%= config.postgresql.port %>
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
+<%- end -%>

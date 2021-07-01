@@ -655,6 +655,8 @@ module GDK
           end
         end
 
+        bool(:multiple_databases) { false }
+
         bool(:sherlock) { false }
 
         settings :puma do
