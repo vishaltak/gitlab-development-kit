@@ -6,8 +6,8 @@
     - release-image
   artifacts:
     paths:
-      - ./gitlab-development-kit/gitlab/log/*.log
-      - ./gitlab-development-kit/log
+      - ./gdk/gitlab/log/*.log
+      - ./gdk/log
     expire_in: 2 days
     when: always
 
