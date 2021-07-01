@@ -145,7 +145,7 @@ module Runit
         def kill(signal, pid)
           puts "runit control/t: sending #{signal} to #{pid}"
           Process.kill(signal, pid)
-        rescue Errno::ESRCH
+        rescue SystemCallError
           nil
         end
 

@@ -276,7 +276,7 @@ module Runit
   def self.kill_processes(pids)
     pids.each do |pid|
       Process.kill('TERM', pid)
-    rescue Errno::ESRCH
+    rescue SystemCallError
     end
   end
 
