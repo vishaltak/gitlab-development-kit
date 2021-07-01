@@ -21,7 +21,7 @@ module Runit
   }.freeze
 
   SERVICES_DIR = Pathname.new(__dir__).join("../services").expand_path
-
+  ALL_DATA_ORIENTED_SERVICE_NAMES = %w[minio openldap gitaly praefect redis postgresql-geo postgresql].freeze
   STOP_RETRY_COUNT = 3
 
   def self.start_runsvdir
@@ -162,8 +162,8 @@ module Runit
   end
 
   def self.data_oriented_service_names
-    %w[minio openldap gitaly praefect redis postgresql-geo postgresql].select do |x|
-      Dir.exist?(File.join(SERVICES_DIR, x))
+    ALL_DATA_ORIENTED_SERVICE_NAMES.select do |service_name|
+      SERVICES_DIR.join(service_name).exist?
     end
   end
 
