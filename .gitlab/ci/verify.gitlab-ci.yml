@@ -8,6 +8,7 @@
     paths:
       - ./gdk/gitlab/log/*.log
       - ./gdk/log
+      - ./gdk/sv/*/run
     expire_in: 2 days
     when: always
 
