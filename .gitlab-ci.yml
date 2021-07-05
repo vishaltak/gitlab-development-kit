@@ -9,7 +9,7 @@ variables:
   VERIFY_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:$CI_COMMIT_REF_SLUG
   GITPOD_WORKSPACE_IMAGE_BASE: $CI_REGISTRY_IMAGE/gitpod-workspace
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
-  GDK_DEBUG: "false"
+  GDK_DEBUG: "true"
 
 default:
   interruptible: true

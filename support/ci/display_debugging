@@ -20,4 +20,5 @@ if [ "${GDK_DEBUG}" = "1" ]; then
   execute_command nproc
   execute_command free -m
   execute_command env
+  execute_command ps -ef
 fi
