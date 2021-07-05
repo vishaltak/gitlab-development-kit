@@ -174,16 +174,16 @@ module Runit
         kill('<%= term_signal %>', pid)
 
         # Wait a few moments for pid to die.
-        1.upto(GIVE_PID_SECS_TO_DIE) do
-          exit(0) unless pid?(pid)
-          sleep 1
-        end
+        #1.upto(GIVE_PID_SECS_TO_DIE) do
+        #  exit(0) unless pid?(pid)
+        #  sleep 1
+        #end
 
         # Kill PID group with KILL
-        kill('KILL', -pid)
+        #kill('KILL', -pid)
 
         # Kill PID with KILL
-        kill('KILL', pid)
+        #kill('KILL', pid)
       TEMPLATE
       control_t_path = File.join(dir(service), 'control/t')
       write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
