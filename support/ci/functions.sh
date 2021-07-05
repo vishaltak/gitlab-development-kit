@@ -7,6 +7,23 @@ if [[ ${GDK_DEBUG} == "1" ]]; then
 fi
 
 init() {
+  clone
+
+  if [ -n "${1}" ]; then
+    checkout "${1}"
+  else
+    if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
+      checkout "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}"
+    else
+      checkout "${CI_COMMIT_SHA}"
+    fi
+  fi
+
+  install_gem
+  install
+}
+
+clone() {
   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
   # TODO: Touching .gdk-install-root will be redundant shortly.
   echo "${GDK_CHECKOUT_PATH}" > "${GDK_CHECKOUT_PATH}/.gdk-install-root"

@@ -5,14 +5,6 @@ parent_path=$(dirname "$0")
 # shellcheck source=support/ci/functions.sh
 source "${parent_path}"/functions.sh
 
+# shellcheck disable=SC2119
 init
-
-if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
-  checkout "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}"
-else
-  checkout "${CI_COMMIT_SHA}"
-fi
-
-install_gem
-install
 reconfigure
