@@ -334,9 +334,9 @@ gitlab-git-pull-run: gitlab/.git/pull
 gitlab/.git/pull: gitlab/git-restore
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab to current default branch"
+	@echo "Updating gitlab-org/gitlab to ${gitlab_branch}"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" HEAD false ${QQ}
+	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" ${gitlab_branch} false ${QQ}
 
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
@@ -345,6 +345,7 @@ gitlab-db-migrate: ensure-databases-running
 
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
+	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" ${gitlab_branch} false ${QQ}
 
 gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
 

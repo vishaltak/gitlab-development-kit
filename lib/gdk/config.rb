@@ -622,6 +622,7 @@ module GDK
       bool(:auto_update) { true }
       path(:dir) { config.gdk_root.join('gitlab') }
       bool(:cache_classes) { false }
+      string(:branch) { 'master' }
 
       settings :rails do
         string(:address) { '' }

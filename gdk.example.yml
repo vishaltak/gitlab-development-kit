@@ -68,6 +68,7 @@ gitaly:
   storage_dir: "/home/git/gdk/repositories"
 gitlab:
   auto_update: true
+  branch: master
   cache_classes: false
   dir: "/home/git/gdk/gitlab"
   rails:
