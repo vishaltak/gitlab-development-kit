@@ -663,6 +663,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#__build_bin_backup_path' do
+      it '/home/git/gdk/gitaly/_build/bin/gitaly-backup' do
+        expect(config.gitaly.__build_bin_backup_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/bin/gitaly-backup'))
+      end
+    end
+
     describe '#__build_deps_path' do
       it '/home/git/gdk/gitaly/_build/deps' do
         expect(config.gitaly.__build_deps_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/deps'))
