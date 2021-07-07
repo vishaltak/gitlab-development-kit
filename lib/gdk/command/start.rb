@@ -46,9 +46,10 @@ module GDK
 
       def print_url_ready_message
         GDK::Output.puts
-        GDK::Output.notice("GitLab will be available at #{config.__uri} shortly.")
-        GDK::Output.notice("GitLab Docs will be available at http://#{config.hostname}:#{config.gitlab_docs.port} shortly.") if config.gitlab_docs.enabled?
-        GDK::Output.notice("GitLab Kubernetes Agent Server available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
+        GDK::Output.notice("GitLab will be available at #{config.__uri}.")
+        GDK::Output.notice("GitLab Docs will be available at http://#{config.hostname}:#{config.gitlab_docs.port}.") if config.gitlab_docs.enabled?
+        GDK::Output.notice("GitLab Kubernetes Agent Server will be available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
+        GDK::Output.notice("Prometheus will be available at http://#{config.hostname}:#{config.prometheus.port}.") if config.prometheus?
       end
     end
   end

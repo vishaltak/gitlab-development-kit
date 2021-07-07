@@ -11,6 +11,7 @@ AllCops:
   Exclude:
     - 'Brewfile'
     - 'Dangerfile'
+    - 'charts-gitlab/**/*'
     - 'danger/**/*'
     - 'elasticsearch/**/*'
     - 'gitaly/**/*'
@@ -30,6 +31,7 @@ AllCops:
     - 'jaeger/**/*'
     - 'log/**/*'
     - 'node_modules/**/*'
+    - 'omnibus-gitlab/**/*'
     - 'postgresql-geo/**/*'
     - 'postgresql-primary/**/*'
     - 'postgresql/**/*'
