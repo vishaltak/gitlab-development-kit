@@ -28,7 +28,7 @@ def current_timings
 end
 
 def update_timings(data)
-  TMP_PATH.mkdir_p unless TMP_PATH.exist?
+  TMP_PATH.mkpath unless TMP_PATH.exist?
   TIMING_FILE.write(data.to_yaml)
 end
 
