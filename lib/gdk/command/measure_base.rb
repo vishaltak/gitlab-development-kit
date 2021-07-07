@@ -6,6 +6,8 @@ require 'net/http'
 module GDK
   module Command
     class MeasureBase < BaseCommand
+      SITESPEED_DOCKER_TAG = '17.8.2'
+
       def run(_ = [])
         check!
 
@@ -63,7 +65,7 @@ module GDK
 
       def docker_command
         # Start Sitespeed through docker
-        command = ['docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:17.8.2 -b chrome']
+        command = ["docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v \"$(pwd):/sitespeed.io\" sitespeedio/sitespeed.io:#{SITESPEED_DOCKER_TAG} -b chrome"]
         # 4 repetitions
         command << '-n 4'
         # Limit Cable Connection
