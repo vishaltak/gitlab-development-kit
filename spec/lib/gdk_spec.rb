@@ -23,7 +23,8 @@ RSpec.describe GDK do
           stub_const('ARGV', [command])
 
           expect_any_instance_of(command_class_proc.call).to receive(:run).and_return(true)
-          described_class.main
+
+          expect { described_class.main }.to raise_error(SystemExit)
         end
       end
     end
