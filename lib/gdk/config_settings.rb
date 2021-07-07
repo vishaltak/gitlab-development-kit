@@ -141,7 +141,11 @@ module GDK
     end
 
     def user_defined?
-      yaml&.any?
+      attributes.values.any? do |attribute|
+        next if attribute.ignore?
+
+        attribute.build(parent: self).user_defined?
+      end
     end
 
     def fetch(slug, *args)
@@ -166,6 +170,23 @@ module GDK
       return value if slugs.empty?
 
       value.dig(*slugs)
+    end
+
+    def bury!(*slugs, new_value)
+      slugs = slugs.first.to_s.split('.') if slugs.one?
+      key = slugs.shift
+
+      if slugs.empty?
+        setting = build(key)
+        setting.value = new_value
+        new_value = yaml[key] = setting.value # Sanitize
+      else
+        new_value = fetch(key).bury!(*slugs, new_value)
+      end
+
+      save_yaml!
+
+      new_value
     end
 
     def config_file_protected?(target)
@@ -217,7 +238,9 @@ module GDK
     private
 
     def attribute(key)
-      attributes[key]
+      attributes.fetch(key) do |k|
+        raise SettingUndefined, %(Could not fetch attributes for '#{k}' in '#{slug || '<root>'}')
+      end
     end
 
     def build(key)
@@ -232,10 +255,21 @@ module GDK
     end
 
     def load_yaml!
-      return {} unless defined?(self.class::FILE) && File.exist?(self.class::FILE)
+      return {} unless file_defined_and_exists?
 
       raw_yaml = File.read(self.class::FILE)
       YAML.safe_load(raw_yaml) || {}
+    end
+
+    def save_yaml!
+      return unless file_defined_and_exists?
+
+      Backup.new(self.class::FILE).backup!
+      File.write(self.class::FILE, dump!(user_only: true).to_yaml)
+    end
+
+    def file_defined_and_exists?
+      defined?(self.class::FILE) && File.exist?(self.class::FILE)
     end
 
     def from_yaml(slug, default: nil)

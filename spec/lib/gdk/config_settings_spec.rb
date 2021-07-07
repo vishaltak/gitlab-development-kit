@@ -144,11 +144,11 @@ RSpec.describe GDK::ConfigSettings do
 
     context 'with foo.yml' do
       before do
-        File.write(temp_path.join('foo.yml'), { 'bar' => 'baz' }.to_yaml)
+        File.write(test_klass::FILE, { 'bar' => 'baz' }.to_yaml)
       end
 
       after do
-        File.unlink(temp_path.join('foo.yml'))
+        File.unlink(test_klass::FILE)
       end
 
       it 'reads settings from yaml' do
@@ -263,6 +263,72 @@ RSpec.describe GDK::ConfigSettings do
   describe '#cmd!' do
     it 'executes command with the chdir being GDK.root' do
       expect(config.cmd!(%w[pwd])).to eql(GDK.root.to_s)
+    end
+  end
+
+  describe '#bury!' do
+    it 'assigns value in the yaml' do
+      key = 'foo'
+      described_class.integer(key) { '333' }
+
+      expect { config.bury!(key, '444') }.to change(config, key).to(444)
+    end
+
+    it 'raises an error when burying a port to a boolean' do
+      key = 'foo'
+      described_class.integer(key) { '333' }
+      current_port = config[key]
+
+      expect { config.bury!(key, false) }.to raise_error(TypeError, "Value 'false' for #{key} is not a valid integer")
+
+      expect(config[key]).to eq(current_port)
+    end
+
+    it 'buries into non-existing subsettings' do
+      described_class.settings(:foo) { string(:name) { 'bonza' } }
+
+      expect { config.bury!('foo.name', 'ripper') }
+        .to change(config, :yaml).to('foo' => { 'name' => 'ripper' })
+    end
+
+    it 'buries next to existing subsettings' do
+      described_class.settings(:foo) { string(:name) { 'bonza' } }
+      config = described_class.new(yaml: { 'foo' => { 'location' => 'down under' } })
+
+      expect { config.bury!('foo.name', 'ripper') }
+        .to change(config, :yaml).to('foo' => { 'name' => 'ripper', 'location' => 'down under' })
+    end
+
+    context 'with foo.yml' do
+      before do
+        stub_backup
+
+        FileUtils.touch(test_klass::FILE)
+      end
+
+      after do
+        File.unlink(test_klass::FILE)
+      end
+
+      let(:test_klass) do
+        new_test_klass do |s|
+          s.integer(:port) { 3000 }
+        end
+      end
+
+      subject(:config) { test_klass.new }
+
+      it 'does not save to file on error' do
+        expect(File).not_to receive(:write)
+
+        expect { config.bury!('port', 'a-port') }.to raise_error(TypeError)
+      end
+
+      it 'saves to file' do
+        expect(File).to receive(:write)
+
+        expect { config.bury!('port', 1337) }.to change(config, :port).to(1337)
+      end
     end
   end
 

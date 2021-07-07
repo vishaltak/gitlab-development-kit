@@ -19,8 +19,8 @@ RSpec.describe GDK::ConfigType::Path do
     context 'when value is initialized with a string' do
       let(:value) { '/tmp' }
 
-      it 'returns true' do
-        expect(subject.parse).to be(true)
+      it 'returns path as Pathname' do
+        expect(subject.parse(value)).to eq(Pathname.new(value))
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe GDK::ConfigType::Path do
       let(:value) { 123 }
 
       it 'raises an exception' do
-        expect { subject.parse }.to raise_error(TypeError, "Value '123' for #{key} is not a valid path")
+        expect { subject.parse(value) }.to raise_error(TypeError, "Value '123' for #{key} is not a valid path")
       end
     end
   end

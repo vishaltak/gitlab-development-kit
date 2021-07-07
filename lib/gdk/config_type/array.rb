@@ -8,8 +8,8 @@ module GDK
     class Array < Base
       include Mergable
 
-      def parse
-        value.is_a?(::Array)
+      def parse(value)
+        value.to_a
       end
 
       private

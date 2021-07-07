@@ -5,12 +5,10 @@ require_relative 'base'
 module GDK
   module ConfigType
     class String < Base
-      def parse
-        return false if value.nil?
+      def parse(value)
+        raise ::TypeError if value.nil?
 
-        self.value = value.to_s
-
-        true
+        value.to_s
       end
     end
   end

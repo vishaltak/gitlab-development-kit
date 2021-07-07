@@ -9,8 +9,8 @@ module GDK
     class Hash < Base
       include Mergable
 
-      def parse
-        value.is_a?(::Hash)
+      def parse(value)
+        value.to_h
       end
 
       private

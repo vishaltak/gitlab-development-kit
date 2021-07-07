@@ -4,7 +4,7 @@ module GDK
   module ConfigType
     class Settings
       def self.new(parent:, builder:, **kwargs)
-        yaml = parent.yaml.fetch(builder.key, {})
+        yaml = parent.yaml[builder.key] ||= {}
 
         Class.new(parent.settings_klass).tap do |k|
           k.class_eval(&builder.blk)

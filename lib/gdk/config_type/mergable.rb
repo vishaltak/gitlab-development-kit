@@ -12,9 +12,11 @@ module GDK
       end
 
       def read_value
-        super
+        val = super
 
-        @value = mergable_merge(user_value, default_value) if merge
+        return val if !merge || !user_defined?
+
+        mergable_merge(user_value, default_value)
       end
     end
   end

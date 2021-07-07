@@ -356,8 +356,7 @@ RSpec.describe GDK::Config do
 
   describe '#validate!' do
     before do
-      allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+      stub_raw_gdk_yaml(raw_yaml)
     end
 
     context 'when gdk.yml is valid' do
@@ -387,8 +386,7 @@ RSpec.describe GDK::Config do
 
   describe '#[]' do
     before do
-      allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:read).with('gdk.example.yml').and_return(raw_yaml)
+      stub_raw_gdk_yaml(raw_yaml)
     end
 
     context 'when looking up a single slug' do
@@ -2048,6 +2046,35 @@ RSpec.describe GDK::Config do
           expect(config.gitlab_spamcheck.monitor_mode?).to be(true)
         end
       end
+    end
+  end
+
+  describe '#bury!' do
+    let(:yaml) do
+      { 'port' => 3000 }
+    end
+
+    before do
+      stub_env_lookups
+      stub_pg_bindir
+      stub_no_color_env('true')
+    end
+
+    it 'backs up and writes out a new YAML file' do
+      key = 'port'
+      new_port = 3001
+      file_name = 'gdk.example.yml'
+
+      config_backup = spy('config_backup')
+
+      expect(config_backup).to receive(:backup!)
+      expect(GDK::Backup).to receive(:new).with(file_name).and_return(config_backup)
+
+      expect(File).to receive(:write).with(file_name, "---\nport: #{new_port}\n")
+
+      config.bury!(key, new_port)
+
+      expect(config.port).to eq(new_port)
     end
   end
 end
