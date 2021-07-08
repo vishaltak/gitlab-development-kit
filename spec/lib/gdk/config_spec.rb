@@ -1314,12 +1314,6 @@ RSpec.describe GDK::Config do
   end
 
   describe 'action_cable' do
-    describe '#in_app' do
-      it 'is true by default' do
-        expect(config.action_cable.in_app).to be true
-      end
-    end
-
     describe '#worker_pool_size' do
       it 'returns 4 by deftault' do
         expect(config.action_cable.worker_pool_size).to eq 4
