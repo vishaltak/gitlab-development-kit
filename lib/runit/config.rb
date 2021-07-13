@@ -140,20 +140,11 @@ module Runit
       control_t_template = <<~'TEMPLATE'
         #!/usr/bin/env ruby
 
-        GIVE_PID_SECS_TO_DIE = 3
-
         def kill(signal, pid)
           puts "runit control/t: sending #{signal} to #{pid}"
           Process.kill(signal, pid)
         rescue SystemCallError
           nil
-        end
-
-        def pid?(pid)
-          Process.getpgid(pid)
-          true
-        rescue Errno::ESRCH
-          false
         end
 
         def pid
@@ -172,18 +163,6 @@ module Runit
 
         # Kill PID with <%= term_signal %>
         kill('<%= term_signal %>', pid)
-
-        # Wait a few moments for pid to die.
-        1.upto(GIVE_PID_SECS_TO_DIE) do
-          exit(0) unless pid?(pid)
-          sleep 1
-        end
-
-        # Kill PID group with KILL
-        kill('KILL', -pid)
-
-        # Kill PID with KILL
-        kill('KILL', pid)
       TEMPLATE
       control_t_path = File.join(dir(service), 'control/t')
       write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
