@@ -140,8 +140,6 @@ module Runit
       control_t_template = <<~'TEMPLATE'
         #!/usr/bin/env ruby
 
-        GIVE_PID_SECS_TO_DIE = 3
-
         def kill(signal, pid)
           puts "runit control/t: sending #{signal} to #{pid}"
           Process.kill(signal, pid)
