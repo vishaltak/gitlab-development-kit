@@ -15,7 +15,7 @@ execute_command() {
   echo
 }
 
-if [ "${GDK_DEBUG}" = "1" ]; then
+if [ "${GDK_DEBUG}" = "1" ] || [ "${GDK_DEBUG}" = "true" ]; then
   execute_command ulimit -a
   execute_command nproc
   execute_command free -m
