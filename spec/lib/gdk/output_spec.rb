@@ -260,13 +260,31 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.interactive?' do
+    context 'when we have a TTY' do
+      it 'returns true' do
+        stub_tty(true)
+
+        expect(described_class.interactive?).to be(true)
+      end
+    end
+
+    context "when we don't have a TTY" do
+      it 'returns false' do
+        stub_tty(false)
+
+        expect(described_class.interactive?).to be(false)
+      end
+    end
+  end
+
   describe '.prompt' do
     it 'returns user input' do
       response = 'n'
       message = 'Are you sure? [y/N]'
 
       expect(Kernel).to receive(:print).with("#{message}: ")
-      expect(ARGF).to receive_message_chain(:gets, :chomp).and_return(response)
+      expect(ARGF).to receive_message_chain(:gets, :to_s, :chomp).and_return(response)
 
       expect(described_class.prompt(message)).to eq(response)
     end

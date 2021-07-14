@@ -77,9 +77,9 @@ def stub_env_lookups
   allow(ENV).to receive(:[]).and_call_original
 end
 
-def stub_env(var, value)
-  allow(ENV).to receive(:fetch).with(var, '').and_return(value)
-  allow(ENV).to receive(:[]).with(var).and_return(value)
+def stub_env(var, return_value, default_value: '')
+  allow(ENV).to receive(:fetch).with(var, default_value).and_return(return_value)
+  allow(ENV).to receive(:[]).with(var).and_return(return_value)
 end
 
 def stub_gdk_yaml(yaml)

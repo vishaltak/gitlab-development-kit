@@ -7,16 +7,18 @@ RSpec.describe GDK::Command::ResetData do
   let!(:backup_base_dir) { root.join('.backups') }
 
   context 'prompt behavior' do
-    let(:are_you_sure) { nil }
+    let(:prompt_response) { nil }
 
     before do
       allow(GDK::Output).to receive(:warn).with("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
       allow(GDK::Output).to receive(:warn).with("Backups will be made in '#{backup_base_dir}', just in case!")
-      allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(are_you_sure)
+      allow(GDK::Output).to receive(:interactive?).and_return(true)
+      allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(prompt_response)
+      stub_env_lookups
     end
 
     context 'when the user does not accept / aborts the prompt' do
-      let(:are_you_sure) { 'n' }
+      let(:prompt_response) { 'no' }
 
       it 'does not run' do
         expect(subject).not_to receive(:stop_and_backup!)
@@ -27,7 +29,7 @@ RSpec.describe GDK::Command::ResetData do
     end
 
     context 'when the user accepts the prompt' do
-      let(:are_you_sure) { 'y' }
+      let(:prompt_response) { 'yes' }
 
       it 'runs' do
         expect(subject).to receive(:stop_and_backup!).and_return(true)
@@ -48,7 +50,7 @@ RSpec.describe GDK::Command::ResetData do
       allow(GDK).to receive(:remember!)
       allow(Runit).to receive(:stop)
       allow(GDK).to receive(:root).and_return(root)
-      allow(subject).to receive(:prompt_and_return_acceptance).and_return(true)
+      allow(subject).to receive(:continue?).and_return(true)
     end
 
     context 'when backup data script fails' do

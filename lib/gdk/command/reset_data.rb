@@ -4,8 +4,8 @@ module GDK
   module Command
     # Handles `gdk reset-data` command execution
     class ResetData < BaseCommand
-      def run(args = [])
-        return false unless prompt_and_return_acceptance
+      def run(_ = [])
+        return false unless continue?
         return false unless stop_and_backup!
 
         reset_data!
@@ -36,12 +36,13 @@ module GDK
         end
       end
 
-      def prompt_and_return_acceptance
+      def continue?
         GDK::Output.warn("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
         GDK::Output.warn("Backups will be made in '#{GDK.root.join('.backups')}', just in case!")
 
-        accepted = GDK::Output.prompt('Are you sure? [y/N]')
-        accepted.match?(/\Ay(?:es)*\z/i)
+        return true if ENV.fetch('GDK_RESET_DATA_CONFIRM', 'false') == 'true' || !GDK::Output.interactive?
+
+        GDK::Output.prompt('Are you sure? [y/N]').match?(/\Ay(?:es)*\z/i)
       end
 
       def backup_data
