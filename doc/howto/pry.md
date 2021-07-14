@@ -7,13 +7,14 @@ When running tests, Pry's interactive debugging prompt appears in the
 terminal window where you start your test command (`rake`, `rspec` etc.).
 
 If you want to get a debugging prompt while browsing on your local
-development server (localhost:3000), you should use `binding.remote_pry` instead.
+development server (localhost:3000), you should use `binding.pry_shell` instead.
 
-You can then connect to this session by running `pry-remote` in your terminal.
+You can then connect to this session by running `pry-shell` in your terminal. See
+[Pry debugging docs](https://docs.gitlab.com/ee/development/pry_debugging.html) for more usage.
 
 ## Using Thin
 
-An alternative to `binding.remote_pry` is to run your Rails web server via Thin.
+An alternative to `binding.pry_shell` is to run your Rails web server via Thin.
 Start by kicking off the normal GDK processes via `gdk start`. Then open a new terminal session and run:
 
 ```shell
