@@ -38,8 +38,8 @@ For example, an identity provider for the "zebra" group can be ran using the fol
 
 ```shell
 docker run --name=gitlab_saml_idp -p 8080:8080 -p 8443:8443 \
--e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/<group-name> \
--e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/<group-name>/-/saml/callback \
+-e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/groups/<group-name> \
+-e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/callback \
 -d jamedjo/test-saml-idp
 ```
 
@@ -58,6 +58,17 @@ Unlike instance-wide SAML, this doesn't add a button to the GitLab global `/user
 Instead you can use `https://<gitlab-host>:<gitlab-port>/<group-name>/-/saml/sso` as displayed on the group configuration page.
 
 Sign in can also be initiated from the identity provider at `https://localhost:8443/simplesaml/saml2/idp/SSOService.php?spentityid=https%3A%2F%2F<gitlab-host>%3A3443%2Fgroups%2Fzebra`
+
+You might get a notification that the user email is not verified and has to be confirmed first. You can either [disable email confirmation](https://docs.gitlab.com/ee/security/user_email_confirmation.html), or you can confirm the user's email manually from:
+
+- **UI:** By logging in to your instance as admin/root, and go to https://<gitlab-host>:<gitlab-port>/admin/users/<username> then click the button to confirm the email.
+- **CLI:** By opening a Rails console and running:
+
+  ```shell
+  user = User.find_by_username '<username>'
+  user.confirmed_at = Time.now
+  user.save
+  ```
 
 ## Instance SAML with Docker
 
@@ -85,7 +96,7 @@ omniauth:
       args: {
         assertion_consumer_service_url: 'http://<gitlab-host>:<gitlab-port>/users/auth/saml/callback',
         idp_cert_fingerprint: '11:9b:9e:02:79:59:cd:b7:c6:62:cf:d0:75:d9:e2:ef:38:4e:44:5f',
-        idp_sso_target_url: 'https://localhost:8443/simplesaml/saml2/idp/SSOService.php',
+        idp_sso_target_url: 'https://<gitlab-host>:8443/simplesaml/saml2/idp/SSOService.php',
         issuer: 'http://<gitlab-host>:<gitlab-port>',
         name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
       }
