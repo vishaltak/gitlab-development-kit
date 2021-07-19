@@ -9,6 +9,7 @@ module GDK
     autoload :Golang, 'gdk/diagnostic/golang'
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
+    autoload :Praefect, 'gdk/diagnostic/praefect'
     autoload :Re2, 'gdk/diagnostic/re2'
     autoload :RubyGems, 'gdk/diagnostic/ruby_gems'
     autoload :RvmAndAsdf, 'gdk/diagnostic/rvm_and_asdf'
@@ -26,6 +27,7 @@ module GDK
         PendingMigrations
         PostgreSQL
         Geo
+        Praefect
         Status
         Re2
         Golang
