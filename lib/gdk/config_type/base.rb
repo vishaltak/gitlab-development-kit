@@ -20,14 +20,18 @@ module GDK
         parent.instance_eval(&blk)
       end
 
-      def value=(val)
-        @value = parse(val)
+      def value=(value)
+        @value = validate_value!(value)
+      end
 
       def parse(value)
         raise NotImplementedError
       end
+
+      def validate_value!(value)
+        parse(value)
       rescue ::TypeError, ::NoMethodError
-        raise ::TypeError, "Value '#{val}' for #{slug} is not a valid #{type}"
+        raise ::TypeError, "Value '#{value}' for #{slug} is not a valid #{type}"
       end
 
       def user_defined?
