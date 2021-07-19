@@ -266,6 +266,76 @@ RSpec.describe GDK::ConfigSettings do
     end
   end
 
+  describe '#values_same_for_slug?' do
+    let(:slug) { 'foo' }
+
+    before do
+      described_class.integer(slug) { '333' }
+    end
+
+    context 'where new value is not an Integer' do
+      it 'returns true' do
+        expect { config.values_same_for_slug?(slug, 'a') }.to raise_error(TypeError)
+      end
+    end
+
+    context 'where new value is the same as the current value' do
+      it 'returns true' do
+        expect(config.values_same_for_slug?(slug, '333')).to be_truthy
+      end
+    end
+
+    context 'where new value is different to the current value' do
+      it 'returns false' do
+        expect(config.values_same_for_slug?(slug, '444')).to be_falsy
+      end
+    end
+  end
+
+  describe '#parsed_value_for_slug' do
+    shared_examples 'a parsed value' do
+      context 'where new value is not an Integer' do
+        it 'returns true' do
+          expect { config.parsed_value_for_slug(slug, 'a') }.to raise_error(TypeError)
+        end
+      end
+
+      context 'where new value is the same as the current value' do
+        it 'returns true' do
+          expect(config.parsed_value_for_slug(slug, '333')).to eq(333)
+        end
+      end
+
+      context 'where new value is different to the current value' do
+        it 'returns false' do
+          expect(config.parsed_value_for_slug(slug, '444')).to eq(444)
+        end
+      end
+    end
+
+    context 'when the slug is one level' do
+      let(:slug) { 'foo' }
+
+      before do
+        described_class.integer(slug) { '333' }
+      end
+
+      it_behaves_like 'a parsed value'
+    end
+
+    context 'when the slug is multi level' do
+      let(:slug) { 'foo.bar' }
+
+      before do
+        described_class.settings('foo') do
+          integer('bar') { '333' }
+        end
+      end
+
+      it_behaves_like 'a parsed value'
+    end
+  end
+
   describe '#bury!' do
     it 'assigns value in the yaml' do
       key = 'foo'

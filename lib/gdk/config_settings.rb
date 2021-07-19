@@ -172,6 +172,24 @@ module GDK
       value.dig(*slugs)
     end
 
+    def values_same_for_slug?(*slugs, new_value)
+      current_value = config.dig(*slugs)
+      proposed_value = parsed_value_for_slug(*slugs, new_value)
+
+      proposed_value == current_value
+    end
+
+    def parsed_value_for_slug(*slugs, new_value)
+      slugs = slugs.first.to_s.split('.') if slugs.one?
+      key = slugs.shift
+
+      if slugs.empty?
+        build(key).validate_value!(new_value)
+      else
+        fetch(key).parsed_value_for_slug(*slugs, new_value)
+      end
+    end
+
     def bury!(*slugs, new_value)
       slugs = slugs.first.to_s.split('.') if slugs.one?
       key = slugs.shift

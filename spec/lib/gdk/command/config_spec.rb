@@ -63,18 +63,36 @@ RSpec.describe GDK::Command::Config do
     end
 
     context 'with a valid key and value' do
-      it 'advises the new value has been set' do
-        old_port = 3000
-        new_port = 3001
+      context 'where the value is the same' do
+        it 'advises the new value is the same as the current value' do
+          current_value = 3000
 
-        stub_gdk_yaml('port' => old_port)
-        backup = stub_backup
+          stub_gdk_yaml('port' => current_value)
+          backup = stub_backup
 
-        expect(GDK::Output).to receive(:info).with("'port' is now set to '#{new_port}' (previously '#{old_port}').")
-        expect(File).to receive(:write).with(GDK::Config::FILE, "---\nport: #{new_port}\n")
-        expect(backup).to receive(:backup!)
+          expect(GDK::Output).to receive(:warn).with("'port' is already set to '#{current_value}'")
+          expect(File).not_to receive(:write).with(GDK::Config::FILE, "---\nport: #{current_value}\n")
+          expect(backup).not_to receive(:backup!)
 
-        subject.run(%W[set port #{new_port}])
+          subject.run(%W[set port #{current_value}])
+        end
+      end
+
+      context 'where the value is different' do
+        it 'advises the new value has been set' do
+          old_port = 3000
+          new_port = 3001
+
+          stub_gdk_yaml('port' => old_port)
+          backup = stub_backup
+
+          expect(GDK::Output).to receive(:success).with("'port' is now set to '#{new_port}' (previously '#{old_port}').")
+          expect(GDK::Output).to receive(:info).with("Don't forget to run 'gdk reconfigure'")
+          expect(File).to receive(:write).with(GDK::Config::FILE, "---\nport: #{new_port}\n")
+          expect(backup).to receive(:backup!)
+
+          subject.run(%W[set port #{new_port}])
+        end
       end
     end
   end
