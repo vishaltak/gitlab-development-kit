@@ -22,6 +22,10 @@ module GDK
 
       def value=(val)
         @value = parse(val)
+
+      def parse(value)
+        raise NotImplementedError
+      end
       rescue ::TypeError, ::NoMethodError
         raise ::TypeError, "Value '#{val}' for #{slug} is not a valid #{type}"
       end
