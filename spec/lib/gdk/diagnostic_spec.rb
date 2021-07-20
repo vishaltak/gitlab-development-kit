@@ -18,6 +18,7 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::PendingMigrations,
         GDK::Diagnostic::PostgreSQL,
         GDK::Diagnostic::Geo,
+        GDK::Diagnostic::Praefect,
         GDK::Diagnostic::Status,
         GDK::Diagnostic::Re2,
         GDK::Diagnostic::Golang,
