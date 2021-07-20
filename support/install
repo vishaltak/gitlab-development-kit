@@ -5,14 +5,16 @@
 #
 # Wrap everything in a function to ensure a partially downloaded install script
 # is not executed. Inspired by https://install.sandstorm.io/
+#
 _() {
 
 set -euo pipefail
 
+GDK_INSTALL_DIR="${2-gitlab-development-kit}"
+
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
 
-GDK_INSTALL_DIR="gitlab-development-kit"
 REQUIRED_COMMANDS=(git make)
 
 error() {
@@ -41,7 +43,7 @@ clone_gdk_if_needed() {
   if [[ -d ${GDK_INSTALL_DIR} ]]; then
     echo "INFO: A ${GDK_INSTALL_DIR} directory already exists in the current working directory, resuming.."
   else
-    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git ${GDK_INSTALL_DIR}
+    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_INSTALL_DIR}"
   fi
 }
 
@@ -69,7 +71,7 @@ fi
 
 ensure_required_commands_exist
 clone_gdk_if_needed
-cd ${GDK_INSTALL_DIR} || exit
+cd "${GDK_INSTALL_DIR}" || exit
 bootstrap
 gdk_install
 
