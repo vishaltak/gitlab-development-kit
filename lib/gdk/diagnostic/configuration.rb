@@ -21,7 +21,7 @@ module GDK
 
       def detail
         <<~MESSAGE
-          Please review the following diff or consider `gdk reconfigure`.
+          Please review the following diff(s) and/or consider running `gdk reconfigure`:
 
           #{@config_diff}
         MESSAGE

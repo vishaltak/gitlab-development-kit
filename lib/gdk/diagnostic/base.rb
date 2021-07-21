@@ -13,19 +13,23 @@ module GDK
         raise NotImplementedError
       end
 
-      def message
-        raise NotImplementedError unless self.class::TITLE
+      def message(content = detail)
+        raise NotImplementedError unless title
 
         <<~MESSAGE
 
-          #{self.class::TITLE}
-          #{'-' * 80}
-          #{detail}
+          #{title}
+          #{'=' * 80}
+          #{content}
         MESSAGE
       end
 
       def detail
         ''
+      end
+
+      def title
+        self.class::TITLE
       end
 
       private
