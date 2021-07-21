@@ -36,7 +36,7 @@ module GDK
         results = jobs.map { |x| x.join[:results] }.compact
 
         results.each do |diff|
-          output = diff.make_output.to_s.chomp
+          output = diff.output.to_s.chomp
           next if output.empty?
 
           stdout.puts(diff.file)
@@ -59,7 +59,7 @@ module GDK
       end
 
       class ConfigDiff
-        attr_reader :file, :output, :make_output
+        attr_reader :file, :output
 
         def initialize(file)
           @file = file
@@ -84,7 +84,7 @@ module GDK
           # runs us in parallel with checks that need to read these
           # config files.
           FileUtils.cp_r(file_path, file_path_unchanged) # must handle files & preserve symlinks
-          @make_output = update_config_file
+          update_config_file
 
           @output = diff_with_unchanged
         ensure
