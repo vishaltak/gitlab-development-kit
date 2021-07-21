@@ -92,7 +92,7 @@ module GDK
         end
 
         def file_path_unchanged
-          @file_path_unchanged ||= "#{file_path}.unchanged"
+          @file_path_unchanged ||= GDK.config.gdk_root.join('tmp', "diff_#{file.gsub(%r{/+}, '_')}")
         end
 
         def update_config_file
@@ -100,7 +100,7 @@ module GDK
         end
 
         def diff_with_unchanged
-          run('git', 'diff', '--no-index', '--color', "#{file}.unchanged", file)
+          run('git', 'diff', '--no-index', '--color', file_path_unchanged.to_s, file)
         end
 
         def run(*commands)
