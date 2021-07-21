@@ -35,6 +35,7 @@ module GDK
   autoload :HTTPHelper, 'gdk/http_helper'
   autoload :Logo, 'gdk/logo'
   autoload :Output, 'gdk/output'
+  autoload :OutputBuffered, 'gdk/output_buffered'
   autoload :Postgresql, 'gdk/postgresql'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
   autoload :Services, 'gdk/services'
