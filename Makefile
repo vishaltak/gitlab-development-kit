@@ -764,7 +764,7 @@ geo-secondary-update: geo-secondary-update-timed
 geo-secondary-update-run: update geo-secondary-migrate diff-config
 
 .PHONY: diff-config
-diff-config:
+diff-config: touch-examples
 	$(Q)gdk $@
 
 ##############################################################
