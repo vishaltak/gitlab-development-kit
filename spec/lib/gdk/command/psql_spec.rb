@@ -6,14 +6,24 @@ RSpec.describe GDK::Command::Psql do
   context 'with no extra arguments' do
     it 'uses the development database by default' do
       expect_exec %w[psql],
-                  ["/usr/local/bin/psql --host=#{GDK.config.postgresql.host} --port=#{GDK.config.postgresql.port} --dbname=gitlabhq_development ", { chdir: GDK.root }]
+                  ['/usr/local/bin/psql',
+                   "--host=#{GDK.config.postgresql.host}",
+                   "--port=#{GDK.config.postgresql.port}",
+                   '--dbname=gitlabhq_development',
+                   { chdir: GDK.root }]
     end
   end
 
   context 'with extra arguments' do
     it 'pass extra arguments to the psql cli application' do
-      expect_exec %w[psql -w -d gitlabhq_test],
-                  ["/usr/local/bin/psql --host=#{GDK.config.postgresql.host} --port=#{GDK.config.postgresql.port} -w -d gitlabhq_test", { chdir: GDK.root }]
+      expect_exec ['psql', '-w', '-d', 'gitlabhq_test', '-c', 'select 1'],
+                  ['/usr/local/bin/psql',
+                   "--host=#{GDK.config.postgresql.host}",
+                   "--port=#{GDK.config.postgresql.port}",
+                   '-w',
+                   '-d', 'gitlabhq_test',
+                   '-c', 'select 1',
+                   { chdir: GDK.root }]
     end
   end
 
