@@ -79,28 +79,23 @@ module GDK
           # generated.
           return nil unless file_path.exist?
 
-          # We must not do the equivalent of "mv && make" here,
-          # because we'd race with other checks when "gdk doctor"
-          # runs us in parallel with checks that need to read these
-          # config files.
-          FileUtils.cp_r(file_path, file_path_unchanged) # must handle files & preserve symlinks
           update_config_file
 
           @output = diff_with_unchanged
         ensure
-          File.rename(file_path_unchanged, file_path) if File.exist?(file_path_unchanged)
+          temporary_diff_file.delete if temporary_diff_file.exist?
         end
 
-        def file_path_unchanged
-          @file_path_unchanged ||= GDK.config.gdk_root.join('tmp', "diff_#{file.gsub(%r{/+}, '_')}")
+        def temporary_diff_file
+          @temporary_diff_file ||= GDK.config.gdk_root.join('tmp', "diff_#{file.gsub(%r{/+}, '_')}")
         end
 
         def update_config_file
-          run('rake', file)
+          run('rake', "generate-file-at[#{file},#{temporary_diff_file}]")
         end
 
         def diff_with_unchanged
-          run('git', 'diff', '--no-index', '--color', file_path_unchanged.to_s, file)
+          run('git', 'diff', '--no-index', '--color', file, temporary_diff_file.to_s)
         end
 
         def run(*commands)
