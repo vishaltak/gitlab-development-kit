@@ -6,7 +6,7 @@ module GDK
     class BaseCommand
       attr_reader :stdout, :stderr
 
-      def initialize(stdout: $stdout, stderr: $stderr)
+      def initialize(stdout: GDK::Output, stderr: GDK::Output)
         @stdout = stdout
         @stderr = stderr
       end

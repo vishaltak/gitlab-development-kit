@@ -39,8 +39,10 @@ module GDK
           output = diff.make_output.to_s.chomp
           next if output.empty?
 
-          GDK::Output.puts(output)
-          GDK::Output.puts("\n")
+          stdout.puts(diff.file)
+          stdout.puts('-' * 80)
+          stdout.puts(output)
+          stdout.puts("\n")
         end
 
         true
