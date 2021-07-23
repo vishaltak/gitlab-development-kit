@@ -189,7 +189,7 @@ module GDK
 
     settings :gitlab_shell do
       bool(:auto_update) { true }
-      string(:dir) { config.gdk_root.join('gitlab-shell') }
+      path(:dir) { config.gdk_root.join('gitlab-shell') }
     end
 
     settings :gitlab_ui do
