@@ -11,13 +11,23 @@ module GDK
       end
 
       def success?
-        socket_dir_length <= MAX_PRAEFECT_INTERNAL_SOCKET_DIR_LENGTH
+        dir_length_ok?
       end
 
       def detail
         return if success?
 
-        <<~GITALY_DIR_LENGTH_MSG
+        dir_length_too_long_message unless dir_length_ok?
+      end
+
+      private
+
+      def dir_length_ok?
+        socket_dir_length <= MAX_PRAEFECT_INTERNAL_SOCKET_DIR_LENGTH
+      end
+
+      def dir_length_too_long_message
+        <<~DIR_LENGTH_TOO_LONG_MESSAGE
           Praefect will attempt to create UNIX sockets in:
 
             #{socket_dir}
@@ -27,10 +37,9 @@ module GDK
 
           If you're experiencing issues, please try and reduce the directory depth to
           be under #{MAX_PRAEFECT_INTERNAL_SOCKET_DIR_LENGTH} characters.
-        GITALY_DIR_LENGTH_MSG
+        DIR_LENGTH_TOO_LONG_MESSAGE
       end
-
-      private
+      end
 
       def socket_dir
         @socket_dir ||= config.praefect.internal_socket_dir
