@@ -125,10 +125,10 @@ markdown-it@12.0.4:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
-markdownlint-cli@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.28.0.tgz#b05289f68cdf3c8eee5f10bfd6a7f03a8878ec1a"
-  integrity sha512-mjcjRCwrOGa64z3cjfHQ6qqPd23/i9h7JS5V7jeKdfBNZT+bFiFRTUnvpP2DUZpProdpeGOrXirupBN/0KxUEQ==
+markdownlint-cli@^0.28.1:
+  version "0.28.1"
+  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.28.1.tgz#76f1d8d50f81dce524826c93bf0f95af9cbe9397"
+  integrity sha512-RBKtRRBzcuAF/H5wMSzb4zvEtbUkyYNEeaDtlQkyH9SoHWPL01emJ2Wrx6NEOa1ZDGwB+seBGvE157Qzc/t/vA==
   dependencies:
     commander "~8.0.0"
     deep-extend "~0.6.0"
