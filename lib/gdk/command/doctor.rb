@@ -43,6 +43,8 @@ module GDK
       def perform_diagnosis_for(diagnostic)
         diagnostic.diagnose
         diagnostic.message unless diagnostic.success?
+      rescue StandardError => e
+        diagnostic.message(([e.message] + e.backtrace).join("\n"))
       end
 
       def start_necessary_services
@@ -56,22 +58,11 @@ module GDK
 
       def show_results
         GDK::Output.puts("\n")
-        GDK::Output.warn('GDK may need attention:')
-        GDK::Output.puts("\n")
-        GDK::Output.puts(warning)
+        GDK::Output.warn('GDK may need attention.')
+
         diagnostic_results.each do |result|
           GDK::Output.puts(result)
         end
-      end
-
-      def warning
-        <<~WARNING
-          #{'=' * 80}
-          Please note these warning only exist for debugging purposes and can
-          help you when you encounter issues with GDK.
-          If your GDK is working fine, you can safely ignore them. Thanks!
-          #{'=' * 80}
-        WARNING
       end
     end
   end

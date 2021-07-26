@@ -36,11 +36,13 @@ module GDK
         results = jobs.map { |x| x.join[:results] }.compact
 
         results.each do |diff|
-          output = diff.make_output.to_s.chomp
+          output = diff.output.to_s.chomp
           next if output.empty?
 
-          GDK::Output.puts(output)
-          GDK::Output.puts("\n")
+          stdout.puts(diff.file)
+          stdout.puts('-' * 80)
+          stdout.puts(output)
+          stdout.puts("\n")
         end
 
         true
@@ -57,7 +59,7 @@ module GDK
       end
 
       class ConfigDiff
-        attr_reader :file, :output, :make_output
+        attr_reader :file, :output
 
         def initialize(file)
           @file = file
@@ -82,7 +84,7 @@ module GDK
           # runs us in parallel with checks that need to read these
           # config files.
           FileUtils.cp_r(file_path, file_path_unchanged) # must handle files & preserve symlinks
-          @make_output = update_config_file
+          update_config_file
 
           @output = diff_with_unchanged
         ensure
@@ -90,15 +92,15 @@ module GDK
         end
 
         def file_path_unchanged
-          @file_path_unchanged ||= "#{file_path}.unchanged"
+          @file_path_unchanged ||= GDK.config.gdk_root.join('tmp', "diff_#{file.gsub(%r{/+}, '_')}")
         end
 
         def update_config_file
-          run(GDK::MAKE, '--silent', file)
+          run('rake', file)
         end
 
         def diff_with_unchanged
-          run('git', 'diff', '--no-index', '--color', "#{file}.unchanged", file)
+          run('git', 'diff', '--no-index', '--color', file_path_unchanged.to_s, file)
         end
 
         def run(*commands)

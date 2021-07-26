@@ -28,85 +28,102 @@ module GDK
       error: "\u274C\ufe0f"
     }.freeze
 
-    def self.color(index)
-      COLORS.values[index % COLORS.size]
+    def self.included(klass)
+      klass.extend(ClassMethods)
     end
 
-    def self.ansi(code)
-      "\e[#{code}m"
+    module ClassMethods
+      def color(index)
+        COLORS.values[index % COLORS.size]
+      end
+
+      def ansi(code)
+        "\e[#{code}m"
+      end
+
+      def reset_color
+        ansi(0)
+      end
+
+      def wrap_in_color(message, color_code)
+        return message unless colorize?
+
+        ansi(color_code) + message + reset_color
+      end
+
+      def stdout_handle
+        $stdout
+      end
+
+      def stderr_handle
+        $stderr
+      end
+
+      def print(message = nil, stderr: false)
+        stderr ? stderr_handle.print(message) : stdout_handle.print(message)
+      end
+
+      def puts(message = nil, stderr: false)
+        stderr ? stderr_handle.puts(message) : stdout_handle.puts(message)
+      end
+
+      def divider(symbol: '-', length: 80, stderr: false)
+        puts(symbol * length, stderr: stderr)
+      end
+
+      def notice(message)
+        puts(notice_format(message))
+      end
+
+      def notice_format(message)
+        "=> #{message}"
+      end
+
+      def info(message)
+        puts(icon(:info) + message)
+      end
+
+      def warn(message)
+        puts(icon(:warning) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
+      end
+
+      def format_error(message)
+        icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}"
+      end
+
+      def error(message)
+        puts(format_error(message), stderr: true)
+      end
+
+      def abort(message)
+        Kernel.abort(format_error(message))
+      end
+
+      def success(message)
+        puts(icon(:success) + message)
+      end
+
+      def icon(code)
+        return '' unless colorize?
+
+        "#{ICONS[code]} "
+      end
+
+      def interactive?
+        STDOUT.isatty # rubocop:disable Style/GlobalStdStream
+      end
+
+      def colorize?
+        interactive? && ENV.fetch('NO_COLOR', '').empty?
+      end
+
+      def prompt(message)
+        Kernel.print("#{message}: ")
+        ARGF.gets.to_s.chomp
+      end
     end
 
-    def self.reset_color
-      ansi(0)
-    end
-
-    def self.wrap_in_color(message, color_code)
-      return message unless colorize?
-
-      ansi(color_code) + message + reset_color
-    end
-
-    def self.print(message = nil, stderr: false)
-      stderr ? $stderr.print(message) : $stdout.print(message)
-    end
-
-    def self.puts(message = nil, stderr: false)
-      stderr ? Kernel.warn(message) : $stdout.puts(message)
-    end
-
-    def self.divider(symbol: '-', length: 80, stderr: false)
-      puts(symbol * length, stderr: stderr)
-    end
-
-    def self.notice(message)
-      puts(notice_format(message))
-    end
-
-    def self.notice_format(message)
-      "=> #{message}"
-    end
-
-    def self.info(message)
-      puts(icon(:info) + message)
-    end
-
-    def self.warn(message)
-      puts(icon(:warning) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
-    end
-
-    def self.format_error(message)
-      icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}"
-    end
-
-    def self.error(message)
-      puts(format_error(message), stderr: true)
-    end
-
-    def self.abort(message)
-      Kernel.abort(format_error(message))
-    end
-
-    def self.success(message)
-      puts(icon(:success) + message)
-    end
-
-    def self.icon(code)
-      return '' unless colorize?
-
-      "#{ICONS[code]} "
-    end
-
-    def self.colorize?
-      interactive? && ENV.fetch('NO_COLOR', '').empty?
-    end
-
-    def self.interactive?
-      STDOUT.isatty # rubocop:disable Style/GlobalStdStream
-    end
-
-    def self.prompt(message)
-      Kernel.print("#{message}: ")
-      ARGF.gets.to_s.chomp
-    end
+    extend ClassMethods
+    include ClassMethods
   end
 end

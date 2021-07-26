@@ -8,15 +8,11 @@ module GDK
       TITLE = 'GDK Configuration'
 
       def diagnose
-        out = StringIO.new
-        err = StringIO.new
+        output = GDK::OutputBuffered.new
 
-        GDK::Command::DiffConfig.new(stdout: out, stderr: err).run
+        GDK::Command::DiffConfig.new(stdout: output, stderr: output).run
 
-        out.close
-        err.close
-
-        @config_diff = out.string.chomp
+        @config_diff = output.dump.chomp
       end
 
       def success?
@@ -25,7 +21,7 @@ module GDK
 
       def detail
         <<~MESSAGE
-          Please review the following diff or consider `gdk reconfigure`.
+          Please review the following diff(s) and/or consider running `gdk reconfigure`:
 
           #{@config_diff}
         MESSAGE
