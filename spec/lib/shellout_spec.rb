@@ -83,10 +83,18 @@ RSpec.describe Shellout do
   end
 
   describe '#readlines' do
-    let(:command) { 'env' }
+    let(:command) { 'seq 10' }
 
-    it 'reads the number of lines given' do
-      expect(subject.readlines(3).count).to eq(3)
+    context 'when limit is not provided' do
+      it 'reads all lines' do
+        expect(subject.readlines.count).to eq(10)
+      end
+    end
+
+    context 'when limit is provided' do
+      it 'reads the number of lines given' do
+        expect(subject.readlines(3).count).to eq(3)
+      end
     end
   end
 
