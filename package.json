@@ -13,6 +13,6 @@
   },
   "homepage": "https://gitlab.com/gitlab-org/gitlab-development-kit#readme",
   "dependencies": {
-    "markdownlint-cli": "^0.28.0"
+    "markdownlint-cli": "^0.28.1"
   }
 }
