@@ -38,6 +38,14 @@ file GDK::Config::FILE do |t|
   FileUtils.touch(t.name)
 end
 
+task 'generate-file-at', [:file, :destination] do |_, args|
+  file = args[:file]
+  destination = args[:destination]
+  source = Rake::Task[file].source
+
+  GDK::ErbRenderer.new(source, destination, config: config).render!
+end
+
 desc 'Generate Procfile that defines the list of services to start'
 file 'Procfile' => ['support/templates/Procfile.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
