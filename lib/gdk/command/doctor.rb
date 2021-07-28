@@ -49,6 +49,8 @@ module GDK
 
       def start_necessary_services
         Shellout.new('gdk start postgresql').run
+        # Give necessary services a chance to startup..
+        sleep(1)
       end
 
       def show_healthy
