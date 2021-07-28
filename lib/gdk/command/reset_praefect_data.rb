@@ -21,14 +21,19 @@ module GDK
       end
 
       def execute
-        Runit.stop && start_necessary_services && drop_database && recreate_database && migrate_database
+        Runit.stop && \
+          # ensure runit has fully stopped
+          sleep(2) && \
+          start_necessary_services && \
+          # ensure runit has fully stopped
+          sleep(2) && \
+          drop_database && \
+          recreate_database && \
+          migrate_database
       end
 
       def start_necessary_services
-        result = Runit.start('postgresql')
-        # Give necessary services a chance to startup..
-        sleep(2)
-        result
+        Runit.start('postgresql')
       end
 
       def psql_cmd(command)
