@@ -20,6 +20,7 @@ RSpec.describe GDK::Command::Psql do
                   ['/usr/local/bin/psql',
                    "--host=#{GDK.config.postgresql.host}",
                    "--port=#{GDK.config.postgresql.port}",
+                   '--dbname=gitlabhq_development',
                    '-w',
                    '-d', 'gitlabhq_test',
                    '-c', 'select 1',

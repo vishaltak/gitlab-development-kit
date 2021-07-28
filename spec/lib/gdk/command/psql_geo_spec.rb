@@ -20,6 +20,7 @@ RSpec.describe GDK::Command::PsqlGeo do
                   ['/usr/local/bin/psql',
                    "--host=#{GDK.config.postgresql.geo.host}",
                    "--port=#{GDK.config.postgresql.geo.port}",
+                   '--dbname=gitlabhq_geo_development',
                    '-w',
                    '-d', 'gitlabhq_test',
                    '-c', 'select 1',
