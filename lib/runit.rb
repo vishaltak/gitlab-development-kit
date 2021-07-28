@@ -123,9 +123,6 @@ module Runit
 
     unload_runsvdir!
 
-    GDK::Output.puts
-    GDK::Output.success('All services have been stopped!')
-
     true
   end
 
