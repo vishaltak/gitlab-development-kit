@@ -76,6 +76,16 @@ RSpec.describe Runit do
           start
         end
       end
+
+      context 'with a string' do
+        let(:start_args) { 'postgresql' }
+
+        it 'starts the requested service' do
+          expect(described_class).to receive(:sv).with('start', [start_args])
+
+          start
+        end
+      end
     end
 
     describe '.stop' do
