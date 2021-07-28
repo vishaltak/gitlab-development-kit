@@ -58,10 +58,10 @@ RSpec.describe Runit do
           allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
 
           data_service_names.reverse_each do |service_name|
-            expect(described_class).to receive(:sv).with('start', [service_name]).and_return(true).ordered
+            expect(described_class).to receive(:sv).with('start', [service_name], quiet: false).and_return(true).ordered
           end
 
-          expect(described_class).to receive(:sv).with('start', non_data_service_names).and_return(true).ordered
+          expect(described_class).to receive(:sv).with('start', non_data_service_names, quiet: false).and_return(true).ordered
 
           start
         end
@@ -71,7 +71,7 @@ RSpec.describe Runit do
         let(:start_args) { data_service_names }
 
         it 'starts the requested services' do
-          expect(described_class).to receive(:sv).with('start', data_service_names)
+          expect(described_class).to receive(:sv).with('start', data_service_names, quiet: false)
 
           start
         end
@@ -81,7 +81,7 @@ RSpec.describe Runit do
         let(:start_args) { 'postgresql' }
 
         it 'starts the requested service' do
-          expect(described_class).to receive(:sv).with('start', [start_args])
+          expect(described_class).to receive(:sv).with('start', [start_args], quiet: false)
 
           start
         end
