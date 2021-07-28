@@ -20,6 +20,7 @@ module GDK
     autoload :RedisCLI, 'gdk/command/redis_cli'
     autoload :Restart, 'gdk/command/restart'
     autoload :ResetData, 'gdk/command/reset_data'
+    autoload :ResetPraefectData, 'gdk/command/reset_praefect_data'
     autoload :Run, 'gdk/command/run'
     autoload :Start, 'gdk/command/start'
     autoload :Status, 'gdk/command/status'
@@ -47,6 +48,7 @@ module GDK
       'reconfigure' => -> { GDK::Command::Reconfigure },
       'redis-cli' => -> { GDK::Command::RedisCLI },
       'reset-data' => -> { GDK::Command::ResetData },
+      'reset-praefect-data' => -> { GDK::Command::ResetPraefectData },
       'run' => -> { GDK::Command::Run },
       'tail' => -> { GDK::Command::Tail },
       'thin' => -> { GDK::Command::Thin },

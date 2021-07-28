@@ -80,6 +80,10 @@ module GDK
           For full output you can run:
 
             #{migrations_check_command}
+
+          To fix, you can run:
+
+            gdk reset-praefect-data
         MIGRATIONS_NOT_OK_MESSAGE
       end
 
