@@ -10,7 +10,7 @@ RSpec.describe GDK::Command::ResetData do
     let(:prompt_response) { nil }
 
     before do
-      allow(GDK::Output).to receive(:warn).with("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
+      allow(GDK::Output).to receive(:warn).with("We're about to remove _all_ (GitLab and praefect) PostgreSQL data, Rails uploads and git repository data.")
       allow(GDK::Output).to receive(:warn).with("Backups will be made in '#{backup_base_dir}', just in case!")
       allow(GDK::Output).to receive(:interactive?).and_return(true)
       allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(prompt_response)
