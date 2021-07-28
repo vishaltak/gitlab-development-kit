@@ -6,6 +6,7 @@ module GDK
     autoload :Configuration, 'gdk/diagnostic/configuration'
     autoload :Dependencies, 'gdk/diagnostic/dependencies'
     autoload :Geo, 'gdk/diagnostic/geo'
+    autoload :Gitlab, 'gdk/diagnostic/gitlab'
     autoload :Golang, 'gdk/diagnostic/golang'
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
@@ -28,6 +29,7 @@ module GDK
         PostgreSQL
         Geo
         Praefect
+        Gitlab
         Status
         Re2
         Golang
