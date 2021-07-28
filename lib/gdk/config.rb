@@ -121,7 +121,7 @@ module GDK
     end
 
     string :relative_url_root do
-      read!('relative_url_root') || ''
+      read!('relative_url_root') || '/'
     end
 
     anything :__uri do
