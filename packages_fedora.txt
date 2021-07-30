@@ -10,6 +10,7 @@ go
 GraphicsMagick
 icu
 krb5-devel
+libcurl-devel
 libicu-devel
 libpqxx-devel
 openssl-devel
