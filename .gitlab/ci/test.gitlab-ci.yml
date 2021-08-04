@@ -67,8 +67,7 @@ checkmake:
   stage: test
   needs: []
   extends: .rules:code-changes
-  # https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1234
-  image: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:main
+  image: registry.gitlab.com/gitlab-org/gitlab-development-kit/asdf-bootstrapped-verify:main
   script:
     - make checkmake
 
