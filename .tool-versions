@@ -11,6 +11,6 @@ ruby 2.7.2
 golang 1.16.4
 nodejs 14.17.2
 yarn 1.22.10
-minio 2021-02-07T01-31-02Z
+minio 2021-04-06T23-11-00Z
 postgres 12.6 11.9
 redis 6.0.10
