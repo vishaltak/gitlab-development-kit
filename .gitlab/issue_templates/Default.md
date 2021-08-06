@@ -1,6 +1,6 @@
 ## Overview
 
-<!-- Details of the issue.  Include any console output or screenshots. -->
+<!-- Details of the issue. Include any console output or screenshots. -->
 
 ## Steps to replicate (optional)
 
@@ -16,3 +16,5 @@
 - The contents of your `gdk.yml`
 - Ruby version: `<!-- output of `ruby --version` -->`
 - GDK version: `<!-- output of `git rev-parse --short HEAD` -->`
+
+/label ~"Category:GDK" ~"section::dev" ~"devops::ecosystem" ~"group::contributor experience"
