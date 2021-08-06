@@ -21,7 +21,6 @@ development:
     adapter: postgresql
     encoding: unicode
     database: gitlabhq_development_ci
-    migrations_paths: db/ci_migrate
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
@@ -46,7 +45,6 @@ test: &test
     adapter: postgresql
     encoding: unicode
     database: gitlabhq_test_ci
-    migrations_paths: db/ci_migrate
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
