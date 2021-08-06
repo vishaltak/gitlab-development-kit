@@ -21,10 +21,7 @@ asdf_update_release() {
 }
 
 asdf_update_plugins() {
-  cut -d ' ' -f 1 .tool-versions | grep -v '^#' | while IFS= read -r plugin
-  do
-    asdf plugin update "${plugin}" || asdf plugin add "${plugin}"
-  done
+  asdf plugin-update --all
 
   # Install Node.js' OpenPGP key
   if [[ ! -f "${HOME}/.gnupg/asdf-nodejs.gpg" ]]; then
