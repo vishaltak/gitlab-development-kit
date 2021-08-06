@@ -16,6 +16,10 @@ header_print() {
   echo "${DIVIDER}"
 }
 
+asdf_update_release() {
+  asdf update
+}
+
 asdf_update_plugins() {
   cut -d ' ' -f 1 .tool-versions | grep -v '^#' | while IFS= read -r plugin
   do
@@ -60,12 +64,15 @@ if ! setup_platform; then
   error "Failed to install platform software." >&2
 fi
 
-header_print "Updating asdf plugins"
+header_print "Updating asdf release, plugins and tools"
+if ! asdf_update_release; then
+  error "Failed to update asdf release." >&2
+fi
+
 if ! asdf_update_plugins; then
   error "Failed to update some asdf plugins." >&2
 fi
 
-header_print "Updating asdf tools"
 if ! asdf_update_tools; then
   error "Failed to update some asdf tools." >&2
 fi
