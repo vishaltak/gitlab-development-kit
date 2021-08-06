@@ -17,7 +17,13 @@ header_print() {
 }
 
 asdf_update_release() {
-  asdf update
+  # Look for v1.2.3-<SHA>, which indicates asdf has been installed via the
+  # git clone method, which supports 'asdf update'
+  if asdf version | grep -E 'v\d+\.\d+\.\d+-\w{7}' > /dev/null 2>&1; then
+    asdf update
+  else
+    echo "INFO: asdf installed using non-Git method. Attempt to update asdf skipped."
+  fi
 }
 
 asdf_update_plugins() {
@@ -61,7 +67,7 @@ if ! setup_platform; then
   error "Failed to install platform software." >&2
 fi
 
-header_print "Updating asdf release, plugins and tools"
+header_print "Updating asdf release, plugins, and tools"
 if ! asdf_update_release; then
   error "Failed to update asdf release." >&2
 fi
