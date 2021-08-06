@@ -111,9 +111,9 @@ install: all show-installed-at start
 # Pull gitlab directory first since dependencies are linked from there.
 .PHONY: update
 update: update-start \
+asdf-update \
 preflight-checks \
 preflight-update-checks \
-asdf-update \
 gitlab-git-pull \
 ensure-databases-running \
 unlock-dependency-installers \
