@@ -260,6 +260,7 @@ gdk:
 | `gitlab.cache_classes` | `false`  | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
 | `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do **not** include `http://`. |
 | `gitlab.rails.multiple_databases` | `false` | Set this to `true` to configure [multiple databases](https://docs.gitlab.com/ee/development/database/multiple_databases.html) in your `config/database.yml`. |
+| `gitlab.rails.separate_db_schemas` | `false` | Set this to `true` to configure `schema_search_path` in your `config/database.yml`. |
 | `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 

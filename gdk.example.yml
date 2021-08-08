@@ -77,6 +77,7 @@ gitlab:
       threads_max: 4
       threads_min: 1
       workers: 2
+    separate_db_schemas: false
     sherlock: false
   rails_background_jobs:
     timeout: 10
