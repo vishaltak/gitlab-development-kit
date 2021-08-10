@@ -190,6 +190,10 @@ clean-config:
 	gitlab/config/gitlab.yml \
 	gitlab/config/puma.rb \
 	gitlab/config/resque.yml \
+	gitlab/config/redis.cache.yml \
+	gitlab/config/redis.queues.yml \
+	gitlab/config/redis.shared_state.yml \
+	gitlab/config/redis.trace_chunks.yml \
 	jaeger \
 	localhost.crt \
 	localhost.key \
@@ -346,7 +350,17 @@ gitlab-db-migrate: ensure-databases-running
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
-gitlab-config: gitlab/config/gitlab.yml gitlab/config/database.yml gitlab/config/cable.yml gitlab/config/resque.yml gitlab/public/uploads gitlab/config/puma.rb
+gitlab-config: \
+	gitlab/config/gitlab.yml \
+	gitlab/config/database.yml \
+	gitlab/config/cable.yml \
+	gitlab/config/resque.yml \
+	gitlab/config/redis.cache.yml \
+	gitlab/config/redis.queues.yml \
+	gitlab/config/redis.shared_state.yml \
+	gitlab/config/redis.trace_chunks.yml \
+	gitlab/public/uploads \
+	gitlab/config/puma.rb
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
@@ -366,6 +380,22 @@ gitlab/config/cable.yml:
 
 .PHONY: gitlab/config/resque.yml
 gitlab/config/resque.yml:
+	$(Q)rake $@
+
+.PHONY: gitlab/config/redis.cache.yml
+gitlab/config/redis.cache.yml:
+	$(Q)rake $@
+
+.PHONY: gitlab/config/redis.queues.yml
+gitlab/config/redis.queues.yml:
+	$(Q)rake $@
+
+.PHONY: gitlab/config/redis.shared_state.yml
+gitlab/config/redis.shared_state.yml:
+	$(Q)rake $@
+
+.PHONY: gitlab/config/redis.trace_chunks.yml
+gitlab/config/redis.trace_chunks.yml:
 	$(Q)rake $@
 
 gitlab/public/uploads:

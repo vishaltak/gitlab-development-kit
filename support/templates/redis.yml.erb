@@ -1,0 +1,2 @@
+development: "unix:<%= config.redis.__socket_file %>?db=<%= config.redis.databases[:development][cluster] %>"
+test: "unix:<%= config.redis.__socket_file %>?db=<%= config.redis.databases[:test][cluster] %>"

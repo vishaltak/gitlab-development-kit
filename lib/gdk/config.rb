@@ -677,6 +677,22 @@ module GDK
     settings :redis do
       path(:dir) { config.gdk_root.join('redis') }
       path(:__socket_file) { dir.join('redis.socket') }
+
+      settings(:databases) do
+        settings(:development) do
+          integer(:shared_state) { 0 } # This inherits db=0 for compatibility reaons
+          integer(:queues) { 1 }
+          integer(:cache) { 2 }
+          integer(:trace_chunks) { 3 }
+        end
+
+        settings(:test) do
+          integer(:shared_state) { 10 }
+          integer(:queues) { 11 }
+          integer(:cache) { 12 }
+          integer(:trace_chunks) { 13 }
+        end
+      end
     end
 
     settings :asdf do
