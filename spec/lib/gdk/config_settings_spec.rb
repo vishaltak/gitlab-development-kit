@@ -266,32 +266,6 @@ RSpec.describe GDK::ConfigSettings do
     end
   end
 
-  describe '#values_same_for_slug?' do
-    let(:slug) { 'foo' }
-
-    before do
-      described_class.integer(slug) { '333' }
-    end
-
-    context 'where new value is not an Integer' do
-      it 'returns true' do
-        expect { config.values_same_for_slug?(slug, 'a') }.to raise_error(TypeError)
-      end
-    end
-
-    context 'where new value is the same as the current value' do
-      it 'returns true' do
-        expect(config.values_same_for_slug?(slug, '333')).to be_truthy
-      end
-    end
-
-    context 'where new value is different to the current value' do
-      it 'returns false' do
-        expect(config.values_same_for_slug?(slug, '444')).to be_falsy
-      end
-    end
-  end
-
   describe '#parsed_value_for_slug' do
     shared_examples 'a parsed value' do
       context 'where new value is not an Integer' do
@@ -399,6 +373,50 @@ RSpec.describe GDK::ConfigSettings do
 
         expect { config.bury!('port', 1337) }.to change(config, :port).to(1337)
       end
+
+      it 'does not save to file if asked not to' do
+        expect(File).not_to receive(:write)
+
+        expect { config.bury!('port', 1337, save: false) }.to change(config, :port).to(1337)
+      end
+    end
+  end
+
+  describe '#save_yaml!' do
+    before do
+      FileUtils.touch(test_klass::FILE)
+    end
+
+    after do
+      File.unlink(test_klass::FILE)
+    end
+
+    let(:test_klass) do
+      new_test_klass do |s|
+        s.integer(:port) { 3000 }
+      end
+    end
+
+    subject(:config) { test_klass.new }
+
+    it 'makes a backup of the gdk.yml' do
+      allow(File).to receive(:write).with('tmp/foo.yml', "---\nport: 1337\n")
+
+      backup_double = instance_double(GDK::Backup, backup!: true)
+      expect(GDK::Backup).to receive(:new).with('tmp/foo.yml').and_return(backup_double)
+
+      config.bury!('port', 1337, save: false)
+      config.save_yaml!
+    end
+
+    it 'writes out a new gdk.yml' do
+      backup_double = instance_double(GDK::Backup, backup!: true)
+      allow(GDK::Backup).to receive(:new).with('tmp/foo.yml').and_return(backup_double)
+
+      expect(File).to receive(:write).with('tmp/foo.yml', "---\nport: 1337\n")
+
+      config.bury!('port', 1337, save: false)
+      config.save_yaml!
     end
   end
 

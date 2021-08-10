@@ -42,11 +42,12 @@ module GDK
 
       def config_set(slug, proposed_new_value)
         old_value = config.dig(*slug)
+        new_value = config.bury!(slug, proposed_new_value, save: false)
 
-        if config.values_same_for_slug?(slug, proposed_new_value)
+        if old_value == new_value
           GDK::Output.warn("'#{slug}' is already set to '#{proposed_new_value}'")
         else
-          new_value = config.bury!(slug, proposed_new_value)
+          config.save_yaml!
           GDK::Output.success("'#{slug}' is now set to '#{new_value}' (previously '#{old_value}').")
           GDK::Output.info("Don't forget to run 'gdk reconfigure'")
         end

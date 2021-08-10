@@ -172,13 +172,6 @@ module GDK
       value.dig(*slugs)
     end
 
-    def values_same_for_slug?(*slugs, new_value)
-      current_value = config.dig(*slugs)
-      proposed_value = parsed_value_for_slug(*slugs, new_value)
-
-      proposed_value == current_value
-    end
-
     def parsed_value_for_slug(*slugs, new_value)
       slugs = slugs.first.to_s.split('.') if slugs.one?
       key = slugs.shift
@@ -190,7 +183,7 @@ module GDK
       end
     end
 
-    def bury!(*slugs, new_value)
+    def bury!(*slugs, new_value, save: true)
       slugs = slugs.first.to_s.split('.') if slugs.one?
       key = slugs.shift
 
@@ -202,7 +195,7 @@ module GDK
         new_value = fetch(key).bury!(*slugs, new_value)
       end
 
-      save_yaml!
+      save_yaml! if save
 
       new_value
     end
@@ -253,6 +246,13 @@ module GDK
       ::GDK::ConfigSettings
     end
 
+    def save_yaml!
+      return unless file_defined_and_exists?
+
+      Backup.new(self.class::FILE).backup!
+      File.write(self.class::FILE, dump!(user_only: true).to_yaml)
+    end
+
     private
 
     def attribute(key)
@@ -277,13 +277,6 @@ module GDK
 
       raw_yaml = File.read(self.class::FILE)
       YAML.safe_load(raw_yaml) || {}
-    end
-
-    def save_yaml!
-      return unless file_defined_and_exists?
-
-      Backup.new(self.class::FILE).backup!
-      File.write(self.class::FILE, dump!(user_only: true).to_yaml)
     end
 
     def file_defined_and_exists?
