@@ -104,14 +104,16 @@ module Runit
     end
   end
 
-  def self.start(args)
+  def self.start(args, quiet: false)
+    args = Array(args)
+
     if args.empty?
       # Redis, PostgresSQL, etc should be started first.
-      data_oriented_service_names.reverse_each { |service_name| sv('start', [service_name]) }
-      sv('start', non_data_oriented_service_names)
-    else
-      sv('start', args)
+      data_oriented_service_names.reverse_each { |service_name| sv('start', [service_name], quiet: quiet) }
+      args = non_data_oriented_service_names
     end
+
+    sv('start', args, quiet: quiet)
   end
 
   def self.stop
@@ -120,9 +122,6 @@ module Runit
     data_oriented_service_names.each { |service_name| stop_services([service_name]) }
 
     unload_runsvdir!
-
-    GDK::Output.puts
-    GDK::Output.success('All services have been stopped!')
 
     true
   end
@@ -152,13 +151,17 @@ module Runit
     Process.kill('HUP', pid)
   end
 
-  def self.sv(cmd, services)
+  def self.sv(cmd, services, quiet: false)
     Dir.chdir(GDK.root)
     start_runsvdir
     services = service_args(services)
     services.each { |svc| wait_runsv!(svc) }
 
-    system('sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services)
+    command = ['sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *services]
+
+    sh = Shellout.new(command, chdir: GDK.root)
+    quiet ? sh.run : sh.stream
+    sh.success?
   end
 
   def self.data_oriented_service_names

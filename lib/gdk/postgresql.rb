@@ -9,9 +9,7 @@ module GDK
     end
 
     def psql_cmd(args)
-      database = args.empty? ? default_database : nil
-
-      pg_cmd(args, database: database).flatten
+      pg_cmd(args, database: default_database).flatten
     end
 
     def current_data_dir

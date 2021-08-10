@@ -37,7 +37,7 @@ module GDK
       end
 
       def continue?
-        GDK::Output.warn("We're about to remove PostgreSQL data, Rails uploads and git repository data.")
+        GDK::Output.warn("We're about to remove _all_ (GitLab and praefect) PostgreSQL data, Rails uploads and git repository data.")
         GDK::Output.warn("Backups will be made in '#{GDK.root.join('.backups')}', just in case!")
 
         return true if ENV.fetch('GDK_RESET_DATA_CONFIRM', 'false') == 'true' || !GDK::Output.interactive?

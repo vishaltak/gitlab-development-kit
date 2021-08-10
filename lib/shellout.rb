@@ -28,14 +28,14 @@ class Shellout
     read_stdout
   end
 
-  def readlines(limit)
+  def readlines(limit = -1)
     @stdout_str = ''
     @stderr_str = ''
     lines = []
 
     Open3.popen2(*args, opts) do |_stdin, stdout, thread|
       stdout.each_line do |line|
-        lines << line.chomp if lines.count < limit
+        lines << line.chomp if limit == -1 || lines.count < limit
       end
 
       thread.join

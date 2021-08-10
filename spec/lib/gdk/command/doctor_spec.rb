@@ -21,11 +21,11 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
   subject { described_class.new(diagnostics: diagnostics) }
 
   before do
-    allow(Shellout).to receive(:new).with('gdk start postgresql').and_return(shellout)
+    allow(Runit).to receive(:start).with('postgresql', quiet: true).and_return(true)
   end
 
   it 'starts necessary services' do
-    expect(shellout).to receive(:run)
+    expect(Runit).to receive(:start).with('postgresql', quiet: true)
 
     subject.run
   end
