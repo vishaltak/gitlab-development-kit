@@ -43,6 +43,9 @@ module GDK
       def config_set(name, value)
         old_value = config.dig(*name)
         new_value = config.bury!(name, value)
+
+        config.save_yaml!
+
         GDK::Output.info("'#{name}' is now set to '#{new_value}' (previously '#{old_value}').")
 
         true

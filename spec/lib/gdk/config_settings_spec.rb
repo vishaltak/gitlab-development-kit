@@ -298,7 +298,9 @@ RSpec.describe GDK::ConfigSettings do
       expect { config.bury!('foo.name', 'ripper') }
         .to change(config, :yaml).to('foo' => { 'name' => 'ripper', 'location' => 'down under' })
     end
+  end
 
+  describe '#save_yaml!' do
     context 'with foo.yml' do
       before do
         stub_backup
@@ -318,16 +320,10 @@ RSpec.describe GDK::ConfigSettings do
 
       subject(:config) { test_klass.new }
 
-      it 'does not save to file on error' do
-        expect(File).not_to receive(:write)
-
-        expect { config.bury!('port', 'a-port') }.to raise_error(TypeError)
-      end
-
       it 'saves to file' do
         expect(File).to receive(:write)
 
-        expect { config.bury!('port', 1337) }.to change(config, :port).to(1337)
+        config.save_yaml!
       end
     end
   end

@@ -179,14 +179,17 @@ module GDK
       if slugs.empty?
         setting = build(key)
         setting.value = new_value
-        new_value = yaml[key] = setting.value # Sanitize
+        yaml[key] = setting.value # Sanitize
       else
-        new_value = fetch(key).bury!(*slugs, new_value)
+        fetch(key).bury!(*slugs, new_value)
       end
+    end
 
-      save_yaml!
+    def save_yaml!
+      return unless file_defined_and_exists?
 
-      new_value
+      Backup.new(self.class::FILE).backup!
+      File.write(self.class::FILE, dump!(user_only: true).to_yaml)
     end
 
     def config_file_protected?(target)
@@ -259,13 +262,6 @@ module GDK
 
       raw_yaml = File.read(self.class::FILE)
       YAML.safe_load(raw_yaml) || {}
-    end
-
-    def save_yaml!
-      return unless file_defined_and_exists?
-
-      Backup.new(self.class::FILE).backup!
-      File.write(self.class::FILE, dump!(user_only: true).to_yaml)
     end
 
     def file_defined_and_exists?
