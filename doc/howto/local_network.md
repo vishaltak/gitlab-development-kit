@@ -1,3 +1,9 @@
+---
+stage: Ecosystem
+group: Contributor Experience
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
 # Local network binding
 
 `gdk.test` is the standard for referring to the local GDK instance in documentation steps and GDK

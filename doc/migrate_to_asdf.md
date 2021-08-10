@@ -1,3 +1,9 @@
+---
+stage: Ecosystem
+group: Contributor Experience
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
 # Migrate from self-managed dependencies to GDK-managed dependencies using `asdf`
 
 If you've previously [managed your own dependencies](advanced.md), you might want to let GDK manage
