@@ -34,6 +34,9 @@ test: &test
     adapter: postgresql
     encoding: unicode
     database: gitlabhq_test
+<%- if config.gitlab.rails.separate_db_schemas -%>
+    schema_search_path: public,gitlab_ci
+<%- end -%>
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
@@ -45,6 +48,9 @@ test: &test
     adapter: postgresql
     encoding: unicode
     database: gitlabhq_test_ci
+  <%- if config.gitlab.rails.separate_db_schemas -%>
+    schema_search_path: public,gitlab_ci
+  <%- end -%>
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10

@@ -655,6 +655,7 @@ module GDK
           end
         end
 
+        bool(:separate_db_schemas) { false }
         bool(:multiple_databases) { false }
 
         bool(:sherlock) { false }
