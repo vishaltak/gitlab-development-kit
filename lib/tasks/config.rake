@@ -83,8 +83,28 @@ file 'gitlab/config/cable.yml' => ['support/templates/cable.yml.erb', GDK::Confi
 end
 
 desc 'Generate the resque.yml config file'
-file 'gitlab/config/resque.yml' => ['support/templates/resque.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+file 'gitlab/config/resque.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :shared_state).safe_render!
+end
+
+desc 'Generate the redis.cache.yml config file'
+file 'gitlab/config/redis.cache.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :cache).safe_render!
+end
+
+desc 'Generate the redis.queues.yml config file'
+file 'gitlab/config/redis.queues.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :queues).safe_render!
+end
+
+desc 'Generate the redis.shared_state.yml config file'
+file 'gitlab/config/redis.shared_state.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :shared_state).safe_render!
+end
+
+desc 'Generate the redis.trace_chunks.yml config file'
+file 'gitlab/config/redis.trace_chunks.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :trace_chunks).safe_render!
 end
 
 desc 'Generate the database_geo.yml config file'

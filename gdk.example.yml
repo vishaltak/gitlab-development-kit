@@ -231,6 +231,17 @@ prometheus:
   praefect_exporter_port: 10101
   sidekiq_exporter_port: 3807
 redis:
+  databases:
+    development:
+      cache: 2
+      queues: 1
+      shared_state: 0
+      trace_chunks: 3
+    test:
+      cache: 12
+      queues: 11
+      shared_state: 10
+      trace_chunks: 13
   dir: "/home/git/gdk/redis"
 registry:
   api_host: 127.0.0.1

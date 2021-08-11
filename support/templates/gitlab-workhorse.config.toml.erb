@@ -1,5 +1,6 @@
 [redis]
 URL = "unix:<%= config.redis.__socket_file %>"
+DB = <%= config.redis.databases[:development][:shared_state] %>
 
 <%- if config.object_store.consolidated_form? && config.object_store.connection['provider'] -%>
 [object_storage]
