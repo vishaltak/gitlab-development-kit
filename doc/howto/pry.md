@@ -1,3 +1,9 @@
+---
+stage: Ecosystem
+group: Contributor Experience
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
 # Debugging with Pry
 
 [Pry](https://pryrepl.org/) allows you to set breakpoints in Ruby code

@@ -1,3 +1,9 @@
+---
+stage: Ecosystem
+group: Contributor Experience
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
 # Using GitLab Runner with GDK
 
 Most features of [GitLab CI/CD](http://docs.gitlab.com/ee/ci/) need a

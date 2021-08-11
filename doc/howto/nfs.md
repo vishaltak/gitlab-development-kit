@@ -1,3 +1,9 @@
+---
+stage: Ecosystem
+group: Contributor Experience
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
 # NFS
 
 If you want to experiment with how GitLab behaves over NFS you can use a setup

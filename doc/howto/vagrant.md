@@ -1,3 +1,9 @@
+---
+stage: Ecosystem
+group: Contributor Experience
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
 # GitLab development with Vagrant
 
 In this file we explain different methods of setting up a Vagrant
