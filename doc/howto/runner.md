@@ -11,7 +11,7 @@ Most features of [GitLab CI/CD](http://docs.gitlab.com/ee/ci/) need a
 the GitLab installation. This how-to takes you through the necessary steps to
 do so when GitLab is running under GDK.
 
-Before setting up Runner, you need to have [set up the GDK](../../index.md) for your workstation.
+Before setting up Runner, you need to have [set up the GDK](../index.md) for your workstation.
 
 You can set up a runner to run directly on your workstation or you can set up a runner in Docker.
 We will outline the steps for setting up each of these separately.
