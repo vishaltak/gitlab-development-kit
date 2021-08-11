@@ -1368,7 +1368,7 @@ endif
 endif
 
 .PHONY: lint
-lint: vale markdownlint
+lint: vale markdownlint docs-metadata
 
 $(dev_vale_versioned_binary):
 	@support/dev/vale-install
@@ -1391,6 +1391,11 @@ endif
 markdownlint: markdownlint-install
 	@echo -n "MarkdownLint: "
 	@${YARN} run --silent markdownlint --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
+
+.PHONY: docs-metadata
+docs-metadata:
+	@echo -n "Documentation metadata: "
+	@support/lint-docs-metadata.sh
 
 .PHONY: shellcheck
 shellcheck: ${dev_shellcheck_versioned_binary}
