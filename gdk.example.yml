@@ -255,7 +255,7 @@ registry:
   port: 5000
   self_signed: false
   uid: ''
-relative_url_root: "/"
+relative_url_root: ''
 repositories:
   charts_gitlab: https://gitlab.com/gitlab-org/charts/gitlab.git
   gitaly: https://gitlab.com/gitlab-org/gitaly.git
