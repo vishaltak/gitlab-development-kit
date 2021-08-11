@@ -40,14 +40,21 @@ module GDK
         GDK::Output.abort("#{e.message}.")
       end
 
-      def config_set(name, value)
-        old_value = config.dig(*name)
-        new_value = config.bury!(name, value)
-        GDK::Output.info("'#{name}' is now set to '#{new_value}' (previously '#{old_value}').")
+      def config_set(slug, value)
+        old_value = config.dig(*slug)
+        new_value = config.bury!(slug, value)
+
+        if old_value == new_value
+          GDK::Output.warn("'#{slug}' is already set to '#{old_value}'")
+        else
+          config.save_yaml!
+          GDK::Output.success("'#{slug}' is now set to '#{new_value}' (previously '#{old_value}').")
+          GDK::Output.info("Don't forget to run 'gdk reconfigure'")
+        end
 
         true
       rescue GDK::ConfigSettings::SettingUndefined
-        GDK::Output.abort("Cannot get config for '#{name}'.")
+        GDK::Output.abort("Cannot get config for '#{slug}'.")
       rescue TypeError => e
         GDK::Output.abort(e.message)
       rescue StandardError => e
