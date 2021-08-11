@@ -21,7 +21,7 @@ export GOPROXY ?= https://proxy.golang.org
 # Silence Rollup when building GitLab Docs with nanoc
 export ROLLUP_OPTIONS = --silent
 
-NO_RUBY_REQUIRED := bootstrap lint
+NO_RUBY_REQUIRED := bootstrap
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
