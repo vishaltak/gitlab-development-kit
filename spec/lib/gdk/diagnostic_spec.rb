@@ -17,6 +17,7 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Dependencies,
         GDK::Diagnostic::PendingMigrations,
         GDK::Diagnostic::PostgreSQL,
+        GDK::Diagnostic::PGUser,
         GDK::Diagnostic::Geo,
         GDK::Diagnostic::Praefect,
         GDK::Diagnostic::Gitlab,

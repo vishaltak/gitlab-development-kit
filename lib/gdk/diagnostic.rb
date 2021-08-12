@@ -8,6 +8,7 @@ module GDK
     autoload :Geo, 'gdk/diagnostic/geo'
     autoload :Gitlab, 'gdk/diagnostic/gitlab'
     autoload :Golang, 'gdk/diagnostic/golang'
+    autoload :PGUser, 'gdk/diagnostic/pguser'
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
     autoload :Praefect, 'gdk/diagnostic/praefect'
@@ -27,6 +28,7 @@ module GDK
         Dependencies
         PendingMigrations
         PostgreSQL
+        PGUser
         Geo
         Praefect
         Gitlab
