@@ -6,50 +6,88 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Migrate from self-managed dependencies to GDK-managed dependencies using `asdf`
 
-If you've previously [managed your own dependencies](advanced.md), you might want to let GDK manage
-dependencies for you using `asdf`. The following are instructions to help you remove previously
-installed self-managed dependencies so that they don't conflict with `asdf`:
+If you currently [manage your own GDK dependencies](advanced.md), you can simplify
+the process by letting GDK manage dependencies for you using `asdf`.
 
-1. Uninstall dependencies you installed with your operating system's package manager. For example,
-   for macOS:
+There are three main types of dependency managers that can be used to manage dependencies required
+by GDK:
 
-   ```shell
-   brew uninstall go postgresql@12 minio/stable/minio redis yarn
-   ```
+- A [Ruby](https://www.ruby-lang.org) manager, usually [`rbenv`](https://github.com/rbenv/rbenv) or
+  [`rvm`](https://rvm.io).
+- A [Node.js](https://nodejs.org) manager, usually [`nvm`](https://github.com/nvm-sh/nvm).
+- An operating system's package manager, or a third-party package manager for macOS. For example:
+  [Homebrew](https://brew.sh) for macOS.
 
-1. Uninstall your Ruby dependency manager, usually `rvm` or `rbenv`. If you're unsure which Ruby
-   dependency manager you were using, run `which ruby` at the command line. The dependency manager in
-   use should be indicated by the output. For more information, see:
+Before `asdf` can manage your GDK dependencies, you must remove [these dependencies](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions)
+from the other dependency managers.
 
-   - [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv) documentation.
-   - [`rvm` removal](https://rvm.io/support/troubleshooting) documentation. Relevant is the
-     section "How do I completely clean out all traces of RVM from my system, including for
-     system wide installs?".
+Before removing the dependencies, note that:
 
-1. Uninstall your Node dependency manager (usually `nvm` or `brew`). If you're unsure which Node
-   dependency manager you were using, run `which node` at the command line. The dependency manager in
-   use should be indicated by the output:
+- You can have more than one dependency manager handling the same dependency. For example,
+  after removing `node` from `nvm`, you might find another version of `node` managed by `brew`.
+  In this case, repeat the process for each dependency manager.
+- Your operating system might come with a built-in version of a dependency. For example,
+  macOS comes with Ruby by default. Don't try to remove these built-in dependencies because:
+  - They are difficult to remove.
+  - The dependency managers are designed to override them.
 
-   - If using `nvm`, see [uninstalling `nvm` documentation](https://github.com/nvm-sh/nvm#uninstalling--removal).
-   - If not using `nvm`, try running `brew uninstall node`.
+## Uninstall Ruby dependency manager
 
-1. Remove configuration from your home directory relating to these dependency managers. For example:
+Uninstall your Ruby dependency manager to let `asdf` manage Ruby dependencies for GDK
+and other Ruby projects.
+
+If you're unsure which Ruby dependency manager you are using, run `which ruby` at the command line.
+The dependency manager should be indicated in the output:
+
+- If using `rbenv`, see the [`rbenv` uninstall](https://github.com/rbenv/rbenv#uninstalling-rbenv)
+  documentation.
+- If using `rvm`, see "How do I completely clean out all traces of RVM from my system, including for
+  system wide installs?" in the [`rvm` removal](https://rvm.io/support/troubleshooting) documentation.
+
+## Uninstall Node.js dependency manager
+
+Uninstall your Node.js dependency manager to let `asdf` manage Node.js dependences for GDK
+and other Node.js projects.
+
+If you're unsure which Node dependency manager you are using, run `which node` at the command line.
+The dependency manager should be indicated in the output:
+
+- If using `nvm`, see the [uninstalling `nvm` documentation](https://github.com/nvm-sh/nvm#uninstalling--removal).
+- If not using `nvm`, try running `brew uninstall node`.
+
+## Remove Ruby and Node.js configuration
+
+Uninstalling the dependency managers for Ruby and Node.js doesn't remove the configuration, and this
+configuration can clash with `asdf` configuration.
+
+1. Remove configuration from your home directory relating to these dependency managers. For example,
+   delete all of the following configuration files if you find them:
 
    - `~/.rvm`.
    - `~/.rbenv`.
    - `~/.nvm`.
 
-1. Remove shell-related configuration settings related to your dependency managers in files such as:
+1. Determine which shell you use by running `printenv SHELL` at the command line.
+1. Edit the shell's configuration file and remove references to these dependency managers. For
+   example, edit:
 
-   - `.bashrc` for `bash`.
-   - `.zshrc` for `zsh`.
+   - `~/.bashrc` for `bash`.
+   - `~/.zshrc` for `zsh`.
 
-It's possible:
+## Remove other dependencies
 
-- You have more than one dependency manager handling the same dependency. In this case, repeat the
-  process for each. For example, removing an `nvm`-managed `node` might reveal a `brew`-managed
-  `node`.
-- That your system provides a dependency also (for example, macOS comes with Ruby itself). Don't
-  try to remove these because `asdf` is less likely to conflict with these.
-- That in order for `asdf` to successfully install Node.js, you may need to import
-  [Node.js release keys](https://github.com/nodejs/node#release-keys) into GPG.
+To remove other dependencies so `asdf` can manage them instead:
+
+1. Look at the list of
+   [dependencies `asdf` manages for GDK](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions).
+1. Use the package manager for your operating system to uninstall any of those dependencies you have
+   installed. For example, to uninstall [Redis](https://redis.io) that was installed
+   by using `brew` in macOS:
+
+   ```shell
+   brew uninstall redis
+   ```
+
+## Install dependencies with `asdf`
+
+To install GDK dependencies with `asdf`, follow [these instructions](index.md#automatically-using-asdf).
