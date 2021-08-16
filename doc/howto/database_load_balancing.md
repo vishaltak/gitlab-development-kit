@@ -20,18 +20,16 @@ For these instructions, we will assume that your GDK root is located at `/full/p
 
 The first step is to prepare both primary and secondary databases for replication and enabling load balancing.
 
-### Primary
-
-```shell
-make postgresql-replication-primary
-```
-
-### Secondary
-
 1. Initialize the secondary database:
 
     ```shell
     make postgresql-replication/data
+    ```
+
+1. Set up primary replication access and role:
+
+    ```shell
+    make postgresql-replication-primary
     ```
 
 1. Remove the secondary database data as we will be replacing the data with that from the primary:
