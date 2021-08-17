@@ -4,7 +4,7 @@
 # GDK for asdf users.
 #
 # <default-version> <other-version>
-ruby 2.7.2 3.0.2
+ruby 2.7.2 2.7.4 3.0.2
 # At least one Go version must match a Go version set in the `.tool-versions` file of the version of
 # the `gitlab-pages` and `gitaly` projects used by GDK. See `pages_version` and `gitaly_version` in
 # the GDK Makefile.
