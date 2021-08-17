@@ -48,61 +48,110 @@ RSpec.describe Runit do
     end
 
     describe '.start' do
-      subject(:start) { described_class.start(start_args) }
+      subject(:start) { described_class.start(*full_args) }
 
-      context 'with empty args array' do
-        let(:start_args) { [] }
+      shared_examples 'starts services' do |quiet|
+        let(:full_args) { [services, args] }
 
-        it 'starts data services first and then non-data services last' do
-          allow(described_class).to receive(:data_oriented_service_names).and_return(data_service_names)
-          allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
+        context 'with empty args array' do
+          let(:services) { [] }
 
-          data_service_names.reverse_each do |service_name|
-            expect(described_class).to receive(:sv).with('start', [service_name], quiet: false).and_return(true).ordered
+          it 'starts data services first and then non-data services last' do
+            allow(described_class).to receive(:data_oriented_service_names).and_return(data_service_names)
+            allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
+
+            data_service_names.reverse_each do |service_name|
+              expect(described_class).to receive(:sv).with('start', [service_name], quiet: quiet).and_return(true).ordered
+            end
+
+            expect(described_class).to receive(:sv).with('start', non_data_service_names, quiet: quiet).and_return(true).ordered
+
+            start
           end
+        end
 
-          expect(described_class).to receive(:sv).with('start', non_data_service_names, quiet: false).and_return(true).ordered
+        context 'with args array' do
+          let(:services) { data_service_names }
 
-          start
+          it 'starts the requested services' do
+            expect(described_class).to receive(:sv).with('start', data_service_names, quiet: quiet)
+
+            start
+          end
+        end
+
+        context 'with a string' do
+          let(:services) { 'postgresql' }
+
+          it 'starts the requested service' do
+            expect(described_class).to receive(:sv).with('start', [services], quiet: quiet)
+
+            start
+          end
         end
       end
 
-      context 'with args array' do
-        let(:start_args) { data_service_names }
-
-        it 'starts the requested services' do
-          expect(described_class).to receive(:sv).with('start', data_service_names, quiet: false)
-
-          start
+      context 'with default operation' do
+        it_behaves_like 'starts services', false do
+          let(:args) { {} }
         end
       end
 
-      context 'with a string' do
-        let(:start_args) { 'postgresql' }
-
-        it 'starts the requested service' do
-          expect(described_class).to receive(:sv).with('start', [start_args], quiet: false)
-
-          start
+      context 'with quiet operation' do
+        it_behaves_like 'starts services', true do
+          let(:args) { { quiet: true } }
         end
       end
     end
 
     describe '.stop' do
-      subject(:stop) { described_class.stop }
+      subject(:stop) { described_class.stop(args) }
 
-      it 'stops all services', :hide_output do
-        allow(described_class).to receive(:data_oriented_service_names).and_return(data_service_names)
-        allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
-        allow(described_class).to receive(:unload_runsvdir!)
+      shared_examples 'stops all services' do |quiet|
+        it 'stops all services', :hide_output do
+          allow(described_class).to receive(:data_oriented_service_names).and_return(data_service_names)
+          allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
+          allow(described_class).to receive(:unload_runsvdir!)
 
-        expect(described_class).to receive(:sv).with('force-stop', non_data_service_names).and_return(true).ordered
+          expect(described_class).to receive(:sv).with('force-stop', non_data_service_names, quiet: quiet).and_return(true).ordered
 
-        data_service_names.each do |service_name|
-          expect(described_class).to receive(:sv).with('force-stop', [service_name]).and_return(true).ordered
+          data_service_names.each do |service_name|
+            expect(described_class).to receive(:sv).with('force-stop', [service_name], quiet: quiet).and_return(true).ordered
+          end
+
+          stop
         end
+      end
 
-        stop
+      context 'with default operation' do
+        it_behaves_like 'stops all services', false do
+          let(:args) { {} }
+        end
+      end
+
+      context 'with quiet operation' do
+        it_behaves_like 'stops all services', true do
+          let(:args) { { quiet: true } }
+        end
+      end
+    end
+
+    describe '.sv' do
+      subject(:sv) { described_class.sv(*full_args) }
+
+      let(:full_args) { [command, services, args] }
+      let(:command) { 'stop' }
+      let(:services) { data_service_names }
+      let(:args) { {} }
+
+      it 'sends the command to services' do
+        expect(described_class).to receive(:start_runsvdir).and_return(nil)
+        expect(described_class).to receive(:ensure_services_are_supervised)
+
+        shellout_double2 = instance_double(Shellout, run: '', stream: '', success?: true)
+        expect(Shellout).to receive(:new).with(%w[sv -w 20 stop /tmp/gdk/services/postgresql /tmp/gdk/services/praefect /tmp/gdk/services/redis], chdir: GDK.root).and_return(shellout_double2)
+
+        expect(sv).to be_truthy
       end
     end
 
@@ -119,6 +168,32 @@ RSpec.describe Runit do
         unload_runsvdir!
       end
     end
+
+    describe '.tail' do
+      subject(:tail) { described_class.tail(services) }
+
+      let(:services) { %w[postgresql redis] }
+
+      context 'when there are no logs to tail' do
+        it 'returns true' do
+          allow(described_class).to receive(:log_files).and_return([])
+
+          expect(GDK::Output).to receive(:warn).with('There are no services to tail.')
+
+          expect(tail).to be_truthy
+        end
+      end
+
+      context 'when there are logs to tail' do
+        it 'attempts to tail service log files' do
+          stub_const('Runit::LOG_DIR', Pathname.new('/home/git/gdk/log'))
+
+          expect(described_class).to receive(:exec).with('tail', '-qF', '/home/git/gdk/log/postgresql/current', '/home/git/gdk/log/redis/current')
+
+          tail
+        end
+      end
+    end
   end
 
   def stub_services
@@ -128,7 +203,9 @@ RSpec.describe Runit do
     allow(described_class::SERVICES_DIR).to receive(:join).and_call_original
 
     children_doubles = (data_service_names + non_data_service_names).map do |service_name|
-      pathname_double = instance_double(Pathname, basename: service_name, exist?: true, directory?: true)
+      pathname_double = Pathname.new(described_class::SERVICES_DIR.join(service_name))
+      allow(pathname_double).to receive(:exist?).and_return(true)
+      allow(pathname_double).to receive(:directory?).and_return(true)
       allow(described_class::SERVICES_DIR).to receive(:join).with(service_name).and_return(pathname_double)
 
       pathname_double
