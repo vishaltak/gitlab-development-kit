@@ -1407,7 +1407,7 @@ ${dev_shellcheck_versioned_binary}:
 
 .PHONY: checkmake
 checkmake: ${dev_checkmake_binary}
-	@echo -n "Checkmake: "
+	@echo -n "Checkmake:   "
 	@${dev_checkmake_binary} Makefile && echo -e "\b\bOK"
 
 ${dev_checkmake_binary}:
