@@ -68,6 +68,10 @@ module Runit
 
     private
 
+    def procfile_path
+      @procfile_path ||= gdk_root.join('Procfile')
+    end
+
     def generate_run_env
       run_env = <<~RUN_ENV
         export host=#{GDK.config.hostname}
@@ -88,9 +92,9 @@ module Runit
     end
 
     def services_from_procfile
-      fname = 'Procfile'
-      abort "fatal: need Procfile to continue, make it with `make Procfile`?" unless File.exist?(fname)
-      File.read(fname).lines.map do |line|
+      abort 'fatal: need Procfile to continue, make it with `make Procfile`?' unless procfile_path.exist?
+
+      procfile_path.readlines.map do |line|
         line.chomp!
         next if line.start_with?('#')
 
