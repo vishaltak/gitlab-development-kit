@@ -1,6 +1,7 @@
 include:
   - template: Code-Quality.gitlab-ci.yml
   - template: Container-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
   - remote: 'https://gitlab.com/gitlab-org/frontend/untamper-my-lockfile/-/raw/main/.gitlab-ci-template.yml'
 
 docs-lint:
@@ -53,6 +54,9 @@ container_scanning:
     - export DOCKER_IMAGE=${VERIFY_IMAGE}
   needs:
     - release-image
+  rules: !reference ['.rules:code-changes', rules]
+
+gemnasium-dependency_scanning:
   rules: !reference ['.rules:code-changes', rules]
 
 shellcheck:

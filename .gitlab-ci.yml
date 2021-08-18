@@ -19,7 +19,7 @@ default:
     - test -f support/ci/display_debugging && support/ci/display_debugging
 
 include:
-  - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
+  - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
   - local: .gitlab/ci/_rules.gitlab-ci.yml
   - local: .gitlab/ci/_docker.gitlab-ci.yml
   - local: .gitlab/ci/pre.gitlab-ci.yml
