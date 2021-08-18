@@ -14,7 +14,7 @@ module GDK
       private
 
       def stop_and_backup!
-        Runit.stop
+        Runit.stop(quiet: true)
 
         return true if backup_data
 

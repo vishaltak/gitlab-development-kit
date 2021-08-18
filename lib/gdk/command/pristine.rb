@@ -49,7 +49,7 @@ module GDK
 
       def gdk_stop
         notice('Stopping GDK..')
-        Runit.stop
+        Runit.stop(quiet: true)
       end
 
       def gdk_tmp_clean

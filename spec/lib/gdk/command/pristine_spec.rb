@@ -14,7 +14,7 @@ RSpec.describe GDK::Command::Pristine do
 
     context 'when a command fails' do
       it 'displays an error and returns false', :hide_stdout do
-        expect(Runit).to receive(:stop).and_return(false)
+        expect(Runit).to receive(:stop).with(quiet: true).and_return(false)
 
         expect(GDK::Output).to receive(:error).with("Failed to run 'gdk pristine' - Had an issue with 'gdk_stop'.")
 
@@ -27,7 +27,7 @@ RSpec.describe GDK::Command::Pristine do
         shellout_double = instance_double(Shellout, stream: nil, 'success?': true)
 
         # gdk_stop
-        expect(Runit).to receive(:stop).and_return(true)
+        expect(Runit).to receive(:stop).with(quiet: true).and_return(true)
 
         # gdk_tmp_clean
         expect_shellout_command(described_class::GIT_CLEAN_TMP_CMD, config.gdk_root).and_return(shellout_double)

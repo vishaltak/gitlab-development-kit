@@ -48,7 +48,7 @@ RSpec.describe GDK::Command::ResetData do
 
     before do
       allow(GDK).to receive(:remember!)
-      allow(Runit).to receive(:stop)
+      allow(Runit).to receive(:stop).with(quiet: true)
       allow(GDK).to receive(:root).and_return(root)
       allow(subject).to receive(:continue?).and_return(true)
     end
