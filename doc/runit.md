@@ -87,7 +87,7 @@ You can also look at the logs for a subset of services:
 
 To modify the actual commands used to start services, use the `Procfile`
 just like with Foreman. Every time you run `gdk start`, `gdk stop`, and so on,
-GDK updates the runit service configuration from the Procfile.
+GDK updates the runit service configuration from the `Procfile`.
 
 If you want to remove a service `foo`:
 

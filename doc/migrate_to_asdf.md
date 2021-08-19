@@ -46,7 +46,7 @@ The dependency manager should be indicated in the output:
 
 ## Uninstall Node.js dependency manager
 
-Uninstall your Node.js dependency manager to let `asdf` manage Node.js dependences for GDK
+Uninstall your Node.js dependency manager to let `asdf` manage Node.js dependencies for GDK
 and other Node.js projects.
 
 If you're unsure which Node dependency manager you are using, run `which node` at the command line.
