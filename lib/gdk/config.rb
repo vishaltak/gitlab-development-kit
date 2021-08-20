@@ -56,11 +56,13 @@ module GDK
       end
 
       settings(:checkmake) do
+        string(:version) { '8915bd4' }
         path(:__binary) { config.dev.__bins.join('checkmake') }
+        path(:__versioned_binary) { config.dev.__bins.join("checkmake_#{config.dev.checkmake.version}") }
       end
 
       settings(:vale) do
-        string(:version) { '2.10.3' }
+        string(:version) { '2.10.4' }
         string(:__platform) { config.__platform == 'darwin' ? 'macos' : config.__platform }
         path(:__binary) { config.dev.__bins.join('vale') }
         path(:__versioned_binary) { config.dev.__bins.join("vale_#{config.dev.vale.version}") }

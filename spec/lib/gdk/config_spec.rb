@@ -1919,6 +1919,14 @@ RSpec.describe GDK::Config do
   end
 
   describe 'dev' do
+    describe 'checkmake' do
+      describe 'version' do
+        it 'returns 8915bd4 by default' do
+          expect(config.dev.checkmake.version).to eq('8915bd4')
+        end
+      end
+    end
+
     describe 'shellcheck' do
       describe 'version' do
         it 'returns 0.7.2 by default' do
@@ -1929,8 +1937,8 @@ RSpec.describe GDK::Config do
 
     describe 'vale' do
       describe 'version' do
-        it 'returns 2.10.3 by default' do
-          expect(config.dev.vale.version).to eq('2.10.3')
+        it 'returns 2.10.4 by default' do
+          expect(config.dev.vale.version).to eq('2.10.4')
         end
       end
     end
