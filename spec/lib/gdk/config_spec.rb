@@ -1937,8 +1937,8 @@ RSpec.describe GDK::Config do
 
     describe 'vale' do
       describe 'version' do
-        it 'returns 2.10.3 by default' do
-          expect(config.dev.vale.version).to eq('2.10.3')
+        it 'returns 2.10.4 by default' do
+          expect(config.dev.vale.version).to eq('2.10.4')
         end
       end
     end
