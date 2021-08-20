@@ -5,7 +5,7 @@ elasticsearch_linux_tar_gz_sha512 = <%= config.elasticsearch.linux_checksum %>
 elasticsearch_mac_tar_gz_sha512 = <%= config.elasticsearch.mac_checksum %>
 elasticsearch_version = <%= config.elasticsearch.version %>
 <%-# dev -%>
-dev_checkmake_binary = <%= config.dev.checkmake.__binary %>
+dev_checkmake_binary = <%= config.dev.checkmake.__versioned_binary %>
 dev_shellcheck_binary = <%= config.dev.shellcheck.__versioned_binary %>
 dev_vale_binary = <%= config.dev.vale.__versioned_binary %>
 <%-# -%>

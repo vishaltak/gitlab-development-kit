@@ -56,7 +56,9 @@ module GDK
       end
 
       settings(:checkmake) do
+        string(:version) { '8915bd4' }
         path(:__binary) { config.dev.__bins.join('checkmake') }
+        path(:__versioned_binary) { config.dev.__bins.join("checkmake_#{config.dev.checkmake.version}") }
       end
 
       settings(:vale) do

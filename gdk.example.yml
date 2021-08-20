@@ -9,7 +9,8 @@ charts_gitlab:
 common:
   ca_path: ''
 dev:
-  checkmake: {}
+  checkmake:
+    version: 8915bd4
   shellcheck:
     version: 0.7.2
   vale:
