@@ -1120,7 +1120,7 @@ brew doctor
 
 However, older installations may have significant cruft leftover from previous
 installations and updates. To manually remove outdated downloads for all
-formulae, casks, and stale lockfiles, run:
+formulae, casks, and stale lock files, run:
 
 ```shell
 brew cleanup
