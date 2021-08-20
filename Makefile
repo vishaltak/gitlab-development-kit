@@ -30,6 +30,12 @@ include $(shell rake gdk-config.mk)
 endif
 endif
 
+# gdk-config.mk defaults: start
+dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
+dev_shellcheck_binary := $(or $(dev_shellcheck_binary),$(shell command -v shellcheck 2> /dev/null))
+dev_vale_binary := $(or $(dev_vale_binary),$(shell command -v vale 2> /dev/null))
+# gdk-config.mk defaults: end
+
 ifeq ($(platform),darwin)
 OPENSSL_PREFIX := $(shell brew --prefix openssl)
 OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
@@ -1370,13 +1376,13 @@ endif
 .PHONY: lint
 lint: vale markdownlint docs-metadata
 
-$(dev_vale_versioned_binary):
+$(dev_vale_binary):
 	@support/dev/vale-install
 
 .PHONY: vale
-vale: $(dev_vale_versioned_binary)
+vale: $(dev_vale_binary)
 	@echo -n "Vale: "
-	@${dev_vale_versioned_binary} --minAlertLevel error *.md doc
+	@${dev_vale_binary} --minAlertLevel error *.md doc
 
 .PHONY: markdownlint-install
 markdownlint-install:
@@ -1398,11 +1404,11 @@ docs-metadata:
 	@support/lint-docs-metadata.sh
 
 .PHONY: shellcheck
-shellcheck: ${dev_shellcheck_versioned_binary}
+shellcheck: ${dev_shellcheck_binary}
 	@echo -n "Shellcheck: "
 	@support/dev/shellcheck && echo "OK"
 
-${dev_shellcheck_versioned_binary}:
+${dev_shellcheck_binary}:
 	@support/dev/shellcheck-install
 
 .PHONY: checkmake

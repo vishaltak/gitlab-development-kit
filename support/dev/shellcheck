@@ -6,10 +6,10 @@
 
 root="$(cd "$(dirname "$0")/../.." || exit ; pwd -P)"
 
-shellcheck_binary="${root}/dev/bin/shellcheck"
+export PATH="${root}/dev/bin:${PATH}"
 
-if ! command -v "${shellcheck_binary}" > /dev/null 2>&1 ; then
-  echo "ERROR: '${shellcheck_binary}' is not available, please run 'make shellcheck' first."
+if ! command -v shellcheck > /dev/null 2>&1 ; then
+  echo "ERROR: shellcheck is not available, please run 'make shellcheck' first."
   exit 1
 fi
 
@@ -20,4 +20,4 @@ exec find "${root}/support" "${root}/support/ci" "${root}/support/completions" \
       -not -path "*/support/.rubocop.yml" \
       -not -path "*.swp" \
       -print0 \
-| xargs -0 "${shellcheck_binary}" --exclude=SC1071 --external-sources --
+| xargs -0 shellcheck --exclude=SC1071 --external-sources --
