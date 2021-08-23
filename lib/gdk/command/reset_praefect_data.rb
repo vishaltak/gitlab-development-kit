@@ -21,7 +21,7 @@ module GDK
       end
 
       def execute
-        Runit.stop && \
+        Runit.stop(quiet: true) && \
           # ensure runit has fully stopped
           sleep(2) && \
           start_necessary_services && \
@@ -33,7 +33,7 @@ module GDK
       end
 
       def start_necessary_services
-        Runit.start('postgresql')
+        Runit.start('postgresql', quiet: true)
       end
 
       def psql_cmd(command)

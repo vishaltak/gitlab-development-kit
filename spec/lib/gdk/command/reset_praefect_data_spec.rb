@@ -28,9 +28,9 @@ RSpec.describe GDK::Command::ResetPraefectData do
     let(:prompt_response) { 'yes' }
 
     it 'runs' do
-      expect(Runit).to receive(:stop).and_return(true)
+      expect(Runit).to receive(:stop).with(quiet: true).and_return(true)
       expect(subject).to receive(:sleep).with(2).and_return(true).ordered
-      expect(Runit).to receive(:start).with('postgresql').and_return(true)
+      expect(Runit).to receive(:start).with('postgresql', quiet: true).and_return(true)
       expect(subject).to receive(:sleep).with(2).and_return(true).ordered
 
       common_command = ['/usr/local/bin/psql', '--host=/home/git/gdk/postgresql', '--port=5432', '--dbname=gitlabhq_development', '-c']
