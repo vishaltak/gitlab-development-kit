@@ -9,8 +9,8 @@ GDK::Output.abort('GitLab Docs not configured. See doc/howto/gitlab_docs.md') un
 
 if gitlab_docs_settings.__all_configured?
   GDK::Output.info('Starting nanoc to preview with live reload..')
-  puts Shellout.new(gitlab_docs_settings.__nanoc_live_cmd, chdir: 'gitlab-docs').run
+  puts Shellout.new(gitlab_docs_settings.__nanoc_live_cmd, chdir: 'gitlab-docs').stream
 else
   GDK::Output.info('Compiling documentation with nanoc and starting preview..')
-  puts Shellout.new(gitlab_docs_settings.__nanoc_view_cmd, chdir: 'gitlab-docs').run
+  puts Shellout.new(gitlab_docs_settings.__nanoc_view_cmd, chdir: 'gitlab-docs').stream
 end
