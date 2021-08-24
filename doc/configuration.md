@@ -453,7 +453,8 @@ webpack:
   port: 3808
   static: false
   vendor_dll: false
-  incremental: false
+  incremental: true
+  incremental_ttl: 30
 ```
 
 | Setting | Default | Description |
@@ -462,13 +463,45 @@ webpack:
 | `port` | `3808` | The port your webpack development server is running on. You should change this if you are running multiple GDKs |
 | `static` | `false` | Setting this to `true` replaces the webpack development server with a lightweight Ruby server with. See below for more information |
 | `vendor_dll` | `false` | Setting this to `true` moves certain dependencies to a webpack DLL. See below for more information |
-| `incremental` | `false` | Setting this to `true` enables incremental webpack rendering. See below for more information |
+| `incremental` | `true` | Setting this to `false` disables incremental webpack compilation. See below for more information |
+| `incremental_ttl` | `30` | Sets the number of days after which a visited page's assets will be evicted from the list of bundles to eagerly compile. Set to `0` to eagerly compile every page's assets ever visited. |
 | `sourcemaps` | `true` | Setting this to `false` disables source maps. This reduces memory consumption for those who do not need to debug frontend code. |
 | `live_reload` | `true` | Setting this to `false` disables hot module replacement when changes are detected. This feature uses sockets and is currently incompatible with SSL, so it is disabled by default when SSL is enabled. |
 
+#### Incremental webpack compilation
+
+By default, webpack only compiles page bundles for pages that were visited
+within the last `webpack.incremental_ttl` days. This is done to keep the memory
+consumption of the webpack development server low. If you visit a previously
+unvisited page or one visited longer than `webpack.incremental_ttl` days ago,
+you see an overlay informing you that the page is being compiled. A page reload
+(either manually or via `live_reload`) then ensures the correct assets are
+served.
+
+You can change the number of days that page bundles are considered "recent",
+and should be eagerly compiled. This number represents the trade-off between
+lazy/eager compilation versus low/high memory consumption of the webpack
+development server. A higher number means fewer pages needing to be compiled on
+demand, at the cost of higher memory consumption. A lower number means lower
+memory consumption, at the cost of more pages being compiled on demand. A value
+of `0` means that all pages in your history, regardless of how long ago you
+visited them, are eagerly compiled.
+
+For instance, if you visited a particular page `webpack.incremental_ttl - 1`
+days ago, it would render as normal if you visted it _today_. But, if instead
+you visit it _tomorrow_, you would see an initial "compiling" overlay.
+
+The history of previously visited pages is stored in the `WEBPACK_CACHE_PATH`
+directory. Clearing this directory will lose that history, meaning subsequent
+page visits will trigger on demand compilation. Over time, your history will be
+rebuilt.
+
+To disable incremental compilation entirely and always eagerly compile all page
+bundles, set `webpack.incremental: false` in your `gdk.yml`.
+
 #### Saving memory on the webpack development server
 
-GDK defaults to memory-intensive settings. GDK uses the webpack development server, which watches
+GDK defaults to mostly memory-intensive settings. GDK uses the webpack development server, which watches
 file changes and keeps all the frontend assets in memory. This allows for very fast recompilation.
 
 An alternative is to lower the memory requirements of GDK. This is useful for back-end development
@@ -480,10 +513,8 @@ or where GDK is running in lower-memory environments. To lower the memory requir
 - Set `webpack.vendor_dll: true` in your `gdk.yml`. This mode is an alternate memory saving mode,
   which takes infrequently updated dependencies and combines them into one long-lived bundle that is
   written to disk and does not reside in memory. You may see 200 to 300 MB in memory savings.
-- Set `webpack.incremental: true` in your `gdk.yml`. This enables incremental compilation of webpack
-  assets and only the JavaScript for pages you visit during development are compiled.
-  If you visit a previously unvisited page, you see an overlay informing you that the recompilation
-  happens. A page reload then serves the correct assets (either manually or via `live_reload`).
+- Reduce the value of `webpack.incremental_ttl` in your `gdk.yml`. This means
+  fewer page bundles will be eagerly compiled.
 
 This means you pay a high upfront cost of a single memory- and CPU-intenstive compile. However, if
 you do not change any frontend files, you just have a lightweight Ruby server running.
