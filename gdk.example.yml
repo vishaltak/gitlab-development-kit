@@ -73,6 +73,7 @@ gitlab:
   dir: "/home/git/gdk/gitlab"
   rails:
     address: ''
+    bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
     hostname: 127.0.0.1
     https:
       enabled: false

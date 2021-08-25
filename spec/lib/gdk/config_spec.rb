@@ -973,6 +973,12 @@ RSpec.describe GDK::Config do
         end
       end
 
+      describe 'bundle_gemfile' do
+        it 'is /home/git/gdk/gitlab/Gemfile by default' do
+          expect(config.gitlab.rails.bundle_gemfile).to eq('/home/git/gdk/gitlab/Gemfile')
+        end
+      end
+
       describe 'separate_db_schemas' do
         it 'is disabled by default' do
           expect(config.gitlab.rails.separate_db_schemas).to be(false)
