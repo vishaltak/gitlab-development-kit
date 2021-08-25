@@ -73,7 +73,11 @@ gitlab:
   dir: "/home/git/gdk/gitlab"
   rails:
     address: ''
+    hostname: 127.0.0.1
+    https:
+      enabled: false
     multiple_databases: false
+    port: 3000
     puma:
       threads_max: 4
       threads_min: 1

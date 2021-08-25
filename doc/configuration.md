@@ -264,6 +264,9 @@ gdk:
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `gitlab.cache_classes` | `false`  | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
+| `gitlab.rails.hostname` | `127.0.0.1` | Specify the hostname value that Rails uses when generating URLs. |
+| `gitlab.rails.port` | `3000` | Specify the port value that Rails uses when generating URLs. |
+| `gitlab.rails.https.enabled` | `false` | Specify if HTTPS is enabled which Rails uses when generating URLs. |
 | `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do **not** include `http://`. |
 | `gitlab.rails.multiple_databases` | `false` | Set this to `true` to configure [multiple databases](https://docs.gitlab.com/ee/development/database/multiple_databases.html) in your `config/database.yml`. |
 | `gitlab.rails.separate_db_schemas` | `false` | Set this to `true` to configure `schema_search_path` in your `config/database.yml`. |

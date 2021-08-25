@@ -907,6 +907,28 @@ RSpec.describe GDK::Config do
     end
 
     describe 'rails' do
+      describe '#hostname' do
+        it 'returns gdk.example.com by default' do
+          expect(config.gitlab.rails.hostname).to eq('gdk.example.com')
+        end
+      end
+
+      describe '#port' do
+        it 'returns 3000 by default' do
+          expect(config.gitlab.rails.port).to eq(3000)
+        end
+      end
+
+      context 'https' do
+        describe '#enabled' do
+          it 'returns false by default' do
+            expect(config.gitlab.rails.https.enabled).to eq(false)
+            expect(config.gitlab.rails.https.enabled?).to eq(false)
+            expect(config.gitlab.rails.https?).to eq(false)
+          end
+        end
+      end
+
       describe '#__socket_file' do
         it 'returns the GitLab socket path' do
           expect(config.gitlab.rails.__socket_file).to eq(Pathname.new('/home/git/gdk/gitlab.socket'))

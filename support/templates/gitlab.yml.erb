@@ -29,9 +29,9 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
-    host: <%= config.hostname %>
-    port: <%= config.port %>
-    https: <%= config.https? %>
+    host: <%= config.gitlab.rails.hostname %>
+    port: <%= config.gitlab.rails.port %>
+    https: <%= config.gitlab.rails.https? %>
 
     relative_url_root: "<%= config.relative_url_root %>"
 

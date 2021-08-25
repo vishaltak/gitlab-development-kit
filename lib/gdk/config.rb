@@ -627,6 +627,13 @@ module GDK
       bool(:cache_classes) { false }
 
       settings :rails do
+        string(:hostname) { config.hostname }
+        integer(:port) { config.port }
+
+        settings :https do
+          bool(:enabled) { config.https? }
+        end
+
         string(:address) { '' }
         string(:__bind) { "#{config.gitlab.rails.__listen_settings.__protocol}://#{config.gitlab.rails.__listen_settings.__address}" }
         string(:__workhorse_url) do
