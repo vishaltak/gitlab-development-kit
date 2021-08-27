@@ -27,7 +27,7 @@ RSpec.describe GDK::Backup do
       it 'raises an exception' do
         fake_source_file = gdk_root_path.join('tmp/filethatdoesntexist.txt')
 
-        expect { described_class.new(fake_source_file) }.to raise_error(Errno::ENOENT)
+        expect { described_class.new(fake_source_file) }.to raise_error(GDK::Backup::SourceFileDoesntExist)
       end
     end
 
@@ -156,7 +156,8 @@ RSpec.describe GDK::Backup do
 
     allow(Pathname).to receive(:new).and_call_original
     allow(Pathname).to receive(:new).with(file).and_return(fake_source_file_pathname)
-    allow(fake_source_file_pathname).to receive(:realpath).and_return(fake_source_file_pathname)
+    allow(fake_source_file_pathname).to receive(:expand_path).and_return(fake_source_file_pathname)
+    allow(fake_source_file_pathname).to receive(:exist?).and_return(true)
 
     fake_source_file_pathname
   end

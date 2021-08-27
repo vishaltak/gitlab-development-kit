@@ -5,6 +5,7 @@ require 'pathname'
 module GDK
   class Backup
     SourceFileOutsideOfGdk = Class.new(StandardError)
+    SourceFileDoesntExist = Class.new(StandardError)
 
     attr_reader :source_file
 
@@ -13,7 +14,7 @@ module GDK
     end
 
     def initialize(source_file)
-      @source_file = Pathname.new(source_file.to_s).realpath
+      @source_file = Pathname.new(source_file.to_s).expand_path
 
       validate!
     end
@@ -47,6 +48,7 @@ module GDK
     end
 
     def validate!
+      raise SourceFileDoesntExist unless source_file.exist?
       raise SourceFileOutsideOfGdk unless source_file.to_s.start_with?(GDK.root.to_s)
 
       true
