@@ -16,9 +16,6 @@ else
   checkout "${CI_COMMIT_SHA}"
 fi
 
-restart
-test_url
-
 # test GDK components update
 install_gem
 update
