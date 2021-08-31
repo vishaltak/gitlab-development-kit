@@ -81,7 +81,10 @@ module GDK
       def check_ruby_version
         return unless check_binary('ruby')
 
-        actual = Gem::Version.new(RUBY_VERSION)
+        raw_version_match = Shellout.new('ruby --version').try_run.match(/\Aruby (.+)p\d+ \(.+\z/)
+        return unless raw_version_match
+
+        actual = Gem::Version.new(raw_version_match[1])
         expected = Gem::Version.new(GitLabVersions.new.ruby_version)
 
         @error_messages << require_minimum_version('Ruby', actual, expected) if actual < expected
@@ -107,8 +110,11 @@ module GDK
         # custom wrapper. Because of this, we cannot use the `bundle
         # _$VERSION_` syntax and need to fall back to using `bundle --version`
         # on a best effort basis.
+
         actual = Shellout.new('bundle --version').try_run
         actual = Checker.parse_version(actual, prefix: 'Bundler version ')
+
+        return unless actual
 
         Gem::Version.new(actual) == Gem::Version.new(expected_bundler_version)
       end
