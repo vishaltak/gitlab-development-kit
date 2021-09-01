@@ -496,6 +496,24 @@ npm install --global yarn
 
 The following are possible solutions to problems you might encounter with PostgreSQL and GDK.
 
+### `gdk update` leaves `gitlab/db/structure.sql` with uncommitted changes
+
+If you have uncommitted changes in `gitlab/db/structure.sql` after a `gdk update` (see
+[GitLab#300251](https://gitlab.com/gitlab-org/gitlab/-/issues/300251)), you can either:
+
+- Add [GDK hook](configuration.md#hooks) to your `gdk.yml` with the following (do this if you are
+  unfamiliar with `db/structure.sql`):
+
+  ```yaml
+  gdk:
+    update_hooks:
+      after:
+        - cd gitlab && git checkout db/structure.sql
+  ```
+
+- Refer to the developer documentation for
+  [schema changes](https://docs.gitlab.com/ee/development/migration_style_guide.html#schema-changes).
+
 ### Unable to build and install `pg` gem on GDK install
 
 After installing PostgreSQL with brew, you have to set the proper path to PostgreSQL.
