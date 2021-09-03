@@ -664,6 +664,16 @@ module GDK
           end
         end
 
+        bool(:__has_jh_dir) { File.exist?(config.gitlab.dir.join('jh')) }
+
+        string(:bundle_gemfile) do
+          if __has_jh_dir
+            config.gitlab.dir.join('jh/Gemfile')
+          else
+            config.gitlab.dir.join('Gemfile')
+          end
+        end
+
         bool(:separate_db_schemas) { false }
         bool(:multiple_databases) { false }
 
