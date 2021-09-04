@@ -1307,8 +1307,14 @@ RSpec.describe GDK::Config do
 
   describe 'webpack' do
     describe '#incremental' do
-      it 'is false by default' do
-        expect(config.webpack.incremental).to be false
+      it 'is true by default' do
+        expect(config.webpack.incremental).to be true
+      end
+    end
+
+    describe '#incremental_ttl' do
+      it 'is 30 days by default' do
+        expect(config.webpack.incremental_ttl).to be 30
       end
     end
 

@@ -306,7 +306,8 @@ tracer:
 username: git
 webpack:
   host: 127.0.0.1
-  incremental: false
+  incremental: true
+  incremental_ttl: 30
   live_reload: true
   port: 3808
   sourcemaps: true
