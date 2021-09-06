@@ -10,5 +10,5 @@
 - [ ] `gdk doctor` test added, if needed.
 - [ ] Add the `~highlight` label if this MR should be included in the [`CHANGELOG.md`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/CHANGELOG.md).
 
-/label ~"Category:GDK" ~"section::dev" ~"devops::ecosystem" ~"group::contributor experience"
+/label ~"Category:GDK" ~Quality ~"Engineering Productivity"
 /assign me

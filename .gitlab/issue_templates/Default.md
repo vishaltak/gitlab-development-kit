@@ -17,4 +17,4 @@
 - Ruby version: `<!-- output of `ruby --version` -->`
 - GDK version: `<!-- output of `git rev-parse --short HEAD` -->`
 
-/label ~"Category:GDK" ~"section::dev" ~"devops::ecosystem" ~"group::contributor experience"
+/label ~"Category:GDK" ~Quality ~"Engineering Productivity"
