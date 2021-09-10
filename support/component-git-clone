@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../lib/gdk'
+
+PROGNAME = File.basename(__FILE__)
+
+def main(git_clone_args)
+  command = %w[git clone] + git_clone_args
+
+  3.times do
+    sh = Shellout.new(command)
+    sh.stream
+    return true if sh.success?
+  end
+
+  false
+end
+
+abort "usage: #{PROGNAME} GIT_CLONE_ARGS" if ARGV.count < 1
+
+main(ARGV)
