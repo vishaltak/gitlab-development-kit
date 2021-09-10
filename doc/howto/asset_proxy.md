@@ -1,9 +1,3 @@
----
-stage: Ecosystem
-group: Contributor Experience
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
----
-
 # Asset Proxy / Camo Server
 
 GitLab can be configured to use an [asset proxy server](https://docs.gitlab.com/ee/security/asset_proxy).

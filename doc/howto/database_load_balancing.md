@@ -1,9 +1,3 @@
----
-stage: Ecosystem
-group: Contributor Experience
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
----
-
 # Database load balancing
 
 This document describes the required steps to enable and test the [database load balancing](https://docs.gitlab.com/ee/administration/database_load_balancing.html) feature in GDK.

@@ -1,9 +1,3 @@
----
-stage: Ecosystem
-group: Contributor Experience
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
----
-
 # Object Storage (LFS, Artifacts, etc)
 
 GitLab has Object Storage integration.

@@ -1,9 +1,3 @@
----
-stage: Ecosystem
-group: Contributor Experience
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
----
-
 # Gitaly and Praefect
 
 GitLab uses [Gitaly](https://docs.gitlab.com/ee/administration/gitaly/index.html) to abstract all
