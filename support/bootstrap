@@ -18,6 +18,9 @@ asdf_install() {
     asdf_add_initializer "${HOME}/.bashrc" "asdf.sh"
     asdf_add_initializer "${HOME}/.zshrc" "asdf.sh"
 
+    # shellcheck disable=SC1091
+    source "${CURRENT_ASDF_DIR}/asdf.sh"
+
     return 0
   fi
 
