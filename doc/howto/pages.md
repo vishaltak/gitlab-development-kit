@@ -1,9 +1,3 @@
----
-stage: Ecosystem
-group: Contributor Experience
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
----
-
 # Pages
 
 This page contains information about developing GitLab Pages inside the GDK. This method allows you test GitLab Pages from deployment to visiting your static site.

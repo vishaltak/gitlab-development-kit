@@ -1,9 +1,3 @@
----
-stage: Ecosystem
-group: Contributor Experience
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
----
-
 # Triggering Alerts with GitLab managed Prometheus
 
 Steps to configure Prometheus Alert with the GitLab managed Prometheus.
