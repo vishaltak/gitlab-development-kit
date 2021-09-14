@@ -37,7 +37,10 @@ module GDK
           elasticsearch
           geo-cursor
           gitaly
+          gitlab-docs
+          gitlab-k8s-agent
           gitlab-pages
+          gitlab-ui
           gitlab-workhorse
           grafana
           jaeger
@@ -46,17 +49,20 @@ module GDK
           nginx
           openldap
           postgresql
+          postgresql-geo
+          postgresql-replica
           praefect
           prometheus
-          registry
-          rails-actioncable
           rails-background-jobs
           rails-web
           redis
+          registry
           runner
+          spamcheck
           sshd
           tunnel_
           webpack
+          sleep
         ]
       end
 
