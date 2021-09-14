@@ -55,12 +55,12 @@ module GDK
 
       def show_healthy
         GDK::Output.puts("\n")
-        GDK::Output.success('GDK is healthy.')
+        GDK::Output.success('Your GDK is healthy.')
       end
 
       def show_results
         GDK::Output.puts("\n")
-        GDK::Output.warn('GDK may need attention.')
+        GDK::Output.warn('Your GDK may need attention.')
 
         diagnostic_results.each do |result|
           GDK::Output.puts(result)

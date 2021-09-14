@@ -40,7 +40,7 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
     end
 
     it 'prints GDK is ready.' do
-      expect(GDK::Output).to receive(:success).with('GDK is healthy.')
+      expect(GDK::Output).to receive(:success).with('Your GDK is healthy.')
 
       subject.run
     end
@@ -57,7 +57,7 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
 
     it 'prints a warning' do
       expect(GDK::Output).to receive(:puts).with("\n").ordered
-      expect(GDK::Output).to receive(:warn).with('GDK may need attention.').ordered
+      expect(GDK::Output).to receive(:warn).with('Your GDK may need attention.').ordered
       expect(GDK::Output).to receive(:puts).with('check failed').ordered.twice
 
       subject.run
@@ -77,7 +77,7 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
     it 'prints a message from failed diagnostics' do
       expect(failing_diagnostic).to receive(:message).twice
       expect(GDK::Output).to receive(:puts).with("\n").ordered
-      expect(GDK::Output).to receive(:warn).with('GDK may need attention.').ordered
+      expect(GDK::Output).to receive(:warn).with('Your GDK may need attention.').ordered
       expect(GDK::Output).to receive(:puts).with('check failed').ordered.twice
 
       subject.run

@@ -31,12 +31,12 @@ module GDK
       end
 
       def continue?
-        GDK::Output.warn("You're about to forcibly kill the following runsv processes:\n\n")
+        GDK::Output.warn("You're about to kill the following runsv processes:\n\n")
         GDK::Output.puts("#{runsv_processes_to_kill}\n\n")
 
         return true if ENV.fetch('GDK_KILL_CONFIRM', 'false') == 'true' || !GDK::Output.interactive?
 
-        GDK::Output.info("This command will stop all your GDK instances and any other process started by runit-based. Check the list above to avoid unwanted results.\n\n")
+        GDK::Output.info("This command will stop all your GDK instances and any other process started by runit.\n\n")
 
         GDK::Output.prompt('Are you sure? [y/N]').match?(/\Ay(?:es)*\z/i)
       end
