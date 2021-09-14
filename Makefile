@@ -23,10 +23,12 @@ export ROLLUP_OPTIONS = --silent
 
 NO_RUBY_REQUIRED := bootstrap
 
+bundle_exec_cmd = ${BUNDLE} exec
+
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
 ifeq (,$(filter $(NO_RUBY_REQUIRED), $(MAKECMDGOALS)))
-include $(shell rake gdk-config.mk)
+include $(shell $(bundle_exec_cmd) rake gdk-config.mk)
 endif
 endif
 
@@ -65,7 +67,7 @@ quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_without_production_cmd = ${BUNDLE} config set without 'production'
 bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
-gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
+gitlab_rake_cmd = $(in_gitlab) ${bundle_exec_cmd} rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 nanoc_cmd = ${BUNDLE} exec nanoc
 
@@ -228,25 +230,21 @@ gdk.yml:
 
 .PHONY: Procfile
 Procfile:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: preflight-checks
 preflight-checks: preflight-checks-timed
 
 .PHONY: preflight-checks-run
-preflight-checks-run: rake
-	$(Q)rake preflight-checks
+preflight-checks-run: .gdk-bundle
+	$(Q)${bundle_exec_cmd} rake preflight-checks
 
 .PHONY: preflight-update-checks
 preflight-update-checks: preflight-update-checks-timed
 
 .PHONY: preflight-update-checks-run
-preflight-update-checks-run: rake
-	$(Q)rake preflight-update-checks
-
-.PHONY: rake
-rake:
-	$(Q)command -v $@ ${QQ} || gem install $@
+preflight-update-checks-run: .gdk-bundle
+	$(Q)${bundle_exec_cmd} rake preflight-update-checks
 
 .PHONY: ensure-databases-running
 ensure-databases-running: Procfile postgresql/data gitaly-setup
@@ -333,7 +331,7 @@ gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 	@echo "${DIVIDER}"
 	@echo "Generating gitlab GraphQL schema files"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) bundle exec rake gitlab:graphql:schema:dump ${QQ}
+	$(Q)$(in_gitlab) $(bundle_exec_cmd) rake gitlab:graphql:schema:dump ${QQ}
 
 .PHONY: gitlab-git-pull
 gitlab-git-pull: gitlab-git-pull-timed
@@ -351,7 +349,7 @@ gitlab/.git/pull: gitlab/git-restore
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
 	@echo
-	$(Q)rake gitlab_rails:db:migrate
+	$(Q)${bundle_exec_cmd} rake gitlab_rails:db:migrate
 
 gitlab/.git:
 	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
@@ -370,39 +368,39 @@ gitlab-config: \
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/database.yml
 gitlab/config/database.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/puma.rb
 gitlab/config/puma.rb:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/cable.yml
 gitlab/config/cable.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/resque.yml
 gitlab/config/resque.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/redis.cache.yml
 gitlab/config/redis.cache.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/redis.queues.yml
 gitlab/config/redis.queues.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/redis.shared_state.yml
 gitlab/config/redis.shared_state.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab/config/redis.trace_chunks.yml
 gitlab/config/redis.trace_chunks.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 gitlab/public/uploads:
 	$(Q)mkdir $@
@@ -477,7 +475,7 @@ ${gitlab_shell_clone_dir}/.git:
 
 .PHONY: gitlab-shell/config.yml
 gitlab-shell/config.yml: ${gitlab_shell_clone_dir}/.git
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .gitlab-shell-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-shell && $(bundle_install_cmd)
@@ -536,11 +534,11 @@ ${gitaly_build_deps_dir}/git/install/bin/git:
 
 .PHONY: gitaly/gitaly.config.toml
 gitaly/gitaly.config.toml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitaly/praefect.config.toml
 gitaly/praefect.config.toml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: praefect-migrate
 praefect-migrate: postgresql-seed-praefect
@@ -751,7 +749,7 @@ gitlab-spamcheck/spamcheck: gitlab-spamcheck/.git
 
 .PHONY: gitlab-spamcheck/config/config.toml
 gitlab-spamcheck/config/config.toml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 ##############################################################
 # gitlab geo
@@ -776,7 +774,7 @@ geo-cursor:
 .PHONY: gitlab/config/database_geo.yml
 gitlab/config/database_geo.yml:
 ifeq ($(geo_enabled),true)
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 else
 	@true
 endif
@@ -811,7 +809,7 @@ gitlab-workhorse-setup: gitlab/workhorse/gitlab-workhorse gitlab/workhorse/confi
 
 .PHONY: gitlab/workhorse/config.toml
 gitlab/workhorse/config.toml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab-workhorse-update
 gitlab-workhorse-update: gitlab-workhorse-update-timed
@@ -880,11 +878,11 @@ gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 gitlab-pages-setup: gitlab-pages-secret gitlab-pages/gitlab-pages.conf gitlab-pages/bin/gitlab-pages
 
 gitlab-pages-secret:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab-pages/gitlab-pages.conf
 gitlab-pages/gitlab-pages.conf: ${gitlab_pages_clone_dir}/.git
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab-pages-update
 gitlab-pages-update: gitlab-pages-update-timed
@@ -933,7 +931,7 @@ gitlab-k8s-agent-update-run: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent
 
 .PHONY: gitlab-k8s-agent-config.yml
 gitlab-k8s-agent-config.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: gitlab-k8s-agent-clean
 gitlab-k8s-agent-clean:
@@ -1042,7 +1040,7 @@ redis: redis/redis.conf
 
 .PHONY: redis/redis.conf
 redis/redis.conf:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 ##############################################################
 # postgresql
@@ -1198,7 +1196,7 @@ prom-setup: prometheus/prometheus.yml
 
 .PHONY: prometheus/prometheus.yml
 prometheus/prometheus.yml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 ##############################################################
 # grafana
@@ -1216,7 +1214,7 @@ grafana/grafana/bin/grafana-server:
 
 .PHONY: Procfile
 grafana/grafana.ini:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 grafana/gdk-pg-created:
 	$(Q)support/create-grafana-db
@@ -1238,11 +1236,11 @@ nginx-setup: nginx/conf/nginx.conf nginx/logs nginx/tmp
 
 .PHONY: nginx/conf/nginx.conf
 nginx/conf/nginx.conf:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: openssh/sshd_config
 openssh/sshd_config:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 ##############################################################
 # nginx
@@ -1277,7 +1275,7 @@ registry/storage:
 
 .PHONY: registry/config.yml
 registry/config.yml: registry_host.crt
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 
 .PHONY: trust-docker-registry
 trust-docker-registry: registry_host.crt
@@ -1296,7 +1294,7 @@ runner-setup: gitlab-runner-config.toml
 .PHONY: gitlab-runner-config.toml
 ifeq ($(runner_enabled),true)
 gitlab-runner-config.toml:
-	$(Q)rake $@
+	$(Q)${bundle_exec_cmd} rake $@
 else
 gitlab-runner-config.toml:
 	@true
@@ -1345,33 +1343,24 @@ jaeger-update-run: jaeger-setup
 .PHONY: test
 test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml
 
-.PHONY: rubocop
-rubocop:
+.PHONY: .gdk-bundle
+.gdk-bundle:
 ifeq ($(BUNDLE),)
 	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
-ifeq ($(RUBOCOP),)
-	@echo "INFO: Installing RuboCop.."
 	$(Q)${bundle_install_cmd} ${QQ}
-endif
-	@echo -n "RuboCop: "
-	@${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
 endif
 
+.PHONY: rubocop
+rubocop: .gdk-bundle
+	@echo -n "RuboCop: "
+	$(Q)${bundle_exec_cmd} $@ --config .rubocop-gdk.yml --parallel
+
 .PHONY: rspec
-rspec:
-ifeq ($(BUNDLE),)
-	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
-	@false
-else
-ifeq ($(RSPEC),)
-	@echo "INFO: Installing RSpec.."
-	$(Q)${bundle_install_cmd} ${QQ}
-endif
+rspec: .gdk-bundle
 	@echo -n "RSpec: "
-	@${BUNDLE} exec $@ ${RSPEC_ARGS}
-endif
+	$(Q)${bundle_exec_cmd} $@ ${RSPEC_ARGS}
 
 .PHONY: lint
 lint: vale markdownlint

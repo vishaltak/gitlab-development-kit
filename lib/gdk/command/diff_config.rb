@@ -95,7 +95,7 @@ module GDK
         end
 
         def update_config_file
-          run('rake', "generate-file-at[#{file},#{temporary_diff_file}]")
+          run('bundle', 'exec', 'rake', "generate-file-at[#{file},#{temporary_diff_file}]")
         end
 
         def diff_with_unchanged
