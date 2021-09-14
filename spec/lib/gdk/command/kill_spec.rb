@@ -21,9 +21,9 @@ RSpec.describe GDK::Command::Kill, :hide_stdout do
 
     before do
       stub_runsv_processes_to_kill(runsv_processes_to_kill_output)
-      allow(GDK::Output).to receive(:warn).with("You're about to forcibly kill the following runsv processes:\n\n")
+      allow(GDK::Output).to receive(:warn).with("You're about to kill the following runsv processes:\n\n")
       allow(GDK::Output).to receive(:puts).with("#{runsv_processes_to_kill_output}\n\n")
-      allow(GDK::Output).to receive(:info).with("This command will stop all your GDK instances and any other process started by runit-based. Check the list above to avoid unwanted results.\n\n")
+      allow(GDK::Output).to receive(:info).with("This command will stop all your GDK instances and any other process started by runit.\n\n")
     end
 
     context 'when the user does not accept / aborts the prompt' do
