@@ -138,6 +138,8 @@ stop() {
   sleep 5
   # shellcheck disable=SC2009
   ps -ef | grep "[r]unsv" || true
+
+  GDK_KILL_CONFIRM=true gdk kill || true
 }
 
 restart() {

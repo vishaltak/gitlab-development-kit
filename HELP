@@ -11,6 +11,7 @@ Manage services:
   gdk status                                # See status of all services
   gdk restart                               # Restart everything
   gdk restart redis postgresql              # Restart specific services
+  gdk kill                                  # Forcibly kills services
 
   gdk tail                                  # Tail all logs
   gdk tail redis postgresql                 # Tail specific logs
