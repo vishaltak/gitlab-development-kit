@@ -81,7 +81,7 @@ RSpec.describe GDK::Diagnostic::StaleServices do
         let(:output) { stale_processes }
 
         it 'returns help message' do
-          expect(subject.detail).to eq("The following GDK services appear to be stale:\n\nrails-web\nrails-actioncable\n\nYou can try killing them by running:\n\nkill 95010 95011\n")
+          expect(subject.detail).to eq("The following GDK services appear to be stale:\n\nrails-web\nrails-actioncable\n\nYou can try killing them by running 'gdk kill' or:\n\nkill 95010 95011\n")
         end
       end
     end

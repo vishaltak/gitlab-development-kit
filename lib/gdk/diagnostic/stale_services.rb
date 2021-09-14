@@ -90,7 +90,7 @@ module GDK
 
           #{stale_services}
 
-          You can try killing them by running:
+          You can try killing them by running 'gdk kill' or:
 
           kill #{stale_pids}
         MESSAGE
