@@ -2,9 +2,10 @@
 
 source 'https://rubygems.org'
 
+gem 'rake', '~> 13.0.0'
+
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
-  gem 'rake', '~> 13.0.0'
   gem 'yard', '~> 0.9.0', require: false
 end
 
