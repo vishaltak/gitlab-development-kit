@@ -10,6 +10,7 @@ module GDK
     autoload :Doctor, 'gdk/command/doctor'
     autoload :Help, 'gdk/command/help'
     autoload :Install, 'gdk/command/install'
+    autoload :Kill, 'gdk/command/kill'
     autoload :MeasureBase, 'gdk/command/measure_base'
     autoload :MeasureUrl, 'gdk/command/measure_url'
     autoload :MeasureWorkflow, 'gdk/command/measure_workflow'
@@ -39,6 +40,7 @@ module GDK
       'doctor' => -> { GDK::Command::Doctor },
       'env' => -> { GDK::Command::Env },
       'install' => -> { GDK::Command::Install },
+      'kill' => -> { GDK::Command::Kill },
       'help' => -> { GDK::Command::Help },
       'measure' => -> { GDK::Command::MeasureUrl },
       'measure-workflow' => -> { GDK::Command::MeasureWorkflow },

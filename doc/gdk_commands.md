@@ -48,6 +48,19 @@ running tests), run:
 gdk stop rails
 ```
 
+## Kill all services
+
+Services can fail to properly stop when running `gdk stop` and must be forcibly
+terminated. To terminate unstoppable services, run:
+
+```shell
+gdk kill
+```
+
+This command is a manual command because it kills all `runsv` processes,
+which can include processes outside the current GDK. Don't use this command if you're running 
+other processes with `runit`, or if you're running multiple instances of GDK (and you don't want to stop them all).
+
 ## Update GDK
 
 To update `gitlab` and all of its dependencies, run the following commands:
