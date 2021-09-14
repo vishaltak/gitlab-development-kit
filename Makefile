@@ -23,13 +23,23 @@ export ROLLUP_OPTIONS = --silent
 
 NO_RUBY_REQUIRED := bootstrap
 
+quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
+bundle_without_production_cmd = ${BUNDLE} config set without 'production'
+bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
 bundle_exec_cmd = ${BUNDLE} exec
 
 # Generate a Makefile from Ruby and include it
-ifdef RAKE
 ifeq (,$(filter $(NO_RUBY_REQUIRED), $(MAKECMDGOALS)))
-include $(shell $(bundle_exec_cmd) rake gdk-config.mk)
+
+ifeq (, $(shell command -v bundle 2> /dev/null))
+$(error "ERROR: Bundler is not installed. Please ensure you have run 'make bootstrap'.")
 endif
+
+ifeq (, $(shell bundle exec rake --version 2> /dev/null))
+$(error "ERROR: Rake is not installed. Please ensure you have run 'make bootstrap'.")
+endif
+
+include $(shell $(bundle_exec_cmd) rake gdk-config.mk)
 endif
 
 # gdk-config.mk defaults: start
@@ -63,9 +73,6 @@ pages_version = $(shell support/resolve-dependency-commitish "${gitlab_developme
 gitlab_k8s_agent_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
 gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
-quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
-bundle_without_production_cmd = ${BUNDLE} config set without 'production'
-bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 gitlab_rake_cmd = $(in_gitlab) ${bundle_exec_cmd} rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)

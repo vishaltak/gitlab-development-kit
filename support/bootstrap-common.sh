@@ -111,6 +111,10 @@ configure_ruby_bundler() {
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 }
 
+install_bundler_gems() {
+  bundle install --jobs 4
+}
+
 ensure_sudo_available() {
   if [ -z "$(command -v sudo)" ]; then
     echo "ERROR: sudo command not found!" >&2

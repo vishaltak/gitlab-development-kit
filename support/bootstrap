@@ -113,6 +113,16 @@ if ! asdf_reshim; then
   error "Failed to reshim asdf." >&2
 fi
 
+echo "INFO: Configuring Ruby Bundler.."
+if ! configure_ruby_bundler; then
+  error "Failed to configure Ruby Bundler." >&2
+fi
+
+echo "INFO: Installing Ruby gems via bundler.."
+if ! install_bundler_gems; then
+  error "Failed to install Ruby gems via bundler." >&2
+fi
+
 echo "INFO: Installing gitlab-development-kit Ruby gem.."
 if ! gdk_install_gem; then
   error "Failed to install gitlab-development-kit Ruby gem." >&2
@@ -121,11 +131,6 @@ fi
 echo "INFO: Preparing GDK directory.."
 if ! gdk_prepare_directory; then
   error "Failed to prepare GDK directory." >&2
-fi
-
-echo "INFO: Configuring Ruby Bundler.."
-if ! configure_ruby_bundler; then
-  error "Failed to configure Ruby Bundler." >&2
 fi
 
 gdk_mark_bootstrapped
