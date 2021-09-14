@@ -354,7 +354,7 @@ gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab_rails:db:migrate
 
 gitlab/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
 gitlab-config: \
 	gitlab/config/gitlab.yml \
@@ -473,7 +473,7 @@ gitlab-shell-git-pull-run:
 # symlink, if necessary. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/1086
 .PHONY: ${gitlab_shell_clone_dir}/.git
 ${gitlab_shell_clone_dir}/.git:
-	$(Q)support/move-existing-gitlab-shell-directory || git clone --quiet --branch "${gitlab_shell_version}" ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
+	$(Q)support/move-existing-gitlab-shell-directory || support/component-git-clone --quiet --branch "${gitlab_shell_version}" ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 .PHONY: gitlab-shell/config.yml
 gitlab-shell/config.yml: ${gitlab_shell_clone_dir}/.git
@@ -494,7 +494,7 @@ gitaly-setup: ${gitaly_build_bin_dir}/gitaly ${gitaly_build_deps_dir}/git/instal
 
 ${gitaly_clone_dir}/.git:
 	$(Q)if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi
-	$(Q)git clone --quiet ${gitaly_repo} ${gitaly_clone_dir}
+	$(Q)support/component-git-clone --quiet ${gitaly_repo} ${gitaly_clone_dir}
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" ${QQ}
 
 .PHONY: gitaly-update
@@ -600,7 +600,7 @@ charts-gitlab-pull:
 endif
 
 gitlab-docs/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
 
 gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo
@@ -610,7 +610,7 @@ gitlab-docs/.git/pull: gitlab-docs/.git
 	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" HEAD ${QQ}
 
 gitlab-runner/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_runner_repo} gitlab-runner
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_runner_repo} gitlab-runner
 
 gitlab-runner/.git/pull: gitlab-runner/.git
 	@echo
@@ -620,7 +620,7 @@ gitlab-runner/.git/pull: gitlab-runner/.git
 	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" HEAD ${QQ}
 
 omnibus-gitlab/.git:
-	$(Q)git clone ${git_depth_param} ${omnibus_gitlab_repo} omnibus-gitlab
+	$(Q)support/component-git-clone ${git_depth_param} ${omnibus_gitlab_repo} omnibus-gitlab
 
 omnibus-gitlab/.git/pull: omnibus-gitlab/.git
 	@echo
@@ -630,7 +630,7 @@ omnibus-gitlab/.git/pull: omnibus-gitlab/.git
 	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" HEAD ${QQ}
 
 charts-gitlab/.git:
-	$(Q)git clone ${git_depth_param} ${charts_gitlab_repo} charts-gitlab
+	$(Q)support/component-git-clone ${git_depth_param} ${charts_gitlab_repo} charts-gitlab
 
 charts-gitlab/.git/pull: charts-gitlab/.git
 	@echo
@@ -723,7 +723,7 @@ gitlab-spamcheck-setup:
 endif
 
 gitlab-spamcheck/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_spamcheck_repo} ${gitlab_spamcheck_clone_dir}
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_spamcheck_repo} ${gitlab_spamcheck_clone_dir}
 
 ifeq ($(gitlab_spamcheck_enabled),true)
 gitlab-spamcheck-update: gitlab-spamcheck-update-timed
@@ -859,7 +859,7 @@ gitlab-elasticsearch-indexer-clean-bin:
 	$(Q)rm -rf gitlab-elasticsearch-indexer/bin
 
 gitlab-elasticsearch-indexer/.git:
-	$(Q)git clone --quiet --branch "${gitlab_elasticsearch_indexer_version}" ${git_depth_param} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
+	$(Q)support/component-git-clone --quiet --branch "${gitlab_elasticsearch_indexer_version}" ${git_depth_param} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
 
 .PHONY: gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
 gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git
@@ -900,7 +900,7 @@ gitlab-pages/bin/gitlab-pages: ${gitlab_pages_clone_dir}/.git
 	$(Q)$(MAKE) -C ${gitlab_pages_clone_dir} ${QQ}
 
 ${gitlab_pages_clone_dir}/.git:
-	$(Q)support/move-existing-gitlab-pages-directory || git clone --quiet --branch "${pages_version}" ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
+	$(Q)support/move-existing-gitlab-pages-directory || support/component-git-clone --quiet --branch "${pages_version}" ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
 
 gitlab-pages/.git/pull:
 	@echo
@@ -961,7 +961,7 @@ endif
 	$(Q)brew install bazelisk
 
 ${gitlab_k8s_agent_clone_dir}/.git:
-	$(Q)git clone --quiet --branch "${gitlab_k8s_agent_version}" ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} ${QQ}
+	$(Q)support/component-git-clone --quiet --branch "${gitlab_k8s_agent_version}" ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} ${QQ}
 
 gitlab-k8s-agent/.git/pull:
 	@echo
@@ -994,7 +994,7 @@ endif
 gitlab-ui-update-run: gitlab-ui/.git gitlab-ui/.git/pull gitlab-ui-clean .gitlab-ui-yarn
 
 gitlab-ui/.git:
-	$(Q)git clone ${git_depth_param} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
 
 gitlab-ui/.git/pull:
 	@echo
