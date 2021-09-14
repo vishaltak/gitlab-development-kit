@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gdk start
+gdk tail

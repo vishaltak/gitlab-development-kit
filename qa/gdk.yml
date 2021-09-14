@@ -1,0 +1,18 @@
+---
+hostname: gitlab.test
+listen_address: 0.0.0.0
+port: 80
+sshd:
+  enabled: true
+  listen_address: 0.0.0.0
+  additional_config: 'AcceptEnv GIT_PROTOCOL'
+  port: 22
+webpack:
+  static: true
+  vendor_dll: true
+  sourcemaps: false
+gitlab:
+  rails:
+    puma:
+      workers: 0
+  cache_classes: true
