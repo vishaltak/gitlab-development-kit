@@ -1,7 +1,7 @@
 _gdk_root()
 {
   local root
-  root="$(cd "$(dirname "$0")" || exit ; pwd -P)"
+  root="$(cd "$(dirname .)" || exit ; pwd -P)"
 
   while [ "$root" != "/" ]; do
     if [ -e "$root/GDK_ROOT" ]; then
