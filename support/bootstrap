@@ -7,7 +7,7 @@ parent_path=$(dirname "$0")
 # shellcheck source=support/bootstrap-common.sh
 source "${parent_path}"/bootstrap-common.sh
 
-ASDF_VERSION_TO_INSTALL="v0.8.0"
+ASDF_VERSION_TO_INSTALL="v0.8.1"
 
 GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
 
