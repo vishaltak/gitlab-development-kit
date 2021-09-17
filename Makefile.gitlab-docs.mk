@@ -1,0 +1,202 @@
+ifeq ($(gitlab_docs_enabled),true)
+gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-docs-deps
+else
+gitlab-docs-setup:
+	@true
+endif
+
+ifeq ($(gitlab_runner_enabled),true)
+gitlab-runner: gitlab-runner/.git
+else
+gitlab-runner:
+	@true
+endif
+
+ifeq ($(gitlab_runner_enabled),true)
+gitlab-runner-pull: gitlab-runner/.git/pull
+else
+gitlab-runner-pull:
+	@true
+endif
+
+ifeq ($(omnibus_gitlab_enabled),true)
+omnibus-gitlab: omnibus-gitlab/.git
+else
+omnibus-gitlab:
+	@true
+endif
+
+ifeq ($(omnibus_gitlab_enabled),true)
+omnibus-gitlab-pull: omnibus-gitlab/.git/pull
+else
+omnibus-gitlab-pull:
+	@true
+endif
+
+ifeq ($(charts_gitlab_enabled),true)
+charts-gitlab: charts-gitlab/.git
+else
+charts-gitlab:
+	@true
+endif
+
+ifeq ($(charts_gitlab_enabled),true)
+charts-gitlab-pull: charts-gitlab/.git/pull
+else
+charts-gitlab-pull:
+	@true
+endif
+
+gitlab-docs/.git:
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
+
+gitlab-docs/.git/pull: gitlab-docs/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/gitlab-docs to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" HEAD ${QQ}
+
+gitlab-runner/.git:
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_runner_repo} gitlab-runner
+
+gitlab-runner/.git/pull: gitlab-runner/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/gitlab-runner to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" HEAD ${QQ}
+
+omnibus-gitlab/.git:
+	$(Q)support/component-git-clone ${git_depth_param} ${omnibus_gitlab_repo} omnibus-gitlab
+
+omnibus-gitlab/.git/pull: omnibus-gitlab/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/omnibus-gitlab to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" HEAD ${QQ}
+
+charts-gitlab/.git:
+	$(Q)support/component-git-clone ${git_depth_param} ${charts_gitlab_repo} charts-gitlab
+
+charts-gitlab/.git/pull: charts-gitlab/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/charts/gitlab to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" HEAD ${QQ}
+
+.PHONY: gitlab-docs-deps
+gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn rm-symlink-gitlab-docs
+
+gitlab-docs-bundle:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
+
+gitlab-docs-yarn:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
+
+# Ensure no legacy symlinks are in place
+rm-symlink-gitlab-docs:
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/ee
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/runner
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/omnibus
+	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/charts
+
+gitlab-docs-clean:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && rm -rf tmp
+
+gitlab-docs-build:
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(nanoc_cmd)
+
+.PHONY: gitlab-docs-update
+ifeq ($(gitlab_docs_enabled),true)
+gitlab-docs-update: gitlab-docs-update-timed
+else
+gitlab-docs-update:
+	@true
+endif
+
+.PHONY: gitlab-docs-update-run
+gitlab-docs-update-run: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-pull charts-gitlab-pull gitlab-docs-deps gitlab-docs-build
+
+# Internal links and anchors checks for documentation
+ifeq ($(gitlab_docs_enabled),true)
+gitlab-docs-check: gitlab-runner-docs-check omnibus-gitlab-docs-check charts-gitlab-docs-check gitlab-docs-build
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
+		$(nanoc_cmd) check internal_links && \
+		$(nanoc_cmd) check internal_anchors
+else
+gitlab-docs-check:
+	@echo "ERROR: gitlab_docs is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+endif
+
+ifneq ($(gitlab_runner_enabled),true)
+gitlab-runner-docs-check:
+	@echo "ERROR: gitlab_runner is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+gitlab-runner-docs-check:
+	@true
+endif
+
+ifneq ($(omnibus_gitlab_enabled),true)
+omnibus-gitlab-docs-check:
+	@echo "ERROR: omnibus_gitlab is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+omnibus-gitlab-docs-check:
+	@true
+endif
+
+ifneq ($(charts_gitlab_enabled),true)
+charts-gitlab-docs-check:
+	@echo "ERROR: charts_gitlab is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+charts-gitlab-docs-check:
+	@true
+endif
+
+##############################################################
+# GitLab Spamcheck
+##############################################################
+
+ifeq ($(gitlab_spamcheck_enabled),true)
+gitlab-spamcheck-setup: gitlab-spamcheck/.git gitlab-spamcheck/spamcheck gitlab-spamcheck/config/config.toml
+else
+gitlab-spamcheck-setup:
+	@true
+endif
+
+gitlab-spamcheck/.git:
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_spamcheck_repo} ${gitlab_spamcheck_clone_dir}
+
+ifeq ($(gitlab_spamcheck_enabled),true)
+gitlab-spamcheck-update: gitlab-spamcheck-update-timed
+else
+gitlab-spamcheck-update:
+	@true
+endif
+
+.PHONY: gitlab-spamcheck-update-run
+gitlab-spamcheck-update-run: gitlab-spamcheck-git-pull gitlab-spamcheck/spamcheck gitlab-spamcheck/config/config.toml
+
+.PHONY: gitlab-spamcheck-git-pull
+gitlab-spamcheck-git-pull: gitlab-spamcheck-git-pull-timed
+
+.PHONY: gitlab-spamcheck-git-pull-run
+gitlab-spamcheck-git-pull-run: gitlab-spamcheck/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/spamcheck to current default branch"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update gitlab_spamcheck "${gitlab_spamcheck_clone_dir}" HEAD ${QQ}
+
+gitlab-spamcheck/spamcheck: gitlab-spamcheck/.git
+	$(Q)make -C gitlab-spamcheck build ${QQ}
+
+.PHONY: gitlab-spamcheck/config/config.toml
+gitlab-spamcheck/config/config.toml:
+	$(Q)rake $@
