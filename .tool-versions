@@ -1,16 +1,11 @@
-# Versions of GDK dependencies managed by asdf.
+# support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
+# files from GDK sub-projects.
 #
-# New versions must be introduced alongside the current version, and are automatically installed by
-# GDK for asdf users.
-#
-# <default-version> <other-version>
-ruby 2.7.4 2.7.2 3.0.2
-# At least one Go version must match a Go version set in the `.tool-versions` file of the version of
-# the `gitlab-pages` and `gitaly` projects used by GDK. See `pages_version` and `gitaly_version` in
-# the GDK Makefile.
-golang 1.16.8 1.16.4
-nodejs 14.17.2
-yarn 1.22.10
+# Do not modify this file directly.
+golang 1.16.8 1.15.15
 minio 2021-04-06T23-11-00Z
+nodejs 14.17.5
 postgres 12.6 11.9
 redis 6.0.15
+ruby 2.7.4 3.0.2
+yarn 1.22.11

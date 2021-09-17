@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'uri'
+require 'net/http'
+
+require_relative '../lib/gdk'
+
+TOOL_VERSIONS_FILES = %w[
+  https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+  https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+  https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
+  https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+].freeze
+
+HEADER_CONTENT = <<~CONTENT
+  # support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
+  # files from GDK sub-projects.
+  #
+  # Do not modify this file directly.
+CONTENT
+
+def gdk_root
+  @gdk_root ||= GDK::Config.new.gdk_root
+end
+
+def http_get(url)
+  uri = URI.parse(url)
+  response = Net::HTTP.get_response(uri)
+  raise "Unable to get '#{url}'" unless response.class == Net::HTTPOK
+
+  response.body
+end
+
+def read_tool_versions_from(content)
+  content.lines.each_with_object({}) do |entry, object|
+    next unless (match = entry.match(/^(?<software>\w+) (?<versions>.+)$/))
+
+    object[match[:software]] = match[:versions].split
+  end
+end
+
+def write_tool_versions_file(tool_versions_data)
+  formatted_tool_versions_data = tool_versions_data.sort.map do |software, versions|
+    "#{software} #{(versions).join(' ')}"
+  end.join("\n")
+
+  gdk_root.join('.tool-versions').write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
+end
+
+# ------------------------------------------------------------------------------
+
+tool_versions_data = read_tool_versions_from(gdk_root.join('.tool-versions-gdk').read)
+
+TOOL_VERSIONS_FILES.each do |url|
+  software, versions = read_tool_versions_from(http_get(url)).first
+  tool_versions_data[software] ||= []
+  tool_versions_data[software] |= versions
+end
+
+write_tool_versions_file(tool_versions_data)
