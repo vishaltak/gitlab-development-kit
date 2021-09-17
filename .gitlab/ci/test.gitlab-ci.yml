@@ -106,6 +106,8 @@ verify-asdf-combine:
   needs: []
   script:
     - make verify-asdf-combine
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
 danger-review:
   extends:
