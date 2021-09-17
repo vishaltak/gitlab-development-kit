@@ -1,3 +1,5 @@
+gitlab_ui_clone_dir = gitlab-ui
+
 .PHONY: gitlab-ui-setup
 ifeq ($(gitlab_ui_enabled),true)
 gitlab-ui-setup: gitlab-ui/.git .gitlab-ui-yarn

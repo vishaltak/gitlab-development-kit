@@ -1,3 +1,5 @@
+psql := $(postgresql_bin_dir)/psql
+
 postgresql-replication-primary: postgresql-replication/access postgresql-replication/role postgresql-replication/config
 
 postgresql-replication-secondary: postgresql-replication/data postgresql-replication/access postgresql-replication/backup postgresql-replication/config

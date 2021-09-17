@@ -1,3 +1,6 @@
+gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
+gitlab_k8s_agent_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
+
 ifeq ($(gitlab_k8s_agent_enabled),true)
 gitlab-k8s-agent-setup: gitlab-k8s-agent/build/gdk/bin/kas_race gitlab-k8s-agent-config.yml
 else

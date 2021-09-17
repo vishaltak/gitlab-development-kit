@@ -11,10 +11,6 @@ BUNDLE := $(shell command -v bundle 2> /dev/null)
 GOLANG := $(shell command -v go 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
 
-MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
-RUBOCOP := $(shell command -v rubocop 2> /dev/null)
-RSPEC := $(shell command -v rspec 2> /dev/null)
-
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
 
@@ -63,12 +59,7 @@ include Makefile.gitlab-pages.mk
 include Makefile.gitlab-k8s.mk
 include Makefile.gitlab-ui.mk
 include Makefile.gitlab-runner.mk
-
-# gdk-config.mk defaults: start
-dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
-dev_shellcheck_binary := $(or $(dev_shellcheck_binary),$(shell command -v shellcheck 2> /dev/null))
-dev_vale_binary := $(or $(dev_vale_binary),$(shell command -v vale 2> /dev/null))
-# gdk-config.mk defaults: end
+include Makefile.gitlab-spamcheck.mk
 
 ifeq ($(platform),darwin)
 OPENSSL_PREFIX := $(shell brew --prefix openssl)
@@ -77,33 +68,8 @@ else
 OPENSSL := $(shell command -v openssl 2> /dev/null)
 endif
 
-gitlab_clone_dir = gitlab
-gitlab_shell_clone_dir = gitlab-shell
-gitaly_clone_dir = gitaly
-gitlab_docs_clone_dir = gitlab-docs
-gitlab_spamcheck_clone_dir = gitlab-spamcheck
-gitlab_runner_clone_dir = gitlab-runner
-omnibus_gitlab_clone_dir = omnibus-gitlab
-charts_gitlab_clone_dir = charts-gitlab
-gitlab_pages_clone_dir = gitlab-pages
-gitlab_k8s_agent_clone_dir = gitlab-k8s-agent
-gitlab_ui_clone_dir = gitlab-ui
-
-gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
-gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
-pages_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
-gitlab_k8s_agent_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_KAS_VERSION")
-gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
-
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
-bundle_without_production_cmd = ${BUNDLE} config set without 'production'
 bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
-in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
-gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
-gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
-nanoc_cmd = ${BUNDLE} exec nanoc
-
-psql := $(postgresql_bin_dir)/psql
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
@@ -287,8 +253,6 @@ ensure-required-ruby-bundlers-installed:
 .PHONY: diff-config
 diff-config: touch-examples
 	$(Q)gdk $@
-
-performance-metrics-setup: Procfile grafana-setup
 
 support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 

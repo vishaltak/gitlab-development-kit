@@ -1,3 +1,6 @@
+gitlab_shell_clone_dir = gitlab-shell
+gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
+
 gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret openssh/ssh_host_rsa_key
 	$(Q)make -C gitlab-shell build ${QQ}
 

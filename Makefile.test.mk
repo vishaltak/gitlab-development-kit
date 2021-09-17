@@ -1,3 +1,11 @@
+MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+RUBOCOP := $(shell command -v rubocop 2> /dev/null)
+RSPEC := $(shell command -v rspec 2> /dev/null)
+
+dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
+dev_shellcheck_binary := $(or $(dev_shellcheck_binary),$(shell command -v shellcheck 2> /dev/null))
+dev_vale_binary := $(or $(dev_vale_binary),$(shell command -v vale 2> /dev/null))
+
 .PHONY: test
 test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml
 
