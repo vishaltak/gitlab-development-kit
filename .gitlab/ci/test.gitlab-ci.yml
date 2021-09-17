@@ -99,6 +99,14 @@ verify-gdk-example-yml:
   script:
     - make verify-gdk-example-yml
 
+verify-asdf-combine:
+  extends: .rules:code-changes
+  image: ruby:2.7
+  stage: test
+  needs: []
+  script:
+    - make verify-asdf-combine
+
 danger-review:
   extends:
     - .review:rules:danger

@@ -1419,6 +1419,11 @@ verify-gdk-example-yml:
 	@echo -n "Checking gdk.example.yml: "
 	@support/ci/verify-gdk-example-yml && echo "OK"
 
+.PHONY: verify-asdf-combine
+verify-asdf-combine:
+	@echo -n "Checking if .tool-versions is up-to-date: "
+	@support/ci/verify-asdf-combine && echo "OK"
+
 ##############################################################
 # Misc
 ##############################################################
