@@ -1,48 +1,62 @@
-#!/usr/bin/env bash
-# Use the unofficial bash strict mode: http://redsymbol.net/articles/unofficial-bash-strict-mode/
+#!/usr/bin/env ruby
 
-set -euo pipefail; export FS=$'\n\t'
+# frozen_string_literal: true
 
-function get_tool_versions() {
-  local dir="$1"
-  local remote="$2"
-  local target="tmp/tool_version/${dir}.tool-versions"
+require 'uri'
+require 'net/http'
 
-  echo "Downloading .tool-versions for $dir"
+require_relative '../lib/gdk'
 
-  curl --location --fail --silent "$remote" > "$target" ||
-    echo "could not download tool versions file for $dir"
-}
+TOOL_VERSIONS_FILES = %w[
+  https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+  https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+  https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
+  https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+].freeze
 
-function combine_tool_versions() {
-  echo "Combined tool-versions:"
-  tools=$(cat tmp/tool_version/*.tool-versions | grep -vE "^#" | cut -f1 -d" " | sort -u)
+HEADER_CONTENT = <<~CONTENT
+  # support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
+  # files from GDK sub-projects.
+  #
+  # Do not modify this file directly.
+CONTENT
 
-  {
-    echo "# support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions"
-    echo "# files from GDK sub-projects."
-    echo "#"
-    echo "# Do not modify this file directly."
+def gdk_root
+  @gdk_root ||= GDK::Config.new.gdk_root
+end
 
-    for tool in $tools; do
-      versions=$(awk 1 tmp/tool_version/*.tool-versions | grep -vE "^#" | grep "^$tool" | cut -f2- -d" " | tr " " "\n" | awk '!a[$0]++' | xargs)
-      echo "$tool $versions"
-    done
-  } | tee .tool-versions | sed 's/^/  /'
-}
+def http_get(url)
+  uri = URI.parse(url)
+  response = Net::HTTP.get_response(uri)
+  raise "Unable to get '#{url}'" unless response.class == Net::HTTPOK
 
-rm -rf "tmp/tool_version" .tool-versions
-mkdir -p "tmp/tool_version"
+  response.body
+end
 
-echo "Copying .tool-versions of gdk"
+def read_tool_versions_from(content)
+  content.lines.each_with_object({}) do |entry, object|
+    next unless (match = entry.match(/^(?<software>\w+) (?<versions>.+)$/))
 
-cp .tool-versions-gdk tmp/tool_version/00_gdk.tool-versions
+    object[match[:software]] = match[:versions].split
+  end
+end
 
-get_tool_versions gitlab-pages https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
-get_tool_versions gitaly https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-get_tool_versions gitlab-ui https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
-get_tool_versions gitlab-docs https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+def write_tool_versions_file(tool_versions_data)
+  formatted_tool_versions_data = tool_versions_data.sort.map do |software, versions|
+    "#{software} #{(versions).join(' ')}"
+  end.join("\n")
 
-combine_tool_versions
+  gdk_root.join('.tool-versions').write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
+end
 
-echo "Done"
+# ------------------------------------------------------------------------------
+
+tool_versions_data = read_tool_versions_from(gdk_root.join('.tool-versions-gdk').read)
+
+TOOL_VERSIONS_FILES.each do |url|
+  software, versions = read_tool_versions_from(http_get(url)).first
+  tool_versions_data[software] ||= []
+  tool_versions_data[software] |= versions
+end
+
+write_tool_versions_file(tool_versions_data)
