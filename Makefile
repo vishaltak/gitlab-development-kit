@@ -8,7 +8,6 @@ SHELL = /bin/bash
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
-GOLANG := $(shell command -v go 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
 
 # Speed up Go module downloads
