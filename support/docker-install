@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if ! command -v multipass > /dev/null 2>&1; then
+	echo "ERROR: multipass not installed, see https://multipass.run/docs for how to install."
+	exit 1
+fi
+
+if ! multipass info docker > /dev/null 2>&1; then
+	multipass launch -c 2 -m 2G -d 4G -n docker 20.10 --cloud-init support/multipass-docker.yaml
+	multipass mount /Users docker
+	multipass set client.primary-name=docker
+fi
+
+until (DOCKER_HOST="docker.local" docker ps > /dev/null 2>&1); do printf '.'; sleep 5; done && echo ; echo "INFO: Docker on your 'docker' multipass instance is ready."
+
+echo "INFO: To be able to use the 'docker' command line tool, you'll need to either:"
+echo
+echo 'Set an alias - alias docker="DOCKER_HOST=docker.local /usr/local/bin/docker"'
+echo "or:"
+echo 'Export the DOCKER_HOST environment variable - export DOCKER_HOST=docker.local'

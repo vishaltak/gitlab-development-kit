@@ -1,0 +1,3 @@
+#!/bin/bash
+
+multipass exec docker --  bash -c 'sudo apt -qq update && sudo apt dist-upgrade && sudo apt autoremove'
