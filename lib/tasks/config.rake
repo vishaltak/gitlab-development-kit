@@ -207,3 +207,7 @@ end
 file 'grafana/grafana.ini' => ['support/templates/grafana.ini.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
+
+file 'postgresql/data/postgresql.conf' => ['support/templates/postgresql.conf.erb'] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end

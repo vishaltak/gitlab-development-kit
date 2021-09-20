@@ -208,6 +208,8 @@ postgresql:
   bin: "/usr/local/bin/postgres"
   bin_dir: "/usr/local/bin"
   data_dir: "/home/git/gdk/postgresql/data"
+  date_style: iso, mdy
+  default_text_search_config: pg_catalog.english
   dir: "/home/git/gdk/postgresql"
   geo:
     dir: "/home/git/gdk/postgresql-geo"

@@ -162,7 +162,6 @@ update-summarize:
 reconfigure: ensure-required-ruby-bundlers-installed \
 touch-examples \
 unlock-dependency-installers \
-postgresql-sensible-defaults \
 all \
 show-reconfigured-at
 
@@ -1049,7 +1048,7 @@ redis/redis.conf:
 ##############################################################
 
 .PHONY: postgresql
-postgresql: postgresql/data postgresql/port postgresql-seed-rails postgresql-seed-praefect
+postgresql: postgresql/data postgresql/data/postgresql.conf postgresql/data/user.conf postgresql-seed-rails postgresql-seed-praefect
 
 postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
@@ -1063,11 +1062,12 @@ postgresql-seed-praefect: Procfile postgresql/data postgresql-geo/data postgresq
 	$(Q)gdk start db
 	$(Q)support/bootstrap-praefect
 
-postgresql/port:
-	$(Q)support/postgres-port ${postgresql_dir} ${postgresql_port}
+.PHONY: postgresql/data/postgresql.conf
+postgresql/data/postgresql.conf:
+	$(Q)rake $@
 
-postgresql-sensible-defaults:
-	$(Q)support/postgresql-sensible-defaults ${postgresql_dir}
+postgresql/data/user.conf:
+	$(Q)touch $@
 
 ##############################################################
 # postgresql replication
@@ -1099,7 +1099,7 @@ postgresql-replication/backup:
 	$(Q)rsync -cva --inplace --exclude="*pg_xlog*" --exclude="*.pid" ${postgresql_primary_dir}/data postgresql
 	$(Q)$(psql) -h ${postgresql_primary_host} -p ${postgresql_primary_port} -d postgres -c "select pg_stop_backup(), current_timestamp"
 	$(Q)./support/postgresql-standby-server ${postgresql_primary_host} ${postgresql_primary_port}
-	$(Q)$(MAKE) postgresql/port ${QQ}
+	$(Q)$(MAKE) postgresql/data/postgresql.conf ${QQ}
 
 postgresql-replication/slot:
 	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_create_physical_replication_slot('gitlab_gdk_replication_slot');"

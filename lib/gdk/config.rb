@@ -30,6 +30,8 @@ module GDK
       string(:ca_path) { '' }
     end
 
+    string(:__timezone) { Pathname.new('/etc/localtime').realpath.each_filename.to_a[-2..].join(File::SEPARATOR) }
+
     settings :repositories do
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
@@ -471,6 +473,8 @@ module GDK
         string(:host) { config.postgresql.geo.dir.to_s }
         string(:__active_host) { GDK::PostgresqlGeo.new.use_tcp? ? config.postgresql.geo.host : '' }
       end
+      string(:date_style) { 'iso, mdy' }
+      string(:default_text_search_config) { 'pg_catalog.english' }
     end
 
     settings :gitaly do
