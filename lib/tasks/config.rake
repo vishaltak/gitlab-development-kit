@@ -212,3 +212,7 @@ end
 file 'grafana/grafana.ini' => ['support/templates/grafana.ini.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
+
+file 'haproxy/haproxy.cfg' => ['support/templates/haproxy.cfg.erb'] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end

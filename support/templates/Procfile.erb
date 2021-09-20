@@ -30,6 +30,7 @@ praefect: exec <%= config.praefect.__praefect_build_bin_path %> -config <%= conf
 <% if config.gitaly? -%>
 gitaly: exec <%= config.gitaly.__gitaly_build_bin_path %> <%= config.gitaly.config_file %>
 <% end -%>
+haproxy: exec /usr/local/opt/haproxy/bin/haproxy -f haproxy/haproxy.cfg
 
 # Frontend services
 #

@@ -1,5 +1,4 @@
 !/repositories/.gitkeep
-node_modules/
 *.crt
 *.key
 *.pem
@@ -42,8 +41,8 @@ node_modules/
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
-/gitlab-k8s-agent/
 /gitlab-k8s-agent-config.yml
+/gitlab-k8s-agent/
 /gitlab-pages
 /gitlab-pages-secret
 /gitlab-runner
@@ -110,3 +109,5 @@ node_modules/
 /sv/
 /webpack_port
 Brewfile.lock.json
+haproxy/haproxy.cfg
+node_modules/
