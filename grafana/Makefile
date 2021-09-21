@@ -1,8 +1,8 @@
 # Details from https://grafana.com/grafana/download
 GRAFANA_INSTALL = true
-GRAFANA_VERSION = 7.3.7
-GRAFANA_MACOS_SHA256 = ff1fca8b139141d8ed907ac155ee457552a9076d1c68e6310e48118f9b465f18
-GRAFANA_LINUX_SHA256 = f761a69dbd79744bf0557252d7163b9f42ea24c050206a3995a9bd27d54b5914
+GRAFANA_VERSION = 8.1.4
+GRAFANA_MACOS_SHA256 = 367a33cc9fea711e96243b43d337d7ae1f086ca7e71bdac4b650df6435e8f6b7
+GRAFANA_LINUX_SHA256 = 6b57d8e16f197c0f7049bd4388d8b14e7c0a85fa09fac6a56915dccb5636b7d6
 
 # Determine host operating system
 ifeq ($(shell uname -s), Darwin)
@@ -15,6 +15,7 @@ else
 	GRAFANA_INSTALL = false
 endif
 
+.PHONY: all
 all: grafana grafana-dashboards
 
 ifeq ($(GRAFANA_INSTALL),true)
@@ -36,6 +37,10 @@ grafana-dashboards:
 	@echo "ERROR: Unsupported platform."
 endif
 
-.PHONY:	clean
+.PHONY: test
+test:
+	@true
+
+.PHONY: clean
 clean:
 	@rm -rf grafana grafana-dashboards grafana-${GRAFANA_VERSION}.${OS}-amd64.tar.gz
