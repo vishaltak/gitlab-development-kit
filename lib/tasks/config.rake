@@ -107,6 +107,11 @@ file 'gitlab/config/redis.trace_chunks.yml' => ['support/templates/redis.yml.erb
   GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :trace_chunks).safe_render!
 end
 
+desc 'Generate the redis.rate_limiting.yml config file'
+file 'gitlab/config/redis.rate_limiting.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :rate_limiting).safe_render!
+end
+
 desc 'Generate the database_geo.yml config file'
 file 'gitlab/config/database_geo.yml' => ['support/templates/database_geo.yml.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!

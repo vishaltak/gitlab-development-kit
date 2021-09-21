@@ -2096,4 +2096,24 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'redis' do
+    describe 'databases' do
+      describe 'development' do
+        describe 'rate_limiting' do
+          it 'is 4 by default' do
+            expect(config.redis.databases.development.rate_limiting).to eq(4)
+          end
+        end
+      end
+
+      describe 'test' do
+        describe 'rate_limiting' do
+          it 'is 14 by default' do
+            expect(config.redis.databases.test.rate_limiting).to eq(14)
+          end
+        end
+      end
+    end
+  end
 end

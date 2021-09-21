@@ -705,6 +705,7 @@ module GDK
           integer(:queues) { 1 }
           integer(:cache) { 2 }
           integer(:trace_chunks) { 3 }
+          integer(:rate_limiting) { 4 }
         end
 
         settings(:test) do
@@ -712,6 +713,7 @@ module GDK
           integer(:queues) { 11 }
           integer(:cache) { 12 }
           integer(:trace_chunks) { 13 }
+          integer(:rate_limiting) { 14 }
         end
       end
     end

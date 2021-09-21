@@ -92,6 +92,10 @@ gitlab/config/redis.shared_state.yml:
 gitlab/config/redis.trace_chunks.yml:
 	$(Q)rake $@
 
+.PHONY: gitlab/config/redis.rate_limiting.yml
+gitlab/config/redis.rate_limiting.yml:
+	$(Q)rake $@
+
 gitlab/public/uploads:
 	$(Q)mkdir $@
 
