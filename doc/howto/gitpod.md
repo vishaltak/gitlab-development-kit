@@ -41,8 +41,11 @@ click the reload button in the right side bar.
 
 ![GDK in Gitpod](img/gdk-in-gitpod.png)
 
-Sign in to GitLab running in GDK, and you are ready to make or review changes. If you
-have questions about the UI or if you are curious have a look at:
+Sign in to GitLab using the default username `root` and password `5iveL!fe`. You must
+immediately change that password after you log in the first time. Every new Gitpod workspace
+requires you to change the password again. Now you are ready to make or review changes.
+
+If you have questions about the UI or if you are curious have a look at:
 
 - [Gitpod documentation](https://www.gitpod.io/docs/).
 - [GDK commands documentation](../gdk_commands.md).
