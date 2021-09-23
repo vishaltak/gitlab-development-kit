@@ -5,7 +5,7 @@ and related projects.
 
 ## Install prerequisites
 
-Installation requires `git` and `make` are installed.
+Installation requires `[git](https://git-scm.com/downloads)` and `make` are installed.
 
 ### macOS
 
