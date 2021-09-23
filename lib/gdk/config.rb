@@ -88,6 +88,7 @@ module GDK
     settings :gdk do
       bool(:ask_to_restart_after_update) { true }
       bool(:debug) { false }
+      bool(:__debug) { config.gdk.debug? || ENV.fetch('GDK_DEBUG', 'false') == 'true' }
       integer(:runit_wait_secs) { 20 }
       bool(:quiet) { true }
       bool(:auto_reconfigure) { true }

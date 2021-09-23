@@ -1613,6 +1613,18 @@ RSpec.describe GDK::Config do
   end
 
   describe 'gdk' do
+    describe '#debug' do
+      it 'defaults to false' do
+        expect(config.gdk.debug?).to eq(false)
+      end
+    end
+
+    describe '#__debug' do
+      it 'defaults to false' do
+        expect(config.gdk.__debug?).to eq(false)
+      end
+    end
+
     describe '#quiet' do
       it 'defaults to true' do
         expect(config.gdk.quiet).to eq(true)
