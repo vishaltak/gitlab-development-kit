@@ -40,6 +40,13 @@ http {
     server <%= config.gitlab_k8s_agent.agent_listen_address %> fail_timeout=0;
     <%- end -%>
   }
+  upstream gitlab-k8s-agent-k8s-proxy {
+    <%- if config.gitlab_k8s_agent.k8s_api_listen_network == 'unix' -%>
+    server unix:<%= config.gitlab_k8s_agent.k8s_api_listen_address %> fail_timeout=0;
+    <%- else -%>
+    server <%= config.gitlab_k8s_agent.k8s_api_listen_address %> fail_timeout=0;
+    <%- end -%>
+  }
 <%- end -%>
 
   map $http_upgrade $connection_upgrade {
@@ -80,8 +87,8 @@ http {
       proxy_pass http://gitlab-k8s-agent;
     }
 
-    location = <%= config.gitlab_k8s_agent.__k8s_api_listen_url_path %> {
-      proxy_pass http://gitlab-k8s-agent;
+    location <%= config.gitlab_k8s_agent.__k8s_api_listen_url_path %> {
+      proxy_pass http://gitlab-k8s-agent-k8s-proxy;
     }
 
 <%- end -%>

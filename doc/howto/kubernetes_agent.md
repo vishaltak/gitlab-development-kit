@@ -13,38 +13,27 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
       enabled: true
     ```
 
-1. Create a new project. It is used for agent's configuration. Note the project's ID. Use it as `project_id` below.
+1. (Optional) To use the CI tunnel functionality, you must:
+   1. Enable [NGINX](nginx.md) in HTTPS mode. `kubectl` never sends credentials over a plain
+      text connection.
+   1. Specify concrete IP addresses for `kas` to listen on. `gdk.yml` looks like this
+      (assuming [loopback alias IP](local_network.md#create-loopback-interface) was set up):
 
-1. In the project's repository create a directory named `.gitlab/agents/my-agent`. In this directory create a file `config.yaml` with the following contents:
-
-    ```yaml
-    gitops:
-      manifest_projects:
-    #  - id: "some_project/name"
-    ```
-
-   You can find information about supported configuration options in [the agent's documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/configuration_repository.md).
-
-1. There is no [user interface to import a Kubernetes cluster](https://gitlab.com/gitlab-org/gitlab/-/issues/220908) yet, so we need to seed the database manually:
-
-    1. Start the Rails console
-
-        ```shell
-        bundle exec rails console
-        ```
-
-    1. Create the agent record and an authentication token for the agent:
-
-        ```ruby
-        project_id = 123 # use ID of the project you created earlier
-        agent_name = 'my-agent' # the name for the agent. This will be the directory name for the agent's configuration
-        p = Project.find(project_id)
-        agent = Clusters::Agent.create!(project: p, name: agent_name)
-        token = Clusters::AgentToken.create!(agent: agent)
-        puts token.token # this will print the token for the agent
-        ```
-
-1. The token from the previous step can be used by the `agentk` to authenticate itself with GitLab (`kas`).
+   ```yaml
+   gitlab_k8s_agent:
+     enabled: true
+     agent_listen_address: 172.16.123.1:8159
+     k8s_api_listen_address: 172.16.123.1:8154
+   hostname: gdk.test
+   port: 3443
+   https:
+     enabled: true
+   nginx:
+     enabled: true
+     ssl:
+       certificate: gdk.test.pem
+       key: gdk.test-key.pem
+   ```
 
 1. Run `gdk update` to get `kas` installed as part of GDK.
 
@@ -78,6 +67,35 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
         ```
 
         This is a normal response from `kas` for such a request because it's expecting a WebSocket connection upgrade.
+
+1. (Optional) To use the CI tunnel, supply the `rootCA.pem` from the generated certificate by running:
+
+   ```shell
+   kubectl config set clusters.gitlab.certificate-authority "$(pwd)/rootCA.pem"
+   ```
+
+   Commit the file into the repository you are using the CI tunnel functionality from. Get the
+   file location by running:
+
+   ```shell
+   ls "$(mkcert -CAROOT)/rootCA.pem"
+   ```
+
+   To copy the contents to the clipboard:
+
+   ```shell
+   cat "$(mkcert -CAROOT)/rootCA.pem" | pbcopy
+   ```
+
+   Then add the same file to the runner. See
+   [the relevant docs](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
+
+   Add `tls-ca-file = "/etc/gitlab-runner/ca/rootCA.pem"` to the runner's `config.toml` and
+   run it. For example:
+
+   ```shell
+   docker run --rm -it -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v "$(mkcert -CAROOT):/etc/gitlab-runner/ca" gitlab/gitlab-runner
+   ```
 
 ## (Optional) Deploy the GitLab Kubernetes Agent (agentk) with k3d
 
