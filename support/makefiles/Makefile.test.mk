@@ -73,7 +73,9 @@ ${dev_shellcheck_binary}:
 .PHONY: checkmake
 checkmake: ${dev_checkmake_binary}
 	@echo -n "Checkmake:   "
-	@${dev_checkmake_binary} Makefile && echo -e "\b\bOK"
+	@cat Makefile support/makefiles/*.mk > tmp/.makefile_combined
+	@${dev_checkmake_binary} tmp/.makefile_combined && echo -e "\b\bOK"
+	@rm -f tmp/.makefile_combined
 
 ${dev_checkmake_binary}:
 	@support/dev/checkmake-install
