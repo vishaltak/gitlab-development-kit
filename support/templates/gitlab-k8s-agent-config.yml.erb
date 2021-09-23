@@ -25,3 +25,6 @@ private_api:
     network: "<%= config.gitlab_k8s_agent.private_api_listen_network %>"
     address: "<%= config.gitlab_k8s_agent.private_api_listen_address %>"
     authentication_secret_file: "<%= config.gitlab_k8s_agent.__private_api_secret_file %>"
+observability:
+  logging:
+    level: debug

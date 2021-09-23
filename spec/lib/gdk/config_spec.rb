@@ -1163,7 +1163,7 @@ RSpec.describe GDK::Config do
 
     describe '__k8s_api_listen_url_path' do
       it 'is /-/k8s-proxy by default' do
-        expect(config.gitlab_k8s_agent.__k8s_api_listen_url_path).to eq('/-/k8s-proxy')
+        expect(config.gitlab_k8s_agent.__k8s_api_listen_url_path).to eq('/-/k8s-proxy/')
       end
     end
 

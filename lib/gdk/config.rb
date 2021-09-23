@@ -351,7 +351,7 @@ module GDK
 
       string(:k8s_api_listen_network) { 'tcp' }
       string(:k8s_api_listen_address) { "#{config.listen_address}:8154" }
-      string(:__k8s_api_listen_url_path) { '/-/k8s-proxy' }
+      string(:__k8s_api_listen_url_path) { '/-/k8s-proxy/' }
 
       string(:internal_api_listen_network) { 'tcp' }
       string(:internal_api_listen_address) { "#{config.listen_address}:8153" }
