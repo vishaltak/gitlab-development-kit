@@ -25,40 +25,11 @@ include $(shell rake gdk-config.mk)
 endif
 endif
 
-include Makefile.timing.mk
-include Makefile.bootstrap.mk
-include Makefile.asdf.mk
+###############################################################################
+# Include all support/makefiles/*.mk files here                               #
+###############################################################################
 
-include Makefile.influxdb.mk
-include Makefile.minio.mk
-include Makefile.redis.mk
-include Makefile.elasticsearch.mk
-include Makefile.postgresql.mk
-include Makefile.postgresql-replication.mk
-include Makefile.postgresql-geo.mk
-include Makefile.prometheus.mk
-include Makefile.grafana.mk
-include Makefile.nginx.mk
-include Makefile.openssh.mk
-include Makefile.registry.mk
-include Makefile.jaeger.mk
-
-.PHONY: test
-include Makefile.preflight-checks.mk
-include Makefile.test.mk
-
-include Makefile.gitlab.mk
-include Makefile.gitlab-shell.mk
-include Makefile.gitaly.mk
-include Makefile.gitlab-docs.mk
-include Makefile.gitlab-geo.mk
-include Makefile.gitlab-workhorse.mk
-include Makefile.gitlab-elasticsearch.mk
-include Makefile.gitlab-pages.mk
-include Makefile.gitlab-k8s.mk
-include Makefile.gitlab-ui.mk
-include Makefile.gitlab-runner.mk
-include Makefile.gitlab-spamcheck.mk
+include support/makefiles/*.mk
 
 ifeq ($(platform),darwin)
 OPENSSL_PREFIX := $(shell brew --prefix openssl)
