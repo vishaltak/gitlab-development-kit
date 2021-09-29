@@ -94,7 +94,7 @@ gdk_install_gem() {
 
 ruby_configure_opts() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
-    brew_openssl_dir=$(brew --prefix openssl)
+    brew_openssl_dir=$(brew --prefix openssl@1.1)
     brew_readline_dir=$(brew --prefix readline)
 
     echo "RUBY_CONFIGURE_OPTS=\"--with-openssl-dir=${brew_openssl_dir} --with-readline-dir=${brew_readline_dir}\""
