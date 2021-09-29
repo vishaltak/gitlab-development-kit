@@ -109,6 +109,13 @@ configure_ruby_bundler() {
 
   bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+
+  if [[ "${OSTYPE}" == "darwin"* ]]; then
+    clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
+    if [[ ${clang_version} -ge 13 ]]; then
+      bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
+    fi
+  fi
 }
 
 ensure_sudo_available() {

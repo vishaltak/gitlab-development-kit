@@ -105,6 +105,7 @@ gitlab/public/uploads:
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
+	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler
 	$(Q)$(in_gitlab) $(bundle_install_cmd)
 	$(Q)touch $@
 
@@ -115,7 +116,6 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) ${YARN} install --pure-lockfile ${QQ}
 	$(Q)touch $@
-
 
 .PHONY: gitlab-translations-unlock
 gitlab-translations-unlock:
