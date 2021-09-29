@@ -38,6 +38,10 @@ RSpec.describe GDK do
       stub_raw_gdk_yaml(raw_yaml)
     end
 
+    after do
+      described_class.instance_variable_set(:@config, nil)
+    end
+
     context 'with valid YAML' do
       let(:raw_yaml) { "---\ngdk:\n  debug: true" }
 
