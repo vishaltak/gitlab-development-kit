@@ -32,9 +32,9 @@ gitlab-git-pull-run: gitlab/.git/pull
 gitlab/.git/pull: gitlab/git-restore
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab to current default branch"
+	@echo "Updating gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" HEAD false ${QQ}
+	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" master master
 
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running

@@ -27,6 +27,10 @@ indent_style = unset
 indent_style = tab
 indent_size = unset
 
+[*.mk]
+indent_style = tab
+indent_size = unset
+
 [GDK_ROOT]
 end_of_line = unset
 trim_trailing_whitespace = unset

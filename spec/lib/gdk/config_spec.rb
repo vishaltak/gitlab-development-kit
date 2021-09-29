@@ -1639,6 +1639,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#auto_rebase_projects' do
+      it 'defaults to false' do
+        expect(config.gdk.auto_rebase_projects?).to eq(false)
+      end
+    end
+
     describe '#runit_wait_secs' do
       it 'is 20 secs by default' do
         expect(config.gdk.runit_wait_secs).to eq(20)

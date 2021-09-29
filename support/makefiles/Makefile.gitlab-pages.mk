@@ -36,4 +36,4 @@ gitlab-pages/.git/pull:
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-pages to ${gitlab_pages_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_pages "${gitlab_pages_clone_dir}" "${gitlab_pages_version}"
+	$(Q)support/component-git-update gitlab_pages "${gitlab_pages_clone_dir}" "${gitlab_pages_version}" master

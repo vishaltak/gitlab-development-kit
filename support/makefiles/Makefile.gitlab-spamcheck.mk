@@ -27,9 +27,9 @@ gitlab-spamcheck-git-pull: gitlab-spamcheck-git-pull-timed
 gitlab-spamcheck-git-pull-run: gitlab-spamcheck/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/spamcheck to current default branch"
+	@echo "Updating gitlab-org/spamcheck"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_spamcheck "${gitlab_spamcheck_clone_dir}" HEAD ${QQ}
+	$(Q)support/component-git-update gitlab_spamcheck "${gitlab_spamcheck_clone_dir}" main main
 
 gitlab-spamcheck/spamcheck: gitlab-spamcheck/.git
 	$(Q)make -C gitlab-spamcheck build ${QQ}

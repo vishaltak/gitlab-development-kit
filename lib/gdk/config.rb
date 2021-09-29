@@ -92,6 +92,7 @@ module GDK
       integer(:runit_wait_secs) { 20 }
       bool(:quiet) { true }
       bool(:auto_reconfigure) { true }
+      bool(:auto_rebase_projects) { false }
       settings :experimental do
         bool(:quiet) { config.gdk.quiet? }
         bool(:auto_reconfigure) { config.gdk.auto_reconfigure? }

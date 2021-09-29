@@ -56,4 +56,4 @@ gitlab-k8s-agent/.git/pull:
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/cluster-integration/gitlab-agent to ${gitlab_k8s_agent_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_k8s_agent "${gitlab_k8s_agent_clone_dir}" "${gitlab_k8s_agent_version}"
+	$(Q)support/component-git-update gitlab_k8s_agent "${gitlab_k8s_agent_clone_dir}" "${gitlab_k8s_agent_version}" master
