@@ -10,6 +10,27 @@ class Shellout
     @opts = opts
   end
 
+  def execute(display_output: true, silent: false, allow_fail: false)
+    GDK::Output.debug("args=[#{args}], opts=[#{opts}], display_output=[#{display_output}], silent=[#{silent}], allow_fail=[#{allow_fail}]")
+
+    display_output ? stream : try_run
+
+    GDK::Output.debug("result: stdout=[#{clean_string(read_stdout)}], stderr=[#{clean_string(read_stderr)}]")
+
+    unless success?
+      message = "ERROR: Command '#{args.join(' ')}' failed."
+      raise(message) unless allow_fail
+
+      unless silent
+        GDK::Output.warn(message)
+        GDK::Output.warn(read_stdout) unless read_stdout.empty?
+        GDK::Output.warn(read_stderr) unless read_stderr.empty?
+      end
+    end
+
+    self
+  end
+
   def stream(extra_options = {})
     @stdout_str = ''
     @stderr_str = ''
@@ -80,6 +101,10 @@ class Shellout
   end
 
   private
+
+  def clean_string(str)
+    str.sub(/\r\e/, '').chomp
+  end
 
   def capture(extra_options = {})
     @stdout_str, @stderr_str, @status = Open3.capture3(*args, opts.merge(extra_options))

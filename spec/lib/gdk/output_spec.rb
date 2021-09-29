@@ -110,6 +110,49 @@ RSpec.describe GDK::Output do
     end
   end
 
+  describe '.debug' do
+    before do
+      stub_tty(false)
+      stub_gdk_debug(debug_enabled)
+    end
+
+    context 'when debug is not enabled' do
+      let(:debug_enabled) { false }
+
+      it 'outputs nothing' do
+        expect { described_class.debug('test') }.not_to output("DEBUG: test\n").to_stderr
+      end
+    end
+
+    context 'when debug is enabled' do
+      let(:debug_enabled) { true }
+
+      context "when we're not a tty" do
+        it 'puts to stderr minus icon and colorization' do
+          expect { described_class.debug('test') }.to output("DEBUG: test\n").to_stderr
+        end
+      end
+
+      context 'when we are a tty' do
+        context 'when NO_COLOR=true is not defined' do
+          it 'puts to stderr' do
+            stub_no_color_env('')
+
+            expect { described_class.debug('test') }.to output("\u26CF\ufe0f  \e[34mDEBUG\e[0m: test\n").to_stderr
+          end
+        end
+
+        context 'when NO_COLOR=true is defined' do
+          it 'puts to stderr minus icon and colorization' do
+            stub_no_color_env('true')
+
+            expect { described_class.debug('test') }.to output("DEBUG: test\n").to_stderr
+          end
+        end
+      end
+    end
+  end
+
   describe '.format_error' do
     context "when we're not a tty" do
       it 'puts to stderr minus icon and colorization' do

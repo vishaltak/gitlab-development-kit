@@ -63,6 +63,48 @@ RSpec.describe Shellout do
     end
   end
 
+  describe '#execute' do
+    it 'returns self', :hide_stdout do
+      expect(subject.execute).to eq(subject)
+    end
+
+    context 'by default' do
+      it 'streams the output' do
+        expect { subject.execute }.to output("foo\n").to_stdout
+      end
+    end
+
+    context 'with display_output: false' do
+      it 'does not stream the output' do
+        expect { subject.execute(display_output: false) }.not_to output("foo\n").to_stdout
+      end
+    end
+
+    context 'when the command fails' do
+      let(:command) { 'false' }
+
+      context 'by default' do
+        it 'raises an error' do
+          expect { subject.execute }.to raise_error("ERROR: Command 'false' failed.")
+        end
+      end
+
+      context 'with allow_fail: true' do
+        it 'does not raise an error but warns' do
+          expect(GDK::Output).to receive(:warn).with("ERROR: Command 'false' failed.")
+          expect { subject.execute(allow_fail: true) }.not_to raise_error
+        end
+
+        context 'with silent: true also set' do
+          it 'does not raise an error and does not warn' do
+            expect(GDK::Output).not_to receive(:warn).with("ERROR: Command 'false' failed.")
+            expect { subject.execute(allow_fail: true, silent: true) }.not_to raise_error
+          end
+        end
+      end
+    end
+  end
+
   describe '#stream' do
     it 'returns output of shell command', :hide_stdout do
       expect(subject.stream).to eq('foo')

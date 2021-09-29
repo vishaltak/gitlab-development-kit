@@ -5,12 +5,13 @@ module GDK
     COLOR_CODE_RED = '31'
     COLOR_CODE_GREEN = '32'
     COLOR_CODE_YELLOW = '33'
+    COLOR_CODE_BLUE = '34'
 
     COLORS = {
       red: COLOR_CODE_RED,
       green: COLOR_CODE_GREEN,
       yellow: COLOR_CODE_YELLOW,
-      blue: '34',
+      blue: COLOR_CODE_BLUE,
       magenta: '35',
       cyan: '36',
       bright_red: '31;1',
@@ -25,7 +26,8 @@ module GDK
       info: "\u2139\ufe0f ",    # requires an extra space
       success: "\u2705\ufe0f",
       warning: "\u26A0\ufe0f ", # requires an extra space
-      error: "\u274C\ufe0f"
+      error: "\u274C\ufe0f",
+      debug: "\u26CF\ufe0f " # requires an extra space
     }.freeze
 
     def self.included(klass)
@@ -85,6 +87,12 @@ module GDK
 
       def warn(message)
         puts(icon(:warning) + wrap_in_color('WARNING', COLOR_CODE_YELLOW) + ": #{message}", stderr: true)
+      end
+
+      def debug(message)
+        return unless GDK.config.gdk.__debug?
+
+        puts(icon(:debug) + wrap_in_color('DEBUG', COLOR_CODE_BLUE) + ": #{message}", stderr: true)
       end
 
       def format_error(message)

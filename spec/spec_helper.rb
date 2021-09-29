@@ -114,3 +114,8 @@ def stub_backup
     allow(::GDK::Backup).to receive(:new).and_return(b)
   end
 end
+
+def stub_gdk_debug(state)
+  gdk_settings = double('GDK::ConfigSettings', debug?: state, __debug?: state)
+  allow_any_instance_of(GDK::Config).to receive(:gdk).and_return(gdk_settings)
+end
