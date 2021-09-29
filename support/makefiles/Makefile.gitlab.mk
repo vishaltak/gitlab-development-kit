@@ -14,7 +14,7 @@ gitlab-update-run: ensure-databases-running postgresql gitlab-git-pull gitlab-se
 
 .PHONY: gitlab/git-restore
 gitlab/git-restore:
-	$(Q)$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --
+	$(Q)$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/structure.sql ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --
 
 gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 	@echo
