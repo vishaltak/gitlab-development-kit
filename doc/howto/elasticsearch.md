@@ -54,7 +54,7 @@ docker run -p 9200:9200 -d docker.elastic.co/elasticsearch/elasticsearch:6.8.9
 
 ## Setup
 
-1. Go to **Admin Area > License** and ensure you have a [license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee) installed as this is required for Elasticsearch.
+1. Go to **Admin Area > Subscription** and ensure you have a [license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee) installed as this is required for Elasticsearch.
 
 1. Start Elasticsearch by either running `elasticsearch` in a new terminal, or
    by starting the GDK service:
