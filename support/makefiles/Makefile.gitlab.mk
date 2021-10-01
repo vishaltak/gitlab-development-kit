@@ -53,6 +53,7 @@ gitlab-config: \
 	gitlab/config/redis.queues.yml \
 	gitlab/config/redis.shared_state.yml \
 	gitlab/config/redis.trace_chunks.yml \
+  gitlab/config/redis.rate_limiting.yml \
 	gitlab/public/uploads \
 	gitlab/config/puma.rb
 
