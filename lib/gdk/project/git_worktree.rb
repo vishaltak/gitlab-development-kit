@@ -3,6 +3,8 @@
 module GDK
   module Project
     class GitWorktree
+      DEFAULT_RETRY_ATTEMPTS = 3
+
       def initialize(worktree_path, default_branch, revision, auto_rebase: false)
         @worktree_path = worktree_path
         @default_branch = default_branch
@@ -34,6 +36,7 @@ module GDK
 
       def execute_command(command, **args)
         args[:display_output] ||= false
+        args[:retry_attempts] ||= DEFAULT_RETRY_ATTEMPTS
 
         Shellout.new(command, chdir: worktree_path).execute(**args)
       end

@@ -170,7 +170,8 @@ RSpec.describe GDK::Project::GitWorktree do
     end
 
     def expect_shellout(command, stdout: '', stderr: '', success: true, args: {})
-      args[:display_output] = false unless args[:display_output]
+      args[:display_output] ||= false
+      args[:retry_attempts] ||= described_class::DEFAULT_RETRY_ATTEMPTS
       shellout_double = instance_double(Shellout, success?: success, read_stdout: stdout, read_stderr: stderr)
       expect(Shellout).to receive(:new).with(command, chdir: worktree_path).and_return(shellout_double)
       expect(shellout_double).to receive(:execute).with(**args).and_return(shellout_double)
