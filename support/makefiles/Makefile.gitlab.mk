@@ -12,9 +12,9 @@ gitlab-update: gitlab-update-timed
 .PHONY: gitlab-update-run
 gitlab-update-run: ensure-databases-running postgresql gitlab-git-pull gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
 
-.PHONY: gitlab/git-restore
-gitlab/git-restore:
-	$(Q)$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/structure.sql ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --
+.PHONY: gitlab/git-checkout-auto-generated-files
+gitlab/git-checkout-auto-generated-files:
+	$(Q)support/retry-command '$(gitlab_git_cmd) ls-tree HEAD --name-only -- Gemfile.lock db/structure.sql db/schema.rb ee/db/geo/structure.sql ee/db/geo/schema.rb | xargs $(gitlab_git_cmd) checkout --'
 
 gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 	@echo
@@ -29,7 +29,7 @@ gitlab-git-pull: gitlab-git-pull-timed
 .PHONY: gitlab-git-pull-run
 gitlab-git-pull-run: gitlab/.git/pull
 
-gitlab/.git/pull: gitlab/git-restore
+gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab"
