@@ -35,6 +35,14 @@ RSpec.describe Shellout do
     end
   end
 
+  describe '#command' do
+    let(:command_as_array) { %w[echo foo] }
+
+    it 'returns command as a string' do
+      expect(subject.command).to eq('echo foo')
+    end
+  end
+
   describe '#exit_code' do
     describe '#run has not yet been executed' do
       it 'returns nil' do
@@ -80,27 +88,110 @@ RSpec.describe Shellout do
       end
     end
 
-    context 'when the command fails' do
-      let(:command) { 'false' }
+    context 'when the command fails completely' do
+      shared_examples 'a command that fails' do
+        it 'is unsuccessful', :hide_output do
+          subject.execute
 
-      context 'by default' do
-        it 'raises an error' do
-          expect { subject.execute }.to raise_error("ERROR: Command 'false' failed.")
+          expect(subject.success?).to be_falsy
+        end
+
+        it 'displays output and errors' do
+          expect(GDK::Output).to receive(:puts).with(expected_command_stderr_puts, stderr: true)
+          expect(GDK::Output).to receive(:error).with(expected_command_error)
+
+          subject.execute
         end
       end
 
-      context 'with allow_fail: true' do
-        it 'does not raise an error but warns' do
-          expect(GDK::Output).to receive(:warn).with("ERROR: Command 'false' failed.")
-          expect { subject.execute(allow_fail: true) }.not_to raise_error
+      shared_examples 'a command that does not retry' do
+        it 'does not retry', :hide_output do
+          expect(Kernel).not_to receive(:retry)
+
+          subject.execute
+        end
+      end
+
+      shared_examples 'a command that retries and fails' do
+        it 'retries', :hide_output do
+          expect(subject).to receive(:sleep).with(2).twice.and_return(true)
+          expect(subject).to receive(expected_execute_method).exactly(3).times # 1 for the first run + 2 retries
+          expect(subject).to receive(:success?).exactly(6).times.and_return(false)
+          expect(GDK::Output).to receive(:error).with("'#{command}' failed. Retrying in 2 secs..").twice
+          expect(GDK::Output).to receive(:error).with("'#{command}' failed.")
+
+          subject.execute(display_output: display_output, retry_attempts: 2)
         end
 
-        context 'with silent: true also set' do
-          it 'does not raise an error and does not warn' do
-            expect(GDK::Output).not_to receive(:warn).with("ERROR: Command 'false' failed.")
-            expect { subject.execute(allow_fail: true, silent: true) }.not_to raise_error
+        it 'is unsuccessful', :hide_output do
+          allow(subject).to receive(:sleep).with(2).twice.and_return(true)
+          subject.execute(display_output: display_output, retry_attempts: 2)
+
+          expect(subject.success?).to be_falsy
+        end
+      end
+
+      context 'when the command does not exist' do
+        let(:command) { 'blah' }
+        let(:expected_command_stderr_puts) { 'No such file or directory - blah' }
+        let(:expected_command_error) { "'blah' failed." }
+
+        it_behaves_like 'a command that fails'
+        it_behaves_like 'a command that does not retry'
+      end
+
+      context 'when the command does exist, but fails' do
+        let(:command) { 'ls /doesntexist' }
+        let(:opts) { {} }
+        let(:expected_command_stderr_puts) { "ls: cannot access '/doesntexist': No such file or directory\n" }
+        let(:expected_command_error) { "'ls /doesntexist' failed." }
+
+        before do
+          stderr = double(StringIO, read: expected_command_stderr_puts)
+          allow(stderr).to receive(:each_line).and_yield(expected_command_stderr_puts)
+          stdout = double(StringIO, each_line: '', read: '')
+          stdin = instance_double(StringIO, write: '', close: nil)
+          allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new {})
+        end
+
+        it_behaves_like 'a command that fails'
+        it_behaves_like 'a command that does not retry'
+
+        context 'with display_output: true' do
+          let(:display_output) { true }
+          let(:expected_execute_method) { :stream }
+
+          context 'with a retry specified' do
+            it_behaves_like 'a command that fails'
+            it_behaves_like 'a command that retries and fails'
           end
         end
+
+        context 'with display_output: false' do
+          let(:opts) { { err: '/dev/null' } }
+          let(:display_output) { false }
+          let(:expected_execute_method) { :try_run }
+
+          context 'with a retry specified' do
+            it_behaves_like 'a command that fails'
+            it_behaves_like 'a command that retries and fails'
+          end
+        end
+      end
+    end
+
+    context 'when the command fails once but ultimately succeeds' do
+      let(:command) { 'ls /fakedir' }
+
+      it 'fails once but then succeeds', :hide_output do
+        allow(subject).to receive(:sleep).with(2).and_return(true)
+
+        expect(subject).to receive(:success?).twice.and_return(false)
+        expect(subject).to receive(:success?).twice.and_return(true)
+
+        expect(GDK::Output).to receive(:success).with("'#{command}' succeeded after retry.")
+
+        subject.execute(retry_attempts: 1)
       end
     end
   end
