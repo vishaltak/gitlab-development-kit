@@ -89,8 +89,8 @@ make geo-setup
 ### Praefect on a Geo secondary
 
 After changing the setting of `geo.secondary` in your GDK configuration, the
-Praefect database needs to be recreated. Check out the [Praefect
-documentation](gitaly.md#praefect-on-a-geo-secondary) for the details.
+Praefect database needs to be recreated. Check out the [Praefect documentation](gitaly.md#praefect-on-a-geo-secondary)
+for the details.
 
 ## Database replication
 
