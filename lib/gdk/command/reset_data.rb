@@ -25,7 +25,7 @@ module GDK
       end
 
       def reset_data!
-        if GDK.make
+        if GDK.make('ensure-databases-running', 'reconfigure')
           GDK::Output.notice('Successfully reset data!')
           GDK::Command::Start.new.run
         else
@@ -68,7 +68,7 @@ module GDK
         directory = gdk_root_pathed(*directory)
         return true unless directory.exist?
 
-        GDK::Output.notice("Moving #{message} from '#{directory}' to '#{backup_directory}'")
+        GDK::Output.notice("Moving #{message} from '#{directory.basename}/' to '#{backup_directory}/'")
 
         # Ensure the base directory exists
         FileUtils.mkdir_p(backup_directory.dirname)
@@ -76,7 +76,7 @@ module GDK
 
         true
       rescue SystemCallError => e
-        GDK::Output.error("Failed to rename directory '#{directory}' to '#{backup_directory}' - #{e}")
+        GDK::Output.error("Failed to rename directory '#{directory.basename}/' to '#{backup_directory}/' - #{e}")
         false
       end
 
@@ -100,7 +100,8 @@ module GDK
 
       def move_git_repository_data
         backup_directory('git repository data', 'repositories') &&
-          restore_repository_data_dir
+          restore_repository_data_dir &&
+          backup_directory('more git repository data', 'repository_storages')
       end
 
       def restore_repository_data_dir
