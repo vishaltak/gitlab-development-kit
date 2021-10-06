@@ -10,8 +10,13 @@ gitlab-pages-secret:
 gitlab-pages/gitlab-pages.conf: ${gitlab_pages_clone_dir}/.git
 	$(Q)rake $@
 
-.PHONY: gitlab-pages-update
+
+ifeq ($(gitlab_pages_enabled),true)
 gitlab-pages-update: gitlab-pages-update-timed
+else
+gitlab-pages-update:
+	@true
+endif
 
 .PHONY: gitlab-pages-update-run
 gitlab-pages-update-run: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages gitlab-pages/gitlab-pages.conf
