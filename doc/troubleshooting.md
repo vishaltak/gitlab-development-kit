@@ -123,6 +123,43 @@ bundle install
 
 See this [issue](https://github.com/macournoyer/thin/pull/364) for more details.
 
+### An error occurred while installing thrift (0.14.0)
+
+The installation of the `thrift` v0.14.0 gem during `bundle install` can fail with the following error due to a [known bug](https://bugs.ruby-lang.org/issues/17865). 
+
+```plaintext
+[SNIPPED]
+
+current directory: /wrkdirs/usr/ports/devel/rubygem-thrift/work/stage/usr/local/lib/ruby/gems/2.7/gems/thrift-0.14.0/ext
+make "DESTDIR="
+compiling binary_protocol_accelerated.c
+binary_protocol_accelerated.c:404:68: error: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Werror,-Wcompound-token-split-by-macro]
+  VALUE thrift_binary_protocol_class = rb_const_get(thrift_module, rb_intern("BinaryProtocol"));
+                                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/include/ruby-2.7/ruby/ruby.h:1847:23: note: expanded from macro 'rb_intern'
+        __extension__ (RUBY_CONST_ID_CACHE((ID), (str))) : \
+                      ^
+binary_protocol_accelerated.c:404:68: note: '{' token is here
+  VALUE thrift_binary_protocol_class = rb_const_get(thrift_module, rb_intern("BinaryProtocol"));
+                                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/include/ruby-2.7/ruby/ruby.h:1847:24: note: expanded from macro 'rb_intern'
+        __extension__ (RUBY_CONST_ID_CACHE((ID), (str))) : \
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/include/ruby-2.7/ruby/ruby.h:1832:5: note: expanded from macro 'RUBY_CONST_ID_CACHE'
+    {                                                   \
+    ^
+```
+
+As a workaround, you can set the following Bundler config:
+
+```shell
+bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
+bundle install
+```
+
+Running `gem install thrift -v '0.14.0' --source 'https://rubygems.org'` won't work because
+`gem` bypasses the Bundler config.
+
 ### An error occurred while installing `gpgme` on macOS
 
 Check if you have `gawk` installed >= 5.0.0 and uninstall it.
