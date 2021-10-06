@@ -59,7 +59,7 @@ RSpec.describe GDK::Command::ResetData do
           stub_postgres_data_move
           allow(File).to receive(:rename).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
 
-          expect(GDK::Output).to receive(:error).with("Failed to rename directory '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}' - No such file or directory")
+          expect(GDK::Output).to receive(:error).with("Failed to rename directory '#{postgresql_data_directory.basename}/' to '#{backup_postgresql_data_directory}/' - No such file or directory")
           expect(GDK::Output).to receive(:error).with('Failed to backup data.')
           expect(subject).to receive(:display_help_message)
           expect(GDK).not_to receive(:make)
@@ -72,15 +72,17 @@ RSpec.describe GDK::Command::ResetData do
     context 'when backup data script succeeds', :hide_stdout do
       let!(:rails_uploads_directory) { root.join('gitlab', 'public', 'uploads') }
       let!(:backup_rails_uploads_directory) { backup_base_dir.join('gitlab', 'public', "uploads.#{current_timestamp}") }
-      let!(:git_repository_data_directory) { root.join('repositories') }
-      let!(:backup_git_repository_data_directory) { backup_base_dir.join("repositories.#{current_timestamp}") }
+      let!(:git_repositories_data_directory) { root.join('repositories') }
+      let!(:backup_git_repositories_data_directory) { backup_base_dir.join("repositories.#{current_timestamp}") }
+      let!(:git_repository_storages_data_directory) { root.join('repository_storages') }
+      let!(:backup_git_repository_storages_data_directory) { backup_base_dir.join("repository_storages.#{current_timestamp}") }
 
       context 'but make command fails' do
         it 'errors out' do
           travel_to(now) do
             stub_data_moves
 
-            expect(GDK).to receive(:make).and_return(false)
+            expect(GDK).to receive(:make).with('ensure-databases-running', 'reconfigure').and_return(false)
 
             expect(GDK::Output).to receive(:error).with('Failed to reset data.')
             expect(GDK::Command::Start).not_to receive(:new)
@@ -96,11 +98,12 @@ RSpec.describe GDK::Command::ResetData do
           travel_to(now) do
             stub_data_moves
 
-            expect(GDK).to receive(:make).and_return(true)
+            expect(GDK).to receive(:make).with('ensure-databases-running', 'reconfigure').and_return(true)
 
-            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}'")
-            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory}' to '#{backup_rails_uploads_directory}'")
-            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repository_data_directory}' to '#{backup_git_repository_data_directory}'")
+            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory.basename}/' to '#{backup_postgresql_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory.basename}/' to '#{backup_rails_uploads_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repositories_data_directory.basename}/' to '#{backup_git_repositories_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving more git repository data from '#{git_repository_storages_data_directory.basename}/' to '#{backup_git_repository_storages_data_directory}/'")
             expect(GDK::Output).to receive(:notice).with('Successfully reset data!')
             expect_any_instance_of(GDK::Command::Start).to receive(:run)
 
@@ -126,8 +129,11 @@ RSpec.describe GDK::Command::ResetData do
       stub_rails_uploads_move
       expect_rename_success(rails_uploads_directory, backup_rails_uploads_directory)
 
-      stub_git_repository_data_move
-      expect_rename_success(git_repository_data_directory, backup_git_repository_data_directory)
+      stub_git_repositories_data_move
+      expect_rename_success(git_repositories_data_directory, backup_git_repositories_data_directory)
+
+      stub_git_repository_storages_data_move
+      expect_rename_success(git_repository_storages_data_directory, backup_git_repository_storages_data_directory)
     end
 
     def stub_postgres_data_move
@@ -146,15 +152,23 @@ RSpec.describe GDK::Command::ResetData do
       allow_make_backup_base_dir(backup_rails_uploads_directory)
     end
 
-    def stub_git_repository_data_move
-      allow(root).to receive(:join).with('.backups', "repositories.#{current_timestamp}").and_return(backup_git_repository_data_directory)
-      allow(root).to receive(:join).with('repositories').and_return(git_repository_data_directory)
+    def stub_git_repositories_data_move
+      allow(root).to receive(:join).with('.backups', "repositories.#{current_timestamp}").and_return(backup_git_repositories_data_directory)
+      allow(root).to receive(:join).with('repositories').and_return(git_repositories_data_directory)
 
-      allow_make_backup_base_dir(backup_git_repository_data_directory)
-      allow(git_repository_data_directory).to receive(:exist?).and_return(true)
+      allow_make_backup_base_dir(backup_git_repositories_data_directory)
+      allow(git_repositories_data_directory).to receive(:exist?).and_return(true)
 
-      git_restore_repositoriess_double = instance_double(Shellout, try_run: '', success?: true)
-      expect(Shellout).to receive(:new).with('git restore repositories', chdir: root).and_return(git_restore_repositoriess_double)
+      shellout_double = instance_double(Shellout, try_run: '', success?: true)
+      expect(Shellout).to receive(:new).with('git restore repositories', chdir: root).and_return(shellout_double)
+    end
+
+    def stub_git_repository_storages_data_move
+      allow(root).to receive(:join).with('.backups', "repository_storages.#{current_timestamp}").and_return(backup_git_repository_storages_data_directory)
+      allow(root).to receive(:join).with('repository_storages').and_return(git_repository_storages_data_directory)
+
+      allow_make_backup_base_dir(backup_git_repository_storages_data_directory)
+      allow(git_repository_storages_data_directory).to receive(:exist?).and_return(true)
     end
   end
 end
