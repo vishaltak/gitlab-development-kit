@@ -20,7 +20,6 @@ module GDK
 
     def self.execute_hook_cmd(cmd, description)
       GDK::Output.abort("Cannot execute '#{description}' hook '#{cmd}' as it's invalid") unless cmd.is_a?(String)
-
       GDK::Output.info("#{description} hook -> #{cmd}")
 
       sh = Shellout.new(cmd, chdir: GDK.root)
@@ -29,7 +28,7 @@ module GDK
       raise HookCommandError, "'#{cmd}' has exited with code #{sh.exit_code}." unless sh.success?
 
       true
-    rescue HookCommandError, Errno::ENOENT => e
+    rescue HookCommandError, Shellout::StreamCommandFailedError => e
       GDK::Output.abort(e.message)
     end
   end

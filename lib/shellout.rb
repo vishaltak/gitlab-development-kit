@@ -5,30 +5,51 @@ require 'open3'
 class Shellout
   attr_reader :args, :opts
 
+  DEFAULT_EXECUTE_DISPLAY_OUTPUT = true
+  DEFAULT_EXECUTE_RETRY_ATTEMPTS = 0
+  DEFAULT_EXECUTE_RETRY_DELAY_SECS = 2
+
+  ShelloutBaseError = Class.new(StandardError)
+  ExecuteCommandFailedError = Class.new(ShelloutBaseError)
+  StreamCommandFailedError = Class.new(ShelloutBaseError)
+
   def initialize(*args, **opts)
     @args = args.flatten
     @opts = opts
   end
 
-  def execute(display_output: true, silent: false, allow_fail: false)
-    GDK::Output.debug("args=[#{args}], opts=[#{opts}], display_output=[#{display_output}], silent=[#{silent}], allow_fail=[#{allow_fail}]")
+  def command
+    @command ||= args.join(' ')
+  end
 
+  def execute(display_output: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
+    retried ||= false
+    GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
     display_output ? stream : try_run
+    GDK::Output.debug("result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
 
-    GDK::Output.debug("result: stdout=[#{clean_string(read_stdout)}], stderr=[#{clean_string(read_stderr)}]")
+    raise ExecuteCommandFailedError unless success?
 
-    unless success?
-      message = "ERROR: Command '#{args.join(' ')}' failed."
-      raise(message) unless allow_fail
-
-      unless silent
-        GDK::Output.warn(message)
-        GDK::Output.warn(read_stdout) unless read_stdout.empty?
-        GDK::Output.warn(read_stderr) unless read_stderr.empty?
-      end
+    if retried
+      retry_success_message = "'#{command}' succeeded after retry."
+      GDK::Output.success(retry_success_message)
     end
 
     self
+  rescue StreamCommandFailedError, ExecuteCommandFailedError
+    error_message = "'#{command}' failed."
+
+    if (retry_attempts -= 1).negative?
+      GDK::Output.error(error_message)
+      self
+    else
+      retried = true
+      error_message += " Retrying in #{retry_delay_secs} secs.."
+      GDK::Output.error(error_message)
+
+      sleep(retry_delay_secs)
+      retry
+    end
   end
 
   def stream(extra_options = {})
@@ -37,16 +58,13 @@ class Shellout
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
     Open3.popen3(*args, opts.merge(extra_options)) do |_stdin, stdout, stderr, thread|
-      threads = Array(thread)
-      threads << thread_read(stdout, method(:print_out))
-      threads << thread_read(stderr, method(:print_err))
-
-      threads.each(&:join)
-
-      @status = thread.value
+      @status = print_output_from_thread(thread, stdout, stderr)
     end
 
     read_stdout
+  rescue Errno::ENOENT => e
+    print_err(e.message)
+    raise StreamCommandFailedError, e
   end
 
   def readlines(limit = -1)
@@ -81,11 +99,11 @@ class Shellout
   end
 
   def read_stdout
-    @stdout_str.to_s.chomp
+    clean_string(@stdout_str.to_s.chomp)
   end
 
   def read_stderr
-    @stderr_str.to_s.chomp
+    clean_string(@stderr_str.to_s.chomp)
   end
 
   def success?
@@ -101,6 +119,14 @@ class Shellout
   end
 
   private
+
+  def print_output_from_thread(thread, stdout, stderr)
+    threads = Array(thread)
+    threads << thread_read(stdout, method(:print_out))
+    threads << thread_read(stderr, method(:print_err))
+    threads.each(&:join)
+    thread.value
+  end
 
   def clean_string(str)
     str.sub(/\r\e/, '').chomp
