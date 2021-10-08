@@ -109,6 +109,8 @@ configure_ruby_bundler() {
 
   bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+  # Needed for XCode 13: https://bugs.ruby-lang.org/issues/17865
+  bundle config build.thrift --with-cppflags="-Wno-compound-token-split-by-macro"
 }
 
 ensure_sudo_available() {
