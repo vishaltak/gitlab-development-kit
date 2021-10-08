@@ -34,6 +34,7 @@ GDK troubleshooting information is available for the following:
 - [Homebrew](#homebrew)
 - [Live reloading](#live-reloading)
 - [Praefect](#praefect)
+- [Stopping and restarting the GDK](#stopping-and-restarting-the-gdk)
 
 If you can't solve your problem, or if you have a problem in another area, open an
 issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
@@ -1199,3 +1200,15 @@ bundle install
 ```
 
 You may need to run a `gdk restart` for the changes to take effect.
+
+## Stopping and restarting the GDK
+
+Sometimes the GDK will fail to stop or restart. This is sometimes caused by processes not shutting down gracefully and can prevent subsequent attempts to stop/start the GDK.
+
+You might see something like the following after running `gdk stop`:
+
+```shell
+kill: run: ./services/rails-background-jobs: (pid 89668) 98s, normally down, want down
+```
+
+To kill off the rogue processes, run `gdk kill`.
