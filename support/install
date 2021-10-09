@@ -40,7 +40,7 @@ ensure_not_root() {
 }
 
 clone_gdk_if_needed() {
-  if [[ -d ${GDK_INSTALL_DIR} ]]; then
+  if [[ -d ${GDK_INSTALL_DIR} || "${PWD}" = *"${GDK_INSTALL_DIR}"* ]]; then
     echo "INFO: A ${GDK_INSTALL_DIR} directory already exists in the current working directory, resuming.."
   else
     git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_INSTALL_DIR}"
