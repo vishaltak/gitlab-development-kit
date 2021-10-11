@@ -12,6 +12,7 @@ RSpec.describe GDK::Diagnostic do
       diagnostic_classes = [
         GDK::Diagnostic::RvmAndAsdf,
         GDK::Diagnostic::RubyGems,
+        GDK::Diagnostic::Bundler,
         GDK::Diagnostic::Version,
         GDK::Diagnostic::Configuration,
         GDK::Diagnostic::Dependencies,
