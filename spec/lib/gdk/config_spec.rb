@@ -1645,6 +1645,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#use_bash_shim' do
+      it 'defaults to false' do
+        expect(config.gdk.use_bash_shim?).to eq(false)
+      end
+    end
+
     describe '#runit_wait_secs' do
       it 'is 20 secs by default' do
         expect(config.gdk.runit_wait_secs).to eq(20)
