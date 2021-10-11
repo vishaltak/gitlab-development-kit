@@ -22,10 +22,12 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
 
   before do
     allow(Runit).to receive(:start).with('postgresql', quiet: true).and_return(true)
+    allow(subject).to receive(:sleep).with(2)
   end
 
   it 'starts necessary services' do
     expect(Runit).to receive(:start).with('postgresql', quiet: true)
+    expect(subject).to receive(:sleep).with(2)
 
     subject.run
   end
