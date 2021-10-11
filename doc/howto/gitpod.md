@@ -110,6 +110,7 @@ advanced features.
 
 1. Go to **Admin Area > Runners** in the GitLab UI running in GDK.
 1. In the terminal, switch to the GDK directory `(cd ../gitlab-development-kit)`
+1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the Remote Explorer tab in Gitpod UI and clicking on the lock icon next to the port name.
 1. Run `gitlab-runner register --run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
 1. As prompted, first enter the URL and then the registration token provided from the GitLab UI running in GDK.
 1. The description and tags are optional, you can just press Enter to skip those.
