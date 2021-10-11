@@ -113,9 +113,8 @@ if ! asdf_reshim; then
   error "Failed to reshim asdf." >&2
 fi
 
-echo "INFO: Installing gitlab-development-kit Ruby gem.."
-if ! gdk_install_gem; then
-  error "Failed to install gitlab-development-kit Ruby gem." >&2
+if ! gdk_install_gdk_clt; then
+  error "Failed to run gdk_install_gdk_clt()." >&2
 fi
 
 echo "INFO: Preparing GDK directory.."

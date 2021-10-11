@@ -17,7 +17,7 @@ else
 fi
 
 # test GDK components update
-install_gem
+install_gdk_clt
 update
 doctor
 test_url

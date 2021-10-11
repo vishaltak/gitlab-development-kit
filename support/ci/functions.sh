@@ -23,7 +23,7 @@ init() {
     fi
   fi
 
-  install_gem
+  install_gdk_clt
   install
 }
 
@@ -31,6 +31,20 @@ clone() {
   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
   # TODO: Touching .gdk-install-root will be redundant shortly.
   echo "${GDK_CHECKOUT_PATH}" > "${GDK_CHECKOUT_PATH}/.gdk-install-root"
+}
+
+install_gdk_clt() {
+  if [[ "$("${GDK_CHECKOUT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
+    echo "INFO: Installing gdk shim.."
+    install_shim
+  else
+    echo "INFO: Installing gitlab-development-kit Ruby gem.."
+    install_gem
+  fi
+}
+
+install_shim() {
+  cp -f "${GDK_CHECKOUT_PATH}/bin/gdk" /usr/local/bin
 }
 
 install_gem() {
