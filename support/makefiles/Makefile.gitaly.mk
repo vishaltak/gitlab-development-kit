@@ -6,7 +6,7 @@ gitaly-setup: ${gitaly_build_bin_dir}/gitaly ${gitaly_build_deps_dir}/git/instal
 ${gitaly_clone_dir}/.git:
 	$(Q)if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi
 	$(Q)support/component-git-clone --quiet ${gitaly_repo} ${gitaly_clone_dir}
-	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" ${QQ}
+	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
 
 .PHONY: gitaly-update
 gitaly-update: gitaly-update-timed
@@ -23,7 +23,7 @@ gitaly-git-pull-run: ${gitaly_clone_dir}/.git
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitaly to ${gitaly_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" ${QQ}
+	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
 
 gitaly-clean:
 	$(Q)rm -rf gitlab/tmp/tests/gitaly

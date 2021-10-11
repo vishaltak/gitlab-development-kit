@@ -32,6 +32,6 @@ gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsea
 gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-elasticsearch-indexer to ${gitlab_elasticsearch_indexer_version}"
+	@echo "Updating gitlab-org/gitlab-elasticsearch-indexer"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_elasticsearch_indexer gitlab-elasticsearch-indexer "${gitlab_elasticsearch_indexer_version}"
+	$(Q)support/component-git-update gitlab_elasticsearch_indexer gitlab-elasticsearch-indexer "${gitlab_elasticsearch_indexer_version}" main

@@ -25,9 +25,9 @@ gitlab-ui/.git:
 gitlab-ui/.git/pull:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-ui to default branch"
+	@echo "Updating gitlab-org/gitlab-ui"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" main
+	$(Q)support/component-git-update gitlab_ui "${gitlab_ui_clone_dir}" main main
 
 .PHONY: gitlab-ui-clean
 gitlab-ui-clean:

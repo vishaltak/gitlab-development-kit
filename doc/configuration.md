@@ -223,6 +223,7 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.runit_wait_secs`             | `10`    | The number of seconds `runit` waits. `runit` is used behind the scenes for `gdk stop/start/restart` and waits for 7 secs by default. |
 | `gdk.quiet`                       | `true`  | Set this to `false` to increase the level of output when updating the GDK. |
 | `gdk.auto_reconfigure`            | `true`  | Set this to `false` to not run a `gdk reconfigure` after a successful `gdk update`. |
+| `gdk.auto_rebase_projects`        | `false` | Set this to `true` to automatically rebase projects as part of a `gdk update`. |
 
 ##### Hooks
 

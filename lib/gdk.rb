@@ -37,6 +37,7 @@ module GDK
   autoload :Output, 'gdk/output'
   autoload :OutputBuffered, 'gdk/output_buffered'
   autoload :Postgresql, 'gdk/postgresql'
+  autoload :Project, 'gdk/project'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
   autoload :Services, 'gdk/services'
   autoload :Shellout, 'shellout'

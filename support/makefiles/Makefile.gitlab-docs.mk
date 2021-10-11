@@ -59,9 +59,9 @@ gitlab-docs/.git:
 gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-docs to current default branch"
+	@echo "Updating gitlab-org/gitlab-docs"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" HEAD ${QQ}
+	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" main main
 
 gitlab-runner/.git:
 	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_runner_repo} gitlab-runner
@@ -69,9 +69,9 @@ gitlab-runner/.git:
 gitlab-runner/.git/pull: gitlab-runner/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/gitlab-runner to current default branch"
+	@echo "Updating gitlab-org/gitlab-runner"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" HEAD ${QQ}
+	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" main main
 
 omnibus-gitlab/.git:
 	$(Q)support/component-git-clone ${git_depth_param} ${omnibus_gitlab_repo} omnibus-gitlab
@@ -79,9 +79,9 @@ omnibus-gitlab/.git:
 omnibus-gitlab/.git/pull: omnibus-gitlab/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/omnibus-gitlab to current default branch"
+	@echo "Updating gitlab-org/omnibus-gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" HEAD ${QQ}
+	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" master master
 
 charts-gitlab/.git:
 	$(Q)support/component-git-clone ${git_depth_param} ${charts_gitlab_repo} charts-gitlab
@@ -89,9 +89,9 @@ charts-gitlab/.git:
 charts-gitlab/.git/pull: charts-gitlab/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/charts/gitlab to current default branch"
+	@echo "Updating gitlab-org/charts/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" HEAD ${QQ}
+	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" master master
 
 .PHONY: gitlab-docs-deps
 gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn rm-symlink-gitlab-docs

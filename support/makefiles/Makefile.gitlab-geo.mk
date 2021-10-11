@@ -26,13 +26,13 @@ endif
 geo-primary-migrate: geo-primary-migrate-timed
 
 .PHONY: geo-primary-migrate-run
-geo-primary-migrate-run: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore diff-config
+geo-primary-migrate-run: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-checkout-auto-generated-files diff-config
 
 .PHONY: geo-primary-update
 geo-primary-update: update geo-primary-migrate diff-config
 
 .PHONY: geo-secondary-migrate
-geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-restore
+geo-secondary-migrate: ensure-databases-running .gitlab-bundle gitlab-db-migrate gitlab/git-checkout-auto-generated-files
 
 .PHONY: geo-secondary-update
 geo-secondary-update: geo-secondary-update-timed

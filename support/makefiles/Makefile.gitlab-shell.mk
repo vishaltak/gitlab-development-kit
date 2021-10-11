@@ -19,7 +19,7 @@ gitlab-shell-git-pull-run:
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab-shell to ${gitlab_shell_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab_shell "${gitlab_development_root}/gitlab-shell" "${gitlab_shell_version}"
+	$(Q)support/component-git-update gitlab_shell "${gitlab_development_root}/gitlab-shell" "${gitlab_shell_version}" main
 
 # This task is phony to allow
 # support/move-existing-gitlab-shell-directory to remove the legacy
