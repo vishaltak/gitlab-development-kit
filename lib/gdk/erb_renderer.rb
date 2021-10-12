@@ -11,6 +11,8 @@ module GDK
   class ErbRenderer
     attr_reader :source, :target
 
+    WAIT_WARNING_SECS = 5
+
     def initialize(source, target, args = {})
       @source = source
       @target = target
@@ -39,7 +41,6 @@ module GDK
 
         if config.config_file_protected?(target)
           warn_not_applied!
-          wait!
 
           return
         end
@@ -60,25 +61,38 @@ module GDK
     private
 
     def warn_changes!(temp_file)
-      diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).run
+      diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..].join("\n")
 
-      GDK::Output.warn "Your '#{target}' contains changes. Here is the diff:"
-      GDK::Output.puts <<~DIFF
+      GDK::Output.puts
+      GDK::Output.info("'#{target}' has incoming changes:")
+
+      diff_output = <<~DIFF_OUTPUT
         -------------------------------------------------------------------------------------------------------------
         #{diff}
+
         -------------------------------------------------------------------------------------------------------------
-      DIFF
+      DIFF_OUTPUT
+
+      GDK::Output.puts(diff_output, stderr: true)
     end
 
     def warn_not_applied!
-      GDK::Output.warn "The changes to '#{target}' have not been applied."
-      GDK::Output.puts <<~NOT_APPLIED
+      GDK::Output.warn "Changes to '#{target}' not applied because it's protected in gdk.yml."
+
+      action_options = <<~ACTION_OPTIONS
+
         - To apply these changes, run:
-          rm #{target} && make #{target}
+            rm #{target} && make #{target}
+
         - To silence this warning (at your own peril):
-          touch #{target}
+            touch #{target}
         -------------------------------------------------------------------------------------------------------------
-      NOT_APPLIED
+      ACTION_OPTIONS
+
+      GDK::Output.puts(action_options, stderr: true)
+      GDK::Output.puts("Resuming in #{WAIT_WARNING_SECS} seconds..", stderr: true)
+
+      sleep(WAIT_WARNING_SECS)
     end
 
     def warn_overwritten!
@@ -86,19 +100,10 @@ module GDK
       GDK::Output.puts <<~OVERWRITTEN
 
         #{backup.recover_cmd_string}
-
         If you want to protect this file from being overwritten, see:
         https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/configuration.md#overwriting-configuration-files
         -------------------------------------------------------------------------------------------------------------
       OVERWRITTEN
-    end
-
-    def wait!
-      GDK::Output.puts <<~WAIT
-        ... Waiting 5 seconds for previous warning to be noticed.
-      WAIT
-
-      sleep 5
     end
 
     def backup
