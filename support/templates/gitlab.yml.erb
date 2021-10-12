@@ -345,6 +345,9 @@ production: &base
   ## Sidekiq
   sidekiq:
     log_format: json # (default is also supported)
+    routing_rules:
+      - ["tags=needs_own_queue", nil]
+      - ["*", "default"]
 
   ## Auxiliary jobs
   # Periodically executed jobs, to self-heal GitLab, do external synchronizations, etc.
