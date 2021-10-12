@@ -130,7 +130,6 @@ update-summarize:
 #
 .PHONY: reconfigure
 reconfigure: ensure-required-ruby-bundlers-installed \
-touch-examples \
 unlock-dependency-installers \
 postgresql-sensible-defaults \
 all \
