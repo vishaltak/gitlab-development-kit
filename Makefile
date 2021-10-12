@@ -148,40 +148,6 @@ self-update: unlock-dependency-installers
 	$(Q)git stash ${QQ}
 	$(Q)support/self-update-git-worktree ${QQ}
 
-clean-config:
-	$(Q)rm -rf \
-	Procfile \
-	gitaly/gitaly-*.praefect.toml \
-	gitaly/gitaly.config.toml \
-	gitaly/praefect.config.toml \
-	gitlab-pages/gitlab-pages.conf \
-	gitlab-runner-config.toml \
-	gitlab-shell/.gitlab_shell_secret \
-	gitlab-shell/config.yml \
-	gitlab-spamcheck/config/config.toml \
-	gitlab/workhorse/config.toml \
-	gitlab/config/cable.yml \
-	gitlab/config/database.yml \
-	gitlab/config/database_geo.yml \
-	gitlab/config/gitlab.yml \
-	gitlab/config/puma.rb \
-	gitlab/config/resque.yml \
-	gitlab/config/redis.cache.yml \
-	gitlab/config/redis.queues.yml \
-	gitlab/config/redis.shared_state.yml \
-	gitlab/config/redis.trace_chunks.yml \
-	gitlab/config/redis.rate_limiting.yml \
-	gitlab/config/redis.sessions.yml \
-	jaeger \
-	localhost.crt \
-	localhost.key \
-	nginx/conf/nginx.conf \
-	prometheus/prometheus.yml \
-	redis/redis.conf \
-	registry/config.yml \
-	registry_host.crt \
-	registry_host.key
-
 touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \
