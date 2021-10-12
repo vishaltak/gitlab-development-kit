@@ -22,8 +22,8 @@ source "$HOME/.asdf/asdf.sh"
 gdk install shallow_clone=true
 gdk stop
 mv gitlab/config/secrets.yml .
-rm -rf gitlab
-rm -rf tmp
+rm -rfd gitlab
+rm -rfd tmp
 cp ./support/completions/gdk.bash "$HOME/.bashrc.d/90-gdk"
 cd /workspace
 mv gitlab-development-kit "$HOME/"
@@ -38,11 +38,11 @@ sudo apt-get autoremove -y
 sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/*
 
 # Cleanup build caches
-sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/git/source"
-sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/libgit2/source"
-sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/cache"
-sudo rm -rf "$HOME/.cache/"
-sudo rm -rf /tmp/*
+sudo rm -rfd "$HOME/gitlab-development-kit/gitaly/_build/deps/git/source"
+sudo rm -rfd "$HOME/gitlab-development-kit/gitaly/_build/deps/libgit2/source"
+sudo rm -rfd "$HOME/gitlab-development-kit/gitaly/_build/cache"
+sudo rm -rfd "$HOME/.cache/"
+sudo rm -rfd /tmp/*
 
 # Cleanup temporary build folder
-sudo rm -rf /workspace
+sudo rm -rfd /workspace
