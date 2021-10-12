@@ -39,6 +39,9 @@ RSpec.describe GDK::Command::Pristine do
         expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gdk_root).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gdk_root).and_return(shellout_double)
 
+        # reset_configs
+        expect_shellout_command(described_class::RESET_CONFIGS_CMD, config.gdk_root).and_return(shellout_double)
+
         # gitlab_bundle
         expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gitlab.dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitlab.dir).and_return(shellout_double)

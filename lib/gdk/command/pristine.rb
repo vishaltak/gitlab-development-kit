@@ -11,6 +11,7 @@ module GDK
       BUNDLE_PRISTINE_CMD = 'bundle pristine'
       YARN_CLEAN_CMD = 'yarn clean'
       GIT_CLEAN_TMP_CMD = 'git clean -fX -- tmp/'
+      RESET_CONFIGS_CMD = 'make touch-examples reconfigure'
 
       def run(_args = [])
         %i[
@@ -18,6 +19,7 @@ module GDK
           gdk_tmp_clean
           go_clean_cache
           gdk_bundle
+          reset_configs
           gitlab_bundle
           gitaly_bundle
           gitlab_tmp_clean
@@ -65,6 +67,10 @@ module GDK
       def gdk_bundle
         notice('Ensuring GDK Ruby gems are installed and pristine..')
         gdk_bundle_install && gdk_bundle_pristine
+      end
+
+      def reset_configs
+        shellout(RESET_CONFIGS_CMD, chdir: config.gdk_root)
       end
 
       def gdk_bundle_install
