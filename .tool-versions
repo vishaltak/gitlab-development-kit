@@ -2,7 +2,7 @@
 # files from GDK sub-projects.
 #
 # Do not modify this file directly.
-golang 1.16.8 1.17.1
+golang 1.16.9 1.16.8 1.17.1
 minio 2021-04-06T23-11-00Z
 nodejs 14.17.5
 postgres 12.6 11.9
