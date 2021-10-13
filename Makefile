@@ -171,6 +171,7 @@ clean-config:
 	gitlab/config/redis.shared_state.yml \
 	gitlab/config/redis.trace_chunks.yml \
 	gitlab/config/redis.rate_limiting.yml \
+	gitlab/config/redis.sessions.yml \
 	jaeger \
 	localhost.crt \
 	localhost.key \

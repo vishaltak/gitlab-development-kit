@@ -2123,12 +2123,24 @@ RSpec.describe GDK::Config do
             expect(config.redis.databases.development.rate_limiting).to eq(4)
           end
         end
+
+        describe 'sessions' do
+          it 'is 5 by default' do
+            expect(config.redis.databases.development.sessions).to eq(5)
+          end
+        end
       end
 
       describe 'test' do
         describe 'rate_limiting' do
           it 'is 14 by default' do
             expect(config.redis.databases.test.rate_limiting).to eq(14)
+          end
+        end
+
+        describe 'sessions' do
+          it 'is 15 by default' do
+            expect(config.redis.databases.test.sessions).to eq(15)
           end
         end
       end

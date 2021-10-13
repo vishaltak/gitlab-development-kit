@@ -244,12 +244,14 @@ redis:
       cache: 2
       queues: 1
       rate_limiting: 4
+      sessions: 5
       shared_state: 0
       trace_chunks: 3
     test:
       cache: 12
       queues: 11
       rate_limiting: 14
+      sessions: 15
       shared_state: 10
       trace_chunks: 13
   dir: "/home/git/gdk/redis"
