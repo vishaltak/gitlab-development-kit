@@ -155,6 +155,11 @@ To enable Elasticsearch:
 1. Run `gdk reconfigure`.
 1. Run `gdk start elasticsearch`.
 
+### How to test features only available in higher GitLab tiers
+
+For information on enabling higher GitLab tiers in GDK to test out features, see
+[Use GitLab Enterprise features](../index.md#use-gitlab-enterprise-features).
+
 ## How to update the Gitpod GDK Docker image
 
 There are two Gitpod GDK Docker images that can be built:
