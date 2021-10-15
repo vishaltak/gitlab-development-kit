@@ -80,6 +80,22 @@ ruby_install_required_bundlers() {
   done
 }
 
+gdk_install_gdk_clt() {
+  if [[ "$("${root_path}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
+    echo "INFO: Installing gdk shim.."
+    gdk_install_shim
+  else
+    echo "INFO: Installing gitlab-development-kit Ruby gem.."
+    gdk_install_gem
+  fi
+}
+
+gdk_install_shim() {
+  if ! echo_if_unsuccessful cp -f bin/gdk /usr/local/bin/gdk; then
+    return 1
+  fi
+}
+
 gdk_install_gem() {
   if ! echo_if_unsuccessful ruby_install_required_bundlers; then
     return 1

@@ -13,7 +13,11 @@ if ! command -v shellcheck > /dev/null 2>&1 ; then
   exit 1
 fi
 
-exec find "${root}/support" "${root}/support/ci" "${root}/support/completions" \
+exec find \
+			"${root}/bin" \
+			"${root}/support" \
+			"${root}/support/ci" \
+			"${root}/support/completions" \
       -maxdepth 1 \
       -type f \
       -not -path "*/support/pg_hba.conf.add" \
