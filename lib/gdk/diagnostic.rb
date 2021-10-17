@@ -3,6 +3,7 @@
 module GDK
   module Diagnostic
     autoload :Base, 'gdk/diagnostic/base'
+    autoload :Bundler, 'gdk/diagnostic/bundler'
     autoload :Configuration, 'gdk/diagnostic/configuration'
     autoload :Dependencies, 'gdk/diagnostic/dependencies'
     autoload :Geo, 'gdk/diagnostic/geo'
@@ -23,6 +24,7 @@ module GDK
       klasses = %i[
         RvmAndAsdf
         RubyGems
+        Bundler
         Version
         Configuration
         Dependencies
