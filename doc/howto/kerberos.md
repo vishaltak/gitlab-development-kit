@@ -113,3 +113,19 @@ appropriate KDC for a specific realm.
 
    If you encounter a `HTTP Basic: Access denied` error, configure `git` to set
    `http.emptyAuth` to `true`.
+
+## Troubleshooting
+
+On macOS, cloning with Kerberos authentication crashes with the following error:
+
+```plaintext
+[NSNumber initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.
+```
+
+To avoid this error:
+
+1. Create an `env.runit` file in the root GDK directory if it does not already exist.
+1. Add `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` to your `env.runit` file.
+1. Run `gdk restart`.
+
+This runs GDK with that environment variable.
