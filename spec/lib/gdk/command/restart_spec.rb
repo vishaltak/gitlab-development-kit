@@ -6,6 +6,7 @@ RSpec.describe GDK::Command::Restart do
   context 'with no extra arguments' do
     it 'calls stop then start without specifying services' do
       expect_any_instance_of(GDK::Command::Stop).to receive(:run).with([])
+      expect(subject).to receive(:sleep).with(3)
       expect_any_instance_of(GDK::Command::Start).to receive(:run).with([])
 
       subject.run
@@ -17,6 +18,7 @@ RSpec.describe GDK::Command::Restart do
       services = %w[rails-web]
 
       expect_any_instance_of(GDK::Command::Stop).to receive(:run).with(services)
+      expect(subject).to receive(:sleep).with(3)
       expect_any_instance_of(GDK::Command::Start).to receive(:run).with(services)
 
       subject.run(services)
