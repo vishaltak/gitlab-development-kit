@@ -38,17 +38,27 @@ The following installation methods are supported, actively maintained, and teste
   ```
 
 - [Simple installation](doc/index.md) on your local system. Requires at least
-  8GB RAM and 12GB disk space. Available for:
-
-  | Operating system | Versions            |
-  |:-----------------|:--------------------|
-  | macOS            | 11, 10.15, 10.14    |
-  | Ubuntu           | 20.10, 20.04, 18.04 |
-  | Debian           | 10, 9               |
-  | Arch             | latest              |
-  | Manjaro          | latest              |
+  8GB RAM and 12GB disk space. Available for [supported platforms](#supported-platforms).
 
 - [Gitpod](doc/howto/gitpod.md).
+
+### Supported platforms
+
+| Operating system | Versions            |
+|:-----------------|:--------------------|
+| macOS            | 11, 10.15, 10.14    |
+| Ubuntu           | 20.10, 20.04, 18.04 |
+| Debian           | 10, 9               |
+| Arch             | latest              |
+| Manjaro          | latest              |
+
+#### macOS with Apple silicon
+
+Running GDK on macOS with [Apple silicon](https://en.wikipedia.org/wiki/Apple_silicon)
+requires [Rosetta 2](https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2).
+
+Follow [Native Apple silicon support](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159)
+for updates on supporting Apple silicon natively.
 
 ### Unsupported methods
 
