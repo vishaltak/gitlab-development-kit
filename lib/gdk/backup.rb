@@ -38,7 +38,10 @@ module GDK
     end
 
     def recover_cmd_string
-      "cp -f '#{destination_file}' '#{source_file}'"
+      <<~CMD
+        cp -f '#{destination_file}' \\
+        '#{source_file}'
+      CMD
     end
 
     private

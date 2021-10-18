@@ -23,8 +23,8 @@ describe GDK::ErbRenderer do
   subject(:renderer) { described_class.new(erb_file.to_s, out_file.to_s, config: config) }
 
   before do
-    allow(renderer).to receive(:wait!)
     allow(renderer).to receive(:backup!)
+
     FileUtils.rm_f(out_file)
   end
 
@@ -61,8 +61,9 @@ describe GDK::ErbRenderer do
         let(:protected_config_files) { ['tmp/*.out'] }
 
         it 'warns about changes and does not overwrite content' do
-          expect(GDK::Output).to receive(:warn).with(%r{The changes to 'tmp/example.out' have not been applied})
+          expect(GDK::Output).to receive(:warn).with(%r{Changes to 'tmp/example.out' not applied because it's protected in gdk.yml.})
           expect(renderer).to receive(:warn_changes!)
+          expect(subject).to receive(:sleep).with(described_class::WAIT_WARNING_SECS)
 
           renderer.safe_render!
 

@@ -97,7 +97,7 @@ RSpec.describe GDK::Backup do
       travel_to(now) do
         fake_destination_file = File.join(backups_path, 'Procfile.20210506185031')
 
-        expect(described_class.new(fake_source_file).recover_cmd_string).to eq("cp -f '#{fake_destination_file}' '#{fake_source_file}'")
+        expect(described_class.new(fake_source_file).recover_cmd_string).to eq("cp -f '#{fake_destination_file}' \\\n'#{fake_source_file}'\n")
       end
     end
   end
