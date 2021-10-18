@@ -709,6 +709,7 @@ module GDK
           integer(:cache) { 2 }
           integer(:trace_chunks) { 3 }
           integer(:rate_limiting) { 4 }
+          integer(:sessions) { 5 }
         end
 
         settings(:test) do
@@ -717,6 +718,7 @@ module GDK
           integer(:cache) { 12 }
           integer(:trace_chunks) { 13 }
           integer(:rate_limiting) { 14 }
+          integer(:sessions) { 15 }
         end
       end
     end

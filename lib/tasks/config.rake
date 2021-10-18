@@ -112,6 +112,11 @@ file 'gitlab/config/redis.rate_limiting.yml' => ['support/templates/redis.yml.er
   GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :rate_limiting).safe_render!
 end
 
+desc 'Generate the redis.sessions.yml config file'
+file 'gitlab/config/redis.sessions.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :sessions).safe_render!
+end
+
 desc 'Generate the database_geo.yml config file'
 file 'gitlab/config/database_geo.yml' => ['support/templates/database_geo.yml.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
