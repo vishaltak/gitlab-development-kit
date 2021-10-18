@@ -7,11 +7,11 @@ require 'net/http'
 
 require_relative '../lib/gdk'
 
-TOOL_VERSIONS_FILES = %w[
-  https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
-  https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-  https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
-  https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+TOOL_VERSIONS_FILES = [
+  { version: -> { "v#{version_from_file('gitlab/GITLAB_PAGES_VERSION')}" }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
+  { version: -> { version_from_file('gitlab/GITALY_SERVER_VERSION') }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
+  { version: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
+  { version: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
 ].freeze
 
 HEADER_CONTENT = <<~CONTENT
@@ -49,12 +49,20 @@ def write_tool_versions_file(tool_versions_data)
   gdk_root.join('.tool-versions').write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
 end
 
+def version_from_file(file)
+  gdk_root.join(file).read.chomp
+end
+
 # ------------------------------------------------------------------------------
 
 tool_versions_data = read_tool_versions_from(gdk_root.join('.tool-versions-gdk').read)
 
-TOOL_VERSIONS_FILES.each do |url|
+TOOL_VERSIONS_FILES.each do |entry|
+  version = entry[:version].call
+  url = "#{entry[:base_url]}/-/raw/#{version}/.tool-versions"
+
   software, versions = read_tool_versions_from(http_get(url)).first
+
   tool_versions_data[software] ||= []
   tool_versions_data[software] |= versions
 end
