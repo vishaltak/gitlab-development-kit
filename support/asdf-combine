@@ -7,11 +7,13 @@ require 'net/http'
 
 require_relative '../lib/gdk'
 
+GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
+
 TOOL_VERSIONS_FILES = [
-  { version: -> { "v#{version_from_file('gitlab/GITLAB_PAGES_VERSION')}" }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
-  { version: -> { version_from_file('gitlab/GITALY_SERVER_VERSION') }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
-  { version: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
-  { version: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
+  { ref: -> { "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}" }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
+  { ref: -> { ref_from_remote_file('GITALY_SERVER_VERSION') }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
+  { ref: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
+  { ref: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
 ].freeze
 
 HEADER_CONTENT = <<~CONTENT
@@ -49,8 +51,9 @@ def write_tool_versions_file(tool_versions_data)
   gdk_root.join('.tool-versions').write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
 end
 
-def version_from_file(file)
-  gdk_root.join(file).read.chomp
+def ref_from_remote_file(file)
+  url = "#{GITLAB_PROJECT_BASE_URL}/-/raw/master/#{file}"
+  http_get(url).chomp
 end
 
 # ------------------------------------------------------------------------------
@@ -58,13 +61,19 @@ end
 tool_versions_data = read_tool_versions_from(gdk_root.join('.tool-versions-gdk').read)
 
 TOOL_VERSIONS_FILES.each do |entry|
-  version = entry[:version].call
-  url = "#{entry[:base_url]}/-/raw/#{version}/.tool-versions"
+  ref = entry[:ref].call
+  url = "#{entry[:base_url]}/-/raw/#{ref}/.tool-versions"
 
-  software, versions = read_tool_versions_from(http_get(url)).first
+  puts
+  puts url
+  puts '-' * url.length
 
-  tool_versions_data[software] ||= []
-  tool_versions_data[software] |= versions
+  read_tool_versions_from(http_get(url)).each do |software, versions|
+    puts "#{software} #{versions.join(' ')}"
+
+    tool_versions_data[software] ||= []
+    tool_versions_data[software] |= versions
+  end
 end
 
 write_tool_versions_file(tool_versions_data)
