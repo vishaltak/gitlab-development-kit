@@ -132,6 +132,13 @@ To enable feature flags:
    feature flag you want to enable.
 1. Leave the console by typing `exit` and hitting Enter.
 
+### Enable the billing page
+
+1. Open a [Rails console](rails_console.md).
+1. Run `ApplicationSetting.first.update(check_namespace_plan: true)`.
+
+The billing page is now accessible at **Group > Settings > Billing**.
+
 ### Use Advanced Search
 
 To use Advanced Search, you must:
