@@ -159,6 +159,7 @@ nginx:
     certificate: localhost.crt
     key: localhost.key
 object_store:
+  backup_remote_directory: ''
   connection:
     provider: AWS
     aws_access_key_id: minio

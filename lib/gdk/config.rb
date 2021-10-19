@@ -275,6 +275,7 @@ module GDK
       bool(:enabled) { read!('object_store_enabled') || false }
       string(:host) { config.listen_address }
       integer(:port) { read!('object_store_port') || 9000 }
+      string(:backup_remote_directory) { '' }
       hash_setting(:connection) do
         {
           'provider' => 'AWS',

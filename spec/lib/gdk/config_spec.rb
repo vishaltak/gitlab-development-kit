@@ -1452,6 +1452,12 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#backup_remote_directory' do
+      it 'is empty by default' do
+        expect(config.object_store.backup_remote_directory).to eq('')
+      end
+    end
   end
 
   describe 'omniauth' do
