@@ -20,6 +20,7 @@ git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
 make bootstrap
 source "$HOME/.asdf/asdf.sh"
+export DISABLE_BOOTSNAP=1
 gdk install shallow_clone=true
 gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true
