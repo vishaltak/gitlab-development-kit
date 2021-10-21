@@ -57,6 +57,16 @@ asdf_is_available() {
   fi
 }
 
+asdf_is_opt_out() {
+  opt_out=$(gdk config get asdf.opt_out 2> /dev/null)
+
+  if [[ "${opt_out}" == "true" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 prefix_with_asdf_if_available() {
   local command
 
