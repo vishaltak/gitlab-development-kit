@@ -146,10 +146,13 @@ ruby_configure_opts() {
 }
 
 configure_ruby_bundler() {
-  local current_postgres_version
-  current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
+  if asdf_enabled; then
+    current_pg_config_location=$(asdf which pg_config)
+  else
+    current_pg_config_location=$(command -v pg_config)
+  fi
 
-  bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
+  bundle config build.pg "--with-pg-config=${current_pg_config_location}"
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 
   if [[ "${OSTYPE}" == "darwin"* ]]; then
