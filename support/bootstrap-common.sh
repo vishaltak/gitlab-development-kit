@@ -49,12 +49,20 @@ asdf_reshim() {
   asdf reshim
 }
 
+asdf_is_available() {
+  if asdf version > /dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 prefix_with_asdf_if_available() {
   local command
 
   command="${*}"
 
-  if asdf version > /dev/null 2>&1; then
+  if asdf_is_available; then
     eval "asdf exec ${command}"
   else
     eval "${command}"
