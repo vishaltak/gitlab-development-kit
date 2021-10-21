@@ -23,6 +23,10 @@ ifdef RAKE
 ifeq (,$(filter $(NO_RUBY_REQUIRED), $(MAKECMDGOALS)))
 include $(shell rake gdk-config.mk)
 endif
+else
+ifeq (,$(filter $(NO_RUBY_REQUIRED), $(MAKECMDGOALS)))
+$(error "ERROR: Cannot find 'rake'. Please run 'make bootstrap'.")
+endif
 endif
 
 ###############################################################################
