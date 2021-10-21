@@ -67,6 +67,14 @@ asdf_is_opt_out() {
   fi
 }
 
+asdf_enabled() {
+  if asdf_is_available && ! asdf_is_opt_out; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 prefix_with_asdf_if_available() {
   local command
 
