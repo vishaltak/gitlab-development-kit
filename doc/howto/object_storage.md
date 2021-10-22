@@ -26,6 +26,16 @@ The object store has the following default settings:
 
 Changing settings requires `gdk reconfigure` to be run.
 
+## Backups
+
+To set the object storage config for backups, configure the bucket in `object_store.backup_remote_directory`, for example:
+
+```yaml
+object_store:
+  enabled: false
+  backup_remote_directory: 'backups'
+```
+
 ## MinIO errors
 
 If you cannot start MinIO, you may have an old version not supporting the `--compat` parameter.
