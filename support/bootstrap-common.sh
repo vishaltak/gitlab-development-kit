@@ -49,12 +49,38 @@ asdf_reshim() {
   asdf reshim
 }
 
+asdf_is_available() {
+  if asdf version > /dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+asdf_is_opt_out() {
+  opt_out=$(gdk config get asdf.opt_out 2> /dev/null)
+
+  if [[ "${opt_out}" == "true" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+asdf_enabled() {
+  if asdf_is_available && ! asdf_is_opt_out; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 prefix_with_asdf_if_available() {
   local command
 
   command="${*}"
 
-  if asdf version > /dev/null 2>&1; then
+  if asdf_is_available; then
     eval "asdf exec ${command}"
   else
     eval "${command}"
@@ -120,10 +146,13 @@ ruby_configure_opts() {
 }
 
 configure_ruby_bundler() {
-  local current_postgres_version
-  current_postgres_version=$(asdf current postgres | awk '{ print $2 }')
+  if asdf_enabled; then
+    current_pg_config_location=$(asdf which pg_config)
+  else
+    current_pg_config_location=$(command -v pg_config)
+  fi
 
-  bundle config build.pg "--with-pg-config=${CURRENT_ASDF_DATA_DIR}/installs/postgres/${current_postgres_version}/bin/pg_config"
+  bundle config build.pg "--with-pg-config=${current_pg_config_location}"
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
 
   if [[ "${OSTYPE}" == "darwin"* ]]; then
