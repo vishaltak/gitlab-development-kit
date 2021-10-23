@@ -8,7 +8,7 @@ ruby 2.7.4 3.0.2
 # At least one Go version must match a Go version set in the `.tool-versions` file of the version of
 # the `gitlab-pages` and `gitaly` projects used by GDK. See `pages_version` and `gitaly_version` in
 # the GDK Makefile.
-golang 1.17.1
+golang 1.17.2
 nodejs 14.17.5
 yarn 1.22.11
 minio 2021-04-06T23-11-00Z
