@@ -478,6 +478,26 @@ rm -rf gitlab/tmp/cache/bootsnap-*
 gdk start
 ```
 
+### Truncate Rails logs
+
+The logs in `gitlab/log` keep growing forever as you use the GDK.
+
+You can truncate them either manually with the provided `Makefile` task:
+
+```shell
+make gitlab-logs-truncate
+```
+
+Or add a [GDK hook](configuration.md#hooks) to your `gdk.yml` with the following to truncate them
+before every `gdk update`:
+
+```yaml
+gdk:
+  update_hooks:
+    before:
+      - make gitlab-logs-truncate
+```
+
 ## Node.js
 
 The following are possible solutions to problems you might encounter with Node.js and GDK.
