@@ -141,11 +141,3 @@ gitlab-translations-run: .gitlab-translations
 	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
 	$(Q)$(gitlab_git_cmd) checkout locale/*/gitlab.po
 	$(Q)touch $@
-
-.PHONY: gitlab-logs-truncate
-gitlab-logs-truncate:
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Truncating logs in gitlab/log"
-	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) truncate -c -s 0 log/*
