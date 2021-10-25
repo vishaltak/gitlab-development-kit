@@ -13,5 +13,4 @@ brew "pkg-config"
 brew "re2"
 brew "runit"
 brew "sqlite"
-
 cask "chromedriver"
