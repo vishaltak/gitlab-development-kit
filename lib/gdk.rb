@@ -10,6 +10,8 @@ $LOAD_PATH.unshift(__dir__)
 require 'pathname'
 require 'securerandom'
 require_relative 'runit'
+
+autoload :Asdf, 'asdf'
 autoload :Shellout, 'shellout'
 
 # GitLab Development Kit
