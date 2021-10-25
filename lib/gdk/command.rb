@@ -4,6 +4,7 @@ module GDK
   # GDK Commands
   module Command
     autoload :BaseCommand, 'gdk/command/base_command'
+    autoload :Cleanup, 'gdk/command/cleanup'
     autoload :Config, 'gdk/command/config'
     autoload :DiffConfig, 'gdk/command/diff_config'
     autoload :Env, 'gdk/command/env'
@@ -35,6 +36,7 @@ module GDK
     # This is a list of existing supported commands and their associated
     # implementation class
     COMMANDS = {
+      'cleanup' => -> { GDK::Command::Cleanup },
       'config' => -> { GDK::Command::Config },
       'diff-config' => -> { GDK::Command::DiffConfig },
       'doctor' => -> { GDK::Command::Doctor },
