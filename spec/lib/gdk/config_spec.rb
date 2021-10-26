@@ -900,6 +900,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#log_dir' do
+      it 'returns the GitLab log directory' do
+        expect(config.gitlab.log_dir).to eq(Pathname.new('/home/git/gdk/gitlab/log'))
+      end
+    end
+
     describe '#cache_classes' do
       it 'returns if Ruby classes should be cached' do
         expect(config.gitlab.cache_classes).to be(false)
