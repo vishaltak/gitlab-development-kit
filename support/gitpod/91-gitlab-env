@@ -6,6 +6,8 @@ source "$HOME/.asdf/asdf.sh"
 # skip if gp is not installed
 hash gp 2>/dev/null || return
 
+cd /workspace/gitlab-development-kit
+
 # set RAILS_HOSTS for Gitpod
 port=$(gdk config get port)
 rails_hosts=$(gp url "${port}" | sed -e 's+^http[s]*://++')
