@@ -1,7 +1,12 @@
 gitlab_pages_clone_dir = gitlab-pages
 gitlab_pages_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_PAGES_VERSION")
 
+ifeq ($(gitlab_pages_enabled),true)
 gitlab-pages-setup: gitlab-pages-secret gitlab-pages/gitlab-pages.conf gitlab-pages/bin/gitlab-pages
+else
+gitlab-pages-setup:
+	@true
+endif
 
 gitlab-pages-secret:
 	$(Q)rake $@
