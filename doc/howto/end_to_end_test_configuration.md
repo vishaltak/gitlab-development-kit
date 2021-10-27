@@ -36,8 +36,7 @@ The steps below set up a new configuration with RubyMine that allows you to Run/
 1. Give the new configuration a meaningful name
 1. Fill in the **Configuration** tab with the following
     - Ruby script: `<Path to GDK folder>/gitlab/qa/bin/qa`
-    - Script arguments: `Test::Instance::All <GitLab URL> -- qa/specs/features/browser_ui/1_manage/login/
-    log_in_spec.rb`
+    - Script arguments: `Test::Instance::All <GitLab URL> -- qa/specs/features/browser_ui/1_manage/login/log_in_spec.rb`
     - Working directory: `<Path to GDK folder>/gitlab/qa`
     - Environment variables: Optional
         - If you'd like to see your script run; `WEBDRIVER_HEADLESS=false`
