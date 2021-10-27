@@ -16,15 +16,15 @@ export GOPROXY ?= https://proxy.golang.org
 # Silence Rollup when building GitLab Docs with nanoc
 export ROLLUP_OPTIONS = --silent
 
-NO_RUBY_REQUIRED := bootstrap
+NO_RAKE_REQUIRED := bootstrap lint
 
 # Generate a Makefile from Ruby and include it
 ifdef RAKE
-ifeq (,$(filter $(NO_RUBY_REQUIRED), $(MAKECMDGOALS)))
+ifeq (,$(filter $(NO_RAKE_REQUIRED), $(MAKECMDGOALS)))
 include $(shell rake gdk-config.mk)
 endif
 else
-ifeq (,$(filter $(NO_RUBY_REQUIRED), $(MAKECMDGOALS)))
+ifeq (,$(filter $(NO_RAKE_REQUIRED), $(MAKECMDGOALS)))
 $(error "ERROR: Cannot find 'rake'. Please run 'make bootstrap'.")
 endif
 endif
