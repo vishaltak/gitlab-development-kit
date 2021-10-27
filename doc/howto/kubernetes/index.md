@@ -73,7 +73,7 @@ by default.
 You likely want to run K8s clusters on GKE as this allows us to test our
 GCP integrations as well. You can use Minikube too but there are limitations
 with this as Minikube doesn't test our GCP integration and Minikube does not
-simulate a real cluser (eg. internet-facing load balancers with external IP
+simulate a real cluster (eg. internet-facing load balancers with external IP
 address are not possible). So when you do choose GKE you conclude that your
 registry running on your machine needs to be internet accessible since GKE
 is outside your network.
