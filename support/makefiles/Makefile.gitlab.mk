@@ -10,7 +10,7 @@ gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gitlab-tran
 gitlab-update: gitlab-update-timed
 
 .PHONY: gitlab-update-run
-gitlab-update-run: ensure-databases-running postgresql gitlab-git-pull gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
+gitlab-update-run: gitlab-git-pull ensure-databases-running postgresql gitlab-setup gitlab-db-migrate gitlab/doc/api/graphql/reference/gitlab_schema.json
 
 .PHONY: gitlab/git-checkout-auto-generated-files
 gitlab/git-checkout-auto-generated-files:

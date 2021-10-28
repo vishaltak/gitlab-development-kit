@@ -176,7 +176,7 @@ rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
 .PHONY: ensure-databases-running
-ensure-databases-running: Procfile postgresql/data gitaly-setup
+ensure-databases-running: Procfile postgresql/data gitaly-update
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Ensuring necessary data services are running"
