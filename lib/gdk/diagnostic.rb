@@ -2,6 +2,7 @@
 
 module GDK
   module Diagnostic
+    autoload :Asdf, 'gdk/diagnostic/asdf'
     autoload :Base, 'gdk/diagnostic/base'
     autoload :Bundler, 'gdk/diagnostic/bundler'
     autoload :Configuration, 'gdk/diagnostic/configuration'
@@ -23,6 +24,7 @@ module GDK
     def self.all
       klasses = %i[
         RvmAndAsdf
+        Asdf
         RubyGems
         Bundler
         Version

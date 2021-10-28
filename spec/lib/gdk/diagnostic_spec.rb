@@ -11,6 +11,7 @@ RSpec.describe GDK::Diagnostic do
     it 'contains only diagnostic classes' do
       diagnostic_classes = [
         GDK::Diagnostic::RvmAndAsdf,
+        GDK::Diagnostic::Asdf,
         GDK::Diagnostic::RubyGems,
         GDK::Diagnostic::Bundler,
         GDK::Diagnostic::Version,
