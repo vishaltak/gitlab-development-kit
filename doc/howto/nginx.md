@@ -33,7 +33,7 @@ echo '127.0.0.1 gdk.test' | sudo tee -a /etc/hosts
 ### Configuring a loopback device (optional)
 
 If you want an isolated network space for all the services of your
-GDK, you can add a lookback network interface:
+GDK, you can add a loopback network interface:
 
 ```shell
 # on macOS

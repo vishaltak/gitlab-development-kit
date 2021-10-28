@@ -482,7 +482,7 @@ of `0` means that all pages in your history, regardless of how long ago you
 visited them, are eagerly compiled.
 
 For instance, if you visited a particular page `webpack.incremental_ttl - 1`
-days ago, it would render as normal if you visted it _today_. But, if instead
+days ago, it would render as normal if you visited it _today_. But, if instead
 you visit it _tomorrow_, you would see an initial "compiling" overlay.
 
 The history of previously visited pages is stored in the `WEBPACK_CACHE_PATH`
@@ -510,7 +510,7 @@ or where GDK is running in lower-memory environments. To lower the memory requir
 - Reduce the value of `webpack.incremental_ttl` in your `gdk.yml`. This means
   fewer page bundles will be eagerly compiled.
 
-This means you pay a high upfront cost of a single memory- and CPU-intenstive compile. However, if
+This means you pay a high upfront cost of a single memory- and CPU-intensive compile. However, if
 you do not change any frontend files, you just have a lightweight Ruby server running.
 
 If you experience any problems with one of the modes, you can quickly change the settings in your

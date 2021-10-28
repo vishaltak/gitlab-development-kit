@@ -83,7 +83,7 @@ This script attempts to:
 
 If the upgrade script does not work, you can also dump the current
 contents of the PostgreSQL database and restore it to the new database
-verson:
+version:
 
 1. (Optional) To retain the current database contents, create a backup of the database:
 
