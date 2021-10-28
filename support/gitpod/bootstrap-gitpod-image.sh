@@ -18,15 +18,34 @@ sudo chown -R gitpod:gitpod /workspace
 cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
+
+# Bootstrap
 make bootstrap
 source "$HOME/.asdf/asdf.sh"
+
+# Installl
 gdk install shallow_clone=true
+mv gitlab/config/secrets.yml .
+cp ./support/completions/gdk.bash "$HOME/.bashrc.d/90-gdk"
+
+# Cleanup
+ps -ef || true
 gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true
-mv gitlab/config/secrets.yml .
+ps -ef || true
+
+lsof gitlab/tmp/cache/bootsnap-load-path-cache || true
+find gitlab/tmp/cache/bootsnap-load-path-cache || true
+
 rm -rf gitlab/ tmp/ || true
+find gitlab/tmp/cache/bootsnap-load-path-cache || true
+
+rm -rf gitlab/ tmp/ || true
+find gitlab/tmp/cache/bootsnap-load-path-cache || true
+
 git restore tmp
-cp ./support/completions/gdk.bash "$HOME/.bashrc.d/90-gdk"
+
+# GDK
 cd /workspace
 mv gitlab-development-kit "$HOME/"
 
