@@ -1004,6 +1004,30 @@ Install it with `gem install overcommit`.
 
 The following are possible solutions to problems you might encounter with Puma and GDK.
 
+### An error has occurred and reported in the system's low-level handler
+
+If you receive this error message:
+
+```plaintext
+An error has occurred and reported in the system's low-level error handler.
+```
+
+This is [Puma](https://github.com/puma/puma) catching an error that has slipped through from Rails. Here are some suggestions that may assist:
+
+- Completely stop your GDK to rule out an out-of-date process running:
+
+  ```shell
+  gdk stop && gdk kill && gdk start
+  ```
+
+- Update your GDK as the problem may have already been fixed:
+
+  ```shell
+  gdk update && gdk restart
+  ```
+
+- If the problem continues to persist, please raise a GDK Issue ensuring all detail requested in the Issue template is provided.
+
 ### Puma timeout
 
 Browser shows `EOF`. Logs show a timeout:
