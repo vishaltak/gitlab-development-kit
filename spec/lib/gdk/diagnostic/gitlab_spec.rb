@@ -128,16 +128,22 @@ RSpec.describe GDK::Diagnostic::Gitlab do
   end
 
   def stub_existence(key, project_dir, exist)
-    stub_gitlab_shell_secret_file_with(key, project_dir, exist: exist)
+    stub_gitlab_shell_secret_file_with([key, :dir], project_dir, exist: exist)
   end
 
   def stub_content(key, project_dir, content)
-    stub_gitlab_shell_secret_file_with(key, project_dir, content: content)
+    stub_gitlab_shell_secret_file_with([key, :dir], project_dir, content: content)
   end
 
-  def stub_gitlab_shell_secret_file_with(key, project_dir, content: 'abc', exist: true)
-    double = instance_double(Pathname, exist?: exist, to_s: "/home/git/gdk/#{project_dir}/.gitlab_shell_secret", read: content)
-    allow_any_instance_of(GDK::Config).to receive_message_chain(key, :dir).and_return(double)
-    allow(double).to receive(:join).with('.gitlab_shell_secret').and_return(double)
+  def stub_file(config_key, file, exist: true, content: '')
+    double = instance_double(Pathname, exist?: exist, to_s: file, read: content)
+    allow_any_instance_of(GDK::Config).to receive_message_chain(*config_key).and_return(double)
+    double
+  end
+
+  def stub_gitlab_shell_secret_file_with(config_key, project_dir, content: 'abc', exist: true)
+    file = '.gitlab_shell_secret'
+    double = stub_file(config_key, "/home/git/gdk/#{project_dir}/#{file}", exist: exist, content: content)
+    allow(double).to receive(:join).with(file).and_return(double)
   end
 end
