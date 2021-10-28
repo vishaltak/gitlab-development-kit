@@ -115,7 +115,7 @@ module GDK
     end
 
     def colors?
-      @colors_supported ||= (`tput colors`.chomp.to_i >= 8)
+      @colors ||= Shellout.new('tput colors').try_run.chomp.to_i >= 8
     end
 
     def colors_arg
