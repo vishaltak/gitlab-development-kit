@@ -73,6 +73,7 @@ gitlab:
   auto_update: true
   cache_classes: false
   dir: "/home/git/gdk/gitlab"
+  log_dir: "/home/git/gdk/gitlab/log"
   rails:
     address: ''
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"

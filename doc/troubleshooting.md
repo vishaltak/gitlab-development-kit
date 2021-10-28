@@ -126,7 +126,7 @@ See this [issue](https://github.com/macournoyer/thin/pull/364) for more details.
 
 ### An error occurred while installing thrift (0.14.0)
 
-The installation of the `thrift` v0.14.0 gem during `bundle install` can fail with the following error due to a [known bug](https://bugs.ruby-lang.org/issues/17865). 
+The installation of the `thrift` v0.14.0 gem during `bundle install` can fail with the following error due to a [known bug](https://bugs.ruby-lang.org/issues/17865).
 
 ```plaintext
 [SNIPPED]
@@ -482,10 +482,10 @@ gdk start
 
 The logs in `gitlab/log` keep growing forever as you use the GDK.
 
-You can truncate them either manually with the provided `Makefile` task:
+You can truncate them either manually with the provided Rake task:
 
 ```shell
-make gitlab-logs-truncate
+rake gitlab:truncate_logs
 ```
 
 Or add a [GDK hook](configuration.md#hooks) to your `gdk.yml` with the following to truncate them
@@ -495,7 +495,7 @@ before every `gdk update`:
 gdk:
   update_hooks:
     before:
-      - make gitlab-logs-truncate
+      - rake gitlab:truncate_logs
 ```
 
 ## Node.js
