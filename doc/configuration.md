@@ -259,6 +259,7 @@ A common use for GDK hooks is [removing uncommitted changes to `gitlab/db/struct
 | `gitlab.rails.separate_db_schemas` | `false` | Set this to `true` to configure `schema_search_path` in your `config/database.yml`. |
 | `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
+| `gitlab.rails.bootsnap` | `true` | Set this to `false` to disable [Bootsnap](https://github.com/Shopify/bootsnap). |
 
 ### GitLab Docs settings
 

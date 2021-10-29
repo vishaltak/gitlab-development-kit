@@ -76,6 +76,7 @@ gitlab:
   log_dir: "/home/git/gdk/gitlab/log"
   rails:
     address: ''
+    bootsnap: true
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
     hostname: 127.0.0.1
     https:
