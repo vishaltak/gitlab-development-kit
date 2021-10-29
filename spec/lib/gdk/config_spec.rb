@@ -925,6 +925,12 @@ RSpec.describe GDK::Config do
         end
       end
 
+      describe '#bootsnap' do
+        it 'returns true by default' do
+          expect(config.gitlab.rails.bootsnap?).to eq(true)
+        end
+      end
+
       context 'https' do
         describe '#enabled' do
           it 'returns false by default' do

@@ -640,6 +640,7 @@ module GDK
           bool(:enabled) { config.https? }
         end
 
+        bool(:bootsnap) { true }
         string(:address) { '' }
         string(:__bind) { "#{config.gitlab.rails.__listen_settings.__protocol}://#{config.gitlab.rails.__listen_settings.__address}" }
         string(:__workhorse_url) do
