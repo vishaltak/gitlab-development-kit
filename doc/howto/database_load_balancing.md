@@ -174,8 +174,12 @@ Once done, restart the instances with GDK and tail their logs.
 ### Simulating replication delay
 
 You can simulate replication delay by adding a minimum delay. The
-following setting delays replication by at least 1 minute:
+following setting in `postgresql-replica/data/postgresql.conf` delays
+replication by at least 1 minute:
 
 ```plaintext
 recovery_min_apply_delay = '1min'
 ```
+
+When simulating replication delay, you may never be caught up if some process is constantly writing. If you find Praefect is constantly
+updating some status, you can work around this by stopping Praefect temporarily with `gdk stop praefect`.
