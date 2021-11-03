@@ -23,7 +23,7 @@ Then run the daemon:
 
 ## Configuring GitLab
 
-In `gitlab.yml` under `production:` and `ldap:`, change the following keys to the values
+In `<gdk-directory>/gitlab/config/gitlab.yml` under `production:` and `ldap:`, change the following keys to the values
 given below (see [defaults](https://gitlab.com/gitlab-org/gitlab/-/blob/master/config/gitlab.yml.example#L550-769)):
 
 ```yaml
