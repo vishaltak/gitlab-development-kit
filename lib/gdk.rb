@@ -10,6 +10,8 @@ $LOAD_PATH.unshift(__dir__)
 require 'pathname'
 require 'securerandom'
 require_relative 'runit'
+
+autoload :Asdf, 'asdf'
 autoload :Shellout, 'shellout'
 
 # GitLab Development Kit
@@ -66,8 +68,8 @@ module GDK
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run(ARGV)
     else
-      GDK::Output.notice "gdk: #{subcommand} is not a gdk command."
-      GDK::Output.notice "See 'gdk help' for more detail."
+      GDK::Output.warn "gdk #{subcommand} is not a GDK command."
+      GDK::Output.info "See 'gdk help' for more detail."
       false
     end
   end

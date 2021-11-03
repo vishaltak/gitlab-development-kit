@@ -127,7 +127,7 @@ module GDK
 
       def prompt(message)
         Kernel.print("#{message}: ")
-        ARGF.gets.to_s.chomp
+        $stdin.gets.to_s.chomp
       rescue Interrupt
         ''
       end
