@@ -112,7 +112,7 @@ module GDK
       end
 
       def icon(code)
-        return '' unless colorize?
+        return '' unless unicode_capable?
 
         "#{ICONS[code]} "
       end
@@ -121,8 +121,12 @@ module GDK
         STDOUT.isatty # rubocop:disable Style/GlobalStdStream
       end
 
+      def unicode_capable?
+        Shellout.new('tput colors').try_run.chomp.to_i > 8
+      end
+
       def colorize?
-        interactive? && ENV.fetch('NO_COLOR', '').empty?
+        ENV.fetch('NO_COLOR', '').empty? && interactive?
       end
 
       def prompt(message)

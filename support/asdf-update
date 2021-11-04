@@ -27,7 +27,7 @@ asdf_update_release() {
 }
 
 asdf_update_plugins() {
-  asdf plugin-update --all
+  asdf plugin-update --all > /dev/null
 
   # Install Node.js' OpenPGP key
   if [[ ! -f "${HOME}/.gnupg/asdf-nodejs.gpg" ]]; then
@@ -62,12 +62,12 @@ if ! ensure_sudo_available; then
   error "sudo is required, please install." >&2
 fi
 
-header_print "Ensuring platform software installed"
+header_print "asdf: Ensuring platform software installed"
 if ! setup_platform; then
   error "Failed to install platform software." >&2
 fi
 
-header_print "Updating asdf release, plugins, and tools"
+header_print "asdf: Updating release, plugins, and tools"
 if ! asdf_update_release; then
   error "Failed to update asdf release." >&2
 fi

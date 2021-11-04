@@ -8,13 +8,7 @@ PROGNAME = File.basename(__FILE__)
 def main(git_clone_args)
   command = %w[git clone] + git_clone_args
 
-  3.times do
-    sh = Shellout.new(command)
-    sh.stream
-    return true if sh.success?
-  end
-
-  false
+  Shellout.new(command).execute.success?
 end
 
 abort "usage: #{PROGNAME} GIT_CLONE_ARGS" if ARGV.count < 1

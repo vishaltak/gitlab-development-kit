@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+services = ARGV.shift || abort('ERROR: Please specify GDK service(s) to check.')
+
+require_relative '../lib/runit.rb'
+
+exit(Runit.all_services_up?(services))

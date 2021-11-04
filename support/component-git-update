@@ -3,12 +3,12 @@
 
 require_relative '../lib/gdk'
 
-abort "usage: #{File.basename(__FILE__)} COMPONENT WORKTREE REVISION DEFAULT_BRANCH" if ARGV.count < 4
+abort "usage: #{File.basename(__FILE__)} COMPONENT WORKTREE REVISION DEFAULT_BRANCH [git_clone_args]" if ARGV.count < 4
 
-component_name, worktree, revision, default_branch = ARGV
+component_name, worktree, revision, default_branch, git_clone_args = ARGV
 
 begin
-  GDK::Project::Base.new(component_name, GDK.config.gdk_root.join(worktree), default_branch).update(revision)
+  exit(GDK::Project::Base.new(component_name, GDK.config.gdk_root.join(worktree), default_branch).update(revision, git_clone_args))
 rescue StandardError => e
   GDK::Output.abort(e)
 end

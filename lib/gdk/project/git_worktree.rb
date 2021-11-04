@@ -5,17 +5,25 @@ module GDK
     class GitWorktree
       DEFAULT_RETRY_ATTEMPTS = 3
 
-      def initialize(worktree_path, default_branch, revision, auto_rebase: false)
+      def initialize(repository, worktree_path, default_branch, revision, git_clone_args, auto_rebase: false)
+        @repository = repository
         @worktree_path = worktree_path
         @default_branch = default_branch
         @revision = revision
+        @git_clone_args = git_clone_args
         @auto_rebase = auto_rebase
       end
 
       def update
-        stashed = stash_save
+        was_cloned = cloned?
 
-        unless fetch
+        if was_cloned
+          stashed = stash_save
+        else
+          clone
+        end
+
+        if was_cloned && !fetch
           GDK::Output.error("Failed to fetch for '#{short_worktree_path}'")
           return false
         end
@@ -27,11 +35,29 @@ module GDK
 
       private
 
-      attr_reader :worktree_path, :default_branch, :revision, :auto_rebase
+      attr_reader :repository, :worktree_path, :default_branch, :revision, :git_clone_args, :auto_rebase
       alias_method :auto_rebase?, :auto_rebase
 
       def short_worktree_path
         "#{worktree_path.basename}/"
+      end
+
+      def clone
+        worktree_path.mkpath
+
+        sh = execute_command("git clone #{git_clone_args} #{repository} .")
+        if sh.success?
+          GDK::Output.success("Successfully cloned '#{repository}' into '#{short_worktree_path}'")
+          true
+        else
+          GDK::Output.puts(sh.read_stderr, stderr: true)
+          GDK::Output.error("Failed to clone '#{repository}' into '#{short_worktree_path}'")
+          false
+        end
+      end
+
+      def cloned?
+        worktree_path.join('.git').exist?
       end
 
       def execute_command(command, **args)
@@ -52,11 +78,11 @@ module GDK
       def checkout_revision
         sh = execute_command("git checkout #{revision}")
         if sh.success?
-          GDK::Output.success("Successfully fetched and checked out '#{revision}' for '#{short_worktree_path}'")
+          GDK::Output.success("Successfully checked out '#{revision}' for '#{short_worktree_path}'")
           true
         else
           GDK::Output.puts(sh.read_stderr, stderr: true)
-          GDK::Output.error("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'")
+          GDK::Output.error("Failed to check out '#{revision}' for '#{short_worktree_path}'")
           false
         end
       end

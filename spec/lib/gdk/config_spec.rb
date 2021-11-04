@@ -1643,13 +1643,6 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#quiet' do
-      it 'defaults to true' do
-        expect(config.gdk.quiet).to eq(true)
-        expect(config.gdk.quiet?).to eq(true)
-      end
-    end
-
     describe '#auto_reconfigure' do
       it 'defaults to true' do
         expect(config.gdk.auto_reconfigure).to eq(true)

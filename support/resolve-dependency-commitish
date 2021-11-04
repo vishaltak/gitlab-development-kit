@@ -4,6 +4,11 @@ set -euo pipefail
 IFS=$'\n\t'
 
 version_file="${1}"
+
+if [[ ! -f "${version_file}" ]]; then
+	exit 1
+fi
+
 version="$(cat "${version_file}")"
 version_size=${#version}
 

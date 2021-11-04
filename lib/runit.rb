@@ -5,7 +5,7 @@ require 'pathname'
 
 require_relative 'shellout'
 require_relative 'runit/config'
-require_relative 'gdk/output'
+require_relative 'gdk'
 
 MakeMakefile::Logging.quiet = true
 MakeMakefile::Logging.logfile(File::NULL)
@@ -149,6 +149,11 @@ module Runit
   end
 
   def self.sv(cmd, services, quiet: false)
+    sh = sv_raw(cmd, services, quiet: quiet)
+    sh.success?
+  end
+
+  def self.sv_raw(cmd, services, quiet:)
     start_runsvdir
     expanded_services = expand_services(services)
     ensure_services_are_supervised(expanded_services)
@@ -157,7 +162,7 @@ module Runit
 
     sh = Shellout.new(command, chdir: GDK.root)
     quiet ? sh.run : sh.stream
-    sh.success?
+    sh
   end
 
   def self.ensure_services_are_supervised(services)
@@ -266,5 +271,10 @@ module Runit
 
   def self.config
     @config ||= GDK::Config.new
+  end
+
+  def self.all_services_up?(services)
+    sh = sv_raw('status', Array(services), quiet: true)
+    sh.read_stdout.split("\n").all? { |service| service.match?(/^run: /) }
   end
 end

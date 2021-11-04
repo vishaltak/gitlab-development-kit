@@ -32,9 +32,6 @@ module GDK
 
     settings :repositories do
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
-      string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
-      string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }
-      string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
       string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-org/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
@@ -42,7 +39,6 @@ module GDK
       string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
       string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
       string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
-      string(:gitlab_spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
     end
 
     settings :dev do
@@ -84,11 +80,12 @@ module GDK
     end
 
     path(:gdk_root) { self.class::GDK_ROOT }
+    path(:gdk_cache_root) { config.gdk_root.join('.cache') }
 
     settings :gdk do
       bool(:ask_to_restart_after_update) { true }
       bool(:debug) { false }
-      bool(:__debug) { config.gdk.debug? || ENV.fetch('GDK_DEBUG', 'false') == 'true' }
+      bool(:__debug) { ENV.fetch('GDK_DEBUG', 'false') == 'true' || config.gdk.debug? }
       integer(:runit_wait_secs) { 20 }
       bool(:quiet) { true }
       bool(:auto_reconfigure) { true }
@@ -194,8 +191,13 @@ module GDK
     end
 
     settings :gitlab_shell do
+      string(:repository) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
       bool(:auto_update) { true }
       path(:dir) { config.gdk_root.join('gitlab-shell') }
+    end
+
+    settings :gitlab_workhorse do
+      string(:repository) { 'https://gitlab.com/gitlab-org/gitlab.git' }
     end
 
     settings :gitlab_ui do
@@ -216,6 +218,7 @@ module GDK
     end
 
     settings :gitlab_spamcheck do
+      string(:repository) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
       bool(:enabled) { false }
       bool(:auto_update) { true }
       integer(:port) { 8001 }
@@ -301,6 +304,7 @@ module GDK
     end
 
     settings :gitlab_pages do
+      string(:repository) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
       bool(:enabled) { false }
       string(:host) { "#{config.listen_address}.nip.io" }
       integer(:port) { read!('gitlab_pages_port') || 3010 }
@@ -478,6 +482,7 @@ module GDK
     end
 
     settings :gitaly do
+      string(:repository) { 'https://gitlab.com/gitlab-org/gitaly.git' }
       path(:dir) { config.gdk_root.join('gitaly') }
       path(:ruby_dir) { config.gitaly.dir.join('ruby') }
       bool(:enabled) { !config.praefect? || storage_count > 1 }
@@ -627,6 +632,7 @@ module GDK
     end
 
     settings :gitlab do
+      string(:repository) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       bool(:auto_update) { true }
       path(:dir) { config.gdk_root.join('gitlab') }
       path(:log_dir) { config.gitlab.dir.join('log') }

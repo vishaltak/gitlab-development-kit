@@ -1,13 +1,15 @@
 .PHONY: preflight-checks
-preflight-checks: preflight-checks-timed
-
-.PHONY: preflight-checks-run
-preflight-checks-run: rake
+preflight-checks: rake
+	@echo
+	@echo "${DIVIDER}"
+	@echo "GDK: Running preflight checks"
+	@echo "${DIVIDER}"
 	$(Q)rake preflight-checks
 
 .PHONY: preflight-update-checks
-preflight-update-checks: preflight-update-checks-timed
-
-.PHONY: preflight-update-checks-run
-preflight-update-checks-run: rake
+preflight-update-checks: rake
+	@echo
+	@echo "${DIVIDER}"
+	@echo "GDK: Running preflight update checks"
+	@echo "${DIVIDER}"
 	$(Q)rake preflight-update-checks

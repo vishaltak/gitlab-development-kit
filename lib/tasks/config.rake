@@ -72,6 +72,11 @@ file 'redis/redis.conf' => ['support/templates/redis.conf.erb', GDK::Config::FIL
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
 
+desc 'Generate the gitlab/.gitlab_shell_secret file'
+file 'gitlab/.gitlab_shell_secret' => ['support/templates/gitlab_shell_secret.erb', GDK::Config::FILE] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+end
+
 desc 'Generate the database.yml config file'
 file 'gitlab/config/database.yml' => ['support/templates/database.yml.erb', GDK::Config::FILE] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
@@ -202,8 +207,7 @@ file 'gitlab-runner-config.toml' => ['support/templates/gitlab-runner-config.tom
 end
 
 file 'prometheus/prometheus.yml' => ['support/templates/prometheus.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-  chmod('+r', t.name)
+  GDK::ErbRenderer.new(t.source, t.name, config: config, perms: 0644).safe_render!
 end
 
 file 'gitlab-spamcheck/config/config.toml' => ['support/templates/gitlab-spamcheck/config.toml.erb'] do |t|

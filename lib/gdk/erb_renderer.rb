@@ -51,6 +51,7 @@ module GDK
 
       FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
       FileUtils.mv(temp_file.path, target)
+      FileUtils.chmod(perms, target)
     rescue GDK::ConfigSettings::UnsupportedConfiguration => e
       GDK::Output.abort("#{e.message}.")
       false
@@ -59,6 +60,12 @@ module GDK
     end
 
     private
+
+    attr_reader :args
+
+    def perms
+      @perms ||= args.fetch(:perms, 0600)
+    end
 
     def warn_changes!(temp_file)
       diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..].join("\n")

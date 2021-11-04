@@ -54,7 +54,7 @@ charts-gitlab-pull:
 endif
 
 gitlab-docs/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
+	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" main main ${git_depth_param}
 
 gitlab-docs/.git/pull: gitlab-docs/.git
 	@echo
@@ -64,7 +64,7 @@ gitlab-docs/.git/pull: gitlab-docs/.git
 	$(Q)support/component-git-update gitlab_docs "${gitlab_docs_clone_dir}" main main
 
 gitlab-runner/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_runner_repo} gitlab-runner
+	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" main main ${git_depth_param}
 
 gitlab-runner/.git/pull: gitlab-runner/.git
 	@echo
@@ -74,7 +74,7 @@ gitlab-runner/.git/pull: gitlab-runner/.git
 	$(Q)support/component-git-update gitlab_runner "${gitlab_runner_clone_dir}" main main
 
 omnibus-gitlab/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${omnibus_gitlab_repo} omnibus-gitlab
+	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" master master ${git_depth_param}
 
 omnibus-gitlab/.git/pull: omnibus-gitlab/.git
 	@echo
@@ -84,7 +84,7 @@ omnibus-gitlab/.git/pull: omnibus-gitlab/.git
 	$(Q)support/component-git-update omnibus_gitlab "${omnibus_gitlab_clone_dir}" master master
 
 charts-gitlab/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${charts_gitlab_repo} charts-gitlab
+	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" master master ${git_depth_param}
 
 charts-gitlab/.git/pull: charts-gitlab/.git
 	@echo

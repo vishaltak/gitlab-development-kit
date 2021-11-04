@@ -25,7 +25,7 @@ module GDK
       end
 
       def reset_data!
-        if GDK.make('ensure-databases-running', 'reconfigure')
+        if GDK.make('ensure-data-services-running', 'reconfigure')
           GDK::Output.notice('Successfully reset data!')
           GDK::Command::Start.new.run
         else
