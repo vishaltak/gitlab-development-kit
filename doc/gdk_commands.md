@@ -58,7 +58,7 @@ gdk kill
 ```
 
 This command is a manual command because it kills all `runsv` processes,
-which can include processes outside the current GDK. Don't use this command if you're running 
+which can include processes outside the current GDK. Don't use this command if you're running
 other processes with `runit`, or if you're running multiple instances of GDK (and you don't want to stop them all).
 
 ## Update GDK
@@ -133,6 +133,24 @@ directories and cleaning the global golang cache.
 
 ```shell
 gdk pristine
+```
+
+## Cleanup
+
+Over time, your GDK may contain large log files in addition to asdf-installed
+software that's no longer required. To cleanup your GDK, run:
+
+```shell
+gdk cleanup
+```
+
+The `gdk cleanup` command is destructive and requires you to confirm 
+if you want to proceed. If you prefer to run without the need to confirm 
+(for example, if you want to run as a [GDK hook](configuration.md#hooks)),
+run:
+
+```shell
+GDK_CLEANUP_CONFIRM=true gdk cleanup
 ```
 
 ## Measure performance
