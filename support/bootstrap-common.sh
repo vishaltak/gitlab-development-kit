@@ -154,6 +154,7 @@ configure_ruby_bundler() {
 
   bundle config build.pg "--with-pg-config=${current_pg_config_location}"
   bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+  bundle config build.gpgme --use-system-libraries
 
   if [[ "${OSTYPE}" == "darwin"* ]]; then
     clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
