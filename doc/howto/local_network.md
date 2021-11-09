@@ -55,9 +55,29 @@ address:
    sudo ip link set dummy0 up
    ```
 
-1. In `config/gitlab.yml`, set the `host` parameter to `172.16.123.1`, or configure `gdk.test`.
+1. Set `gitlab.rails.hostname` to `172.16.123.1` or `gdk.test`.
 
-1. In `config/gitlab.yml`, set the `webpack` `host` setting to `172.16.123.1`.
+    ```shell
+    gdk config set gitlab.rails.hostname 172.16.123.1
+    ```
+
+1. Set `webpack.host` to `172.16.123.1`.
+
+    ```shell
+    gdk config set webpack.host 172.16.123.1
+    ```
+
+1. Reconfigure GDK:
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Restart GDK to use the new configuration:
+
+   ```shell
+   gdk restart
+   ```
 
 For this to work across reboots, the aliased IP address command must be run at startup. To
 automate this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/`
