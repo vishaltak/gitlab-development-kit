@@ -266,21 +266,67 @@ RSpec.describe GDK::Output do
   end
 
   describe '.icon' do
-    context 'when NO_COLOR=true is not defined' do
+    let(:unicode_capable) { nil }
+
+    before do
+      allow(described_class).to receive(:unicode_capable?).and_return(unicode_capable)
+    end
+
+    context 'when terminal is capable of displaying icons' do
+      let(:unicode_capable) { true }
+
       it 'returns the icon code with trailing space' do
         icon = described_class::ICONS[:success]
-
-        stub_no_color_env('')
 
         expect(described_class.icon(:success)).to eq("#{icon} ")
       end
     end
 
-    context 'when NO_COLOR=true is defined' do
-      it 'returns an empty string' do
-        stub_no_color_env('true')
+    context 'when terminal is not capable of displaying icons' do
+      let(:unicode_capable) { false }
 
+      it 'returns an empty string' do
         expect(described_class.icon('doesntmatter')).to be_empty
+      end
+    end
+  end
+
+  describe '.unicode_capable?' do
+    let(:color_env_value) { nil }
+    let(:tput_colors_response) { nil }
+
+    before do
+      stub_no_color_env(color_env_value)
+
+      shellout_double = instance_double(Shellout, try_run: tput_colors_response)
+      allow(Shellout).to receive(:new).with('tput colors').and_return(shellout_double)
+    end
+
+    context 'when NO_COLOR=true is defined' do
+      let(:color_env_value) { 'true' }
+
+      it 'returns false' do
+        expect(described_class.unicode_capable?).to be(false)
+      end
+    end
+
+    context 'when NO_COLOR=true is not defined' do
+      let(:color_env_value) { '' }
+
+      context 'terminal is not capable' do
+        let(:tput_colors_response) { '8' }
+
+        it 'returns false' do
+          expect(described_class.unicode_capable?).to be(false)
+        end
+      end
+
+      context 'terminal is capable' do
+        let(:tput_colors_response) { '24' }
+
+        it 'returns true' do
+          expect(described_class.unicode_capable?).to be(true)
+        end
       end
     end
   end
