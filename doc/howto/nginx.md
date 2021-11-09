@@ -75,8 +75,8 @@ https:
 nginx:
   enabled: true
   ssl:
-    certificate: gdk.test.pem
-    key: gdk.test-key.pem
+    certificate: <path/to/file/gdk.test.pem>
+    key: <path/to/file/gdk.test-key.pem>
 ```
 
 ### Generate certificate
@@ -114,8 +114,8 @@ nginx:
   http2:
     enabled: true
   ssl:
-    certificate: gdk.test.pem
-    key: gdk.test-key.pem
+    certificate: <path/to/file/gdk.test.pem>
+    key: <path/to/file/gdk.test-key.pem>
 ```
 
 ## Configure GDK
