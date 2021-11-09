@@ -57,6 +57,8 @@ address:
 
 1. In `config/gitlab.yml`, set the `host` parameter to `172.16.123.1`, or configure `gdk.test`.
 
+1. In `config/gitlab.yml`, set the `webpack` `host` setting to `172.16.123.1`.
+
 For this to work across reboots, the aliased IP address command must be run at startup. To
 automate this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/`
 containing:
