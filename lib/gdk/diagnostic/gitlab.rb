@@ -134,7 +134,7 @@ module GDK
             Your gitlab/log/ directory is #{log_dir_size}MB.  You can truncate the log files if you wish
             by running:
 
-              rake gitlab:truncate_logs
+              cd #{config.gdk_root} && rake gitlab:truncate_logs
           LOG_DIR_SIZE_NOT_OK
         end
 

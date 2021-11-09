@@ -38,7 +38,7 @@ module GDK
           output << "#{name} #{versions.keys.join(', ')}"
         end
 
-        output << ["\nYou can uninstall the software above by running:\n\n  rake asdf:uninstall_unnecessary_software"]
+        output << ["\nYou can uninstall the software above by running:\n\n  cd #{config.gdk_root} && rake asdf:uninstall_unnecessary_software"]
         output
       end
     end
