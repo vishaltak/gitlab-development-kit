@@ -49,6 +49,7 @@ RSpec.describe GDK::Output do
     it 'puts to stdout' do
       stub_no_color_env('')
 
+      p described_class.info('test')
       expect { described_class.info('test') }.to output("\u2139\ufe0f  test\n").to_stdout
     end
   end

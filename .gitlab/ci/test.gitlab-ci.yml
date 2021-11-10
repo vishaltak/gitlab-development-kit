@@ -4,131 +4,137 @@ include:
   - template: Dependency-Scanning.gitlab-ci.yml
   - remote: 'https://gitlab.com/gitlab-org/frontend/untamper-my-lockfile/-/raw/main/.gitlab-ci-template.yml'
 
-docs-lint:
-  extends: .rules:docs-changes
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.14-vale-2.10.4-markdownlint-0.28.1
+# docs-lint:
+#   extends: .rules:docs-changes
+#   image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.14-vale-2.10.4-markdownlint-0.28.1
+#   stage: test
+#   needs: []
+#   script:
+#     - make lint
+
+# rubocop:
+#   extends: .rules:code-changes
+#   image: ruby:2.7
+#   stage: test
+#   needs: []
+#   variables:
+#     BUNDLE_ARGS: "--path vendor/bundle"
+#   script:
+#     - make rubocop
+
+# rspec:
+#   extends: .rules:code-changes
+#   image: ruby:2.7
+#   stage: test
+#   needs: []
+#   variables:
+#     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
+#     BUNDLE_ARGS: "--path vendor/bundle"
+#   script:
+#     - pwd > .gdk-install-root
+#     - make rspec
+#   cache:
+#     key: "ruby-2.7-bundle"
+#     paths:
+#       - ./vendor/bundle
+#   artifacts:
+#     paths:
+#       - rspec.xml
+#     reports:
+#       junit: rspec.xml
+#       cobertura: coverage/coverage.xml
+
+# code_quality:
+#   extends:
+#     - .docker:use-docker-in-docker
+#   rules: !reference ['.rules:code-changes', rules]
+
+# container_scanning:
+#   before_script:
+#     - export DOCKER_IMAGE=${DEFAULT_IMAGE}
+#   needs:
+#     - release-image
+#   rules: !reference ['.rules:code-changes', rules]
+
+# gemnasium-dependency_scanning:
+#   rules: !reference ['.rules:code-changes', rules]
+
+# shellcheck:
+#   extends: .rules:code-changes
+#   stage: test
+#   needs: []
+#   image: ruby:2.7
+#   script:
+#     - make shellcheck
+
+# checkmake:
+#   stage: test
+#   needs: []
+#   extends: .rules:code-changes
+#   image: registry.gitlab.com/gitlab-org/gitlab-development-kit/asdf-bootstrapped-verify:main
+#   script:
+#     - make checkmake
+
+# yard:
+#   stage: test
+#   needs: []
+#   image: ruby:2.7
+#   script:
+#     - bundle install --jobs 4 --path vendor/bundle
+#     - bundle exec yardoc
+#   cache:
+#     key: "ruby-2.7-bundle"
+#     paths:
+#       - ./vendor/bundle
+#   artifacts:
+#     expire_in: 1 week
+#     paths:
+#       - yard/*
+
+# verify-gdk-example-yml:
+#   extends: .rules:code-changes
+#   image: ruby:2.7
+#   stage: test
+#   needs: []
+#   script:
+#     - make verify-gdk-example-yml
+
+# verify-asdf-combine:
+#   extends: .rules:code-changes
+#   image: ruby:2.7
+#   stage: test
+#   needs: []
+#   script:
+#     - make verify-asdf-combine
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+#     - if: '$CI_MERGE_REQUEST_IID'
+#       changes:
+#         - ".tool-versions*"
+#         - "support/asdf-combine"
+#         - "support/ci/verify-asdf-combine"
+
+# danger-review:
+#   extends:
+#     - .review:rules:danger
+#   image: ruby:2.7
+#   stage: test
+#   needs: []
+#   before_script:
+#     - bundle install --with danger
+#   script:
+#     - >
+#       if [ -z "$DANGER_GITLAB_API_TOKEN" ]; then
+#         # Force danger to skip CI source GitLab and fallback to "local only git repo".
+#         unset GITLAB_CI
+#         # We need to base SHA to help danger determine the base commit for this shallow clone.
+#         bundle exec danger dry_run --fail-on-errors=true --verbose --base='$CI_MERGE_REQUEST_DIFF_BASE_SHA'
+#       else
+#         bundle exec danger --fail-on-errors=true --verbose
+#       fi
+
+play:
   stage: test
-  needs: []
   script:
-    - make lint
-
-rubocop:
-  extends: .rules:code-changes
-  image: ruby:2.7
-  stage: test
-  needs: []
-  variables:
-    BUNDLE_ARGS: "--path vendor/bundle"
-  script:
-    - make rubocop
-
-rspec:
-  extends: .rules:code-changes
-  image: ruby:2.7
-  stage: test
-  needs: []
-  variables:
-    RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
-    BUNDLE_ARGS: "--path vendor/bundle"
-  script:
-    - pwd > .gdk-install-root
-    - make rspec
-  cache:
-    key: "ruby-2.7-bundle"
-    paths:
-      - ./vendor/bundle
-  artifacts:
-    paths:
-      - rspec.xml
-    reports:
-      junit: rspec.xml
-      cobertura: coverage/coverage.xml
-
-code_quality:
-  extends:
-    - .docker:use-docker-in-docker
-  rules: !reference ['.rules:code-changes', rules]
-
-container_scanning:
-  before_script:
-    - export DOCKER_IMAGE=${DEFAULT_IMAGE}
-  needs:
-    - release-image
-  rules: !reference ['.rules:code-changes', rules]
-
-gemnasium-dependency_scanning:
-  rules: !reference ['.rules:code-changes', rules]
-
-shellcheck:
-  extends: .rules:code-changes
-  stage: test
-  needs: []
-  image: ruby:2.7
-  script:
-    - make shellcheck
-
-checkmake:
-  stage: test
-  needs: []
-  extends: .rules:code-changes
-  image: registry.gitlab.com/gitlab-org/gitlab-development-kit/asdf-bootstrapped-verify:main
-  script:
-    - make checkmake
-
-yard:
-  stage: test
-  needs: []
-  image: ruby:2.7
-  script:
-    - bundle install --jobs 4 --path vendor/bundle
-    - bundle exec yardoc
-  cache:
-    key: "ruby-2.7-bundle"
-    paths:
-      - ./vendor/bundle
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - yard/*
-
-verify-gdk-example-yml:
-  extends: .rules:code-changes
-  image: ruby:2.7
-  stage: test
-  needs: []
-  script:
-    - make verify-gdk-example-yml
-
-verify-asdf-combine:
-  extends: .rules:code-changes
-  image: ruby:2.7
-  stage: test
-  needs: []
-  script:
-    - make verify-asdf-combine
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_MERGE_REQUEST_IID'
-      changes:
-        - ".tool-versions*"
-        - "support/asdf-combine"
-        - "support/ci/verify-asdf-combine"
-
-danger-review:
-  extends:
-    - .review:rules:danger
-  image: ruby:2.7
-  stage: test
-  needs: []
-  before_script:
-    - bundle install --with danger
-  script:
-    - >
-      if [ -z "$DANGER_GITLAB_API_TOKEN" ]; then
-        # Force danger to skip CI source GitLab and fallback to "local only git repo".
-        unset GITLAB_CI
-        # We need to base SHA to help danger determine the base commit for this shallow clone.
-        bundle exec danger dry_run --fail-on-errors=true --verbose --base='$CI_MERGE_REQUEST_DIFF_BASE_SHA'
-      else
-        bundle exec danger --fail-on-errors=true --verbose
-      fi
+    - tput colors || true
+    - tty -s || echo "false"
