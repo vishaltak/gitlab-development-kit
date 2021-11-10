@@ -13,5 +13,6 @@ work_mem = '16MB'
 maintenance_work_mem = '64MB'
 shared_buffers = '256MB'
 synchronous_commit = 'off'
+timezone = 'UTC'
 EOF
 fi
