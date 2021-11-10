@@ -44,13 +44,13 @@ The following installation methods are supported, actively maintained, and teste
 
 ### Supported platforms
 
-| Operating system | Versions            |
-|:-----------------|:--------------------|
-| macOS            | 11, 10.15, 10.14    |
-| Ubuntu           | 20.10, 20.04, 18.04 |
-| Debian           | 10, 9               |
-| Arch             | latest              |
-| Manjaro          | latest              |
+| Operating system | Versions                   |
+|:-----------------|:---------------------------|
+| macOS            | 12, 11, 10.15, 10.14       |
+| Ubuntu           | 21.10, 20.10, 20.04, 18.04 |
+| Debian           | 11, 10, 9                  |
+| Arch             | latest                     |
+| Manjaro          | latest                     |
 
 #### macOS with Apple silicon
 
