@@ -13,9 +13,9 @@ RSpec.describe GDK::Postgresql do
   end
 
   describe '::TARGET_VERSION' do
-    it 'is 12.6 by default' do
+    it 'is 12.9 by default' do
       expect(described_class::TARGET_VERSION).to be_instance_of(Gem::Version)
-      expect(described_class::TARGET_VERSION).to eq(Gem::Version.new('12.6'))
+      expect(described_class::TARGET_VERSION).to eq(Gem::Version.new('12.9'))
     end
   end
 
