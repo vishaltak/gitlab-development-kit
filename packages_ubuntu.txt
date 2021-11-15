@@ -30,5 +30,6 @@ rsync
 runit
 sudo
 tzdata
+uuid-dev
 wget
 zlib1g-dev
