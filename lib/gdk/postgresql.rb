@@ -2,7 +2,7 @@
 
 module GDK
   class Postgresql
-    TARGET_VERSION = Gem::Version.new(12.6)
+    TARGET_VERSION = Gem::Version.new(12.9)
 
     def self.target_version_major
       TARGET_VERSION.canonical_segments[0]
