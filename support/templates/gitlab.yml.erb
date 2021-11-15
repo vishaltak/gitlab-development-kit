@@ -1003,6 +1003,27 @@ test:
     host: localhost
     port: 80
 
+    content_security_policy:
+      enabled: true
+      report_only: false
+      directives:
+        base_uri:
+        child_src:
+        connect_src:
+        default_src: "http://<%= config.webpack.host %>:* http://127.0.0.1:* ws://<%= config.webpack.host %>:<%= config.webpack.port %> ws://127.0.0.1:*"
+        font_src:
+        form_action:
+        frame_ancestors: "http://<%= config.webpack.host %>:*"
+        frame_src: "http://<%= config.webpack.host %>:* https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com"
+        img_src: "* data: blob:"
+        manifest_src:
+        media_src:
+        object_src: "'none'"
+        script_src: "http://<%= config.webpack.host %>:* 'unsafe-eval' http://127.0.0.1:* https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ https://apis.google.com"
+        style_src: "http://<%= config.webpack.host %>:* http://127.0.0.1:* 'unsafe-inline'"
+        worker_src: "http://<%= config.webpack.host %>:* blob:"
+        report_uri:
+
     # When you run tests we clone and set up gitlab-shell
     # In order to set it up correctly you need to specify
     # your system username you use to run GitLab
