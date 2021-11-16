@@ -5,7 +5,7 @@ and related projects.
 
 ## Install prerequisites
 
-Installation requires `[git](https://git-scm.com/downloads)` and `make` are installed.
+Installation requires [Git](https://git-scm.com/downloads) and `make` are installed.
 
 ### macOS
 
@@ -51,14 +51,6 @@ Install using your system's package manager.
 
 ## One-line installation
 
-Both `git` and `make` are required for the one-line installation to work, and
-macOS comes with these already installed. For other operating systems, refer
-to the [dependency installation instructions](index.md#install-prerequisites).
-
-```shell
-curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
-```
-
 The one-line installation:
 
 - Clones the GDK project into a new `gitlab-development-kit` directory in the current working
@@ -66,6 +58,14 @@ The one-line installation:
 - Installs `asdf` and necessary `asdf` plugins.
 - Runs `gdk install`.
 - Runs `gdk start`.
+
+1. Follow [dependency installation instructions](index.md#install-prerequisites).
+
+1. Install GDK:
+
+    ```shell
+    curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
+    ```
 
 ## Simple Installation
 
