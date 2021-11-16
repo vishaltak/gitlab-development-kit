@@ -10,7 +10,7 @@ require_relative '../lib/gdk'
 FileNotFoundError = Class.new(StandardError)
 
 GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
-TOOL_VERSIONS_FILES = [
+REMOTE_TOOL_VERSIONS_FILES = [
   { refs: -> { %w[master] }, base_url: 'https://gitlab.com/gitlab-org/gitlab' },
   { refs: -> { %w[master] }, base_url: 'https://gitlab.com/gitlab-org/gitlab', path: 'workhorse' },
   { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_SHELL_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
@@ -23,6 +23,13 @@ TOOL_VERSIONS_FILES = [
 HEADER_CONTENT = <<~CONTENT
   # support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
   # files from GDK sub-projects.
+  #
+  # Do not modify this file directly.
+CONTENT
+
+FULL_HEADER_CONTENT = <<~CONTENT
+  # support/asdf-combine generates this file from .tool-versions-gdk, .tool-versions-extra and
+  # the .tool-versions files from GDK sub-projects.
   #
   # Do not modify this file directly.
 CONTENT
@@ -47,12 +54,12 @@ def read_tool_versions_from(content)
   end
 end
 
-def write_tool_versions_file(tool_versions_data)
+def write_tool_versions_file(file, tool_versions_data, header_content)
   formatted_tool_versions_data = tool_versions_data.sort.map do |software, versions|
     "#{software} #{(versions).join(' ')}"
   end.join("\n")
 
-  tool_versions_file.write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
+  file.write("#{header_content}#{formatted_tool_versions_data}\n")
 end
 
 def ref_from_remote_file(file)
@@ -62,6 +69,14 @@ end
 
 def tool_versions_file
   @tool_versions_file ||= gdk_root.join('.tool-versions')
+end
+
+def tool_versions_full_file
+  @tool_versions_full_file ||= gdk_root.join('.tool-versions-full')
+end
+
+def tool_versions_extra_file
+  @tool_versions_extra_file ||= gdk_root.join('.tool-versions-extra')
 end
 
 def tool_versions_gdk_file
@@ -74,17 +89,59 @@ def display_software_and_versions_for(data)
   end
 end
 
-# ------------------------------------------------------------------------------
+def write_to_file(file, data, header_content)
+  puts
+  puts "Writing to #{file}"
+  puts '=' * 80
+  display_software_and_versions_for(data)
 
-tool_versions_data_from_gdk_file = read_tool_versions_from(tool_versions_gdk_file.read)
+  write_tool_versions_file(file, data, header_content)
+end
+
+def sort_version_data(data, gdk_data)
+  data.sort.each_with_object({}) do |(software, versions), all|
+    # We only sort by newest version first *if* not defined in .tool-versions-gdk
+    versions = if gdk_data[software]
+                 versions
+               else
+                 versions.sort { |x, y| Gem::Version.new(x) <=> Gem::Version.new(y) }.reverse
+               end
+
+    all[software] = versions
+  end
+end
+
+def process_file(file)
+  data = read_tool_versions_from(file.read)
+
+  puts
+  puts file.to_s
+  puts '-' * file.to_s.length
+  display_software_and_versions_for(data)
+
+  data
+end
+
+def set_versions_if_not_exist(data, out)
+  data.each do |software, versions|
+    out[software] ||= []
+    out[software] |= versions
+  end
+  out
+end
+
+################################################################################
+
+# Read .tool-versions-gdk
+#
+tool_versions_data_from_gdk_file = process_file(tool_versions_gdk_file)
 tool_versions_data = tool_versions_data_from_gdk_file.clone
 
-puts
-puts tool_versions_gdk_file.to_s
-puts '-' * tool_versions_gdk_file.to_s.length
-display_software_and_versions_for(tool_versions_data)
+################################################################################
 
-TOOL_VERSIONS_FILES.each do |entry|
+# Read remote .tool-versions files
+#
+REMOTE_TOOL_VERSIONS_FILES.each do |entry|
   entry[:refs].call.each do |ref|
     path = entry[:path] ? "#{entry[:path]}/" : ''
     path_to_tool_versions = "#{path}.tool-versions"
@@ -103,28 +160,27 @@ TOOL_VERSIONS_FILES.each do |entry|
 
     tool_versions_data_for_entry = read_tool_versions_from(tool_versions_contents)
     display_software_and_versions_for(tool_versions_data_for_entry)
-
-    tool_versions_data_for_entry.each do |software, versions|
-      tool_versions_data[software] ||= []
-      tool_versions_data[software] |= versions
-    end
+    tool_versions_data = set_versions_if_not_exist(tool_versions_data_for_entry, tool_versions_data)
   end
 end
 
-tool_versions_data = tool_versions_data.sort.each_with_object({}) do |(software, versions), all|
-  # We only sort by newest version first *if* not defined in .tool-versions-gdk
-  versions = if tool_versions_data_from_gdk_file[software]
-               versions
-             else
-               versions.sort { |x, y| Gem::Version.new(x) <=> Gem::Version.new(y) }.reverse
-             end
+################################################################################
 
-  all[software] = versions
-end
+# Write .tool-versions
+#
+tool_versions_data = sort_version_data(tool_versions_data, tool_versions_data_from_gdk_file)
+write_to_file(tool_versions_file, tool_versions_data, HEADER_CONTENT)
 
-puts
-puts "Writing to #{tool_versions_file}"
-puts '=' * 80
-display_software_and_versions_for(tool_versions_data)
+################################################################################
 
-write_tool_versions_file(tool_versions_data)
+# Read .tool-versions-extra
+#
+tool_versions_data_from_extra_file = process_file(tool_versions_extra_file)
+tool_versions_full_data = set_versions_if_not_exist(tool_versions_data_from_extra_file, tool_versions_data.clone)
+
+################################################################################
+
+# Write .tool-versions-full
+#
+tool_versions_full_data = sort_version_data(tool_versions_full_data, tool_versions_data_from_gdk_file)
+write_to_file(tool_versions_full_file, tool_versions_full_data, FULL_HEADER_CONTENT)

@@ -1,0 +1,5 @@
+# Versions of extra GDK dependencies managed by asdf which can be versions that
+# are being tested as 'next' or older versions for assisting with backports.
+#
+ruby 3.0.2
+postgres 12.6
