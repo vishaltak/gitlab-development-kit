@@ -14,7 +14,7 @@ by:
   This installs required Node.js modules and Ruby gems, and performs database migrations, which can
   fix errors caused by switching branches.
 
-- [Updating GDK](index.md#update-gdk).
+- [Updating GDK](../index.md#update-gdk).
 
 ## Sections
 
@@ -488,7 +488,7 @@ You can truncate them either manually with the provided Rake task:
 rake gitlab:truncate_logs
 ```
 
-Or add a [GDK hook](configuration.md#hooks) to your `gdk.yml` with the following to truncate them
+Or add a [GDK hook](../configuration.md#hooks) to your `gdk.yml` with the following to truncate them
 before every `gdk update`:
 
 ```yaml
@@ -553,7 +553,7 @@ The following are possible solutions to problems you might encounter with Postgr
 If you have uncommitted changes in `gitlab/db/structure.sql` after a `gdk update` (see
 [GitLab#300251](https://gitlab.com/gitlab-org/gitlab/-/issues/300251)), you can either:
 
-- Add [GDK hook](configuration.md#hooks) to your `gdk.yml` with the following (do this if you are
+- Add [GDK hook](../configuration.md#hooks) to your `gdk.yml` with the following (do this if you are
   unfamiliar with `db/structure.sql`):
 
   ```yaml
@@ -701,7 +701,7 @@ You also need to update your `Procfile` to use the downgraded PostgreSQL binarie
 gdk reconfigure
 ```
 
-You can now follow the steps described in [Upgrade PostgreSQL](howto/postgresql.md#upgrade-postgresql)
+You can now follow the steps described in [Upgrade PostgreSQL](../howto/postgresql.md#upgrade-postgresql)
 to upgrade your PostgreSQL version while retaining your current data.
 
 ### Rails cannot connect to PostgreSQL
@@ -830,7 +830,7 @@ for `gdk` that lists killed files.
 ## Webpack
 
 Since webpack has been added as a new background process which GitLab depends on
-in development, the [GDK must be updated and reconfigured](index.md#update-gdk) in
+in development, the [GDK must be updated and reconfigured](../index.md#update-gdk) in
 order to work properly again.
 
 If you still encounter some errors, see the troubleshooting FAQ below:
