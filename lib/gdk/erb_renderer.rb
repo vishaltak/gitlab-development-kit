@@ -61,14 +61,15 @@ module GDK
     private
 
     def warn_changes!(temp_file)
-      diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..].join("\n")
+      diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..]
+      return unless diff
 
       GDK::Output.puts
       GDK::Output.info("'#{target}' has incoming changes:")
 
       diff_output = <<~DIFF_OUTPUT
         -------------------------------------------------------------------------------------------------------------
-        #{diff}
+        #{diff.join("\n")}
 
         -------------------------------------------------------------------------------------------------------------
       DIFF_OUTPUT
