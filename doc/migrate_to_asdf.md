@@ -9,11 +9,16 @@ by GDK:
 - A [Ruby](https://www.ruby-lang.org) manager, usually [`rbenv`](https://github.com/rbenv/rbenv) or
   [`rvm`](https://rvm.io).
 - A [Node.js](https://nodejs.org) manager, usually [`nvm`](https://github.com/nvm-sh/nvm).
-- An operating system's package manager, or a third-party package manager for macOS. For example:
-  [Homebrew](https://brew.sh) for macOS.
+- An operating system's package manager, or a third-party package manager for macOS (for example: [Homebrew](https://brew.sh)
+  or [MacPorts](https://www.macports.org)).
 
-Before `asdf` can manage your GDK dependencies, you must remove [these dependencies](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions)
-from the other dependency managers.
+Before `asdf` can manage your GDK dependencies, you must:
+
+1. Check the dependencies listed in the project's [.tool-versions](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions)
+   file and remove them from the other dependency managers.
+1. If you use macOS, make sure MacPorts is [uninstalled](https://guide.macports.org/chunked/installing.macports.uninstalling.html).
+   If you haven't used MacPorts for a long time, you may need to [update](https://guide.macports.org/chunked/using.html#using.port.selfupdate)
+   it before you uninstall it.
 
 Before removing the dependencies, note that:
 

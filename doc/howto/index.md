@@ -11,7 +11,7 @@ to learn how to contribute to GitLab.
 - [Browse your development GitLab server](browse.md)
 - [GitLab developer documentation](https://docs.gitlab.com/ee/development/README.html)
 - [GDK commands](../gdk_commands.md)
-- [Installation, configuration, and development troubleshooting](../troubleshooting.md)
+- [Installation, configuration, and development troubleshooting](../troubleshooting/index.md)
 - [Cheat sheet](../../HELP): `gdk help`
 
 ## Tips and tricks
