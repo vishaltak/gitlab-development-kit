@@ -7,7 +7,7 @@ namespace :gitlab do
       GDK::Output.warn("About to truncate gitlab/log/* files.")
       GDK::Output.puts(stderr: true)
 
-      return true if ENV.fetch('GDK_GITLAB_TRUNCATE_LOGS_CONFIRM', 'false') == 'true' || !GDK::Output.interactive?
+      next if ENV.fetch('GDK_GITLAB_TRUNCATE_LOGS_CONFIRM', 'false') == 'true' || !GDK::Output.interactive?
 
       prompt_response = GDK::Output.prompt('Are you sure? [y/N]').match?(/\Ay(?:es)*\z/i)
       next unless prompt_response
