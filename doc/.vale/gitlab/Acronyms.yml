@@ -17,53 +17,66 @@ exceptions:
   - AJAX
   - ANSI
   - API
+  - APM
   - ARM
   - ARN
   - ASCII
   - AWS
   - BSD
   - CAS
+  - CDN
+  - CIDR
   - CLI
   - CNA
   - CNAME
   - CORE
-  - CVS
-  - FREE
   - CPU
   - CRIME
   - CSRF
   - CSS
   - CSV
   - CVE
+  - CVS
   - DAG
   - DAST
   - DHCP
   - DNS
   - DOM
   - DSA
+  - DSL
   - DVCS
   - ECDSA
+  - ECS
   - EFS
   - EKS
+  - ELB
   - EOL
   - EXIF
   - FAQ
+  - FIFO
+  - FIPS
+  - FLAG
   - FOSS
   - FQDN
   - FREE
+  - FTP
   - GCP
   - GDK
   - GDPR
   - GET
+  - GID
   - GIF
   - GKE
   - GNU
   - GPG
   - GPL
+  - GPU
   - GUI
   - HAML
+  - HDD
   - HEAD
   - HIPAA
+  - HLL
   - HTML
   - HTTP
   - HTTPS
@@ -79,6 +92,7 @@ exceptions:
   - JPEG
   - JPG
   - JSON
+  - JVM
   - JWT
   - LAN
   - LDAP
@@ -86,17 +100,21 @@ exceptions:
   - LESS
   - LFS
   - LRU
+  - LTM
   - LTS
   - MIME
   - MIT
   - MVC
   - NAT
+  - NDA
   - NFS
   - NGINX
   - NOTE
   - NPM
   - NTP
   - ONLY
+  - OSS
+  - OTP
   - OWASP
   - PAT
   - PCI-DSS
@@ -104,12 +122,18 @@ exceptions:
   - PEM
   - PEP
   - PGP
+  - PID
+  - PKCS
   - PHP
   - PNG
+  - POSIX
   - POST
   - PUT
+  - RAID
   - RAM
+  - RBAC
   - RDP
+  - RDS
   - REST
   - RFC
   - RHEL
@@ -117,17 +141,21 @@ exceptions:
   - RPM
   - RPS
   - RSA
+  - RDS
   - RSS
   - RVM
-  - SAML
   - SAAS
+  - SAML
+  - SAN
   - SAST
+  - SATA
   - SCIM
   - SCP
   - SCSS
   - SDK
   - SELF
   - SEO
+  - SFTP
   - SHA
   - SLA
   - SMS
@@ -152,7 +180,9 @@ exceptions:
   - TODO
   - TOML
   - TTL
+  - UID
   - UDP
+  - UID
   - UNIX
   - URI
   - URL
@@ -162,6 +192,7 @@ exceptions:
   - UUID
   - VCS
   - VPC
+  - VPN
   - WIP
   - WSL
   - XML
