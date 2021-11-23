@@ -11,8 +11,8 @@ FileNotFoundError = Class.new(StandardError)
 
 GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
 TOOL_VERSIONS_FILES = [
-  { refs: -> { %w[master] }, base_url: 'https://gitlab.com/gitlab-org/gitlab' },
-  { refs: -> { %w[master] }, base_url: 'https://gitlab.com/gitlab-org/gitlab', path: 'workhorse' },
+  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL },
+  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL, path: 'workhorse' },
   { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_SHELL_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
   { refs: -> { ['master', "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
   { refs: -> { ['master', ref_from_remote_file('GITALY_SERVER_VERSION')] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
