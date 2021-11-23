@@ -2,9 +2,9 @@
 # files from GDK sub-projects.
 #
 # Do not modify this file directly.
-golang 1.17.2 1.16.10 1.16.9
+golang 1.17.2 1.16.10
 minio 2021-04-06T23-11-00Z
-nodejs 14.17.5 14.15.4
+nodejs 14.17.5
 postgres 12.9 12.6
 redis 6.0.16
 ruby 2.7.4 3.0.2

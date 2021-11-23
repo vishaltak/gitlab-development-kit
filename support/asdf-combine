@@ -7,13 +7,17 @@ require 'net/http'
 
 require_relative '../lib/gdk'
 
-GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
+FileNotFoundError = Class.new(StandardError)
 
+GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
 TOOL_VERSIONS_FILES = [
-  { ref: -> { "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}" }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
-  { ref: -> { ref_from_remote_file('GITALY_SERVER_VERSION') }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
-  { ref: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
-  { ref: -> { 'main' }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
+  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL },
+  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL, path: 'workhorse' },
+  { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_SHELL_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
+  { refs: -> { ['master', "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
+  { refs: -> { ['master', ref_from_remote_file('GITALY_SERVER_VERSION')] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
+  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
+  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
 ].freeze
 
 HEADER_CONTENT = <<~CONTENT
@@ -30,7 +34,7 @@ end
 def http_get(url)
   uri = URI.parse(url)
   response = Net::HTTP.get_response(uri)
-  raise "Unable to get '#{url}'" unless response.class == Net::HTTPOK
+  raise FileNotFoundError, "Unable to get '#{url}'" unless response.class == Net::HTTPOK
 
   response.body
 end
@@ -48,7 +52,7 @@ def write_tool_versions_file(tool_versions_data)
     "#{software} #{(versions).join(' ')}"
   end.join("\n")
 
-  gdk_root.join('.tool-versions').write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
+  tool_versions_file.write("#{HEADER_CONTENT}#{formatted_tool_versions_data}\n")
 end
 
 def ref_from_remote_file(file)
@@ -56,24 +60,71 @@ def ref_from_remote_file(file)
   http_get(url).chomp
 end
 
-# ------------------------------------------------------------------------------
+def tool_versions_file
+  @tool_versions_file ||= gdk_root.join('.tool-versions')
+end
 
-tool_versions_data = read_tool_versions_from(gdk_root.join('.tool-versions-gdk').read)
+def tool_versions_gdk_file
+  @tool_versions_gdk_file ||= gdk_root.join('.tool-versions-gdk')
+end
 
-TOOL_VERSIONS_FILES.each do |entry|
-  ref = entry[:ref].call
-  url = "#{entry[:base_url]}/-/raw/#{ref}/.tool-versions"
-
-  puts
-  puts url
-  puts '-' * url.length
-
-  read_tool_versions_from(http_get(url)).each do |software, versions|
+def display_software_and_versions_for(data)
+  data.each do |software, versions|
     puts "#{software} #{versions.join(' ')}"
-
-    tool_versions_data[software] ||= []
-    tool_versions_data[software] |= versions
   end
 end
+
+# ------------------------------------------------------------------------------
+
+tool_versions_data_from_gdk_file = read_tool_versions_from(tool_versions_gdk_file.read)
+tool_versions_data = tool_versions_data_from_gdk_file.clone
+
+puts
+puts tool_versions_gdk_file.to_s
+puts '-' * tool_versions_gdk_file.to_s.length
+display_software_and_versions_for(tool_versions_data)
+
+TOOL_VERSIONS_FILES.each do |entry|
+  entry[:refs].call.each do |ref|
+    path = entry[:path] ? "#{entry[:path]}/" : ''
+    path_to_tool_versions = "#{path}.tool-versions"
+    url = "#{entry[:base_url]}/-/raw/#{ref}/#{path_to_tool_versions}"
+
+    puts
+    puts url
+    puts '-' * url.length
+
+    begin
+      tool_versions_contents = http_get(url)
+    rescue FileNotFoundError
+      warn("ERROR: #{url} does not exist.")
+      next
+    end
+
+    tool_versions_data_for_entry = read_tool_versions_from(tool_versions_contents)
+    display_software_and_versions_for(tool_versions_data_for_entry)
+
+    tool_versions_data_for_entry.each do |software, versions|
+      tool_versions_data[software] ||= []
+      tool_versions_data[software] |= versions
+    end
+  end
+end
+
+tool_versions_data = tool_versions_data.sort.each_with_object({}) do |(software, versions), all|
+  # We only sort by newest version first *if* not defined in .tool-versions-gdk
+  versions = if tool_versions_data_from_gdk_file[software]
+               versions
+             else
+               versions.sort { |x, y| Gem::Version.new(x) <=> Gem::Version.new(y) }.reverse
+             end
+
+  all[software] = versions
+end
+
+puts
+puts "Writing to #{tool_versions_file}"
+puts '=' * 80
+display_software_and_versions_for(tool_versions_data)
 
 write_tool_versions_file(tool_versions_data)
