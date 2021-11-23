@@ -13,11 +13,14 @@ anonymization
 anonymized
 Ansible
 Anthos
+Apdex
+Apparmor
 approvers
 architected
 architecting
 archiver
 Arel
+arity
 Artifactory
 Asana
 Asciidoctor
@@ -26,6 +29,7 @@ Atlassian
 auditability
 Auth0
 Authentiq
+Authy
 autocomplete
 autocompleted
 autocompletes
@@ -41,8 +45,8 @@ autoscales
 autoscaling
 awardable
 awardables
-Ayoa
 Axios
+Ayoa
 Azure
 B-tree
 backfilling
@@ -86,11 +90,12 @@ callstack
 callstacks
 Camo
 canonicalized
+captcha
 CentOS
 Certbot
+chai
 changeset
 changesets
-chai
 ChaosKube
 chatbot
 chatbots
@@ -123,10 +128,11 @@ crosslinked
 crosslinking
 crosslinks
 Crossplane
-CrowdIn
+Crowdin
 CSV
 cybersecurity
 Dangerfile
+Datadog
 datasource
 datasources
 datetime
@@ -144,6 +150,7 @@ denormalized
 denormalizes
 denormalizing
 denylist
+denylisted
 denylisting
 denylists
 deployer
@@ -155,7 +162,12 @@ deprovisions
 dequarantine
 dequarantined
 dequarantining
+deserialization
+deserialize
+deserializers
+deserializes
 DevOps
+Dhall
 disambiguates
 discoverability
 dismissable
@@ -175,6 +187,7 @@ downvotes
 Dpl
 Dreamweaver
 Ecto
+ElastiCache
 Elasticsearch
 enablement
 enqueued
@@ -183,6 +196,7 @@ enum
 enums
 ETag
 Excon
+exfiltration
 expirable
 Facebook
 failover
@@ -199,14 +213,17 @@ Filebeat
 Fio
 firewalled
 firewalling
+fixup
 Flawfinder
 Flowdock
 Fluentd
+Flycheck
 Forgerock
 formatters
 Fugit
 fuzzer
 Gantt
+Gemfile
 Gemnasium
 Gemojione
 Getter
@@ -242,6 +259,7 @@ Haswell
 heatmap
 heatmaps
 Helm
+Helmfile
 Heroku
 Herokuish
 Hexo
@@ -257,6 +275,7 @@ https
 idempotence
 idmapper
 Iglu
+Immer
 inclusivity
 Ingress
 initializer
@@ -266,7 +285,7 @@ innersourcing
 interdependencies
 interdependency
 interruptible
-Irker
+irker
 issuables
 Istio
 Jaeger
@@ -281,11 +300,13 @@ jQuery
 jsdom
 Jsonnet
 JupyterHub
+Kaminari
 kanban
 kanbans
 kaniko
 Karma
 Kerberos
+Keycloak
 keyset
 keyspace
 keytab
@@ -439,6 +460,7 @@ Pritaly
 Priyanka
 profiler
 Prometheus
+ProseMirror
 protobuf
 protobufs
 proxied
@@ -456,6 +478,7 @@ queryable
 Quicktime
 Rackspace
 Raspbian
+rbenv
 rbtrace
 Rdoc
 reachability
@@ -546,6 +569,7 @@ serializer
 serializers
 serializing
 serverless
+severities
 sharded
 sharding
 shfmt
@@ -563,6 +587,7 @@ smartcard
 smartcards
 snapshotting
 Sobelow
+Solargraph
 Solarized
 Sourcegraph
 sparkline
@@ -638,6 +663,7 @@ timeboxed
 timeboxes
 timeboxing
 timecop
+tiptap
 todos
 tokenizer
 Tokenizers
@@ -659,8 +685,8 @@ triaged
 triages
 triaging
 Trivy
-truthy
 Truststore
+truthy
 Twilio
 Twitter
 TypeScript
@@ -677,6 +703,7 @@ unary
 unassign
 unassigning
 unassigns
+unban
 uncheck
 unchecked
 unchecking
@@ -798,8 +825,10 @@ Worldline
 Xcode
 Xeon
 YouTrack
+ytt
 Yubico
 Zeitwerk
 Zendesk
+ZenTao
 zsh
 Zstandard
