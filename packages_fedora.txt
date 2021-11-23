@@ -13,6 +13,7 @@ krb5-devel
 libcurl-devel
 libicu-devel
 libpqxx-devel
+libuuid-devel
 openssl-devel
 openssl-libs
 perl-Digest-SHA
