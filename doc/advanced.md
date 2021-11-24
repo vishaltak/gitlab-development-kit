@@ -369,17 +369,17 @@ bundle config build.gpgme --use-system-libraries
 
 Now you can proceed to [set up GDK](index.md).
 
-### Void linux
+### Void Linux
 
 To run GDK on Void you need to install `ruby` with development headers, gem binary dependencies, `go`,
- `postgresql` with client, development headers and shared libraries, `sqlite`, `redis`:
+`postgresql` with client, development headers and shared libraries, `sqlite`, `redis`:
 
- ```shell
+```shell
 sudo xbps-install -Su
 sudo xbps-install ruby ruby-devel minio re2 re2-devel icu icu-libs icu-devel \
   go redis yarn GraphicsMagick sqlite sqlite-devel  pkg-config \
   postgresql13 postgresql13-client postgresql13-contrib postgresql-libs postgresql-libs-devel
- ```
+```
 
 ## Install FreeBSD dependencies
 
