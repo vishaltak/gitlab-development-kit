@@ -1,6 +1,6 @@
-# GitLab Kubernetes Agent Server
+# GitLab Agent Server (KAS)
 
-If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) as part of your GDK, do the following:
+If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) as part of your GDK, do the following:
 
 1. Install [Bazel](https://www.bazel.build/)
 
@@ -43,7 +43,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
     ```plaintext
     => GitLab will be available at http://127.0.0.1:3000 shortly.
-    => GitLab Kubernetes Agent Server available at grpc://127.0.0.1:8150.
+    => GitLab Agent Server (KAS) available at grpc://127.0.0.1:8150.
     ```
 
 1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
@@ -97,7 +97,7 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
    docker run --rm -it -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v "$(mkcert -CAROOT):/etc/gitlab-runner/ca" gitlab/gitlab-runner
    ```
 
-## (Optional) Deploy the GitLab Kubernetes Agent (agentk) with k3d
+## (Optional) Deploy the GitLab Agent (agentk) with k3d
 
 1. [Install k3d](https://github.com/rancher/k3d#get).
 1. Create a k3d cluster:
@@ -145,5 +145,5 @@ If you wish to clone and keep an updated [GitLab Kubernetes Agent](https://gitla
 
 ## (Optional) Run using Bazel instead of GDK
 
-If you want to run GitLab Kubernetes Agent Server and Agent locally with Bazel instead of GDK, see
-the [GitLab Kubernetes Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
+If you want to run GitLab Agent Server and Agent locally with Bazel instead of GDK, see
+the [GitLab Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
