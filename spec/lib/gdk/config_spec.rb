@@ -309,7 +309,7 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#___listen' do
+    describe '#__listen' do
       subject { config.sshd.__listen }
 
       context 'when listen address is IPv4' do
