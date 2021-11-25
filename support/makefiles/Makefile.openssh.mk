@@ -1,7 +1,7 @@
-openssh-setup: openssh/sshd_config openssh/ssh_host_rsa_key
+openssh-setup: openssh/sshd_config $(sshd_hostkeys)
 
-openssh/ssh_host_rsa_key:
-	$(Q)ssh-keygen -f $@ -N '' -t rsa
+$(gdk_root)/openssh/ssh_host_%_key:
+	$(Q)ssh-keygen -f $@ -N '' -t $*
 
 .PHONY: openssh/sshd_config
 openssh/sshd_config:

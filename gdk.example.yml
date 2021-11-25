@@ -299,7 +299,13 @@ sshd:
   authorized_keys_file: "/home/git/gdk/.ssh/authorized_keys"
   bin: "/usr/local/sbin/sshd"
   enabled: true
-  host_key: "/home/git/gdk/openssh/ssh_host_rsa_key"
+  host_key: ''
+  host_key_algorithms:
+  - rsa
+  - ed25519
+  host_keys:
+  - "/home/git/gdk/openssh/ssh_host_rsa_key"
+  - "/home/git/gdk/openssh/ssh_host_ed25519_key"
   listen_address: 127.0.0.1
   listen_port: 2222
   proxy_protocol: false

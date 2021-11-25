@@ -573,7 +573,13 @@ module GDK
           config.username
         end
       end
-      path(:host_key) { config.gdk_root.join('openssh', 'ssh_host_rsa_key') }
+      anything(:host_key) { '' } # kept for backward compatibility in case the user did set this
+      array(:host_key_algorithms) { %w[rsa ed25519] }
+      array(:host_keys) do
+        host_key_algorithms.map { |algorithm| config.gdk_root.join('openssh', "ssh_host_#{algorithm}_key").to_s }
+          .append(host_key)
+          .reject(&:empty?).uniq
+      end
 
       # gitlab-sshd only
       bool(:proxy_protocol) { false }

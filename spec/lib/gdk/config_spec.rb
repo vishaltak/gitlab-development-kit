@@ -330,6 +330,42 @@ RSpec.describe GDK::Config do
         it { is_expected.to eq('localhost:2222') }
       end
     end
+
+    describe '#host_keys' do
+      subject(:host_keys) { config.sshd.host_keys }
+
+      it 'defaults to rsa and ed25519 keys' do
+        expect(host_keys).to eq(['/home/git/gdk/openssh/ssh_host_rsa_key', '/home/git/gdk/openssh/ssh_host_ed25519_key'])
+      end
+
+      context 'with user configured host_key' do
+        let(:yaml) do
+          {
+            'sshd' => {
+              'host_key' => '/i/ve/got/the/key'
+            }
+          }
+        end
+
+        it 'includes the user defined key' do
+          expect(host_keys).to eq(['/home/git/gdk/openssh/ssh_host_rsa_key', '/home/git/gdk/openssh/ssh_host_ed25519_key', '/i/ve/got/the/key'])
+        end
+      end
+
+      context 'with user configured host_keys' do
+        let(:yaml) do
+          {
+            'sshd' => {
+              'host_keys' => ['/i/ve/got/the/key']
+            }
+          }
+        end
+
+        it 'matches the user defined keys' do
+          expect(host_keys).to eq(['/i/ve/got/the/key'])
+        end
+      end
+    end
   end
 
   describe '#dump!' do
