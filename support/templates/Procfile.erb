@@ -58,9 +58,13 @@ sshd: exec <%= config.sshd.__full_command %>
 #
 <%= '#' unless config.gitlab_docs? %>gitlab-docs: exec support/start-gitlab-docs-nanoc
 
-# Gitlab Runner
+# Gitlab Runner Binary
 #
-<%= '#' unless config.runner? %>runner: exec <%= config.runner.bin %> --log-level debug run --config <%= config.runner.config_file %>
+<%= '#' unless config.runner? && config.runner.install_mode == "binary" %>runner: exec <%= config.runner.bin %> --log-level debug run --config <%= config.runner.config_file %>
+
+# Gitlab Runner Docker
+#
+<%= '#' unless config.runner? && config.runner.install_mode == "docker" %>runner: exec docker run --rm <%= config.runner.extra_hosts.map { |h| " --add-host='#{h}'" }.join(" ") %> -v '<%= config.runner.config_file %>:/etc/gitlab-runner/config.toml' -v /var/run/docker.sock:/var/run/docker.sock <%= config.runner.image %>
 
 # Gitlab Spamcheck
 #

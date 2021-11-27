@@ -813,9 +813,21 @@ RSpec.describe GDK::Config do
       allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).with(config.runner.config_file) { file_contents }
     end
 
+    describe '#install_mode' do
+      it 'returns binary' do
+        expect(config.runner.install_mode).to eq("binary")
+      end
+    end
+
     describe '#extra_hosts' do
       it 'returns []' do
         expect(config.runner.extra_hosts).to eq([])
+      end
+    end
+
+    describe '#image' do
+      it 'returns gitlab/gitlab-runner:latest' do
+        expect(config.runner.image).to eq("gitlab/gitlab-runner:latest")
       end
     end
 
