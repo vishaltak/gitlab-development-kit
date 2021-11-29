@@ -20,6 +20,7 @@ by:
 
 GDK troubleshooting information is available for the following:
 
+- [Installing the GDK](#installing-the-gdk)
 - [Ruby](#ruby)
 - [Node.js](#nodejs)
 - [PostgreSQL](#postgresql)
@@ -38,6 +39,31 @@ GDK troubleshooting information is available for the following:
 
 If you can't solve your problem, or if you have a problem in another area, open an
 issue on the [GDK issue tracker](https://gitlab.com/gitlab-org/gitlab-development-kit/issues).
+
+## Installing the GDK
+
+### No keyserver available
+
+If you see the following error while `asdf` tries to install dependencies as part of the GDK installation:
+
+```shell
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  3490    0  3490    0     0  45921      0 --:--:-- --:--:-- --:--:-- 45921
+gpg: keyserver receive failed: Network is unreachable
+gpg: keyserver receive failed: No keyserver available
+[...]
+ERROR: Failed to install some asdf tools.
+```
+
+You can fix it by running:
+
+```shell
+echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
+sudo pkill dirmngr
+```
+
+See this [issue](https://github.com/asdf-vm/asdf-nodejs/issues/192) for more details.
 
 ## Ruby
 
