@@ -1,95 +1,82 @@
-# Registry
+# Container Registry
 
-To run the registry, you need [Docker](https://docker.com) installed.
+Depending on your needs, you can set up Container Registry locally in the following ways:
 
-## Enabling the registry
+- Display the Container Registry in the UI only (not push or pull images).
+- Use the Container Registry as an insecure registry (can push and pull images).
+- Use the Container Registry with a self-signed certificate (can push and pull images).
 
-In your `gdk.yml`, set
+## Set up Container Registry to display in UI only
+
+To set up Container Registry to display it the UI only (but not be able to push or pull images) add the following your `gdk.yml`:
 
 ```yaml
 registry:
   enabled: true
-  # See gdk.example.yml for a full set of options
 ```
 
-and run `gdk reconfigure` to create or update the necessary configuration files.
+Then run the following commands:
 
-You should now be able to run the registry with the `gdk start registry` command,
-but for the changes to get picked up by your Rails environment, you must also run
-the `gdk restart rails` command.
+1. `gdk reconfigure`.
+1. `gdk restart`.
 
-## Configuring the registry
+## Set up pushing and pulling of images
 
-To configure a local registry:
+To set up Container Registry to allow pushing and pulling of images, you must have a Docker-compatible client installed. For example,
+[Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/) or [`lima nerdctl`](https://github.com/containerd/nerdctl).
+
+### Obtain a usable hostname
+
+Because `localhost` and `127.0.0.1` have different meanings inside a Docker-based runner, a different host is required to access your
+GitLab instance and your registry. For example, `gdk.test` for GitLab instance and `registry.test` for Container Registry:
+
+1. [Create a loopback interface for GDK](local_network.md#create-loopback-interface).
+1. Set up `gdk.test` and `registry.test` as hostnames by editing `/etc/hosts`. For example, if you set up `172.16.123.1` in the
+   previous step, add `172.16.123.1 registry.test` to `/etc/hosts`. If you're using `docker-machine`, you must replace
+   this IP address with the one returned from  `docker-machine ip default`. See the
+   [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)  for details.
+
+   WARNING:
+   If you end up on a network with the loopback alias as your local network IP, your GDK becomes
+   accessible on the local network.
 
 1. Update `gdk.yml` as follows:
 
-    ```yaml
-    auto_devops:
-      enabled: false
+   ```yaml
+   auto_devops:
+     enabled: false
+   hostname: gdk.test
+   registry:
+     enabled: true
+     host: gdk.test
+     listen_address: '172.16.123.1' # your loopback alias
+     self_signed: false # see note below on setting self signed to true
+     auth_enabled: false
+   ```
 
-    hostname: gdk.test
+   NOTE:
+   If you have a specific need for your registry to be `self_signed`, skip the following steps and move on to [trust the registry's self-signed certificate](#trust-the-registrys-self-signed-certificate)
 
-    registry:
-      enabled: true
-      host: gdk.test
-      listen_address: '172.16.123.1' # your loopback alias
-      self_signed: true  # or false, see below for details (default is false)
-      auth_enabled: true # or false, see below for details (default is true)
-    ```
+1. Edit the Docker `daemon.json` file (see [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry) for the location)
+   and add the following:
 
-    Here, `gdk.test` is configured according to
-    [Obtaining a usable hostname](#obtaining-a-usable-hostname), and `172.16.123.1` is the
-    corresponding loopback alias.
+   ```json
+   {
+     "insecure-registries" : ["registry.test:5000"]
+   }
+   ```
 
-1. Run `gdk reconfigure` to update the configuration and generate certificate files
-   for the local registry (`registry_host.crt` and `registry_host.key`) if needed.
-
-1. If you set `registry.self_signed` to `true`, you should now:
-    1. Configure Docker to [trust the registry's certificate](#trusting-the-registrys-self-signed-certificate).
-    1. Configure any local runner to [mount the trusted certificates](#configuring-a-local-docker-based-runner).
-
-1. If you set either `registry.self_signed` or `registry.auth_enabled` to `false`, your
-   registry is considered *insecure* by Docker and you must
-   [explicitly allow it](https://docs.docker.com/registry/insecure/). For information
-   on [using an insecure registry](#using-an-insecure-registry-from-gitlab-ci) using
-   Docker-in-Docker, see the documentation.
-
-NOTE:
-When changing the hostname for a self-signed registry, you must run `gdk reconfigure` and
-[update the trusted certificates in Docker](#trusting-the-registrys-self-signed-certificate).
+1. Run `gdk reconfigure`. If you don't have certificate files for the local registry (`registry_host.crt` and `registry_host.key`),
+   they are generated.
+1. Run `gdk restart`.
 
 After completing these instructions, you should be ready to work with the registry locally. See the
 [Interacting with the local container registry](#interacting-with-the-local-container-registry)
 section for examples of how to query the registry manually using `curl`.
 
-## Tips and Tricks
+### Trust the registry's self-signed certificate
 
-Here are some tips and tricks for using the GitLab registry with GDK.
-
-### Obtaining a usable hostname
-
-Because `localhost` and `127.0.0.1` have different meanings inside a Docker-based runner, a
-different host is required to access your GitLab instance and your registry.
-
-One solution is to bind `gdk.test` to a loopback IP *alias* (*not*
-`127.0.0.1`) in `/etc/hosts`. A loopback IP alias is like `127.0.0.1` (requests go
-straight to your computer) but this IP remains accessible from within a container
-(unlike `127.0.0.1`). To set this up:
-
-1. [Create a loopback interface for GDK](local_network.md#create-loopback-interface).
-1. [Point `gdk.test` to this new IP](local_network.md) in your `/etc/hosts` file.
-
-WARNING:
-If you end up on a network with the loopback alias as your local network IP, your GDK becomes
-accessible on the local network.
-
-NOTE:
-If you're using `docker-machine`, you must replace this IP address with the one returned from
-`docker-machine ip default`. See the [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)
-for details.
-
-### Trusting the registry's self-signed certificate
+This section is relevant if you set `self_signed: true` in your `gdk.yml`.
 
 Since the registry is self-signed, Docker treats it as *insecure*. The certificate must be in your
 GDK root, called `registry_host.crt`, and must be copied as `ca.crt` to the
@@ -105,35 +92,11 @@ This places the certificate under `~/.docker/certs.d/$REGISTRY_HOST:$REGISRY_POR
 
 Afterwards, you **must restart Docker** to apply the changes.
 
-### Using an insecure registry from GitLab CI
+### Observe the registry
 
-If trusting the self-signed certificate is not an option, you can instruct Docker to consider the registry as insecure. For example, Docker-in-Docker builds require an additional flag, `--insecure-registry`:
+Run `gdk tail registry`.
 
-```yaml
-services:
-  - name: docker:stable-dind
-    command: ["--insecure-registry=gdk.test:5000"]
-```
-
-### Configuring a local Docker-based runner
-
-For Docker-in-Docker builds to work in a local runner, you must also make the nested Docker
-service trust the certificates by editing `volumes` under `[[runners.docker]]` in your
-runner's `.toml` configuration to include:
-
-```shell
-$HOME/.docker/certs.d:/etc/docker/certs.d
-```
-
-replacing `$HOME` with the expanded path. For example
-
-```toml
-volumes = ["/Users/hfyngvason/.docker/certs.d:/etc/docker/certs.d", "/certs/client", "/cache"]
-```
-
-### Observing the registry
-
-Execute `gdk tail` and notice the `registry` entries in the log output, for example:
+Example:
 
 ```plaintext
 registry   : level=warning msg="No HTTP secret provided - generated random secret ...
@@ -153,9 +116,35 @@ CONTAINER ID        IMAGE                                                       
 61b7b150be33        registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v2.9.1-gitlab         "/entrypoint.sh /etc…"   2 minutes ago       Up 2 minutes        0.0.0.0:5000->5000/tcp   priceless_hoover
 ```
 
-Visit `$REGISTRY_HOST:$REGISTRY_PORT` (such as `gdk.test:5000`) in your browser.
+Visit `$REGISTRY_HOST:$REGISTRY_PORT` (such as `registry.test:5000`) in your browser.
 Any response, even a blank page, means that the registry is probably running. If the
 registry is running, the output of `gdk tail` changes.
+
+### Configure an insecure registry for GitLab CI/CD
+
+If your're not using a self-signed certificate, you can instruct Docker to consider the registry as insecure. For example, Docker-in-Docker builds require an additional flag, `--insecure-registry`:
+
+```yaml
+services:
+  - name: docker:stable-dind
+    command: ["--insecure-registry=registry.test:5000"]
+```
+
+### Configure a local Docker-based runner
+
+For Docker-in-Docker builds to work in a local runner, you must also make the nested Docker
+service trust the certificates by editing `volumes` under `[[runners.docker]]` in your
+runner's `.toml` configuration to include:
+
+```shell
+$HOME/.docker/certs.d:/etc/docker/certs.d
+```
+
+replacing `$HOME` with the expanded path. For example
+
+```toml
+volumes = ["/Users/hfyngvason/.docker/certs.d:/etc/docker/certs.d", "/certs/client", "/cache"]
+```
 
 ### Interacting with the local container registry
 
@@ -191,7 +180,7 @@ docker push gdk.test:5000/custom-docker-image
 #### Using HTTP
 
 - If you have a self-signed certificate, you can add `--cacert registry_host.crt` or `-k` to the `curl` commands.
-- If you have authentication enabled, you need to obtain a bearer token for your requests:
+- If you have authentication enabled, you must obtain a bearer token for your requests:
 
   ```shell
   export GITLAB_REGISTRY_JWT=`curl "http://gitlab-token:$GITLAB_TOKEN@gdk.test:3000/jwt/auth?service=container_registry&scope=$SCOPE" | jq -r .token`
@@ -409,12 +398,12 @@ build:
     - docker push $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
 ```
 
-To verify that the build stage has successfully pushed an image to your local GitLab container registry, follow the instructions in the section [List tags for a specific image](#list-tags-for-a-specific-image)
+To verify that the build stage has successfully pushed an image to your local GitLab container registry, follow the instructions in the section [List tags for a specific image](#list-tags-for-a-specific-image).
 
 **Some notes about the above `.gitlab-yml.ci` configuration file:**
 
-- The variable `DOCKER_TLS_CERTDIR: ""` is required in the `build` stage because of a breaking change introduced by Docker 19.03, described [here](https://about.gitlab.com/2019/07/31/docker-in-docker-with-docker-19-dot-03/)
-- It's only necessary to set `--insecure-registry=gdk.test:5000` for the `docker:stable-dind` if you have not set up a [trusted self-signed registry](#trusting-the-registrys-self-signed-certificate).
+- The variable `DOCKER_TLS_CERTDIR: ""` is required in the `build` stage because of a breaking change introduced by Docker 19.03, described [here](https://about.gitlab.com/2019/07/31/docker-in-docker-with-docker-19-dot-03/).
+- It's only necessary to set `--insecure-registry=gdk.test:5000` for the `docker:stable-dind` if you have not set up a [trusted self-signed registry](#trust-the-registrys-self-signed-certificate).
 
 ### Running container scanning on a local Docker image created by a build step in your pipeline
 
