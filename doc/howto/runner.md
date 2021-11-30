@@ -153,7 +153,7 @@ $ docker run --rm -ti tutum/dnsutils dig +short host.docker.internal
 192.168.65.2
 ```
 
-then add it to your `extra_hosts` configuration:
+Then add it to your `extra_hosts` configuration:
 
 ```yaml
 runner:
