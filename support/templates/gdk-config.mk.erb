@@ -12,6 +12,7 @@ dev_vale_binary = <%= config.dev.vale.__versioned_binary %>
 gdk_ask_to_restart_after_update = <%= config.gdk.ask_to_restart_after_update %>
 gdk_debug = <%= config.gdk.debug || ENV['GDK_DEBUG'] == 'true' %>
 gdk_quiet = <%= config.gdk.quiet? %>
+gdk_root = <%= config.gdk_root %>
 geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
@@ -72,4 +73,5 @@ relative_url_root = <%= config.relative_url_root %>
 runner_enabled = <%= config.runner.enabled %>
 <%-# -%>
 sshd_bin = <%= config.sshd.bin %>
+sshd_hostkeys = <%= config.sshd.host_keys.join(' ') %>
 username = <%= config.username %>

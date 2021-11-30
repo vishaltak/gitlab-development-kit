@@ -1,6 +1,6 @@
 AllowUsers <%= config.sshd.user %>
 AuthenticationMethods publickey
-HostKey <%= config.sshd.host_key %>
+HostKey <%= config.sshd.host_keys.join(',') %>
 ListenAddress <%= config.sshd.listen_address %>:<%= config.sshd.listen_port %>
 LogLevel VERBOSE
 PasswordAuthentication no

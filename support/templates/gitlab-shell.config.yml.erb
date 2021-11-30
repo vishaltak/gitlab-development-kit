@@ -68,5 +68,6 @@ sshd:
   # Maximum number of concurrent sessions allowed on a single SSH connection. Defaults to 10.
   concurrent_sessions_limit: 10
   # SSH host key files.
-  host_key_files:
-    - "<%= config.sshd.host_key %>"
+  host_key_files: <% config.sshd.host_keys.each do |host_key| %>
+    - "<%= host_key %>"
+  <% end %>
