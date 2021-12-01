@@ -15,7 +15,6 @@ gitlab-pages-secret:
 gitlab-pages/gitlab-pages.conf: ${gitlab_pages_clone_dir}/.git
 	$(Q)rake $@
 
-
 ifeq ($(gitlab_pages_enabled),true)
 gitlab-pages-update: gitlab-pages-update-timed
 else

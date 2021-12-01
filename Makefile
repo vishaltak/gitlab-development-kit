@@ -135,6 +135,7 @@ update-summarize:
 .PHONY: reconfigure
 reconfigure: ensure-required-ruby-bundlers-installed \
 unlock-dependency-installers \
+touch-examples \
 postgresql-sensible-defaults \
 all \
 show-reconfigured-at
@@ -151,6 +152,7 @@ self-update: unlock-dependency-installers
 	$(Q)git stash ${QQ}
 	$(Q)support/self-update-git-worktree ${QQ}
 
+.PHONY: touch-examples
 touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \

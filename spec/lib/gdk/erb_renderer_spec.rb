@@ -62,8 +62,6 @@ describe GDK::ErbRenderer do
 
         it 'warns about changes and does not overwrite content' do
           expect(GDK::Output).to receive(:warn).with(%r{Changes to 'tmp/example.out' not applied because it's protected in gdk.yml.})
-          expect(renderer).to receive(:warn_changes!)
-          expect(subject).to receive(:sleep).with(described_class::WAIT_WARNING_SECS)
 
           renderer.safe_render!
 
