@@ -20,7 +20,7 @@ RSpec.describe GDK::Hooks do
       let(:description) { 'example' }
 
       before do
-        stub_tty(false)
+        stub_no_color_env('true')
       end
 
       context 'when cmd is not a string' do

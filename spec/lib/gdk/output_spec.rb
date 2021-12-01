@@ -54,58 +54,37 @@ RSpec.describe GDK::Output do
   end
 
   describe '.success' do
-    context "when we're not a tty" do
+    context 'when NO_COLOR=true is not defined' do
       it 'puts to stdout' do
-        stub_tty(false)
+        stub_no_color_env('')
 
-        expect { described_class.success('test') }.to output("test\n").to_stdout
+        expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
       end
     end
 
-    context 'when we are a tty' do
-      context 'when NO_COLOR=true is not defined' do
-        it 'puts to stdout' do
-          stub_tty(true)
-          stub_no_color_env('')
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stdout minus icon and colorization' do
+        stub_no_color_env('true')
 
-          expect { described_class.success('test') }.to output("\u2705\ufe0f test\n").to_stdout
-        end
-      end
-
-      context 'when NO_COLOR=true is defined' do
-        it 'puts to stdout minus icon and colorization' do
-          stub_no_color_env('true')
-
-          expect { described_class.success('test') }.to output("test\n").to_stdout
-        end
+        expect { described_class.success('test') }.to output("test\n").to_stdout
       end
     end
   end
 
   describe '.warn' do
-    context "when we're not a tty" do
-      it 'puts to stderr minus icon and colorization' do
-        stub_tty(false)
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stderr' do
+        stub_no_color_env('')
 
-        expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
+        expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
       end
     end
 
-    context 'when we are a tty' do
-      context 'when NO_COLOR=true is not defined' do
-        it 'puts to stderr' do
-          stub_no_color_env('')
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stderr minus icon and colorization' do
+        stub_no_color_env('true')
 
-          expect { described_class.warn('test') }.to output("\u26a0\ufe0f  \e[33mWARNING\e[0m: test\n").to_stderr
-        end
-      end
-
-      context 'when NO_COLOR=true is defined' do
-        it 'puts to stderr minus icon and colorization' do
-          stub_no_color_env('true')
-
-          expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
-        end
+        expect { described_class.warn('test') }.to output("WARNING: test\n").to_stderr
       end
     end
   end
@@ -127,112 +106,74 @@ RSpec.describe GDK::Output do
     context 'when debug is enabled' do
       let(:debug_enabled) { true }
 
-      context "when we're not a tty" do
-        it 'puts to stderr minus icon and colorization' do
-          expect { described_class.debug('test') }.to output("DEBUG: test\n").to_stderr
+      context 'when NO_COLOR=true is not defined' do
+        it 'puts to stderr' do
+          stub_no_color_env('')
+
+          expect { described_class.debug('test') }.to output("\u26CF\ufe0f  \e[34mDEBUG\e[0m: test\n").to_stderr
         end
       end
 
-      context 'when we are a tty' do
-        context 'when NO_COLOR=true is not defined' do
-          it 'puts to stderr' do
-            stub_no_color_env('')
+      context 'when NO_COLOR=true is defined' do
+        it 'puts to stderr minus icon and colorization' do
+          stub_no_color_env('true')
 
-            expect { described_class.debug('test') }.to output("\u26CF\ufe0f  \e[34mDEBUG\e[0m: test\n").to_stderr
-          end
-        end
-
-        context 'when NO_COLOR=true is defined' do
-          it 'puts to stderr minus icon and colorization' do
-            stub_no_color_env('true')
-
-            expect { described_class.debug('test') }.to output("DEBUG: test\n").to_stderr
-          end
+          expect { described_class.debug('test') }.to output("DEBUG: test\n").to_stderr
         end
       end
     end
   end
 
   describe '.format_error' do
-    context "when we're not a tty" do
-      it 'puts to stderr minus icon and colorization' do
-        stub_tty(false)
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stderr' do
+        stub_no_color_env('')
 
-        expect(described_class.format_error('test')).to eq("ERROR: test")
+        expect(described_class.format_error('test')).to eq("\u274C\ufe0f \e[31mERROR\e[0m: test")
       end
     end
 
-    context 'when we are a tty' do
-      context 'when NO_COLOR=true is not defined' do
-        it 'puts to stderr' do
-          stub_no_color_env('')
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stderr minus icon and colorization' do
+        stub_no_color_env('true')
 
-          expect(described_class.format_error('test')).to eq("\u274C\ufe0f \e[31mERROR\e[0m: test")
-        end
-      end
-
-      context 'when NO_COLOR=true is defined' do
-        it 'puts to stderr minus icon and colorization' do
-          stub_no_color_env('true')
-
-          expect(described_class.format_error('test')).to eq("ERROR: test")
-        end
+        expect(described_class.format_error('test')).to eq("ERROR: test")
       end
     end
   end
 
   describe '.error' do
-    context "when we're not a tty" do
-      it 'puts to stderr minus icon and colorization' do
-        stub_tty(false)
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stderr' do
+        stub_no_color_env('')
 
-        expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
+        expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
       end
     end
 
-    context 'when we are a tty' do
-      context 'when NO_COLOR=true is not defined' do
-        it 'puts to stderr' do
-          stub_no_color_env('')
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stderr minus icon and colorization' do
+        stub_no_color_env('true')
 
-          expect { described_class.error('test') }.to output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
-        end
-      end
-
-      context 'when NO_COLOR=true is defined' do
-        it 'puts to stderr minus icon and colorization' do
-          stub_no_color_env('true')
-
-          expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
-        end
+        expect { described_class.error('test') }.to output("ERROR: test\n").to_stderr
       end
     end
   end
 
   describe '.abort' do
-    context "when we're not a tty" do
-      it 'puts to stderr minus icon and colorization' do
-        stub_tty(false)
+    context 'when NO_COLOR=true is not defined' do
+      it 'puts to stderr' do
+        stub_no_color_env('')
 
-        expect { described_class.abort('test') }.to raise_error(/test/).and output("ERROR: test\n").to_stderr
+        expect { described_class.abort('test') }.to raise_error(/test/).and output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
       end
     end
 
-    context 'when we are a tty' do
-      context 'when NO_COLOR=true is not defined' do
-        it 'puts to stderr' do
-          stub_no_color_env('')
+    context 'when NO_COLOR=true is defined' do
+      it 'puts to stderr minus icon and colorization' do
+        stub_no_color_env('true')
 
-          expect { described_class.abort('test') }.to raise_error(/test/).and output("\u274C\ufe0f \e[31mERROR\e[0m: test\n").to_stderr
-        end
-      end
-
-      context 'when NO_COLOR=true is defined' do
-        it 'puts to stderr minus icon and colorization' do
-          stub_no_color_env('true')
-
-          expect { described_class.abort('test') }.to raise_error(/test/).and output("ERROR: test\n").to_stderr
-        end
+        expect { described_class.abort('test') }.to raise_error(/test/).and output("ERROR: test\n").to_stderr
       end
     end
   end

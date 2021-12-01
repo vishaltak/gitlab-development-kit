@@ -10,7 +10,7 @@ RSpec.describe GDK::Command::MeasureUrl do
   let(:docker_running) { nil }
 
   before do
-    stub_tty(false)
+    stub_no_color_env('true')
   end
 
   describe '#run' do
