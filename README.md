@@ -75,7 +75,7 @@ supported installation methods:
 
 - We encourage you to [create a new issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/new).
 - GitLab team members can use the `#gdk` channel on the GitLab Slack workspace.
-- Review the [troubleshooting information](doc/troubleshooting.md).
+- Review the [troubleshooting information](doc/troubleshooting).
 - Wider community members can use the [Gitter contributors room](https://gitter.im/gitlab/contributors)
   or [GitLab Forum](https://forum.gitlab.com/c/community/community-contributions/15).
 
