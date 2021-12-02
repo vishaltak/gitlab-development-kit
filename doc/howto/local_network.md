@@ -12,10 +12,10 @@ To set up `gdk.test` as a hostname (assumes `172.16.123.1` is available):
    172.16.123.1 gdk.test
    ```
 
-1. Add the following to `gdk.yml`:
+1. Set `hostname` to `gdk.test`.
 
-   ```yaml
-   hostname: gdk.test
+   ```shell
+   gdk config set hostname gdk.test
    ```
 
 1. Reconfigure GDK:
