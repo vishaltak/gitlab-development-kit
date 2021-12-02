@@ -10,6 +10,7 @@ module GDK
     autoload :Geo, 'gdk/diagnostic/geo'
     autoload :Gitlab, 'gdk/diagnostic/gitlab'
     autoload :Golang, 'gdk/diagnostic/golang'
+    autoload :MacPorts, 'gdk/diagnostic/mac_ports'
     autoload :PGUser, 'gdk/diagnostic/pguser'
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
@@ -24,6 +25,7 @@ module GDK
     def self.all
       klasses = %i[
         RvmAndAsdf
+        MacPorts
         Asdf
         RubyGems
         Bundler
