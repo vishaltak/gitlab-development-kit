@@ -11,8 +11,6 @@ module GDK
   class ErbRenderer
     attr_reader :source, :target
 
-    WAIT_WARNING_SECS = 5
-
     def initialize(source, target, args = {})
       @source = source
       @target = target
@@ -20,6 +18,8 @@ module GDK
     end
 
     def render!(target = @target)
+      return if warn_not_applied_if_target_protected?
+
       str = File.read(source)
       # A trim_mode of '-' allows omitting empty lines with <%- -%>
       result = ERB.new(str, trim_mode: '-').result_with_hash(@args)
@@ -31,6 +31,8 @@ module GDK
     end
 
     def safe_render!
+      return if warn_not_applied_if_target_protected?
+
       temp_file = Tempfile.open(target)
       render!(temp_file.path)
 
@@ -38,13 +40,6 @@ module GDK
         return if FileUtils.identical?(target, temp_file.path)
 
         warn_changes!(temp_file.path)
-
-        if config.config_file_protected?(target)
-          warn_not_applied!
-
-          return
-        end
-
         backup!
         warn_overwritten!
       end
@@ -55,7 +50,7 @@ module GDK
       GDK::Output.abort("#{e.message}.")
       false
     ensure
-      temp_file.close
+      temp_file&.close
     end
 
     private
@@ -77,23 +72,15 @@ module GDK
       GDK::Output.puts(diff_output, stderr: true)
     end
 
-    def warn_not_applied!
-      GDK::Output.warn "Changes to '#{target}' not applied because it's protected in gdk.yml."
+    def target_protected?
+      config.config_file_protected?(target)
+    end
 
-      action_options = <<~ACTION_OPTIONS
+    def warn_not_applied_if_target_protected?
+      return false unless target_protected?
 
-        - To apply these changes, run:
-            rm #{target} && make #{target}
-
-        - To silence this warning (at your own peril):
-            touch #{target}
-        -------------------------------------------------------------------------------------------------------------
-      ACTION_OPTIONS
-
-      GDK::Output.puts(action_options, stderr: true)
-      GDK::Output.puts("Resuming in #{WAIT_WARNING_SECS} seconds..", stderr: true)
-
-      sleep(WAIT_WARNING_SECS)
+      GDK::Output.warn("Changes to '#{target}' not applied because it's protected in gdk.yml.")
+      true
     end
 
     def warn_overwritten!
