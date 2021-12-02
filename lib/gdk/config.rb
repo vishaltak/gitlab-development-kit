@@ -609,6 +609,9 @@ module GDK
 
         config.runner.network_mode_host
       end
+      bool(:__install_mode_binary) { config.runner? && config.runner.install_mode == "binary" }
+      bool(:__install_mode_docker) { config.runner? && config.runner.install_mode == "docker" }
+      string(:__add_host_flags) { config.runner.extra_hosts.map { |h| "--add-host='#{h}'" }.join(" ") }
     end
 
     settings :grafana do
