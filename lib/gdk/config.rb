@@ -598,8 +598,10 @@ module GDK
     settings :runner do
       path(:config_file) { config.gdk_root.join('gitlab-runner-config.toml') }
       bool(:enabled) { !!read!(config.runner.config_file) }
+      string(:install_mode) { "binary" }
       array(:extra_hosts) { [] }
       string(:token) { 'DEFAULT TOKEN: Register your runner to get a valid token' }
+      string(:image) { "gitlab/gitlab-runner:latest" }
       path(:bin) { find_executable!('gitlab-runner') || '/usr/local/bin/gitlab-runner' }
       bool(:network_mode_host) { false }
       bool(:__network_mode_host) do
@@ -607,6 +609,9 @@ module GDK
 
         config.runner.network_mode_host
       end
+      bool(:__install_mode_binary) { config.runner? && config.runner.install_mode == "binary" }
+      bool(:__install_mode_docker) { config.runner? && config.runner.install_mode == "docker" }
+      string(:__add_host_flags) { config.runner.extra_hosts.map { |h| "--add-host='#{h}'" }.join(" ") }
     end
 
     settings :grafana do

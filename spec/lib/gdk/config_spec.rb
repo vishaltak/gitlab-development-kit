@@ -813,9 +813,21 @@ RSpec.describe GDK::Config do
       allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).with(config.runner.config_file) { file_contents }
     end
 
+    describe '#install_mode' do
+      it 'returns binary' do
+        expect(config.runner.install_mode).to eq('binary')
+      end
+    end
+
     describe '#extra_hosts' do
       it 'returns []' do
         expect(config.runner.extra_hosts).to eq([])
+      end
+    end
+
+    describe '#image' do
+      it 'returns gitlab/gitlab-runner:latest' do
+        expect(config.runner.image).to eq('gitlab/gitlab-runner:latest')
       end
     end
 
@@ -864,6 +876,137 @@ RSpec.describe GDK::Config do
           it 'returns true' do
             expect(config.runner.__network_mode_host).to be(true)
           end
+        end
+      end
+    end
+
+    describe '__install_mode_binary' do
+      context 'when runner is not enabled' do
+        let(:file_contents) { nil }
+
+        it 'returns false' do
+          expect(config.runner.__install_mode_binary).to be(false)
+        end
+      end
+
+      context 'when runner is enabled' do
+        before do
+          yaml['runner'] = {
+            'enabled' => 'true'
+          }
+        end
+
+        context 'when install_mode is unset' do
+          it 'returns true' do
+            expect(config.runner.__install_mode_binary).to be(true)
+          end
+        end
+
+        context 'when install_mode is binary' do
+          before do
+            yaml['runner']['install_mode'] = 'binary'
+          end
+
+          it 'returns true' do
+            expect(config.runner.__install_mode_binary).to be(true)
+          end
+        end
+
+        context 'when install_mode is docker' do
+          before do
+            yaml['runner']['install_mode'] = 'docker'
+          end
+
+          it 'returns false' do
+            expect(config.runner.__install_mode_binary).to be(false)
+          end
+        end
+      end
+    end
+
+    describe '__install_mode_docker' do
+      context 'when runner is not enabled' do
+        let(:file_contents) { nil }
+
+        it 'returns false' do
+          expect(config.runner.__install_mode_docker).to be(false)
+        end
+      end
+
+      context 'when runner is enabled' do
+        before do
+          yaml['runner'] = {
+            'enabled' => 'true'
+          }
+        end
+
+        context 'when install_mode is unset' do
+          it 'returns false' do
+            expect(config.runner.__install_mode_docker).to be(false)
+          end
+        end
+
+        context 'when install_mode is binary' do
+          before do
+            yaml['runner']['install_mode'] = 'binary'
+          end
+
+          it 'returns false' do
+            expect(config.runner.__install_mode_docker).to be(false)
+          end
+        end
+
+        context 'when install_mode is docker' do
+          before do
+            yaml['runner']['install_mode'] = 'docker'
+          end
+
+          it 'returns true' do
+            expect(config.runner.__install_mode_docker).to be(true)
+          end
+        end
+      end
+    end
+
+    describe '__add_host_flags' do
+      before do
+        yaml['runner'] = {
+          'enabled' => 'true'
+        }
+      end
+
+      context 'when extra_hosts is empty' do
+        before do
+          yaml['runner']['extra_hosts'] = []
+        end
+
+        it 'returns an empty string' do
+          flags = config.runner.__add_host_flags
+
+          expect(flags).to be_a(String)
+          expect(flags).to be_empty
+        end
+      end
+
+      context 'when extra_hosts contains a single item' do
+        before do
+          yaml['runner']['extra_hosts'] = ['gdk.test:172.16.123.1']
+        end
+
+        it 'returns a single flag' do
+          expect(config.runner.__add_host_flags).to eq("--add-host='gdk.test:172.16.123.1'")
+        end
+      end
+
+      context 'when extra_hosts contains multiple items' do
+        before do
+          yaml['runner']['extra_hosts'] = ['gdk.test:172.16.123.1', 'gdk.test:192.168.65.2', 'registry.gdk.test:172.17.0.4']
+        end
+
+        it 'returns multiple flags separated by spaces' do
+          flags = config.runner.__add_host_flags
+
+          expect(flags).to eq("--add-host='gdk.test:172.16.123.1' --add-host='gdk.test:192.168.65.2' --add-host='registry.gdk.test:172.17.0.4'")
         end
       end
     end

@@ -292,6 +292,8 @@ runner:
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
   enabled: false
   extra_hosts: []
+  image: gitlab/gitlab-runner:latest
+  install_mode: binary
   network_mode_host: false
   token: 'DEFAULT TOKEN: Register your runner to get a valid token'
 sshd:

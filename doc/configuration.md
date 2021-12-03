@@ -435,7 +435,13 @@ Under the runner key you can define the following settings for the [GitLab Runne
 | Setting | Default | Description |
 | --- | ------ | ----- |
 | `enabled` | `false` | Set this to `true` to enable the `runner` service. |
+| `config_file` | `$GDK_ROOT/gitlab-runner-config.toml` | Path to your runner's `config.toml`. Defaults to GDK-managed config file. |
+| `install_mode` | `binary` | Set this to `docker` in order to create a Docker container instead of using a local `gitlab-runner` binary. |
+| `image` | `gitlab/gitlab-runner:latest` | Docker image to use for the runner when using `install_mode: docker`. |
+| `bin` | `/usr/loca/bin/gitlab-runner` | Path to local runner binary when using `install_mode: binary`. |
+| `extra_hosts` | `[]` | Sets the value of the `extra_hosts = []` key under `[runners.docker]` in the runner config. If using the Docker runner, these hosts are added to the container as `--add-host` flags. |
 | `network_mode_host` | `false` | Set this to `true` to set `network_mode = "host"` for the `[runners.docker]` section (only on Linux). |
+| `token` | Empty | Runner token to add to the runner config. |
 
 ## Webpack settings
 

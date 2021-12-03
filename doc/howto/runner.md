@@ -109,6 +109,14 @@ Using runners in Docker allows you to set up a clean environment for your builds
 each time. It is also safer than running directly on your computer, as the
 runner will not have direct access to your computer.
 
+You can have GDK manage a Docker container for you by setting `install_mode: docker`.
+
+```yaml
+runner:
+  enabled: true
+  install_mode: docker
+```
+
 ### Set up Docker and GDK
 
 Ensure you have Docker installed, then we will need to set up GitLab to bind to an IP on your machine
@@ -134,6 +142,23 @@ to your `gdk.yml`. For example, for `gdk.test`:
   runner:
     extra_hosts: ["gdk.test:172.16.123.1"]
   ```
+
+If creating a loopback interface proves troublesome, another method is to use `extra_hosts`
+to alias your GDK hostname to your `host.docker.internal` IP address.
+
+You can find this IP by doing a DNS lookup:
+
+```shell
+$ docker run --rm -ti tutum/dnsutils dig +short host.docker.internal
+192.168.65.2
+```
+
+Then add it to your `extra_hosts` configuration:
+
+```yaml
+runner:
+  extra_hosts: ["gdk.test:192.168.65.2"]
+```
 
 ### Alternative method for Linux
 
