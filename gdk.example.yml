@@ -242,6 +242,7 @@ prometheus:
   port: 9090
   praefect_exporter_port: 10101
   sidekiq_exporter_port: 3807
+  workhorse_exporter_port: 9229
 redis:
   databases:
     development:
