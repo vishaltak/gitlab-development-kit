@@ -87,6 +87,17 @@ prefix_with_asdf_if_available() {
   fi
 }
 
+asdf_check_rvm_rbenv() {
+  # RVM and rbenv can conflict with asdf
+  if type rvm > /dev/null 2>&1; then
+    return 1
+  elif type rbenv > /dev/null 2>&1; then
+    return 1
+  fi
+
+  return 0
+}
+
 ruby_required_bundler_versions() {
   find . -type f -name Gemfile.lock -exec awk '/BUNDLED WITH/{getline;print $NF;}' {} + 2> /dev/null | sort -r | uniq
 
@@ -238,6 +249,13 @@ common_preflight_checks() {
 
   if ! ensure_sudo_available; then
     error "sudo is required, please install." >&2
+  fi
+
+  if ! asdf_check_rvm_rbenv; then
+    echo "ERROR: RVM or rbenv detected, which can cause issues with asdf." >&2
+    echo "INFO: We recommend you uninstall RVM or rbenv, or remove RVM or rbenv from your PATH variable." >&2
+    echo "INFO: For more information, see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/migrate_to_asdf.md." >&2
+    exit 1
   fi
 }
 
