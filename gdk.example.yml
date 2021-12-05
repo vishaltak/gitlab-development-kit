@@ -91,6 +91,7 @@ gitlab:
     sherlock: false
   rails_background_jobs:
     timeout: 10
+    verbose: false
 gitlab_docs:
   auto_update: true
   enabled: false

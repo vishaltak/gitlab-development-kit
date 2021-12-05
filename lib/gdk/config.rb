@@ -709,6 +709,7 @@ module GDK
       end
 
       settings :rails_background_jobs do
+        bool(:verbose) { false }
         integer(:timeout) { config.gdk.runit_wait_secs / 2 }
       end
     end

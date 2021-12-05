@@ -1275,6 +1275,12 @@ RSpec.describe GDK::Config do
     end
 
     describe 'rails_background_jobs' do
+      describe 'verbose' do
+        it 'is disabled by default' do
+          expect(config.gitlab.rails_background_jobs.verbose?).to be(false)
+        end
+      end
+
       describe 'timeout' do
         it 'is 10 (half of config.gdk.runit_wait_secs) by default' do
           expect(config.gitlab.rails_background_jobs.timeout).to be(10)
