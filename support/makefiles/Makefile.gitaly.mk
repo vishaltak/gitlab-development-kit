@@ -12,7 +12,7 @@ ${gitaly_clone_dir}/.git:
 gitaly-update: gitaly-update-timed
 
 .PHONY: gitaly-update-run
-gitaly-update-run: gitaly-git-pull gitaly-clean gitaly-setup praefect-migrate
+gitaly-update-run: gitaly-git-pull gitaly-setup praefect-migrate
 
 .PHONY: gitaly-git-pull
 gitaly-git-pull: gitaly-git-pull-timed
@@ -24,9 +24,6 @@ gitaly-git-pull-run: ${gitaly_clone_dir}/.git
 	@echo "Updating gitlab-org/gitaly to ${gitaly_version}"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
-
-gitaly-clean:
-	$(Q)rm -rf gitlab/tmp/tests/gitaly
 
 .PHONY: ${gitaly_build_bin_dir}/gitaly
 ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
