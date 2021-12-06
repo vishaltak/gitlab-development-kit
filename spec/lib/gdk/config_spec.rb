@@ -1792,6 +1792,12 @@ RSpec.describe GDK::Config do
         expect(config.prometheus.sidekiq_exporter_port).to eq(3807)
       end
     end
+
+    describe '#workhorse_exporter_port' do
+      it 'defaults to 9229' do
+        expect(config.prometheus.workhorse_exporter_port).to eq(9229)
+      end
+    end
   end
 
   describe 'grafana' do
