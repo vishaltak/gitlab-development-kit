@@ -65,7 +65,7 @@ GEM
     gitlab (4.17.0)
       httparty (~> 0.18)
       terminal-table (~> 1.5, >= 1.5.1)
-    gitlab-dangerfiles (2.5.0)
+    gitlab-dangerfiles (2.6.1)
       danger (>= 8.3.1)
       danger-gitlab (>= 8.0.0)
     gitlab-styles (6.6.0)
@@ -86,9 +86,9 @@ GEM
       kramdown (~> 2.0)
     lefthook (0.7.7)
     method_source (1.0.0)
-    mime-types (3.3.1)
+    mime-types (3.4.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2021.0901)
+    mime-types-data (3.2021.1115)
     minitest (5.14.4)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -180,7 +180,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  gitlab-dangerfiles (~> 2.5.0)
+  gitlab-dangerfiles (~> 2.6.0)
   gitlab-styles (~> 6.6.0)
   lefthook (~> 0.7.0)
   pry-byebug (~> 3.9.0)
