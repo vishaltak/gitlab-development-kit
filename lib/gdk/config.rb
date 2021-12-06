@@ -494,9 +494,7 @@ module GDK
       path(:__build_path) { config.gitaly.dir.join('_build') }
       path(:__build_bin_path) { config.gitaly.__build_path.join('bin') }
       path(:__build_bin_backup_path) { config.gitaly.__build_bin_path.join('gitaly-backup') }
-      path(:__build_deps_path) { config.gitaly.__build_path.join('deps') }
       path(:__gitaly_build_bin_path) { config.gitaly.__build_bin_path.join('gitaly') }
-      path(:git_bin_path) { config.gitaly.__build_deps_path.join('git', 'install', 'bin', 'git') }
       settings_array :__storages, size: -> { storage_count } do |i|
         string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
         path(:path) do
