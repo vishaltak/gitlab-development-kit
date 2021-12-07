@@ -8,12 +8,14 @@ git
 git-lfs
 go
 GraphicsMagick
+gpgme-devel
 icu
 krb5-devel
 libcurl-devel
 libicu-devel
 libpqxx-devel
 libuuid-devel
+openssl
 openssl-devel
 openssl-libs
 perl-Digest-SHA
