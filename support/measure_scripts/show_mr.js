@@ -1,8 +1,7 @@
 const login_util = require("./utils/login_measure_util");
 const mouse_utils = require("./utils/mouse_utils");
 
-// const baseURL = "http://host.docker.internal:3000";
-const baseURL = "http://172.19.144.67:3000"
+const baseURL = "http://host.docker.internal:3000";
 const baseRepo = "/flightjs/Flight";
 
 module.exports = async function (context, commands) {

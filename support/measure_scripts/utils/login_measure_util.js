@@ -6,7 +6,7 @@ module.exports = async function (baseUrl, context, commands) {
     console.log('Starting Login')
 
     const userName = 'root'; // context.options.gitlab.user;
-    const password = 'secret_pass'; // context.options.gitlab.password;
+    const password = '5iveL!fe'; // context.options.gitlab.password;
 
     await commands.addText.bySelector(userName, '[data-qa-selector="login_field"]');
     await commands.addText.bySelector(password, '[data-qa-selector="password_field"]');

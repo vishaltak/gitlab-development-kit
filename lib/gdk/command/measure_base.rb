@@ -6,7 +6,7 @@ require 'net/http'
 module GDK
   module Command
     class MeasureBase < BaseCommand
-      SITESPEED_DOCKER_TAG = '20.6.0'
+      SITESPEED_DOCKER_TAG = '21.1.0'
 
       def run(_ = [])
         check!
