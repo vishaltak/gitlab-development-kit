@@ -4,7 +4,7 @@ START_TIME := $(shell date "+%s")
 
 DIVIDER = "--------------------------------------------------------------------------------"
 
-SHELL = /bin/bash
+SHELL = bin/shell
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)

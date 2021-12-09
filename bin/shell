@@ -1,0 +1,21 @@
+#!/bin/bash
+
+ROOT_PATH="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
+
+# shellcheck disable=SC1091
+source "${ROOT_PATH}/.gdk.env"
+
+exec /usr/bin/env -i \
+HOME="${HOME}" \
+PATH="${PATH}" \
+LANG="${LANG}" \
+LANGUAGE="${LANGUAGE}" \
+LC_ALL="${LC_ALL}" \
+LDFLAGS="${LDFLAGS}" \
+CPPFLAGS="${CPPFLAGS}" \
+PKG_CONFIG_PATH="${PKG_CONFIG_PATH}" \
+LIBPCREDIR="${LIBPCREDIR}" \
+RUBY_CONFIGURE_OPTS="${RUBY_CONFIGURE_OPTS}" \
+GDK_ENV_LOADED="${GDK_ENV_LOADED}" \
+GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE}" \
+/bin/bash -c "$@"
