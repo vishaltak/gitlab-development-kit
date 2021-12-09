@@ -2,12 +2,12 @@
 
 require 'gitlab-dangerfiles'
 
-gitlab_dangerfiles = Gitlab::Dangerfiles::Engine.new(self)
-gitlab_dangerfiles.import_plugins
+Gitlab::Dangerfiles.for_project(self) do |dangerfiles|
+  dangerfiles.import_plugins
+  dangerfiles.import_dangerfiles(rules: [:changes_size, :commit_messages])
+end
 
 danger.import_plugin('danger/plugins/*.rb')
-
-gitlab_dangerfiles.import_dangerfiles
 
 project_helper.rule_names.each do |rule|
   danger.import_dangerfile(path: File.join('danger', rule))
