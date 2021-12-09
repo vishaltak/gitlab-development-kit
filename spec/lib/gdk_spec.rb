@@ -16,6 +16,10 @@ RSpec.describe GDK do
     subject.main
   end
 
+  def expect_output(level, message: nil)
+    expect(GDK::Output).to receive(level).with(message || no_args)
+  end
+
   describe '.main' do
     GDK::Command::COMMANDS.each do |command, command_class_proc|
       context "when invoking 'gdk #{command}' from command-line" do
@@ -26,6 +30,22 @@ RSpec.describe GDK do
 
           expect { described_class.main }.to raise_error(SystemExit)
         end
+      end
+    end
+
+    context 'with an invalid command' do
+      let(:command) { 'rstart' }
+
+      it "shows a helpful error message" do
+        stub_const('ARGV', [command])
+
+        expect_output(:warn, message: 'rstart is not a GDK command.')
+        expect_output(:warn, message: 'Did you mean?  restart')
+        expect_output(:warn, message: '               start')
+        expect_output(:puts)
+        expect_output(:info, message: "See 'gdk help' for more detail.")
+
+        expect(described_class.main).to be_falsey
       end
     end
   end
