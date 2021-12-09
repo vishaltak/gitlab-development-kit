@@ -181,7 +181,10 @@ configure_ruby_bundler() {
   bundle config build.gpgme --use-system-libraries
 
   if [[ "${OSTYPE}" == "darwin"* ]]; then
+    bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
+
     clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
+
     if [[ ${clang_version} -ge 13 ]]; then
       bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
     fi
