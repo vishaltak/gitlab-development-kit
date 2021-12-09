@@ -393,7 +393,9 @@ sudo pkg install postgresql10-server postgresql10-contrib postgresql-libpqxx \
 redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio sqlite3
 ```
 
-## Install Windows 10 dependencies
+## Windows 10/Windows 11
+
+You can set up GDK on Windows by using the Windows Subsystem for Linux (version 2 only).
 
 **Setting up the Windows Subsystem for Linux:**
 
@@ -415,6 +417,8 @@ distribution options include:
 - SLES
 - Kali Linux
 - Debian GNU/Linux
+
+We have validated that Ubuntu 20.04 works correctly, but other distributions may also work.
 
 Launch the distribution of choice.
 
@@ -439,6 +443,18 @@ wsl -l
 # Run the following command
 wsl --set-version <your subsystem name here>
 ```
+
+### Known issues with Windows Subsystem for Linux
+
+#### Directories
+
+Using a directory path with a space in it causes the install to fail (e.g. using the default home directory of the Windows user, where you've possibly used your full name). This is [an open issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1380).
+
+Additionally, using a directory path in Windows filesystem mount points (such as `/mnt/c` or `/mnt/d`) [results in permissions issues](https://gitlab.com/gitlab-org/gitlab/-/issues/347422#note_757891300). Instead, you must use a path inside the WSL OS, such as inside `/home/<user>/`. If you need to access the files from Windows, you can go to `\\wsl$` in Explorer to browse the file system. For example, `/home/sid/dev/gitlab-development-kit` would be visible at `\\wsl$\Ubuntu-20.04\home\sid\dev\gitlab-development-kit`.
+
+#### Performance
+
+WSL allocates up to 50% of your RAM by default for the Linux OS.
 
 ## Apply custom patches for Ruby
 
