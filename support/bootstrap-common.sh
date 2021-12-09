@@ -28,6 +28,7 @@ SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_
 
 GDK_CACHE_DIR="${root_path}/.cache"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
+GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
 error() {
   echo
@@ -189,7 +190,7 @@ ensure_not_root() {
 
 ensure_supported_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
-    if [[ "${CPU_TYPE}" == "arm64" ]]; then
+    if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
 
       if [[ $(command -v brew) == "/opt/homebrew/bin/brew" ]]; then
         echo "ERROR: Native Apple Silicon (arm64) detected. Rosetta 2 is required. For more information, see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md#macos." >&2
@@ -411,7 +412,7 @@ setup_platform_darwin() {
   fi
 
   # Support running brew under Rosetta 2 on Apple M1 machines
-  if [[ "${CPU_TYPE}" == "arm64" ]]; then
+  if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
     brew_opts="arch -x86_64"
   else
     brew_opts=""
