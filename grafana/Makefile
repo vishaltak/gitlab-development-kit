@@ -1,8 +1,8 @@
 # Details from https://grafana.com/grafana/download
 GRAFANA_INSTALL = true
-GRAFANA_VERSION = 8.1.4
-GRAFANA_MACOS_SHA256 = 367a33cc9fea711e96243b43d337d7ae1f086ca7e71bdac4b650df6435e8f6b7
-GRAFANA_LINUX_SHA256 = 6b57d8e16f197c0f7049bd4388d8b14e7c0a85fa09fac6a56915dccb5636b7d6
+GRAFANA_VERSION = 7.5.11
+GRAFANA_MACOS_SHA256 = efd1f27e1f66508ea7bef228786fae3629a32b50e565d0fc5dac616c4e0d9c20
+GRAFANA_LINUX_SHA256 = 3244d0ced48d2de9726c9a3bd6d5f08c1b6a081d42665401e033fc4a31c57d5d
 
 # Determine host operating system
 ifeq ($(shell uname -s), Darwin)
