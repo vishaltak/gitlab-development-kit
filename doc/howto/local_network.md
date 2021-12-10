@@ -4,12 +4,19 @@
 tools. We recommend [mapping this to a loopback interface](#create-loopback-interface), but
 it can be mapped to `127.0.0.1`.
 
-To set up `gdk.test` as a hostname (assumes `172.16.123.1` is available):
+To set up `gdk.test` as a hostname:
 
-1. Map `gdk.test` to `172.16.123.1`. For example, add the following to `/etc/hosts`:
+1. Map `gdk.test` to a local address. If using [loopback interface](#create-loopback-interface), add the following to
+   `/etc/hosts`:
 
    ```plaintext
    172.16.123.1 gdk.test
+   ```
+
+   Or, if using `127.0.0.1`:
+
+   ```plaintext
+   127.0.0.1 gdk.test
    ```
 
 1. Set `hostname` to `gdk.test`.
@@ -55,16 +62,28 @@ address:
    sudo ip link set dummy0 up
    ```
 
-1. Set `gitlab.rails.hostname` to `172.16.123.1` or `gdk.test`.
+1. Set `gitlab.rails.hostname` to `172.16.123.1`:
 
     ```shell
     gdk config set gitlab.rails.hostname 172.16.123.1
+    ```
+
+    Or, if you added `gdk.test` to your `/etc/hosts` file:
+
+    ```shell
+    gdk config set gitlab.rails.hostname gdk.test
     ```
 
 1. Set `webpack.host` to `172.16.123.1`.
 
     ```shell
     gdk config set webpack.host 172.16.123.1
+    ```
+
+   Or, if you added `gdk.test` to your `/etc/hosts` file:
+
+    ```shell
+    gdk config set webpack.host gdk.test
     ```
 
 1. Reconfigure GDK:
@@ -78,6 +97,8 @@ address:
    ```shell
    gdk restart
    ```
+
+### Create loopback device on startup
 
 For this to work across reboots, the aliased IP address command must be run at startup. To
 automate this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/`
