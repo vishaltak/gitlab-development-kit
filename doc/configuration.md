@@ -249,6 +249,8 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/index.md#truncate
 
 ### GitLab settings
 
+#### Rails
+
 | Setting | Default | Description |
 |---------|---------|-------------|
 | `gitlab.cache_classes` | `false`  | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
@@ -261,6 +263,13 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/index.md#truncate
 | `gitlab.rails.sherlock` | `false` | Set this to `true` to enable [Sherlock profiling](https://docs.gitlab.com/ee/development/profiling.html#sherlock). |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 | `gitlab.rails.bootsnap` | `true` | Set this to `false` to disable [Bootsnap](https://github.com/Shopify/bootsnap). |
+
+#### Rails background jobs (Sidekiq)
+
+| Setting | Default | Description l|
+|---------|---------|-------------
+| `gitlab.rails_background_jobs.verbose` | `false`  | Set this to `true` to increase the level of logging Sidekiq produces. |
+| `gitlab.rails_background_jobs.timeout` | `10`  | Set this to the number of seconds to ask Sidekiq to wait before forcibly terminating. |
 
 ### GitLab Docs settings
 
