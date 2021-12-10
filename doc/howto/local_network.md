@@ -74,18 +74,6 @@ address:
     gdk config set gitlab.rails.hostname gdk.test
     ```
 
-1. Set `webpack.host` to `172.16.123.1`.
-
-    ```shell
-    gdk config set webpack.host 172.16.123.1
-    ```
-
-   Or, if you added `gdk.test` to your `/etc/hosts` file:
-
-    ```shell
-    gdk config set webpack.host gdk.test
-    ```
-
 1. Reconfigure GDK:
 
    ```shell

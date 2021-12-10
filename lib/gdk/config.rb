@@ -144,7 +144,7 @@ module GDK
     end
 
     settings :webpack do
-      string(:host) { read!('webpack_host') || config.hostname }
+      string(:host) { read!('webpack_host') || config.gitlab.rails.hostname }
       bool(:static) { false }
       bool(:vendor_dll) { false }
       bool(:incremental) { true }
