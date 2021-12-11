@@ -99,7 +99,8 @@ asdf_check_rvm_rbenv() {
 }
 
 ruby_required_bundler_versions() {
-  find . -type f -name Gemfile.lock -exec awk '/BUNDLED WITH/{getline;print $NF;}' {} + 2> /dev/null | sort -r | uniq
+ gemfiles="Gemfile.lock gitlab/Gemfile.lock gitaly/ruby/Gemfile.lock"
+ ls $gemfiles | xargs -I {} -n 1 awk '/BUNDLED WITH/{getline;print $NF;}' {} + 2> /dev/null | sort -r | uniq
 
   return 0
 }
@@ -111,6 +112,7 @@ ruby_install_required_bundlers() {
 
   for version in ${required_versions}
   do
+    echo "Installing bundler $version"
     if ! bundle "_${version}_" --version > /dev/null 2>&1; then
       prefix_with_asdf_if_available gem install bundler -v "=${version}"
     fi
