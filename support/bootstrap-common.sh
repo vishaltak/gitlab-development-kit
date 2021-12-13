@@ -77,14 +77,14 @@ asdf_enabled() {
 
 asdf_command_enabled() {
   if ! asdf_enabled; then
-    return 0
+    false
   fi
 
   if asdf which "$1" > /dev/null 2>&1; then
-    return 0
+    true
   fi
 
-  return 1
+  false
 }
 
 prefix_with_asdf_if_available() {
