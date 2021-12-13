@@ -77,7 +77,7 @@ asdf_enabled() {
 
 asdf_command_enabled() {
   if ! asdf_enabled; then
-    return 0
+    return 1
   fi
 
   if asdf which "$1" > /dev/null 2>&1; then
