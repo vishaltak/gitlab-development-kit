@@ -75,24 +75,12 @@ asdf_enabled() {
   fi
 }
 
-asdf_command_enabled() {
-  if ! asdf_enabled; then
-    return 0
-  fi
-
-  if asdf which "$1" > /dev/null 2>&1; then
-    return 0
-  fi
-
-  return 1
-}
-
 prefix_with_asdf_if_available() {
   local command
 
   command="${*}"
 
-  if asdf_command_enabled "$1"; then
+  if asdf_is_available; then
     eval "asdf exec ${command}"
   else
     eval "${command}"
@@ -123,7 +111,7 @@ ruby_install_required_bundlers() {
 
   for version in ${required_versions}
   do
-    if ! prefix_with_asdf_if_available bundle "_${version}_" --version ; then
+    if ! bundle "_${version}_" --version > /dev/null 2>&1; then
       prefix_with_asdf_if_available gem install bundler -v "=${version}"
     fi
   done
@@ -169,7 +157,7 @@ ruby_configure_opts() {
 }
 
 configure_ruby_bundler() {
-  if asdf_command_enabled "pg_config"; then
+  if asdf_enabled; then
     current_pg_config_location=$(asdf which pg_config)
   else
     current_pg_config_location=$(command -v pg_config)
