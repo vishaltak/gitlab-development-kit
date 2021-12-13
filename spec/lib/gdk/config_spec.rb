@@ -679,12 +679,6 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#git_bin_path' do
-      it 'returns the path to the gitaly compiled git binary' do
-        expect(config.gitaly.git_bin_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/deps/git/install/bin/git'))
-      end
-    end
-
     describe '#__build_path' do
       it '/home/git/gdk/gitaly/_build' do
         expect(config.gitaly.__build_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build'))
@@ -700,12 +694,6 @@ RSpec.describe GDK::Config do
     describe '#__build_bin_backup_path' do
       it '/home/git/gdk/gitaly/_build/bin/gitaly-backup' do
         expect(config.gitaly.__build_bin_backup_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/bin/gitaly-backup'))
-      end
-    end
-
-    describe '#__build_deps_path' do
-      it '/home/git/gdk/gitaly/_build/deps' do
-        expect(config.gitaly.__build_deps_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build/deps'))
       end
     end
 
