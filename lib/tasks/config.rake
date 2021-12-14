@@ -217,3 +217,13 @@ end
 file 'grafana/grafana.ini' => ['support/templates/grafana.ini.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
 end
+
+file 'snowplow/snowplow_micro.conf' => ['support/templates/snowplow_micro.conf.erb'] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+  chmod('+r', t.name)
+end
+
+file 'snowplow/iglu.json' => ['support/templates/iglu.json.erb'] do |t|
+  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+  chmod('+r', t.name)
+end

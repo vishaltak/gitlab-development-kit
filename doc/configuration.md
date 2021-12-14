@@ -283,6 +283,16 @@ Under the `gitlab_docs` key, you can define the following settings:
 
 For more information on using GitLab Docs with GDK, see the [GitLab Docs how to](howto/gitlab_docs.md).
 
+### Snowplow Micro
+
+Under the `snowplow_micro` key, you can define the following settings:
+
+| Setting                      | Default                           | Description                                                                                              |
+|:-----------------------------|:----------------------------------|:---------------------------------------------------------------------------------------------------------|
+| `snowplow_micro.enabled`     | `false`                           | Set to `true` to enable [`snowplow-micro`](howto/snowplow_micro.md) to be managed by GDK.                                         |
+| `snowplow_micro.image`       | `snowplow/snowplow-micro:latest`  | Docker image to run.                                                                                     |
+| `snowplow_micro.port`        | `9091`                            | The port for `snowplow-micro` to listen on.                                                              |
+
 ### Additional projects
 
 You can have GDK manage checkouts for `gitlab-runner`, `omnibus-gitlab`, and `charts/gitlab` projects.

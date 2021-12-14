@@ -106,6 +106,7 @@
 /repository_storages/
 /services/
 /sitespeed-result/
+/snowplow
 /sv/
 /webpack_port
 Brewfile.lock.json

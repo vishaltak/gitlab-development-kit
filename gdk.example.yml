@@ -297,6 +297,10 @@ runner:
   install_mode: binary
   network_mode_host: false
   token: 'DEFAULT TOKEN: Register your runner to get a valid token'
+snowplow_micro:
+  enabled: false
+  image: snowplow/snowplow-micro:latest
+  port: 9091
 sshd:
   additional_config: ''
   authorized_keys_file: "/home/git/gdk/.ssh/authorized_keys"
