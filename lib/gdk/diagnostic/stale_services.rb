@@ -58,6 +58,7 @@ module GDK
           redis
           registry
           runner
+          snowplow-micro
           spamcheck
           sshd
           tunnel_

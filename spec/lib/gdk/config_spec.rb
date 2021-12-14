@@ -2349,4 +2349,24 @@ RSpec.describe GDK::Config do
       end
     end
   end
+
+  describe 'snowplow_micro' do
+    describe '#enabled' do
+      it 'defaults to false' do
+        expect(config.snowplow_micro.enabled).to eq(false)
+      end
+    end
+
+    describe '#port' do
+      it 'defaults to 9091' do
+        expect(config.snowplow_micro.port).to eq(9091)
+      end
+    end
+
+    describe '#gitaly_exporter_port' do
+      it 'defaults to snowplow/snowplow-micro:latest' do
+        expect(config.snowplow_micro.image).to eq('snowplow/snowplow-micro:latest')
+      end
+    end
+  end
 end

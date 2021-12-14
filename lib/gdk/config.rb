@@ -215,6 +215,12 @@ module GDK
       string(:__nanoc_view_cmd) { "bundle exec nanoc compile && bundle exec nanoc view #{config.gitlab_docs.__nanoc_cmd_common}" }
     end
 
+    settings :snowplow_micro do
+      bool(:enabled) { false }
+      integer(:port) { 9091 }
+      string(:image) { 'snowplow/snowplow-micro:latest' }
+    end
+
     settings :gitlab_spamcheck do
       bool(:enabled) { false }
       bool(:auto_update) { true }

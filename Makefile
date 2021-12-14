@@ -80,6 +80,7 @@ grafana-setup \
 gitlab-ui-setup \
 gitlab-docs-setup \
 gitlab-spamcheck-setup \
+snowplow-micro-setup \
 
 # This is used by `gdk install`
 #

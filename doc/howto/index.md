@@ -50,6 +50,7 @@ to learn how to contribute to GitLab.
 - [Serverless (Knative)](serverless.md)
 - [Sherlock](sherlock.md)
 - [Simulate slow or broken repository storage](simulate_storage.md)
+- [Snowplow Micro](snowplow_micro.md)
 - [Start a Rails console](rails_console.md)
 - [Tracing and Jaeger](https://docs.gitlab.com/ee/development/distributed_tracing.html#using-jaeger-in-the-gitlab-development-kit)
 - [Update external dependencies](update_external_dependencies.md)
