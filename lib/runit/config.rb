@@ -79,6 +79,7 @@ module Runit
         export relative_url_root=#{GDK.config.relative_url_root}
         export cache_classes=#{GDK.config.gitlab.cache_classes}
         export bundle_gemfile=#{GDK.config.gitlab.rails.bundle_gemfile}
+        export GITALY_DISABLE_REQUEST_LIMITS=#{GDK.config.gitlab.gitaly_disable_request_limits}
       RUN_ENV
 
       if GDK.config.tracer.jaeger?
