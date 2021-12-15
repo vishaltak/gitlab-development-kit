@@ -50,29 +50,13 @@ asdf_reshim() {
 }
 
 asdf_is_available() {
-  if asdf version > /dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-asdf_is_opt_out() {
-  opt_out=$(gdk config get asdf.opt_out 2> /dev/null)
-
-  if [[ "${opt_out}" == "true" ]]; then
-    return 0
-  else
-    return 1
-  fi
+  asdf version > /dev/null 2>&1
 }
 
 asdf_enabled() {
-  if asdf_is_available && ! asdf_is_opt_out; then
-    return 0
-  else
-    return 1
-  fi
+  opt_out=$(gdk config get asdf.opt_out 2> /dev/null)
+
+  asdf_is_available && [[ "${opt_out}" != "true" ]]
 }
 
 asdf_command_enabled() {
@@ -80,11 +64,7 @@ asdf_command_enabled() {
     return 1
   fi
 
-  if asdf which "$1" > /dev/null 2>&1; then
-    return 0
-  fi
-
-  return 1
+  asdf which "$1" > /dev/null 2>&1
 }
 
 prefix_with_asdf_if_available() {
