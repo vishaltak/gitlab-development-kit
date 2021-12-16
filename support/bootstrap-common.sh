@@ -160,10 +160,6 @@ configure_ruby_bundler() {
     if [[ ${clang_version} -ge 13 ]]; then
       bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
     fi
-
-    if [[ "${CPU_TYPE}" == "arm64" ]]; then
-      bundle config set force_ruby_platform true
-    fi
   fi
 }
 
