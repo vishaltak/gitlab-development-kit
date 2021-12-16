@@ -91,7 +91,10 @@ asdf_check_rvm_rbenv() {
 }
 
 ruby_required_bundler_versions() {
-  find . -type f -name Gemfile.lock -exec awk '/BUNDLED WITH/{getline;print $NF;}' {} + 2> /dev/null | sort -r | uniq
+  local gemfiles
+
+  gemfiles=(./Gemfile.lock ./gitlab/Gemfile.lock ./gitaly/ruby/Gemfile.lock)
+  awk '/BUNDLED WITH/{getline;print $NF;}' "${gemfiles[@]}" 2> /dev/null | sort -r | head -n 1
 
   return 0
 }
