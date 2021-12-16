@@ -863,11 +863,17 @@ production: &base
       - 172.16.0.0/12
       - 192.168.0.0/16
 
-    # Sidekiq exporter is webserver built in to Sidekiq to expose Prometheus metrics
+    # Sidekiq exporter is a webserver built in to Sidekiq to expose Prometheus metrics
     sidekiq_exporter:
-      enabled: <%= config.prometheus.enabled? %>
+      enabled: <%= config.gitlab.rails_background_jobs.sidekiq_exporter_enabled? %>
       address: <%= config.hostname %>
-      port: <%= config.prometheus.sidekiq_exporter_port %>
+      port: <%= config.gitlab.rails_background_jobs.sidekiq_exporter_port %>
+
+    # Sidekiq health checks is a webserver built in to Sidekiq to serve health checks for the workers
+    sidekiq_health_checks:
+      enabled: <%= config.gitlab.rails_background_jobs.sidekiq_health_check_enabled? %>
+      address: <%= config.hostname %>
+      port: <%= config.gitlab.rails_background_jobs.sidekiq_health_check_port %>
   prometheus:
     enabled: <%= config.prometheus.enabled? %>
     server_address: '<%= config.hostname %>:<%= config.prometheus.port %>'

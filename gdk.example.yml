@@ -89,6 +89,10 @@ gitlab:
     separate_db_schemas: false
     sherlock: false
   rails_background_jobs:
+    sidekiq_exporter_enabled: false
+    sidekiq_exporter_port: 3807
+    sidekiq_health_check_enabled: false
+    sidekiq_health_check_port: 3907
     timeout: 10
     verbose: false
 gitlab_docs:
@@ -241,7 +245,6 @@ prometheus:
   gitaly_exporter_port: 9236
   port: 9090
   praefect_exporter_port: 10101
-  sidekiq_exporter_port: 3807
   workhorse_exporter_port: 9229
 redis:
   databases:

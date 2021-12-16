@@ -628,7 +628,6 @@ module GDK
       integer(:port) { 9090 }
       integer(:gitaly_exporter_port) { 9236 }
       integer(:praefect_exporter_port) { 10_101 }
-      integer(:sidekiq_exporter_port) { 3807 }
       integer(:workhorse_exporter_port) { 9229 }
     end
 
@@ -715,6 +714,10 @@ module GDK
       settings :rails_background_jobs do
         bool(:verbose) { false }
         integer(:timeout) { config.gdk.runit_wait_secs / 2 }
+        bool(:sidekiq_exporter_enabled) { false }
+        integer(:sidekiq_exporter_port) { 3807 }
+        bool(:sidekiq_health_check_enabled) { false }
+        integer(:sidekiq_health_check_port) { 3907 }
       end
     end
 
