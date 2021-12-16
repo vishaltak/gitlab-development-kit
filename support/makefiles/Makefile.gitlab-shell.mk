@@ -28,10 +28,6 @@ gitlab-shell-git-pull-run:
 ${gitlab_shell_clone_dir}/.git:
 	$(Q)support/move-existing-gitlab-shell-directory || support/component-git-clone --quiet --branch "${gitlab_shell_version}" ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
-.PHONY: gitlab-shell/config.yml
-gitlab-shell/config.yml: ${gitlab_shell_clone_dir}/.git
-	$(Q)rake $@
-
 .gitlab-shell-bundle:
 	$(Q)cd ${gitlab_development_root}/gitlab-shell && $(bundle_install_cmd)
 	$(Q)touch $@

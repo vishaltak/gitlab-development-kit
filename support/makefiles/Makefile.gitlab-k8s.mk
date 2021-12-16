@@ -19,9 +19,6 @@ endif
 .PHONY: gitlab-k8s-agent-update-run
 gitlab-k8s-agent-update-run: ${gitlab_k8s_agent_clone_dir}/.git gitlab-k8s-agent/.git/pull gitlab-k8s-agent/build/gdk/bin/kas_race
 
-.PHONY: gitlab-k8s-agent-config.yml
-gitlab-k8s-agent-config.yml:
-	$(Q)rake $@
 
 .PHONY: gitlab-k8s-agent-clean
 gitlab-k8s-agent-clean:

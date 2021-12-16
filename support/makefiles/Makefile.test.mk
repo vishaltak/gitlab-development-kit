@@ -7,7 +7,7 @@ dev_shellcheck_binary := $(or $(dev_shellcheck_binary),$(shell command -v shellc
 dev_vale_binary := $(or $(dev_vale_binary),$(shell command -v vale 2> /dev/null))
 
 .PHONY: test
-test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-asdf-combine
+test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-asdf-combine verify-makefile-config
 
 .PHONY: rubocop
 rubocop:
@@ -89,3 +89,8 @@ verify-gdk-example-yml:
 verify-asdf-combine:
 	@echo -n "Checking if .tool-versions is up-to-date: "
 	@support/ci/verify-asdf-combine && echo "OK"
+
+.PHONY: verify-makefile-config
+verify-makefile-config:
+	@echo -n "Checking if support/makefiles/Makefile.config.mk is up-to-date: "
+	@support/ci/verify-makefile-config && echo "OK"

@@ -14,14 +14,6 @@ geo-config: gitlab/config/database_geo.yml postgresql/geo/port
 geo-cursor:
 	$(Q)grep '^geo-cursor:' Procfile || (printf ',s/^#geo-cursor/geo-cursor/\nwq\n' | ed -s Procfile)
 
-.PHONY: gitlab/config/database_geo.yml
-gitlab/config/database_geo.yml:
-ifeq ($(geo_enabled),true)
-	$(Q)rake $@
-else
-	@true
-endif
-
 .PHONY: geo-primary-migrate
 geo-primary-migrate: geo-primary-migrate-timed
 

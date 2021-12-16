@@ -1,9 +1,5 @@
 gitlab-workhorse-setup: gitlab/workhorse/gitlab-workhorse gitlab/workhorse/config.toml
 
-.PHONY: gitlab/workhorse/config.toml
-gitlab/workhorse/config.toml:
-	$(Q)rake $@
-
 .PHONY: gitlab-workhorse-update
 gitlab-workhorse-update: gitlab-workhorse-update-timed
 

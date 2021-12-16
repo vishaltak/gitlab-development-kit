@@ -19,12 +19,10 @@ export ROLLUP_OPTIONS = --silent
 NO_RAKE_REQUIRED := bootstrap bootstrap-packages lint
 
 # Generate a Makefile from Ruby and include it
+ifeq (,$(filter $(NO_RAKE_REQUIRED), $(MAKECMDGOALS)))
 ifdef RAKE
-ifeq (,$(filter $(NO_RAKE_REQUIRED), $(MAKECMDGOALS)))
 include $(shell rake gdk-config.mk)
-endif
 else
-ifeq (,$(filter $(NO_RAKE_REQUIRED), $(MAKECMDGOALS)))
 $(error "ERROR: Cannot find 'rake'. Please run 'make bootstrap'.")
 endif
 endif
@@ -169,10 +167,6 @@ unlock-dependency-installers:
 
 gdk.yml:
 	$(Q)touch $@
-
-.PHONY: Procfile
-Procfile:
-	$(Q)rake $@
 
 .PHONY: rake
 rake:

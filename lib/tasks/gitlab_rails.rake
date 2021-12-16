@@ -2,11 +2,8 @@
 
 require_relative '../gdk/gitlab_rails/db'
 
-namespace :gitlab_rails do
-  namespace :db do
-    desc 'Run GitLab migrations'
-    task :migrate do
-      GDK::GitlabRails::DB.new.migrate
-    end
-  end
+desc 'Run GitLab migrations'
+task 'gitlab-db-migrate' do
+  puts
+  GDK::GitlabRails::DB.new.migrate
 end
