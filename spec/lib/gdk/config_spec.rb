@@ -1288,6 +1288,30 @@ RSpec.describe GDK::Config do
           end
         end
       end
+
+      describe '#sidekiq_exporter_enabled' do
+        it 'defaults to false' do
+          expect(config.gitlab.rails_background_jobs.sidekiq_exporter_enabled).to eq(false)
+        end
+      end
+
+      describe '#sidekiq_exporter_port' do
+        it 'defaults to 3807' do
+          expect(config.gitlab.rails_background_jobs.sidekiq_exporter_port).to eq(3807)
+        end
+      end
+
+      describe '#sidekiq_health_check_enabled' do
+        it 'defaults to false' do
+          expect(config.gitlab.rails_background_jobs.sidekiq_health_check_enabled).to eq(false)
+        end
+      end
+
+      describe '#sidekiq_health_check_port' do
+        it 'defaults to 3907' do
+          expect(config.gitlab.rails_background_jobs.sidekiq_health_check_port).to eq(3907)
+        end
+      end
     end
   end
 
@@ -1778,12 +1802,6 @@ RSpec.describe GDK::Config do
     describe '#praefect_exporter_port' do
       it 'defaults to 10101' do
         expect(config.prometheus.praefect_exporter_port).to eq(10101)
-      end
-    end
-
-    describe '#sidekiq_exporter_port' do
-      it 'defaults to' do
-        expect(config.prometheus.sidekiq_exporter_port).to eq(3807)
       end
     end
 
