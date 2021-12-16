@@ -33,7 +33,3 @@ gitlab-spamcheck-git-pull-run: gitlab-spamcheck/.git
 
 gitlab-spamcheck/spamcheck: gitlab-spamcheck/.git
 	$(Q)make -C gitlab-spamcheck build ${QQ}
-
-.PHONY: gitlab-spamcheck/config/config.toml
-gitlab-spamcheck/config/config.toml:
-	$(Q)rake $@

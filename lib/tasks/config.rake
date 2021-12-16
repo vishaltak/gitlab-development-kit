@@ -46,114 +46,14 @@ task 'generate-file-at', [:file, :destination] do |_, args|
   GDK::ErbRenderer.new(source, destination, config: config).render!
 end
 
-desc 'Generate Procfile that defines the list of services to start'
-file 'Procfile' => ['support/templates/Procfile.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
-end
-
 # Define as a task instead of a file, so it's built unconditionally
 task 'gdk-config.mk' => 'support/templates/gdk-config.mk.erb' do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
   puts t.name # Print the filename, so make can include it
 end
 
-desc 'Generate nginx configuration'
-file 'nginx/conf/nginx.conf' => ['support/templates/nginx/conf/nginx.conf.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate sshd configuration'
-file 'openssh/sshd_config' => ['support/templates/openssh/sshd_config.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate redis configuration'
-file 'redis/redis.conf' => ['support/templates/redis.conf.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the database.yml config file'
-file 'gitlab/config/database.yml' => ['support/templates/database.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the cable.yml config file'
-file 'gitlab/config/cable.yml' => ['support/templates/cable.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the resque.yml config file'
-file 'gitlab/config/resque.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :shared_state).safe_render!
-end
-
-desc 'Generate the redis.cache.yml config file'
-file 'gitlab/config/redis.cache.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :cache).safe_render!
-end
-
-desc 'Generate the redis.queues.yml config file'
-file 'gitlab/config/redis.queues.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :queues).safe_render!
-end
-
-desc 'Generate the redis.shared_state.yml config file'
-file 'gitlab/config/redis.shared_state.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :shared_state).safe_render!
-end
-
-desc 'Generate the redis.trace_chunks.yml config file'
-file 'gitlab/config/redis.trace_chunks.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :trace_chunks).safe_render!
-end
-
-desc 'Generate the redis.rate_limiting.yml config file'
-file 'gitlab/config/redis.rate_limiting.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :rate_limiting).safe_render!
-end
-
-desc 'Generate the redis.sessions.yml config file'
-file 'gitlab/config/redis.sessions.yml' => ['support/templates/redis.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config, cluster: :sessions).safe_render!
-end
-
-desc 'Generate the database_geo.yml config file'
-file 'gitlab/config/database_geo.yml' => ['support/templates/database_geo.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab.yml config file'
-file 'gitlab/config/gitlab.yml' => ['support/templates/gitlab.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the puma.rb config file'
-file 'gitlab/config/puma.rb' => ['support/templates/puma.rb.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab-shell config.yml file'
-file 'gitlab-shell/config.yml' => ['support/templates/gitlab-shell.config.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab-workhorse config file'
-file 'gitlab/workhorse/config.toml' => ['support/templates/gitlab-workhorse.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab-pages config file'
-file 'gitlab-pages/gitlab-pages.conf' => ['support/templates/gitlab-pages.conf.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab-pages secret file'
-file 'gitlab-pages-secret' => ['support/templates/gitlab-pages-secret.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
 desc 'Generate gitaly config toml'
-file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly.config.toml.erb'] do |t|
+file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
   GDK::ErbRenderer.new(
     t.source,
     t.name,
@@ -166,10 +66,10 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly.config.toml.erb']
   FileUtils.mkdir_p(config.gitaly.log_dir)
 end
 
-file 'gitaly/praefect.config.toml' => ['support/templates/praefect.config.toml.erb'] do |t|
+file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
 
-  config.praefect.__nodes.each_with_index do |node, index|
+  config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
   end
 
@@ -178,7 +78,7 @@ end
 
 config.praefect.__nodes.each do |node|
   desc "Generate gitaly config for #{node['storage']}"
-  file node['config_file'] => ['support/templates/gitaly.config.toml.erb'] do |t|
+  file node['config_file'] => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
     GDK::ErbRenderer.new(
       t.source,
       t.name,
@@ -193,29 +93,110 @@ config.praefect.__nodes.each do |node|
   end
 end
 
-file 'registry/config.yml' => ['support/templates/registry.config.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+Task = Struct.new(:name, :make_dependencies, :template, :erb_extra_args, :post_render, :no_op_condition, :timed, keyword_init: true) do
+  def initialize(attributes)
+    super
+    self[:make_dependencies] = (attributes[:make_dependencies] || []).join(' ')
+    self[:template] ||= "support/templates/#{self[:name]}.erb"
+    self[:erb_extra_args] ||= {}
+    self[:timed] = false if self[:timed].nil?
+  end
 end
 
-file 'gitlab-runner-config.toml' => ['support/templates/gitlab-runner-config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+CONFIG_FILE_TASKS = [
+  Task.new(name: 'Procfile'),
+  Task.new(name: 'gitlab/config/cable.yml'),
+  Task.new(name: 'gitlab/config/database.yml'),
+  Task.new(name: 'gitlab/config/database_geo.yml', no_op_condition: 'geo_enabled'),
+  Task.new(name: 'gitlab/config/gitlab.yml'),
+  Task.new(name: 'gitlab/config/puma.rb'),
+  Task.new(name: 'gitlab/config/redis.cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting }),
+  Task.new(name: 'gitlab/config/redis.queues.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :queues }),
+  Task.new(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting }),
+  Task.new(name: 'gitlab/config/redis.sessions.yml', erb_extra_args: { cluster: :sessions }),
+  Task.new(name: 'gitlab/config/redis.shared_state.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state }),
+  Task.new(name: 'gitlab/config/redis.trace_chunks.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :trace_chunks }),
+  Task.new(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state }),
+  Task.new(name: 'gitlab/workhorse/config.toml'),
+  Task.new(name: 'gitlab-k8s-agent-config.yml'),
+  Task.new(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git']),
+  Task.new(name: 'gitlab-pages-secret'),
+  Task.new(name: 'gitlab-runner-config.toml', no_op_condition: 'runner_enabled'),
+  Task.new(name: 'gitlab-shell/config.yml', make_dependencies: ['gitlab-shell/.git']),
+  Task.new(name: 'gitlab-spamcheck/config/config.toml'),
+  Task.new(name: 'grafana/grafana.ini'),
+  Task.new(name: 'nginx/conf/nginx.conf'),
+  Task.new(name: 'openssh/sshd_config'),
+  Task.new(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name) }),
+  Task.new(name: 'redis/redis.conf'),
+  Task.new(name: 'registry/config.yml', make_dependencies: ['registry_host.crt'])
+].freeze
+
+MAKE_TASKS = [
+  Task.new(name: 'gitlab-db-migrate', make_dependencies: ['ensure-databases-running']),
+  Task.new(name: 'preflight-checks', timed: true),
+  Task.new(name: 'preflight-update-checks', timed: true),
+  Task.new(name: 'gitaly/gitaly.config.toml'),
+  Task.new(name: 'gitaly/praefect.config.toml')
+].freeze
+
+MAKE_FILE_HEADER = <<~TASK_DEF
+# ---------------------------------------------------------------------------------------------
+# This file is used by the GDK to get interoperatability between Make and Rake with the end
+# goal of getting rid of Make in the future: https://gitlab.com/groups/gitlab-org/-/epics/1556.
+# This file can be generated with the `rake support/makefiles/Makefile.config.mk` task.
+# ---------------------------------------------------------------------------------------------
+
+TASK_DEF
+
+MAKE_TASK_TEMPLATE = <<~TASK_DEF
+.PHONY: %{name}
+%{name}: %{make_dependencies}
+\t$(Q)rake %{name}
+
+TASK_DEF
+MAKE_NO_OP_TASK_TEMPLATE = <<~TASK_DEF
+.PHONY: %{name}
+%{name}: %{make_dependencies}
+ifeq ($(%{no_op_condition}),true)
+\t$(Q)rake %{name}
+else
+\t@true
+endif
+
+TASK_DEF
+MAKE_TIMED_TASK_TEMPLATE = <<~TASK_DEF
+.PHONY: %{name}
+%{name}: %{name}-timed
+
+.PHONY: %{name}-run
+%{name}-run: rake
+\t$(Q)rake %{name}
+
+TASK_DEF
+
+CONFIG_FILE_TASKS.each do |task|
+  desc "Generate #{task.name}"
+  file task.name => [task.template, GDK::Config::FILE] do |t, args|
+    GDK::ErbRenderer.new(t.source, t.name, config: config, **task.erb_extra_args).safe_render!
+    task.post_render&.call(t)
+  end
 end
 
-file 'prometheus/prometheus.yml' => ['support/templates/prometheus.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-  chmod('+r', t.name)
-end
-
-file 'gitlab-spamcheck/config/config.toml' => ['support/templates/gitlab-spamcheck/config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-file 'gitlab-k8s-agent-config.yml' => ['support/templates/gitlab-k8s-agent-config.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-file 'grafana/grafana.ini' => ['support/templates/grafana.ini.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+desc 'Dynamically generate Make targets for Rake tasks'
+file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, args|
+  File.open(t.name, mode: 'w+') do |file|
+    file.write(MAKE_FILE_HEADER)
+    (CONFIG_FILE_TASKS + MAKE_TASKS).each do |task|
+      if task.no_op_condition
+        file.write(MAKE_NO_OP_TASK_TEMPLATE % task.to_h)
+      elsif task.timed
+        file.write(MAKE_TIMED_TASK_TEMPLATE % task.to_h)
+      else
+        file.write(MAKE_TASK_TEMPLATE % task.to_h)
+      end
+    end
+  end
 end
 
 file 'snowplow/snowplow_micro.conf' => ['support/templates/snowplow_micro.conf.erb'] do |t|

@@ -114,6 +114,14 @@ verify-asdf-combine:
         - "support/asdf-combine"
         - "support/ci/verify-asdf-combine"
 
+verify-makefile-config:
+  extends: .rules:code-changes
+  image: ruby:2.7
+  stage: test
+  needs: []
+  script:
+    - support/ci/verify-makefile-config
+
 danger-review:
   extends:
     - .review:rules:danger

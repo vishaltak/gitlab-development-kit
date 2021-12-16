@@ -8,13 +8,6 @@ gitlab-pages-setup:
 	@true
 endif
 
-gitlab-pages-secret:
-	$(Q)rake $@
-
-.PHONY: gitlab-pages/gitlab-pages.conf
-gitlab-pages/gitlab-pages.conf: ${gitlab_pages_clone_dir}/.git
-	$(Q)rake $@
-
 ifeq ($(gitlab_pages_enabled),true)
 gitlab-pages-update: gitlab-pages-update-timed
 else

@@ -15,10 +15,6 @@ registry_host.key:
 registry/storage:
 	$(Q)mkdir -p $@
 
-.PHONY: registry/config.yml
-registry/config.yml: registry_host.crt
-	$(Q)rake $@
-
 .PHONY: trust-docker-registry
 trust-docker-registry: registry_host.crt
 	$(Q)mkdir -p "${HOME}/.docker/certs.d/${registry_host}:${registry_port}"

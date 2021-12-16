@@ -36,11 +36,6 @@ gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" master master
 
-.PHONY: gitlab-db-migrate
-gitlab-db-migrate: ensure-databases-running
-	@echo
-	$(Q)rake gitlab_rails:db:migrate
-
 gitlab/.git:
 	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
@@ -57,50 +52,6 @@ gitlab-config: \
 	gitlab/config/redis.sessions.yml \
 	gitlab/public/uploads \
 	gitlab/config/puma.rb
-
-.PHONY: gitlab/config/gitlab.yml
-gitlab/config/gitlab.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/database.yml
-gitlab/config/database.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/puma.rb
-gitlab/config/puma.rb:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/cable.yml
-gitlab/config/cable.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/resque.yml
-gitlab/config/resque.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/redis.cache.yml
-gitlab/config/redis.cache.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/redis.queues.yml
-gitlab/config/redis.queues.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/redis.shared_state.yml
-gitlab/config/redis.shared_state.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/redis.trace_chunks.yml
-gitlab/config/redis.trace_chunks.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/redis.rate_limiting.yml
-gitlab/config/redis.rate_limiting.yml:
-	$(Q)rake $@
-
-.PHONY: gitlab/config/redis.sessions.yml
-gitlab/config/redis.sessions.yml:
-	$(Q)rake $@
 
 gitlab/public/uploads:
 	$(Q)mkdir $@

@@ -34,14 +34,6 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	$(Q)$(MAKE) -C ${gitaly_clone_dir} WITH_BUNDLED_GIT=YesPlease BUNDLE_FLAGS=--no-deployment
 	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(bundle_install_cmd)
 
-.PHONY: gitaly/gitaly.config.toml
-gitaly/gitaly.config.toml:
-	$(Q)rake $@
-
-.PHONY: gitaly/praefect.config.toml
-gitaly/praefect.config.toml:
-	$(Q)rake $@
-
 .PHONY: praefect-migrate
 praefect-migrate: postgresql-seed-praefect
 	$(Q)support/migrate-praefect

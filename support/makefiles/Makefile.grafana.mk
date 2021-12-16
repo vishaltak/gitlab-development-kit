@@ -10,10 +10,6 @@ performance-metrics-setup: Procfile grafana-setup
 grafana/grafana/bin/grafana-server:
 	$(Q)cd grafana && ${MAKE} ${QQ}
 
-.PHONY: Procfile
-grafana/grafana.ini:
-	$(Q)rake $@
-
 grafana/gdk-pg-created:
 	$(Q)support/create-grafana-db
 	$(Q)touch $@
