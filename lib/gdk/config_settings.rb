@@ -186,9 +186,7 @@ module GDK
     end
 
     def save_yaml!
-      return unless file_defined_and_exists?
-
-      Backup.new(self.class::FILE).backup!
+      Backup.new(self.class::FILE).backup! if file_defined_and_exists?
       File.write(self.class::FILE, dump!(user_only: true).to_yaml)
     end
 
