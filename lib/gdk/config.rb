@@ -410,6 +410,7 @@ module GDK
     settings :elasticsearch do
       bool(:enabled) { false }
       string(:version) { '7.16.1' }
+      string(:__architecture) { config.__architecture == 'arm64' ? 'aarch64' : config.__architecture }
     end
 
     settings :tracer do

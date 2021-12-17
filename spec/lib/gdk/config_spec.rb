@@ -204,6 +204,28 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#__architecture' do
+      before do
+        allow(config).to receive(:__architecture).and_return(fake_arch)
+      end
+
+      context 'when __architecture is x86_64' do
+        let(:fake_arch) { 'x86_64' }
+
+        it 'returns x86_64' do
+          expect(config.elasticsearch.__architecture).to eq('x86_64')
+        end
+      end
+
+      context 'when __architecture is arm64' do
+        let(:fake_arch) { 'arm64' }
+
+        it 'returns aarch64' do
+          expect(config.elasticsearch.__architecture).to eq('aarch64')
+        end
+      end
+    end
   end
 
   describe 'repositories' do

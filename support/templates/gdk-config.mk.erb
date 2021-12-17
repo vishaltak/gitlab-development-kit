@@ -2,6 +2,7 @@ architecture = <%= config.__architecture %>
 asdf_opt_out = <%= config.asdf.opt_out? %>
 elasticsearch_enabled = <%= config.elasticsearch.enabled? %>
 elasticsearch_version = <%= config.elasticsearch.version %>
+elasticsearch_architecture = <%= config.elasticsearch.__architecture %>
 <%-# dev -%>
 dev_checkmake_binary = <%= config.dev.checkmake.__versioned_binary %>
 dev_shellcheck_binary = <%= config.dev.shellcheck.__versioned_binary %>
