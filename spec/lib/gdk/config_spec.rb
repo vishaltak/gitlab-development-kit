@@ -2381,7 +2381,7 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#gitaly_exporter_port' do
+    describe '#image' do
       it 'defaults to snowplow/snowplow-micro:latest' do
         expect(config.snowplow_micro.image).to eq('snowplow/snowplow-micro:latest')
       end
