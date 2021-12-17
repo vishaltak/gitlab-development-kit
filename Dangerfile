@@ -2,15 +2,15 @@
 
 require 'gitlab-dangerfiles'
 
-Gitlab::Dangerfiles.for_project(self) do |dangerfiles|
-  dangerfiles.import_plugins
-  dangerfiles.import_dangerfiles(rules: [:changes_size, :commit_messages])
-end
+Gitlab::Dangerfiles.for_project(self) do |gitlab_dangerfiles|
+  gitlab_dangerfiles.config.files_to_category = {
+    %r{\Adoc/.*(\.(md|png|gif|jpg))\z} => :docs,
+    %r{\A(CONTRIBUTING|LICENSE|MAINTENANCE|PHILOSOPHY|PROCESS|README)(\.md)?\z} => :docs,
+    %r{.*} => [nil]
+  }.freeze
 
-danger.import_plugin('danger/plugins/*.rb')
-
-project_helper.rule_names.each do |rule|
-  danger.import_dangerfile(path: File.join('danger', rule))
+  gitlab_dangerfiles.import_plugins
+  gitlab_dangerfiles.import_dangerfiles
 end
 
 anything_to_post = status_report.values.any?(&:any?)
