@@ -204,38 +204,6 @@ RSpec.describe GDK::Config do
         end
       end
     end
-
-    describe '#mac_checksum' do
-      it 'has a default value' do
-        expect(config.elasticsearch.mac_checksum).to match(/[a-f0-9]{128}/)
-      end
-
-      context 'when specified in config file' do
-        let(:yaml) do
-          { 'elasticsearch' => { 'mac_checksum' => checksum } }
-        end
-
-        it 'returns the version from the config file' do
-          expect(config.elasticsearch.mac_checksum).to eq(checksum)
-        end
-      end
-    end
-
-    describe '#linux_checksum' do
-      it 'has a default value' do
-        expect(config.elasticsearch.linux_checksum).to match(/[a-f0-9]{128}/)
-      end
-
-      context 'when specified in config file' do
-        let(:yaml) do
-          { 'elasticsearch' => { 'linux_checksum' => checksum } }
-        end
-
-        it 'returns the version from the config file' do
-          expect(config.elasticsearch.linux_checksum).to eq(checksum)
-        end
-      end
-    end
   end
 
   describe 'repositories' do

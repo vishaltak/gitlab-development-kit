@@ -409,8 +409,6 @@ module GDK
 
     settings :elasticsearch do
       bool(:enabled) { false }
-      string(:mac_checksum) { 'b7afae5c8c39577898d057bcac9fcabcc52f925369b0dd1e9d7a3accc8a8f6009b73af6657f30969c7b9ae6ea6bf229b7aafd802e2fd2100d6e0ab9370fd6ece' }
-      string(:linux_checksum) { 'e0fd2be2fed5f63e0adb7e5e4999389cc7ed6f95ea4465f6e981c7fa680c853da40fbd490c909b442ba050c78c2e4958d431b71a004a30c32e2f47815c01664b' }
       string(:version) { '7.16.1' }
     end
 
