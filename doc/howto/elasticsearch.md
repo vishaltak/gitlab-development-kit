@@ -35,7 +35,6 @@ For example, to use 7.5.2:
    elasticsearch:
      enabled: true
      version: 7.5.2
-     mac_checksum: f3142e73e51a9be25c74cb85dcf2cf20ca8acaf6480be616c4dd0404469e5f22a086efbe81dc975d0af19543437e8daf45d41a5952750048b01517857a00c676
    ```
 
 1. Install the selected version:

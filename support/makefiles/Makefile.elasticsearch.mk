@@ -9,5 +9,5 @@ elasticsearch/bin/elasticsearch: .cache/.elasticsearch_${elasticsearch_version}_
 
 .cache/.elasticsearch_${elasticsearch_version}_installed:
 	$(Q)rm -rf elasticsearch && mkdir -p elasticsearch
-	$(Q)curl -C - -L --fail "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${elasticsearch_version}-${platform}-x86_64.tar.gz" | tar xzf - --strip-components=1 -C elasticsearch
+	$(Q)curl -C - -L --fail "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${elasticsearch_version}-${platform}-${elasticsearch_architecture}.tar.gz" | tar xzf - --strip-components=1 -C elasticsearch
 	$(Q)mkdir -p .cache && touch $@

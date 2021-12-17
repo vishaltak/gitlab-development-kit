@@ -205,34 +205,24 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#mac_checksum' do
-      it 'has a default value' do
-        expect(config.elasticsearch.mac_checksum).to match(/[a-f0-9]{128}/)
+    describe '#__architecture' do
+      before do
+        allow(config).to receive(:__architecture).and_return(fake_arch)
       end
 
-      context 'when specified in config file' do
-        let(:yaml) do
-          { 'elasticsearch' => { 'mac_checksum' => checksum } }
-        end
+      context 'when __architecture is x86_64' do
+        let(:fake_arch) { 'x86_64' }
 
-        it 'returns the version from the config file' do
-          expect(config.elasticsearch.mac_checksum).to eq(checksum)
+        it 'returns x86_64' do
+          expect(config.elasticsearch.__architecture).to eq('x86_64')
         end
       end
-    end
 
-    describe '#linux_checksum' do
-      it 'has a default value' do
-        expect(config.elasticsearch.linux_checksum).to match(/[a-f0-9]{128}/)
-      end
+      context 'when __architecture is arm64' do
+        let(:fake_arch) { 'arm64' }
 
-      context 'when specified in config file' do
-        let(:yaml) do
-          { 'elasticsearch' => { 'linux_checksum' => checksum } }
-        end
-
-        it 'returns the version from the config file' do
-          expect(config.elasticsearch.linux_checksum).to eq(checksum)
+        it 'returns aarch64' do
+          expect(config.elasticsearch.__architecture).to eq('aarch64')
         end
       end
     end
