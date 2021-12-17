@@ -646,6 +646,7 @@ module GDK
       path(:dir) { config.gdk_root.join('gitlab') }
       path(:log_dir) { config.gitlab.dir.join('log') }
       bool(:cache_classes) { false }
+      bool(:gitaly_disable_request_limits) { false }
 
       settings :rails do
         string(:hostname) { config.hostname }

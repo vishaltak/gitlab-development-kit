@@ -72,6 +72,7 @@ gitlab:
   auto_update: true
   cache_classes: false
   dir: "/home/git/gdk/gitlab"
+  gitaly_disable_request_limits: false
   log_dir: "/home/git/gdk/gitlab/log"
   rails:
     address: ''

@@ -1079,6 +1079,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#gitaly_disable_request_limits' do
+      it 'returns if Gitaly request limit checks should be disabled' do
+        expect(config.gitlab.gitaly_disable_request_limits).to be(false)
+      end
+    end
+
     describe 'rails' do
       describe '#hostname' do
         it 'returns gdk.example.com by default' do
