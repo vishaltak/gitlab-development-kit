@@ -25,3 +25,10 @@ To enable GDK to manage `snowplow-micro`:
    ```shell
    gdk reconfigure
    ```
+
+1. Use these URLs to access Snowplow Micro:
+
+   - `http://localhost:9091/micro/good`: View the good events.
+   - `http://localhost:9091/micro/bad`: View the bad events .
+   - `http://localhost:9091/micro/all`: View the statistics for all events.
+   - `http://localhost:9091/micro/reset`: Reset the counter.
