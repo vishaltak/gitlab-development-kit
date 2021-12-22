@@ -50,7 +50,3 @@
 .rules:docs-code-changes:
   rules:
     - changes: *docs-code-changes
-
-.review:rules:danger:
-  rules:
-    - if: '$DANGER_GITLAB_API_TOKEN && $CI_MERGE_REQUEST_IID'
