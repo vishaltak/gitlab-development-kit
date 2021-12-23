@@ -1,4 +1,5 @@
 listen-http=<%= config.gitlab_pages.__uri %>
+gitlab-server=<%= config.__uri %>
 artifacts-server=<%= config.__uri.merge('api/v4') %>
 pages-root=<%= config.gdk_root.join('gitlab', 'shared', 'pages') %>
 pages-domain=<%= config.gitlab_pages.host %>
