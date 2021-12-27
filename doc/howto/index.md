@@ -49,7 +49,6 @@ to learn how to contribute to GitLab.
 - [Preview GitLab changes](preview_gitlab_changes.md)
 - [SSH](ssh.md)
 - [Serverless (Knative)](serverless.md)
-- [Sherlock](sherlock.md)
 - [Simulate slow or broken repository storage](simulate_storage.md)
 - [Snowplow Micro](snowplow_micro.md)
 - [Start a Rails console](rails_console.md)
