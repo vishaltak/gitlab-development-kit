@@ -18,7 +18,7 @@ CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 # ensure the check is not case sensitive which means we get the best of both
 # worlds.
 #
-SUPPORTED_UBUNTU_LIKE_PLATFORMS=('Ubuntu Pop neon "ubuntu debian"')
+SUPPORTED_UBUNTU_LIKE_PLATFORMS=('Ubuntu Pop neon')
 SUPPORTED_DEBIAN_LIKE_PLATFORMS=('Debian PureOS')
 SUPPORTED_ARCH_LIKE_PLATFORMS=('Arch Manjaro')
 SUPPORTED_FEDORA_LIKE_PLATFORMS=('Fedora RHEL')
