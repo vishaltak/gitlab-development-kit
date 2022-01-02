@@ -208,13 +208,10 @@ ensure_supported_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     shopt -s nocasematch
 
-    os_id=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
-    if [[ ! "${os_id}" ]]; then
-      os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    fi
-
-    if [[ ${SUPPORTED_PLATFORMS[*]} =~ ${os_id} ]]; then
+    if [[ ${SUPPORTED_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_PLATFORMS[*]} =~ ${os_id_like} ]]; then
       shopt -u nocasematch
       return 0
     fi
@@ -273,35 +270,33 @@ setup_platform() {
       return 1
     fi
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    os_id=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    if [[ ! "${os_id}" ]]; then
-      os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    fi
+    os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
 
     shopt -s nocasematch
 
-    if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
+    if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
       if setup_platform_linux_with "packages_ubuntu.txt"; then
         mark_platform_as_setup "packages_ubuntu.txt"
       else
         shopt -u nocasematch
         return 1
       fi
-    elif [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
+    elif [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
       if setup_platform_linux_with "packages_debian.txt"; then
         mark_platform_as_setup "packages_debian.txt"
       else
         shopt -u nocasematch
         return 1
       fi
-    elif [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
+    elif [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
       if setup_platform_linux_arch_like_with "packages_arch.txt"; then
         mark_platform_as_setup "packages_arch.txt"
       else
         shopt -u nocasematch
         return 1
       fi
-    elif [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id} ]]; then
+    elif [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
       if setup_platform_linux_fedora_like_with "packages_fedora.txt"; then
         mark_platform_as_setup "packages_fedora.txt"
       else
