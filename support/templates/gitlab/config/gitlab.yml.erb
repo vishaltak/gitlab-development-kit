@@ -346,7 +346,7 @@ production: &base
   sidekiq:
     log_format: json # (default is also supported)
     routing_rules:
-      - ["tags=needs_own_queue", nil]
+      - ["tags=needs_own_queue", null]
       - ["*", "default"]
 
   ## Auxiliary jobs
