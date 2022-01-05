@@ -29,8 +29,21 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 
 1. Add `/usr/local/opt/postgresql@12/bin` to your shell's `PATH` environment variable.
 1. [Configure `rbenv`](https://github.com/rbenv/rbenv#homebrew-on-macos) for your shell.
-1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating), and configure it for your
-   shell.
+1. Install [the GDK required version of Ruby](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.ruby-version)
+using rbenv, such as:
+
+   ```shell
+   rbenv install 2.7.5
+   ```
+
+1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). It should automatically
+   configure it for your shell.
+1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using nvm, such as:
+
+   ```shell
+   nvm install 14.17.5
+   ```
+
 1. Workaround [`thin` installation issues on macOS](https://github.com/macournoyer/thin/issues/365) by running:
 
    ```shell
