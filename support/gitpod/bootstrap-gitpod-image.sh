@@ -20,9 +20,12 @@ git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
 make bootstrap
 source "$HOME/.asdf/asdf.sh"
+gdk config set gitlab.rails.bootsnap false
+cat gdk.yml
 gdk install shallow_clone=true
 gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true
+ps -ef || true
 mv gitlab/config/secrets.yml .
 rm -rf gitlab/ tmp/ || true
 git restore tmp
