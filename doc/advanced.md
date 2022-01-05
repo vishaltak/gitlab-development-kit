@@ -485,7 +485,7 @@ export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/ra
 asdf install ruby 2.7.2
 
 # Compile Ruby 3.0.0
-export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/blob/master/patches/ruby/3.0.3/thread-memory-allocations-3.0.patch
+export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/thread-memory-allocations-3.0.patch
 asdf install ruby 3.0.0
 ```
 
