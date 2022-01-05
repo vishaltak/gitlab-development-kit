@@ -12,9 +12,10 @@
 
 ## Environment (optional)
 
-- Operating system: macOS/Linux/etc
-- The contents of your `gdk.yml`
-- Ruby version: `<!-- output of `ruby --version` -->`
-- GDK version: `<!-- output of `git rev-parse --short HEAD` -->`
+- Operating system name: ```<!-- output of `uname -a` command -->```
+- Architecture: ```<!-- output of `arch` command -->```
+- The contents of your `gdk.yml` (if any)
+- Ruby version: ```<!-- output of `ruby --version` command -->```
+- GDK version: ```<!-- output of `git rev-parse --short HEAD` command -->```
 
 /label ~"Category:GDK" ~Quality ~"Engineering Productivity"
