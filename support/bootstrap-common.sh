@@ -313,14 +313,14 @@ platform_files_checksum_matches() {
     return 1
   fi
 
-  sha256sum --check --status "${GDK_PLATFORM_SETUP_FILE}"
+  sha1sum -c "${GDK_PLATFORM_SETUP_FILE}" > /dev/null 2>&1
 }
 
 mark_platform_as_setup() {
   local platform_file="${1}"
 
   mkdir -p "${GDK_CACHE_DIR}"
-  sha256sum "${platform_file}" > "${GDK_PLATFORM_SETUP_FILE}"
+  sha1sum "${platform_file}" > "${GDK_PLATFORM_SETUP_FILE}"
 }
 
 setup_platform_linux_with() {
