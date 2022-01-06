@@ -313,6 +313,11 @@ platform_files_checksum_matches() {
     return 1
   fi
 
+  # sha256sum _may_ not exist at this point
+  if ! which sha256sum > /dev/null 2>&1; then
+    return 1
+  fi
+
   sha256sum --check --status "${GDK_PLATFORM_SETUP_FILE}"
 }
 
