@@ -106,6 +106,8 @@ Installing and managing dependencies automatically lets GDK manage dependencies 
    make bootstrap
    ```
 
+1. If migrating from other version managers like RVM or rbenv, you can set [`legacy_version_file`](https://asdf-vm.com/manage/configuration.html#legacy-version-file) in `.asdfrc` to load the Ruby version from a different config file like `.ruby-version`.
+
 #### Manually
 
 Use your operating system's package manager to install and managed dependencies.
