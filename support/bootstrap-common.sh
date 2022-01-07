@@ -272,6 +272,7 @@ setup_platform() {
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    [[ -n ${os_id_like} ]] || os_id_like=unknown
 
     shopt -s nocasematch
 
