@@ -25,6 +25,7 @@ openssh-server
 pkg-config
 psmisc
 python
+python3-docutil
 redis-server
 rsync
 runit
