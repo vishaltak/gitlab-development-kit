@@ -12,7 +12,7 @@ group :test do
   gem 'gitlab-styles', '~> 6.6.0', require: false
   gem 'pry-byebug', '~> 3.9.0', require: false
   gem 'rspec', '~> 3.10.0', require: false
-  gem 'rspec_junit_formatter', '~> 0.4.0', require: false
+  gem 'rspec_junit_formatter', '~> 0.5.0', require: false
   gem 'simplecov-cobertura', '~> 2.1.0', require: false
 end
 
