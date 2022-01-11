@@ -190,18 +190,26 @@ ensure_not_root() {
 ensure_supported_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
     if [[ "${CPU_TYPE}" == "arm64" ]]; then
-      echo "INFO:" >&2
-      echo "INFO: GDK currently runs on Apple Silicon hardware using Rosetta 2." >&2
-      echo "INFO:" >&2
-      echo "INFO: To see the latest on running the GDK natively on Apple Silicon, visit:" >&2
-      echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159" >&2
-      echo "INFO:" >&2
-      echo "INFO: To learn more about Rosetta 2, visit:" >&2
-      echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
-      echo "INFO:" >&2
-      echo "INFO: Resuming in 3 seconds.." >&2
 
-      sleep 3
+      if [[ $(command -v brew) == "/opt/homebrew/bin/brew" ]]; then
+        echo "ERROR: Native Apple Silicon (arm64) detected. Rosetta 2 is required. For more information, see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md#macos." >&2
+        echo "INFO: Native Apple Silicon support for macOS is coming with https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159." >&2
+
+        return 1
+      else
+        echo "INFO:" >&2
+        echo "INFO: Apple Silicon (arm64) with Rosetta 2 detected." >&2
+        echo "INFO:" >&2
+        echo "INFO: To see the latest on running the GDK natively on Apple Silicon, visit:" >&2
+        echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159" >&2
+        echo "INFO:" >&2
+        echo "INFO: To learn more about Rosetta 2, visit:" >&2
+        echo "INFO: https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2" >&2
+        echo "INFO:" >&2
+        echo "INFO: Resuming in 3 seconds.." >&2
+
+        sleep 3
+      fi
     fi
 
     return 0
@@ -233,7 +241,7 @@ common_preflight_checks() {
       echo "INFO: - $platform" >&2
     done
     echo "INFO:" >&2
-    echo "INFO: If you want to add your platform to this list, you're welcome to edit bootstrap-common.sh and open a merge request or open an issue in the GDK project." >&2
+    echo "INFO: If your platform is not listed above, you're welcome to create a Merge Request in the GDK project to add support." >&2
     echo "INFO:" >&2
     echo "INFO: Please visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md to bootstrap manually." >&2
     return 1
