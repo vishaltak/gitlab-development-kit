@@ -6,11 +6,16 @@
 # Wrap everything in a function to ensure a partially downloaded install script
 # is not executed. Inspired by https://install.sandstorm.io/
 #
+# Valid args are:
+#
+# 1 = directory in which to clone into, default is gitlab-development-kit (GDK_INSTALL_DIR)
+# 2 = git SHA/branch to checkout once cloned, default is main (GDK_CLONE_BRANCH)
 _() {
 
 set -euo pipefail
 
 GDK_INSTALL_DIR="${2-gitlab-development-kit}"
+GDK_CLONE_BRANCH="${3-main}"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
@@ -47,6 +52,11 @@ clone_gdk_if_needed() {
   fi
 }
 
+ensure_gdk_clone_branch_checked_out() {
+  git -C "${PWD}/${GDK_INSTALL_DIR}" fetch origin "${GDK_CLONE_BRANCH}"
+  git -C "${PWD}/${GDK_INSTALL_DIR}" checkout "${GDK_CLONE_BRANCH}"
+}
+
 bootstrap() {
   make bootstrap
 }
@@ -71,6 +81,7 @@ fi
 
 ensure_required_commands_exist
 clone_gdk_if_needed
+ensure_gdk_clone_branch_checked_out
 cd "${GDK_INSTALL_DIR}" || exit
 bootstrap
 gdk_install
