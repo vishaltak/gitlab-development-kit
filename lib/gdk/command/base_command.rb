@@ -28,7 +28,7 @@ module GDK
           - Run 'gdk doctor'.
 
           - Visit the troubleshooting documentation:
-            https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/troubleshooting.md.
+            https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/troubleshooting/index.md.
           - Visit https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues to
             see if there are known issues.
 
