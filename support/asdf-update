@@ -39,8 +39,7 @@ asdf_update_plugins() {
 
 asdf_update_tools() {
   # Install all tools specified in .tool-versions
-  ruby_configure_opts=$(ruby_configure_opts)
-  bash -c "MAKELEVEL=0 ${ruby_configure_opts} asdf install"
+  bash -c "MAKELEVEL=0 asdf install"
 
   return $?
 }

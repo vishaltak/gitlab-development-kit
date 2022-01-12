@@ -36,6 +36,9 @@ include support/makefiles/*.mk
 ifeq ($(platform),darwin)
 OPENSSL_PREFIX := $(shell brew --prefix openssl@1.1)
 OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
+READLINE_PREFIX := $(shell brew --prefix readline)
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=${OPENSSL_PREFIX} --with-readline-dir=${READLINE_PREFIX}"
+export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:\$PKG_CONFIG_PATH"
 else
 OPENSSL := $(shell command -v openssl 2> /dev/null)
 endif

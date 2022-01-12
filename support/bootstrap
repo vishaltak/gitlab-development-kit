@@ -53,8 +53,7 @@ asdf_install_tools() {
     asdf_opts=""
   fi
 
-  ruby_configure_opts=$(ruby_configure_opts)
-  bash -c "MAKELEVEL=0 ${ruby_configure_opts} ${asdf_opts} asdf install"
+  bash -c "MAKELEVEL=0 ${asdf_opts} asdf install"
 
   return $?
 }

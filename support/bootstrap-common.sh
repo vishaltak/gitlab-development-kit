@@ -140,17 +140,6 @@ gdk_install_gem() {
   return 0
 }
 
-ruby_configure_opts() {
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
-    brew_openssl_dir=$(brew --prefix openssl@1.1)
-    brew_readline_dir=$(brew --prefix readline)
-
-    echo "RUBY_CONFIGURE_OPTS=\"--with-openssl-dir=${brew_openssl_dir} --with-readline-dir=${brew_readline_dir}\""
-  fi
-
-  return 0
-}
-
 configure_ruby_bundler() {
   if asdf_command_enabled "pg_config"; then
     current_pg_config_location=$(asdf which pg_config)
@@ -399,7 +388,7 @@ setup_platform_linux_fedora_like_with() {
 }
 
 setup_platform_darwin() {
-  local shell_file ruby_configure_opts brew_opts
+  local brew_opts
 
   if [ -z "$(command -v brew)" ]; then
     echo "INFO: Installing Homebrew."
@@ -423,25 +412,6 @@ setup_platform_darwin() {
 
   if ! echo_if_unsuccessful brew link pkg-config; then
     return 1
-  fi
-
-  case $SHELL in
-  */zsh)
-    shell_file="${HOME}/.zshrc"
-    ;;
-  *)
-    shell_file="${HOME}/.bashrc"
-    ;;
-  esac
-
-  icu4c_pkgconfig_path="export PKG_CONFIG_PATH=\"/usr/local/opt/icu4c/lib/pkgconfig:\${PKG_CONFIG_PATH}\""
-  if ! grep -Fxq "${icu4c_pkgconfig_path}" "${shell_file}" 2> /dev/null; then
-    echo -e "\n# Added by GDK bootstrap\n${icu4c_pkgconfig_path}" >> "${shell_file}"
-  fi
-
-  ruby_configure_opts="export $(ruby_configure_opts)"
-  if ! grep -Fxq "${ruby_configure_opts}" "${shell_file}" 2> /dev/null; then
-    echo -e "\n# Added by GDK bootstrap\n${ruby_configure_opts}" >> "${shell_file}"
   fi
 
   if [[ ! -d "/Applications/Google Chrome.app" ]]; then
