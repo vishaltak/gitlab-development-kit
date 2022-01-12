@@ -6,6 +6,7 @@ module GDK
     autoload :BaseCommand, 'gdk/command/base_command'
     autoload :Cleanup, 'gdk/command/cleanup'
     autoload :Config, 'gdk/command/config'
+    autoload :DebugInfo, 'gdk/command/debug_info'
     autoload :DiffConfig, 'gdk/command/diff_config'
     autoload :Env, 'gdk/command/env'
     autoload :Doctor, 'gdk/command/doctor'
@@ -38,6 +39,7 @@ module GDK
     COMMANDS = {
       'cleanup' => -> { GDK::Command::Cleanup },
       'config' => -> { GDK::Command::Config },
+      'debug-info' => -> { GDK::Command::DebugInfo },
       'diff-config' => -> { GDK::Command::DiffConfig },
       'doctor' => -> { GDK::Command::Doctor },
       'env' => -> { GDK::Command::Env },
