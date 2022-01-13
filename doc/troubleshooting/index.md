@@ -1249,6 +1249,20 @@ brew cleanup
 For more information on uninstalling old versions of a formula, see the [Homebrew FAQ](https://docs.brew.sh/FAQ#how-do-i-uninstall-old-versions-of-a-formula).
 For additional troubleshooting information, see the Homebrew [Common Issues](https://docs.brew.sh/Common-Issues) page.
 
+## GraphQL Explorer
+
+When accessing `/-/graphql-explorer/`, you may see a `Loading...` page
+but nothing else. This may be happening because the `graphiql-rails` gem
+produces its own static assets that need to be available in the
+`public/assets/graphiql` directory:
+
+```shell
+bundle exec rake rake:assets:precompile
+```
+
+We have [an issue](https://gitlab.com/gitlab-org/gitlab/-/issues/325945)
+to remove this gem and manage the GraphQL explorer assets internally.
+
 ## Live reloading
 
 If you previously compiled production assets with `bundle exec rake gitlab:assets:compile`, the GDK
@@ -1256,7 +1270,7 @@ serves the assets from the `public/assets/` directory, which means that changing
 have any effect in development until you recompile the assets manually.
 
 To re-enable live reloading of CSS in development, remove the `public/assets/` directory and restart
-GDK.
+GDK. Keep the `public/assets/graphiql` directory for [the GraphQL Explorer](#graphql-explorer).
 
 ## Praefect
 
