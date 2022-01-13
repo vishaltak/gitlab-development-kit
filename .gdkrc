@@ -37,11 +37,11 @@ if [[ -d "${CURRENT_ASDF_DIR}" ]]; then
   export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 fi
 
-GDK_EXTRA_ENV_FILE=".gdk.extra.env"
+GDK_CUSTOM_RC_FILE=".gdkrc.custom"
 
-if [[ -f "${GDK_EXTRA_ENV_FILE}" ]]; then
+if [[ -f "${GDK_CUSTOM_RC_FILE}" ]]; then
   # shellcheck disable=SC1090
-  source "${GDK_EXTRA_ENV_FILE}"
+  source "${GDK_CUSTOM_RC_FILE}"
 fi
 
 export GDK_ENV_LOADED=1
