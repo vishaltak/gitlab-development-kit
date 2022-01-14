@@ -10,9 +10,6 @@ These instructions may contain advanced configuration options that
 
 GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 
-1. Because GDK [doesn't yet fully support](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159)
-   native Apple silicon, set up a
-   [Rosetta-enabled terminal](https://www.courier.com/blog/tips-and-tricks-to-setup-your-apple-m1-for-development) for installation and configuration.
 1. [Install](https://brew.sh) Homebrew to get access to the `brew` command for package management.
 1. Clone the [`gitlab-development-kit` project](https://gitlab.com/gitlab-org/gitlab-development-kit)
    so you have access to the project's

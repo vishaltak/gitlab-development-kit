@@ -48,14 +48,6 @@ The following installation methods are supported, actively maintained, and teste
 | Arch             | latest                     |
 | Manjaro          | latest                     |
 
-#### macOS with Apple silicon
-
-Running GDK on macOS with [Apple silicon](https://en.wikipedia.org/wiki/Apple_silicon)
-requires [Rosetta 2](https://en.wikipedia.org/wiki/Rosetta_(software)#Rosetta_2).
-
-Follow [Native Apple silicon support](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1159)
-for updates on supporting Apple silicon natively.
-
 ### Unsupported methods
 
 The following documentation is provided for those who can benefit from it, but aren't
