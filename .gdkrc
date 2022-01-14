@@ -2,7 +2,7 @@
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin:${PATH}"
 
 if [[ "${OSTYPE}" == "darwin"* ]]; then
   if [[ -x "/opt/homebrew/bin/brew" ]]; then
