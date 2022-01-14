@@ -5,7 +5,7 @@
 .DS_Store
 .bundle/
 .cache/
-.gdk.extra.env
+.gdkrc.custom
 .idea
 .yardoc
 /*.log
