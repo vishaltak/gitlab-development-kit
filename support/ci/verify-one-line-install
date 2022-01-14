@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 
 if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
   sha="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}"
