@@ -30,6 +30,7 @@ to learn how to contribute to GitLab.
 - [Email](email.md)
 - [Enable Shell completion](shell_completion.md)
 - [End to End Test Configuration](end_to_end_test_configuration.md)
+- [.gdkrc.custom](gdkrc.custom.md)
 - [GDK in Gitpod](gitpod.md)
 - [Git push options](git_push_options.md)
 - [GitLab Geo](geo.md)
