@@ -2,8 +2,8 @@
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/sbin:/usr/bin:/bin"
-
+# macOS
+#
 if [[ "${OSTYPE}" == "darwin"* ]]; then
   if [[ -x "/opt/homebrew/bin/brew" ]]; then
     BREW_PREFIX="/opt/homebrew"
@@ -13,8 +13,6 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
     echo "ERROR: Homebrew is required but cannot be found."
     exit
   fi
-
-  export PATH="${BREW_PREFIX}/sbin:${BREW_PREFIX}/bin:${PATH}"
 
   OPENSSL_PREFIX="${BREW_PREFIX}/opt/openssl@1.1"
   READLINE_PREFIX="${BREW_PREFIX}/opt/readline"
@@ -28,13 +26,6 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "true" ]]; then
     export LIBPCREDIR="${BREW_PREFIX}/opt/pcre2"
   fi
-fi
-
-CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
-
-if [[ -d "${CURRENT_ASDF_DIR}" ]]; then
-  export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 fi
 
 GDK_CUSTOM_RC_FILE=".gdkrc.custom"
