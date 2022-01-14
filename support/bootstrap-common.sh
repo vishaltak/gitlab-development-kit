@@ -28,6 +28,7 @@ SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_
 
 GDK_CACHE_DIR="${root_path}/.cache"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
+GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
 error() {
   echo
@@ -140,17 +141,6 @@ gdk_install_gem() {
   return 0
 }
 
-ruby_configure_opts() {
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
-    brew_openssl_dir=$(brew --prefix openssl@1.1)
-    brew_readline_dir=$(brew --prefix readline)
-
-    echo "RUBY_CONFIGURE_OPTS=\"--with-openssl-dir=${brew_openssl_dir} --with-readline-dir=${brew_readline_dir}\""
-  fi
-
-  return 0
-}
-
 configure_ruby_bundler() {
   if asdf_command_enabled "pg_config"; then
     current_pg_config_location=$(asdf which pg_config)
@@ -163,7 +153,10 @@ configure_ruby_bundler() {
   bundle config build.gpgme --use-system-libraries
 
   if [[ "${OSTYPE}" == "darwin"* ]]; then
+    bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
+
     clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
+
     if [[ ${clang_version} -ge 13 ]]; then
       bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
     fi
@@ -189,7 +182,7 @@ ensure_not_root() {
 
 ensure_supported_platform() {
   if [[ "${OSTYPE}" == "darwin"* ]]; then
-    if [[ "${CPU_TYPE}" == "arm64" ]]; then
+    if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
 
       if [[ $(command -v brew) == "/opt/homebrew/bin/brew" ]]; then
         echo "ERROR: Native Apple Silicon (arm64) detected. Rosetta 2 is required. For more information, see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md#macos." >&2
@@ -399,7 +392,7 @@ setup_platform_linux_fedora_like_with() {
 }
 
 setup_platform_darwin() {
-  local shell_file ruby_configure_opts brew_opts
+  local brew_opts
 
   if [ -z "$(command -v brew)" ]; then
     echo "INFO: Installing Homebrew."
@@ -411,7 +404,7 @@ setup_platform_darwin() {
   fi
 
   # Support running brew under Rosetta 2 on Apple M1 machines
-  if [[ "${CPU_TYPE}" == "arm64" ]]; then
+  if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
     brew_opts="arch -x86_64"
   else
     brew_opts=""
@@ -423,25 +416,6 @@ setup_platform_darwin() {
 
   if ! echo_if_unsuccessful brew link pkg-config; then
     return 1
-  fi
-
-  case $SHELL in
-  */zsh)
-    shell_file="${HOME}/.zshrc"
-    ;;
-  *)
-    shell_file="${HOME}/.bashrc"
-    ;;
-  esac
-
-  icu4c_pkgconfig_path="export PKG_CONFIG_PATH=\"/usr/local/opt/icu4c/lib/pkgconfig:\${PKG_CONFIG_PATH}\""
-  if ! grep -Fxq "${icu4c_pkgconfig_path}" "${shell_file}" 2> /dev/null; then
-    echo -e "\n# Added by GDK bootstrap\n${icu4c_pkgconfig_path}" >> "${shell_file}"
-  fi
-
-  ruby_configure_opts="export $(ruby_configure_opts)"
-  if ! grep -Fxq "${ruby_configure_opts}" "${shell_file}" 2> /dev/null; then
-    echo -e "\n# Added by GDK bootstrap\n${ruby_configure_opts}" >> "${shell_file}"
   fi
 
   if [[ ! -d "/Applications/Google Chrome.app" ]]; then
