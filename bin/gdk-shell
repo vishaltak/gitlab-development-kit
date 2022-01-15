@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Having values in `$CDPATH` makes `cd` announce the directory its moving to,
+# if the directory is within the $CDPATH values.
+CDPATH=""
 ROOT_PATH="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
 GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
@@ -8,6 +11,7 @@ source "${ROOT_PATH}/.gdkrc"
 
 exec /usr/bin/env -i \
 HOME="${HOME}" \
+CDPATH="" \
 SSH_AUTH_SOCK="${SSH_AUTH_SOCK}" \
 SSH_AGENT_PID="${SSH_AGENT_PID}" \
 PATH="${PATH}" \

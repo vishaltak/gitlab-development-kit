@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+CDPATH=''
 root_path="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
