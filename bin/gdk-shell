@@ -9,6 +9,17 @@ GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 # shellcheck disable=SC1091
 source "${ROOT_PATH}/.gdkrc"
 
+# The following env vars should only be passed along *if* they actually have a
+# value as an empty value will also be processed.
+extra_conditional_vars=""
+
+[[ -n "${BUNDLE_USER_CACHE}" ]] && extra_conditional_vars+="BUNDLE_USER_CACHE=\"${BUNDLE_USER_CACHE}\" "
+[[ -n "${BUNDLE_USER_CONFIG}" ]] && extra_conditional_vars+="BUNDLE_USER_CONFIG=\"${BUNDLE_USER_CONFIG}\" "
+[[ -n "${BUNDLE_USER_PLUGIN}" ]] && extra_conditional_vars+="BUNDLE_USER_PLUGIN=\"${BUNDLE_USER_PLUGIN}\" "
+[[ -n "${GEM_HOME}" ]] && extra_conditional_vars+="GEM_HOME=\"${GEM_HOME}\" "
+[[ -n "${GEM_PATH}" ]] && extra_conditional_vars+="GEM_PATH=\"${GEM_PATH}\" "
+[[ -n "${GEM_ROOT}" ]] && extra_conditional_vars+="GEM_ROOT=\"${GEM_ROOT}\""
+
 exec /usr/bin/env -i \
 CDPATH="" \
 CPPFLAGS="${CPPFLAGS}" \
@@ -25,4 +36,5 @@ PKG_CONFIG_PATH="${PKG_CONFIG_PATH}" \
 RUBY_CONFIGURE_OPTS="${RUBY_CONFIGURE_OPTS}" \
 SSH_AGENT_PID="${SSH_AGENT_PID}" \
 SSH_AUTH_SOCK="${SSH_AUTH_SOCK}" \
+${extra_conditional_vars} \
 /bin/bash -c "$@"
