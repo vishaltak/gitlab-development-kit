@@ -21,7 +21,7 @@ gitlab/doc/api/graphql/reference/gitlab_schema.json: .gitlab-bundle
 	@echo "${DIVIDER}"
 	@echo "Generating gitlab GraphQL schema files"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) bundle exec rake gitlab:graphql:schema:dump ${QQ}
+	$(Q)$(gitlab_rake_cmd) gitlab:graphql:schema:dump ${QQ}
 
 .PHONY: gitlab-git-pull
 gitlab-git-pull: gitlab-git-pull-timed
