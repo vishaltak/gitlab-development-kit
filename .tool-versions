@@ -4,8 +4,8 @@
 # Do not modify this file directly.
 golang 1.17.2 1.16.12 1.16.10
 minio 2021-04-06T23-11-00Z
-nodejs 14.17.5
+nodejs 14.17.5 16.13.2
 postgres 12.9 12.6
 redis 6.0.16
 ruby 2.7.5 3.0.2 2.7.4
-yarn 1.22.11
+yarn 1.22.11 1.22.17
