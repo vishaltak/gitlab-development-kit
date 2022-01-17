@@ -108,7 +108,7 @@ ruby_install_required_bundlers() {
 
   for version in ${required_versions}
   do
-    if ! prefix_with_asdf_if_available bundle "_${version}_" --version ; then
+    if ! prefix_with_asdf_if_available bundle "_${version}_" --version > /dev/null 2>&1 ; then
       prefix_with_asdf_if_available gem install bundler -v "=${version}"
     fi
   done
