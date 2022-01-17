@@ -17,6 +17,15 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
    You can:
      - Reuse an existing checkout if you have one, but make sure it's up to date.
      - Use this check out again when you [install GDK](index.md#install-gdk).
+
+1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). It should automatically
+   configure it for your shell.
+1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using nvm, such as:
+
+   ```shell
+   nvm install 14.17.5
+   ```
+
 1. In the `gitlab-development-kit` checkout, run the following `brew` commands:
 
    ```shell
@@ -36,14 +45,6 @@ using rbenv, such as:
 
    ```shell
    rbenv install 2.7.5
-   ```
-
-1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). It should automatically
-   configure it for your shell.
-1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using nvm, such as:
-
-   ```shell
-   nvm install 14.17.5
    ```
 
 1. Workaround [`thin` installation issues on macOS](https://github.com/macournoyer/thin/issues/365) by running:
