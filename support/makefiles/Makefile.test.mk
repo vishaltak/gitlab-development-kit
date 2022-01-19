@@ -38,7 +38,7 @@ endif
 endif
 
 .PHONY: lint
-lint: vale markdownlint
+lint: vale markdownlint check-links
 
 $(dev_vale_binary):
 	@support/dev/vale-install
@@ -46,10 +46,10 @@ $(dev_vale_binary):
 .PHONY: vale
 vale: $(dev_vale_binary)
 	@echo -n "Vale: "
-	@${dev_vale_binary} --minAlertLevel error *.md doc
+	@${dev_vale_binary} --minAlertLevel error *.md doc README.md
 
-.PHONY: markdownlint-install
-markdownlint-install:
+.PHONY: yarn-install
+yarn-install:
 ifeq ($(YARN)),)
 	@echo "ERROR: YARN is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
@@ -58,9 +58,15 @@ else
 endif
 
 .PHONY: markdownlint
-markdownlint: markdownlint-install
+markdownlint: yarn-install
 	@echo -n "MarkdownLint: "
-	@${YARN} run --silent markdownlint --config .markdownlint.yml 'doc/**/*.md' && echo "OK"
+	@${YARN} run --silent markdownlint --config .markdownlint.yml 'doc/**/*.md' 'README.md' && echo "OK"
+
+# Checks internal links. Doesn't check external links or anchors.
+.PHONY: check-links
+check-links: yarn-install
+	@echo -n "Check internal links: "
+	@${YARN} run --silent check-links 2>&1 && echo "OK"
 
 .PHONY: shellcheck
 shellcheck: ${dev_shellcheck_binary}
