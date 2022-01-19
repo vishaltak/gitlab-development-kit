@@ -107,7 +107,11 @@ module GDK
     end
 
     def colors_arg
-      '--color' if colors?
+      if colors?
+        '--color'
+      else
+        '--no-color'
+      end
     end
 
     def config
