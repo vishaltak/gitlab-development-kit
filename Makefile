@@ -132,8 +132,7 @@ update-summarize:
 # This is used by `gdk reconfigure`
 #
 .PHONY: reconfigure
-reconfigure: ensure-required-ruby-bundlers-installed \
-unlock-dependency-installers \
+reconfigure: unlock-dependency-installers \
 touch-examples \
 postgresql-sensible-defaults \
 all \
@@ -179,14 +178,6 @@ ensure-databases-running: Procfile postgresql/data gitaly-update
 	@echo "Ensuring necessary data services are running"
 	@echo "${DIVIDER}"
 	$(Q)gdk start rails-migration-dependencies
-
-.PHONY: ensure-required-ruby-bundlers-installed
-ensure-required-ruby-bundlers-installed:
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Ensuring all required versions of bundler are installed"
-	@echo "${DIVIDER}"
-	${Q}. ./support/bootstrap-common.sh ; ruby_install_required_bundlers
 
 .PHONY: diff-config
 diff-config: touch-examples

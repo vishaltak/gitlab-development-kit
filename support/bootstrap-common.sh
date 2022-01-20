@@ -92,28 +92,6 @@ asdf_check_rvm_rbenv() {
   return 0
 }
 
-ruby_required_bundler_versions() {
-  local gemfiles
-
-  gemfiles=(./Gemfile.lock ./gitlab/Gemfile.lock ./gitaly/ruby/Gemfile.lock ./gitlab-shell/Gemfile.lock)
-  awk '/BUNDLED WITH/{getline;print $NF;}' "${gemfiles[@]}" 2> /dev/null | sort -r | head -n 1
-
-  return 0
-}
-
-ruby_install_required_bundlers() {
-  local required_versions
-
-  required_versions=$(ruby_required_bundler_versions)
-
-  for version in ${required_versions}
-  do
-    if ! prefix_with_asdf_if_available bundle "_${version}_" --version > /dev/null 2>&1 ; then
-      prefix_with_asdf_if_available gem install bundler -v "=${version}"
-    fi
-  done
-}
-
 gdk_install_gdk_clt() {
   if [[ "$("${root_path}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
     echo "INFO: Installing gdk shim.."
@@ -131,10 +109,6 @@ gdk_install_shim() {
 }
 
 gdk_install_gem() {
-  if ! echo_if_unsuccessful ruby_install_required_bundlers; then
-    return 1
-  fi
-
   if ! echo_if_unsuccessful prefix_with_asdf_if_available gem install gitlab-development-kit; then
     return 1
   fi

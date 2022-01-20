@@ -56,7 +56,7 @@ gitlab-config: \
 gitlab/public/uploads:
 	$(Q)mkdir $@
 
-.gitlab-bundle: ensure-required-ruby-bundlers-installed
+.gitlab-bundle:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
