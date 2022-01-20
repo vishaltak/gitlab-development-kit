@@ -10,6 +10,7 @@ See [issue about](https://gitlab.com/gitlab-org/gitlab-development-kit/issues/24
 
 ## How to use it?
 
+1. [Install Minikube](https://minikube.sigs.k8s.io/docs/start/)
 1. Clone GDK repository
 1. Start Minikube using `minikube start`
 1. Create pod using `kubectl create -f gdkube.yml`
