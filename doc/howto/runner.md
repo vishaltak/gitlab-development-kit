@@ -16,20 +16,7 @@ The GDK supports managing the runner configuration file and the process itself, 
 or within a Docker container. Running jobs inside a Docker executor is supported in both cases; you can use a native
 binary to run jobs inside a Docker container.
 
-We outline the steps for setting up each of these separately.
-
-- [Simple configuration](#simple-configuration)
-- [Docker configuration](#docker-configuration) (recommended)
-
-## Simple configuration
-
-If you intend to just use the "shell" executor (fine for simple jobs), you can use the GDK with its default settings.
-Builds run directly on the host computer. If you choose this configuration, don't use random `.gitlab-ci.yml`
-files from the internet unless you understand them fully as this could be a security risk. If you need a basic pipeline,
-see an [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configuring-manual-deployments) that
-you can use.
-
-### Download GitLab Runner
+## Download GitLab Runner
 
 To register a runner in your GDK, you first must use a runner binary either:
 
@@ -49,7 +36,7 @@ runner:
 NOTE:
 `runner` should not be confused with [`gitlab_runner`](gitlab_docs.md).
 
-### Setting up a Runner
+## Setting up a Runner
 
 Run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml` (as your normal user),
 and follow the prompts. Use:
@@ -75,7 +62,9 @@ and follow the prompts. Use:
 
 - **executor**
 
-  Since we are running directly on the host computer in this simple configuration, choose `shell`.
+  Choose `shell` if you want builds to run directly on the host computer.
+  Choose `docker` if you want builds to run inside a Docker container. Follow the
+  [Docker configuration below](#docker-configuration-optional) if you choose this option.
 
 The Runner writes its configuration file to `gitlab-runner-config.toml`,
 which is in GDK's `.gitignore` file.
@@ -110,7 +99,15 @@ project in the GitLab web interface and add a
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
 watch as the Runner processes the builds just as it would on a "real" install!
 
-## Docker configuration
+## Run a build
+
+If you intend to just use the "shell" executor (fine for simple jobs), you're done!
+Builds run directly on the host computer. If you choose this configuration, don't use random `.gitlab-ci.yml`
+files from the internet unless you understand them fully as this could be a security risk. If you need a basic pipeline,
+see an [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configuring-manual-deployments) that
+you can use.
+
+## Docker configuration (optional)
 
 Using runners in Docker allows you to set up a clean environment for your builds
 each time. It is also safer than running directly on your computer, as the
