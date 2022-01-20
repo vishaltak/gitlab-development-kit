@@ -17,7 +17,7 @@ ifeq ($(BUNDLE),)
 else
 ifeq ($(RUBOCOP),)
 	@echo "INFO: Installing RuboCop.."
-	$(Q)${bundle_install_cmd} ${QQ}
+	$(Q)$(gem_install_required_bundler) && ${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RuboCop: "
 	@${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
@@ -31,7 +31,7 @@ ifeq ($(BUNDLE),)
 else
 ifeq ($(RSPEC),)
 	@echo "INFO: Installing RSpec.."
-	$(Q)${bundle_install_cmd} ${QQ}
+	$(Q)$(gem_install_required_bundler) && ${bundle_install_cmd} ${QQ}
 endif
 	@echo -n "RSpec: "
 	@${BUNDLE} exec $@ ${RSPEC_ARGS}

@@ -2,7 +2,7 @@ gitlab_clone_dir = gitlab
 gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
-bundle_without_production_cmd = ${BUNDLE} config set without 'production'
+bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
 
 gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gitlab-translations
 
@@ -63,7 +63,7 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
 	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler
-	$(Q)$(in_gitlab) $(bundle_install_cmd)
+	$(Q)$(in_gitlab) $(gem_install_required_bundler) && $(bundle_install_cmd)
 	$(Q)touch $@
 
 .gitlab-yarn:

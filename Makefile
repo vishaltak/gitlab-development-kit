@@ -42,6 +42,7 @@ endif
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
+gem_install_required_bundler = gem install bundler --conservative -v=$(shell awk '/BUNDLED WITH/{getline;print $$NF;}' Gemfile.lock)
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #

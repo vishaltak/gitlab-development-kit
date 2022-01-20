@@ -101,7 +101,7 @@ gitlab-docs-bundle:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab-docs Ruby gems"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(gem_install_required_bundler) && $(bundle_install_cmd)
 
 gitlab-docs-yarn:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
