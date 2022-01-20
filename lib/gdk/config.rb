@@ -602,6 +602,7 @@ module GDK
       path(:config_file) { config.gdk_root.join('gitlab-runner-config.toml') }
       bool(:enabled) { !!read!(config.runner.config_file) }
       string(:install_mode) { "binary" }
+      string(:executor) { "docker" }
       array(:extra_hosts) { [] }
       string(:token) { 'DEFAULT TOKEN: Register your runner to get a valid token' }
       string(:image) { "gitlab/gitlab-runner:latest" }

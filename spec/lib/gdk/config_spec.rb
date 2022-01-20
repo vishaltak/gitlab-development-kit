@@ -899,6 +899,22 @@ RSpec.describe GDK::Config do
             expect(config.runner.__install_mode_binary).to be(false)
           end
         end
+
+        context 'when executor is docker' do
+          it 'returns docker' do
+            expect(config.runner.executor).to eq('docker')
+          end
+        end
+
+        context 'when executor is shell' do
+          before do
+            yaml['runner']['executor'] = 'shell'
+          end
+
+          it 'returns shell' do
+            expect(config.runner.executor).to eq('shell')
+          end
+        end
       end
     end
 

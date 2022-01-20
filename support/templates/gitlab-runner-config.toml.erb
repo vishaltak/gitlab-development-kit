@@ -8,7 +8,7 @@ check_interval = 0
   name = "GDK local runner"
   url = "<%= "#{config.__uri}" %>"
   token = "<%= config.runner.token %>"
-  executor = "docker"
+  executor = "<%= config.runner.executor %>"
   [runners.custom_build_dir]
   [runners.docker]
 <%= "    network_mode = \"host\"\n" if config.runner.__network_mode_host? -%>
