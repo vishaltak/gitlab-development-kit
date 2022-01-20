@@ -97,6 +97,10 @@ charts-gitlab/.git/pull: charts-gitlab/.git
 gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn rm-symlink-gitlab-docs
 
 gitlab-docs-bundle:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing gitlab-org/gitlab-docs Ruby gems"
+	@echo "${DIVIDER}"
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && $(bundle_install_cmd)
 
 gitlab-docs-yarn:
