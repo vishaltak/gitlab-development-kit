@@ -1166,12 +1166,6 @@ RSpec.describe GDK::Config do
         end
       end
 
-      describe 'sherlock' do
-        it 'is disabled by default' do
-          expect(config.gitlab.rails.sherlock).to be(false)
-        end
-      end
-
       describe 'puma' do
         describe 'threads_min' do
           it 'is 1 by default' do
