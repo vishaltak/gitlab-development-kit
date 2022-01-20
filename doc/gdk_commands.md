@@ -81,7 +81,7 @@ It then updates the remote repositories.
 
 ## Update your `gdk.yml`
 
-When updating your `gdk.yml`, you must regenerate the necessary config files by
+When updating your `gdk.yml`, you must regenerate the necessary configuration files by
 running:
 
 ```shell
@@ -118,7 +118,7 @@ gdk doctor
 ## Reset data
 
 There may come a time where you wish to reset the data within your GDK. Backups
-of any reset data will be taken prior and you will be prompted to confirm you
+of any reset data are taken prior and you are prompted to confirm you
 wish to proceed:
 
 ```shell
@@ -127,9 +127,9 @@ gdk reset-data
 
 ## GDK pristine
 
-If you want to return your GDK instance to a pristine state which will install
-Ruby gems and Node modules from scratch for GitLab, Gitaly, cleaning tmp
-directories and cleaning the global golang cache.
+If you want to return your GDK instance to a pristine state, which installs
+Ruby gems and Node modules from scratch for GitLab, Gitaly, cleaning temporary
+directories, and cleaning the global Golang cache:
 
 ```shell
 gdk pristine
@@ -145,7 +145,7 @@ gdk cleanup
 ```
 
 The `gdk cleanup` command is destructive and requires you to confirm 
-if you want to proceed. If you prefer to run without the need to confirm 
+if you want to proceed. If you prefer to run without confirming
 (for example, if you want to run as a [GDK hook](configuration.md#hooks)),
 run:
 
