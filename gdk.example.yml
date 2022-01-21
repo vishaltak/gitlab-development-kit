@@ -293,6 +293,7 @@ runner:
   bin: "/usr/local/bin/gitlab-runner"
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
   enabled: false
+  executor: docker
   extra_hosts: []
   image: gitlab/gitlab-runner:latest
   install_mode: binary
