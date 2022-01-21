@@ -18,6 +18,15 @@ RSpec.describe GDK::Command::DebugInfo do
     stub_shellout_response('arch', 'example_arch')
     stub_shellout_response('ruby --version', '1.2.3')
     stub_shellout_response('git rev-parse --short HEAD', 'abcdef')
+
+    env = {
+      'LANGUAGE' => 'example-lang',
+      'GDK_EXAMPLE_ENV' => 'gdk-example',
+      'GEM_EXAMPLE_ENV' => 'gem-example',
+      'BUNDLE_EXAMPLE_ENV' => 'bundle-example'
+    }
+
+    stub_const('ENV', env)
   end
 
   describe '#run' do
@@ -26,6 +35,11 @@ RSpec.describe GDK::Command::DebugInfo do
       expect_output('Architecture: example_arch')
       expect_output('Ruby version: 1.2.3')
       expect_output('GDK version: abcdef')
+
+      expect_output('LANGUAGE=example-lang')
+      expect_output('GDK_EXAMPLE_ENV=gdk-example')
+      expect_output('GEM_EXAMPLE_ENV=gem-example')
+      expect_output('BUNDLE_EXAMPLE_ENV=bundle-example')
 
       expect(subject).to be(true)
     end
