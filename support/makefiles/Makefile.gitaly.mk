@@ -31,7 +31,7 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"
 	@echo "${DIVIDER}"
-	$(Q)$(MAKE) -C ${gitaly_clone_dir} WITH_BUNDLED_GIT=YesPlease BUNDLE_FLAGS=--no-deployment
+	$(Q)$(MAKE) -C ${gitaly_clone_dir} WITH_BUNDLED_GIT=YesPlease WITHOUT_BUILD_ID=YesPlease BUNDLE_FLAGS=--no-deployment
 	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(bundle_install_cmd)
 
 .PHONY: praefect-migrate
