@@ -26,6 +26,11 @@ doctor:
   script:
     - support/ci/verify-doctor
 
+debug-info:
+  extends: .verify-job
+  script:
+    - bin/gdk debug-info
+
 reconfigure:
   extends: .verify-job
   script:
