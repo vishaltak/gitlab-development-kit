@@ -5,14 +5,34 @@ require 'fileutils'
 module GDK
   module Command
     class DebugInfo < BaseCommand
+      ENV_WILDCARDS = %w[GDK_.* BUNDLE_.* GEM_.*].freeze
+      ENV_VARS = %w[
+        PATH LANG LANGUAGE LC_ALL LDFLAGS CPPFLAGS PKG_CONFIG_PATH
+        LIBPCREDIR RUBY_CONFIGURE_OPTS
+      ].freeze
+
       def run(_ = [])
-        stdout.puts review_prompt
+        stdout.puts separator
+        stdout.info review_prompt
         stdout.puts separator
 
         stdout.puts "Operating system: #{os_name}"
         stdout.puts "Architecture: #{arch}"
         stdout.puts "Ruby version: #{ruby_version}"
         stdout.puts "GDK version: #{gdk_version}"
+
+        stdout.puts
+        stdout.puts 'Environment:'
+
+        ENV_VARS.each do |var|
+          stdout.puts "#{var}=#{ENV[var]}"
+        end
+
+        ENV.each do |var, content|
+          next unless matches_regex?(var)
+
+          stdout.puts "#{var}=#{content}"
+        end
 
         if gdk_yml_exists?
           stdout.puts
@@ -49,6 +69,14 @@ module GDK
         "Unknown (#{e.message})"
       end
 
+      def matches_regex?(var)
+        var.match?(combined_env_regex)
+      end
+
+      def combined_env_regex
+        @combined_env_regex ||= /^#{ENV_WILDCARDS.join('|')}$/
+      end
+
       def gdk_yml
         File.read(GDK::Config::FILE)
       end
@@ -59,8 +87,8 @@ module GDK
 
       def review_prompt
         <<~MESSAGE
-          Please review the content below, ensuring any sensitive information such as API
-          keys, passwords etc are removed before submitting:
+          Please review the content below, ensuring any sensitive information such as
+             API keys, passwords etc are removed before submitting:
 
         MESSAGE
       end
