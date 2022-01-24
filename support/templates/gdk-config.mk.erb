@@ -9,7 +9,7 @@ dev_shellcheck_binary = <%= config.dev.shellcheck.__versioned_binary %>
 dev_vale_binary = <%= config.dev.vale.__versioned_binary %>
 <%-# -%>
 gdk_ask_to_restart_after_update = <%= config.gdk.ask_to_restart_after_update %>
-gdk_debug = <%= config.gdk.debug || ENV['GDK_DEBUG'] == 'true' %>
+gdk_debug = <%= config.gdk.__debug? %>
 gdk_quiet = <%= config.gdk.quiet? %>
 gdk_root = <%= config.gdk_root %>
 geo_enabled = <%= config.geo? %>

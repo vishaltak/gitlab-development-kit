@@ -42,6 +42,7 @@ endif
 
 quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
 bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
+gem_install_required_bundler = gem install bundler --conservative -v=$(shell awk '/BUNDLED WITH/{getline;print $$NF;}' Gemfile.lock)
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
@@ -132,8 +133,7 @@ update-summarize:
 # This is used by `gdk reconfigure`
 #
 .PHONY: reconfigure
-reconfigure: ensure-required-ruby-bundlers-installed \
-unlock-dependency-installers \
+reconfigure: unlock-dependency-installers \
 touch-examples \
 postgresql-sensible-defaults \
 all \
@@ -179,14 +179,6 @@ ensure-databases-running: Procfile postgresql/data gitaly-update
 	@echo "Ensuring necessary data services are running"
 	@echo "${DIVIDER}"
 	$(Q)gdk start rails-migration-dependencies
-
-.PHONY: ensure-required-ruby-bundlers-installed
-ensure-required-ruby-bundlers-installed:
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Ensuring all required versions of bundler are installed"
-	@echo "${DIVIDER}"
-	${Q}. ./support/bootstrap-common.sh ; ruby_install_required_bundlers
 
 .PHONY: diff-config
 diff-config: touch-examples

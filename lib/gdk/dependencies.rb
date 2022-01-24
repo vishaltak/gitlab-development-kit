@@ -17,10 +17,6 @@ module GDK
         read_gitlab_file('.ruby-version').strip || raise(VersionNotDetected, "Failed to determine GitLab's Ruby version")
       end
 
-      def bundler_version
-        Checker.parse_version(read_gitlab_file('Gemfile.lock'), prefix: 'BUNDLED WITH\n +') || raise(VersionNotDetected, "Failed to determine GitLab's Bundler version")
-      end
-
       private
 
       def read_gitlab_file(filename)
@@ -59,7 +55,6 @@ module GDK
 
       def check_all
         check_ruby_version
-        check_bundler_version
         check_go_version
         check_nodejs_version
         check_yarn_version
@@ -88,35 +83,6 @@ module GDK
         expected = Gem::Version.new(GitLabVersions.new.ruby_version)
 
         @error_messages << require_minimum_version('Ruby', actual, expected) if actual < expected
-      end
-
-      def check_bundler_version
-        return if bundler_version_ok? || alt_bundler_version_ok?
-
-        @error_messages << <<~BUNDLER_VERSION_NOT_MET
-          Please install Bundler version #{expected_bundler_version}.
-          gem install bundler -v '= #{expected_bundler_version}'
-        BUNDLER_VERSION_NOT_MET
-      end
-
-      def bundler_version_ok?
-        cmd = Shellout.new("bundle _#{expected_bundler_version}_ --version >/dev/null 2>&1")
-        cmd.try_run
-        cmd.success?
-      end
-
-      def alt_bundler_version_ok?
-        # On some systems, most notably Gentoo, Ruby Gems get patched to use a
-        # custom wrapper. Because of this, we cannot use the `bundle
-        # _$VERSION_` syntax and need to fall back to using `bundle --version`
-        # on a best effort basis.
-
-        actual = Shellout.new('bundle --version').try_run
-        actual = Checker.parse_version(actual, prefix: 'Bundler version ')
-
-        return unless actual
-
-        Gem::Version.new(actual) == Gem::Version.new(expected_bundler_version)
       end
 
       def check_go_version
@@ -212,10 +178,6 @@ module GDK
 
       def config
         @config ||= GDK.config
-      end
-
-      def expected_bundler_version
-        @expected_bundler_version ||= GitLabVersions.new.bundler_version.freeze
       end
     end
   end

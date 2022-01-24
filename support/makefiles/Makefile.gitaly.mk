@@ -32,7 +32,12 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"
 	@echo "${DIVIDER}"
 	$(Q)$(MAKE) -C ${gitaly_clone_dir} WITH_BUNDLED_GIT=YesPlease WITHOUT_BUILD_ID=YesPlease BUNDLE_FLAGS=--no-deployment
-	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(bundle_install_cmd)
+
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing gitlab-org/gitaly Ruby gems"
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(gem_install_required_bundler) && $(bundle_install_cmd)
 
 .PHONY: praefect-migrate
 praefect-migrate: postgresql-seed-praefect
