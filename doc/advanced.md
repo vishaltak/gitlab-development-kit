@@ -20,7 +20,7 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 
 1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). It should automatically
    configure it for your shell.
-1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using nvm, such as:
+1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using `nvm`, such as:
 
    ```shell
    nvm install 14.17.5
@@ -92,7 +92,7 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
    - If available for your version of Ubuntu or Debian, run `sudo apt install golang`.
    - If the required version is only available as a backport in [Ubuntu](https://help.ubuntu.com/community/UbuntuBackports),
      or [Debian](https://backports.debian.org/Instructions/#index2h2), use the backport package. You
-     may need to update your `$PATH` so the backported version of Go is used.
+     may have to update your `$PATH` so the backported version of Go is used.
    - If unavailable, install it manually. See the official [Go installation](https://golang.org/doc/install#install)
      instructions.
 
@@ -107,9 +107,9 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
 
 1. Run `rbenv init` to get instructions for what to add to your shell configuration file. For more
    information, see [the `rbenv` docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell). Note:
-   - If the required Ruby version in `.tool-versions` isn't installable, you need to get the
+   - If the required Ruby version in `.tool-versions` isn't installable, you must get the
      [`ruby-build` plugin](https://github.com/rbenv/ruby-build#installation) and build it.
-   - You need to select the Ruby version instead of your distributions default one (if any). See the
+   - You must select the Ruby version instead of your distributions default one (if any). See the
      [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
      `echo 2.7.2 >~/.rbenv/version`.
 1. [Install GDK](index.md#install-gdk).
@@ -198,11 +198,11 @@ sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /u
 sudo chmod +x /usr/local/bin/minio
 ```
 
-You may need to install Redis 5.0 or newer manually.
+You may have to install Redis 5.0 or newer manually.
 
 #### runit
 
-You also need to install [runit](http://smarden.org/runit) manually.
+You also have to install [runit](http://smarden.org/runit) manually.
 
 Although the following instructions work for runit version 2.1.2, be sure to
 read the up-to-date installation instructions on [the website](http://smarden.org/runit)
@@ -249,7 +249,7 @@ sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
 ```
 
-You need to follow [runit install instruction](#runit) to install it manually.
+Follow [runit install instruction](#runit) to install it manually.
 
 ### Red Hat Enterprise Linux
 
@@ -278,11 +278,11 @@ sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
 ```
 
-You need to follow [runit install instruction](#runit) to install it manually.
+Follow [runit install instruction](#runit) to install it manually.
 
 NOTE:
 Although RHEL8 has a FIPS-compliant mode and GitLab can be installed with it
-enabled, GitLab is not FIPS-compliant and will not run correctly with it
+enabled, GitLab is not FIPS-compliant and doesn't run correctly with it
 enabled. [Epic &5104](https://gitlab.com/groups/gitlab-org/-/epics/5104) tracks
 the status of GitLab FIPS compliance.
 
@@ -390,7 +390,7 @@ Now you can proceed to [set up GDK](index.md).
 
 ### Void Linux
 
-To run GDK on Void you need to install `ruby` with development headers, gem binary dependencies, `go`,
+To run GDK on Void, you must install `ruby` with development headers, gem binary dependencies, `go`,
 `postgresql` with client, development headers and shared libraries, `sqlite`, `redis`:
 
 ```shell
@@ -464,9 +464,9 @@ wsl --set-version <your subsystem name here>
 
 #### Directories
 
-Using a directory path with a space in it causes the install to fail (e.g. using the default home directory of the Windows user, where you've possibly used your full name). This is [an open issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1380).
+Using a directory path with a space in it causes the install to fail (for example, using the default home directory of the Windows user, where you've possibly used your full name). This is [an open issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1380).
 
-Additionally, using a directory path in Windows filesystem mount points (such as `/mnt/c` or `/mnt/d`) [results in permissions issues](https://gitlab.com/gitlab-org/gitlab/-/issues/347422#note_757891300). Instead, you must use a path inside the WSL OS, such as inside `/home/<user>/`. If you need to access the files from Windows, you can go to `\\wsl$` in Explorer to browse the file system. For example, `/home/sid/dev/gitlab-development-kit` would be visible at `\\wsl$\Ubuntu-20.04\home\sid\dev\gitlab-development-kit`.
+Additionally, using a directory path in Windows file system mount points (such as `/mnt/c` or `/mnt/d`) [results in permissions issues](https://gitlab.com/gitlab-org/gitlab/-/issues/347422#note_757891300). Instead, you must use a path inside the WSL OS, such as inside `/home/<user>/`. If you must access the files from Windows, you can go to `\\wsl$` in Explorer to browse the file system. For example, `/home/sid/dev/gitlab-development-kit` would be visible at `\\wsl$\Ubuntu-20.04\home\sid\dev\gitlab-development-kit`.
 
 #### Performance
 
@@ -476,7 +476,7 @@ WSL allocates up to 50% of your RAM by default for the Linux OS.
 
 Some functions (and specs) require a special Ruby installed with additional [patches](https://gitlab.com/gitlab-org/gitlab-build-images/-/tree/master/patches/ruby).
 These patches are already applied when running on GitLab CI/CD or when using GitLab Compose Kit,
-but since GitLab Development Kit uses `asdf` they need to be manually enabled.
+but since GitLab Development Kit uses `asdf` they must be manually enabled.
 
 To recompile Ruby with adding additional patches do the following:
 

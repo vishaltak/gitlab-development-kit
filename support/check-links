@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+find doc -name \*.md -print0 | cat - <(echo -n 'README.md') | xargs -0 -n1 "$(yarn bin)"/markdown-link-check --config markdown-link-check-config.json | awk 'BEGIN {ec=0 ; p=0}; /FILE: / {S=$0 ; p = 1 ; next}; /Status: */ {ec=1 ; p=0 ; print S, " - " $0}; END {exit ec}'
