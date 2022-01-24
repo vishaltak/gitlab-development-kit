@@ -13,7 +13,7 @@
   },
   "homepage": "https://gitlab.com/gitlab-org/gitlab-development-kit#readme",
   "scripts": {
-    "check-links": "find doc -name \\*.md -print0 | sed 's/\\(.*\\)/\\1README.md/' | xargs -0 -n1 markdown-link-check -qq --config markdown-link-check-config.json | awk 'BEGIN {ec=0 ; p=0}; /FILE: / {S=$0 ; p = 1 ; next}; /Status: */ {ec=1 ; p=0 ; print S, \" - \" $0}; END {exit ec}'"
+    "check-links": "find doc -name \\*.md -print0 | cat - <(echo -n 'README.md') | xargs -0 -n1 markdown-link-check -qq --config markdown-link-check-config.json | awk 'BEGIN {ec=0 ; p=0}; /FILE: / {S=$0 ; p = 1 ; next}; /Status: */ {ec=1 ; p=0 ; print S, \" - \" $0}; END {exit ec}'"
   },
   "dependencies": {
     "markdown-link-check": "^3.9.0",
