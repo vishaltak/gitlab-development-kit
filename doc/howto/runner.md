@@ -81,11 +81,12 @@ The Runner writes its configuration file to `gitlab-runner-config.toml`,
 which is in GDK's `.gitignore` file.
 
 To ensure the Runner token persists between subsequent runs of `gdk reconfigure`, add
-the token to your `gdk.yml` file:
+the token to your `gdk.yml` file and set `executor` to `shell`:
 
 ```yaml
 runner:
   enabled: true
+  executor: shell
   token: <runner-token>
 ```
 
@@ -112,17 +113,86 @@ watch as the Runner processes the builds just as it would on a "real" install!
 
 ## Docker configuration
 
+### Set up a runner
+
+To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker) in
+your GDK, you can run the `gitlab/gitlab-runner` Docker image. You'll want to
+ensure that the runner saves the configuration to a file that is
+accessible to the host after the registration is complete. Here we use
+`/tmp/gitlab-runner` as an example:
+
+```shell
+mkdir /tmp/gitlab-runner
+docker run --rm -it -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register
+```
+
+(optional) If you have [SSL enabled with NGINX](nginx.md), a
+Docker-based runner will need access to your self-signed certificate
+(e.g. `gdk.test.pem`). For example, suppose your certificate is in
+`/Users/example/gdk/gdk.test.pem`, you can register your runner in this
+way:
+
+```shell
+mkdir /tmp/gitlab-runner
+cp /Users/example/gdk/gdk.test.pem /tmp/gitlab-runner
+docker run --rm -it --env=SSL_CERT_FILE=/etc/gitlab-runner/gdk.test.pem -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register
+```
+
+The following prompts will appear:
+
+- **coordinator URL**
+
+  Use either:
+
+  - `http://172.16.123.1:3000/`
+  - `http://gdk.test:3000/`, if you set up a custom hostname such as `gdk.test`.
+
+- **token**
+
+  `Registration token` (copied from `<coordinator-url>/admin/runners`)
+
+  A description of the Runner. Defaults to the hostname of the machine.
+
+- **tags** (optional)
+
+  Comma-separated tags. Jobs can be set up to use only Runners with specific tags.
+
+- **executor**
+
+  Since we are running our runner in Docker, choose `docker`.
+
+- **Docker image**
+
 Using runners in Docker allows you to set up a clean environment for your builds
 each time. It is also safer than running directly on your computer, as the
 runner does not have direct access to your computer.
 
-You can have GDK manage a Docker container for you by setting `install_mode: docker`.
+Once the registration is complete, find the token in `/tmp/gitlab-runner/config.toml`.
+For example:
+
+```shell
+# grep token /tmp/gitlab-runner/config.toml
+token = "<runner-token>"
+```
+
+The GDK will manage a runner in a Docker container for you, but it needs
+this token in your `gdk.yml` file. Edit the `gdk.yml` to use this value
+and set `install_mode` and `executor` to `docker`:
 
 ```yaml
 runner:
   enabled: true
   install_mode: docker
+  executor: docker
+  token: <runner-token>
 ```
+
+Running `gdk reconfigure` will create `<path-to-gdk>/gitlab-runner-config.toml`.
+
+For SSL users, the GDK will configure the Docker runner with
+[`tls_verify`](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section)
+set to `false`, so SSL verification will be disabled by
+default.
 
 ### Set up Docker and GDK
 
@@ -205,12 +275,13 @@ At the end of all these steps, your `gdk.yml` might look something like:
 hostname: gdk.test
 runner:
   enabled: true
+  executor: docker
   install_mode: docker
-  extra_hosts: ["gdk.test:172.16.123.1"]
   token: <runner-token>
+  extra_hosts: ["gdk.test:172.16.123.1"]
 ```
 
-1. Be sure to replace `<runner-token>` with the value inside `gitlab-runner-config.toml` after registering.
+1. Be sure to replace `<runner-token>` with the value inside the generated `/tmp/gitlab-runner/config.toml`.
 1. Run `gdk reconfigure`.
 1. This generates `gitlab-runner-config.toml` in your GDK directory and enable the runner inside a Docker container.
 1. `gdk start runner` starts the runner.
