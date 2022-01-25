@@ -1,11 +1,11 @@
 # Using GitLab Runner with GDK
 
 Most features of [GitLab CI/CD](http://docs.gitlab.com/ee/ci/) need a
-[Runner](http://docs.gitlab.com/ee/ci/runners/README.html) to be registered with
+[runner](http://docs.gitlab.com/ee/ci/runners/README.html) to be registered with
 the GitLab installation. This how-to takes you through the necessary steps to
 do so when GitLab is running under GDK.
 
-Before setting up Runner, you must have [set up the GDK](../index.md) for your workstation.
+Before setting up a runner, you must have [set up the GDK](../index.md) for your workstation.
 
 You can set up:
 
@@ -21,9 +21,12 @@ We outline the steps for setting up each of these separately.
 - [Simple configuration](#simple-configuration)
 - [Docker configuration](#docker-configuration) (recommended)
 
+NOTE:
+In the configuration examples, `runner` should not be confused with [`gitlab_runner`](gitlab_docs.md).
+
 ## Simple configuration
 
-If you intend to just use the "shell" executor (fine for simple jobs), you can use the GDK with its default settings.
+If you intend to just use the `shell` executor (fine for simple jobs), you can use the GDK with its default settings.
 Builds run directly on the host computer. If you choose this configuration, don't use random `.gitlab-ci.yml`
 files from the internet unless you understand them fully as this could be a security risk. If you need a basic pipeline,
 see an [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configuring-manual-deployments) that
@@ -31,7 +34,7 @@ you can use.
 
 ### Download GitLab Runner
 
-To register a runner in your GDK, you first must use a runner binary either:
+Before you register a runner in your GDK, you first must have a runner binary either:
 
 - Pre-built. To use a pre-built binary, follow [the runner installation instructions](https://docs.gitlab.com/runner/install/#binaries)
   for your specific operation system. Avoid following the instructions in the **Containers** section because it's simpler
@@ -39,49 +42,30 @@ To register a runner in your GDK, you first must use a runner binary either:
 - Compiled from source. To build from source, follow [the runner development instructions](https://docs.gitlab.com/runner/development/).
   See the official [GitLab Runner repository](https://gitlab.com/gitlab-org/gitlab-runner).
 
-To specify a custom `gitlab-runner` binary, add the following to `gdk.yml`:
+By default, GDK expects the runner binary to be at `/usr/local/bin/gitlab-runner`. To specify a custom `gitlab-runner`
+binary location, add the following to `gdk.yml`:
 
 ```yaml
 runner:
   bin: <path_to_gitlab_runner_binary>/gitlab-runner-darwin-amd64
 ```
 
-NOTE:
-`runner` should not be confused with [`gitlab_runner`](gitlab_docs.md).
+### Set up a local runner
 
-### Setting up a Runner
+With a local runner installed, run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml`
+(as your normal user), and follow the prompts:
 
-Run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml` (as your normal user),
-and follow the prompts. Use:
+- **coordinator URL**: Use `http://localhost:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
+  address.
+- **token**: Value of **Registration token** copied from `<coordinator-url>/admin/runners`.
+- **description** (optional): A description of the runner. Defaults to the hostname of the machine.
+- **tags** (optional): Comma-separated tags. Jobs can be set up to use only runners with specific tags.
+- **executor**: Because we are running directly on the host computer, choose `shell`.
 
-- **coordinator URL**
+The runner writes its configuration file to `gitlab-runner-config.toml`, which is in GDK's `.gitignore` file.
 
-  Use either:
-
-  - `http://localhost:3000/`
-  - `http://<custom_IP_address>:3000/`, if you customized your IP address.
-
-- **token**
-
-  `Registration token` (copied from `<coordinator-url>/admin/runners`)
-
-- **description** (optional)
-
-  A description of the Runner. Defaults to the hostname of the machine.
-
-- **tags** (optional)
-
-  Comma-separated tags. Jobs can be set up to use only Runners with specific tags.
-
-- **executor**
-
-  Since we are running directly on the host computer in this simple configuration, choose `shell`.
-
-The Runner writes its configuration file to `gitlab-runner-config.toml`,
-which is in GDK's `.gitignore` file.
-
-To ensure the Runner token persists between subsequent runs of `gdk reconfigure`, add
-the token to your `gdk.yml` file and set `executor` to `shell`:
+To ensure the runner token persists between subsequent runs of `gdk reconfigure`, add the token (from `gitlab-runner-config.toml`,
+not the **Registration token**), to your `gdk.yml` file and set `executor` to `shell`:
 
 ```yaml
 runner:
@@ -90,77 +74,55 @@ runner:
   token: <runner-token>
 ```
 
-Finally, rebuild your `Procfile` with `gdk update` or un-comment
-the line that starts with `runner:`. This allows you to manage the runner along with
-your other GDK processes.
-
-You can run the `register` command multiple times to set up additional Runners -
-fuller documentation on the different types of executor and their requirements
-can be found [here](https://docs.gitlab.com/runner/executors/).
-Each `register` invocation adds a section to the configuration file, so make
-sure you're referencing the same one each time.
+Finally, run `gdk update` to rebuild your `Procfile`. This allows you to manage the runner along with your other GDK processes.
 
 Alternately, run `gitlab-runner --log-level debug run --config <path-to-gdk>/gitlab-runner-config.toml`
-to get a long-lived Runner process, using the configuration you created in the
+to get a long-lived runner process, using the configuration you created in the
 last step. It stays in the foreground, outputting logs as it executes
 builds, so run it in its own terminal session.
 
-The Runners pane in the administration panel now lists the Runners. Create a
-project in the GitLab web interface and add a
+The **Runners** page (`/admin/runners`) now lists the runners. Create a project in the GitLab UI and add a
 [`.gitlab-ci.yml`](https://docs.gitlab.com/ee/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
-watch as the Runner processes the builds just as it would on a "real" install!
+watch as the runner processes the builds just as it would on a "real" install!
 
 ## Docker configuration
+
+Instead of running GitLab Runner locally on your workstation, you can run it using Docker instead.
 
 ### Set up a runner
 
 To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker) in
-your GDK, you can run the `gitlab/gitlab-runner` Docker image. You'll want to
+your GDK, you can run the `gitlab/gitlab-runner` Docker image. You must
 ensure that the runner saves the configuration to a file that is
 accessible to the host after the registration is complete. Here we use
 `/tmp/gitlab-runner` as an example:
 
 ```shell
 mkdir /tmp/gitlab-runner
-docker run --rm -it -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register
+docker run --rm -it -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
 ```
 
 (optional) If you have [SSL enabled with NGINX](nginx.md), a
-Docker-based runner will need access to your self-signed certificate
-(e.g. `gdk.test.pem`). For example, suppose your certificate is in
+Docker-based runner needs access to your self-signed certificate
+(for example, `gdk.test.pem`). Suppose your certificate is in
 `/Users/example/gdk/gdk.test.pem`, you can register your runner in this
 way:
 
 ```shell
 mkdir /tmp/gitlab-runner
 cp /Users/example/gdk/gdk.test.pem /tmp/gitlab-runner
-docker run --rm -it --env=SSL_CERT_FILE=/etc/gitlab-runner/gdk.test.pem -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register
+docker run --rm -it --env=SSL_CERT_FILE=/etc/gitlab-runner/gdk.test.pem -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
 ```
 
-The following prompts will appear:
+The following prompts appear:
 
-- **coordinator URL**
-
-  Use either:
-
-  - `http://172.16.123.1:3000/`
-  - `http://gdk.test:3000/`, if you set up a custom hostname such as `gdk.test`.
-
-- **token**
-
-  `Registration token` (copied from `<coordinator-url>/admin/runners`)
-
-  A description of the Runner. Defaults to the hostname of the machine.
-
-- **tags** (optional)
-
-  Comma-separated tags. Jobs can be set up to use only Runners with specific tags.
-
-- **executor**
-
-  Since we are running our runner in Docker, choose `docker`.
-
+- **coordinator URL**: Use `http://localhost:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
+  address.
+- **token**: Value of **Registration token** copied from `<coordinator-url>/admin/runners`.
+- **description** (optional): A description of the runner.
+- **tags** (optional): Comma-separated tags. Jobs can be set up to use only runners with specific tags.
+- **executor**: Because we are running our runner in Docker, choose `docker`.
 - **Docker image**
 
 Using runners in Docker allows you to set up a clean environment for your builds
@@ -175,7 +137,7 @@ For example:
 token = "<runner-token>"
 ```
 
-The GDK will manage a runner in a Docker container for you, but it needs
+The GDK manages a runner in a Docker container for you, but it needs
 this token in your `gdk.yml` file. Edit the `gdk.yml` to use this value
 and set `install_mode` and `executor` to `docker`:
 
@@ -187,11 +149,11 @@ runner:
   token: <runner-token>
 ```
 
-Running `gdk reconfigure` will create `<path-to-gdk>/gitlab-runner-config.toml`.
+Running `gdk reconfigure` creates `<path-to-gdk>/gitlab-runner-config.toml`.
 
-For SSL users, the GDK will configure the Docker runner with
+For SSL users, the GDK configures the Docker runner with
 [`tls_verify`](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section)
-set to `false`, so SSL verification will be disabled by
+set to `false`, so SSL verification is disabled by
 default.
 
 ### Set up Docker and GDK
