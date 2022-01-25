@@ -5,6 +5,7 @@ require 'fileutils'
 module GDK
   module Command
     class DebugInfo < BaseCommand
+      NEW_ISSUE_LINK = 'https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/new'
       ENV_WILDCARDS = %w[GDK_.* BUNDLE_.* GEM_.*].freeze
       ENV_VARS = %w[
         PATH LANG LANGUAGE LC_ALL LDFLAGS CPPFLAGS PKG_CONFIG_PATH
@@ -88,7 +89,10 @@ module GDK
       def review_prompt
         <<~MESSAGE
           Please review the content below, ensuring any sensitive information such as
-             API keys, passwords etc are removed before submitting:
+             API keys, passwords etc are removed before submitting. To create an issue
+             in the GitLab Development Kit project, use the following link:
+
+             #{NEW_ISSUE_LINK}
 
         MESSAGE
       end
