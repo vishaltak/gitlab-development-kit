@@ -2208,16 +2208,16 @@ RSpec.describe GDK::Config do
 
     describe 'shellcheck' do
       describe 'version' do
-        it 'returns 0.7.2 by default' do
-          expect(config.dev.shellcheck.version).to eq('0.7.2')
+        it 'returns 0.8.0 by default' do
+          expect(config.dev.shellcheck.version).to eq('0.8.0')
         end
       end
     end
 
     describe 'vale' do
       describe 'version' do
-        it 'returns 2.12.0 by default' do
-          expect(config.dev.vale.version).to eq('2.12.0')
+        it 'returns 2.14.0 by default' do
+          expect(config.dev.vale.version).to eq('2.14.0')
         end
       end
     end
