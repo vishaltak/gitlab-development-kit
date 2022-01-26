@@ -31,6 +31,8 @@ RSpec.describe GDK::Command::DebugInfo do
 
   describe '#run' do
     it 'displays debug information and returns true' do
+      expect_output(/#{described_class::NEW_ISSUE_LINK}/o)
+
       expect_output('Operating system: exampleOS')
       expect_output('Architecture: example_arch')
       expect_output('Ruby version: 1.2.3')
