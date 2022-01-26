@@ -51,9 +51,6 @@ Install using your system's package manager.
 
 ## One-line installation
 
-NOTE:
-If you are using an M1 Mac, do not use this method. Follow the [simple manual install instructions](#manually) instead.
-
 The one-line installation:
 
 - Clones the GDK project into a new `gitlab-development-kit` directory in the current working
