@@ -43,7 +43,7 @@ The following installation methods are supported, actively maintained, and teste
 | Operating system | Versions                   |
 |:-----------------|:---------------------------|
 | macOS            | 12, 11, 10.15, 10.14       |
-| Ubuntu           | 21.10, 20.10, 20.04, 18.04 |
+| Ubuntu           | 21.10, 20.04, 18.04 |
 | Debian           | 11, 10, 9                  |
 | Arch             | latest                     |
 | Manjaro          | latest                     |
