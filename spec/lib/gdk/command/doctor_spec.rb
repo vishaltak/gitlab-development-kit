@@ -22,6 +22,10 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
 
   before do
     allow(Runit).to receive(:start).with('postgresql', quiet: true).and_return(true)
+    gdk_root_stub = double('GDK_ROOT')
+    procfile_stub = double('Procfile', exist?: true)
+    allow(GDK).to receive(:root).and_return(gdk_root_stub)
+    allow(gdk_root_stub).to receive(:join).with('Procfile').and_return(procfile_stub)
     allow(subject).to receive(:sleep).with(2)
   end
 
