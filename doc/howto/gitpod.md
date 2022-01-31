@@ -108,14 +108,15 @@ advanced features.
 
 ### Enable runners
 
-1. Go to **Admin Area > Runners** in the GitLab UI running in GDK.
-1. In the terminal, switch to the GDK directory `(cd ../gitlab-development-kit)`
-1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the Remote Explorer tab in Gitpod UI and clicking on the lock icon next to the port name.
-1. Run `gitlab-runner register --run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
-1. As prompted, first enter the URL and then the registration token provided from the GitLab UI running in GDK.
-1. The description and tags are optional, you can just press Enter to skip those.
-1. When prompted for the executor, type `shell` and press Enter.
-1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`
+1. On the top bar, select **Menu > Admin** in the GitLab UI running in GDK.
+1. On the left sidebar, select **Overview > Runners**.
+1. In the terminal, switch to the GDK directory `cd ../gitlab-development-kit`
+1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the
+   **Remote Explorer** tab in Gitpod UI and selecting the lock icon next to the port name.
+1. From the **Register an instance runner** dropdown, select **Show runner installation and registration instructions**.
+1. Copy the **Command to register runner**.
+1. Run the copied command with the following added to the end `--run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml --non-interactive --executor shell`.
+1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
 
 Your runner is ready to pick up jobs for you! If you create a new project, the
 **Pages/Plain HTML** template contains a super simple and tiny pipeline that's great to
