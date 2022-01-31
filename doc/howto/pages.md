@@ -26,6 +26,7 @@ You can configure a custom host name. For example, to set up `pages.gdk.test`:
 
    ```yaml
    gitlab_pages:
+     enabled: true
      host: pages.gdk.test
    ```
 
@@ -56,6 +57,7 @@ to create an OAuth application for GitLab Pages.
 
    ```yaml
    gitlab_pages:
+     enabled: true
      access_control: true
      auth_client_id: 'YOUR_CLIENT_ID' # replace with OAuth Client ID generated above
      auth_client_secret: 'YOUR_CLIENT_SECRET' # replace with OAuth Client Secret generated above
