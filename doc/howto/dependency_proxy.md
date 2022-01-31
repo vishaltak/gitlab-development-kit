@@ -46,9 +46,32 @@ host: 0.0.0.0
 Run `gdk reconfigure` and `gdk restart` to invoke the changes and visit the IP
 (`0.0.0.0:3000`) to check if GitLab is accessible through the new IP.
 
-#### Add this IP address and port to the list of insecure registries and restart Docker
+#### Reconfigure the Docker daemon
 
-##### Old Docker for Mac (< 2.2.0.0)
+Edit `daemon.json` using the Docker Desktop UI or by
+editting it directly.
+
+##### Editting directly
+
+The `daemon.json` file is located at:
+
+- MacOS: `~/.docker/daemon.json`
+- Linux: `/etc/docker/daemon.json`
+- Windows: `C:\ProgramData\docker\config\daemon.json`
+
+1. Add these values to the file:
+
+   ```json
+   {
+     "experimental": true,
+     "insecure-registries": ["0.0.0.0:3000", "127.0.0.1:3000"]
+   }
+   ```
+
+1. Restart Docker: this will vary depending on how you are running Docker.
+   See the specific documentation for your platform (Rancher, Docker Desktop, etc.)
+
+##### Old Docker Desktop for Mac (< 2.2.0.0)
 
 Open Docker -> Preferences, and navigate to the tab labeled **Daemon**.
 Check the box to enable **Experimental features** and you can add
@@ -56,7 +79,7 @@ a new **Insecure registry**. Click **Apply & Restart**.
 
 ![Adding an insecure registry](img/dependency_proxy_macos_config.png)
 
-##### Docker for Mac 2.2.0.0+ (newest versions)
+##### Docker Desktop for Mac 2.2.0.0+ (newest versions)
 
 Open Docker -> Right click on status bar -> Preferences -> Docker Engine, and type in:
 
