@@ -307,7 +307,7 @@ production: &base
     <%- unless config.object_store.consolidated_form? -%>
     object_store:
       enabled: <%= config.object_store? %>
-      remote_directory: ci_secure_files
+      remote_directory: ci-secure-files
       connection:
         provider: AWS
         aws_access_key_id: minio
