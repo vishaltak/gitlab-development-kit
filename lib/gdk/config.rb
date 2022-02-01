@@ -299,7 +299,7 @@ module GDK
           'lfs' => { 'bucket' => 'lfs-objects' },
           'uploads' => { 'bucket' => 'uploads' },
           'packages' => { 'bucket' => 'packages' },
-          'dependency_proxy' => { 'bucket' => 'dependency_proxy' },
+          'dependency_proxy' => { 'bucket' => 'dependency-proxy' },
           'terraform_state' => { 'bucket' => 'terraform' },
           'pages' => { 'bucket' => 'pages' }
         }
