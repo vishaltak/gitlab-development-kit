@@ -10,6 +10,11 @@ module GDK
       end
 
       def run(_ = [])
+        unless installed?
+          GDK::Output.warn("GDK has not been installed so cannot run 'gdk doctor'.")
+          return false
+        end
+
         start_necessary_services
 
         if diagnostic_results.empty?
@@ -26,6 +31,12 @@ module GDK
       private
 
       attr_reader :diagnostics
+
+      def installed?
+        # TODO: Eventually, the Procfile will no longer exists so we need a better
+        # way to determine this, but this will be OK for now.
+        GDK.root.join('Procfile').exist?
+      end
 
       def diagnostic_results
         @diagnostic_results ||= jobs.map { |x| x.join[:results] }.compact
