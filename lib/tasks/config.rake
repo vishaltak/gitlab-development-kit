@@ -96,7 +96,9 @@ end
 Task = Struct.new(:name, :make_dependencies, :template, :erb_extra_args, :post_render, :no_op_condition, :timed, keyword_init: true) do
   def initialize(attributes)
     super
-    self[:make_dependencies] = (attributes[:make_dependencies] || []).join(' ')
+    # Add [''] to the front of attributes[:make_dependencies] which will result
+    # in a space at the beginning, which is what we need.
+    self[:make_dependencies] = ([''] + (attributes[:make_dependencies] || [])).join(' ')
     self[:template] ||= "support/templates/#{self[:name]}.erb"
     self[:erb_extra_args] ||= {}
     self[:timed] = false if self[:timed].nil?
@@ -151,13 +153,13 @@ TASK_DEF
 
 MAKE_TASK_TEMPLATE = <<~TASK_DEF
 .PHONY: %{name}
-%{name}: %{make_dependencies}
+%{name}:%{make_dependencies}
 \t$(Q)rake %{name}
 
 TASK_DEF
 MAKE_NO_OP_TASK_TEMPLATE = <<~TASK_DEF
 .PHONY: %{name}
-%{name}: %{make_dependencies}
+%{name}:%{make_dependencies}
 ifeq ($(%{no_op_condition}),true)
 \t$(Q)rake %{name}
 else
