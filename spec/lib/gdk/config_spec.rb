@@ -127,6 +127,47 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe '__homebrew_prefix' do
+    before do
+      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+    end
+
+    context 'on a Linux system' do
+      let(:host_os) { 'linux' }
+
+      it "returns ''" do
+        expect(config).not_to receive(:cmd!)
+        expect(config.__homebrew_prefix).to be('')
+      end
+    end
+
+    context 'on a macOS system' do
+      let(:host_os) { 'darwin' }
+      let(:brew_prefix) { nil }
+
+      before do
+        allow(config).to receive(:cmd!).with(%w[brew --prefix]).and_return(brew_prefix)
+      end
+
+      context 'on an x86_64 system' do
+        let(:brew_prefix) { '/usr/local' }
+
+        it 'returns /usr/local' do
+          expect(config.__homebrew_prefix).to be(brew_prefix)
+        end
+      end
+
+      context 'on an arm64 system' do
+        let(:brew_prefix) { '/opt/homebrew' }
+
+        it 'returns /opt/homebrew' do
+          expect(config.__homebrew_prefix).to be(brew_prefix)
+        end
+      end
+    end
+  end
+
   describe '__uri' do
     context 'for defaults' do
       it 'returns http://gdk.example.com:3000' do

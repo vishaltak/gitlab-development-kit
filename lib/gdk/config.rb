@@ -26,6 +26,8 @@ module GDK
     bool(:__platform_darwin) { config.__platform == 'darwin' }
     bool(:__platform_supported?) { config.__platform != 'unknown' }
 
+    string(:__homebrew_prefix) { config.__platform_darwin? ? cmd!(%w[brew --prefix]) : '' }
+
     settings :common do
       string(:ca_path) { '' }
     end
