@@ -8,13 +8,9 @@
 Procfile:
 	$(Q)rake Procfile
 
-.PHONY: gitaly/gitaly.config.toml
-gitaly/gitaly.config.toml:
-	$(Q)rake gitaly/gitaly.config.toml
-
-.PHONY: gitaly/praefect.config.toml
-gitaly/praefect.config.toml:
-	$(Q)rake gitaly/praefect.config.toml
+.PHONY: gitaly/config_generated.mak
+gitaly/config_generated.mak:
+	$(Q)rake gitaly/config_generated.mak
 
 .PHONY: gitlab/config/cable.yml
 gitlab/config/cable.yml:
@@ -141,3 +137,12 @@ preflight-update-checks: preflight-update-checks-timed
 .PHONY: preflight-update-checks-run
 preflight-update-checks-run: rake
 	$(Q)rake preflight-update-checks
+
+.PHONY: gitaly/gitaly.config.toml
+gitaly/gitaly.config.toml:
+	$(Q)rake gitaly/gitaly.config.toml
+
+.PHONY: gitaly/praefect.config.toml
+gitaly/praefect.config.toml:
+	$(Q)rake gitaly/praefect.config.toml
+

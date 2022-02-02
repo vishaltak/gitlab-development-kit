@@ -107,6 +107,7 @@ end
 
 CONFIG_FILE_TASKS = [
   Task.new(name: 'Procfile'),
+  Task.new(name: 'gitaly/config_generated.mak'),
   Task.new(name: 'gitlab/config/cable.yml'),
   Task.new(name: 'gitlab/config/database.yml'),
   Task.new(name: 'gitlab/config/database_geo.yml', no_op_condition: 'geo_enabled'),

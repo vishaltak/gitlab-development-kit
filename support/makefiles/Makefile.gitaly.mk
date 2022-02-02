@@ -26,7 +26,7 @@ gitaly-git-pull-run: ${gitaly_clone_dir}/.git
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
 
 .PHONY: ${gitaly_build_bin_dir}/gitaly
-${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
+${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git gitaly/config_generated.mak
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"

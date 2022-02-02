@@ -1,0 +1,3 @@
+<%- unless config.__homebrew_prefix.empty? -%>
+GIT_APPEND_BUILD_OPTIONS := ${GIT_APPEND_BUILD_OPTIONS} LIBPCREDIR="<%= config.__homebrew_prefix %>/opt/pcre2"'
+<%- end -%>

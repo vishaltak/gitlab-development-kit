@@ -9,6 +9,7 @@ module GDK
         Procfile
         gitaly/gitaly.config.toml
         gitaly/praefect.config.toml
+        gitaly/config_generated.mak
         gitlab-pages/gitlab-pages.conf
         gitlab-runner-config.toml
         gitlab-shell/.gitlab_shell_secret
