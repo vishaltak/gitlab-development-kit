@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eo pipefail
+
 # Having values in `$CDPATH` makes `cd` announce the directory its moving to,
 # if the directory is within the $CDPATH values.
 CDPATH=""
@@ -27,4 +29,4 @@ GDK_DEBUG="${GDK_DEBUG}" \
 GDK_ENV_LOADED="${GDK_ENV_LOADED}" \
 GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE}" \
 ASDF_DATA_DIR="${ASDF_DATA_DIR}" \
-/bin/bash -c "$@"
+"$@"

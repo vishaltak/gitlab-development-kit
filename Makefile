@@ -4,7 +4,11 @@ START_TIME := $(shell date "+%s")
 
 DIVIDER = "--------------------------------------------------------------------------------"
 
-SHELL = bin/gdk-shell
+SHELL = /bin/bash
+MAKESHELL = bin/gdk-shell
+
+# SHELL = bin/gdk-shell
+
 ASDF := $(shell command -v asdf 2> /dev/null)
 RAKE := $(shell command -v rake 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)

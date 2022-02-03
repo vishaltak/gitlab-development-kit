@@ -39,7 +39,7 @@ module GDK
       private
 
       def new_command
-        Shellout.new(['ruby', '-e', SCRIPT])
+        Shellout.new('ruby', '-e', SCRIPT)
       end
     end
   end

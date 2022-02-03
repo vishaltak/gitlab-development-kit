@@ -12,18 +12,23 @@ class Shellout
   ShelloutBaseError = Class.new(StandardError)
   ExecuteCommandFailedError = Class.new(ShelloutBaseError)
   StreamCommandFailedError = Class.new(ShelloutBaseError)
+  UnknownArgsTypeError = Class.new(StandardError)
 
   def initialize(*args, **opts)
-    @args = args.flatten
-    @opts = opts
-  end
+    args = if args.count == 1
+             args.join(' ')
+           else
+             args.flatten
+           end
 
-  def command
-    @command ||= args.join(' ')
+    @args = prefix_args_with_gdk_shell(args)
+    @opts = opts
   end
 
   def execute(display_output: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
     retried ||= false
+    command ||= Array(args).join(' ')
+
     GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
     display_output ? stream : try_run
     GDK::Output.debug("result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
@@ -57,6 +62,8 @@ class Shellout
     @stderr_str = ''
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
+    # require 'pry-byebug' ; binding.pry
+
     Open3.popen3(*args, opts.merge(extra_options)) do |_stdin, stdout, stderr, thread|
       @status = print_output_from_thread(thread, stdout, stderr)
     end
@@ -119,6 +126,19 @@ class Shellout
   end
 
   private
+
+  def prefix_args_with_gdk_shell(args)
+    gdk_shell_path = ::GDK.root.join('bin', 'gdk-shell').to_s
+
+    case args
+    when Array
+      args.unshift(gdk_shell_path)
+    when String
+      "#{gdk_shell_path} #{args}"
+    else
+      raise UnknownArgsTypeError, 'args needs to be either a String or an Array'
+    end
+  end
 
   def print_output_from_thread(thread, stdout, stderr)
     threads = Array(thread)

@@ -3,8 +3,9 @@
 module GDK
   module Command
     class Doctor < BaseCommand
-      def initialize(diagnostics: GDK::Diagnostic.all, **args)
+      def initialize(diagnostics: GDK::Diagnostic.all, parallel: true, **args)
         @diagnostics = diagnostics
+        @parallel = parallel
 
         super(**args)
       end
@@ -25,17 +26,23 @@ module GDK
 
       private
 
-      attr_reader :diagnostics
+      attr_reader :diagnostics, :parallel
 
       def diagnostic_results
-        @diagnostic_results ||= jobs.map { |x| x.join[:results] }.compact
+        @diagnostic_results ||= (parallel ? jobs.map { |x| x.join[:results] } : jobs).compact
       end
 
       def jobs
         diagnostics.map do |diagnostic|
-          Thread.new do
-            Thread.current[:results] = perform_diagnosis_for(diagnostic)
+          if parallel
+            Thread.new do
+              Thread.current[:results] = perform_diagnosis_for(diagnostic)
+              GDK::Output.print('.', stderr: true)
+            end
+          else
+            result = perform_diagnosis_for(diagnostic)
             GDK::Output.print('.', stderr: true)
+            result
           end
         end
       end

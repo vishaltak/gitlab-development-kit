@@ -2,10 +2,11 @@
 
 require 'spec_helper'
 
-RSpec.describe Shellout do
+RSpec.describe Shellout, stub_gdk_root: false do
   let(:command) { 'echo foo' }
   let(:opts) { {} }
   let(:tmp_directory) { File.realpath('/tmp') }
+  let(:gdk_shell) { GDK.root.join('bin', 'gdk-shell') }
 
   subject { described_class.new(command, opts) }
 
@@ -14,7 +15,7 @@ RSpec.describe Shellout do
 
     context 'when command is a String' do
       it 'parses correctly' do
-        expect(subject.args).to eq([command])
+        expect(subject.args).to eq("#{gdk_shell} echo foo")
       end
     end
 
@@ -22,7 +23,7 @@ RSpec.describe Shellout do
       let(:command) { command_as_array }
 
       it 'parses correctly' do
-        expect(subject.args).to eq(command)
+        expect(subject.args).to eq("#{gdk_shell} echo foo")
       end
     end
 
@@ -30,16 +31,8 @@ RSpec.describe Shellout do
       subject { described_class.new('echo', 'foo') }
 
       it 'parses correctly' do
-        expect(subject.args).to eq(command_as_array)
+        expect(subject.args).to eq(%W[#{gdk_shell} echo foo])
       end
-    end
-  end
-
-  describe '#command' do
-    let(:command_as_array) { %w[echo foo] }
-
-    it 'returns command as a string' do
-      expect(subject.command).to eq('echo foo')
     end
   end
 
@@ -133,8 +126,8 @@ RSpec.describe Shellout do
 
       context 'when the command does not exist' do
         let(:command) { 'blah' }
-        let(:expected_command_stderr_puts) { 'No such file or directory - blah' }
-        let(:expected_command_error) { "'blah' failed." }
+        let(:expected_command_stderr_puts) { "env: blah: No such file or directory\n" }
+        let(:expected_command_error) { "'#{gdk_shell} blah' failed." }
 
         it_behaves_like 'a command that fails'
         it_behaves_like 'a command that does not retry'
@@ -143,8 +136,8 @@ RSpec.describe Shellout do
       context 'when the command does exist, but fails' do
         let(:command) { 'ls /doesntexist' }
         let(:opts) { {} }
-        let(:expected_command_stderr_puts) { "ls: cannot access '/doesntexist': No such file or directory\n" }
-        let(:expected_command_error) { "'ls /doesntexist' failed." }
+        let(:expected_command_stderr_puts) { "#{gdk_shell} ls: cannot access '/doesntexist': No such file or directory\n" }
+        let(:expected_command_error) { "'#{gdk_shell} ls /doesntexist' failed." }
 
         before do
           stderr = double(StringIO, read: expected_command_stderr_puts)

@@ -15,7 +15,7 @@ RSpec.describe GDK::Hooks do
       end
     end
 
-    describe '#execute_hook_cmd' do
+    describe '#execute_hook_cmd', stub_gdk_root: false do
       let(:cmd) { 'echo' }
       let(:description) { 'example' }
 
@@ -34,7 +34,7 @@ RSpec.describe GDK::Hooks do
       context 'when cmd is a string' do
         context 'when cmd does not exist' do
           it 'aborts with error message', :hide_stdout do
-            error_message = %(ERROR: No such file or directory - fail)
+            error_message = %(ERROR: 'fail' has exited with code 127.)
 
             expect { subject.execute_hook_cmd('fail', description) }.to raise_error(/#{error_message}/).and output(/#{error_message}/).to_stderr
           end
