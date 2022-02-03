@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+sudo mkdir -p /opt/gdk || true
+sudo chown $(whoami) /opt/gdk
+
+export ASDF_DIR=/opt/gdk/.asdf
+export ASDF_DATA_DIR=/opt/gdk/.asdf
+
+[[ ! -d ${ASDF_DIR} ]] && git clone https://github.com/asdf-vm/asdf.git ${ASDF_DIR} --branch v0.9.0
+
+source ${ASDF_DIR}/asdf.sh
+
+asdf plugin add postgres-binary https://gitlab.com/ashmckenzie/postgres-binary-asdf-plugin.git || true
+asdf plugin add redis-binary https://gitlab.com/ashmckenzie/redis-binary-asdf-plugin.git || true
+asdf plugin add ruby-binary https://gitlab.com/ashmckenzie/ruby-binary-asdf-plugin.git || true

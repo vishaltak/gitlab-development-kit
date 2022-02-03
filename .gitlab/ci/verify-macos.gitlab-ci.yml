@@ -30,29 +30,12 @@ install-macos:
   variables:
     GDK_DEBUG: 'true'
   script:
-    # Copy cached asdf into $HOME/.asdf/
-    #
-    - rsync -ax .asdf/ $HOME/.asdf/ || true
-    - "[[ -f ${HOME}/.asdf/asdf.sh ]] && source ${HOME}/.asdf/asdf.sh"
-    - asdf list || true
+    #- rsync -ax .usr_local/ /usr/local/ || true
 
-    # Copy cached Homebrew into /usr/local/
-    #
-    - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    - rsync -ax .usr_local/ /usr/local/ || true
-    - brew list || true
+    - time /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    - source support/bootstrap-prep
+    - time make bootstrap
 
-    - make bootstrap
-
-    # Update asdf cache with latest $HOME/.asdf
-    #
-    - "[[ -f ${HOME}/.asdf/asdf.sh ]] && source ${HOME}/.asdf/asdf.sh"
-    - asdf list || true
-    - rsync -ax --delete-after $HOME/.asdf/ .asdf/ || true
-
-    # Update Homebrew cache with latest /usr/local/
-    #
-    - brew list || true
-    - rsync -ax --delete-after /usr/local/ .usr_local/ || true
+    #- rsync -ax --delete-after /usr/local/ .usr_local/ || true
 
     #- support/ci/verify-install
