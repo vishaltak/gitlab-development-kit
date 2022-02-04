@@ -4,11 +4,9 @@
 # if the directory is within the $CDPATH values.
 CDPATH=""
 ROOT_PATH="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
-GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
+export GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
 # shellcheck disable=SC1091
 source "${ROOT_PATH}/.gdkrc"
 
-exec /usr/bin/env \
-GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE}" \
-/bin/bash -c "$@"
+exec /bin/bash -c "$@"
