@@ -954,6 +954,25 @@ If you still encounter some errors, see the troubleshooting FAQ below:
 There may be times when running spinach feature tests or Ruby Capybara RSpec
 tests (tests that are located in the `spec/features` directory) fails.
 
+### `pcre2.h` problems
+
+`rspec` tests can fail with the error `'pcre2.h' file not found`. This error can occur on `arm64` macOS systems that
+install `pcre2` with Homebrew.
+
+By default, Homebrew installs packages for `arm64` under `/opt/homebrew` which causes issue for the Gitaly instance
+that is built for running tests. To resolve the issue:
+
+1. Remove the Gitaly instance that is built for running tests (it must be built again) at `<path-to-gdk>/gitlab/tmp/tests/gitaly`.
+1. Set the `LIBPCREDIR` environment variable to `/opt/homebrew/opt/pcre2`, either:
+
+   - Inline when running tests:
+
+     ```shell
+     LIBPCREDIR=/opt/homebrew/opt/pcre2 bundle exec rspec <path-to-test-file>
+     ```
+
+   - Permanently in your shell's configuration `export LIBPCREDIR="/opt/homebrew/opt/pcre2"`.
+
 ### ChromeDriver problems
 
 ChromeDriver is the app on your machine that is used to run headless
