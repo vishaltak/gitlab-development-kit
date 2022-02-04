@@ -4,27 +4,9 @@
 # if the directory is within the $CDPATH values.
 CDPATH=""
 ROOT_PATH="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
-GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
+export GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
 # shellcheck disable=SC1091
 source "${ROOT_PATH}/.gdkrc"
 
-exec /usr/bin/env -i \
-HOME="${HOME}" \
-CDPATH="" \
-SSH_AUTH_SOCK="${SSH_AUTH_SOCK}" \
-SSH_AGENT_PID="${SSH_AGENT_PID}" \
-PATH="${PATH}" \
-LANG="${LANG}" \
-LANGUAGE="${LANGUAGE}" \
-LC_ALL="${LC_ALL}" \
-LDFLAGS="${LDFLAGS}" \
-CPPFLAGS="${CPPFLAGS}" \
-PKG_CONFIG_PATH="${PKG_CONFIG_PATH}" \
-LIBPCREDIR="${LIBPCREDIR}" \
-RUBY_CONFIGURE_OPTS="${RUBY_CONFIGURE_OPTS}" \
-GDK_DEBUG="${GDK_DEBUG}" \
-GDK_ENV_LOADED="${GDK_ENV_LOADED}" \
-GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE}" \
-ASDF_DATA_DIR="${ASDF_DATA_DIR}" \
-/bin/bash -c "$@"
+exec /bin/bash -c "$@"
