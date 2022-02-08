@@ -19,7 +19,7 @@ To set the configuration globally, run `rake git:configure[true]`. When using
 
 ## GDK configuration
 
-There are many configuration options for GDK. GDK can be configured using either:
+GDK can be configured using either:
 
 - [`gdk.yml`](#gdkyml) configuration file.
 - [Loose files](#loose-files-deprecated) (deprecated).
