@@ -62,7 +62,7 @@ module GDK
       end
 
       settings(:vale) do
-        string(:version) { '2.14.0' }
+        string(:version) { '2.15.0' }
         string(:__platform) { config.__platform == 'darwin' ? 'macos' : config.__platform }
         path(:__binary) { config.dev.__bins.join('vale') }
         path(:__versioned_binary) { config.dev.__bins.join("vale_#{config.dev.vale.version}") }
