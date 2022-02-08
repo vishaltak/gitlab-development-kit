@@ -20,16 +20,7 @@ To create the workstation:
 1. Make sure you have at least OpenSSH 8.2 installed on your machine:
    - On macOS: `brew install openssh`
    - On Ubuntu/Debian: `sudo apt install openssh-client`
-1. Connect your YubiKey to your computer.
-1. (OPTIONAL / RECOMMENDED) You can set a FIDO2 pin on your YubiKey for extra security.
-1. Create a FIDO2 SSH key for authentication:
-   - If your YubiKey supports resident ED25519-SK keys (firmware version 5.2.3):
-     - `ssh-keygen -t ed25519-sk -O resident -f ~/.ssh/id_ed25519_sk`
-   - If your YubiKey does not support resident ED25519-SK:
-     - `ssh-keygen -t ecdsa-sk -f ~/.ssh/id_ecdsa_sk`
-1. Add the newly generated SSH key in the SSH keychain:
-   - If you generated a resident ED25519-SK key: `ssh-add -K`
-   - If you generated a non-resident ECDSA-SK key: `ssh-add`
+1. [Generate an SSH key pair for your FIDO/U2F hardware security key](https://docs.gitlab.com/ee/ssh/#generate-an-ssh-key-pair-for-a-fidou2f-hardware-security-key)
 1. Add the newly generated public SSH key to your [GitLab](https://docs.gitlab.com/ee/ssh/#add-an-ssh-key-to-your-gitlab-account) and [GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) profiles:
    - If you generated a resident ED25519-SK key, the profile is in `~/.ssh/id_ed25519_sk.pub`.
    - If you generated a non-resident ECDSA-SK key, the profile is in `~/.ssh/id_ecdsa_sk.pub`.
