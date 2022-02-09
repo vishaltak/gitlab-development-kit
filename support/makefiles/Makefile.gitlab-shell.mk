@@ -33,7 +33,7 @@ ${gitlab_shell_clone_dir}/.git:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab-shell Ruby gems"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_development_root}/gitlab-shell && $(gem_install_required_bundler) && $(bundle_install_cmd)
+	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_shell_clone_dir)
 	$(Q)touch $@
 
 gitlab-shell/.gitlab_shell_secret:
