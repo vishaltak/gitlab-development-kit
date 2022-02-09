@@ -16,6 +16,7 @@ TOOL_VERSIONS_FILES = [
   { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_SHELL_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
   { refs: -> { ['master', "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
   { refs: -> { ['master', ref_from_remote_file('GITALY_SERVER_VERSION')] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
+  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-runner' },
   { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
   { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
 ].freeze
