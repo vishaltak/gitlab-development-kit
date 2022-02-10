@@ -67,12 +67,6 @@ module GDK
         path(:__binary) { config.dev.__bins.join('vale') }
         path(:__versioned_binary) { config.dev.__bins.join("vale_#{config.dev.vale.version}") }
       end
-
-      settings(:shellcheck) do
-        string(:version) { '0.8.0' }
-        path(:__binary) { config.dev.__bins.join('shellcheck') }
-        path(:__versioned_binary) { config.dev.__bins.join("shellcheck_#{config.dev.shellcheck.version}") }
-      end
     end
 
     array(:git_repositories) do
