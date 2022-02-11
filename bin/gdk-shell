@@ -6,7 +6,7 @@ CDPATH=""
 ROOT_PATH="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
 export GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
-# shellcheck disable=SC1091
+# shellcheck disable=SC1091 disable=SC1090
 source "${ROOT_PATH}/.gdkrc"
 
 exec /bin/bash -c "$@"
