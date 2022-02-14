@@ -14,6 +14,12 @@ require_relative 'runit'
 autoload :Asdf, 'asdf'
 autoload :Shellout, 'shellout'
 
+if ENV['GDK_ASDF_PREBUILT_PACKAGES'] == 'true' && ENV['GDK_ENV_LOADED'] != '1'
+  warn("WARNING: GDK environment not loaded. Please ensure you run 'source .gdkrc'")
+  warn("INFO: If you'd like to automate this, see https://direnv.net/.")
+  exit(1)
+end
+
 # GitLab Development Kit
 module GDK
   HookCommandError = Class.new(StandardError)

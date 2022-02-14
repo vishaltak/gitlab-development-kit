@@ -5,6 +5,7 @@
 .DS_Store
 .bundle/
 .cache/
+.envrc.local
 .gdkrc.custom
 .idea
 .yardoc

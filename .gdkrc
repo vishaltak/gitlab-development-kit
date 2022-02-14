@@ -2,6 +2,23 @@
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
+GDK_CUSTOM_RC_FILE=".gdkrc.custom"
+
+if [[ -f "${GDK_CUSTOM_RC_FILE}" ]]; then
+  # shellcheck disable=SC1090
+  source "${GDK_CUSTOM_RC_FILE}"
+fi
+
+export GDK_ASDF_PREBUILT_PACKAGES="${GDK_ASDF_PREBUILT_PACKAGES:-false}"
+
+if [[ "${GDK_ASDF_PREBUILT_PACKAGES}" == "true" ]]; then
+  export ASDF_DIR="/opt/asdf"
+  export ASDF_DIR_ASDF_SH="${ASDF_DIR}/asdf.sh"
+  export ASDF_DATA_DIR="${ASDF_DIR}"
+
+  [[ -f "${ASDF_DIR_ASDF_SH}" ]] && source "${ASDF_DIR_ASDF_SH}"
+fi
+
 # macOS
 #
 if [[ "${OSTYPE}" == "darwin"* ]]; then
@@ -26,13 +43,6 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "true" ]]; then
     export LIBPCREDIR="${BREW_PREFIX}/opt/pcre2"
   fi
-fi
-
-GDK_CUSTOM_RC_FILE=".gdkrc.custom"
-
-if [[ -f "${GDK_CUSTOM_RC_FILE}" ]]; then
-  # shellcheck disable=SC1090
-  source "${GDK_CUSTOM_RC_FILE}"
 fi
 
 export GDK_ENV_LOADED=1

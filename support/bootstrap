@@ -10,13 +10,21 @@ source "${parent_path}"/bootstrap-common.sh
 ASDF_VERSION_TO_INSTALL="v0.9.0"
 
 GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
+GDK_ASDF_PREBUILT_PACKAGES="${GDK_ASDF_PREBUILT_PACKAGES:-false}"
 
 asdf_install() {
   if [[ ! -d "${CURRENT_ASDF_DIR}" ]]; then
+    if [[ "${GDK_ASDF_PREBUILT_PACKAGES}" == "true" ]]; then
+      echo "INFO: Need sudo access in order to create '${ASDF_DIR}' and set correct permissions"
+      sudo install -d -o "$(whoami)" "${ASDF_DIR}"
+    fi
+
     git clone https://github.com/asdf-vm/asdf.git "${CURRENT_ASDF_DIR}" --branch ${ASDF_VERSION_TO_INSTALL}
 
-    asdf_add_initializer "${HOME}/.bashrc" "asdf.sh"
-    asdf_add_initializer "${HOME}/.zshrc" "asdf.sh"
+    if [[ "${GDK_ASDF_PREBUILT_PACKAGES}" == "false" ]]; then
+      asdf_add_initializer "${HOME}/.bashrc"
+      asdf_add_initializer "${HOME}/.zshrc"
+    fi
 
     return 0
   fi
@@ -25,19 +33,50 @@ asdf_install() {
 }
 
 asdf_add_initializer() {
-  [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/${2}" >> "${1}"
+  [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/asdf.sh" >> "${1}"
 }
 
 asdf_install_update_plugins() {
-  cut -d ' ' -f 1 .tool-versions | grep -v '^#' | while IFS= read -r plugin
+  # Look to install the *-prebuilt package plugins first so when
+  # asdf_install_update_required_plugins() processes .tool-versions*, it detects
+  # the *-prebuilt package plugins are already installed.
+  if [[ "${GDK_ASDF_PREBUILT_PACKAGES}" == "true" ]]; then
+    asdf_install_update_prebuilt_plugins
+  fi
+
+  asdf_install_update_required_plugins
+
+  return 0
+}
+
+asdf_install_update_required_plugins() {
+  cut -d ' ' -f 1 .tool-versions | grep -v '^#' | while IFS= read -r plugin_name
   do
-    asdf plugin update "${plugin}" || asdf plugin add "${plugin}"
+    asdf_install_update_plugin "${plugin_name}"
   done
 
   # Install Node.js' OpenPGP key
   if [[ ! -f "${HOME}/.gnupg/asdf-nodejs.gpg" ]]; then
     bash -c "${CURRENT_ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring" > /dev/null 2>&1
   fi
+
+  return 0
+}
+
+asdf_install_update_prebuilt_plugins() {
+  # TODO: Let's try redis first.
+  # asdf_install_update_plugin postgres https://gitlab.com/ashmckenzie/asdf-prebuilt-plugin.git
+  asdf_install_update_plugin redis https://gitlab.com/ashmckenzie/asdf-prebuilt-plugin.git
+  # asdf_install_update_plugin ruby https://gitlab.com/ashmckenzie/asdf-prebuilt-plugin.git
+
+  return 0
+}
+
+asdf_install_update_plugin() {
+  local plugin_name="${1}"
+  local plugin_url="${2:-}"
+
+  asdf plugin update "${plugin_name}" || asdf plugin add "${plugin_name}" "${plugin_url}"
 
   return 0
 }
