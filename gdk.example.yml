@@ -11,10 +11,6 @@ common:
 dev:
   checkmake:
     version: 8915bd4
-  shellcheck:
-    version: 0.8.0
-  vale:
-    version: 2.15.0
 elasticsearch:
   enabled: false
   version: 7.16.1

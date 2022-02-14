@@ -3,8 +3,6 @@ RUBOCOP := $(shell command -v rubocop 2> /dev/null)
 RSPEC := $(shell command -v rspec 2> /dev/null)
 
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
-dev_shellcheck_binary := $(or $(dev_shellcheck_binary),$(shell command -v shellcheck 2> /dev/null))
-dev_vale_binary := $(or $(dev_vale_binary),$(shell command -v vale 2> /dev/null))
 
 .PHONY: test
 test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-asdf-combine verify-makefile-config
@@ -40,13 +38,9 @@ endif
 .PHONY: lint
 lint: vale markdownlint check-links
 
-$(dev_vale_binary):
-	@support/dev/vale-install
-
 .PHONY: vale
-vale: $(dev_vale_binary)
-	@echo -n "Vale: "
-	@${dev_vale_binary} --minAlertLevel error *.md doc README.md
+vale:
+	@support/dev/vale
 
 .PHONY: yarn-install
 yarn-install:
@@ -69,12 +63,8 @@ check-links: yarn-install
 	@${YARN} run --silent check-links 2>&1 && echo "OK"
 
 .PHONY: shellcheck
-shellcheck: ${dev_shellcheck_binary}
-	@echo -n "Shellcheck: "
-	@support/dev/shellcheck && echo "OK"
-
-${dev_shellcheck_binary}:
-	@support/dev/shellcheck-install
+shellcheck:
+	@support/dev/shellcheck
 
 .PHONY: checkmake
 checkmake: ${dev_checkmake_binary}

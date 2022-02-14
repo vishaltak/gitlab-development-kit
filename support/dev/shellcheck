@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 # Spellcheck rule definitions
 #
@@ -6,17 +8,20 @@
 
 root="$(cd "$(dirname "$0")/../.." || exit ; pwd -P)"
 
-export PATH="${root}/dev/bin:${PATH}"
+does_shellcheck_exist() {
+  command -v shellcheck > /dev/null 2>&1
+}
 
-if ! command -v shellcheck > /dev/null 2>&1 ; then
-  echo "ERROR: shellcheck is not available, please run 'make shellcheck' first."
-  exit 1
-fi
+attempt_shellcheck_install() {
+  eval "${root}/support/dev/package-install shellcheck"
+}
 
-exec find \
+run() {
+  find \
 			"${root}/bin" \
 			"${root}/support" \
 			"${root}/support/ci" \
+			"${root}/support/dev" \
 			"${root}/support/completions" \
       -maxdepth 1 \
       -type f \
@@ -24,4 +29,23 @@ exec find \
       -not -path "*/support/.rubocop.yml" \
       -not -path "*.swp" \
       -print0 \
-| xargs -0 shellcheck --exclude=SC1071 --external-sources --
+  | xargs -0 shellcheck --exclude=SC1071 --external-sources --
+}
+
+if ! does_shellcheck_exist; then
+  attempt_shellcheck_install
+fi
+
+if ! does_shellcheck_exist; then
+  echo "ERROR: shellcheck is not available, please ensure it's installed on your platform." >&2
+  exit 1
+fi
+
+/bin/echo -n "Shellcheck: "
+
+if run; then
+  echo "OK"
+  exit 0
+else
+  exit 1
+fi

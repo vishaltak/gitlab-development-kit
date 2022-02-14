@@ -68,6 +68,7 @@ shellcheck:
   needs: []
   image: ruby:2.7
   script:
+    - apt-get update
     - make shellcheck
 
 checkmake:
