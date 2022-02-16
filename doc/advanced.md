@@ -190,7 +190,7 @@ sudo dnf module enable postgresql:12 # or postgresql:11
 To install dependencies for Fedora:
 
 ```shell
-sudo dnf install postgresql libpqxx-devel postgresql-libs redis libicu-devel \
+sudo dnf install postgresql postgresql-libs redis libicu-devel \
   git git-lfs ed make cmake rpm-build gcc-c++ krb5-devel go postgresql-server \
   postgresql-contrib postgresql-devel re2 GraphicsMagick re2-devel sqlite-devel \
   perl-Digest-SHA perl-Image-ExifTool rsync
@@ -303,7 +303,7 @@ To install dependencies for OpenSUSE:
 sudo zypper dup
 # now reboot with "sudo init 6" if zypper reports:
 # There are running programs which still use files and libraries deleted or updated by recent upgrades.
-sudo zypper install libxslt-devel postgresql postgresql-devel libpqxx-devel redis libicu-devel git git-lfs ed cmake \
+sudo zypper install libxslt-devel postgresql postgresql-devel redis libicu-devel git git-lfs ed cmake \
         rpm-build gcc-c++ krb5-devel postgresql-server postgresql-contrib \
         libxml2-devel libxml2-devel-32bit findutils-locate GraphicsMagick \
         exiftool rsync sqlite3-devel postgresql-server-devel \
@@ -405,7 +405,7 @@ sudo xbps-install ruby ruby-devel minio re2 re2-devel icu icu-libs icu-devel \
 To install dependencies for FreeBSD:
 
 ```shell
-sudo pkg install postgresql10-server postgresql10-contrib postgresql-libpqxx \
+sudo pkg install postgresql10-server postgresql10-contrib \
 redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio sqlite3
 ```
 
