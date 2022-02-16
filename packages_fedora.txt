@@ -13,7 +13,6 @@ icu
 krb5-devel
 libcurl-devel
 libicu-devel
-libpqxx-devel
 libuuid-devel
 openssl
 openssl-devel
