@@ -12,7 +12,7 @@
 # 2 = git SHA/branch to checkout once cloned, default is main (GDK_CLONE_BRANCH)
 _() {
 
-set -euo pipefail
+set -eo pipefail
 
 GDK_INSTALL_DIR="${2-gitlab-development-kit}"
 GDK_CLONE_BRANCH="${3-main}"
