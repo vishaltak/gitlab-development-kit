@@ -1521,6 +1521,30 @@ RSpec.describe GDK::Config do
   end
 
   describe 'webpack' do
+    describe '#__https' do
+      it 'is false by default' do
+        expect(config.webpack.__https).to be false
+      end
+    end
+
+    describe '#type' do
+      it 'is HTTP by default' do
+        expect(config.webpack.type).to eq 'http'
+      end
+    end
+
+    describe '#ssl_cert' do
+      it 'is localhost.crt by default' do
+        expect(config.webpack.ssl_cert).to eq('localhost.crt')
+      end
+    end
+
+    describe '#ssl_key' do
+      it 'is localhost.key by default' do
+        expect(config.webpack.ssl_key).to eq('localhost.key')
+      end
+    end
+
     describe '#incremental' do
       it 'is true by default' do
         expect(config.webpack.incremental).to be true

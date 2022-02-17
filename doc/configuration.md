@@ -483,6 +483,9 @@ webpack:
 | --- | ------ | ----- |
 | `host` | `127.0.0.1` | The host your webpack development server is running on. Usually no need to change. |
 | `port` | `3808` | The port your webpack development server is running on. You should change this if you are running multiple GDKs |
+| `type` | `http` | Setting this to `https` enables HTTPS. See the [Webpack documentation](https://webpack.js.org/configuration/dev-server/#devserverserver). |
+| `ssl_cert` | `localhost.crt` | Sets the SSL server certificate for HTTPS. This uses NGINX `nginx.ssl.certificate` value by default. |
+| `ssl_key` | `localhost.key` | Sets the SSL server key for HTTPS. This uses NGINX `nginx.ssl.key` value by default. |
 | `static` | `false` | Setting this to `true` replaces the webpack development server with a lightweight Ruby server with. See below for more information |
 | `vendor_dll` | `false` | Setting this to `true` moves certain dependencies to a webpack DLL. See below for more information |
 | `incremental` | `true` | Setting this to `false` disables incremental webpack compilation. See below for more information |
