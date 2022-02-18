@@ -331,7 +331,10 @@ webpack:
   live_reload: true
   port: 3808
   sourcemaps: true
+  ssl_cert: localhost.crt
+  ssl_key: localhost.key
   static: false
+  type: http
   vendor_dll: false
 workhorse:
   configured_port: 3333

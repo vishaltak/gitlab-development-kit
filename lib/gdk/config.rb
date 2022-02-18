@@ -132,6 +132,10 @@ module GDK
 
     settings :webpack do
       string(:host) { read!('webpack_host') || config.gitlab.rails.hostname }
+      bool(:__https) { config.https? }
+      string(:type) { config.https? ? 'https' : 'http' }
+      string(:ssl_cert) { config.nginx.ssl.certificate }
+      string(:ssl_key) { config.nginx.ssl.key }
       bool(:static) { false }
       bool(:vendor_dll) { false }
       bool(:incremental) { true }
