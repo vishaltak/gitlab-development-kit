@@ -19,13 +19,16 @@ cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
 make bootstrap
+
+# Set asdf dir correctly
+ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 source "$HOME/.asdf/asdf.sh"
-gdk config set gitlab.rails.bootsnap false
 
 # Enable docs by default
 gdk config set gitlab_docs.enabled true
 
 cat gdk.yml
+
 gdk install shallow_clone=true
 gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true
