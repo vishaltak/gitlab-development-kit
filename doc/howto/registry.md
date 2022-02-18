@@ -20,45 +20,32 @@ Then run the following commands:
 1. `gdk reconfigure`.
 1. `gdk restart`.
 
-## Set up pushing and pulling of images
+## Set up pushing and pulling of images over HTTP
 
-To set up Container Registry to allow pushing and pulling of images, you must have a Docker-compatible client installed. For example,
-[Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/) or [`lima nerdctl`](https://github.com/containerd/nerdctl).
+To set up Container Registry to allow pushing and pulling of images over HTTP, you must have a Docker-compatible client
+installed. For example:
 
-### Obtain a usable hostname
+- [Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/).
+- [`lima nerdctl`](https://github.com/containerd/nerdctl).
+- [Rancher Desktop](https://rancherdesktop.io).
 
-Because `localhost` and `127.0.0.1` have different meanings inside a Docker-based runner, a different host is required to access your
-GitLab instance and your registry. For example, `gdk.test` for GitLab instance and `registry.test` for Container Registry:
-
-1. [Create a loopback interface for GDK](local_network.md#create-loopback-interface).
-1. Set up `gdk.test` and `registry.test` as hostnames by editing `/etc/hosts`. For example, if you set up `172.16.123.1` in the
-   previous step, add `172.16.123.1 registry.test` to `/etc/hosts`. If you're using `docker-machine`, you must replace
-   this IP address with the one returned from  `docker-machine ip default`. See the
-   [information about switching Docker runtimes](#switching-between-docker-desktop-on-mac-and-docker-machine)  for details.
-
-   WARNING:
-   If you end up on a network with the loopback alias as your local network IP, your GDK becomes
-   accessible on the local network.
+In these instructions, we assume you [set up `registry.test`](local_network.md).
 
 1. Update `gdk.yml` as follows:
 
    ```yaml
-   auto_devops:
-     enabled: false
    hostname: gdk.test
    registry:
      enabled: true
-     host: gdk.test
-     listen_address: '172.16.123.1' # your loopback alias
-     self_signed: false # see note below on setting self signed to true
+     host: registry.test
+     self_signed: false
      auth_enabled: false
    ```
 
-   NOTE:
-   If you have a specific need for your registry to be `self_signed`, skip the following steps and move on to [trust the registry's self-signed certificate](#trust-the-registrys-self-signed-certificate)
-
-1. Edit the Docker `daemon.json` file (see [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry) for the location)
-   and add the following:
+1. Locate `daemon.json`. For information:
+   - For Rancher Desktop, see: <https://github.com/rancher-sandbox/rancher-desktop/discussions/1477>.
+   - General information, see the [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
+1. Edit the Docker `daemon.json` file and add the following:
 
    ```json
    {
@@ -66,15 +53,14 @@ GitLab instance and your registry. For example, `gdk.test` for GitLab instance a
    }
    ```
 
-1. Run `gdk reconfigure`. If you don't have certificate files for the local registry (`registry_host.crt` and `registry_host.key`),
-   they are generated.
+1. Run `gdk reconfigure`.
 1. Run `gdk restart`.
 
 After completing these instructions, you should be ready to work with the registry locally. See the
 [Interacting with the local container registry](#interacting-with-the-local-container-registry)
 section for examples of how to query the registry manually using `curl`.
 
-### Trust the registry's self-signed certificate
+### Set up pushing and pulling of images over HTTPS
 
 This section is relevant if you set `self_signed: true` in your `gdk.yml`.
 
