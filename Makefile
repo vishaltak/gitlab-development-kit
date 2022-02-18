@@ -137,7 +137,8 @@ reconfigure: unlock-dependency-installers \
 touch-examples \
 postgresql-sensible-defaults \
 all \
-show-reconfigured-at
+show-reconfigured-at \
+ask-to-restart
 
 .PHONY: clean
 clean:
