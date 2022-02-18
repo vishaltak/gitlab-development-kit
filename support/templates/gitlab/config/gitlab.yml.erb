@@ -866,7 +866,6 @@ production: &base
       enabled: true
       host: <%= config.webpack.host %>
       port: <%= config.webpack.port %>
-      https: <%= config.webpack.__https %>
 
   ## Monitoring
   # Built in monitoring settings
@@ -1034,7 +1033,7 @@ test:
         aws_access_key_id: AWS_ACCESS_KEY_ID
         aws_secret_access_key: AWS_SECRET_ACCESS_KEY
         region: us-east-1
-    <%- end -%>    
+    <%- end -%>
   gitlab:
     host: localhost
     port: 80

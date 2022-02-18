@@ -1521,30 +1521,6 @@ RSpec.describe GDK::Config do
   end
 
   describe 'webpack' do
-    describe '#__https' do
-      it 'is false by default' do
-        expect(config.webpack.__https).to be false
-      end
-    end
-
-    describe '#type' do
-      it 'is HTTP by default' do
-        expect(config.webpack.type).to eq 'http'
-      end
-    end
-
-    describe '#ssl_cert' do
-      it 'is localhost.crt by default' do
-        expect(config.webpack.ssl_cert).to eq('localhost.crt')
-      end
-    end
-
-    describe '#ssl_key' do
-      it 'is localhost.key by default' do
-        expect(config.webpack.ssl_key).to eq('localhost.key')
-      end
-    end
-
     describe '#incremental' do
       it 'is true by default' do
         expect(config.webpack.incremental).to be true
@@ -1576,23 +1552,56 @@ RSpec.describe GDK::Config do
     end
 
     describe '#live_reload' do
-      context 'when https is disabled' do
+      it 'is true by default' do
+        expect(config.webpack.live_reload).to be true
+      end
+    end
+
+    describe '#public_address' do
+      it 'is empty string by default' do
+        expect(config.webpack.public_address).to be ""
+      end
+    end
+
+    describe '#__dev_server_public' do
+      context 'when live_reload is disabled' do
         before do
-          yaml['https'] = { 'enabled' => false }
+          yaml['webpack'] = { 'live_reload' => false }
         end
 
-        it 'is true' do
-          expect(config.webpack.live_reload).to be true
+        it 'is empty string' do
+          expect(config.webpack.__dev_server_public).to be ""
         end
       end
 
-      context 'when https is enabled' do
+      context 'when public_address is set' do
         before do
+          yaml['webpack'] = { 'public_address' => "wss://3808-example.gitpod.io/ws" }
+        end
+
+        it 'is equals the public_address value' do
+          expect(config.webpack.__dev_server_public).to be config.webpack.public_address
+        end
+      end
+
+      context 'when nginx is enabled (with http)' do
+        before do
+          yaml['nginx'] = { 'enabled' => true }
+        end
+
+        it 'is set to the nginx proxy with ws' do
+          expect(config.webpack.__dev_server_public).to eq "ws://#{config.nginx.__listen_address}/_hmr/"
+        end
+      end
+
+      context 'when nginx is enabled (with https)' do
+        before do
+          yaml['nginx'] = { 'enabled' => true }
           yaml['https'] = { 'enabled' => true }
         end
 
-        it 'is false' do
-          expect(config.webpack.live_reload).to be false
+        it 'is set to the nginx proxy with wss' do
+          expect(config.webpack.__dev_server_public).to eq "wss://#{config.nginx.__listen_address}/_hmr/"
         end
       end
     end

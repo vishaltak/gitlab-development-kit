@@ -132,18 +132,31 @@ module GDK
 
     settings :webpack do
       string(:host) { read!('webpack_host') || config.gitlab.rails.hostname }
-      bool(:__https) { config.https? }
-      string(:type) { config.https? ? 'https' : 'http' }
-      string(:ssl_cert) { config.nginx.ssl.certificate }
-      string(:ssl_key) { config.nginx.ssl.key }
+      integer(:port) { read!('webpack_port') || 3808 }
+      string(:public_address) { "" }
       bool(:static) { false }
       bool(:vendor_dll) { false }
       bool(:incremental) { true }
       integer(:incremental_ttl) { 30 }
       bool(:sourcemaps) { true }
-      bool(:live_reload) { !config.https? }
+      bool(:live_reload) { true }
 
-      integer(:port) { read!('webpack_port') || 3808 }
+      string(:__dev_server_public) do
+        if !config.webpack.live_reload
+          ""
+        elsif !config.webpack.public_address.empty?
+          config.webpack.public_address
+        elsif config.nginx?
+          # webpack behind nginx
+          if config.https?
+            "wss://#{config.nginx.__listen_address}/_hmr/"
+          else
+            "ws://#{config.nginx.__listen_address}/_hmr/"
+          end
+        else
+          ""
+        end
+      end
     end
 
     settings :action_cable do
