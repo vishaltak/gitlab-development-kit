@@ -356,6 +356,12 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#web_listen' do
+      it 'defaults to 127.0.0.1:9122' do
+        expect(config.sshd.web_listen).to eq('127.0.0.1:9122')
+      end
+    end
   end
 
   describe '#dump!' do
@@ -1847,6 +1853,12 @@ RSpec.describe GDK::Config do
     describe '#workhorse_exporter_port' do
       it 'defaults to 9229' do
         expect(config.prometheus.workhorse_exporter_port).to eq(9229)
+      end
+    end
+
+    describe '#gitlab_shell_exporter_port' do
+      it 'defaults to 9122' do
+        expect(config.prometheus.gitlab_shell_exporter_port).to eq(9122)
       end
     end
   end

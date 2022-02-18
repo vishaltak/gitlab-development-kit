@@ -590,7 +590,7 @@ module GDK
 
       # gitlab-sshd only
       bool(:proxy_protocol) { false }
-      string(:web_listen) { '' }
+      string(:web_listen) { "#{config.listen_address}:9122" }
 
       # OpenSSH only
       path(:bin) { find_executable!('sshd') || '/usr/local/sbin/sshd' }
@@ -633,6 +633,7 @@ module GDK
       integer(:gitaly_exporter_port) { 9236 }
       integer(:praefect_exporter_port) { 10_101 }
       integer(:workhorse_exporter_port) { 9229 }
+      integer(:gitlab_shell_exporter_port) { 9122 }
     end
 
     settings :openldap do
