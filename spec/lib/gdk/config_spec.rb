@@ -1525,6 +1525,22 @@ RSpec.describe GDK::Config do
       it 'is false by default' do
         expect(config.webpack.__https).to be false
       end
+
+      context 'when webpack.type is set to HTTPS' do
+        before do
+          yaml.merge!(
+            {
+              'webpack' => {
+                'type' => 'https'
+              }
+            }
+          )
+        end
+
+        it 'is true' do
+          expect(config.webpack.__https).to be true
+        end
+      end
     end
 
     describe '#type' do
