@@ -21,6 +21,10 @@ cd gitlab-development-kit
 make bootstrap
 source "$HOME/.asdf/asdf.sh"
 gdk config set gitlab.rails.bootsnap false
+
+# Enable docs by default
+gdk config set gitlab_docs.enabled true
+
 cat gdk.yml
 gdk install shallow_clone=true
 gdk stop || true
