@@ -78,6 +78,14 @@ http {
       proxy_request_buffering off;
     }
 
+<%- if config.webpack.live_reload? -%>
+
+    location /_hmr/ {
+      proxy_pass http://<%= config.webpack.host %>:<%= config.webpack.port %>/ws;
+    }
+
+<%- end -%>
+
     location / {
       proxy_pass http://gitlab-workhorse;
     }
