@@ -22,7 +22,11 @@ make bootstrap
 
 # Set asdf dir correctly
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-source "$HOME/.asdf/asdf.sh"
+source "${ASDF_DIR}/asdf.sh"
+
+# Disable bootsnap as it can cause temporary/cache files to remain, resulting
+# in Docker image creation to fail
+gdk config set gitlab.rails.bootsnap false
 
 # Enable docs by default
 gdk config set gitlab_docs.enabled true
