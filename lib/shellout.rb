@@ -18,6 +18,10 @@ class Shellout
   def initialize(*args, **opts)
     @args = args.flatten
     @opts = opts
+
+    @stdout_str = ''
+    @stderr_str = ''
+    @status = false
   end
 
   def command
@@ -61,18 +65,37 @@ class Shellout
   # This command will stream each individual character from a separate thread
   # making it possible to visualize interactive progress bar.
   def stream(extra_options = {})
+    jobs = []
     @stdout_str = ''
     @stderr_str = ''
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
-    Open3.popen3(*args, opts.merge(extra_options)) do |_stdin, stdout, stderr, thread|
-      @status = print_output_from_thread(thread, stdout, stderr)
+    Open3.popen3(*args, opts.merge(extra_options)) do |stdin, stdout, stderr, thread|
+      jobs = [
+        thread_read('stdout', stdout, method(:print_out)),
+        thread_read('stderr', stderr, method(:print_err)),
+        read_from_write_to($stdin, stdin)
+      ]
+
+      # Give the read (stdin) and write (stdout, stderr) threads a chance to get going.
+      sleep(0.01)
+
+      begin
+        thread.join
+      rescue Interrupt
+        # handle if/when CTRL-C is pressed
+        exit
+      end
+
+      @status = thread.value
     end
 
     read_stdout
   rescue Errno::ENOENT => e
     print_err(e.message)
     raise StreamCommandFailedError, e
+  ensure
+    jobs.each(&:kill)
   end
 
   def readlines(limit = -1)
@@ -118,7 +141,7 @@ class Shellout
   #
   # @return [Boolean] whether last run command was successful
   def success?
-    return false unless @status
+    return false if !@status || @status.success?.nil?
 
     @status.success?
   end
@@ -134,14 +157,6 @@ class Shellout
 
   private
 
-  def print_output_from_thread(thread, stdout, stderr)
-    threads = Array(thread)
-    threads << thread_read(stdout, method(:print_out))
-    threads << thread_read(stderr, method(:print_err))
-    threads.each(&:join)
-    thread.value
-  end
-
   def clean_string(str)
     str.sub(/\r\e/, '').chomp
   end
@@ -150,13 +165,25 @@ class Shellout
     @stdout_str, @stderr_str, @status = Open3.capture3(*args, opts.merge(extra_options))
   end
 
-  def thread_read(io, meth)
-    Thread.new do
-      until io.eof?
-        ready = IO.select([io])
+  def read_from_write_to(stdin_read, stdin_write)
+    Thread.start do
+      while (line = stdin_read.gets)
+        break if stdin_write.closed?
 
-        meth.call(io.read_nonblock(BLOCK_SIZE)) if ready
+        stdin_write.write(line)
       end
+    end
+  end
+
+  def thread_read(label, io, meth)
+    Thread.start do
+      while (c = io.getc)
+        break if io.closed?
+
+        meth.call(c)
+      end
+    rescue IOError
+      nil
     end
   end
 

@@ -30,6 +30,10 @@ def restart_gdk?
 
   puts # so keep the same formatting
   false
+rescue Interrupt
+  # handle if/when CTRL-C is pressed
+  puts # so keep the same formatting
+  false
 end
 
 def restart_gdk
