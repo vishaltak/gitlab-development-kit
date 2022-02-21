@@ -3,6 +3,8 @@
 
 require_relative '../lib/gdk'
 
+$stdout.sync = true
+
 PROMPT_TIMEOUT = 5
 
 def ask_to_restart?
