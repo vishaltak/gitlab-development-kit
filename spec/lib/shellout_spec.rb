@@ -97,10 +97,9 @@ RSpec.describe Shellout do
         end
 
         it 'displays output and errors' do
-          expect(GDK::Output).to receive(:puts).with(expected_command_stderr_puts, stderr: true)
           expect(GDK::Output).to receive(:error).with(expected_command_error)
 
-          subject.execute
+          expect { subject.execute }.to output(expected_command_stderr_puts).to_stderr
         end
       end
 
@@ -124,7 +123,9 @@ RSpec.describe Shellout do
         end
 
         it 'is unsuccessful', :hide_output do
+          allow(subject).to receive(:sleep).with(0.01)
           allow(subject).to receive(:sleep).with(2).twice.and_return(true)
+
           subject.execute(display_output: display_output, retry_attempts: 2)
 
           expect(subject.success?).to be_falsy
@@ -143,16 +144,8 @@ RSpec.describe Shellout do
       context 'when the command does exist, but fails' do
         let(:command) { 'ls /doesntexist' }
         let(:opts) { {} }
-        let(:expected_command_stderr_puts) { "ls: cannot access '/doesntexist': No such file or directory\n" }
+        let(:expected_command_stderr_puts) { %r{ls:( cannot access)? '*?/doesntexist'*: No such file or directory} }
         let(:expected_command_error) { "'ls /doesntexist' failed." }
-
-        before do
-          stderr = double(StringIO, read: expected_command_stderr_puts)
-          allow(stderr).to receive(:each_line).and_yield(expected_command_stderr_puts)
-          stdout = double(StringIO, each_line: '', read: '')
-          stdin = instance_double(StringIO, write: '', close: nil)
-          allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new {})
-        end
 
         it_behaves_like 'a command that fails'
         it_behaves_like 'a command that does not retry'
@@ -184,7 +177,8 @@ RSpec.describe Shellout do
       let(:command) { 'ls /fakedir' }
 
       it 'fails once but then succeeds', :hide_output do
-        allow(subject).to receive(:sleep).with(2).and_return(true)
+        allow(subject).to receive(:sleep).with(0.01)
+        allow(subject).to receive(:sleep).with(2).once.and_return(true)
 
         expect(subject).to receive(:success?).twice.and_return(false)
         expect(subject).to receive(:success?).twice.and_return(true)
