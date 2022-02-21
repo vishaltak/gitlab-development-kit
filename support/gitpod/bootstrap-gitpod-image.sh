@@ -19,9 +19,23 @@ cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
 make bootstrap
-source "$HOME/.asdf/asdf.sh"
+
+# Set asdf dir correctly
+ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+source "${ASDF_DIR}/asdf.sh"
+
+# Disable bootsnap as it can cause temporary/cache files to remain, resulting
+# in Docker image creation to fail
 gdk config set gitlab.rails.bootsnap false
+
+# make webpack static, prevents that GitLab tries to connect to localhost webpack from browser outside the workspace
+gdk config set webpack.static true
+
+# Enable docs by default
+gdk config set gitlab_docs.enabled true
+
 cat gdk.yml
+
 gdk install shallow_clone=true
 gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true

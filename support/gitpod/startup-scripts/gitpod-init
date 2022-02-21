@@ -10,10 +10,6 @@ source "$HOME/gitpod-common"
 
 cd /workspace/gitlab-development-kit
 
-# make webpack static, prevents that GitLab tries to connect to localhost webpack from browser outside the workspace
-echo "webpack:" >> gdk.yml
-echo "  static: true" >> gdk.yml
-
 # reconfigure GDK
 log "Reconfiguring GDK"
 gdk reconfigure
