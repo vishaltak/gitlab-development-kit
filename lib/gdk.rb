@@ -117,9 +117,7 @@ module GDK
   end
 
   def self.make(*targets)
-    sh = Shellout.new(MAKE, targets, chdir: GDK.root)
-    sh.stream
-    sh.success?
+    Shellout.new(MAKE, targets, chdir: GDK.root).execute.success?
   end
 
   def self.validate_yaml!
