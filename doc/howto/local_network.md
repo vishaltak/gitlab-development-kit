@@ -1,22 +1,25 @@
 # Local network binding
 
-`gdk.test` is the standard for referring to the local GDK instance in documentation steps and GDK
-tools. We recommend [mapping this to a loopback interface](#create-loopback-interface), but
-it can be mapped to `127.0.0.1`.
+For ease of documentation:
 
-To set up `gdk.test` as a hostname:
+- `gdk.test` is the standard hostname for referring to the local GDK instance.
+- `registry.test` is the standard hostname for referring to a local [container registry](registry.md).
+
+We recommend [mapping this to a loopback interface](#create-loopback-interface), but it can be mapped to `127.0.0.1`.
+
+To set up `gdk.test` and `registry.test` as hostnames:
 
 1. Map `gdk.test` to a local address. If using [loopback interface](#create-loopback-interface), add the following to
    `/etc/hosts`:
 
    ```plaintext
-   172.16.123.1 gdk.test
+   172.16.123.1 gdk.test registry.test
    ```
 
    Or, if using `127.0.0.1`:
 
    ```plaintext
-   127.0.0.1 gdk.test
+   127.0.0.1 gdk.test registry.test
    ```
 
 1. Set `hostname` to `gdk.test`.
