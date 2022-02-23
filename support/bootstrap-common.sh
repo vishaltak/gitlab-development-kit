@@ -11,21 +11,22 @@ export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
 # Add supported linux platform IDs extracted from /etc/os-release into the
-# appropriate varible variables below. SUPPORTED_PLATFORMS ends up containing
+# appropriate varible variables below. SUPPORTED_LINUX_PLATFORMS ends up containing
 # all supported platforms and is displayed to the user if their platform is not
 # supported, so you can format the ID to be 'Ubuntu' instead of 'ubuntu'
 # (which is how ID appears in /etc/os-release) so it's rendered nicely to the
-# user. When comparing the user's platform ID against SUPPORTED_PLATFORMS, we
+# user. When comparing the user's platform ID against SUPPORTED_LINUX_PLATFORMS, we
 # ensure the check is not case sensitive which means we get the best of both
 # worlds.
 #
-SUPPORTED_UBUNTU_LIKE_PLATFORMS=('Ubuntu Pop neon')
-SUPPORTED_DEBIAN_LIKE_PLATFORMS=('Debian PureOS')
-SUPPORTED_ARCH_LIKE_PLATFORMS=('Arch Manjaro')
-SUPPORTED_FEDORA_LIKE_PLATFORMS=('Fedora RHEL')
-SUPPORTED_OTHER_PLATFORMS=('macOS')
-
-SUPPORTED_PLATFORMS=("${SUPPORTED_OTHER_PLATFORMS[@]}" "${SUPPORTED_UBUNTU_LIKE_PLATFORMS[@]}" "${SUPPORTED_DEBIAN_LIKE_PLATFORMS[@]}" "${SUPPORTED_ARCH_LIKE_PLATFORMS[@]}" "${SUPPORTED_FEDORA_LIKE_PLATFORMS[@]}")
+# Check first if the BASH version is 3.2 (macOS's default) because associative arrays were introducted in version 4.
+# shellcheck disable=SC2076
+if [[ ${BASH_VERSION%%.*} -gt 3 ]]; then
+  declare -A SUPPORTED_LINUX_PLATFORMS=( ['ubuntu']='Ubuntu Pop neon' \
+                                   ['debian']='Debian PureOS' \
+                                   ['arch']='Arch Manjaro' \
+                                   ['fedora']='Fedora RHEL' )
+fi
 
 GDK_CACHE_DIR="${root_path}/.cache"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
@@ -186,8 +187,9 @@ ensure_supported_platform() {
 
     os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    [[ -n ${os_id_like} ]] || os_id_like=unknown
 
-    if [[ ${SUPPORTED_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_PLATFORMS[*]} =~ ${os_id_like} ]]; then
+    if [[ ${SUPPORTED_LINUX_PLATFORMS[*]} =~ ${os_id}|${os_id_like} ]]; then
       shopt -u nocasematch
       return 0
     fi
@@ -205,9 +207,10 @@ common_preflight_checks() {
     echo
     echo "ERROR: Unsupported platform. The list of supported platforms are:" >&2
     echo "INFO:" >&2
-    for platform in "${SUPPORTED_PLATFORMS[@]}"; do
+    for platform in "${SUPPORTED_LINUX_PLATFORMS[@]}"; do
       echo "INFO: - $platform" >&2
     done
+    echo "INFO: - macOS" >&2
     echo "INFO:" >&2
     echo "INFO: If your platform is not listed above, you're welcome to create a Merge Request in the GDK project to add support." >&2
     echo "INFO:" >&2
@@ -228,6 +231,17 @@ common_preflight_checks() {
     echo "INFO: We recommend you uninstall RVM or rbenv, or remove RVM or rbenv from your PATH variable." >&2
     echo "INFO: For more information, see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/migrate_to_asdf.md." >&2
     exit 1
+  fi
+}
+
+linux_platform_distro_selector() {
+  local platform="${1}"
+
+  if setup_platform_linux_with "packages_${platform}.txt"; then
+    mark_platform_as_setup "packages_${platform}.txt"
+  else
+    shopt -u nocasematch
+    return 1
   fi
 }
 
@@ -252,35 +266,12 @@ setup_platform() {
 
     shopt -s nocasematch
 
-    if [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_UBUNTU_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
-      if setup_platform_linux_with "packages_ubuntu.txt"; then
-        mark_platform_as_setup "packages_ubuntu.txt"
-      else
-        shopt -u nocasematch
-        return 1
+    for platform in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
+      if [[ ${SUPPORTED_LINUX_PLATFORMS[${platform}]} =~ ${os_id}|${os_id_like} ]]; then
+        linux_platform_distro_selector "${platform}"
       fi
-    elif [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_DEBIAN_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
-      if setup_platform_linux_with "packages_debian.txt"; then
-        mark_platform_as_setup "packages_debian.txt"
-      else
-        shopt -u nocasematch
-        return 1
-      fi
-    elif [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_ARCH_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
-      if setup_platform_linux_arch_like_with "packages_arch.txt"; then
-        mark_platform_as_setup "packages_arch.txt"
-      else
-        shopt -u nocasematch
-        return 1
-      fi
-    elif [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id} ]] || [[ ${SUPPORTED_FEDORA_LIKE_PLATFORMS[*]} =~ ${os_id_like} ]]; then
-      if setup_platform_linux_fedora_like_with "packages_fedora.txt"; then
-        mark_platform_as_setup "packages_fedora.txt"
-      else
-        shopt -u nocasematch
-        return 1
-      fi
-    fi
+    done
+
     shopt -u nocasematch
   fi
 }
