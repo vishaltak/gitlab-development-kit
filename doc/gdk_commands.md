@@ -14,7 +14,17 @@ To access GitLab, go to <http://localhost:3000> in your browser. It may take a f
 Rails app to be ready. During this period you can see `If you just started GDK it can take 60-300 seconds before GitLab has finished booting. This page will automatically reload every 5 seconds.`
 in the browser.
 
+### Get the login credentials
+
 The development login credentials are `root` and `5iveL!fe`.
+
+You can also get the credentials by running:
+
+```shell
+gdk help
+```
+
+## View logs
 
 To see logs, run:
 
@@ -22,18 +32,18 @@ To see logs, run:
 gdk tail
 ```
 
+## Stop GDK
+
 When you are not using GDK you may want to shut it down to free up memory on your computer:
 
 ```shell
 gdk stop
 ```
 
-If you'd like to run a specific group of services, you can do so by providing
-the service names as arguments. Multiple arguments are supported.
-
 ## Run specific services
 
-GDK can start specific services only. For example, to start just PostgreSQL and Redis, run:
+You can start specific services only by providing the service names as arguments.
+Multiple arguments are supported. For example, to start just PostgreSQL and Redis, run:
 
 ```shell
 gdk start postgresql redis
@@ -144,7 +154,7 @@ software that's no longer required. To cleanup your GDK, run:
 gdk cleanup
 ```
 
-The `gdk cleanup` command is destructive and requires you to confirm 
+The `gdk cleanup` command is destructive and requires you to confirm
 if you want to proceed. If you prefer to run without confirming
 (for example, if you want to run as a [GDK hook](configuration.md#hooks)),
 run:
