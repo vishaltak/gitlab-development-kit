@@ -62,6 +62,7 @@ supported installation methods:
 
 - [Use GDK](doc/howto/index.md).
 - [Update an existing installation](doc/index.md#update-gdk).
+- [Login credentials (root login and password)](doc/gdk_commands.md#get-the-login-credentials).
 
 ## Getting help
 
