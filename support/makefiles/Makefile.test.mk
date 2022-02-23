@@ -5,7 +5,7 @@ RSPEC := $(shell command -v rspec 2> /dev/null)
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
 
 .PHONY: test
-test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-asdf-combine verify-makefile-config
+test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-makefile-config
 
 .PHONY: rubocop
 rubocop:
