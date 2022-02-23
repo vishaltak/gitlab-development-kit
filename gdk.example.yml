@@ -237,6 +237,7 @@ praefect:
 prometheus:
   enabled: false
   gitaly_exporter_port: 9236
+  gitlab_shell_exporter_port: 9122
   port: 9090
   praefect_exporter_port: 10101
   workhorse_exporter_port: 9229
@@ -316,7 +317,7 @@ sshd:
   proxy_protocol: false
   use_gitlab_sshd: true
   user: git
-  web_listen: ''
+  web_listen: 127.0.0.1:9122
 tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:
