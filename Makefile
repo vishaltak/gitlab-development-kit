@@ -27,6 +27,8 @@ $(error "ERROR: Cannot find 'rake'. Please run 'make bootstrap'.")
 endif
 endif
 
+export GDK_QUIET = $(gdk_quiet)
+
 ###############################################################################
 # Include all support/makefiles/*.mk files here                               #
 ###############################################################################
@@ -40,9 +42,7 @@ else
 OPENSSL := $(shell command -v openssl 2> /dev/null)
 endif
 
-quiet_bundle_flag = $(shell ${gdk_quiet} && echo "--quiet")
-bundle_install_cmd = ${BUNDLE} install --jobs 4 ${quiet_bundle_flag} ${BUNDLE_ARGS}
-gem_install_required_bundler = gem install bundler --conservative -v=$(shell awk '/BUNDLED WITH/{getline;print $$NF;}' Gemfile.lock)
+support_bundle_install = $(gitlab_development_root)/support/bundle-install
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #

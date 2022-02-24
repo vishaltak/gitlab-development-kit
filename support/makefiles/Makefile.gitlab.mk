@@ -63,7 +63,7 @@ gitlab/public/uploads:
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
 	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler
-	$(Q)$(in_gitlab) $(gem_install_required_bundler) && $(bundle_install_cmd)
+	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_clone_dir)
 	$(Q)touch $@
 
 .gitlab-yarn:

@@ -37,7 +37,7 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitaly Ruby gems"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_development_root}/gitaly/ruby && $(gem_install_required_bundler) && $(bundle_install_cmd)
+	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitaly_clone_dir)/ruby
 
 .PHONY: praefect-migrate
 praefect-migrate: postgresql-seed-praefect

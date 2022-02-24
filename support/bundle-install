@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+GDK_QUIET="${GDK_QUIET:-false}"
+
+ensure_bundler_version_installed() {
+  local gem_install_args=
+
+  if [[ "${GDK_QUIET}" == "true" ]]; then
+    gem_install_args="--silent"
+  fi
+
+  gem install bundler --conservative -v="$(needed_bundler_version)" ${gem_install_args}
+}
+
+needed_bundler_version() {
+  awk '/BUNDLED WITH/{ getline; print $NF; }' Gemfile.lock
+}
+
+bundle_install() {
+  bundle check > /dev/null 2>&1 || bundle install --jobs 4
+}
+
+GDK_QUIET="${GDK_QUIET:-false}"
+BUNDLE_INSTALL_ARGS="${BUNDLE_INSTALL_ARGS:-}"
+
+DIR_TO_PROCESS="${1}"
+
+if [[ ! -d ${DIR_TO_PROCESS} ]]; then
+  echo "ERROR: Directory '${DIR_TO_PROCESS}' does not exist, exiting."
+fi
+
+cd "${DIR_TO_PROCESS}"
+ensure_bundler_version_installed
+bundle_install

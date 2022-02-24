@@ -1,36 +1,32 @@
 MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
-RUBOCOP := $(shell command -v rubocop 2> /dev/null)
-RSPEC := $(shell command -v rspec 2> /dev/null)
 
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
 
 .PHONY: test
 test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-makefile-config
 
+.PHONY: gdk_bundle_install
+gdk_bundle_install:
+	${Q}$(support_bundle_install) $(gitlab_development_root)
+
 .PHONY: rubocop
-rubocop:
 ifeq ($(BUNDLE),)
+rubocop:
 	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
-ifeq ($(RUBOCOP),)
-	@echo "INFO: Installing RuboCop.."
-	$(Q)$(gem_install_required_bundler) && ${bundle_install_cmd} ${QQ}
-endif
+rubocop: gdk_bundle_install
 	@echo -n "RuboCop: "
 	@${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
 endif
 
 .PHONY: rspec
-rspec:
 ifeq ($(BUNDLE),)
+rspec:
 	@echo "ERROR: Bundler is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details"
 	@false
 else
-ifeq ($(RSPEC),)
-	@echo "INFO: Installing RSpec.."
-	$(Q)$(gem_install_required_bundler) && ${bundle_install_cmd} ${QQ}
-endif
+rspec: gdk_bundle_install
 	@echo -n "RSpec: "
 	@${BUNDLE} exec $@ ${RSPEC_ARGS}
 endif

@@ -21,7 +21,7 @@ rubocop:
   stage: test
   needs: []
   variables:
-    BUNDLE_ARGS: "--path vendor/bundle"
+    BUNDLE_INSTALL_ARGS: "--path vendor/bundle"
   script:
     - make rubocop
 
@@ -32,7 +32,7 @@ rspec:
   needs: []
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
-    BUNDLE_ARGS: "--path vendor/bundle"
+    BUNDLE_INSTALL_ARGS: "--path vendor/bundle"
   script:
     - pwd > .gdk-install-root
     - make rspec
