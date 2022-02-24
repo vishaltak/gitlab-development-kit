@@ -1,11 +1,13 @@
 #!/bin/bash -e
 
-output=$(support/asdf-combine)
+support/asdf-combine --quiet
+diff_output=$(git diff --color --exit-code -G'^[^#]' .tool-versions || true)
 
-if ! git diff --exit-code .tool-versions; then
-  echo
-  echo "ERROR: There are .tool-versions changes that need to be checked in.  Run 'support/asdf-combine' to generate."
-  echo "INFO: Output from support/asdf-combine:"
-  echo "${output}"
+if [[ -n "${diff_output}" ]] ; then
+  echo "ERROR: There are .tool-versions changes that need to be checked in.  Run 'support/asdf-combine' to generate." >&2
+  echo >&2
+  echo "${diff_output}"
+  echo >&2
+
   exit 1
 fi
