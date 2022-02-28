@@ -108,6 +108,10 @@ verify-asdf-combine:
   image: ruby:2.7
   stage: test
   needs: []
+  artifacts:
+    when: on_failure
+    paths:
+      - .tool-versions
   script:
     - make verify-asdf-combine
   rules:
