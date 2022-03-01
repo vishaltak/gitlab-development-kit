@@ -44,12 +44,27 @@ To enable GDK to manage `gitlab-docs`:
    gdk start gitlab-docs
    ```
 
-1. Go to the URL shown in the terminal to ensure the site loads correctly. If the site doesn't
-   load correctly, `tail` the `gitlab-docs` logs:
+   Or all GDK services (including `gitlab-docs`):
 
    ```shell
-   gdk tail gitlab-docs
+   gdk start
    ```
+
+Go to the local documentation URL to ensure the site loads correctly. Either:
+
+- The URL shown in the terminal, if you ran `gdk start`.
+- The URL given by the `hostname` and `port` of the following commands:
+
+  ```shell
+  gdk config get hostname
+  gdk config get gitlab_docs
+  ```
+
+If the site doesn't load correctly, `tail` the `gitlab-docs` logs:
+
+```shell
+gdk tail gitlab-docs
+```
 
 ## Make documentation changes
 
