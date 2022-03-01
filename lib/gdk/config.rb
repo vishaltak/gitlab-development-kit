@@ -26,14 +26,10 @@ module GDK
     bool(:__platform_supported) { config.__platform != 'unknown' }
 
     path(:__brew_prefix_path) do
-      if config.__platform_darwin?
-        if File.exist?('/opt/homebrew/bin/brew')
-          '/opt/homebrew'
-        elsif File.exist?('/usr/local/bin/brew')
-          '/usr/local'
-        else
-          ''
-        end
+      if config.__platform_darwin? && File.exist?('/opt/homebrew/bin/brew')
+        '/opt/homebrew'
+      elsif config.__platform_darwin? && File.exist?('/usr/local/bin/brew')
+        '/usr/local'
       else
         ''
       end
