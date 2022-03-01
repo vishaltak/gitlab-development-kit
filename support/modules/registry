@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require_relative '../../lib/gdk'
+
+klass = GDK::Modules::Registry.new
+
+case ARGV[0]
+when 'setup'
+  klass.setup
+when 'trust'
+  klass.trust
+end
