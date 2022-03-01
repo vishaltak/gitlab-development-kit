@@ -35,13 +35,6 @@ export GDK_QUIET = $(gdk_quiet)
 
 include support/makefiles/*.mk
 
-ifeq ($(platform),darwin)
-OPENSSL_PREFIX := $(shell brew --prefix openssl@1.1)
-OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
-else
-OPENSSL := $(shell command -v openssl 2> /dev/null)
-endif
-
 support_bundle_install = $(gitlab_development_root)/support/bundle-install
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87

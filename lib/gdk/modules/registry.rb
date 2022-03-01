@@ -11,7 +11,7 @@ module GDK
 
         return if config.localhost_key_path.exist?
 
-        Shellout.new(%(#{openssl_bin_path} req -new -subj "/CN=#{hostname}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "#{config.localhost_key_path}" -out "#{config.localhost_crt_path}")).execute
+        Shellout.new(%(#{openssl_bin_path} req -new -subj "/CN=#{hostname}/" -x509 -days 365 -newkey rsa:2048 -nodes -keyout "#{config.localhost_key_path}" -out "#{config.localhost_crt_path}" -addext "subjectAltName=DNS:#{config.host})).execute
         config.localhost_key_path.chmod(0o600)
       end
 

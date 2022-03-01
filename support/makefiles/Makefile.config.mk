@@ -104,10 +104,6 @@ prometheus/prometheus.yml:
 redis/redis.conf: 
 	$(Q)rake redis/redis.conf
 
-.PHONY: registry/config.yml
-registry/config.yml: registry_host.crt
-	$(Q)rake registry/config.yml
-
 .PHONY: snowplow/snowplow_micro.conf
 snowplow/snowplow_micro.conf: 
 	$(Q)rake snowplow/snowplow_micro.conf
