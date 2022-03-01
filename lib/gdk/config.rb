@@ -24,7 +24,7 @@ module GDK
 
     bool(:__platform_linux) { config.__platform == 'linux' }
     bool(:__platform_darwin) { config.__platform == 'darwin' }
-    bool(:__platform_supported?) { config.__platform != 'unknown' }
+    bool(:__platform_supported) { config.__platform != 'unknown' }
 
     settings :common do
       string(:ca_path) { '' }
