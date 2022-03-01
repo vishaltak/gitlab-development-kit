@@ -334,6 +334,16 @@ module GDK
       string(:gid) { '' }
 
       bool(:compatibility_schema1_enabled) { false }
+
+      path(:path) { config.gdk_root.join('registry') }
+      path(:config_yml) { config.registry.path.join('config.yml') }
+      path(:storage_path) { config.registry.path.join('storage') }
+      path(:localhost_key_path) { config.gdk_root.join('localhost.key') }
+      path(:localhost_crt_path) { config.gdk_root.join('localhost.crt') }
+      path(:registry_host_key_path) { config.gdk_root.join('registry_host.key') }
+      path(:registry_host_crt_path) { config.gdk_root.join('registry_host.crt') }
+      path(:__docker_certs_d_path) { Pathname.new(ENV['HOME']).join('.docker', '.certs.d', "#{config.registry.host}:#{config.registry.port}") }
+      path(:__docker_certs_ca_crt_path) { config.registry.__docker_certs_d_path.join('ca.crt') }
     end
 
     settings :object_store do

@@ -2017,6 +2017,48 @@ RSpec.describe GDK::Config do
         expect(config.registry.gid).to eq('')
       end
     end
+
+    describe '#path' do
+      it 'is /home/git/gdk/registry by default' do
+        expect(subject.registry.path.to_s).to eq('/home/git/gdk/registry')
+      end
+    end
+
+    describe '#config_yml' do
+      it 'is /home/git/gdk/registry/config.yml by default' do
+        expect(subject.registry.config_yml.to_s).to eq('/home/git/gdk/registry/config.yml')
+      end
+    end
+
+    describe '#storage_path' do
+      it 'is /home/git/gdk/registry/storage by default' do
+        expect(subject.registry.storage_path.to_s).to eq('/home/git/gdk/registry/storage')
+      end
+    end
+
+    describe '#localhost_key_path' do
+      it 'is /home/git/gdk/localhost.key by default' do
+        expect(subject.registry.localhost_key_path.to_s).to eq('/home/git/gdk/localhost.key')
+      end
+    end
+
+    describe '#localhost_crt_path' do
+      it 'is /home/git/gdk/localhost.crt by default' do
+        expect(subject.registry.localhost_crt_path.to_s).to eq('/home/git/gdk/localhost.crt')
+      end
+    end
+
+    describe '#registry_host_key_path' do
+      it 'is /home/git/gdk/registry_host.key by default' do
+        expect(subject.registry.registry_host_key_path.to_s).to eq('/home/git/gdk/registry_host.key')
+      end
+    end
+
+    describe '#registry_host_crt_path' do
+      it 'is /home/git/gdk/registry_host.crt by default' do
+        expect(subject.registry.registry_host_crt_path.to_s).to eq('/home/git/gdk/registry_host.crt')
+      end
+    end
   end
 
   describe 'object_store' do
