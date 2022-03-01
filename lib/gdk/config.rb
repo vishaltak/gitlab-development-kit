@@ -24,7 +24,29 @@ module GDK
 
     bool(:__platform_linux) { config.__platform == 'linux' }
     bool(:__platform_darwin) { config.__platform == 'darwin' }
-    bool(:__platform_supported?) { config.__platform != 'unknown' }
+    bool(:__platform_supported) { config.__platform != 'unknown' }
+
+    path(:__brew_prefix_path) do
+      if config.__platform_darwin?
+        if File.exist?('/opt/homebrew/bin/brew')
+          '/opt/homebrew'
+        elsif File.exist?('/usr/local/bin/brew')
+          '/usr/local'
+        else
+          ''
+        end
+      else
+        ''
+      end
+    end
+
+    path(:__openssl_bin_path) do
+      if config.__brew_prefix_path.to_s.empty?
+        Pathname.new(MakeMakefile.find_executable('openssl'))
+      else
+        config.__brew_prefix_path.join('opt', 'openssl@1.1', 'bin', 'openssl')
+      end
+    end
 
     settings :common do
       string(:ca_path) { '' }

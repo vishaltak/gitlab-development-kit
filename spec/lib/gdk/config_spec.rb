@@ -127,6 +127,58 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe '__brew_prefix_path' do
+    before do
+      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+    end
+
+    context 'on a Linux system' do
+      let(:host_os) { 'linux' }
+
+      it 'returns an empty string' do
+        expect(config.__brew_prefix_path.to_s).to eq('')
+      end
+    end
+
+    context 'on a macOS system' do
+      let(:host_os) { 'darwin' }
+
+      it 'returns the brew prefix string' do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with('/opt/homebrew/bin/brew').and_return(true)
+
+        expect(config.__brew_prefix_path.to_s).to eq('/opt/homebrew')
+      end
+    end
+  end
+
+  describe '__openssl_bin_path' do
+    before do
+      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+    end
+
+    context 'on a Linux system' do
+      let(:host_os) { 'linux' }
+
+      it 'returns the location of the pathed openssl as a string' do
+        expect(config.__openssl_bin_path.to_s).to eq('/usr/bin/openssl')
+      end
+    end
+
+    context 'on a macOS system' do
+      let(:host_os) { 'darwin' }
+
+      it 'returns the location of the openssl@1.1 bin as a string' do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with('/opt/homebrew/bin/brew').and_return(true)
+
+        expect(config.__openssl_bin_path.to_s).to eq('/opt/homebrew/opt/openssl@1.1/bin/openssl')
+      end
+    end
+  end
+
   describe '__uri' do
     context 'for defaults' do
       it 'returns http://gdk.example.com:3000' do
