@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rake/clean'
+
 require_relative '../gdk/task_helpers'
 
 CONFIGS = FileList[
