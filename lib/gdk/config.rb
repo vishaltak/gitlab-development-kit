@@ -724,7 +724,6 @@ module GDK
           end
         end
 
-        bool(:separate_db_schemas) { false }
         bool(:multiple_databases) { false }
 
         settings :puma do

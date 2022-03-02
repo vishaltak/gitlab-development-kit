@@ -81,7 +81,6 @@ gitlab:
       threads_max: 4
       threads_min: 1
       workers: 2
-    separate_db_schemas: false
   rails_background_jobs:
     sidekiq_exporter_enabled: false
     sidekiq_exporter_port: 3807
