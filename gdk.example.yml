@@ -75,6 +75,8 @@ gitlab:
     hostname: 127.0.0.1
     https:
       enabled: false
+    multiple_database_ci:
+      use_main_database: true
     multiple_databases: false
     port: 3000
     puma:

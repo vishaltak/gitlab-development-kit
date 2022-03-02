@@ -20,7 +20,11 @@ development:
   ci:
     adapter: postgresql
     encoding: unicode
+  <%- if config.gitlab.rails.multiple_database_ci.use_main_database -%>
+    database: gitlabhq_development
+  <%- else -%>
     database: gitlabhq_development_ci
+  <%- end -%>
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
@@ -44,7 +48,11 @@ test: &test
   ci:
     adapter: postgresql
     encoding: unicode
+  <%- if config.gitlab.rails.multiple_database_ci.use_main_database -%>
+    database: gitlabhq_test
+  <%- else -%>
     database: gitlabhq_test_ci
+  <%- end -%>
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10

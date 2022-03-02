@@ -259,7 +259,8 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/index.md#truncate
 | `gitlab.rails.port` | `3000` | Specify the port value that Rails uses when generating URLs. |
 | `gitlab.rails.https.enabled` | `false` | Specify if HTTPS is enabled which Rails uses when generating URLs. |
 | `gitlab.rails.address` | `''`     | Specify whether Rails should listen to a UNIX socket or a TCP port. Useful for debugging with Wireshark. Use `host:port` to listen on a TCP port. Do **not** include `http://`. |
-| `gitlab.rails.multiple_databases` | `false` | Set this to `true` to configure [multiple databases](https://docs.gitlab.com/ee/development/database/multiple_databases.html) in your `config/database.yml`. |
+| `gitlab.rails.multiple_databases` | `false` | Set this to `true` to configure [multiple database connections](https://docs.gitlab.com/ee/development/database/multiple_databases.html) in your `config/database.yml`. |
+| `gitlab.rails.multiple_database_ci.use_main_database` | `true` | When `true`, the CI database connection uses the same database as the Main database (`gitlabhq_development`). When `false`, it uses a distinct database (`gitlabhq_development_ci`). Only relevant when `gitlab.rails.multiple_databases` is enabled. |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 | `gitlab.rails.bootsnap` | `true` | Set this to `false` to disable [Bootsnap](https://github.com/Shopify/bootsnap). |
 

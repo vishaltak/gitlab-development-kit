@@ -726,6 +726,10 @@ module GDK
 
         bool(:multiple_databases) { false }
 
+        settings :multiple_database_ci do
+          bool(:use_main_database) { true }
+        end
+
         settings :puma do
           integer(:workers) { 2 }
 

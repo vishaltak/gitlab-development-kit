@@ -1234,6 +1234,14 @@ RSpec.describe GDK::Config do
         end
       end
 
+      describe 'multiple_database_ci' do
+        describe 'use_main_database' do
+          it 'is enabled by default' do
+            expect(config.gitlab.rails.multiple_database_ci.use_main_database).to be(true)
+          end
+        end
+      end
+
       describe 'puma' do
         describe 'threads_min' do
           it 'is 1 by default' do
