@@ -1176,12 +1176,6 @@ RSpec.describe GDK::Config do
         end
       end
 
-      describe 'separate_db_schemas' do
-        it 'is disabled by default' do
-          expect(config.gitlab.rails.separate_db_schemas).to be(false)
-        end
-      end
-
       describe 'multiple_databases' do
         it 'is disabled by default' do
           expect(config.gitlab.rails.multiple_databases).to be(false)
