@@ -58,6 +58,4 @@ end
 
 dir = (brew_linked_discover || brew_symlink_discover || brew_cellar_discover || pg_config_discover)
 
-raise('ERROR: Unable to determine PostgreSQL bin directory') unless dir
-
-puts dir
+puts dir if dir
