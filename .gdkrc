@@ -9,22 +9,24 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
     BREW_PREFIX="/opt/homebrew"
   elif [[ -x "/usr/local/bin/brew" ]]; then
     BREW_PREFIX="/usr/local"
-  else
-    echo "ERROR: Homebrew is required but cannot be found."
-    exit
   fi
 
-  OPENSSL_PREFIX="${BREW_PREFIX}/opt/openssl@1.1"
-  READLINE_PREFIX="${BREW_PREFIX}/opt/readline"
-  ICU4C_PREFIX="${BREW_PREFIX}/opt/icu4c"
+  # Is Homebrew available?
+  if [[ -n "${BREW_PREFIX:-}" ]]; then
+    eval "$(${BREW_PREFIX}/bin/brew shellenv)" # Ensure brew is loaded
 
-  export LDFLAGS="-L${OPENSSL_PREFIX}/lib"
-  export CPPFLAGS="-I${OPENSSL_PREFIX}/include"
-  export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig:${ICU4C_PREFIX}/lib/pkgconfig"
-  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=${OPENSSL_PREFIX} --with-readline-dir=${READLINE_PREFIX}"
+    OPENSSL_PREFIX="${BREW_PREFIX}/opt/openssl@1.1"
+    READLINE_PREFIX="${BREW_PREFIX}/opt/readline"
+    ICU4C_PREFIX="${BREW_PREFIX}/opt/icu4c"
 
-  if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "true" ]]; then
-    export LIBPCREDIR="${BREW_PREFIX}/opt/pcre2"
+    export LDFLAGS="-L${OPENSSL_PREFIX}/lib"
+    export CPPFLAGS="-I${OPENSSL_PREFIX}/include"
+    export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig:${ICU4C_PREFIX}/lib/pkgconfig"
+    export RUBY_CONFIGURE_OPTS="--with-openssl-dir=${OPENSSL_PREFIX} --with-readline-dir=${READLINE_PREFIX}"
+
+    if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "true" ]]; then
+      export LIBPCREDIR="${BREW_PREFIX}/opt/pcre2"
+    fi
   fi
 fi
 
