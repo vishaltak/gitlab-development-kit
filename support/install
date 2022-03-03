@@ -90,7 +90,7 @@ echo
 echo "INFO: To make sure GDK commands are available in this shell and ensure you're"
 echo "INFO: in the newly installed GDK directory, please run:"
 echo
-echo "source \"${ASDF_SH_PATH}\""
+echo "source \"${HOME}/.gdkrc\""
 echo "cd ${GDK_INSTALL_DIR}"
 echo
 }

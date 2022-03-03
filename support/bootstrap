@@ -14,18 +14,11 @@ GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
 asdf_install() {
   if [[ ! -d "${CURRENT_ASDF_DIR}" ]]; then
     git clone https://github.com/asdf-vm/asdf.git "${CURRENT_ASDF_DIR}" --branch ${ASDF_VERSION_TO_INSTALL}
-
-    asdf_add_initializer "${HOME}/.bashrc" "asdf.sh"
-    asdf_add_initializer "${HOME}/.zshrc" "asdf.sh"
-
-    return 0
   fi
 
-  return 0
-}
+  add_to_user_gdkrc_file "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
 
-asdf_add_initializer() {
-  [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/${2}" >> "${1}"
+  return 0
 }
 
 asdf_install_update_plugins() {
@@ -44,9 +37,7 @@ asdf_install_update_plugins() {
 
 asdf_install_tools() {
   # Install all tools specified in .tool-versions
-  local asdf_arch_opts
-
-  asdf_arch_opts=""
+  local asdf_arch_opts=""
 
   if [[ "${OSTYPE}" == "darwin"* ]]; then
     if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
@@ -75,7 +66,7 @@ gdk_mark_bootstrapped() {
   echo "INFO: Bootstrap successful!"
   echo "INFO: To make sure GDK commands are available in this shell, run:"
   echo
-  echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
+  echo "source \"${HOME}/.gdkrc\""
   echo
 }
 

@@ -48,6 +48,32 @@ echo_if_unsuccessful() {
   fi
 }
 
+add_to_user_gdkrc_file() {
+  local new_line="${1}"
+  local user_gdkrc_file="${HOME}/.gdkrc"
+  local user_shell_file=""
+
+  if [[ "${OSTYPE}" == "darwin"* ]]; then
+    user_shell_file="${HOME}/.zprofile"
+  else
+    user_shell_file="${HOME}/.bashrc"
+  fi
+
+  write_to_file_it_not_exist "${user_gdkrc_file}" "${1}"
+  write_to_file_it_not_exist "${user_shell_file}" "source \"${user_gdkrc_file}\""
+}
+
+write_to_file_it_not_exist() {
+  local file="${1}"
+  local new_line="${2}"
+
+  new_line="${new_line} # Added by GDK"
+
+  if ! grep -q "${new_line}" "${file}" > /dev/null 2>&1; then
+    echo -e "\n${new_line}" >> "${file}"
+  fi
+}
+
 asdf_reshim() {
   asdf reshim
 }
@@ -376,6 +402,13 @@ setup_platform_darwin() {
     echo "INFO: Installing Homebrew."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   fi
+
+  # Force a (re)source of .gdkrc as we possibly _didn't_ have Homebrew installed
+  # but will now.
+  # shellcheck disable=SC1090
+  source "${ROOT_PATH}/.gdkrc"
+
+  add_to_user_gdkrc_file "eval \"\$(${BREW_PREFIX}/bin/brew shellenv)\""
 
   if ! brew tap homebrew/cask; then
     return 1
