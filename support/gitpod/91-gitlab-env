@@ -14,6 +14,8 @@ rails_hosts=$(gp url "${port}" | sed -e 's+^http[s]*://++')
 export RAILS_HOSTS=$rails_hosts
 
 # set DEV_SERVER_PUBLIC_ADDR
+# This allows to provide 
 webpack_port=$(gdk config get webpack.port)
-webpack_url=$(gp url "${webpack_port}")
+webpack_url=$(gp url "${webpack_port}" | sed -e 's+^http[s]*://+wss://+')/ws
 export DEV_SERVER_PUBLIC_ADDR=$webpack_url
+export DEV_SERVER_ALLOWED_HOSTS=$rails_hosts
