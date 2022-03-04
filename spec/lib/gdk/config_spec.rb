@@ -1234,6 +1234,98 @@ RSpec.describe GDK::Config do
         end
       end
 
+      describe 'databases' do
+        describe 'ci' do
+          describe 'enabled' do
+            it 'is disabled by default' do
+              expect(config.gitlab.rails.databases.ci.enabled).to be(false)
+            end
+          end
+
+          describe 'use_main_database' do
+            it 'is enabled by default' do
+              expect(config.gitlab.rails.databases.ci.use_main_database).to be(true)
+            end
+          end
+        end
+
+        describe '__enabled' do
+          it 'is disabled by default' do
+            expect(config.gitlab.rails.databases.ci.__enabled).to be(false)
+          end
+
+          context 'when config.gitlab.rails.multiple_databases is true' do
+            before do
+              yaml['gitlab'] = {
+                'rails' => {
+                  'multiple_databases' => true
+                }
+              }
+            end
+
+            it 'is enabled' do
+              expect(config.gitlab.rails.databases.ci.__enabled).to be(true)
+            end
+          end
+
+          context 'when config.gitlab.rails.databases.ci.enabled is true' do
+            before do
+              yaml['gitlab'] = {
+                'rails' => {
+                  'databases' => {
+                    'ci' => {
+                      'enabled' => true
+                    }
+                  }
+                }
+              }
+            end
+
+            it 'is enabled' do
+              expect(config.gitlab.rails.databases.ci.__enabled).to be(true)
+            end
+          end
+        end
+
+        describe '__use_main_database' do
+          it 'is disabled by default' do
+            expect(config.gitlab.rails.databases.ci.__use_main_database).to be(false)
+          end
+
+          context 'when config.gitlab.rails.multiple_databases is true' do
+            before do
+              yaml['gitlab'] = {
+                'rails' => {
+                  'multiple_databases' => 'true'
+                }
+              }
+            end
+
+            it 'is disabled' do
+              expect(config.gitlab.rails.databases.ci.__use_main_database).to be(false)
+            end
+          end
+
+          context 'when config.gitlab.rails.databases.ci.enabled is true' do
+            before do
+              yaml['gitlab'] = {
+                'rails' => {
+                  'databases' => {
+                    'ci' => {
+                      'enabled' => true
+                    }
+                  }
+                }
+              }
+            end
+
+            it 'is enabled' do
+              expect(config.gitlab.rails.databases.ci.__enabled).to be(true)
+            end
+          end
+        end
+      end
+
       describe 'puma' do
         describe 'threads_min' do
           it 'is 1 by default' do
