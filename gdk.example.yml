@@ -72,11 +72,13 @@ gitlab:
     address: ''
     bootsnap: true
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
+    databases:
+      ci:
+        enabled: false
+        use_main_database: true
     hostname: 127.0.0.1
     https:
       enabled: false
-    multiple_database_ci:
-      use_main_database: true
     multiple_databases: false
     port: 3000
     puma:

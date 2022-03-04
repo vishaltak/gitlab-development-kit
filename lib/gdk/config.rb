@@ -724,10 +724,28 @@ module GDK
           end
         end
 
+        # Deprecated, use :databases settings instead
         bool(:multiple_databases) { false }
 
-        settings :multiple_database_ci do
-          bool(:use_main_database) { true }
+        settings :databases do
+          settings :ci do
+            bool(:enabled) { false }
+            bool(:use_main_database) { true }
+
+            bool(:__enabled) do
+              config.gitlab.rails.multiple_databases || config.gitlab.rails.databases.ci.enabled
+            end
+
+            bool(:__use_main_database) do
+              if config.gitlab.rails.multiple_databases
+                false
+              elsif config.gitlab.rails.databases.ci.enabled
+                config.gitlab.rails.databases.ci.use_main_database
+              else
+                false
+              end
+            end
+          end
         end
 
         settings :puma do
