@@ -12,7 +12,7 @@ module GDK
       extend Forwardable
 
       MAIN_TASKS = %w[db:migrate db:test:prepare].freeze
-      GEO_TASKS = %w[geo:db:migrate geo:db:test:prepare].freeze
+      GEO_TASKS = %w[db:migrate:geo db:test:prepare:geo].freeze
 
       def_delegators :config, :geo?
       def_delegators :postgresql, :in_recovery?
