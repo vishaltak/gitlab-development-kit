@@ -147,9 +147,9 @@ RSpec.describe Shellout do
         let(:expected_command_error) { "'ls /doesntexist' failed." }
 
         before do
-          stderr = double(StringIO, read: expected_command_stderr_puts)
+          stderr = double(StringIO, read: expected_command_stderr_puts) # rubocop:todo RSpec/VerifiedDoubles
           allow(stderr).to receive(:each_line).and_yield(expected_command_stderr_puts)
-          stdout = double(StringIO, each_line: '', read: '')
+          stdout = double(StringIO, each_line: '', read: '') # rubocop:todo RSpec/VerifiedDoubles
           stdin = instance_double(StringIO, write: '', close: nil)
           allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new {})
         end

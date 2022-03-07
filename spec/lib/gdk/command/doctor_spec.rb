@@ -4,10 +4,12 @@ require 'spec_helper'
 require 'stringio'
 
 RSpec.describe GDK::Command::Doctor, :hide_output do
+  # rubocop:todo RSpec/VerifiedDoubles
   let(:successful_diagnostic) { double(GDK::Diagnostic, success?: true, diagnose: nil, message: nil) }
   let(:failing_diagnostic) { double(GDK::Diagnostic, success?: false, diagnose: 'error', message: 'check failed') }
-  let(:diagnostics) { [] }
   let(:shellout) { double(Shellout, run: nil) }
+  # rubocop:enable RSpec/VerifiedDoubles
+  let(:diagnostics) { [] }
   let(:warning_message) do
     <<~WARNING
       ================================================================================
@@ -22,8 +24,8 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
 
   before do
     allow(Runit).to receive(:start).with('postgresql', quiet: true).and_return(true)
-    gdk_root_stub = double('GDK_ROOT')
-    procfile_stub = double('Procfile', exist?: true)
+    gdk_root_stub = double('GDK_ROOT') # rubocop:todo RSpec/VerifiedDoubles
+    procfile_stub = double('Procfile', exist?: true) # rubocop:todo RSpec/VerifiedDoubles
     allow(GDK).to receive(:root).and_return(gdk_root_stub)
     allow(gdk_root_stub).to receive(:join).with('Procfile').and_return(procfile_stub)
     allow(subject).to receive(:sleep).with(2)

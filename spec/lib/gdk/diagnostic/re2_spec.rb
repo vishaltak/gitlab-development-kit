@@ -66,7 +66,9 @@ RSpec.describe GDK::Diagnostic::Re2 do
   end
 
   def stub_shellout(success, stdout: '', stderr: '')
+    # rubocop:todo RSpec/VerifiedDoubles
     shellout = double('Shellout', try_run: nil, read_stdout: stdout, read_stderr: stderr, success?: success)
+    # rubocop:enable RSpec/VerifiedDoubles
     allow(Shellout).to receive(:new).with(['ruby', '-e', "require 're2'; regexp = RE2::Regexp.new('{', log_errors: false); regexp.error unless regexp.ok?"]).and_return(shellout)
   end
 end

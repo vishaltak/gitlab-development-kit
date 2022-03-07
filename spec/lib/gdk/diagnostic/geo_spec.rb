@@ -89,7 +89,7 @@ RSpec.describe GDK::Diagnostic::Geo do
   end
 
   def stub_geo_enabled(enabled)
-    gdk_geo_config = double('geo config', enabled: enabled)
+    gdk_geo_config = double('geo config', enabled: enabled) # rubocop:todo RSpec/VerifiedDoubles
     allow_any_instance_of(GDK::Config).to receive(:geo).and_return(gdk_geo_config)
   end
 end

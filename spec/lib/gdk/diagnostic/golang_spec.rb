@@ -70,13 +70,15 @@ RSpec.describe GDK::Diagnostic::Golang do
 
   def stub_clone_exists?(exists)
     dir = Pathname.new('/home/git/gdk/gitlab-elasticsearch-indexer')
-    settings = double('gitlab_elasticsearch_indexer settings', __dir: dir)
+    settings = double('gitlab_elasticsearch_indexer settings', __dir: dir) # rubocop:todo RSpec/VerifiedDoubles
     allow_any_instance_of(GDK::Config).to receive(:gitlab_elasticsearch_indexer).and_return(settings)
     allow(dir).to receive(:exist?).and_return(exists)
   end
 
   def stub_go_get(result, success: true)
+    # rubocop:todo RSpec/VerifiedDoubles
     shellout = double('Shellout', try_run: result, read_stdout: result, success?: success)
+    # rubocop:enable RSpec/VerifiedDoubles
     allow(Shellout).to receive(:new).with(%w[go get], chdir: '/home/git/gdk/gitlab-elasticsearch-indexer').and_return(shellout)
     allow(shellout).to receive(:try_run).and_return(result)
   end

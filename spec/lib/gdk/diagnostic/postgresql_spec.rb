@@ -9,7 +9,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   end
 
   after do
-    FileUtils.rm(@tmp_file) if File.exist?(@tmp_file)
+    FileUtils.rm(@tmp_file) if File.exist?(@tmp_file) # rubocop:todo RSpec/InstanceVariable
   end
 
   describe '#diagnose' do
@@ -110,7 +110,9 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   end
 
   def stub_psql_version(result, success: true)
+    # rubocop:todo RSpec/VerifiedDoubles
     shellout = double('Shellout', try_run: result, read_stdout: result, success?: success)
+    # rubocop:enable RSpec/VerifiedDoubles
     allow(Shellout).to receive(:new).with(%w[psql --version]).and_return(shellout)
     allow(shellout).to receive(:try_run).and_return(result)
   end

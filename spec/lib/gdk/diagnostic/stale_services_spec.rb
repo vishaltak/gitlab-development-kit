@@ -88,7 +88,9 @@ RSpec.describe GDK::Diagnostic::StaleServices do
   end
 
   def stub_ps(result, success: true)
+    # rubocop:todo RSpec/VerifiedDoubles
     shellout = double('Shellout', try_run: result, read_stdout: result, success?: success)
+    # rubocop:enable RSpec/VerifiedDoubles
     full_command = %(pgrep -l -P 1 -f "runsv (elasticsearch|geo-cursor|gitaly|gitlab-docs|gitlab-k8s-agent|gitlab-pages|gitlab-ui|gitlab-workhorse|grafana|jaeger|mattermost|minio|nginx|openldap|postgresql|postgresql-geo|postgresql-replica|praefect|prometheus|rails-background-jobs|rails-web|redis|registry|runner|snowplow-micro|spamcheck|sshd|tunnel_|webpack|sleep)")
     allow(Shellout).to receive(:new).with(full_command).and_return(shellout)
     allow(shellout).to receive(:try_run).and_return(result)

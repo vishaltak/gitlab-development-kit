@@ -144,14 +144,18 @@ RSpec.describe GDK::HTTPHelper do
   def stub_http_get_with_code(http_code)
     http_client_double = stub_http
 
+    # rubocop:todo RSpec/VerifiedDoubles
     http_response_double = double('Net::HTTPResponse', code: http_code.to_s, message: Rack::Utils::HTTP_STATUS_CODES[http_code])
+    # rubocop:enable RSpec/VerifiedDoubles
     allow(http_client_double).to receive(:get).with(path).and_return(http_response_double)
   end
 
   def stub_http_head_with_code(http_code)
     http_client_double = stub_http
 
+    # rubocop:todo RSpec/VerifiedDoubles
     http_response_double = double('Net::HTTPResponse', code: http_code.to_s, message: Rack::Utils::HTTP_STATUS_CODES[http_code])
+    # rubocop:enable RSpec/VerifiedDoubles
     allow(http_client_double).to receive(:head).with(path).and_return(http_response_double)
   end
 end
