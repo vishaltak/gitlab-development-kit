@@ -43,10 +43,12 @@ RSpec.describe GDK::Command::MeasureUrl do
         freeze_time do
           report_file_path = "sitespeed-result/#{branch_name}_#{Time.now.strftime('%F-%H-%M-%S')}"
           urls = %w[/explore]
+          # rubocop:todo RSpec/VerifiedDoubles
           shellout_docker_run_double = double('Shellout', stream: '', success?: true)
+          # rubocop:enable RSpec/VerifiedDoubles
           expect(Shellout).to receive(:new).with(%(docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:1.2.3 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path} http://host.docker.internal:3000/explore)).and_return(shellout_docker_run_double)
 
-          shellout_open_double = double('Shellout', run: true, success?: true)
+          shellout_open_double = double('Shellout', run: true, success?: true) # rubocop:todo RSpec/VerifiedDoubles
           expect(Shellout).to receive(:new).with("open ./#{report_file_path}/index.html").and_return(shellout_open_double)
 
           subject.run(urls)

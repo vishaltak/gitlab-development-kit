@@ -92,7 +92,7 @@ def stub_raw_gdk_yaml(raw_yaml)
 end
 
 def stub_pg_bindir
-  fake_io = double('IO', read: '/usr/local/bin')
+  fake_io = double('IO', read: '/usr/local/bin') # rubocop:todo RSpec/VerifiedDoubles
   allow(IO).to receive(:popen).and_call_original
   allow(IO).to receive(:popen).with(%w[support/pg_bindir], any_args).and_yield(fake_io)
 end
@@ -116,6 +116,6 @@ def stub_backup
 end
 
 def stub_gdk_debug(state)
-  gdk_settings = double('GDK::ConfigSettings', debug?: state, __debug?: state)
+  gdk_settings = double('GDK::ConfigSettings', debug?: state, __debug?: state) # rubocop:todo RSpec/VerifiedDoubles
   allow_any_instance_of(GDK::Config).to receive(:gdk).and_return(gdk_settings)
 end

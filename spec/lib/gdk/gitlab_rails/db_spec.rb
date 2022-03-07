@@ -5,7 +5,7 @@ require 'gdk/gitlab_rails/db'
 
 RSpec.describe GDK::GitlabRails::DB, :hide_stdout do
   describe '#migrate' do
-    let(:shellout_mock) { double('Shellout', stream: nil, success?: true) }
+    let(:shellout_mock) { double('Shellout', stream: nil, success?: true) } # rubocop:todo RSpec/VerifiedDoubles
 
     subject(:migrate) { described_class.new.migrate }
 

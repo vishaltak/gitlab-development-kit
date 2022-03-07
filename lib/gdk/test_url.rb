@@ -46,7 +46,7 @@ module GDK
           GDK::Output.puts("> Testing attempt ##{i}..")
         end
 
-        return true if http_helper.head_up?
+        return true if http_helper.head_up? # rubocop:todo Cop/AvoidReturnFromBlocks
 
         GDK::Output.puts(http_helper.last_response_reason) unless quiet
 

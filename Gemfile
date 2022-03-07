@@ -9,7 +9,7 @@ group :development do
 end
 
 group :test do
-  gem 'gitlab-styles', '~> 6.6.0', require: false
+  gem 'gitlab-styles', '~> 7.0.0', require: false
   gem 'pry-byebug', '~> 3.9.0', require: false
   gem 'rspec', '~> 3.11.0', require: false
   gem 'rspec_junit_formatter', '~> 0.5.0', require: false

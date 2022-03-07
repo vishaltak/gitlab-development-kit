@@ -120,7 +120,7 @@ RSpec.describe GDK::Command::Cleanup do
 
     def stub_rake_task(task_name, rake_file)
       allow(Kernel).to receive(:load).with(GDK.root.join('lib', 'tasks', rake_file)).and_return(true)
-      rake_task_double = double("#{task_name} rake task")
+      rake_task_double = double("#{task_name} rake task") # rubocop:todo RSpec/VerifiedDoubles
       allow(Rake::Task).to receive(:[]).with(task_name).and_return(rake_task_double)
       rake_task_double
     end

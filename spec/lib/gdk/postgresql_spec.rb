@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
-  let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) }
+  let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) } # rubocop:todo RSpec/VerifiedDoubles
   let(:pg_version_file) { '/home/git/gdk/postgresql/data/PG_VERSION' }
 
   before do

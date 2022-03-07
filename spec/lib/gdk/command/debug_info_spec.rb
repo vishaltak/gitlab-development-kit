@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe GDK::Command::DebugInfo do
   let(:gdk_root) { Pathname.new('/home/git/gdk') }
   let(:args) { [] }
-  let(:shellout) { double(run: true) }
+  let(:shellout) { double(run: true) } # rubocop:todo RSpec/VerifiedDoubles
 
   subject { described_class.new.run(args) }
 
@@ -76,7 +76,7 @@ RSpec.describe GDK::Command::DebugInfo do
   end
 
   def stub_shellout_response(cmd, response)
-    shellout = double(run: response)
+    shellout = double(run: response) # rubocop:todo RSpec/VerifiedDoubles
 
     allow(Shellout).to receive(:new).with(cmd, any_args).and_return(shellout)
   end
