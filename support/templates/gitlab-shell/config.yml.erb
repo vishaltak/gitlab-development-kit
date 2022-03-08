@@ -20,9 +20,14 @@ http_settings:
 #  read_timeout: 300
 #  user: someone
 #  password: somepass
-#  ca_file: /etc/ssl/cert.pem
 #  ca_path: /etc/pki/tls/certs
   self_signed_cert: false
+  <%- if config.https? -%>
+  ca_file: "<%= config.gdk_root.join('localhost.crt') %>"
+  <%- else -%>
+#  ca_file: /etc/ssl/cert.pem
+  <%- end -%>
+
 
 # File used as authorized_keys for gitlab user
 auth_file: "<%= config.sshd.authorized_keys_file %>"
