@@ -96,6 +96,9 @@ url = "<%= config.__uri %>"
 <%- unless config.common.ca_path.empty? -%>
 ca_path = "<%= config.common.ca_path %>"
 <%- end -%>
+<%- if config.https? -%>
+ca_file = "<%= config.gdk_root.join('localhost.crt') %>"
+<%- end -%>
 self_signed_cert = false
 
 # # You can adjust the concurrency of each RPC endpoint
