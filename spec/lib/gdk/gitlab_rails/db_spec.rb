@@ -27,7 +27,7 @@ RSpec.describe GDK::GitlabRails::DB, :hide_stdout do
       it 'migrates the Geo database when Geo is enabled' do
         stub_gdk_yaml('geo' => { 'enabled' => true })
 
-        expect(Shellout).to receive(:new).with(array_including('geo:db:migrate'), any_args).and_return(shellout_mock)
+        expect(Shellout).to receive(:new).with(array_including('db:migrate:geo'), any_args).and_return(shellout_mock)
 
         migrate
       end
@@ -56,7 +56,7 @@ RSpec.describe GDK::GitlabRails::DB, :hide_stdout do
       it 'migrates the Geo database when Geo is enabled' do
         stub_gdk_yaml('geo' => { 'enabled' => true })
 
-        expect(Shellout).to receive(:new).with(array_including('geo:db:migrate'), any_args).and_return(shellout_mock)
+        expect(Shellout).to receive(:new).with(array_including('db:migrate:geo'), any_args).and_return(shellout_mock)
 
         migrate
       end
