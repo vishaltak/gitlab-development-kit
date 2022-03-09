@@ -8,7 +8,84 @@ instances. For more, see
 [GitLab Geo](https://about.gitlab.com/solutions/geo/) or
 [Replication (Geo)](https://docs.gitlab.com/ee/administration/geo/replication/).
 
-## Prerequisites
+## Easy installation
+
+### If you have no GDK yet: How to install 2 GDKs and configure Geo
+
+The installation script:
+
+- Clones the GDK project into a new `gdk` directory in the current working directory.
+- Installs `asdf` and necessary `asdf` plugins.
+- Runs `gdk install`.
+- Runs `gdk start`.
+- Adds your license.
+- Clones the GDK project into a new `gdk2` directory in the current working directory.
+- Runs `./support/geo-add-secondary` (see below for a description of this script).
+
+1. Follow the [dependency installation instructions](../index.md#install-prerequisites).
+
+1. Set the `GITLAB_LICENSE_KEY` environment variable in your shell, with the text of a GitLab Premium or Ultimate license key.
+
+   If you have a file on disk, then run:
+
+   ```shell
+   export GITLAB_LICENSE_KEY=$(cat /path/to/your/premium.gitlab-license)
+   ```
+
+   Or, if you have plaintext, then run:
+
+   ```shell
+   export GITLAB_LICENSE_KEY="pasted text"
+   ```
+
+1. Run the installation script:
+
+   ```shell
+   curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/geo-install" | bash
+   ```
+
+   Or, if you want to name the GDK directories, then run:
+
+   ```shell
+   curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/geo-install" | bash -s name-of-primary name-of-secondary
+   ```
+
+To check if it is working, visit the unified URL at `http://127.0.0.1:3001` and sign in. Your requests are always served by the secondary site (as if Geo-location based DNS is set up and you are located near the secondary site). It should behave no differently than the primary site. That is the goal anyway.
+
+If needed, you can visit the primary directly at `http://127.0.0.1:3000` but this would be considered a workaround, and you may notice quirks. For example, absolute URLs rendered on the page use the unified URL. You may also occasionally get redirected to the unified URL.
+
+To see if you are able to run tests, you can run a simple spec like `bin/rspec ee/spec/lib/gitlab/geo/logger_spec.rb` from the `gitlab` directory in the primary `gdk` directory.
+
+### If you have one working GDK already: How to add a secondary Geo site
+
+1. On your existing GDK, add a GitLab Premium or Ultimate license either:
+
+   - In the [GitLab UI](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
+   - Using an [environment variable](https://docs.gitlab.com/ee/user/admin_area/license_file.html#add-your-license-file-during-installation).
+
+1. Clone GDK into a second directory adjacent to your existing GDK:
+
+   ```shell
+   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git gdk2
+   ```
+
+1. Change directory to your existing GDK:
+
+   ```shell
+   cd gdk
+   ```
+
+1. Run the script:
+
+   ```shell
+   ./support/geo-add-secondary --secondary-port 3001 --primary . ../gdk2
+   ```
+
+The new GDK's URL `http://127.0.0.1:3001` is the unified URL. You can still visit the primary directly if needed.
+
+## Manual installation
+
+### Prerequisites
 
 Development on GitLab Geo requires two GDK instances running side-by-side. You can use an existing
 GDK instance based on the [install GDK](../index.md#install-gdk) documentation as the primary
@@ -27,22 +104,7 @@ git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git gdk-geo
 cd gdk-geo
 ```
 
-## Easy installation
-
-1. Add a GitLab Premium or Ultimate license either:
-
-   - In the [GitLab UI](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
-   - Using an [environment variable](https://docs.gitlab.com/ee/user/admin_area/license_file.html#add-your-license-file-during-installation).
-
-1. Run the following command in the `../gdk` folder:
-
-   ```shell
-   ./support/geo-add-secondary --secondary-port 3001 --primary . ../gdk-geo
-   ```
-
-## Manual installation
-
-### Primary
+#### Primary
 
 Add the following to `gdk.yml` file on the primary node:
 
@@ -57,7 +119,7 @@ assume they can run secondary-specific logic on any node. That is, rather than t
 node-type aware, this ensures the primary can act "like a secondary" in some cases
 such as when running tests.
 
-### Secondary
+#### Secondary
 
 Add the following to the `gdk.yml` file to configure unique ports for the new instance so
 that it can run alongside the primary:
@@ -102,13 +164,13 @@ gdk start postgresql postgresql-geo
 make geo-setup
 ```
 
-### Praefect on a Geo secondary
+#### Praefect on a Geo secondary
 
 After changing the setting of `geo.secondary` in your GDK configuration, the
 Praefect database needs to be recreated. Check out the [Praefect documentation](gitaly.md#praefect-on-a-geo-secondary)
 for the details.
 
-## Database replication
+### Database replication
 
 For GitLab Geo, you need a primary/secondary database replication defined.
 There are a few extra steps to follow.
@@ -130,7 +192,7 @@ make postgresql-replication-primary-create-slot
 gdk restart postgresql
 ```
 
-### Set up replication on secondary
+#### Set up replication on secondary
 
 Because we replicate the primary database to the secondary, we need to
 remove the secondary's PostgreSQL data folder:
@@ -156,75 +218,22 @@ Initialize a secondary database and setup replication:
 make postgresql-geo-replication-secondary
 ```
 
-### Running tests
+### Copy database encryption key
 
-#### On a primary
-
-The secondary has a read-write tracking database, which is necessary for some
-Geo tests to run. However, its copy of the replicated database is read-only, so
-tests fail to run.
-
-You can add the tracking database to the primary node by running:
-
-```shell
-# From the gdk folder:
-gdk start
-
-# In another terminal window
-make geo-setup
-```
-
-This adds both development and test instances, but the primary continues
-to operate *as* a primary except in tests where the current Geo node has been
-stubbed.
-
-To ensure the tracking database is started, restart GDK. You need to use
-`gdk start` to be able to run the tests.
-
-#### On a secondary
-
-When you try to run tests on a GDK configured as a Geo secondary, tests
-might fail because the main database is read-only.
-
-You can work around this by using the PostgreSQL instance that is used
-for the tracking database (i.e. the one running in
-`<secondary-gdk-root>/postgresql-geo`) for both the tracking and the
-main database.
-
-Add or replace the `test:` block with the following to `<secondary-gdk-root>/gitlab/config/database.yml`:
-
-```yaml
-test: &test
-  adapter: postgresql
-  encoding: unicode
-  database: gitlabhq_test
-  host: /home/<secondary-gdk-root>/postgresql-geo
-  port: 5432
-  pool: 10
-```
-
-## Copy database encryption key
-
-The primary and the secondary nodes use the same secret key
-to encrypt attributes in the database. To copy the secret from your primary to your secondary:
+The primary and the secondary nodes use the same secret key to encrypt and decrypt attributes in the database. To copy the secret from your primary to your secondary:
 
 1. Open `gdk/gitlab/config/secrets.yml` with your editor of choice
 1. Copy the value of `development.db_key_base`
 1. Paste it into `gdk-geo/gitlab/config/secrets.yml`
 
-## SSH cloning
+### Configure Geo nodes
 
-To be able to clone over SSH on a secondary, follow the instruction on how
-to set up [SSH](ssh.md), including [SSH key lookup from database](ssh.md#ssh-key-lookup-from-database).
-
-## Configure Geo nodes
-
-### Add a license that includes the Geo feature
+#### Add a license that includes the Geo feature
 
 1. Get a [test license](https://about.gitlab.com/handbook/support/workflows/test_env.html#testing-environment-license)
 1. Upload the license on your local Geo primary at <http://gdk.test:3000/admin/license>
 
-### Add primary node
+#### Add primary node
 
 1. Add the primary node:
 
@@ -240,7 +249,7 @@ to set up [SSH](ssh.md), including [SSH key lookup from database](ssh.md#ssh-key
    gdk restart rails
    ```
 
-### Add secondary node
+#### Add secondary node
 
 There isn't a convenient Rake task to add the secondary node because the relevant
 data is on the secondary, but we can only write to the primary database. So we
@@ -316,6 +325,62 @@ You could set up a reverse proxy at port `3002` to forward requests to either si
 
    However, there are still pages that are not proxied and might not load here, including the Geo replication details for projects and designs.
    If you wish to access and modify these pages in development, you should disable unified URLs for now.
+
+## Running tests
+
+### On a primary
+
+If you used an [easy installation](#easy-installation) method to configure Geo, then this has already been done on the primary.
+
+The secondary has a read-write tracking database, which is necessary for some
+Geo tests to run. However, its copy of the replicated database is read-only, so
+tests fail to run.
+
+You can add the tracking database to the primary node by running:
+
+```shell
+# From the gdk folder:
+gdk start
+
+# In another terminal window
+make geo-setup
+```
+
+This adds both development and test instances, but the primary continues
+to operate *as* a primary except in tests where the current Geo node has been
+stubbed.
+
+To ensure the tracking database is started, restart GDK. You need to use
+`gdk start` to be able to run the tests.
+
+### On a secondary
+
+<!-- TODO: Add this to support/geo-add-secondary. Then the Running tests section can be moved into the Manual installation section. -->
+
+When you try to run tests on a GDK configured as a Geo secondary, tests
+might fail because the main database is read-only.
+
+You can work around this by using the PostgreSQL instance that is used
+for the tracking database (i.e. the one running in
+`<secondary-gdk-root>/postgresql-geo`) for both the tracking and the
+main database.
+
+In `<secondary-gdk-root>/gitlab/config/database.yml`, add or replace the `test:` block with the following:
+
+```yaml
+test: &test
+  adapter: postgresql
+  encoding: unicode
+  database: gitlabhq_test
+  host: /home/<secondary-gdk-root>/postgresql-geo
+  port: 5432
+  pool: 10
+```
+
+## SSH cloning
+
+To be able to clone over SSH on a secondary, follow the instruction on how
+to set up [SSH](ssh.md), including [SSH key lookup from database](ssh.md#ssh-key-lookup-from-database).
 
 ## Geo-specific GDK commands
 
