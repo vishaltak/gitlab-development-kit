@@ -729,7 +729,7 @@ module GDK
 
         settings :databases do
           settings :ci do
-            bool(:enabled) { false }
+            bool(:enabled) { true }
             bool(:use_main_database) { true }
 
             bool(:__enabled) do

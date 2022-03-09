@@ -74,7 +74,7 @@ gitlab:
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
     databases:
       ci:
-        enabled: false
+        enabled: true
         use_main_database: true
     hostname: 127.0.0.1
     https:
