@@ -32,13 +32,13 @@ module GDK
       end
 
       def display_unncessary_software_to_uninstall
-        output = ["The following asdf software is installed, but doesn't need to be:\n"]
+        output = ["You have the following software installed using asdf but GDK doesn't need them:\n"]
 
         asdf_tool_versions.unnecessary_installed_versions_of_software.each do |name, versions|
           output << "#{name} #{versions.keys.join(', ')}"
         end
 
-        output << ["\nYou can uninstall the software above by running:\n\n  cd #{config.gdk_root} && rake asdf:uninstall_unnecessary_software"]
+        output << ["\nIf you know other projects don't need them and want to uninstall them, run:\n\n  cd #{config.gdk_root} && rake asdf:uninstall_unnecessary_software"]
         output
       end
     end
