@@ -48,7 +48,7 @@ RSpec.describe GDK::Diagnostic::Asdf do
       it 'returns a message' do
         allow(asdf_tool_versions).to receive(:unnecessary_installed_versions_of_software).and_return('golang' => { '1.17.1' => 'ToolVersion' })
 
-        expect(subject.detail).to match(/^The following asdf software is installed.+golang 1.17.1.*You can uninstall the software above by running.*rake asdf:uninstall_unnecessary_software$/m)
+        expect(subject.detail).to match(/^You have the following software installed using asdf.+golang 1.17.1.*If you know other projects don't need them.*rake asdf:uninstall_unnecessary_software$/m)
       end
     end
 
