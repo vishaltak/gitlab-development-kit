@@ -292,6 +292,15 @@ You could set up a reverse proxy at port `3002` to forward requests to either si
 
    You can still visit the primary directly, just as you can access any GitLab instance at a different URL than its external URL. However, you may find some edge cases. Using the same example above: Git remote URLs will always point to the Unified URL regardless of the URL you are visiting the primary at.
 
+1. Comment out the `webpack` section in the secondary's `gdk.yml`, or set the `listen_address` and `port` to be the same as on the primary if you're not using the defaults.
+
+   After a reconfigure, the Rails webpack configuration uses the connection details of the primary webpack.
+
+   You no longer have to start `webpack` on the secondary site, which saves memory.
+
+   However, there are still pages that are not proxied and might not load here, including the Geo replication details for projects and designs.
+   If you wish to access and modify these pages in development, you should disable unified URLs for now.
+
 ## Geo-specific GDK commands
 
 Use the following commands to keep Geo-enabled GDK installations up to date.
