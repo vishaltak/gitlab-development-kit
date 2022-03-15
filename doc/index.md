@@ -136,6 +136,12 @@ After installing GDK dependencies:
    cd gitlab-development-kit
    ```
 
+1. Install all the Ruby dependencies:
+
+   ```shell
+   bundle install
+   ```
+
 ### Install GDK
 
 Install GDK by cloning and configuring GitLab and other projects using
