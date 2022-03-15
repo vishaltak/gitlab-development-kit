@@ -5,7 +5,7 @@
 #
 # <default-version> <other-version>
 ruby 2.7.5 3.0.2
-nodejs 16.13.2
+nodejs 16.14.0
 yarn 1.22.17
 minio 2021-04-06T23-11-00Z
 postgres 12.9
