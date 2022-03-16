@@ -50,7 +50,7 @@ rails-web: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle
 
 # Additional services
 #
-sshd: exec <%= config.sshd.__full_command %>
+<%= '#' unless config.sshd? %>sshd: exec <%= config.sshd.__full_command %>
 <%= '#' unless config.nginx? %>nginx: exec <%= config.nginx.bin %> -e /dev/stderr -p <%= config.gdk_root.join('nginx') %> -c conf/nginx.conf
 <%= '#' unless config.elasticsearch? %>elasticsearch: exec elasticsearch/bin/elasticsearch
 
