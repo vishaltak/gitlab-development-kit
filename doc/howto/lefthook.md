@@ -35,3 +35,8 @@ To run the `pre-push` Git hook, run:
    ```shell
    bundle exec lefthook run pre-push
    ```
+
+## Troubleshooting: Vale not found error
+
+If you get the error `ERROR: Vale not found` when running Lefthook, you can
+[install it manually](https://docs.gitlab.com/ee/development/documentation/testing.html#install-linters).
