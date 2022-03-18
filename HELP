@@ -16,8 +16,6 @@ Manage services:
   gdk tail                                  # Tail all logs
   gdk tail redis postgresql                 # Tail specific logs
 
-  gdk thin                                  # Run Rails web server with thin in
-                                            #  foreground
   gdk psql [-d gitlabhq_development]        # Run Postgres console
   gdk redis-cli                             # Run Redis console
 
