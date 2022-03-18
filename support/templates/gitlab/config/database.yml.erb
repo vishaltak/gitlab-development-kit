@@ -22,6 +22,7 @@ development:
     encoding: unicode
   <%- if config.gitlab.rails.databases.ci.__use_main_database -%>
     database: gitlabhq_development
+    database_tasks: false
   <%- else -%>
     database: gitlabhq_development_ci
   <%- end -%>
@@ -50,6 +51,7 @@ test: &test
     encoding: unicode
   <%- if config.gitlab.rails.databases.ci.__use_main_database -%>
     database: gitlabhq_test
+    database_tasks: false
   <%- else -%>
     database: gitlabhq_test_ci
   <%- end -%>
