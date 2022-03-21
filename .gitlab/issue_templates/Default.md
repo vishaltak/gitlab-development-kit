@@ -12,6 +12,10 @@
 
 ## Environment (optional)
 
-<!-- Output of `gdk debug-info` command. If the 'debug-info' command is not found, please update your GDK checkout via `git pull` and try again. -->
+- Operating system name: ```<!-- output of `uname -a` command -->```
+- Architecture: ```<!-- output of `arch` command -->```
+- The contents of your `gdk.yml` (if any)
+- Ruby version: ```<!-- output of `ruby --version` command -->```
+- GDK version: ```<!-- output of `git rev-parse --short HEAD` command -->```
 
 /label ~"Category:GDK" ~Quality ~"Engineering Productivity"
