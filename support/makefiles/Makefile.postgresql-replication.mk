@@ -15,7 +15,7 @@ postgresql-replication/access:
 	$(Q)cat support/pg_hba.conf.add >> ${postgresql_replica_data_dir}/pg_hba.conf
 
 postgresql-replication/role:
-	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"
+	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "DROP ROLE IF EXISTS ${postgresql_replication_user}; CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"
 
 postgresql-replication/backup:
 	$(Q)$(eval postgresql_primary_dir := $(realpath postgresql-primary))
