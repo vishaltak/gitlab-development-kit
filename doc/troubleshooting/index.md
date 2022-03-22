@@ -1179,8 +1179,8 @@ Check which version of Git you're running with `git --version`, and compare it a
 might be running an unsupported version.
 
 If the supported version is not available for you from pre-compiled packages, try following the
-instructions for [Ubuntu/Debian](#ubuntudebian) or [Arch/Manjaro](#arch-and-manjaro-linux). If
-that doesn't give you the supported version, you might need to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
+instructions for [Ubuntu/Debian](../index.md#ubuntudebian) or [Arch/Manjaro](../index.md#arch-and-manjaro-linux). If
+that doesn't give you the supported version, you might have to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
 
 ## Elasticsearch
 

@@ -389,7 +389,7 @@ To verify that the build stage has successfully pushed an image to your local Gi
 **Some notes about the above `.gitlab-yml.ci` configuration file:**
 
 - The variable `DOCKER_TLS_CERTDIR: ""` is required in the `build` stage because of a breaking change introduced by Docker 19.03, described [here](https://about.gitlab.com/2019/07/31/docker-in-docker-with-docker-19-dot-03/).
-- It's only necessary to set `--insecure-registry=gdk.test:5000` for the `docker:stable-dind` if you have not set up a [trusted self-signed registry](#trust-the-registrys-self-signed-certificate).
+- It's only necessary to set `--insecure-registry=gdk.test:5000` for the `docker:stable-dind` if you have not set up a [trusted self-signed registry](#set-up-pushing-and-pulling-of-images-over-https).
 
 ### Running container scanning on a local Docker image created by a build step in your pipeline
 

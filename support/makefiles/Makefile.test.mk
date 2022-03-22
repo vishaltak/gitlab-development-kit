@@ -52,7 +52,13 @@ markdownlint: yarn-install
 	@echo -n "MarkdownLint: "
 	@${YARN} run --silent markdownlint --config .markdownlint.yml 'doc/**/*.md' 'README.md' && echo "OK"
 
-# Checks internal links. Doesn't check external links or anchors.
+# Checks:
+#   - Internal links.
+#   - Anchors within the same page.
+#
+# Doesn't check:
+#    - External links.
+#    - Anchors on other pages.
 .PHONY: check-links
 check-links: yarn-install
 	@echo -n "Check internal links: "
