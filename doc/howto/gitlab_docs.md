@@ -154,7 +154,7 @@ make gitlab-docs-check
 This check requires:
 
 - `gitlab_docs.enabled` is true.
-- `enabled` is true for [all other projects](#include-additional-documentation) that provide
+- `enabled` is true for [all other projects](#include-more-documentation) that provide
   documentation.
 
 ### Troubleshooting

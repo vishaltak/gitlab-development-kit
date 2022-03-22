@@ -16,7 +16,7 @@
     "check-links": "support/check-links"
   },
   "dependencies": {
-    "markdown-link-check": "^3.9.0",
-    "markdownlint-cli": "^0.30.0"
+    "markdown-link-check": "^3.10.0",
+    "markdownlint-cli": "^0.31.1"
   }
 }
