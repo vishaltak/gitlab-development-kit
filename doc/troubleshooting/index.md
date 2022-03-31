@@ -252,7 +252,7 @@ This indicates that Go is trying to link (unsuccessfully) to brew's `icu4c`.
 
 Find the directory where `icu-i18n.pc` resides:
 
-- On macOS, using [Homebrew](https://brew.sh/), it is generally in `/usr/local/opt/icu4c/lib/pkgconfig`
+- On macOS, using [Homebrew](https://brew.sh/), it is generally in `/usr/local/opt/icu4c/lib/pkgconfig` or `/opt/homebrew/opt/icu4c/lib/pkgconfig`
 - On Ubuntu/Debian it might be in `/usr/lib/x86_64-linux-gnu/pkgconfig`
 - On Fedora it is expected to be in `/usr/lib64/pkgconfig`
 
