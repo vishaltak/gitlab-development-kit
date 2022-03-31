@@ -1,0 +1,337 @@
+#!/usr/bin/env ruby
+#
+# frozen_string_literal: true
+#
+# Add target GDK as a Geo secondary
+#
+# Prerequisites
+#
+# * Have a primary GDK working
+# * Have a GitLab Premium license installed
+# * Have another clone of GDK for the secondary site, but no need to `make bootstrap` or `gdk install`
+#
+# Notes
+#
+# * The basename of each GDK directory is the "Geo node name", by default
+# * This script configures Unified URL
+#
+# Example:
+#
+#   ./support/geo-add-secondary --secondary-port 3001 --primary . ../gdk2
+#
+
+require 'optparse'
+require 'yaml'
+require 'fileutils'
+require 'readline'
+require 'pathname'
+require 'open3'
+require 'English'
+
+module GeoSecondaryHelpers
+  Abort = Class.new(StandardError)
+  Done = Class.new(StandardError)
+
+  def capture_stdout(cmd)
+    output = IO.popen(cmd, &:read)
+    fail_with "command failed: #{cmd.join(' ')}" unless $CHILD_STATUS.success?
+    output
+  end
+
+  def fail_with(message)
+    raise Abort, "\e[31merror\e[0m #{message}"
+  end
+end
+
+class AddGeoSecondaryOptionParser
+  Options = Struct.new(
+    :primary_gdk,
+    :secondary_gdk,
+    :secondary_port
+  )
+
+  class << self
+    def parse(argv)
+      options = Options.new
+
+      parser = OptionParser.new do |opts|
+        opts.banner = "Usage: #{__FILE__} [options] <target-gdk-directory>\n\n"
+
+        opts.on('--primary [string]', String, 'GDK directory of primary site') do |value|
+          options.primary_gdk = value
+        end
+
+        opts.on('--secondary_port [string]', String, 'Desired port of target secondary site') do |value|
+          options.secondary_port = value
+        end
+
+        opts.on('-h', '--help', 'Print help message') do
+          $stdout.puts opts
+          raise Done
+        end
+      end
+
+      parser.parse!(argv)
+
+      unless argv.one?
+        $stdout.puts parser.help
+        $stdout.puts
+        raise Abort, 'Target GDK directory is required'
+      end
+
+      options.secondary_gdk = argv.first
+
+      options
+    end
+
+    def read_primary_gdk
+      $stdout.puts
+      $stdout.puts '>> GDK directory of primary site:'
+
+      loop do
+        primary_gdk = Readline.readline('?> ', false)&.strip
+        return primary_gdk unless primary_gdk.empty?
+
+        warn 'GDK directory of primary site is required'
+      end
+    end
+
+    def read_secondary_port
+      $stdout.puts
+      $stdout.puts '>> Desired port of target secondary site (enter to skip):'
+
+      secondary_port = Readline.readline('?> ', false)&.strip
+      secondary_port = nil if secondary_port.empty?
+      secondary_port
+    end
+  end
+end
+
+class GeoSecondaryAdder
+  include GeoSecondaryHelpers
+
+  attr_reader :options, :primary_gdk, :secondary_gdk, :primary_gitlab, :secondary_gitlab, :secondary_port
+
+  def initialize(options)
+    @options = options
+  end
+
+  def execute
+    initialize_vars
+
+    configure_primary
+    configure_secondary
+
+    unified_url = run_rails_command(secondary_gitlab, 'puts(GeoNode.current_node_url)')
+    create_primary_geo_node_record(unified_url)
+    create_secondary_geo_node_record(unified_url)
+
+    restart_both
+    gitlab_geo_checks
+  end
+
+  private
+
+  def initialize_vars
+    options.primary_gdk ||= AddGeoSecondaryOptionParser.read_primary_gdk
+    options.secondary_port ||= AddGeoSecondaryOptionParser.read_secondary_port
+
+    @primary_gdk = Pathname.new(options.primary_gdk).realpath
+    @secondary_gdk = Pathname.new(options.secondary_gdk).realpath
+    @primary_gitlab = primary_gdk.join('gitlab')
+    @secondary_gitlab = secondary_gdk.join('gitlab')
+    @secondary_port = options.secondary_port
+
+    print_vars
+  end
+
+  def print_vars
+    $stdout.puts "Primary site: #{primary_gdk}"
+    $stdout.puts "Secondary site: #{secondary_gdk}"
+    $stdout.puts "Secondary site port: #{secondary_port}"
+  end
+
+  def configure_primary
+    configure_primary_gdk_yml
+    run_command_arr(primary_gdk, %w[make geo-setup])
+    run_command_arr(primary_gdk, %w[gdk restart postgresql-geo])
+    run_command_arr(primary_gdk, %w[gdk start])
+  end
+
+  def configure_secondary
+    configure_secondary_gdk_yml
+    run_command_arr(secondary_gdk, %w[make bootstrap])
+    run_command_arr(secondary_gdk, %W[gdk install gitlab_repo=#{primary_gitlab}]) unless secondary_gitlab.exist?
+    run_command_arr(secondary_gdk, %w[make geo-setup])
+    copy_db_key_base_to_secondary
+    setup_pg_replication
+  end
+
+  def configure_primary_gdk_yml
+    gdk_set(primary_gdk, 'geo.enabled', true)
+    gdk_set(primary_gdk, 'geo.secondary', false)
+    gdk_set(primary_gdk, 'sshd.enabled', false)
+  end
+
+  def configure_secondary_gdk_yml
+    gdk_set(secondary_gdk, 'port', secondary_port)
+    gdk_set(secondary_gdk, 'geo.enabled', true)
+    gdk_set(secondary_gdk, 'geo.secondary', true)
+    gdk_set(secondary_gdk, 'sshd.enabled', true)
+  end
+
+  def gdk_set(pathname, key, value)
+    $stdout.puts "gdk_set: Pathname: #{pathname}, key: #{key}, desired value: #{value}"
+
+    cmd = %w[gdk config set] << key.to_s << value.to_s
+    run_command_arr(pathname.to_s, cmd)
+  end
+
+  def secondary_gdk_gitlab_directory_exists?
+    retval = secondary_gitlab.exist? && secondary_gitlab.directory?
+    $stdout.puts "Secondary GDK gitlab directory #{retval ? 'exists' : 'does not exist'}"
+    retval
+  end
+
+  def setup_pg_replication
+    # Stop secondary PG now in case it's already streaming replication
+    run_command_arr(secondary_gdk, %w[gdk stop postgresql])
+
+    pg_replication_prepare_primary
+    pg_replication_prepare_secondary
+
+    # Backup, and configure replication
+    run_command_arr(secondary_gdk, %w[make postgresql-geo-replication-secondary])
+
+    # Start the replica
+    run_command_arr(secondary_gdk, %w[gdk start postgresql])
+  end
+
+  def pg_replication_prepare_primary
+    run_command_arr(primary_gdk, %w[gdk start postgresql])
+    run_command_arr(primary_gdk, %w[make postgresql-geo-replication-primary])
+    run_command_arr(primary_gdk, %w[gdk restart postgresql])
+
+    system('make', 'postgresql-replication/drop-slot') # silence
+    run_command_arr(primary_gdk, %w[make postgresql-replication-primary-create-slot])
+    run_command_arr(primary_gdk, %w[gdk restart postgresql])
+  end
+
+  def pg_replication_prepare_secondary
+    FileUtils.remove_dir(secondary_gdk.join('postgresql/data'), true)
+    symlink = secondary_gdk.join('postgresql-primary')
+    File.unlink(symlink) if File.exist?(symlink)
+    File.symlink(primary_gdk.join('postgresql'), secondary_gdk.join('postgresql-primary'))
+  end
+
+  # Copy the secret key to the secondary so it can decrypt data in the PG DB
+  # which was encrypted by the primary.
+  def copy_db_key_base_to_secondary
+    db_key_base = read_db_key_base(primary_gitlab)
+    write_db_key_base(secondary_gitlab, db_key_base)
+  end
+
+  def read_db_key_base(rails_dir)
+    secrets_file = rails_dir.join('config', 'secrets.yml')
+
+    data = YAML.load_file secrets_file
+    data['development']['db_key_base']
+  end
+
+  def write_db_key_base(rails_dir, new_db_key_base)
+    secrets_file = rails_dir.join('config', 'secrets.yml')
+
+    data = YAML.load_file secrets_file
+    data['development']['db_key_base'] = new_db_key_base
+    File.open(secrets_file, 'w') { |f| YAML.dump(data, f) }
+  end
+
+  def create_primary_geo_node_record(unified_url)
+    # Note that we aren't using rake geo:set_primary_node here because setting
+    # up Unified URL in GDK requires us to overwrite some GeoNode attrs anyway.
+    rails_set_as_primary_with_unified_url_cmd =
+      'n = GeoNode.find_or_initialize_by(name: GeoNode.current_node_name); ' \
+      'n.primary = true; ' \
+      "n.url = '#{unified_url}'; " \
+      'n.internal_url = GeoNode.current_node_url; ' \
+      'n.save!'
+
+    run_rails_command(primary_gitlab, rails_set_as_primary_with_unified_url_cmd)
+  end
+
+  def create_secondary_geo_node_record(unified_url)
+    cmd_get_secondary_node_name = 'gdk config get geo.node_name'
+    secondary_node_name = run_command_for_stdout(secondary_gdk, cmd_get_secondary_node_name)
+
+    rails_create_secondary_node_cmd =
+      "n = GeoNode.find_or_initialize_by(name: '#{secondary_node_name}'); " \
+      'n.primary = false; ' \
+      "n.url = '#{unified_url}'; " \
+      'n.save!'
+
+    run_rails_command(primary_gitlab, rails_create_secondary_node_cmd)
+  end
+
+  def run_command_arr(dir, cmd_arr)
+    success = false
+    Dir.chdir(dir.to_s) do
+      $stdout.puts "In #{dir.inspect}, run system(*#{cmd_arr.inspect})"
+      success = system(*cmd_arr)
+    end
+    raise GeoSecondaryHelpers::Abort unless success
+
+    success
+  end
+
+  def run_command_for_stdout(dir, cmd)
+    $stdout.puts "run_command_for_stdout(dir: #{dir.inspect}, cmd: #{cmd.inspect})"
+    stdout, stderr, status = Open3.capture3(cmd, chdir: dir.to_s, &:read)
+    $stdout.puts(stderr) unless stderr.empty?
+    $stdout.puts "stdout: #{stdout.inspect}, status: #{status.inspect}"
+    raise GeoSecondaryHelpers::Abort unless status.success?
+
+    stdout.chomp
+  end
+
+  def run_rails_command(dir, cmd)
+    # TODO: Tokenizing shell commands is preferred. However it seems that
+    # tokenizing a `bin/rails runner "foo"` command does not actually succeed,
+    # with `system` or `Open3.capture3`. AND it returns exit code 0 and no
+    # output! Why??
+    cmd = "bin/rails runner \"#{cmd}\""
+
+    run_command_for_stdout(dir, cmd)
+  end
+
+  def assert_equal(result, expected)
+    unless expected == result
+      msg = "assert_equal: Got #{result.inspect} instead of #{expected.inspect}"
+      raise GeoSecondaryHelpers::Abort, msg
+    end
+
+    $stdout.puts "assert_equal: Got #{result.inspect} as expected"
+  end
+
+  def restart_both
+    run_command_arr(primary_gdk, %w[gdk restart])
+    run_command_arr(secondary_gdk, %w[gdk restart])
+  end
+
+  def gitlab_geo_checks
+    run_command_arr(primary_gitlab, %w[bin/rake gitlab:geo:check])
+    run_command_arr(secondary_gitlab, %w[bin/rake gitlab:geo:check])
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  begin
+    options = AddGeoSecondaryOptionParser.parse(ARGV)
+    GeoSecondaryAdder.new(options).execute
+  rescue GeoSecondaryHelpers::Abort => e
+    warn e.message
+    warn e.backtrace.join("\n")
+    exit 1
+  rescue GeoSecondaryHelpers::Done
+    exit
+  end
+end
