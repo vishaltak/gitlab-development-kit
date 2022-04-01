@@ -5,6 +5,8 @@
 # This file is loaded by the 'gdk' command in the gem. This file is NOT
 # part of the gitlab-development-kit gem so that we can iterate faster.
 
+# Another change.
+
 $LOAD_PATH.unshift(__dir__)
 
 require 'pathname'
