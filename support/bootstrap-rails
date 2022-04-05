@@ -20,11 +20,11 @@ def main
 
   FileUtils.rm_f(LOG_FILE)
 
-  try_connect!(config.praefect? ? 'praefect' : 'gitaly')
-
   if postgresql.db_exists?('gitlabhq_development')
     puts 'INFO: gitlabhq_development exists, nothing to do here.'
   else
+    test_gitaly_up!
+
     cmd = %w[support/exec-cd gitlab bundle exec rake dev:setup]
 
     success &&= system({ 'force' => 'yes', 'BOOTSTRAP' => '1' }, *cmd)
@@ -34,6 +34,8 @@ def main
     if postgresql.db_exists?('gitlabhq_development_ci')
       puts 'INFO: gitlabhq_development_ci exists, nothing to do here.'
     else
+      test_gitaly_up!
+
       cmd = %w[support/exec-cd gitlab bundle exec rake dev:copy_db:ci]
 
       success &&= system(*cmd)
@@ -47,6 +49,10 @@ end
 
 def config
   @config ||= GDK::Config.new
+end
+
+def test_gitaly_up!
+  try_connect!(config.praefect? ? 'praefect' : 'gitaly')
 end
 
 def try_connect!(service)
