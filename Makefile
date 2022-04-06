@@ -80,6 +80,7 @@ gitlab-ui-setup \
 gitlab-docs-setup \
 gitlab-spamcheck-setup \
 snowplow-micro-setup \
+postgresql-sensible-defaults \
 
 # This is used by `gdk install`
 #
@@ -135,7 +136,6 @@ update-summarize:
 .PHONY: reconfigure
 reconfigure: unlock-dependency-installers \
 touch-examples \
-postgresql-sensible-defaults \
 all \
 show-reconfigured-at
 
