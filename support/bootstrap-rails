@@ -16,19 +16,30 @@ def main
   postgresql = GDK::Postgresql.new
   abort 'Cannot connect to postgres' unless postgresql.ready?
 
-  if postgresql.db_exists?('gitlabhq_development')
-    puts 'INFO: gitlabhq_development exists, nothing to do here.'
-    exit
-  end
-
   success = true
 
   FileUtils.rm_f(LOG_FILE)
 
-  try_connect!(config.praefect? ? 'praefect' : 'gitaly')
+  if postgresql.db_exists?('gitlabhq_development')
+    puts 'INFO: gitlabhq_development exists, nothing to do here.'
+  else
+    test_gitaly_up!
 
-  bootstrap_commands.each do |cmd|
+    cmd = %w[support/exec-cd gitlab bundle exec rake dev:setup]
+
     success &&= system({ 'force' => 'yes', 'BOOTSTRAP' => '1' }, *cmd)
+  end
+
+  if config.gitlab.rails.databases.ci.__enabled && !config.gitlab.rails.databases.ci.__use_main_database
+    if postgresql.db_exists?('gitlabhq_development_ci')
+      puts 'INFO: gitlabhq_development_ci exists, nothing to do here.'
+    else
+      test_gitaly_up!
+
+      cmd = %w[support/exec-cd gitlab bundle exec rake dev:copy_db:ci]
+
+      success &&= system(*cmd)
+    end
   end
 
   exit true if success
@@ -36,14 +47,12 @@ def main
   abort "#{$PROGRAM_NAME} failed"
 end
 
-def bootstrap_commands
-  [
-    %w[support/exec-cd gitlab bundle exec rake dev:setup]
-  ]
-end
-
 def config
   @config ||= GDK::Config.new
+end
+
+def test_gitaly_up!
+  try_connect!(config.praefect? ? 'praefect' : 'gitaly')
 end
 
 def try_connect!(service)
