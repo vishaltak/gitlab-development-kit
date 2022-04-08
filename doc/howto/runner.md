@@ -29,7 +29,7 @@ In the configuration examples, `runner` should not be confused with [`gitlab_run
 If you intend to just use the `shell` executor (fine for simple jobs), you can use the GDK with its default settings.
 Builds run directly on the host computer. If you choose this configuration, don't use random `.gitlab-ci.yml`
 files from the internet unless you understand them fully as this could be a security risk. If you need a basic pipeline,
-see an [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configuring-manual-deployments) that
+see an [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configure-manual-deployments) that
 you can use.
 
 ### Download GitLab Runner
