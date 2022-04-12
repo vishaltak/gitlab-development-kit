@@ -28,6 +28,12 @@ To set up `gdk.test` and `registry.test` as hostnames:
    gdk config set hostname gdk.test
    ```
 
+1. If using [loopback interface](#create-loopback-interface), change `listen_address` to be the loopback alias:
+
+    ```shell
+    gdk config set listen_address 172.16.123.1
+    ```
+
 1. Reconfigure GDK:
 
    ```shell
