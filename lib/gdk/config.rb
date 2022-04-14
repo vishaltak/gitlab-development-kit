@@ -730,7 +730,7 @@ module GDK
         settings :databases do
           settings :ci do
             bool(:enabled) { true }
-            bool(:use_main_database) { true }
+            bool(:use_main_database) { false }
 
             bool(:__enabled) do
               config.gitlab.rails.multiple_databases || config.gitlab.rails.databases.ci.enabled

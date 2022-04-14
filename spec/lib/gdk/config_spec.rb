@@ -1243,8 +1243,8 @@ RSpec.describe GDK::Config do
           end
 
           describe 'use_main_database' do
-            it 'is enabled by default' do
-              expect(config.gitlab.rails.databases.ci.use_main_database).to be(true)
+            it 'is disabled by default' do
+              expect(config.gitlab.rails.databases.ci.use_main_database).to be(false)
             end
           end
         end
@@ -1306,8 +1306,8 @@ RSpec.describe GDK::Config do
         end
 
         describe '__use_main_database' do
-          it 'is enabled by default' do
-            expect(config.gitlab.rails.databases.ci.__use_main_database).to be(true)
+          it 'is disabled by default' do
+            expect(config.gitlab.rails.databases.ci.__use_main_database).to be(false)
           end
 
           context 'when config.gitlab.rails.multiple_databases is true' do
