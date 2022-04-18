@@ -11,8 +11,36 @@ instances. For more, see
 ## Prerequisites
 
 Development on GitLab Geo requires two GDK instances running side-by-side. You can use an existing
-`gdk` instance based on the [install GDK](../index.md#install-gdk) documentation as the primary
+GDK instance based on the [install GDK](../index.md#install-gdk) documentation as the primary
 node.
+
+In these instructions we assume:
+
+- Your primary GDK instance is in a folder named `gdk`.
+- Your secondary GDK instance lives in a parallel folder named `gdk-geo`.
+
+If you use different folder names, modify the commands below as needed. To create the folder for the secondary instance, run the
+following in the parent folder of the `gdk` folder:
+
+```shell
+git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git gdk-geo
+cd gdk-geo
+```
+
+## Easy installation
+
+1. Add a GitLab Premium or Ultimate license either:
+
+   - In the [GitLab UI](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
+   - Using an [environment variable](https://docs.gitlab.com/ee/user/admin_area/license_file.html#add-your-license-file-during-installation).
+
+1. Run the following command in the `../gdk` folder:
+
+   ```shell
+   ./support/geo-add-secondary --secondary-port 3001 --primary . ../gdk-geo
+   ```
+
+## Manual installation
 
 ### Primary
 
@@ -31,20 +59,8 @@ such as when running tests.
 
 ### Secondary
 
-We assume your primary GDK instance lives in a parallel folder: `../gdk`,
-make sure you use the correct folder name if not when looking at
-the instructions below.
-
-We create a secondary instance in a `gdk-geo` folder to act as
-a secondary node. We configure unique ports for the new instance so
-that it can run alongside the primary.
-
-```shell
-git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git gdk-geo
-cd gdk-geo
-```
-
-Add the following to `gdk.yml` file:
+Add the following to the `gdk.yml` file to configure unique ports for the new instance so
+that it can run alongside the primary:
 
 ```yaml
 ---
