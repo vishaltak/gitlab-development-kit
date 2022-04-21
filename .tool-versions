@@ -4,8 +4,9 @@
 # Do not modify this file directly.
 #
 # golang:
-#   1.17.8:
+#   1.17.9:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
+#   1.17.8:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v13.25.1/.tool-versions
 #   1.17.7:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
@@ -18,7 +19,7 @@
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/53768dae0bc6395d2b80438286723a912aa50921/.tool-versions
 #
-golang 1.17.8 1.17.7 1.16.14
+golang 1.17.9 1.17.8 1.17.7 1.16.14
 
 # minio:
 #   2021-04-06T23-11-00Z:
