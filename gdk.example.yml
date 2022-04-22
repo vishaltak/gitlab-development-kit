@@ -75,7 +75,7 @@ gitlab:
     databases:
       ci:
         enabled: true
-        use_main_database: true
+        use_main_database: false
     hostname: 127.0.0.1
     https:
       enabled: false
