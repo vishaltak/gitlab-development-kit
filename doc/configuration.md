@@ -296,7 +296,7 @@ Under the `snowplow_micro` key, you can define the following settings:
 
 ### Additional projects
 
-You can have GDK manage checkouts for `gitlab-runner`, `omnibus-gitlab`, and `charts/gitlab` projects.
+You can have GDK manage checkouts for `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab`, and `www-gitlab-com` projects.
 
 Under the `gitlab_runner` key, you can define the following settings:
 
@@ -320,8 +320,16 @@ Under the `charts_gitlab` key, you can define the following settings:
 | `charts_gitlab.auto_update`  | `true`  | Set to `false` to disable updating the `charts/gitlab` checkout.                                             |
 
 NOTE:
-If you set `enabled` to `true` for all of these projects, you can
+If you set `enabled` to `true` for  `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab` projects, you can
 [live preview documentation changes](howto/gitlab_docs.md#make-documentation-changes).
+
+Under the `www_gitlab_com` key, you can define the following settings:
+
+| Setting                     | Default    | Description                                                                                                                                                                                                                                                  |
+|:----------------------------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `charts_gitlab.enabled`     | `false`    | Set to `true` to enable [`www-gitlab-com`](https://gitlab.com/gitlab-com/www-gitlab-com) to be managed by GDK.                                                                                                                                               |
+| `charts_gitlab.auto_update` | `true`     | Set to `false` to disable updating the `www-gitlab-com` checkout.                                                                                                                                                                                            |
+| `www-gitlab-com.build_site` | `handbook` | Set to `uncagegorized` to build the [uncategorized](https://gitlab.com/gitlab-com/www-gitlab-com/-/tree/master/sites/uncategorized) site. By default, builds the [handbook](https://gitlab.com/gitlab-com/www-gitlab-com/-/tree/master/sites/handbook) site. |
 
 ### NGINX settings
 

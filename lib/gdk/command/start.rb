@@ -52,6 +52,7 @@ module GDK
         GDK::Output.notice("Prometheus will be available at http://#{config.hostname}:#{config.prometheus.port}.") if config.prometheus?
         GDK::Output.notice("Grafana will be available at http://#{config.hostname}:#{config.grafana.port}.") if config.grafana?
         GDK::Output.notice("A container registry will be available at #{config.registry.host}:#{config.registry.port}.") if config.registry?
+        GDK::Output.notice("A build of the www-gitlab-com #{config.www_gitlab_com.build_site} site will be available at http://localhost:4567.") if config.www_gitlab_com.enabled?
       end
     end
   end

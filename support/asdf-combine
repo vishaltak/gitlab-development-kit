@@ -20,7 +20,8 @@ TOOL_VERSIONS_FILES = [
   { refs: -> { ['master', ref_from_remote_file('GITALY_SERVER_VERSION')] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
   { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-runner' },
   { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
+  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' },
+  { refs: -> { %w[master] }, base_url: 'https://gitlab.com/gitlab-com/www-gitlab-com' }
 ].freeze
 
 HEADER_CONTENT = <<~CONTENT

@@ -65,6 +65,7 @@ module GDK
       string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
       string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
       string(:gitlab_spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
+      string(:www_gitlab_com) { 'https://gitlab.com/gitlab-com/www-gitlab-com.git' }
     end
 
     settings :dev do
@@ -791,6 +792,14 @@ module GDK
           integer(:sessions) { 15 }
         end
       end
+    end
+
+    settings :www_gitlab_com do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      string(:build_site) { 'handbook' }
+
+      string(:__middleman_cmd) { 'bundle exec middleman' }
     end
 
     settings :asdf do
