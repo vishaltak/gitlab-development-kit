@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../../lib/gdk'
+
+www_gitlab_com_settings = GDK::Config.new.www_gitlab_com
+
+GDK::Output.abort('www-gitlab-com not configured. See doc/howto/gitlab_docs.md') unless www_gitlab_com_settings.enabled?
+
+if www_gitlab_com_settings.build_site == 'uncategorized'
+  GDK::Output.info('Starting www-gitlab-com with uncategorized site..')
+  puts Shellout.new(www_gitlab_com_settings.__middleman_cmd, chdir: 'www-gitlab-com/sites/uncategorized').stream
+else
+  GDK::Output.info('Starting www-gitlab-com with handbook site..')
+  puts Shellout.new(www_gitlab_com_settings.__middleman_cmd, chdir: 'www-gitlab-com/sites/handbook').stream
+end

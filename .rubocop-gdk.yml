@@ -46,6 +46,7 @@ AllCops:
     - 'tmp/**/*'
     - 'tooling/**/*'
     - 'vendor/**/*'
+    - 'www-gitlab-com/**/*'
 
 CodeReuse/ActiveRecord:
   Enabled: false

@@ -72,3 +72,6 @@ snowplow_micro_enabled = <%= config.snowplow_micro.enabled %>
 sshd_bin = <%= config.sshd.bin %>
 sshd_hostkeys = <%= config.sshd.host_keys.join(' ') %>
 username = <%= config.username %>
+www_gitlab_com_enabled = <%= config.www_gitlab_com? %>
+www_gitlab_com_build_site = <%= config.www_gitlab_com.build_site %>
+www_gitlab_com_repo = <%= config.repositories.www_gitlab_com %>

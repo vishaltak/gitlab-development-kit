@@ -19,6 +19,7 @@
 /.gitlab-shell-bundle
 /.gitlab-translations
 /.gitlab-ui-yarn
+/.www-gitlab-com-yarn
 /.gitlab-yarn
 /.node-version
 /.ruby-gemset
@@ -110,6 +111,7 @@
 /snowplow
 /sv/
 /webpack_port
+/www-gitlab-com
 Brewfile.lock.json
 haproxy/haproxy.cfg
 node_modules/
