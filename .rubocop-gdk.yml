@@ -23,6 +23,7 @@ AllCops:
     - 'gitlab-docs/**/*'
     - 'gitlab-elasticsearch-indexer/**/*'
     - 'gitlab-k8s-agent/**/*'
+    - 'gitlab-operator/**/*'
     - 'gitlab-pages/**/*'
     - 'gitlab-runner/**/*'
     - 'gitlab-shell/**/*'

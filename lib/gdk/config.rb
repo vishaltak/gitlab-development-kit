@@ -52,18 +52,19 @@ module GDK
     end
 
     settings :repositories do
-      string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
-      string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
+      string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
       string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }
-      string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
-      string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
+      string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-org/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
-      string(:gitlab_ui) { 'https://gitlab.com/gitlab-org/gitlab-ui.git' }
-      string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
-      string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
-      string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
+      string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
+      string(:gitlab_operator) { 'https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git' }
+      string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
+      string(:gitlab_shell) { 'https://gitlab.com/gitlab-org/gitlab-shell.git' }
       string(:gitlab_spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
+      string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
+      string(:gitlab_ui) { 'https://gitlab.com/gitlab-org/gitlab-ui.git' }
+      string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
       string(:www_gitlab_com) { 'https://gitlab.com/gitlab-com/www-gitlab-com.git' }
     end
 
@@ -234,7 +235,7 @@ module GDK
       bool(:auto_update) { true }
       integer(:port) { 3005 }
 
-      bool(:__all_configured?) { config.gitlab_docs.enabled? && config.gitlab_runner.enabled? && config.omnibus_gitlab.enabled? && config.charts_gitlab.enabled? }
+      bool(:__all_configured?) { config.gitlab_docs.enabled? && config.gitlab_runner.enabled? && config.omnibus_gitlab.enabled? && config.charts_gitlab.enabled? && config.gitlab_operator.enabled? }
 
       string(:__nanoc_cmd_common) { "--host #{config.hostname} --port #{config.gitlab_docs.port}" }
       string(:__nanoc_live_cmd) { "bundle exec nanoc live #{config.gitlab_docs.__nanoc_cmd_common}" }
@@ -268,6 +269,11 @@ module GDK
     end
 
     settings :charts_gitlab do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+    end
+
+    settings :gitlab_operator do
       bool(:enabled) { false }
       bool(:auto_update) { true }
     end

@@ -2297,7 +2297,8 @@ RSpec.describe GDK::Config do
             'gitlab_docs' => { 'enabled' => true },
             'gitlab_runner' => { 'enabled' => true },
             'omnibus_gitlab' => { 'enabled' => true },
-            'charts_gitlab' => { 'enabled' => true }
+            'charts_gitlab' => { 'enabled' => true },
+            'gitlab_operator' => { 'enabled' => true }
           }
         end
 
@@ -2312,7 +2313,8 @@ RSpec.describe GDK::Config do
             'gitlab_docs' => { 'enabled' => true },
             'gitlab_runner' => { 'enabled' => true },
             'omnibus_gitlab' => { 'enabled' => false },
-            'charts_gitlab' => { 'enabled' => true }
+            'charts_gitlab' => { 'enabled' => true },
+            'gitlab_operator' => { 'enabled' => true }
           }
         end
 
@@ -2392,6 +2394,22 @@ RSpec.describe GDK::Config do
         it 'is enabled by default' do
           expect(config.charts_gitlab.auto_update).to be(true)
           expect(config.charts_gitlab.auto_update?).to be(true)
+        end
+      end
+    end
+
+    describe 'gitlab_operator' do
+      describe 'enabled' do
+        it 'is disabled by default' do
+          expect(config.gitlab_operator.enabled).to be(false)
+          expect(config.gitlab_operator.enabled?).to be(false)
+        end
+      end
+
+      describe 'auto_update' do
+        it 'is enabled by default' do
+          expect(config.gitlab_operator.auto_update).to be(true)
+          expect(config.gitlab_operator.auto_update?).to be(true)
         end
       end
     end

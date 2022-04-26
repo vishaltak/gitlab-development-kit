@@ -28,6 +28,9 @@ omnibus_gitlab_repo = <%= config.repositories.omnibus_gitlab %>
 charts_gitlab_enabled = <%= config.charts_gitlab.enabled? %>
 charts_gitlab_repo = <%= config.repositories.charts_gitlab %>
 <%-# -%>
+gitlab_operator_enabled = <%= config.gitlab_operator.enabled? %>
+gitlab_operator_repo = <%= config.repositories.gitlab_operator %>
+<%-# -%>
 gitlab_elasticsearch_indexer_enabled = <%= config.elasticsearch.enabled %>
 gitlab_elasticsearch_indexer_repo = <%= config.repositories.gitlab_elasticsearch_indexer %>
 gitlab_k8s_agent_enabled = <%= config.gitlab_k8s_agent? %>
