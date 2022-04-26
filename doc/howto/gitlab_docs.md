@@ -107,6 +107,8 @@ To be able to make and preview changes to the additional documentation:
      enabled: true
    charts_gitlab:
      enabled: true
+   gitlab_operator:
+     enabled: true
    ```
 
 1. Run `gdk update` to:
