@@ -9,11 +9,11 @@ Procfile:
 	$(Q)rake Procfile
 
 .PHONY: gitaly/gitaly.config.toml
-gitaly/gitaly.config.toml: 
+gitaly/gitaly.config.toml:
 	$(Q)rake gitaly/gitaly.config.toml
 
 .PHONY: gitaly/praefect.config.toml
-gitaly/praefect.config.toml: 
+gitaly/praefect.config.toml:
 	$(Q)rake gitaly/praefect.config.toml
 
 .PHONY: gitlab/config/cable.yml
@@ -23,14 +23,6 @@ gitlab/config/cable.yml:
 .PHONY: gitlab/config/database.yml
 gitlab/config/database.yml: 
 	$(Q)rake gitlab/config/database.yml
-
-.PHONY: gitlab/config/database_geo.yml
-gitlab/config/database_geo.yml: 
-ifeq ($(geo_enabled),true)
-	$(Q)rake gitlab/config/database_geo.yml
-else
-	@true
-endif
 
 .PHONY: gitlab/config/gitlab.yml
 gitlab/config/gitlab.yml: 
@@ -141,4 +133,3 @@ preflight-update-checks: preflight-update-checks-timed
 .PHONY: preflight-update-checks-run
 preflight-update-checks-run: rake
 	$(Q)rake preflight-update-checks
-

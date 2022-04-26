@@ -9,7 +9,7 @@ else
 	@true
 endif
 
-geo-config: gitlab/config/database_geo.yml postgresql/geo/port
+geo-config: gitlab/config/database.yml postgresql/geo/port
 
 geo-cursor:
 	$(Q)grep '^geo-cursor:' Procfile || (printf ',s/^#geo-cursor/geo-cursor/\nwq\n' | ed -s Procfile)

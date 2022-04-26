@@ -107,7 +107,6 @@ CONFIG_FILE_TASKS = [
   Task.new(name: 'Procfile'),
   Task.new(name: 'gitlab/config/cable.yml'),
   Task.new(name: 'gitlab/config/database.yml'),
-  Task.new(name: 'gitlab/config/database_geo.yml', no_op_condition: 'geo_enabled'),
   Task.new(name: 'gitlab/config/gitlab.yml'),
   Task.new(name: 'gitlab/config/puma.rb'),
   Task.new(name: 'gitlab/config/redis.cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting }),
