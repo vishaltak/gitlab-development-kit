@@ -3,22 +3,78 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::Geo do
-  let(:database_geo_yml_file) { '/home/git/gdk/gitlab/config/database_geo.yml' }
+  let(:database_yml_file) { '/home/git/gdk/gitlab/config/database.yml' }
+
+  let(:default_content) do
+    <<-CONTENT
+      development:
+        main:
+          adapter: postgresql
+          encoding: unicode
+          database: gitlabhq_development
+          username: postgres
+          password: "secure password"
+          host: localhost
+          variables:
+            statement_timeout: 15s
+    CONTENT
+  end
+
+  let(:geo_content) do
+    <<-CONTENT
+      development:
+        main:
+          adapter: postgresql
+          encoding: unicode
+          database: gitlabhq_development
+          username: postgres
+          password: "secure password"
+          host: localhost
+          variables:
+            statement_timeout: 15s
+
+        geo:
+          adapter: postgresql
+          encoding: unicode
+          database: gitlabhq_geo_development
+          username: postgres
+          password: "secure password"
+          host: localhost
+          variables:
+            statement_timeout: 15s
+    CONTENT
+  end
 
   describe '#diagnose' do
-    context "when Geo database YAML file doesn't exist" do
-      it 'sets @success to true' do
-        stub_database_geo_yml_file(false)
+    context "when Geo database settings doesn't exist" do
+      before do
+        stub_database_yml_content(default_content)
+      end
 
-        subject.diagnose
+      context 'and geo.enabled is set to false' do
+        it 'sets @success to true' do
+          stub_geo_enabled(false)
 
-        expect(subject).to be_success
+          subject.diagnose
+
+          expect(subject).to be_success
+        end
+      end
+
+      context 'and geo.enabled is set to true' do
+        it 'sets @success to false' do
+          stub_geo_enabled(true)
+
+          subject.diagnose
+
+          expect(subject).not_to be_success
+        end
       end
     end
 
-    context 'when Geo database YAML file does exist' do
+    context 'when Geo database settings does exist' do
       before do
-        stub_database_geo_yml_file(true)
+        stub_database_yml_content(geo_content)
       end
 
       context 'and geo.enabled is set to false' do
@@ -70,11 +126,11 @@ RSpec.describe GDK::Diagnostic::Geo do
   describe '#detail' do
     it 'returns a message advising how to detail with the situation' do
       expected_detail = <<~MESSAGE
-        #{database_geo_yml_file} exists but
+        #{database_yml_file} contains the geo database settings but
         geo.enabled is not set to true in your gdk.yml.
 
         Either update your gdk.yml to set geo.enabled to true or remove
-        #{database_geo_yml_file}
+        the geo database settings from #{database_yml_file}
 
         https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/howto/geo.md
       MESSAGE
@@ -83,9 +139,12 @@ RSpec.describe GDK::Diagnostic::Geo do
     end
   end
 
-  def stub_database_geo_yml_file(exists)
+  def stub_database_yml_content(content)
     allow(File).to receive(:exist?).and_call_original
-    allow(File).to receive(:exist?).with(database_geo_yml_file).and_return(exists)
+    allow(File).to receive(:exist?).with(database_yml_file).and_return(true)
+
+    allow(File).to receive(:read).and_call_original
+    allow(File).to receive(:read).with(database_yml_file).and_return(content)
   end
 
   def stub_geo_enabled(enabled)

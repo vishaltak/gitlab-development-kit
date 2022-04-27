@@ -16,7 +16,6 @@ module GDK
         gitlab/workhorse/config.toml
         gitlab/config/cable.yml
         gitlab/config/database.yml
-        gitlab/config/database_geo.yml
         gitlab/config/gitlab.yml
         gitlab/config/puma.rb
         gitlab/config/resque.yml
