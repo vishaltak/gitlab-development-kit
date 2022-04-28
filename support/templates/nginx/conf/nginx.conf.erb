@@ -73,21 +73,39 @@ http {
     proxy_read_timeout 300;
 
     location ~ (<%= config.nginx.__request_buffering_off_routes.join('|') %>) {
-      proxy_cache off;
+    <%- if config.https? -%>
+      proxy_pass https://gitlab-workhorse;
+      proxy_ssl_certificate <%= config.gdk_root.join(config.nginx.ssl.certificate) %>;
+      proxy_ssl_certificate_key <%= config.gdk_root.join(config.nginx.ssl.key) %>;
+    <%- else -%>
       proxy_pass http://gitlab-workhorse;
+    <%- end -%>
+      proxy_cache off;
       proxy_request_buffering off;
     }
 
 <%- if config.webpack.live_reload? -%>
 
     location /_hmr/ {
+    <%- if config.https? -%>
+      proxy_pass https://<%= config.webpack.host %>:<%= config.webpack.port %>/ws;
+      proxy_ssl_certificate <%= config.gdk_root.join(config.nginx.ssl.certificate) %>;
+      proxy_ssl_certificate_key <%= config.gdk_root.join(config.nginx.ssl.key) %>;
+    <%- else -%>
       proxy_pass http://<%= config.webpack.host %>:<%= config.webpack.port %>/ws;
+    <%- end -%>
     }
 
 <%- end -%>
 
     location / {
+    <%- if config.https? -%>
+      proxy_pass https://gitlab-workhorse;
+      proxy_ssl_certificate <%= config.gdk_root.join(config.nginx.ssl.certificate) %>;
+      proxy_ssl_certificate_key <%= config.gdk_root.join(config.nginx.ssl.key) %>;
+    <%- else -%>
       proxy_pass http://gitlab-workhorse;
+    <%- end -%>
     }
 <%- if config.gitlab_k8s_agent? -%>
 

@@ -23,7 +23,7 @@ http_settings:
 #  ca_path: /etc/pki/tls/certs
   self_signed_cert: false
   <%- if config.https? -%>
-  ca_file: "<%= config.gdk_root.join('localhost.crt') %>"
+  ca_file: "<%= config.gdk_root.join(config.nginx.ssl.certificate) %>"
   <%- else -%>
 #  ca_file: /etc/ssl/cert.pem
   <%- end -%>
