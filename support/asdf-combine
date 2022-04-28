@@ -13,15 +13,18 @@ FileNotFoundError = Class.new(StandardError)
 
 GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
 TOOL_VERSIONS_FILES = [
-  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL },
-  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL, path: 'workhorse' },
-  { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_SHELL_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
-  { refs: -> { ['master', "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
-  { refs: -> { ['master', ref_from_remote_file('GITALY_SERVER_VERSION')] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
-  { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_ELASTICSEARCH_INDEXER_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-runner' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
+  { refs: -> { [{ ref: 'master' }] }, base_url: GITLAB_PROJECT_BASE_URL },
+  { refs: -> { [{ ref: 'master' }] }, base_url: GITLAB_PROJECT_BASE_URL, path: 'workhorse' },
+  { refs: -> { [{ ref: 'main' }, { ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_SHELL_VERSION')}", label_ref: 'v<GITLAB_SHELL_VERSION>' }] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
+  { refs: -> { [{ ref: 'master' }, { ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')}", label_ref: 'v<GITLAB_PAGES_VERSION>' }] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
+  { refs: -> { [{ ref: 'master' }, { ref: ref_from_remote_file_for_gitlab_project('GITALY_SERVER_VERSION'), label_ref: 'v<GITALY_SERVER_VERSION>' }] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
+  { refs: -> { [
+    { ref: 'main' },
+    { ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION')}", label_ref: 'v<GITLAB_ELASTICSEARCH_INDEXER_VERSION>'  }
+    ] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer' },
+  { refs: -> { [{ ref: 'main' }] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-runner' },
+  { refs: -> { [{ ref: 'main' }] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
+  { refs: -> { [{ ref: 'main' }] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
 ].freeze
 
 HEADER_CONTENT = <<~CONTENT
@@ -90,10 +93,11 @@ end
 
 def process_tool_versions_files(tool_versions_data, quiet: false)
   TOOL_VERSIONS_FILES.each do |entry|
-    entry[:refs].call.each do |ref|
+    entry[:refs].call.each do |ref_data|
+      ref = ref_data[:ref]
       path = entry[:path] ? "#{entry[:path]}/" : ''
-      path_to_tool_versions = "#{path}.tool-versions"
-      url = "#{entry[:base_url]}/-/raw/#{ref}/#{path_to_tool_versions}"
+      url = "#{entry[:base_url]}/-/raw/#{ref}/#{path}.tool-versions"
+      label_url = "#{entry[:base_url]}/-/raw/#{ref_data.fetch(:label_ref, ref)}/#{path}.tool-versions"
 
       $stderr.print '.' unless quiet
 
@@ -104,7 +108,7 @@ def process_tool_versions_files(tool_versions_data, quiet: false)
         next
       end
 
-      tool_versions_data_for_entry = read_tool_versions_from(url, tool_versions_contents)
+      tool_versions_data_for_entry = read_tool_versions_from(label_url, tool_versions_contents)
 
       tool_versions_data_for_entry.each do |software, versions|
         tool_versions_data[software] ||= {}
