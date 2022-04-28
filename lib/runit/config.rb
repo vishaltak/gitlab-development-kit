@@ -2,7 +2,6 @@
 
 require 'erb'
 require 'fileutils'
-require_relative '../gdk/config'
 
 module Runit
   class Config
