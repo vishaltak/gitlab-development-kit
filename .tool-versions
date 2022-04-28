@@ -7,17 +7,16 @@
 #   1.17.9:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #   1.17.8:
-#     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v13.25.1/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v13.25.2/.tool-versions
 #   1.17.7:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/v1.57.0/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/53768dae0bc6395d2b80438286723a912aa50921/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/ccfab390f7c32dae9d5683662be62d27c80f768f/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #   1.16.14:
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/53768dae0bc6395d2b80438286723a912aa50921/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/ccfab390f7c32dae9d5683662be62d27c80f768f/.tool-versions
 #
 golang 1.17.9 1.17.8 1.17.7 1.16.14
 
@@ -33,6 +32,7 @@ minio 2021-04-06T23-11-00Z
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/.tool-versions
 #
 nodejs 16.14.0
 
@@ -53,12 +53,14 @@ redis 6.0.16
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v13.25.1/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v13.25.2/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/53768dae0bc6395d2b80438286723a912aa50921/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/ccfab390f7c32dae9d5683662be62d27c80f768f/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #   3.0.2:
 #     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/.tool-versions
 #
 ruby 2.7.5 3.0.2
 
@@ -68,6 +70,7 @@ ruby 2.7.5 3.0.2
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/.tool-versions
 #
 yarn 1.22.17
 
