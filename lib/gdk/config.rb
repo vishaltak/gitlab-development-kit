@@ -3,7 +3,6 @@
 require 'cgi'
 require 'etc'
 require 'uri'
-require_relative 'config_settings'
 
 module GDK
   class Config < ConfigSettings

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'json'
-require_relative 'base'
-require_relative 'mergable'
 
 module GDK
   module ConfigType

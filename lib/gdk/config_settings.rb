@@ -3,16 +3,6 @@
 require 'yaml'
 require 'mkmf'
 require 'forwardable'
-require_relative 'config_type/builder'
-require_relative 'config_type/anything'
-require_relative 'config_type/array'
-require_relative 'config_type/bool'
-require_relative 'config_type/hash'
-require_relative 'config_type/integer'
-require_relative 'config_type/path'
-require_relative 'config_type/settings'
-require_relative 'config_type/settings_array'
-require_relative 'config_type/string'
 
 MakeMakefile::Logging.quiet = true
 MakeMakefile::Logging.logfile(File::NULL)

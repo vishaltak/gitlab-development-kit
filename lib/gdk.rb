@@ -29,6 +29,8 @@ module GDK
   autoload :Backup, 'gdk/backup'
   autoload :Command, 'gdk/command'
   autoload :Config, 'gdk/config'
+  autoload :ConfigType, 'gdk/config_type'
+  autoload :ConfigSettings, 'gdk/config_settings'
   autoload :Dependencies, 'gdk/dependencies'
   autoload :Diagnostic, 'gdk/diagnostic'
   autoload :Env, 'gdk/env'
