@@ -88,7 +88,7 @@ def format_software_and_versions_data(data)
   output.join("\n")
 end
 
-def processs_tool_versions_files(tool_versions_data, quiet: false)
+def process_tool_versions_files(tool_versions_data, quiet: false)
   TOOL_VERSIONS_FILES.each do |entry|
     entry[:refs].call.each do |ref|
       path = entry[:path] ? "#{entry[:path]}/" : ''
@@ -122,7 +122,7 @@ end
 def main(quiet: false)
   tool_versions_data_from_gdk_file = read_tool_versions_from('.tool-versions-gdk', tool_versions_gdk_file.read)
 
-  tool_versions_data = processs_tool_versions_files(tool_versions_data_from_gdk_file.clone, quiet: quiet).sort.each_with_object({}) do |(software, versions), all|
+  tool_versions_data = process_tool_versions_files(tool_versions_data_from_gdk_file.clone, quiet: quiet).sort.each_with_object({}) do |(software, versions), all|
     # We only sort by newest version first *if* not defined in .tool-versions-gdk
     sorted_versions = if tool_versions_data_from_gdk_file[software]
                         versions
