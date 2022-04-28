@@ -56,7 +56,7 @@ def write_tool_versions_file(data)
   tool_versions_file.write("#{HEADER_CONTENT}#{data}\n")
 end
 
-def ref_from_remote_file(file)
+def ref_from_remote_file_for_gitlab_project(file)
   url = "#{GITLAB_PROJECT_BASE_URL}/-/raw/master/#{file}"
   http_get(url).chomp
 end
