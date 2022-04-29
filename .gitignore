@@ -45,6 +45,7 @@
 /gitlab-elasticsearch-indexer
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
+/gitlab-operator
 /gitlab-pages
 /gitlab-pages-secret
 /gitlab-runner

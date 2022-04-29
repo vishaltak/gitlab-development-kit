@@ -2,10 +2,11 @@ gitlab_docs_clone_dir = gitlab-docs
 gitlab_runner_clone_dir = gitlab-runner
 omnibus_gitlab_clone_dir = omnibus-gitlab
 charts_gitlab_clone_dir = charts-gitlab
+gitlab_operator_clone_dir = gitlab-operator
 nanoc_cmd = ${BUNDLE} exec nanoc
 
 ifeq ($(gitlab_docs_enabled),true)
-gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-docs-deps
+gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-operator gitlab-docs-deps
 else
 gitlab-docs-setup:
 	@true
@@ -53,6 +54,20 @@ charts-gitlab-pull:
 	@true
 endif
 
+ifeq ($(gitlab_operator_enabled),true)
+gitlab-operator: gitlab-operator/.git
+else
+gitlab-operator:
+	@true
+endif
+
+ifeq ($(gitlab_operator_enabled),true)
+gitlab-operator-pull: gitlab-operator/.git/pull
+else
+gitlab-operator-pull:
+	@true
+endif
+
 gitlab-docs/.git:
 	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_docs_repo} gitlab-docs
 
@@ -93,8 +108,18 @@ charts-gitlab/.git/pull: charts-gitlab/.git
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update charts_gitlab "${charts_gitlab_clone_dir}" master master
 
+gitlab-operator/.git:
+	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_operator_repo} gitlab-operator
+
+gitlab-operator/.git/pull: gitlab-operator/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Updating gitlab-org/cloud-native/gitlab-operator"
+	@echo "${DIVIDER}"
+	$(Q)support/component-git-update gitlab_operator "${gitlab_operator_clone_dir}" master master
+
 .PHONY: gitlab-docs-deps
-gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn rm-symlink-gitlab-docs
+gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn
 
 gitlab-docs-bundle:
 	@echo
@@ -105,13 +130,6 @@ gitlab-docs-bundle:
 
 gitlab-docs-yarn:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
-
-# Ensure no legacy symlinks are in place
-rm-symlink-gitlab-docs:
-	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/ee
-	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/runner
-	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/omnibus
-	$(Q)rm -f ${gitlab_development_root}/${gitlab_docs_clone_dir}/content/charts
 
 gitlab-docs-clean:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && rm -rf tmp
@@ -128,11 +146,11 @@ gitlab-docs-update:
 endif
 
 .PHONY: gitlab-docs-update-run
-gitlab-docs-update-run: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-pull charts-gitlab-pull gitlab-docs-deps gitlab-docs-build
+gitlab-docs-update-run: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-pull charts-gitlab-pull gitlab-operator-pull gitlab-docs-deps gitlab-docs-build
 
 # Internal links and anchors checks for documentation
 ifeq ($(gitlab_docs_enabled),true)
-gitlab-docs-check: gitlab-runner-docs-check omnibus-gitlab-docs-check charts-gitlab-docs-check gitlab-docs-build
+gitlab-docs-check: gitlab-runner-docs-check omnibus-gitlab-docs-check charts-gitlab-docs-check gitlab-operator-docs-check gitlab-docs-build
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && \
 		$(nanoc_cmd) check internal_links && \
 		$(nanoc_cmd) check internal_anchors
@@ -166,5 +184,14 @@ charts-gitlab-docs-check:
 	@false
 else
 charts-gitlab-docs-check:
+	@true
+endif
+
+ifneq ($(gitlab_operator_enabled),true)
+gitlab-operator-docs-check:
+	@echo "ERROR: gitlab_operator is not enabled. See doc/howto/gitlab_docs.md"
+	@false
+else
+gitlab-operator-docs-check:
 	@true
 endif

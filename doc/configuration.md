@@ -41,6 +41,7 @@ all applied settings in a YAML structure.
 - [GDK settings](#gdk-settings)
 - [GitLab settings](#gitlab-settings)
 - [GitLab Docs settings](#gitlab-docs-settings)
+- [Additional projects settings](#additional-projects-settings)
 - [NGINX settings](#nginx-settings)
 
 #### Run GitLab and GitLab FOSS concurrently
@@ -294,9 +295,15 @@ Under the `snowplow_micro` key, you can define the following settings:
 | `snowplow_micro.image`       | `snowplow/snowplow-micro:latest`  | Docker image to run.                                                                                     |
 | `snowplow_micro.port`        | `9091`                            | The port for `snowplow-micro` to listen on.                                                              |
 
-### Additional projects
+### Additional projects settings
 
-You can have GDK manage checkouts for `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab`, and `www-gitlab-com` projects.
+You can have GDK manage checkouts for these projects:
+
+- `gitlab-runner`
+- `omnibus-gitlab`
+- `charts/gitlab`
+- `cloud-native/gitlab-operator`
+- `www-gitlab-com`
 
 Under the `gitlab_runner` key, you can define the following settings:
 
@@ -319,9 +326,16 @@ Under the `charts_gitlab` key, you can define the following settings:
 | `charts_gitlab.enabled`      | `false` | Set to `true` to enable [`charts/gitlab`](https://gitlab.com/gitlab-org/charts/gitlab) to be managed by GDK. |
 | `charts_gitlab.auto_update`  | `true`  | Set to `false` to disable updating the `charts/gitlab` checkout.                                             |
 
+Under the `gitlab_operator` key, you can define the following settings:
+
+| Setting                       | Default | Description                                                                                                                                |
+|:------------------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------|
+| `gitlab_operator.enabled`     | `false` | Set to `true` to enable [`cloud-native/gitlab-operator`](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator) to be managed by GDK. |
+| `gitlab_operator.auto_update` | `true`  | Set to `false` to disable updating the `cloud-native/gitlab-operator` checkout.                                                            |                                         |
+
 NOTE:
-If you set `enabled` to `true` for  `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab` projects, you can
-[live preview documentation changes](howto/gitlab_docs.md#make-documentation-changes).
+If you set `enabled` to `true` for  `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab`, `gitlab_operator` projects, you
+can [live preview documentation changes](howto/gitlab_docs.md#make-documentation-changes).
 
 Under the `www_gitlab_com` key, you can define the following settings:
 

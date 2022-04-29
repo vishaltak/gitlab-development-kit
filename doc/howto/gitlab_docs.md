@@ -107,6 +107,8 @@ To be able to make and preview changes to the additional documentation:
      enabled: true
    charts_gitlab:
      enabled: true
+   gitlab_operator:
+     enabled: true
    ```
 
 1. Run `gdk update` to:
@@ -121,7 +123,7 @@ To be able to make and preview changes to the additional documentation:
 NOTE:
 `gitlab_runner` should not be confused with [`runner`](runner.md).
 
-By default, the cloned repositories of the `gitlab_runner`, `omnibus_gitlab`, and `charts_gitlab`
+By default, the cloned repositories of the `gitlab_runner`, `omnibus_gitlab`, `charts_gitlab`, and `gitlab_operator`
 components are:
 
 - Updated automatically when you run `gdk update`. To disable this, set `auto_update: false` against
