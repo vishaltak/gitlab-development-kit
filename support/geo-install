@@ -16,8 +16,8 @@
 #
 # Valid arguments are:
 #
-# 1 = directory in which to clone into, default is gdk (GDK_INSTALL_DIR)
-# 2 = directory in which to clone into, default is gdk2 (GDK2_INSTALL_DIR)
+# 1 = directory in which to clone into, default is gdk (GDK_PRIMARY_INSTALL_DIR)
+# 2 = directory in which to clone into, default is gdk2 (GDK_SECONDARY_INSTALL_DIR)
 # 3 = git SHA/branch to checkout once cloned, default is main (GDK_CLONE_BRANCH)
 #
 # Example usage with arguments:
@@ -28,8 +28,8 @@ _() {
 
 set -eo pipefail
 
-GDK_INSTALL_DIR="${2-gdk}"
-GDK2_INSTALL_DIR="${3-gdk2}"
+GDK_PRIMARY_INSTALL_DIR="${2-gdk}"
+GDK_SECONDARY_INSTALL_DIR="${3-gdk2}"
 GDK_CLONE_BRANCH="${4-main}"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
@@ -68,24 +68,24 @@ ensure_not_root() {
 }
 
 clone_gdk_if_needed() {
-  if [[ -d ${GDK_INSTALL_DIR} ]]; then
-    echo "INFO: A ${GDK_INSTALL_DIR} directory already exists in the current working directory, resuming.."
+  if [[ -d ${GDK_PRIMARY_INSTALL_DIR} ]]; then
+    echo "INFO: A ${GDK_PRIMARY_INSTALL_DIR} directory already exists in the current working directory, resuming.."
   else
-    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_INSTALL_DIR}"
+    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_PRIMARY_INSTALL_DIR}"
   fi
 }
 
 clone_gdk2_if_needed() {
-  if [[ -d ${GDK2_INSTALL_DIR} ]]; then
-    echo "INFO: A ${GDK2_INSTALL_DIR} directory already exists in the current working directory, resuming.."
+  if [[ -d ${GDK_SECONDARY_INSTALL_DIR} ]]; then
+    echo "INFO: A ${GDK_SECONDARY_INSTALL_DIR} directory already exists in the current working directory, resuming.."
   else
-    git clone "${GDK_INSTALL_DIR}" "${GDK2_INSTALL_DIR}"
+    git clone "${GDK_PRIMARY_INSTALL_DIR}" "${GDK_SECONDARY_INSTALL_DIR}"
   fi
 }
 
 ensure_gdk_clone_branch_checked_out() {
-  git -C "${PWD}/${GDK_INSTALL_DIR}" fetch origin "${GDK_CLONE_BRANCH}"
-  git -C "${PWD}/${GDK_INSTALL_DIR}" checkout "${GDK_CLONE_BRANCH}"
+  git -C "${PWD}/${GDK_PRIMARY_INSTALL_DIR}" fetch origin "${GDK_CLONE_BRANCH}"
+  git -C "${PWD}/${GDK_PRIMARY_INSTALL_DIR}" checkout "${GDK_CLONE_BRANCH}"
 }
 
 bootstrap() {
@@ -114,7 +114,7 @@ ensure_required_commands_exist
 ensure_required_env_vars_exist
 clone_gdk_if_needed
 ensure_gdk_clone_branch_checked_out
-cd "${GDK_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_INSTALL_DIR} directory."
+cd "${GDK_PRIMARY_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_PRIMARY_INSTALL_DIR} directory."
 bootstrap
 gdk_install
 cd gitlab || error "gdk install should have created gitlab directory."
@@ -125,21 +125,21 @@ echo "INFO: To make sure GDK commands are available in this shell and ensure you
 echo "INFO: in the newly installed GDK directory, please run:"
 echo
 echo "source \"${ASDF_SH_PATH}\""
-echo "cd ${GDK_INSTALL_DIR}"
+echo "cd ${GDK_PRIMARY_INSTALL_DIR}"
 echo
 
 cd ../..
 clone_gdk2_if_needed
-cd "${GDK2_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK2_INSTALL_DIR} directory."
-cd "../${GDK_INSTALL_DIR}" || error "Sanity check for ${GDK_INSTALL_DIR} directory failed."
-./support/geo-add-secondary --secondary_port 3001 --primary . "../${GDK2_INSTALL_DIR}"
+cd "${GDK_SECONDARY_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_SECONDARY_INSTALL_DIR} directory."
+cd "../${GDK_PRIMARY_INSTALL_DIR}" || error "Sanity check for ${GDK_PRIMARY_INSTALL_DIR} directory failed."
+./support/geo-add-secondary --secondary_port 3001 --primary . "../${GDK_SECONDARY_INSTALL_DIR}"
 
 echo
 echo "INFO: To make sure GDK commands are available in this shell and ensure you're"
 echo "INFO: in the newly installed GDK directory, please run:"
 echo
 echo "source \"${ASDF_SH_PATH}\""
-echo "cd ${GDK2_INSTALL_DIR}"
+echo "cd ${GDK_SECONDARY_INSTALL_DIR}"
 echo
 }
 
