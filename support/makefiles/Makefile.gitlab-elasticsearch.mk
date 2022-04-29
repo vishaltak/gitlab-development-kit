@@ -25,7 +25,11 @@ gitlab-elasticsearch-indexer/.git:
 	$(Q)support/component-git-clone --quiet --branch "${gitlab_elasticsearch_indexer_version}" ${git_depth_param} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
 
 .PHONY: gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
-gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git
+gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git/pull
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Building gitlab-org/gitlab-elasticsearch-indexer version ${gitlab_elasticsearch_indexer_version}"
+	@echo "${DIVIDER}"
 	$(Q)$(MAKE) -C gitlab-elasticsearch-indexer build ${QQ}
 
 .PHONY: gitlab-elasticsearch-indexer/.git/pull
