@@ -2,13 +2,10 @@
 
 require 'forwardable'
 
-require_relative '../../shellout'
-require_relative '../config'
-
 module GDK
-  module GitlabRails
+  module TaskHelpers
     # Class to work with database migrations on gitlab-rails
-    class DB
+    class RailsMigration
       extend Forwardable
 
       MAIN_TASKS = %w[db:migrate db:test:prepare].freeze

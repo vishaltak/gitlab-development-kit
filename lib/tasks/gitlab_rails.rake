@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../gdk/gitlab_rails/db'
+require_relative '../gdk/task_helpers'
 
 desc 'Run GitLab migrations'
 task 'gitlab-db-migrate' do
   puts
-  GDK::GitlabRails::DB.new.migrate
+  GDK::TaskHelpers::RailsMigration.new.migrate
 end

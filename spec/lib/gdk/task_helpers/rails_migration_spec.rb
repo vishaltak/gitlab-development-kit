@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'gdk/gitlab_rails/db'
 
-RSpec.describe GDK::GitlabRails::DB, :hide_stdout do
+RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
   describe '#migrate' do
     let(:shellout_mock) { double('Shellout', stream: nil, success?: true) } # rubocop:todo RSpec/VerifiedDoubles
 

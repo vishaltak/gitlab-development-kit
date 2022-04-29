@@ -14,6 +14,7 @@ SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
 SimpleCov.start
 
 require_relative '../lib/gdk'
+require_relative '../lib/gdk/task_helpers'
 
 RSpec.configure do |config|
   config.before do |example|
