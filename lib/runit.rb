@@ -4,12 +4,13 @@ require 'mkmf'
 require 'pathname'
 
 require_relative 'shellout'
-require_relative 'runit/config'
 
 MakeMakefile::Logging.quiet = true
 MakeMakefile::Logging.logfile(File::NULL)
 
 module Runit
+  autoload :Config, 'runit/config'
+
   SERVICE_SHORTCUTS = {
     'rails' => 'rails-*',
     'tunnel' => 'tunnel_*',
