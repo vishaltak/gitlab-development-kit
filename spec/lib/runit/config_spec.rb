@@ -5,7 +5,7 @@ require 'tempfile'
 
 RSpec.describe Runit::Config do
   let(:tmp_root) { File.expand_path('../../../tmp', __dir__) }
-  let(:gdk_root) { Dir.mktmpdir(nil, tmp_root) }
+  let(:gdk_root) { Pathname.new(Dir.mktmpdir(nil, tmp_root)) }
 
   subject { described_class.new(gdk_root) }
 
@@ -15,7 +15,7 @@ RSpec.describe Runit::Config do
 
   describe '#stale_service_links' do
     it 'removes unknown symlinks from the services directory' do
-      services_dir = File.join(gdk_root, 'services')
+      services_dir = gdk_root.join('services')
 
       enabled_service_names = %w[svc1 svc2]
       all_services = %w[svc1 svc2 stale]
@@ -25,12 +25,12 @@ RSpec.describe Runit::Config do
       FileUtils.mkdir_p(services_dir)
 
       all_services.each do |entry|
-        File.symlink('/tmp', File.join(services_dir, entry))
+        File.symlink('/tmp', services_dir.join(entry))
       end
 
-      FileUtils.touch(File.join(services_dir, 'should-be-ignored'))
+      FileUtils.touch(services_dir.join('should-be-ignored'))
 
-      stale_collection = [File.join(services_dir, 'stale')]
+      stale_collection = [services_dir.join('stale')]
       expect(subject.stale_service_links(enabled_services)).to eq(stale_collection)
     end
   end
