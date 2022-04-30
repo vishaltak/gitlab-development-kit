@@ -72,22 +72,7 @@ module Runit
     end
 
     def generate_run_env
-      run_env = <<~RUN_ENV
-        export host=#{GDK.config.hostname}
-        export port=#{GDK.config.port}
-        export relative_url_root=#{GDK.config.relative_url_root}
-        export cache_classes=#{GDK.config.gitlab.cache_classes}
-        export bundle_gemfile=#{GDK.config.gitlab.rails.bundle_gemfile}
-      RUN_ENV
-
-      if GDK.config.tracer.jaeger?
-        run_env += <<~RUN_ENV
-          export GITLAB_TRACING='#{GDK.config.tracer.jaeger.__tracer_url}'
-          export GITLAB_TRACING_URL='#{GDK.config.tracer.jaeger.__search_url}'
-        RUN_ENV
-      end
-
-      run_env
+      render_template('runit/run_env.sh.erb')
     end
 
     # Load a list of services from Procfile
@@ -117,23 +102,13 @@ module Runit
     end
 
     def create_runit_service(service)
-      run_template = <<~TEMPLATE
-        #!/bin/sh
-        set -e
-
-        exec 2>&1
-        cd <%=  gdk_root %>
-
-        <%= run_env %>
-
-        test -f env.runit && . ./env.runit
-
-        # Use chpst -P to run the command in its own process group
-        exec chpst -P <%= service.command %>
-      TEMPLATE
+      run = render_template('runit/run.sh.erb',
+                            gdk_root: gdk_root,
+                            run_env: run_env,
+                            service: service)
 
       run_path = File.join(dir(service), 'run')
-      write_file(run_path, ERB.new(run_template).result(binding), 0o755)
+      write_file(run_path, run, 0o755)
 
       # Create a 'down' file so that runsvdir won't boot this service until
       # you request it with `sv start`.
@@ -142,71 +117,43 @@ module Runit
 
     def create_runit_control_t(service)
       term_signal = TERM_SIGNAL.fetch(service.name, 'TERM')
+      pid_path = File.join(dir(service), 'supervise/pid')
 
-      control_t_template = <<~'TEMPLATE'
-        #!/usr/bin/env ruby
+      control_t = render_template('runit/control/t.rb.erb',
+                                  pid_path: pid_path,
+                                  term_signal: term_signal)
 
-        def kill(signal, pid)
-          puts "runit control/t: sending #{signal} to #{pid}"
-          Process.kill(signal, pid)
-        rescue SystemCallError
-          nil
-        end
-
-        def pid
-          @pid ||= begin
-            p = File.read('<%= File.join(dir(service), 'supervise/pid') %>')
-            return if p.empty?
-
-            Integer(p)
-          end
-        end
-
-        exit(0) unless pid
-
-        # Kill PID group with <%= term_signal %>
-        kill('<%= term_signal %>', -pid)
-
-        # Kill PID with <%= term_signal %>
-        kill('<%= term_signal %>', pid)
-      TEMPLATE
       control_t_path = File.join(dir(service), 'control/t')
-      write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
+      write_file(control_t_path, control_t, 0o755)
     end
 
     def create_runit_log_service(service, max_service_length, index)
+      # runit log/run
+      #
+
       service_log_dir = File.join(log_dir, service.name)
       FileUtils.mkdir_p(service_log_dir)
 
-      log_run_template = <<~TEMPLATE
-        #!/bin/sh
-        set -e
-
-        # svlogd is a long-running daemon so it should run from /
-        cd /
-
-        exec svlogd -tt <%= service_log_dir %>
-      TEMPLATE
+      log_run = render_template('runit/log/run.sh.erb', service_log_dir: service_log_dir)
 
       log_run_path = File.join(dir(service), 'log/run')
-      write_file(log_run_path, ERB.new(log_run_template).result(binding), 0o755)
+      write_file(log_run_path, log_run, 0o755)
+
+      # runit config
+      #
 
       log_prefix = GDK::Output.ansi(GDK::Output.color(index))
       log_label = format("%-#{max_service_length}s : ", service.name)
       reset_color = GDK::Output.reset_color
 
-      # See http://smarden.org/runit/svlogd.8.html#sect6 for documentation of the svlogd config file
-      log_config_template = <<~TEMPLATE
-        # zip old log files
-        !gzip
-        # custom log prefix for <%= service.name %>
-        p<%= log_prefix + log_label + reset_color %>
-        # keep at most 1 old log file
-        n1
-      TEMPLATE
+      log_config = render_template('runit/config.erb',
+                                   log_prefix: log_prefix,
+                                   log_label: log_label,
+                                   reset_color: reset_color,
+                                   service: service)
 
       log_config_path = File.join(service_log_dir, 'config')
-      write_file(log_config_path, ERB.new(log_config_template).result(binding), 0o644)
+      write_file(log_config_path, log_config, 0o644)
     end
 
     def enable_runit_service(service)
@@ -222,6 +169,18 @@ module Runit
       FileUtils.mkdir_p(File.dirname(path))
       File.open(path, 'w') { |f| f.write(content) }
       File.chmod(perm, path)
+    end
+
+    def render_template(template_path, **args)
+      template_fullpath = GDK.template_root.join(template_path)
+      raise ArgumentError, "file not found in: #{template_path}" unless File.exist?(template_fullpath)
+
+      template = File.read(template_fullpath)
+
+      erb = ERB.new(template)
+      # define the file location so errors can point to the right file
+      erb.location = template_fullpath.to_s
+      erb.result_with_hash(args)
     end
   end
 end
