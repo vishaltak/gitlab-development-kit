@@ -23,6 +23,7 @@ to learn how to contribute to GitLab.
 ## Special topics
 
 - [Asset Proxy / Camo Server](asset_proxy.md)
+- [Change GitLab Version](gitlab_version.md)
 - [Database load balancing](database_load_balancing.md)
 - [Debugging with Pry](pry.md)
 - [Dependency Proxy](dependency_proxy.md)
