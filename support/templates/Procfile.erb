@@ -56,7 +56,7 @@ rails-web: exec /usr/bin/env CACHE_CLASSES=$cache_classes BUNDLE_GEMFILE=$bundle
 
 # Gitlab Docs
 #
-<%= '#' unless config.gitlab_docs? %>gitlab-docs: exec support/start-gitlab-docs-nanoc
+<%= '#' unless config.gitlab_docs? %>gitlab-docs: exec support/gitlab-docs/start-nanoc
 
 # Gitlab Runner Binary
 #
