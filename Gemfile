@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
   gem 'rake', '~> 13.0.0'
+  gem 'rubocop', require: false
   gem 'yard', '~> 0.9.0', require: false
 end
 
