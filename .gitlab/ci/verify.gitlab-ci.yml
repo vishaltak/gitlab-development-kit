@@ -13,14 +13,23 @@
   variables:
     GEM_HOME: "$CI_PROJECT_DIR/.gem"
     GEM_PATH: "$CI_PROJECT_DIR/.gem"
+    GOCACHE: "$CI_PROJECT_DIR/.cache/go-build"
+    GOMODCACHE: "$CI_PROJECT_DIR/.cache/go-mod"
   cache:
-    key:
-      files:
-        - '.ruby-version'
-        - '.gitlab/ci/verify.gitlab-ci.yml'
-    paths:
-      - "$CI_PROJECT_DIR/.gem"
-    policy: pull-push
+    - key:
+        files:
+          - '.ruby-version'
+          - '.gitlab/ci/verify.gitlab-ci.yml'
+      paths:
+        - "$CI_PROJECT_DIR/.gem"
+      policy: pull-push
+    - key:
+        files:
+          - '.tool-versions-gdk'
+      paths:
+        - "$CI_PROJECT_DIR/.cache/go-build"
+        - "$CI_PROJECT_DIR/.cache/go-mod"
+      policy: pull-push
 
 install:
   extends: .verify-job
