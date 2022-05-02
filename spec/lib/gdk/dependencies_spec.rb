@@ -3,52 +3,59 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Dependencies do
-  describe GDK::Dependencies::Checker do
-    describe '.parse_version' do
-      it 'returns the version in the string' do
-        expect(described_class.parse_version('foo 1.2 bar')).to eq('1.2')
-        expect(described_class.parse_version('foo 1.2.3.4.5.6 bar')).to eq('1.2.3.4.5.6')
-      end
+  let(:tmp_path) { Dir.mktmpdir('gdk-path') }
 
-      it 'picks the first version looking number' do
-        expect(described_class.parse_version("Yarn v0.1.1 2011 Author Name")).to eq('0.1.1')
-        expect(described_class.parse_version('v0.1.1 2011')).to eq('0.1.1')
-      end
-
-      it 'uses the given prefix' do
-        expect(described_class.parse_version('1.2.3 v4.5.6', prefix: 'v')).to eq('4.5.6')
-      end
-
-      it 'ignores suffixes' do
-        expect(described_class.parse_version('1.2.3-foo+foo')).to eq('1.2.3')
-      end
-
-      it 'requires at least two numeric segments' do
-        expect(described_class.parse_version('1')).to be_nil
-      end
+  describe '.homebrew_available?' do
+    before do
+      stub_env('PATH', tmp_path)
     end
 
-    describe '#check_git_installed' do
-      context 'when git is not installed' do
-        it 'returns nil' do
-          stub_check_binary('git', false)
+    it 'returns true when Homebrew is available in PATH' do
+      create_dummy_executable('brew')
 
-          expect(subject.check_git_installed).to be false
-        end
-      end
+      expect(described_class.homebrew_available?).to be_truthy
+    end
 
-      context 'when git is installed' do
-        it 'returns nil' do
-          stub_check_binary('git', true)
-
-          expect(subject.check_git_installed).to be true
-          expect(subject.error_messages).to be_empty
-        end
-      end
+    it 'returns false when Homebrew is not available in PATH' do
+      expect(described_class.homebrew_available?).to be_falsey
     end
   end
 
-  def stub_check_binary(binary, result)
-    allow(subject).to receive(:check_binary).with(binary).and_return(result)
+  describe '.macports_available?' do
+    before do
+      stub_env('PATH', tmp_path)
+    end
+
+    it 'returns true when Macports is available in PATH' do
+      create_dummy_executable('port')
+
+      expect(described_class.macports_available?).to be_truthy
+    end
+
+    it 'returns false when Macports is not available in PATH' do
+      expect(described_class.macports_available?).to be_falsey
+    end
+  end
+
+  describe '.linux_apt_available?' do
+    before do
+      stub_env('PATH', tmp_path)
+    end
+
+    it 'returns true when APT is available in PATH' do
+      create_dummy_executable('apt')
+
+      expect(described_class.linux_apt_available?).to be_truthy
+    end
+
+    it 'returns false when APT is not available in PATH' do
+      expect(described_class.linux_apt_available?).to be_falsey
+    end
+  end
+
+  def create_dummy_executable(name)
+    path = File.join(tmp_path, name)
+    FileUtils.touch(path)
+    File.chmod(0o755, path)
   end
 end

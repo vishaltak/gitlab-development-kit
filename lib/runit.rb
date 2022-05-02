@@ -91,11 +91,11 @@ module Runit
   end
 
   def self.runit_instructions
-    if File.executable?('/usr/local/bin/brew') # Homebrew
+    if GDK::Dependencies.homebrew_available?
       'brew install runit'
-    elsif File.executable?('/opt/local/bin/port') # MacPorts
+    elsif GDK::Dependencies.macports_available?
       'sudo port install runit'
-    elsif File.executable?('/usr/bin/apt') # Debian / Ubuntu
+    elsif GDK::Dependencies.linux_apt_available?
       'sudo apt install runit'
     else
       '(no copy-paste Runit installation snippet available for your OS)'

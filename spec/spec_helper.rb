@@ -30,10 +30,12 @@ RSpec.configure do |config|
       allow(GDK::Output).to receive(:success)
     end
 
-    # isolate configs for the testing environment
-    allow(GDK).to receive(:root) { Pathname.new(temp_path) }
-    stub_const('GDK::Config::GDK_ROOT', '/home/git/gdk')
-    stub_const('GDK::Config::FILE', 'gdk.example.yml')
+    unless example.metadata[:gdk_root]
+      # isolate configs for the testing environment
+      allow(GDK).to receive(:root) { Pathname.new(temp_path) }
+      stub_const('GDK::Config::GDK_ROOT', '/home/git/gdk')
+      stub_const('GDK::Config::FILE', 'gdk.example.yml')
+    end
   end
 
   config.disable_monkey_patching
