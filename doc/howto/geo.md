@@ -369,12 +369,26 @@ In `<secondary-gdk-root>/gitlab/config/database.yml`, add or replace the `test:`
 
 ```yaml
 test: &test
-  adapter: postgresql
-  encoding: unicode
-  database: gitlabhq_test
-  host: /home/<secondary-gdk-root>/postgresql-geo
-  port: 5432
-  pool: 10
+  main:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_test
+    host: /home/<secondary-gdk-root>/postgresql-geo
+    port: 5432
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
+  ci:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_test_ci
+    host: /home/<secondary-gdk-root>/postgresql-geo
+    port: 5432
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
 ```
 
 ## SSH cloning
