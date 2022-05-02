@@ -77,6 +77,10 @@ supported installation methods:
 Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md)
 for more details.
 
+### Install lefthook locally
+
+Please refer to our [Lefthook Howto page](doc/howto/lefthook.md).
+
 ## License
 
 The GitLab Development Kit is distributed under the MIT license; see the
