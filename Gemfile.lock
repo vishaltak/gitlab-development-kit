@@ -190,6 +190,7 @@ DEPENDENCIES
   rake (~> 13.0.0)
   rspec (~> 3.11.0)
   rspec_junit_formatter (~> 0.5.0)
+  rubocop
   simplecov-cobertura (~> 2.1.0)
   yard (~> 0.9.0)
 

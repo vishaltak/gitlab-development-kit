@@ -6,3 +6,6 @@ pre-push:
     # Run all tests (warn if there are any missing tools required for tests).
     test:
       run: make test
+    # Run the Rubocop linter
+    rubocop:
+      run: make rubocop
