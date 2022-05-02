@@ -32,7 +32,13 @@ module Runit
     runit_config = Runit::Config.new(GDK.root)
 
     if GDK.config.gdk.experimental.ruby_services?
-      runit_config.render(services: GDK::Services.enabled)
+      # To make transition easier, we merge legacy services that haven't been migrated yet
+      # so that using experimental ruby services will always working even when partially migrated
+      services = GDK::Services.enabled
+      new_services = services.map(&:name)
+      legacy_services = runit_config.services_from_procfile.reject { |legacy| new_services.include?(legacy.name) }
+
+      runit_config.render(services: services + legacy_services)
     else
       runit_config.render
     end

@@ -74,17 +74,6 @@ module Runit
       end.compact
     end
 
-    private
-
-    # @deprecated should be removed when Procfile based services is not supported anymore
-    def procfile_path
-      @procfile_path ||= gdk_root.join('Procfile')
-    end
-
-    def generate_run_env
-      render_template('runit/run_env.sh.erb')
-    end
-
     # Load a list of services from Procfile
     #
     # @deprecated This will be removed when all services have been converted to GDK::Services
@@ -102,6 +91,17 @@ module Runit
 
         Service.new(name, command)
       end.compact
+    end
+
+    private
+
+    # @deprecated should be removed when Procfile based services is not supported anymore
+    def procfile_path
+      @procfile_path ||= gdk_root.join('Procfile')
+    end
+
+    def generate_run_env
+      render_template('runit/run_env.sh.erb')
     end
 
     # @deprecated should be removed when Procfile based services is not supported anymore
