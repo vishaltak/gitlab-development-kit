@@ -303,7 +303,6 @@ You can have GDK manage checkouts for these projects:
 - `omnibus-gitlab`
 - `charts/gitlab`
 - `cloud-native/gitlab-operator`
-- `www-gitlab-com`
 
 Under the `gitlab_runner` key, you can define the following settings:
 
@@ -336,14 +335,6 @@ Under the `gitlab_operator` key, you can define the following settings:
 NOTE:
 If you set `enabled` to `true` for  `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab`, `gitlab_operator` projects, you
 can [live preview documentation changes](howto/gitlab_docs.md#make-documentation-changes).
-
-Under the `www_gitlab_com` key, you can define the following settings:
-
-| Setting                      | Default    | Description                                                                                                                                                                                                                                                  |
-|:-----------------------------|:-----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `www_gitlab_com.enabled`     | `false`    | Set to `true` to enable [`www-gitlab-com`](https://gitlab.com/gitlab-com/www-gitlab-com) to be managed by GDK.                                                                                                                                               |
-| `www_gitlab_com.auto_update` | `true`     | Set to `false` to disable updating the `www-gitlab-com` checkout.                                                                                                                                                                                            |
-| `www_gitlab_com.build_site`  | `handbook` | Set to `uncategorized` to build the [uncategorized](https://gitlab.com/gitlab-com/www-gitlab-com/-/tree/master/sites/uncategorized) site. By default, builds the [handbook](https://gitlab.com/gitlab-com/www-gitlab-com/-/tree/master/sites/handbook) site. |
 
 ### NGINX settings
 
