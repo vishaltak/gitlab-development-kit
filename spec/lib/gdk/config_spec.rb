@@ -286,12 +286,6 @@ RSpec.describe GDK::Config do
         expect(config.repositories.gitlab_ui).to eq('https://gitlab.com/gitlab-org/gitlab-ui.git')
       end
     end
-
-    describe 'www_gitlab_com' do
-      it 'returns the www-gitlab-com repository URL' do
-        expect(config.repositories.www_gitlab_com).to eq('https://gitlab.com/gitlab-com/www-gitlab-com.git')
-      end
-    end
   end
 
   describe 'workhorse' do
@@ -2617,38 +2611,6 @@ RSpec.describe GDK::Config do
     describe '#image' do
       it 'defaults to snowplow/snowplow-micro:latest' do
         expect(config.snowplow_micro.image).to eq('snowplow/snowplow-micro:latest')
-      end
-    end
-  end
-
-  describe 'www_gitlab_com' do
-    describe 'enabled' do
-      it 'is disabled by default' do
-        expect(config.www_gitlab_com.enabled).to be(false)
-      end
-    end
-
-    describe 'auto_update' do
-      it 'is enabled by default' do
-        expect(config.www_gitlab_com.auto_update).to be(true)
-      end
-    end
-
-    describe 'build_site' do
-      it 'defaults to handbook' do
-        expect(config.www_gitlab_com.build_site).to eq('handbook')
-      end
-
-      context 'when build_site is uncategorized' do
-        let(:yaml) do
-          {
-            'www_gitlab_com' => { 'build_site' => 'uncategorized' }
-          }
-        end
-
-        it 'returns uncategorized' do
-          expect(config.www_gitlab_com.build_site).to eq('uncategorized')
-        end
       end
     end
   end

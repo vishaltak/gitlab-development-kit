@@ -81,7 +81,6 @@ gitlab-docs-setup \
 gitlab-spamcheck-setup \
 snowplow-micro-setup \
 postgresql-sensible-defaults \
-www-gitlab-com-setup
 
 # This is used by `gdk install`
 #
@@ -113,7 +112,6 @@ grafana-update \
 gitlab-ui-update \
 gitlab-docs-update \
 gitlab-spamcheck-update \
-www-gitlab-com-update \
 update-summarize
 
 .PHONY: update-start
@@ -165,9 +163,7 @@ unlock-dependency-installers:
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
-	.gitlab-ui-yarn \
-	.gitlab-www-yarn
-
+	.gitlab-ui-yarn
 
 gdk.yml:
 	$(Q)touch $@
