@@ -31,11 +31,9 @@ You can install GDK using the following methods. Some are:
 
 The following installation methods are supported, actively maintained, and tested:
 
-- [One-line installation](doc/index.md#one-line-installation):
-
-- [Simple installation](doc/index.md) on your local system. Requires at least
+- [One-line installation](doc/index.md#one-line-installation)
+- [Simple installation](doc/index.md#simple-installation) on your local system. Requires at least
   8GB RAM and 12GB disk space. Available for [supported platforms](#supported-platforms).
-
 - [Gitpod](doc/howto/gitpod.md).
 
 ### Supported platforms
