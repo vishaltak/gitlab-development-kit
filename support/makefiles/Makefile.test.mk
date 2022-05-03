@@ -1,9 +1,16 @@
 MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+LEFTHOOK := $(shell command -v lefthook 2> /dev/null)
 
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
 
 .PHONY: test
-test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-makefile-config
+test:
+ifeq ($(LEFTHOOK),)
+	@echo "ERROR: Lefthook is not installed. See https://github.com/evilmartians/lefthook for more details."
+	@false
+else
+	@${LEFTHOOK} run pre-push
+endif
 
 .PHONY: gdk_bundle_install
 gdk_bundle_install:

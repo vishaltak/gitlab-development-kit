@@ -2,10 +2,26 @@
 # https://github.com/Arkweid/lefthook/blob/master/docs/full_guide.md
 
 pre-push:
+  parallel: true
+
   commands:
-    # Run all tests (warn if there are any missing tools required for tests).
-    test:
-      run: make test
-    # Run the Rubocop linter
+    checkmake:
+      run: make checkmake
+
+    lint:
+      run: make lint
+
+    shellcheck:
+      run: make shellcheck
+
     rubocop:
       run: make rubocop
+
+    rspec:
+      run: make rspec
+
+    verify-gdk-example-yml:
+      run: make verify-gdk-example-yml
+
+    verify-makefile-config:
+      run: make verify-makefile-config
