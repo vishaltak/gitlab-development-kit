@@ -64,6 +64,7 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
     FileUtils.mkdir_p(storage.path)
   end
   FileUtils.mkdir_p(config.gitaly.log_dir)
+  FileUtils.mkdir_p(config.gitaly.runtime_dir)
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
@@ -89,7 +90,7 @@ config.praefect.__nodes.each do |node|
       FileUtils.mkdir_p(storage.path)
     end
     FileUtils.mkdir_p(node['log_dir'])
-    FileUtils.mkdir_p(node['internal_socket_dir'])
+    FileUtils.mkdir_p(node['runtime_dir'])
   end
 end
 

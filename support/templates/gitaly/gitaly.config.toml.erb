@@ -4,8 +4,8 @@ socket_path = "<%= node.address %>"
 
 # The directory where Gitaly's executables are stored
 bin_dir = "<%= config.gitaly.__build_bin_path %>"
-
-internal_socket_dir = "<%= node.internal_socket_dir %>"
+# The directory where Gitaly creates all data required at runtime.
+runtime_dir = "<%= node.runtime_dir %>"
 
 # # Optional: listen on a TCP socket. This is insecure (no authentication)
 # listen_addr = "<%= config.hostname %>:9999"
