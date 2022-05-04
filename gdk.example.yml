@@ -238,7 +238,6 @@ praefect:
     port: 5432
     sslmode: disable
   enabled: true
-  internal_socket_dir: "/home/git/gdk/tmp/praefect"
   node_count: 1
 prometheus:
   enabled: false

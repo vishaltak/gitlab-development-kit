@@ -73,8 +73,6 @@ file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config
   config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
   end
-
-  FileUtils.mkdir_p(config.praefect.internal_socket_dir)
 end
 
 config.praefect.__nodes.each do |node|

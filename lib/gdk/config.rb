@@ -547,7 +547,6 @@ module GDK
       path(:address) { config.gdk_root.join('praefect.socket') }
       path(:config_file) { config.gitaly.dir.join('praefect.config.toml') }
       bool(:enabled) { true }
-      path(:internal_socket_dir) { config.gdk_root.join('tmp', 'praefect') }
       path(:__praefect_build_bin_path) { config.gitaly.__build_bin_path.join('praefect') }
       settings :database do
         string(:host) { config.geo.secondary? ? config.postgresql.geo.host : config.postgresql.host }
