@@ -523,7 +523,7 @@ module GDK
       path(:log_dir) { config.gdk_root.join('log', 'gitaly') }
       path(:storage_dir) { config.repositories_root }
       path(:repository_storages) { config.repository_storages }
-      path(:runtime_dir) { config.gdk_root.join('tmp', 'gitaly') }
+      path(:runtime_dir) { config.gdk_root.join('tmp') }
       string(:auth_token) { '' }
       bool(:auto_update) { true }
       integer(:storage_count) { 1 }
@@ -563,7 +563,7 @@ module GDK
         string(:storage) { "praefect-internal-#{i}" }
         path(:storage_dir) { config.repositories_root }
         path(:repository_storages) { config.repository_storages }
-        path(:runtime_dir) { config.gdk_root.join('tmp', 'praefect', "gitaly-#{i}") }
+        path(:runtime_dir) { config.gdk_root.join('tmp') }
         settings_array :__storages, size: 1 do |j|
           string(:name) { parent.parent.storage }
           path(:path) { i.zero? && j.zero? ? parent.parent.storage_dir : File.join(parent.parent.repository_storages, parent.parent.service_name, name) }
