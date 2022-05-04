@@ -23,6 +23,7 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::PGUser,
         GDK::Diagnostic::Geo,
         GDK::Diagnostic::Praefect,
+        GDK::Diagnostic::Gitaly,
         GDK::Diagnostic::Gitlab,
         GDK::Diagnostic::Status,
         GDK::Diagnostic::Re2,
