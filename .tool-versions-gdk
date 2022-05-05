@@ -1,12 +1,15 @@
 # Versions of GDK dependencies managed by asdf.
 #
-# New versions must be introduced alongside the current version, and are automatically installed by
-# GDK for asdf users.
+# New versions must be introduced alongside the current version, and are
+# automatically installed by GDK for asdf users.
+#
+# This file is incorporated into .tool-versions via the support/asdf-combine
+# script, which should be run when this file is updated.
 #
 # <default-version> <other-version>
 ruby 2.7.5 3.0.2
 nodejs 16.14.0
 yarn 1.22.17
 minio 2021-04-06T23-11-00Z
-postgres 12.9
+postgres 12.9 13.3
 redis 6.0.16
