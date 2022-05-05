@@ -54,11 +54,11 @@ module GDK
       end
 
       def stdout_handle
-        $stdout
+        $stdout.tap { |handle| handle.sync = true }
       end
 
       def stderr_handle
-        $stderr
+        $stderr.tap { |handle| handle.sync = true }
       end
 
       def print(message = nil, stderr: false)
