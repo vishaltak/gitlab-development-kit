@@ -31,7 +31,7 @@ module GDK
       private
 
       def config
-        @config ||= GDK::Config.new
+        GDK.config
       end
     end
   end

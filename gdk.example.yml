@@ -6,6 +6,19 @@ asdf:
 charts_gitlab:
   auto_update: true
   enabled: false
+clickhouse:
+  bin: "/usr/bin/clickhouse"
+  data_dir: "/home/git/gdk/clickhouse/data"
+  dir: "/home/git/gdk/clickhouse"
+  enabled: false
+  http_port: 8123
+  interserver_http_port: 9009
+  log_dir: "/home/git/gdk/log/clickhouse"
+  log_level: trace
+  max_memory_usage: 1000000000
+  max_server_memory_usage: 2000000000
+  max_thread_pool_size: 1000
+  tcp_port: 9001
 common:
   ca_path: ''
 dev:

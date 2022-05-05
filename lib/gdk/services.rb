@@ -7,9 +7,12 @@ module GDK
   #
   module Services
     autoload :Base, 'gdk/services/base'
+    autoload :Clickhouse, 'gdk/services/clickhouse'
     autoload :Required, 'gdk/services/required'
 
-    ALL = %i[].freeze
+    ALL = %i[
+      Clickhouse
+    ].freeze
 
     # Returns an Array of all services, including enabled and not
     # enabled.

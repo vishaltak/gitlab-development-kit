@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Config do
+  let(:tmp_path) { Dir.mktmpdir('gdk-path') }
+  let(:gdk_basepath) { Pathname.new('/home/git/gdk/') }
   let(:nginx_enabled) { false }
   let(:group_saml_enabled) { false }
   let(:protected_config_files) { [] }
@@ -20,7 +22,7 @@ RSpec.describe GDK::Config do
     }
   end
 
-  let(:default_config) { described_class.new }
+  let(:default_config) { described_class.new(yaml: {}) }
 
   subject(:config) { described_class.new(yaml: yaml) }
 
@@ -652,6 +654,69 @@ RSpec.describe GDK::Config do
           expect(config.postgresql.geo.port).to eq(5678)
         end
       end
+    end
+  end
+
+  describe '#clickhouse' do
+    context 'with default settings' do
+      it { expect(default_config.clickhouse.enabled).to eq(false) }
+      it { expect(default_config.clickhouse.dir).to eq(gdk_basepath.join('clickhouse')) }
+      it { expect(default_config.clickhouse.data_dir).to eq(gdk_basepath.join('clickhouse/data')) }
+      it { expect(default_config.clickhouse.log_dir).to eq(gdk_basepath.join('log/clickhouse')) }
+      it { expect(default_config.clickhouse.log_level).to eq('trace') }
+      it { expect(default_config.clickhouse.http_port).to eq(8123) }
+      it { expect(default_config.clickhouse.tcp_port).to eq(9001) }
+      it { expect(default_config.clickhouse.interserver_http_port).to eq(9009) }
+      it { expect(default_config.clickhouse.max_memory_usage).to eq(1_000_000_000) }
+      it { expect(default_config.clickhouse.max_thread_pool_size).to eq(1000) }
+      it { expect(default_config.clickhouse.max_server_memory_usage).to eq(2_000_000_000) }
+
+      it 'defaults bin to /usr/bin/clickhouse when no executable can be found' do
+        stub_env('PATH', tmp_path)
+
+        expect(default_config.clickhouse.bin).to eq(Pathname.new('/usr/bin/clickhouse'))
+      end
+
+      it 'returns bin full path based on find_executable' do
+        stub_env('PATH', tmp_path)
+        custom_bin_path = Pathname.new(create_dummy_executable('clickhouse'))
+
+        expect(default_config.clickhouse.bin).to eq(custom_bin_path)
+      end
+    end
+
+    context 'with custom settings' do
+      let(:yaml) do
+        {
+          'clickhouse' => {
+            'enabled' => true,
+            'bin' => '/tmp/clickhouse/clickhouse-123',
+            'dir' => '/tmp/clickhouse',
+            'data_dir' => '/tmp/clickhouse/data-dir',
+            'log_dir' => '/tmp/clickhouse/log-dir',
+            'log_level' => 'warn',
+            'http_port' => 1234,
+            'tcp_port' => 5678,
+            'interserver_http_port' => 15678,
+            'max_memory_usage' => 10,
+            'max_thread_pool_size' => 20,
+            'max_server_memory_usage' => 30
+          }
+        }
+      end
+
+      it { expect(config.clickhouse.enabled).to eq(true) }
+      it { expect(config.clickhouse.bin).to eq(Pathname.new('/tmp/clickhouse/clickhouse-123')) }
+      it { expect(config.clickhouse.dir).to eq(Pathname.new('/tmp/clickhouse')) }
+      it { expect(config.clickhouse.data_dir).to eq(Pathname.new('/tmp/clickhouse/data-dir')) }
+      it { expect(config.clickhouse.log_dir).to eq(Pathname.new('/tmp/clickhouse/log-dir')) }
+      it { expect(config.clickhouse.log_level).to eq('warn') }
+      it { expect(config.clickhouse.http_port).to eq(1234) }
+      it { expect(config.clickhouse.tcp_port).to eq(5678) }
+      it { expect(config.clickhouse.interserver_http_port).to eq(15678) }
+      it { expect(config.clickhouse.max_memory_usage).to eq(10) }
+      it { expect(config.clickhouse.max_thread_pool_size).to eq(20) }
+      it { expect(config.clickhouse.max_server_memory_usage).to eq(30) }
     end
   end
 
@@ -2659,5 +2724,13 @@ RSpec.describe GDK::Config do
         expect(config.snowplow_micro.image).to eq('snowplow/snowplow-micro:latest')
       end
     end
+  end
+
+  def create_dummy_executable(name)
+    path = File.join(tmp_path, name)
+    FileUtils.touch(path)
+    File.chmod(0o755, path)
+
+    path
   end
 end
