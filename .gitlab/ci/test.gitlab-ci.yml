@@ -46,8 +46,9 @@ rspec:
       - rspec.xml
     reports:
       junit: rspec.xml
-      cobertura: coverage/coverage.xml
-
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/coverage.xml
 code_quality:
   extends:
     - .docker:use-docker-in-docker
