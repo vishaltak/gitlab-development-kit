@@ -9,16 +9,19 @@
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v14.0.0/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #   1.17.7:
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/v1.57.0/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/372599313791cb92e579e0ff02279f33cbcd71b5/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/3f35f74cbd48f0a1557cd567087f685feede6672/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
+#   1.17.6:
+#     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/v3.0.0/.tool-versions
 #   1.16.14:
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/372599313791cb92e579e0ff02279f33cbcd71b5/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/3f35f74cbd48f0a1557cd567087f685feede6672/.tool-versions
 #
-golang 1.17.9 1.17.7 1.16.14
+golang 1.17.9 1.17.7 1.17.6 1.16.14
 
 # minio:
 #   2021-04-06T23-11-00Z:
@@ -56,7 +59,7 @@ redis 6.0.16
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/v14.0.0/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/372599313791cb92e579e0ff02279f33cbcd71b5/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/3f35f74cbd48f0a1557cd567087f685feede6672/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #   3.0.2:
 #     - .tool-versions-gdk
