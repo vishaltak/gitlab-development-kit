@@ -1,4 +1,17 @@
-# Versions of GDK dependencies managed by asdf.
+# Below are software and versions the GDK requires to operate correctly.
+# Currently GDK itself (excluding other projects) requires the following
+# software:
+#
+# * Ruby - The majority of GDK is written in Ruby.
+# * Node.js - Linting tools GDK uses require Node.js.
+# * Yarn - Supports Node.js.
+# * Minio - Provides object storage for gitlab-org/gitlab Rails.
+# * PostgreSQL - Provides RDBMS for gitlab-org/gitlab Rails/Sidekiq.
+# * Redis - Provides data storage for gitlab-org/gitlab Rails/Sidekiq.
+#
+# Each project GDK manages should ideally provide its own .tool-versions
+# file that contains the project's specific software and versions, resulting
+# in the .tool-versions-gdk file containing _just_ GDK-only software requirements.
 #
 # New versions must be introduced alongside the current version, and are
 # automatically installed by GDK for asdf users.
