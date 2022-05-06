@@ -8,6 +8,7 @@ module GDK
     autoload :Configuration, 'gdk/diagnostic/configuration'
     autoload :Dependencies, 'gdk/diagnostic/dependencies'
     autoload :Geo, 'gdk/diagnostic/geo'
+    autoload :Gitaly, 'gdk/diagnostic/gitaly'
     autoload :Gitlab, 'gdk/diagnostic/gitlab'
     autoload :Golang, 'gdk/diagnostic/golang'
     autoload :MacPorts, 'gdk/diagnostic/mac_ports'
@@ -37,6 +38,7 @@ module GDK
         PGUser
         Geo
         Praefect
+        Gitaly
         Gitlab
         Status
         Re2
