@@ -62,7 +62,7 @@ task 'generate-file-at', [:file, :destination] do |_, args|
 end
 
 # Define as a task instead of a file, so it's built unconditionally
-task 'gdk-config.mk' => 'support/templates/gdk-config.mk.erb' do |t|
+task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
   GDK::ErbRenderer.new(t.source, t.name, config: config).render!
   puts t.name # Print the filename, so make can include it
 end
