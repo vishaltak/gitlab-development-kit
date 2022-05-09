@@ -153,9 +153,9 @@ class GeoSecondaryAdder
 
   def configure_primary
     configure_primary_gdk_yml
+    run_command_arr(primary_gdk, %w[gdk start])
     run_command_arr(primary_gdk, %w[make geo-setup])
     run_command_arr(primary_gdk, %w[gdk restart postgresql-geo])
-    run_command_arr(primary_gdk, %w[gdk start])
   end
 
   def configure_secondary
