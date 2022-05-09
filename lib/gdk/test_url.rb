@@ -3,6 +3,9 @@
 module GDK
   class TestURL
     MAX_ATTEMPTS = 90
+    SLEEP_BETWEEN_ATTEMPTS = 3
+    OPEN_TIMEOUT = 60
+    READ_TIMEOUT = 60
 
     UrlAppearsInvalid = Class.new(StandardError)
 
@@ -10,21 +13,22 @@ module GDK
       "#{GDK.config.__uri}/users/sign_in"
     end
 
-    def initialize(url, quiet: true)
+    def initialize(url = self.class.default_url, max_attempts: MAX_ATTEMPTS, sleep_between_attempts: SLEEP_BETWEEN_ATTEMPTS, read_timeout: READ_TIMEOUT, open_timeout: OPEN_TIMEOUT)
       raise UrlAppearsInvalid unless URI::DEFAULT_PARSER.make_regexp.match?(url)
 
       @uri = URI.parse(url)
-      @quiet = quiet
+      @max_attempts = max_attempts
+      @sleep_between_attempts = sleep_between_attempts
+      @read_timeout = read_timeout
+      @open_timeout = open_timeout
     end
 
     def wait
       @start_time = Time.now
 
-      GDK::Output.print(GDK::Output.notice_format("Waiting until #{uri} is ready.."))
-      GDK::Output.puts unless quiet
+      GDK::Output.puts(GDK::Output.notice_format("Waiting until #{uri} is ready.."))
 
       if check_url
-        GDK::Output.puts
         GDK::Output.notice("#{uri} is up (#{http_helper.last_response_reason}). Took #{duration} second(s).")
         true
       else
@@ -33,40 +37,42 @@ module GDK
       end
     end
 
-    private
+    def check_url(override_max_attempts: max_attempts, verbose: true, silent: false)
+      result = false
+      display_output = verbose && !silent
 
-    attr_reader :uri, :quiet, :start_time
+      1.upto(override_max_attempts) do |i|
+        GDK::Output.puts("\n> Testing attempt ##{i}..") if display_output
 
-    def check_url
-      1.upto(MAX_ATTEMPTS) do |i|
-        if quiet
-          GDK::Output.print('.')
-        else
-          GDK::Output.puts
-          GDK::Output.puts("> Testing attempt ##{i}..")
+        if http_helper.head_up?
+          GDK::Output.puts("#{http_helper.last_response_reason}\n") if display_output
+          GDK::Output.puts unless silent
+          result = true
+          break
         end
 
-        return true if http_helper.head_up? # rubocop:todo Cop/AvoidReturnFromBlocks
-
-        GDK::Output.puts(http_helper.last_response_reason) unless quiet
+        if display_output
+          GDK::Output.puts(http_helper.last_response_reason)
+        elsif !silent
+          GDK::Output.print('.')
+        end
 
         sleep(sleep_between_attempts)
       end
 
-      GDK::Output.puts
-      false
+      result
     end
+
+    private
+
+    attr_reader :uri, :start_time, :sleep_between_attempts, :max_attempts, :read_timeout, :open_timeout
 
     def duration
       (Time.now - start_time).round(2)
     end
 
-    def sleep_between_attempts
-      @sleep_between_attempts ||= quiet ? 5 : 1
-    end
-
     def http_helper
-      @http_helper ||= GDK::HTTPHelper.new(uri, read_timeout: 60, open_timeout: 60, cache_response: false)
+      @http_helper ||= GDK::HTTPHelper.new(uri, read_timeout: read_timeout, open_timeout: open_timeout, cache_response: false)
     end
   end
 end
