@@ -28,16 +28,29 @@ RSpec.describe GDK::Command::Start do
         end
       end
 
-      context 'with progress' do
+      context 'with --show-progress' do
         it 'executes hooks, starts all enabled services and waits until up' do
           stub_gdk_start
 
           expect_runit_start_to_execute([])
 
           test_url_double = instance_double(GDK::TestURL, wait: true)
-          expect(GDK::TestURL).to receive(:new).with(default_url).and_return(test_url_double)
+          expect(GDK::TestURL).to receive(:new).and_return(test_url_double)
 
           expect { subject.run(%w[--show-progress]) }.to output(/GitLab available at/).to_stdout
+        end
+      end
+
+      context 'with --open-when-ready' do
+        it 'executes hooks, starts all enabled services and waits until up' do
+          stub_gdk_start
+
+          expect_runit_start_to_execute([])
+
+          open_double = instance_double(GDK::Command::Open, run: true)
+          expect(GDK::Command::Open).to receive(:new).and_return(open_double)
+
+          expect { subject.run(%w[--open-when-ready]) }.to output(/GitLab available at/).to_stdout
         end
       end
     end
@@ -54,7 +67,7 @@ RSpec.describe GDK::Command::Start do
         end
       end
 
-      context 'with progress' do
+      context 'with --show-progress' do
         it 'executes hooks and starts specified services and ignores --show-progress' do
           services = %w[rails-web]
 
