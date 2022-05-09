@@ -18,13 +18,9 @@ CONFIGS = FileList[
 ]
 CLOBBER.include(*CONFIGS)
 
-def config
-  @config ||= GDK::Config.new
-end
-
 desc 'Dump the configured settings'
 task 'dump_config' do
-  puts GDK::Config.new.dump_as_yaml
+  puts GDK.config.dump_as_yaml
 end
 
 desc 'Generate an example config file with all the defaults'
@@ -58,12 +54,12 @@ task 'generate-file-at', [:file, :destination] do |_, args|
   destination = args[:destination]
   source = Rake::Task[file].source
 
-  GDK::ErbRenderer.new(source, destination, config: config).render!
+  GDK::ErbRenderer.new(source, destination, config: GDK.config).render!
 end
 
 # Define as a task instead of a file, so it's built unconditionally
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
+  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).render!
   puts t.name # Print the filename, so make can include it
 end
 
@@ -72,36 +68,40 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
   GDK::ErbRenderer.new(
     t.source,
     t.name,
-    config: config,
-    node: config.gitaly
+    config: GDK.config,
+    node: GDK.config.gitaly
   ).safe_render!
-  config.gitaly.__storages.each do |storage|
+
+  GDK.config.gitaly.__storages.each do |storage|
     FileUtils.mkdir_p(storage.path)
   end
-  FileUtils.mkdir_p(config.gitaly.log_dir)
-  FileUtils.mkdir_p(config.gitaly.runtime_dir)
+
+  FileUtils.mkdir_p(GDK.config.gitaly.log_dir)
+  FileUtils.mkdir_p(GDK.config.gitaly.runtime_dir)
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
+  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).render!
 
-  config.praefect.__nodes.each_with_index do |node, _|
+  GDK.config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
   end
 end
 
-config.praefect.__nodes.each do |node|
+GDK.config.praefect.__nodes.each do |node|
   desc "Generate gitaly config for #{node['storage']}"
   file node['config_file'] => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
     GDK::ErbRenderer.new(
       t.source,
       t.name,
-      config: config,
+      config: GDK.config,
       node: node
     ).safe_render!
+
     node.__storages.each do |storage|
       FileUtils.mkdir_p(storage.path)
     end
+
     FileUtils.mkdir_p(node['log_dir'])
     FileUtils.mkdir_p(node['runtime_dir'])
   end
@@ -164,7 +164,7 @@ MAKE_TASKS = [
 CONFIG_FILE_TASKS.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, args|
-    GDK::ErbRenderer.new(t.source, t.name, config: config, **task.erb_extra_args).safe_render!
+    GDK::ErbRenderer.new(t.source, t.name, config: GDK.config, **task.erb_extra_args).safe_render!
     task.post_render&.call(t)
   end
 end
@@ -176,17 +176,17 @@ file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
   GDK::ErbRenderer.new(
     'support/templates/makefiles/Makefile.config.mk.erb',
     t.name,
-    config: config,
+    config: GDK.config,
     tasks: tasks
   ).safe_render!
 end
 
 file 'snowplow/snowplow_micro.conf' => ['support/templates/snowplow_micro.conf.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).safe_render!
   chmod('+r', t.name)
 end
 
 file 'snowplow/iglu.json' => ['support/templates/iglu.json.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
+  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).safe_render!
   chmod('+r', t.name)
 end
