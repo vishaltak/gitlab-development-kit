@@ -108,6 +108,14 @@ redis/redis.conf:
 registry/config.yml: registry_host.crt
 	$(Q)rake registry/config.yml
 
+.PHONY: snowplow/snowplow_micro.conf
+snowplow/snowplow_micro.conf: 
+	$(Q)rake snowplow/snowplow_micro.conf
+
+.PHONY: snowplow/iglu.json
+snowplow/iglu.json: 
+	$(Q)rake snowplow/iglu.json
+
 .PHONY: clickhouse/config.xml
 clickhouse/config.xml: 
 	$(Q)rake clickhouse/config.xml

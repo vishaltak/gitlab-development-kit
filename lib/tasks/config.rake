@@ -143,6 +143,8 @@ CONFIG_FILE_TASKS = [
   Task.new(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
   Task.new(name: 'redis/redis.conf'),
   Task.new(name: 'registry/config.yml', make_dependencies: ['registry_host.crt']),
+  Task.new(name: 'snowplow/snowplow_micro.conf', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
+  Task.new(name: 'snowplow/iglu.json', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
   Task.new(name: 'clickhouse/config.xml', template: 'support/templates/clickhouse/config.xml'),
   Task.new(name: 'clickhouse/users.xml', template: 'support/templates/clickhouse/users.xml'),
   Task.new(name: 'clickhouse/config.d/data-paths.xml'),
@@ -179,14 +181,4 @@ file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
     config: GDK.config,
     tasks: tasks
   ).safe_render!
-end
-
-file 'snowplow/snowplow_micro.conf' => ['support/templates/snowplow_micro.conf.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).safe_render!
-  chmod('+r', t.name)
-end
-
-file 'snowplow/iglu.json' => ['support/templates/iglu.json.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).safe_render!
-  chmod('+r', t.name)
 end
