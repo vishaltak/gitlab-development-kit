@@ -9,12 +9,13 @@ require_relative 'output'
 
 module GDK
   class ErbRenderer
-    attr_reader :source, :target
+    attr_reader :source, :target, :config
 
-    def initialize(source, target, args = {})
+    def initialize(source, target, config:, **args)
       @source = source
       @target = target
-      @args = args
+      @config = config
+      @args = args.merge(config: config)
     end
 
     def render!(target = @target)
@@ -122,10 +123,6 @@ module GDK
       else
         '--no-color'
       end
-    end
-
-    def config
-      @args[:config] || raise(::ArgumentError, "'args' argument should have ':config' key")
     end
   end
 end
