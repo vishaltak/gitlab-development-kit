@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------
-# This file is used by the GDK to get interoperatability between Make and Rake with the end
+# This file is used by the GDK to get interoperability between Make and Rake with the end
 # goal of getting rid of Make in the future: https://gitlab.com/groups/gitlab-org/-/epics/1556.
 # This file can be generated with the `rake support/makefiles/Makefile.config.mk` task.
 # ---------------------------------------------------------------------------------------------

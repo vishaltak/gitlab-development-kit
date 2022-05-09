@@ -161,41 +161,6 @@ MAKE_TASKS = [
   Task.new(name: 'gitaly/praefect.config.toml')
 ].freeze
 
-MAKE_FILE_HEADER = <<~TASK_DEF
-# ---------------------------------------------------------------------------------------------
-# This file is used by the GDK to get interoperatability between Make and Rake with the end
-# goal of getting rid of Make in the future: https://gitlab.com/groups/gitlab-org/-/epics/1556.
-# This file can be generated with the `rake support/makefiles/Makefile.config.mk` task.
-# ---------------------------------------------------------------------------------------------
-
-TASK_DEF
-
-MAKE_TASK_TEMPLATE = <<~TASK_DEF
-.PHONY: %{name}
-%{name}: %{make_dependencies}
-\t$(Q)rake %{name}
-
-TASK_DEF
-MAKE_NO_OP_TASK_TEMPLATE = <<~TASK_DEF
-.PHONY: %{name}
-%{name}: %{make_dependencies}
-ifeq ($(%{no_op_condition}),true)
-\t$(Q)rake %{name}
-else
-\t@true
-endif
-
-TASK_DEF
-MAKE_TIMED_TASK_TEMPLATE = <<~TASK_DEF
-.PHONY: %{name}
-%{name}: %{name}-timed
-
-.PHONY: %{name}-run
-%{name}-run: rake
-\t$(Q)rake %{name}
-
-TASK_DEF
-
 CONFIG_FILE_TASKS.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, args|
@@ -205,19 +170,15 @@ CONFIG_FILE_TASKS.each do |task|
 end
 
 desc 'Dynamically generate Make targets for Rake tasks'
-file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, args|
-  File.open(t.name, mode: 'w+') do |file|
-    file.write(MAKE_FILE_HEADER)
-    (CONFIG_FILE_TASKS + MAKE_TASKS).each do |task|
-      if task.no_op_condition
-        file.write(MAKE_NO_OP_TASK_TEMPLATE % task.to_h)
-      elsif task.timed
-        file.write(MAKE_TIMED_TASK_TEMPLATE % task.to_h)
-      else
-        file.write(MAKE_TASK_TEMPLATE % task.to_h)
-      end
-    end
-  end
+file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
+  tasks = CONFIG_FILE_TASKS + MAKE_TASKS
+
+  GDK::ErbRenderer.new(
+    'support/templates/makefiles/Makefile.config.mk.erb',
+    t.name,
+    config: config,
+    tasks: tasks
+  ).safe_render!
 end
 
 file 'snowplow/snowplow_micro.conf' => ['support/templates/snowplow_micro.conf.erb'] do |t|
