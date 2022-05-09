@@ -32,6 +32,14 @@ To see logs, run:
 gdk tail
 ```
 
+## Open in web browser
+
+To visit the GitLab web UI running in your local GDK installation, using your default web browser:
+
+```shell
+gdk open
+```
+
 ## Stop GDK
 
 When you are not using GDK you may want to shut it down to free up memory on your computer:
