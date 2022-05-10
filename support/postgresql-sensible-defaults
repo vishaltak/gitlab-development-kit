@@ -14,5 +14,7 @@ maintenance_work_mem = '64MB'
 shared_buffers = '256MB'
 synchronous_commit = 'off'
 timezone = 'UTC'
+# Turning off fsync speeds up 'rake db:test:prepare'
+fsync = 'off'
 EOF
 fi
