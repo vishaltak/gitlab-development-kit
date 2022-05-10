@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../gdk/task_helpers'
+
 CONFIGS = FileList[
   'Procfile',
   'gdk.example.yml',
@@ -107,63 +109,54 @@ GDK.config.praefect.__nodes.each do |node|
   end
 end
 
-Task = Struct.new(:name, :make_dependencies, :template, :erb_extra_args, :post_render, :no_op_condition, :timed, keyword_init: true) do
-  def initialize(attributes)
-    super
-    self[:make_dependencies] = (attributes[:make_dependencies] || []).join(' ')
-    self[:template] ||= "support/templates/#{self[:name]}.erb"
-    self[:erb_extra_args] ||= {}
-    self[:timed] = false if self[:timed].nil?
-  end
-end
+tasks = GDK::TaskHelpers::ConfigTasks.instance
 
-CONFIG_FILE_TASKS = [
-  Task.new(name: 'Procfile'),
-  Task.new(name: 'gitlab/config/cable.yml'),
-  Task.new(name: 'gitlab/config/database.yml'),
-  Task.new(name: 'gitlab/config/gitlab.yml'),
-  Task.new(name: 'gitlab/config/puma.rb'),
-  Task.new(name: 'gitlab/config/redis.cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting }),
-  Task.new(name: 'gitlab/config/redis.queues.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :queues }),
-  Task.new(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting }),
-  Task.new(name: 'gitlab/config/redis.sessions.yml', erb_extra_args: { cluster: :sessions }),
-  Task.new(name: 'gitlab/config/redis.shared_state.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state }),
-  Task.new(name: 'gitlab/config/redis.trace_chunks.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :trace_chunks }),
-  Task.new(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state }),
-  Task.new(name: 'gitlab/workhorse/config.toml'),
-  Task.new(name: 'gitlab-k8s-agent-config.yml'),
-  Task.new(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git']),
-  Task.new(name: 'gitlab-pages-secret'),
-  Task.new(name: 'gitlab-runner-config.toml', no_op_condition: 'runner_enabled'),
-  Task.new(name: 'gitlab-shell/config.yml', make_dependencies: ['gitlab-shell/.git']),
-  Task.new(name: 'gitlab-spamcheck/config/config.toml'),
-  Task.new(name: 'grafana/grafana.ini'),
-  Task.new(name: 'nginx/conf/nginx.conf'),
-  Task.new(name: 'openssh/sshd_config'),
-  Task.new(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
-  Task.new(name: 'redis/redis.conf'),
-  Task.new(name: 'registry/config.yml', make_dependencies: ['registry_host.crt']),
-  Task.new(name: 'snowplow/snowplow_micro.conf', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
-  Task.new(name: 'snowplow/iglu.json', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
-  Task.new(name: 'clickhouse/config.xml', template: 'support/templates/clickhouse/config.xml'),
-  Task.new(name: 'clickhouse/users.xml', template: 'support/templates/clickhouse/users.xml'),
-  Task.new(name: 'clickhouse/config.d/data-paths.xml'),
-  Task.new(name: 'clickhouse/config.d/gdk.xml'),
-  Task.new(name: 'clickhouse/config.d/logger.xml'),
-  Task.new(name: 'clickhouse/config.d/openssl.xml'),
-  Task.new(name: 'clickhouse/config.d/user-directories.xml'),
-  Task.new(name: 'clickhouse/users.d/gdk.xml')
-].freeze
+# Template tasks
+tasks.add_template(name: 'Procfile')
+tasks.add_template(name: 'gitlab/config/cable.yml')
+tasks.add_template(name: 'gitlab/config/database.yml')
+tasks.add_template(name: 'gitlab/config/gitlab.yml')
+tasks.add_template(name: 'gitlab/config/puma.rb')
+tasks.add_template(name: 'gitlab/config/redis.cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting })
+tasks.add_template(name: 'gitlab/config/redis.queues.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :queues })
+tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting })
+tasks.add_template(name: 'gitlab/config/redis.sessions.yml', erb_extra_args: { cluster: :sessions })
+tasks.add_template(name: 'gitlab/config/redis.shared_state.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
+tasks.add_template(name: 'gitlab/config/redis.trace_chunks.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :trace_chunks })
+tasks.add_template(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
+tasks.add_template(name: 'gitlab/workhorse/config.toml')
+tasks.add_template(name: 'gitlab-k8s-agent-config.yml')
+tasks.add_template(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git'])
+tasks.add_template(name: 'gitlab-pages-secret')
+tasks.add_template(name: 'gitlab-runner-config.toml', no_op_condition: 'runner_enabled')
+tasks.add_template(name: 'gitlab-shell/config.yml', make_dependencies: ['gitlab-shell/.git'])
+tasks.add_template(name: 'gitlab-spamcheck/config/config.toml')
+tasks.add_template(name: 'grafana/grafana.ini')
+tasks.add_template(name: 'nginx/conf/nginx.conf')
+tasks.add_template(name: 'openssh/sshd_config')
+tasks.add_template(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name, verbose: false) })
+tasks.add_template(name: 'redis/redis.conf')
+tasks.add_template(name: 'registry/config.yml', make_dependencies: ['registry_host.crt'])
+tasks.add_template(name: 'snowplow/snowplow_micro.conf', post_render: ->(task) { chmod('+r', task.name, verbose: false) })
+tasks.add_template(name: 'snowplow/iglu.json', post_render: ->(task) { chmod('+r', task.name, verbose: false) })
+tasks.add_template(name: 'clickhouse/config.xml', template: 'support/templates/clickhouse/config.xml')
+tasks.add_template(name: 'clickhouse/users.xml', template: 'support/templates/clickhouse/users.xml')
+tasks.add_template(name: 'clickhouse/config.d/data-paths.xml')
+tasks.add_template(name: 'clickhouse/config.d/gdk.xml')
+tasks.add_template(name: 'clickhouse/config.d/logger.xml')
+tasks.add_template(name: 'clickhouse/config.d/openssl.xml')
+tasks.add_template(name: 'clickhouse/config.d/user-directories.xml')
+tasks.add_template(name: 'clickhouse/users.d/gdk.xml')
 
-MAKE_TASKS = [
-  Task.new(name: 'gitlab-db-migrate', make_dependencies: ['ensure-databases-running']),
-  Task.new(name: 'preflight-checks', timed: true),
-  Task.new(name: 'preflight-update-checks', timed: true),
-  Task.new(name: 'gitaly/gitaly.config.toml'),
-  Task.new(name: 'gitaly/praefect.config.toml')
-].freeze
+# Make targets
+tasks.add_make_task(name: 'gitlab-db-migrate', make_dependencies: ['ensure-databases-running'])
+tasks.add_make_task(name: 'preflight-checks', timed: true)
+tasks.add_make_task(name: 'preflight-update-checks', timed: true)
+tasks.add_make_task(name: 'gitaly/gitaly.config.toml')
+tasks.add_make_task(name: 'gitaly/praefect.config.toml')
 
-CONFIG_FILE_TASKS.each do |task|
+# Generate a file task for each template we manage
+tasks.template_tasks.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, args|
     GDK::ErbRenderer.new(t.source, t.name, config: GDK.config, **task.erb_extra_args).safe_render!
@@ -173,12 +166,10 @@ end
 
 desc 'Dynamically generate Make targets for Rake tasks'
 file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
-  tasks = CONFIG_FILE_TASKS + MAKE_TASKS
-
   GDK::ErbRenderer.new(
     'support/templates/makefiles/Makefile.config.mk.erb',
     t.name,
     config: GDK.config,
-    tasks: tasks
+    tasks: tasks.all_tasks
   ).safe_render!
 end
