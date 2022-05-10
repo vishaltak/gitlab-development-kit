@@ -23,7 +23,7 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using `nvm`, such as:
 
    ```shell
-   nvm install 14.17.5
+   nvm install 16.14.0
    ```
 
 1. In the `gitlab-development-kit` checkout, run the following `brew` commands:
@@ -111,7 +111,7 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
      [`ruby-build` plugin](https://github.com/rbenv/ruby-build#installation) and build it.
    - You must select the Ruby version instead of your distributions default one (if any). See the
      [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
-     `echo 2.7.2 >~/.rbenv/version`.
+     `echo 2.7.5 >~/.rbenv/version`.
 1. [Install GDK](index.md#install-gdk).
 
 ## Install dependencies for other Linux distributions
@@ -241,9 +241,9 @@ sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cma
 sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
-# This example uses Ruby 2.7.2. Substitute with the current version if different.
-sudo rvm install 2.7.2
-sudo rvm use 2.7.2
+# This example uses Ruby 2.7.5. Substitute with the current version if different.
+sudo rvm install 2.7.5
+sudo rvm use 2.7.5
 #Ensure your user is in rvm group
 sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
@@ -270,9 +270,9 @@ sudo dnf install postgresql-server postgresql-devel libicu-devel git git-lfs cma
 sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
 sudo chmod +x /usr/local/bin/minio
 
-# This example uses Ruby 2.7.2. Substitute with the current version if different.
-sudo rvm install 2.7.2
-sudo rvm use 2.7.2
+# This example uses Ruby 2.7.5. Substitute with the current version if different.
+sudo rvm install 2.7.5
+sudo rvm use 2.7.5
 #Ensure your user is in rvm group
 sudo usermod -a -G rvm <username>
 #add iptables exceptions, or sudo service stop iptables
@@ -345,7 +345,7 @@ curl -sSL -o setup_rvm.sh "https://get.rvm.io"
 chmod a+rx setup_rvm.sh
 ./setup_rvm.sh
 source  /home/ansible/.rvm/scripts/rvm
-rvm install 2.7.2
+rvm install 2.7.5
 ```
 
 Append these lines to your `~/.bashrc`:
@@ -373,7 +373,7 @@ Now determine that the current Ruby version is 2.7.x:
 
 ```shell
 ruby --version
-ruby 2.7.2p137 (2020-10-01 revision 5445e04352) [x86_64-linux]
+ruby 2.7.5p203 (2021-11-24 revision f69aeb8314) [x86_64-linux]
 ```
 
 If it's different (for example Ruby 2.7 - system default in Tumbleweed), you
@@ -483,13 +483,22 @@ To recompile Ruby with adding additional patches do the following:
 ```shell
 asdf uninstall ruby
 
-# Compile Ruby 2.7.2
-export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.2/thread-memory-allocations-2.7.patch
-asdf install ruby 2.7.2
+# Compile Ruby 2.7.5
+export RUBY_APPLY_PATCHES="$(cat <<EOF
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.5/debug-segfault.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.5/thread-memory-allocations-2.7.patch
+EOF
+)"
+asdf install ruby 2.7.5
 
-# Compile Ruby 3.0.0
-export RUBY_APPLY_PATCHES=https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/thread-memory-allocations-3.0.patch
-asdf install ruby 3.0.0
+# Compile Ruby 3.0.3
+export RUBY_APPLY_PATCHES="$(cat <<EOF
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/dont_alias_array_size.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/override_optimized_methods.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/thread-memory-allocations-3.0.patch
+EOF
+)"
+asdf install ruby 3.0.3
 ```
 
 You can later verify that patches were properly applied:
