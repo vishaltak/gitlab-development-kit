@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'socket'
+
 module GDK
   module Dependencies
     class Checker
@@ -24,6 +26,7 @@ module GDK
         check_nodejs_version
         check_yarn_version
         check_postgresql_version
+        check_postgresql_socket_path
 
         check_git_installed
         check_graphicsmagick_installed
@@ -107,6 +110,35 @@ module GDK
         @error_messages << missing_dependency('PostgreSQL', minimum_version: expected)
       end
 
+      def check_postgresql_socket_path
+        return if Postgresql.new.use_tcp?
+
+        # use a temporary file the same character length as 'postgresql/.s.PGSQL.port'
+        # port max is 65535, so assume 5 characters for the port number
+        gitlab_path = Pathname.new(__dir__).join("../../..").expand_path
+        socket_path = gitlab_path.join("postgresql_.s.PGSQL.XXXXX")
+
+        remove_postgresql_temporary_socket_file(socket_path)
+
+        begin
+          UNIXServer.new(socket_path)
+        rescue ArgumentError => e
+          if e.to_s.include?('too long unix socket path')
+            @error_messages = <<~MSG
+            ERROR: GDK directory's character length (#{gitlab_path.to_s.length}) is too long to support the creation
+                   of a UNIX socket for Postgres:
+
+                   #{gitlab_path}
+
+                   Try using a shorter directory path for GDK or use TCP for Postgres
+            MSG
+          end
+        rescue StandardError
+        end
+
+        remove_postgresql_temporary_socket_file(socket_path)
+      end
+
       def check_git_installed
         check_binary('git')
       end
@@ -140,6 +172,11 @@ module GDK
       end
 
       private
+
+      def remove_postgresql_temporary_socket_file(socket_path)
+        File.unlink(socket_path) if File.exist?(socket_path) && File.socket?(socket_path)
+      rescue StandardError
+      end
 
       def config
         @config ||= GDK.config
