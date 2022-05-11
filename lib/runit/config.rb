@@ -120,7 +120,7 @@ module Runit
                             service: service)
 
       run_path = sv_dir(service).join('run')
-      write_file(run_path, run, PERMISSION_EXECUTION)
+      write_executable_file(run_path, run)
     end
 
     # Create runit `down` file so that `runsvdir` won't boot this service
@@ -128,7 +128,7 @@ module Runit
     #
     # @param [GDK::Service::Base] service
     def create_runit_down(service)
-      write_file(sv_dir(service).join('down'), '', PERMISSION_READONLY)
+      write_readonly_file(sv_dir(service).join('down'), '')
     end
 
     # Create runit `control/t` executable
@@ -143,7 +143,7 @@ module Runit
                                   term_signal: term_signal)
 
       control_t_path = sv_dir(service).join('control/t')
-      write_file(control_t_path, control_t, PERMISSION_EXECUTION)
+      write_executable_file(control_t_path, control_t)
     end
 
     # Create runit `log/run` executable
@@ -156,7 +156,7 @@ module Runit
       log_run = render_template('runit/log/run.sh.erb', service_log_dir: service_log_dir)
 
       log_run_path = sv_dir(service).join('log/run')
-      write_file(log_run_path, log_run, PERMISSION_EXECUTION)
+      write_executable_file(log_run_path, log_run)
     end
 
     # Create runit `log/:service:/config` file
@@ -176,7 +176,7 @@ module Runit
                                    service: service)
 
       log_config_path = log_dir.join(service.name, 'config')
-      write_file(log_config_path, log_config, PERMISSION_READONLY)
+      write_readonly_file(log_config_path, log_config)
     end
 
     def enable_runit_service(service)
@@ -192,16 +192,30 @@ module Runit
       TERM_SIGNAL.fetch(service.name, 'TERM')
     end
 
+    # Write content to a given file with execution permission
+    #
+    # @param [String] path of the file
+    # @param [String] content that will be written to the file
+    def write_executable_file(path, content)
+      write_file(path, content)
+
+      File.chmod(PERMISSION_EXECUTION, path)
+    end
+
+    def write_readonly_file(path, content)
+      write_file(path, content)
+
+      File.chmod(PERMISSION_READONLY, path)
+    end
+
     # Write content to a given file with specified permissions
     #
     # @param [String] path of the file
     # @param [String] content that will be written to the file
-    # @param [Integer] permissions in chmod octal notation (ex: 0o755)
-    def write_file(path, content, permissions)
+    def write_file(path, content)
       FileUtils.mkdir_p(File.dirname(path))
 
       File.open(path, 'w') { |f| f.write(content) }
-      File.chmod(permissions, path)
     end
 
     # Render a template to string with optional injected local variables
