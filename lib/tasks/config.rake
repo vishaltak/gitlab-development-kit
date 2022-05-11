@@ -92,7 +92,7 @@ config.praefect.__nodes.each do |node|
   end
 end
 
-Task = Struct.new(:name, :make_dependencies, :template, :erb_extra_args, :post_render, :no_op_condition, :timed, keyword_init: true) do
+Task = Struct.new(:name, :make_dependencies, :template, :skip_if_exists, :erb_extra_args, :post_render, :no_op_condition, :timed, keyword_init: true) do
   def initialize(attributes)
     super
     self[:make_dependencies] = (attributes[:make_dependencies] || []).join(' ')
@@ -118,7 +118,7 @@ CONFIG_FILE_TASKS = [
   Task.new(name: 'gitlab/workhorse/config.toml'),
   Task.new(name: 'gitlab-k8s-agent-config.yml'),
   Task.new(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git']),
-  Task.new(name: 'gitlab-pages-secret'),
+  Task.new(name: 'gitlab-pages-secret', skip_if_exists: true),
   Task.new(name: 'gitlab-runner-config.toml', no_op_condition: 'runner_enabled'),
   Task.new(name: 'gitlab-shell/config.yml', make_dependencies: ['gitlab-shell/.git']),
   Task.new(name: 'gitlab-spamcheck/config/config.toml'),
@@ -176,7 +176,7 @@ TASK_DEF
 CONFIG_FILE_TASKS.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, args|
-    GDK::ErbRenderer.new(t.source, t.name, config: config, **task.erb_extra_args).safe_render!
+    GDK::ErbRenderer.new(t.source, t.name, skip_if_exists: task.skip_if_exists, config: config, **task.erb_extra_args).safe_render!
     task.post_render&.call(t)
   end
 end

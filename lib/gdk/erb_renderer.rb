@@ -32,6 +32,7 @@ module GDK
 
     def safe_render!
       return if warn_not_applied_if_target_protected?
+      return if skip_if_exists? && File.exist?(target) && File.size(target).positive?
 
       temp_file = Tempfile.open(target)
       render!(temp_file.path)
@@ -116,6 +117,10 @@ module GDK
 
     def config
       @args[:config] || raise(::ArgumentError, "'args' argument should have ':config' key")
+    end
+
+    def skip_if_exists?
+      !!@args[:skip_if_exists]
     end
   end
 end

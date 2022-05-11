@@ -37,6 +37,38 @@ describe GDK::ErbRenderer do
 
         expect(File.read(out_file)).to match('Foo is foo, and Bar is bar')
       end
+
+      context 'with a ERB that generates random values' do
+        let(:skip_if_exists) { false }
+        let(:erb_file) { fixture_path.join('random_example.erb') }
+
+        subject(:renderer) { described_class.new(erb_file.to_s, out_file.to_s, skip_if_exists: skip_if_exists, config: config) }
+
+        it 'generates new content' do
+          expect(renderer).to receive(:warn_changes!)
+          expect(renderer).to receive(:warn_overwritten!)
+
+          renderer.safe_render!
+          text = File.read(out_file)
+          renderer.safe_render!
+
+          expect(File.read(out_file)).not_to match(text)
+        end
+
+        context 'with skip_if_exists is used' do
+          let(:skip_if_exists) { true }
+
+          it 'does not overwrite the file' do
+            expect(renderer).not_to receive(:warn_changes!)
+
+            renderer.safe_render!
+            text = File.read(out_file)
+            renderer.safe_render!
+
+            expect(File.read(out_file)).to match(text)
+          end
+        end
+      end
     end
 
     context 'output file exists with differences' do
