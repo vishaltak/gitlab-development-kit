@@ -12,3 +12,5 @@
 
 /label ~"Category:GDK" ~Quality ~"Engineering Productivity"
 /assign me
+
+<!-- template sourced from https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.gitlab/merge_request_templates/Default.md -->
