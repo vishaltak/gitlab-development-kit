@@ -19,3 +19,5 @@
 - GDK version: ```<!-- output of `git rev-parse --short HEAD` command -->```
 
 /label ~"Category:GDK" ~Quality ~"Engineering Productivity"
+
+<!-- template sourced from https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.gitlab/issue_templates/Default.md -->
