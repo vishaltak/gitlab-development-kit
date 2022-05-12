@@ -111,6 +111,10 @@ module GDK
     Pathname.new($gdk_root || Pathname.new(__dir__).parent) # rubocop:disable Style/GlobalVars
   end
 
+  def self.template_root
+    Pathname.new(File.expand_path(File.join(__dir__, '..', 'support', 'templates')))
+  end
+
   def self.make(*targets)
     sh = Shellout.new(MAKE, targets, chdir: GDK.root)
     sh.stream

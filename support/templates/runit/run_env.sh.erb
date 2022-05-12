@@ -1,0 +1,10 @@
+export host=<%= GDK.config.hostname %>
+export port=<%= GDK.config.port %>
+export relative_url_root=<%= GDK.config.relative_url_root %>
+export cache_classes=<%= GDK.config.gitlab.cache_classes %>
+export bundle_gemfile=<%= GDK.config.gitlab.rails.bundle_gemfile %>
+
+<% if GDK.config.tracer.jaeger? %>
+export GITLAB_TRACING='<%= GDK.config.tracer.jaeger.__tracer_url %>'
+export GITLAB_TRACING_URL='<%= GDK.config.tracer.jaeger.__search_url %>'
+<% end %>

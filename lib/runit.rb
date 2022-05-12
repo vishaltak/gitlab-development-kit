@@ -4,12 +4,13 @@ require 'mkmf'
 require 'pathname'
 
 require_relative 'shellout'
-require_relative 'runit/config'
 
 MakeMakefile::Logging.quiet = true
 MakeMakefile::Logging.logfile(File::NULL)
 
 module Runit
+  autoload :Config, 'runit/config'
+
   SERVICE_SHORTCUTS = {
     'rails' => 'rails-*',
     'tunnel' => 'tunnel_*',
@@ -28,7 +29,19 @@ module Runit
   def self.start_runsvdir
     runit_installed!
 
-    Runit::Config.new(GDK.root).render
+    runit_config = Runit::Config.new(GDK.root)
+
+    if GDK.config.gdk.experimental.ruby_services?
+      # To make transition easier, we merge legacy services that haven't been migrated yet
+      # so that using experimental ruby services will always working even when partially migrated
+      services = GDK::Services.enabled
+      new_services = services.map(&:name)
+      legacy_services = runit_config.services_from_procfile.reject { |legacy| new_services.include?(legacy.name) }
+
+      runit_config.render(services: services + legacy_services)
+    else
+      runit_config.render
+    end
 
     # It is important that we use an absolute path with `runsvdir`: this
     # allows us to distinguish processes belonging to different GDK

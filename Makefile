@@ -65,6 +65,7 @@ endif
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
+gdk-reconfigure-task \
 gitlab-shell-setup \
 gitlab-workhorse-setup \
 gitlab-pages-setup \
@@ -206,3 +207,11 @@ show-installed-at:
 show-reconfigured-at:
 	@echo
 	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
+
+.PHONY: gdk-reconfigure-task
+gdk-reconfigure-task:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Ensuring GDK managed configuration files are up-to-date"
+	@echo "${DIVIDER}"
+	$(Q)rake reconfigure

@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
-CONFIGS = FileList['Procfile', 'nginx/conf/nginx.conf', 'gitlab/config/gitlab.yml', 'prometheus/prometheus.yml']
+CONFIGS = FileList[
+  'Procfile',
+  'gdk.example.yml',
+  'support/makefiles/Makefile.config.mk',
+  'nginx/conf/nginx.conf',
+  'gitlab/config/gitlab.yml',
+  'prometheus/prometheus.yml'
+]
 CLOBBER.include(*CONFIGS, 'gdk.example.yml')
 
 def config
@@ -125,7 +132,7 @@ CONFIG_FILE_TASKS = [
   Task.new(name: 'grafana/grafana.ini'),
   Task.new(name: 'nginx/conf/nginx.conf'),
   Task.new(name: 'openssh/sshd_config'),
-  Task.new(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name) }),
+  Task.new(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
   Task.new(name: 'redis/redis.conf'),
   Task.new(name: 'registry/config.yml', make_dependencies: ['registry_host.crt'])
 ].freeze

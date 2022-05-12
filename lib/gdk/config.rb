@@ -106,6 +106,7 @@ module GDK
       settings :experimental do
         bool(:quiet) { config.gdk.quiet? }
         bool(:auto_reconfigure) { config.gdk.auto_reconfigure? }
+        bool(:ruby_services) { false }
       end
       bool(:overwrite_changes) { false }
       array(:protected_config_files) { [] }
