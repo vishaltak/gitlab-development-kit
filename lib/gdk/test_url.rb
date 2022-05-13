@@ -63,6 +63,10 @@ module GDK
       result
     end
 
+    def check_url_oneshot(verbose: false, silent: true)
+      check_url(override_max_attempts: 1, verbose: verbose, silent: silent)
+    end
+
     private
 
     attr_reader :uri, :start_time, :sleep_between_attempts, :max_attempts, :read_timeout, :open_timeout

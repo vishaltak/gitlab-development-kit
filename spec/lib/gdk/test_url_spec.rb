@@ -153,6 +153,14 @@ RSpec.describe GDK::TestURL do
     end
   end
 
+  describe '#check_url_oneshot' do
+    it 'calls #check_url, overriding max_attempts, verbose and silent' do
+      expect(subject).to receive(:check_url).with(override_max_attempts: 1, verbose: false, silent: true)
+
+      subject.check_url_oneshot
+    end
+  end
+
   def stub_test_url_http_helper(last_response_reason = '')
     uri = URI.parse(default_url)
     http_helper_double = instance_double(GDK::HTTPHelper, last_response_reason: last_response_reason)
