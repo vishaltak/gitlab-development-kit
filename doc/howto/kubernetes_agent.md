@@ -42,7 +42,7 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
 1. You can start GDK with `gdk start`. It prints the URL for `agentk` to use:
 
     ```plaintext
-    => GitLab will be available at http://127.0.0.1:3000 shortly.
+    => GitLab available at http://127.0.0.1:3000.
     => GitLab Agent Server (KAS) available at grpc://127.0.0.1:8150.
     ```
 

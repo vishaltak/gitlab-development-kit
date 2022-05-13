@@ -24,7 +24,7 @@ RSpec.describe GDK::Command::Start do
 
           expect_runit_start_to_execute([])
 
-          expect { subject.run }.to output(/GitLab will be available at/).to_stdout
+          expect { subject.run }.to output(/GitLab available at/).to_stdout
         end
       end
 
@@ -37,7 +37,7 @@ RSpec.describe GDK::Command::Start do
           test_url_double = instance_double(GDK::TestURL, wait: true)
           expect(GDK::TestURL).to receive(:new).with(default_url).and_return(test_url_double)
 
-          expect { subject.run(%w[--show-progress]) }.to output(/GitLab will be available at/).to_stdout
+          expect { subject.run(%w[--show-progress]) }.to output(/GitLab available at/).to_stdout
         end
       end
     end
