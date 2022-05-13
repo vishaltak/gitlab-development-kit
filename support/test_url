@@ -5,10 +5,10 @@
 require_relative '../lib/gdk'
 
 url = ARGV[0] || GDK::TestURL.default_url
-quiet = ENV['QUIET'] != 'false'
+verbose = ENV['QUIET'] == 'false'
 
 begin
-  exit(GDK::TestURL.new(url, quiet: quiet).wait)
+  exit(GDK::TestURL.new(url).wait(verbose: verbose))
 rescue GDK::TestURL::UrlAppearsInvalid
   GDK::Output.error("'#{url}' does not appear to be a valid URL?")
   exit(1)

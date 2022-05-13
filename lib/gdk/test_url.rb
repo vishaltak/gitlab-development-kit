@@ -23,12 +23,12 @@ module GDK
       @open_timeout = open_timeout
     end
 
-    def wait
+    def wait(verbose: false)
       @start_time = Time.now
 
       GDK::Output.puts(GDK::Output.notice_format("Waiting until #{uri} is ready.."))
 
-      if check_url
+      if check_url(verbose: verbose)
         GDK::Output.notice("#{uri} is up (#{http_helper.last_response_reason}). Took #{duration} second(s).")
         true
       else
@@ -37,7 +37,7 @@ module GDK
       end
     end
 
-    def check_url(override_max_attempts: max_attempts, verbose: true, silent: false)
+    def check_url(override_max_attempts: max_attempts, verbose: false, silent: false)
       result = false
       display_output = verbose && !silent
 
