@@ -8,7 +8,7 @@ CONFIGS = FileList[
   'gitlab/config/gitlab.yml',
   'prometheus/prometheus.yml'
 ]
-CLOBBER.include(*CONFIGS, 'gdk.example.yml')
+CLOBBER.include(*CONFIGS)
 
 def config
   @config ||= GDK::Config.new
@@ -32,7 +32,7 @@ file 'gdk.example.yml' => 'clobber:gdk.example.yml' do |t|
 end
 
 desc 'Regenerate all config files from scratch'
-task reconfigure: [:clobber, :all]
+task reconfigure: [:all]
 
 desc 'Generate all config files'
 task all: CONFIGS
