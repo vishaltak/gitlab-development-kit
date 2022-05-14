@@ -18,7 +18,7 @@ module GDK
     end
 
     def render!(target = @target)
-      return if warn_not_applied_if_target_protected?
+      return if should_not_render?(target)
 
       str = File.read(source)
       # A trim_mode of '-' allows omitting empty lines with <%- -%>
@@ -31,7 +31,7 @@ module GDK
     end
 
     def safe_render!
-      return if warn_not_applied_if_target_protected?
+      return if should_not_render?(target)
 
       temp_file = Tempfile.open(target)
       render!(temp_file.path)
@@ -72,15 +72,22 @@ module GDK
       GDK::Output.puts(diff_output, stderr: true)
     end
 
-    def target_protected?
+    def target_protected?(target)
       config.config_file_protected?(target)
     end
 
-    def warn_not_applied_if_target_protected?
-      return false unless target_protected?
+    def should_not_render?(target)
+      return false unless target_protected?(target)
 
-      GDK::Output.warn("Changes to '#{target}' not applied because it's protected in gdk.yml.")
-      true
+      if File.exist?(target)
+        GDK::Output.warn("Changes to '#{target}' not applied because it's protected in gdk.yml.")
+
+        true
+      else
+        GDK::Output.warn("Creating missing protected file '#{target}'.")
+
+        false
+      end
     end
 
     def warn_overwritten!

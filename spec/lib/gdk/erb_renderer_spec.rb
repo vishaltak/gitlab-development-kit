@@ -37,6 +37,18 @@ describe GDK::ErbRenderer do
 
         expect(File.read(out_file)).to match('Foo is foo, and Bar is bar')
       end
+
+      context 'with protected config file match', :hide_stdout do
+        let(:protected_config_files) { ['tmp/example.out'] }
+
+        it 'renders with a warning' do
+          expect(GDK::Output).to receive(:warn).with(%r{Creating missing protected file 'tmp/example.out'.})
+
+          renderer.safe_render!
+
+          expect(File.read(out_file)).to match('Foo is foo, and Bar is bar')
+        end
+      end
     end
 
     context 'output file exists with differences' do
