@@ -491,11 +491,9 @@ EOF
 )"
 asdf install ruby 2.7.5
 
-# Compile Ruby 3.0.3
+# Compile Ruby 3.0.4
 export RUBY_APPLY_PATCHES="$(cat <<EOF
-https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/dont_alias_array_size.patch
-https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/override_optimized_methods.patch
-https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.3/thread-memory-allocations-3.0.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.4/thread-memory-allocations-3.0.patch
 EOF
 )"
 asdf install ruby 3.0.3
