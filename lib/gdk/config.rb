@@ -233,7 +233,18 @@ module GDK
     settings :gitlab_docs do
       bool(:enabled) { false }
       bool(:auto_update) { true }
+      bool(:https) { false }
       integer(:port) { 3005 }
+      integer(:port_https) { 3030 }
+
+      anything :__uri do
+        klass = config.gitlab_docs.https? ? URI::HTTPS : URI::HTTP
+        port = config.gitlab_docs.https? ? config.gitlab_docs.port_https : config.gitlab_docs.port
+        klass.build(host: config.hostname, port: port)
+      end
+
+      string(:__listen_address) { "#{config.nginx.listen}:#{config.gitlab_docs.port}" }
+      string(:__https_listen_address) { "#{config.nginx.listen}:#{config.gitlab_docs.port_https}" }
 
       bool(:__all_configured?) { config.gitlab_docs.enabled? && config.gitlab_runner.enabled? && config.omnibus_gitlab.enabled? && config.charts_gitlab.enabled? && config.gitlab_operator.enabled? }
 

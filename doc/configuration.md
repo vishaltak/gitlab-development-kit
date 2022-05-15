@@ -292,6 +292,8 @@ Under the `gitlab_docs` key, you can define the following settings:
 | `gitlab_docs.enabled`     | `false` | Set to `true` to enable [`gitlab-docs`](https://gitlab.com/gitlab-org/gitlab-docs) to be managed by GDK. |
 | `gitlab_docs.auto_update` | `true`  | Set to `false` to disable updating the `gitlab-docs` checkout.                                           |
 | `gitlab_docs.port`        | `3005`  | The port for `nanoc` to listen on.                                                                       |
+| `gitlab_docs.https`       | `false` | Set to `true` to run the Docs site under [HTTPS](howto/nginx.md).                                        |
+| `gitlab_docs.port_https`  | `3030`  | The port for `nanoc` to listen on when [HTTPS](howto/nginx.md) is enabled.                               |
 
 For more information on using GitLab Docs with GDK, see the [GitLab Docs how to](howto/gitlab_docs.md).
 
