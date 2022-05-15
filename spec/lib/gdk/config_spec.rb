@@ -2284,6 +2284,32 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#https' do
+      it 'is false by default' do
+        expect(config.gitlab_docs.https).to be false
+      end
+    end
+
+    describe '#port_https' do
+      context 'when port_https is not specified' do
+        it 'returns the default port' do
+          expect(config.gitlab_docs.port_https).to eq(3030)
+        end
+      end
+
+      context 'when port is specified' do
+        let(:yaml) do
+          {
+            'gitlab_docs' => { 'port_https' => 3333 }
+          }
+        end
+
+        it 'returns the configured port' do
+          expect(config.gitlab_docs.port_https).to eq(3333)
+        end
+      end
+    end
+
     describe '__all_configured' do
       context 'when all documentation projects enabled' do
         let(:yaml) do

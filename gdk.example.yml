@@ -96,7 +96,9 @@ gitlab:
 gitlab_docs:
   auto_update: true
   enabled: false
+  https: false
   port: 3005
+  port_https: 3030
 gitlab_elasticsearch_indexer:
   auto_update: true
 gitlab_k8s_agent:

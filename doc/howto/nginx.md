@@ -79,6 +79,13 @@ nginx:
     key: <path/to/file/gdk.test-key.pem>
 ```
 
+To also run the [Docs site](gitlab_docs.md) under HTTPS, run:
+
+```shell
+gdk config set gitlab_docs.enabled true
+gdk config set gitlab_docs.https true
+```
+
 ### Generate certificate
 
 [`mkcert`](https://github.com/FiloSottile/mkcert) is needed to generate certificates.
@@ -133,3 +140,16 @@ GitLab should now be available for:
 
 - HTTP: <http://gdk.test:8080>
 - HTTPS: <https://gdk.test:3443> (if you set up HTTPS).
+
+GitLab Docs should now be available for:
+
+- HTTP: <http://gdk.test:3005>
+- HTTPS: <https://gdk.test:3030> (if you set up HTTPS).
+
+## Troubleshooting
+
+### `nginx: invalid option: "e"`
+
+NGINX v1.19 supports the `-e` flag, but v1.18 does not. If you encounter this
+error, use [NGINX's repositories](https://nginx.org/en/linux_packages.html)
+to install the latest package instead of the one shipped with your distribution.

@@ -65,6 +65,10 @@ To enable GDK to manage `gitlab-docs`:
    gdk tail gitlab-docs
    ```
 
+## Run GitLab Docs under HTTPS
+
+You can run the Docs site under HTTPS. Read more in the [NGINX howto](nginx.md).
+
 ## Make documentation changes
 
 You can preview documentation changes as they would appear when published on
