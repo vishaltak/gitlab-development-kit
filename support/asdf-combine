@@ -11,18 +11,38 @@ $stdout.sync = true
 
 FileNotFoundError = Class.new(StandardError)
 
-GITLAB_PROJECT_BASE_URL = 'https://gitlab.com/gitlab-org/gitlab'
-TOOL_VERSIONS_FILES = [
-  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL },
-  { refs: -> { %w[master] }, base_url: GITLAB_PROJECT_BASE_URL, path: 'workhorse' },
-  { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_SHELL_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-shell' },
-  { refs: -> { ['master', "v#{ref_from_remote_file('GITLAB_PAGES_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-pages' },
-  { refs: -> { ['master', ref_from_remote_file('GITALY_SERVER_VERSION')] }, base_url: 'https://gitlab.com/gitlab-org/gitaly' },
-  { refs: -> { ['main', "v#{ref_from_remote_file('GITLAB_ELASTICSEARCH_INDEXER_VERSION')}"] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-runner' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-ui' },
-  { refs: -> { %w[main] }, base_url: 'https://gitlab.com/gitlab-org/gitlab-docs' }
-].freeze
+GITLAB_ORG_URL = 'https://gitlab.com/gitlab-org'
+GITLAB_URL = "#{GITLAB_ORG_URL}/gitlab"
+GITLAB_SHELL_URL = "#{GITLAB_ORG_URL}/gitlab-shell"
+GITLAB_PAGES_URL = "#{GITLAB_ORG_URL}/gitlab-pages"
+GITALY_URL = "#{GITLAB_ORG_URL}/gitaly"
+GITLAB_RUNNER_URL = "#{GITLAB_ORG_URL}/gitlab-runner"
+GITLAB_UI_URL = "#{GITLAB_ORG_URL}/gitlab-ui"
+GITLAB_DOCS_URL = "#{GITLAB_ORG_URL}/gitlab-docs"
+GITLAB_ELASTICSEARCH_INDEXER_URL = "#{GITLAB_ORG_URL}/gitlab-elasticsearch-indexer"
+
+class RemoteToolVersionFile
+  def initialize(base_url, ref: 'master', path: '', label_ref: '')
+    @base_url = base_url
+    @ref = ref
+    @label_ref = label_ref
+    @path = path.empty? ? '' : "#{path.gsub(%r{(^/*|/*$)}, '')}/"
+  end
+
+  def url
+    @url ||= "#{base_url}/-/raw/#{ref}/#{path}.tool-versions"
+  end
+
+  def line_comment
+    return url if label_ref.empty?
+
+    "#{base_url} -> #{label_ref}"
+  end
+
+  private
+
+  attr_reader :ref, :base_url, :path, :label_ref
+end
 
 HEADER_CONTENT = <<~CONTENT
   # support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
@@ -56,9 +76,12 @@ def write_tool_versions_file(data)
   tool_versions_file.write("#{HEADER_CONTENT}#{data}\n")
 end
 
-def ref_from_remote_file(file)
-  url = "#{GITLAB_PROJECT_BASE_URL}/-/raw/master/#{file}"
-  http_get(url).chomp
+def ref_from_remote_file_for_gitlab_project(file)
+  http_get(url_for_remote_file_for_gitlab_project(file)).chomp
+end
+
+def url_for_remote_file_for_gitlab_project(file)
+  "#{GITLAB_URL}/-/raw/master/#{file}"
 end
 
 def tool_versions_file
@@ -88,30 +111,24 @@ def format_software_and_versions_data(data)
   output.join("\n")
 end
 
-def processs_tool_versions_files(tool_versions_data, quiet: false)
-  TOOL_VERSIONS_FILES.each do |entry|
-    entry[:refs].call.each do |ref|
-      path = entry[:path] ? "#{entry[:path]}/" : ''
-      path_to_tool_versions = "#{path}.tool-versions"
-      url = "#{entry[:base_url]}/-/raw/#{ref}/#{path_to_tool_versions}"
+def process_tool_versions_files(tool_versions_files, tool_versions_data, quiet: false)
+  tool_versions_files.each do |entry|
+    $stderr.print '.' unless quiet
 
-      $stderr.print '.' unless quiet
+    begin
+      tool_versions_contents = http_get(entry.url)
+    rescue FileNotFoundError
+      warn("ERROR: #{url} does not exist.")
+      next
+    end
 
-      begin
-        tool_versions_contents = http_get(url)
-      rescue FileNotFoundError
-        warn("ERROR: #{url} does not exist.")
-        next
-      end
+    tool_versions_data_for_entry = read_tool_versions_from(entry.line_comment, tool_versions_contents)
 
-      tool_versions_data_for_entry = read_tool_versions_from(url, tool_versions_contents)
-
-      tool_versions_data_for_entry.each do |software, versions|
-        tool_versions_data[software] ||= {}
-        versions.each do |version, origin|
-          tool_versions_data[software][version] ||= []
-          tool_versions_data[software][version] |= origin
-        end
+    tool_versions_data_for_entry.each do |software, versions|
+      tool_versions_data[software] ||= {}
+      versions.each do |version, origin|
+        tool_versions_data[software][version] ||= []
+        tool_versions_data[software][version] |= origin
       end
     end
   end
@@ -119,10 +136,10 @@ def processs_tool_versions_files(tool_versions_data, quiet: false)
   tool_versions_data
 end
 
-def main(quiet: false)
+def main(tool_versions_files, quiet: false)
   tool_versions_data_from_gdk_file = read_tool_versions_from('.tool-versions-gdk', tool_versions_gdk_file.read)
 
-  tool_versions_data = processs_tool_versions_files(tool_versions_data_from_gdk_file.clone, quiet: quiet).sort.each_with_object({}) do |(software, versions), all|
+  tool_versions_data = process_tool_versions_files(tool_versions_files, tool_versions_data_from_gdk_file.clone, quiet: quiet).sort.each_with_object({}) do |(software, versions), all|
     # We only sort by newest version first *if* not defined in .tool-versions-gdk
     sorted_versions = if tool_versions_data_from_gdk_file[software]
                         versions
@@ -149,4 +166,20 @@ end
 
 # ------------------------------------------------------------------------------
 
-main(quiet: ARGV.include?('--quiet'))
+tool_versions_files = [
+  RemoteToolVersionFile.new(GITLAB_URL),
+  RemoteToolVersionFile.new(GITLAB_URL, path: 'workhorse'),
+  RemoteToolVersionFile.new(GITLAB_SHELL_URL, ref: 'main'),
+  RemoteToolVersionFile.new(GITLAB_SHELL_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_SHELL_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_SHELL_VERSION')),
+  RemoteToolVersionFile.new(GITLAB_PAGES_URL),
+  RemoteToolVersionFile.new(GITLAB_PAGES_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')),
+  RemoteToolVersionFile.new(GITALY_URL),
+  RemoteToolVersionFile.new(GITALY_URL, ref: ref_from_remote_file_for_gitlab_project('GITALY_SERVER_VERSION'), label_ref: url_for_remote_file_for_gitlab_project('GITALY_SERVER_VERSION')),
+  RemoteToolVersionFile.new(GITLAB_RUNNER_URL, ref: 'main'),
+  RemoteToolVersionFile.new(GITLAB_UI_URL, ref: 'main'),
+  RemoteToolVersionFile.new(GITLAB_DOCS_URL, ref: 'main'),
+  RemoteToolVersionFile.new(GITLAB_ELASTICSEARCH_INDEXER_URL, ref: 'main'),
+  RemoteToolVersionFile.new(GITLAB_ELASTICSEARCH_INDEXER_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION'))
+].freeze
+
+main(tool_versions_files, quiet: ARGV.include?('--quiet'))
