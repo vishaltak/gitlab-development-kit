@@ -17,7 +17,8 @@ up the time it takes to make successful contributions.
 
 - Provide developer tooling to install, update, and develop against a local GitLab instance.
 - Offer GDK users an automated method for installing [required software](https://docs.gitlab.com/ee/install/requirements.html#software-requirements).
-- Out of the box, only enable the services GitLab requires to operate.
+- Only manage projects, software, and services that may be needed to run a GitLab instance.
+- Out of the box, only enable the services GitLab strictly requires to operate.
 - Support native operating systems as listed below.
 
 ## Installation
