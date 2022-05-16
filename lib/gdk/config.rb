@@ -57,6 +57,7 @@ module GDK
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-org/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
+      string(:gitlab_metrics_exporter) { 'https://gitlab.com/gitlab-org/gitlab-metrics-exporter.git' }
       string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }
       string(:gitlab_operator) { 'https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git' }
       string(:gitlab_pages) { 'https://gitlab.com/gitlab-org/gitlab-pages.git' }
@@ -292,6 +293,12 @@ module GDK
     settings :gitlab_elasticsearch_indexer do
       bool(:auto_update) { true }
       path(:__dir) { config.gdk_root.join('gitlab-elasticsearch-indexer') }
+    end
+
+    settings :gitlab_metrics_exporter do
+      bool(:auto_update) { true }
+      bool(:enabled) { true }
+      path(:dir) { config.gdk_root.join('gitlab-metrics-exporter') }
     end
 
     settings :registry do
