@@ -19,6 +19,7 @@ exclude_paths:
 - gitaly/
 - gitlab/
 - gitlab-elasticsearch-indexer
+- gitlab-metrics-exporter
 - gitlab-shell/
 - gitlab-workhorse/
 - reposities/

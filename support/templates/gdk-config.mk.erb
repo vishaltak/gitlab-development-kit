@@ -33,6 +33,8 @@ gitlab_operator_repo = <%= config.repositories.gitlab_operator %>
 <%-# -%>
 gitlab_elasticsearch_indexer_enabled = <%= config.elasticsearch.enabled %>
 gitlab_elasticsearch_indexer_repo = <%= config.repositories.gitlab_elasticsearch_indexer %>
+gitlab_metrics_exporter_enabled = <%= config.gitlab_metrics_exporter.enabled %>
+gitlab_metrics_exporter_repo = <%= config.repositories.gitlab_metrics_exporter %>
 gitlab_k8s_agent_enabled = <%= config.gitlab_k8s_agent? %>
 gitlab_k8s_agent_repo = <%= config.repositories.gitlab_k8s_agent %>
 gitlab_pages_enabled = <%= config.gitlab_pages.enabled? %>

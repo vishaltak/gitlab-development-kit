@@ -42,6 +42,7 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
+/gitlab-metrics-exporter
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
 /gitlab-operator
