@@ -72,8 +72,10 @@ module GDK
       GDK::Output.puts(diff_output, stderr: true)
     end
 
-    def target_protected?(target)
-      config.config_file_protected?(target)
+    def target_protected?(target_file)
+      # We need to pass in target_file because #render! can potentially override
+      # @target
+      config.config_file_protected?(target_file)
     end
 
     def should_render?(target)
