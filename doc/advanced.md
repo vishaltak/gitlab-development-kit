@@ -496,7 +496,7 @@ export RUBY_APPLY_PATCHES="$(cat <<EOF
 https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.4/thread-memory-allocations-3.0.patch
 EOF
 )"
-asdf install ruby 3.0.3
+asdf install ruby 3.0.4
 ```
 
 You can later verify that patches were properly applied:
