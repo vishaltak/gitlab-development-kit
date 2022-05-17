@@ -7,7 +7,7 @@ RSpec.describe GDK::Command::Status do
     it 'queries runit for status to all enabled services' do
       expect_runit_to_execute(command: 'status')
 
-      subject.run
+      expect { subject.run }.to output(/GitLab available at/).to_stdout
     end
   end
 
@@ -15,7 +15,7 @@ RSpec.describe GDK::Command::Status do
     it 'queries runit for status to specific services only' do
       expect_runit_to_execute(command: 'status', args: ['rails-web'])
 
-      subject.run(%w[rails-web])
+      expect { subject.run(%w[rails-web]) }.not_to output(/GitLab available at/).to_stdout
     end
   end
 

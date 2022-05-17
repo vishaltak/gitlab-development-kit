@@ -43,16 +43,6 @@ module GDK
       def test_url
         GDK::TestURL.new(GDK::TestURL.default_url).wait
       end
-
-      def print_url_ready_message
-        GDK::Output.puts
-        GDK::Output.notice("GitLab will be available at #{config.__uri}.")
-        GDK::Output.notice("GitLab Docs will be available at #{config.gitlab_docs.__uri}.") if config.gitlab_docs.enabled?
-        GDK::Output.notice("GitLab Agent Server (KAS) will be available at #{config.gitlab_k8s_agent.__url_for_agentk}.") if config.gitlab_k8s_agent?
-        GDK::Output.notice("Prometheus will be available at http://#{config.hostname}:#{config.prometheus.port}.") if config.prometheus?
-        GDK::Output.notice("Grafana will be available at http://#{config.hostname}:#{config.grafana.port}.") if config.grafana?
-        GDK::Output.notice("A container registry will be available at #{config.registry.host}:#{config.registry.port}.") if config.registry?
-      end
     end
   end
 end
