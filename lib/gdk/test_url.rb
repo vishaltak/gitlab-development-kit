@@ -26,7 +26,8 @@ module GDK
     def wait(verbose: false)
       @start_time = Time.now
 
-      GDK::Output.puts(GDK::Output.notice_format("Waiting until #{uri} is ready.."))
+      message = GDK::Output.notice_format("Waiting until #{uri} is ready..")
+      verbose ? GDK::Output.puts(message) : GDK::Output.print(message)
 
       if check_url(verbose: verbose)
         GDK::Output.notice("#{uri} is up (#{http_helper.last_response_reason}). Took #{duration} second(s).")
