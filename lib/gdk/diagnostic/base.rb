@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'stringio'
+require 'socket'
 
 module GDK
   module Diagnostic
@@ -44,6 +45,22 @@ module GDK
 
       def config
         @config ||= GDK::Config.new
+      end
+
+      def remove_socket_file(path)
+        File.unlink(path) if File.exist?(path) && File.socket?(path)
+      end
+
+      def can_create_socket?(path)
+        result = true
+        remove_socket_file(path)
+        UNIXServer.new(path)
+        result
+      rescue ArgumentError
+        result = false
+      ensure
+        remove_socket_file(path)
+        result
       end
     end
   end
