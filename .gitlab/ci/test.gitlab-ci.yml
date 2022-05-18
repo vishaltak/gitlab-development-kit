@@ -47,8 +47,9 @@ rspec:
         coverage_format: cobertura
         path: coverage/coverage.xml
 code_quality:
-  extends:
-    - .docker:use-docker-in-docker
+  tags:
+    # See https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/7019 for tag descriptions
+    - gitlab-org-docker
   rules: !reference ['.rules:code-changes', rules]
 
 container_scanning:
