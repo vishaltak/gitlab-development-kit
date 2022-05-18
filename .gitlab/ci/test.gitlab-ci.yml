@@ -83,7 +83,7 @@ yard:
   needs: []
   image: ruby:2.7
   script:
-    - bundle install --jobs 4 --path vendor/bundle
+    - bundle install
     - bundle exec yardoc
   cache:
     key: "ruby-2.7-bundle"
