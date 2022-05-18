@@ -456,3 +456,81 @@ gdk:
     before:
       - rake gitlab:truncate_logs
 ```
+
+## OpenSSL 3 breaks Ruby builds
+
+Ubuntu 22.04 and Fedora 36 ship with OpenSSL 3.0, which causes Ruby builds and gem failures.
+Ruby 2.7.x and 3.0.x [don't support OpenSSL 3](https://bugs.ruby-lang.org/issues/18658).
+
+As a [workaround](https://github.com/rbenv/ruby-build/discussions/1940#discussioncomment-2663209),
+you must compile and install OpenSSL 1.1.1:
+
+1. Install the dependencies:
+
+   ```shell
+   ## Ubuntu 22.04
+   sudo apt install build-essential checkinstall zlib1g-dev
+
+   ## Fedora 36
+   sudo dnf groupinstall "Development Tools"
+   sudo dnf install perl-core zlib-devel
+   ```
+
+1. Download OpenSSL 1.1.1:
+
+   ```shell
+   cd ~/Downloads
+   wget https://www.openssl.org/source/openssl-1.1.1o.tar.gz
+   tar xf openssl-1.1.1o.tar.gz
+   ```
+
+1. Compile OpenSSL 1.1.1:
+
+   ```shell
+   cd ~/Downloads/openssl-1.1.1o
+   ./config --prefix=/opt/openssl-1.1.1o --openssldir=/opt/openssl-1.1.1o shared zlib
+   make
+   make test
+   sudo make install
+   ```
+
+1. Link the system's certs to OpenSSL's 1.1.1 directory:
+
+   ```shell
+   sudo rm -rf /opt/openssl-1.1.1o/certs
+   sudo ln -s /etc/ssl/certs /opt/openssl-1.1.1o
+   ```
+
+1. Add the following line to your `.bashrc` or `.zshrc`:
+
+   ```plaintext
+   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/openssl-1.1.1o/"
+   ```
+
+1. Start a new shell for the environment variable to apply, or source your
+   `.bashrc` or `.zshrc`:
+
+   ```shell
+   source ~/.bashrc
+   source ~/.zshrc
+   ```
+
+1. Remove Ruby 2.7.5 with `asdf`:
+
+   ```shell
+   asdf uninstall ruby 2.7.5
+   ```
+
+1. Bootstrap GDK:
+
+   ```shell
+   rm <path/to/gdk>/.cache/.gdk_platform_setup
+   rm <path/to/gdk>/.cache/.gdk_bootstrapped
+   make bootstrap
+   ```
+
+1. Update GDK:
+
+   ```shell
+   gdk update
+   ```
