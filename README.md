@@ -39,13 +39,16 @@ The following installation methods are supported, actively maintained, and teste
 
 ### Supported platforms
 
-| Operating system | Versions                   |
-|:-----------------|:---------------------------|
-| macOS            | 12, 11, 10.15              |
-| Ubuntu           | 21.10, 20.04, 18.04        |
-| Debian           | 11, 10, 9                  |
-| Arch             | latest                     |
-| Manjaro          | latest                     |
+| Operating system | Versions                       |
+|:-----------------|:-------------------------------|
+| macOS            | 12, 11, 10.15                  |
+| Ubuntu           | 22.04 (1), 21.10, 20.04, 18.04 |
+| Fedora           | 36 (1), 35                     |
+| Debian           | 11, 10, 9                      |
+| Arch             | latest                         |
+| Manjaro          | latest                         |
+
+(1) Requires [manual installation of OpenSSL 1.1.1](doc/troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
 
 ### Unsupported methods
 
