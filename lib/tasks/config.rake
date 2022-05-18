@@ -6,7 +6,15 @@ CONFIGS = FileList[
   'support/makefiles/Makefile.config.mk',
   'nginx/conf/nginx.conf',
   'gitlab/config/gitlab.yml',
-  'prometheus/prometheus.yml'
+  'prometheus/prometheus.yml',
+  'clickhouse/config.xml',
+  'clickhouse/users.xml',
+  'clickhouse/config.d/data-paths.xml',
+  'clickhouse/config.d/gdk.xml',
+  'clickhouse/config.d/logger.xml',
+  'clickhouse/config.d/openssl.xml',
+  'clickhouse/config.d/user-directories.xml',
+  'clickhouse/users.d/gdk.xml'
 ]
 CLOBBER.include(*CONFIGS)
 
@@ -134,7 +142,15 @@ CONFIG_FILE_TASKS = [
   Task.new(name: 'openssh/sshd_config'),
   Task.new(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name, verbose: false) }),
   Task.new(name: 'redis/redis.conf'),
-  Task.new(name: 'registry/config.yml', make_dependencies: ['registry_host.crt'])
+  Task.new(name: 'registry/config.yml', make_dependencies: ['registry_host.crt']),
+  Task.new(name: 'clickhouse/config.xml', template: 'support/templates/clickhouse/config.xml'),
+  Task.new(name: 'clickhouse/users.xml', template: 'support/templates/clickhouse/users.xml'),
+  Task.new(name: 'clickhouse/config.d/data-paths.xml'),
+  Task.new(name: 'clickhouse/config.d/gdk.xml'),
+  Task.new(name: 'clickhouse/config.d/logger.xml'),
+  Task.new(name: 'clickhouse/config.d/openssl.xml'),
+  Task.new(name: 'clickhouse/config.d/user-directories.xml'),
+  Task.new(name: 'clickhouse/users.d/gdk.xml')
 ].freeze
 
 MAKE_TASKS = [

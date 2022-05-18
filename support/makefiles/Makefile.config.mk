@@ -108,6 +108,38 @@ redis/redis.conf:
 registry/config.yml: registry_host.crt
 	$(Q)rake registry/config.yml
 
+.PHONY: clickhouse/config.xml
+clickhouse/config.xml: 
+	$(Q)rake clickhouse/config.xml
+
+.PHONY: clickhouse/users.xml
+clickhouse/users.xml: 
+	$(Q)rake clickhouse/users.xml
+
+.PHONY: clickhouse/config.d/data-paths.xml
+clickhouse/config.d/data-paths.xml: 
+	$(Q)rake clickhouse/config.d/data-paths.xml
+
+.PHONY: clickhouse/config.d/gdk.xml
+clickhouse/config.d/gdk.xml: 
+	$(Q)rake clickhouse/config.d/gdk.xml
+
+.PHONY: clickhouse/config.d/logger.xml
+clickhouse/config.d/logger.xml: 
+	$(Q)rake clickhouse/config.d/logger.xml
+
+.PHONY: clickhouse/config.d/openssl.xml
+clickhouse/config.d/openssl.xml: 
+	$(Q)rake clickhouse/config.d/openssl.xml
+
+.PHONY: clickhouse/config.d/user-directories.xml
+clickhouse/config.d/user-directories.xml: 
+	$(Q)rake clickhouse/config.d/user-directories.xml
+
+.PHONY: clickhouse/users.d/gdk.xml
+clickhouse/users.d/gdk.xml: 
+	$(Q)rake clickhouse/users.d/gdk.xml
+
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab-db-migrate

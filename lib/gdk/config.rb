@@ -532,6 +532,21 @@ module GDK
       end
     end
 
+    settings :clickhouse do
+      bool(:enabled) { false }
+      path(:bin) { find_executable!('clickhouse') || '/usr/bin/clickhouse' }
+      path(:dir) { config.gdk_root.join('clickhouse') }
+      path(:data_dir) { config.clickhouse.dir.join('data') }
+      path(:log_dir) { config.gdk_root.join('log', 'clickhouse') }
+      string(:log_level) { 'trace' }
+      integer(:http_port) { 8123 }
+      integer(:tcp_port) { 9001 }
+      integer(:interserver_http_port) { 9009 }
+      integer(:max_memory_usage) { 1000 * 1000 * 1000 } # 1 GB
+      integer(:max_thread_pool_size) { 1000 }
+      integer(:max_server_memory_usage) { 2 * 1000 * 1000 * 1000 } # 2 GB
+    end
+
     settings :gitaly do
       path(:dir) { config.gdk_root.join('gitaly') }
       path(:ruby_dir) { config.gitaly.dir.join('ruby') }

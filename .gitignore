@@ -27,6 +27,7 @@
 /Procfile
 /bootstrap-rails.log
 /builds
+/clickhouse
 /charts-gitlab
 /coverage
 /dev/
