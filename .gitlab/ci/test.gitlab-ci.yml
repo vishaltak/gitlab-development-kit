@@ -37,7 +37,7 @@ rspec:
   cache:
     key: "ruby-2.7-bundle"
     paths:
-      - ./vendor/bundle
+      - ${CI_PROJECT_DIR}/vendor/bundle
   artifacts:
     paths:
       - rspec.xml
@@ -88,7 +88,7 @@ yard:
   cache:
     key: "ruby-2.7-bundle"
     paths:
-      - ./vendor/bundle
+      - ${CI_PROJECT_DIR}/vendor/bundle
   artifacts:
     expire_in: 1 week
     paths:
