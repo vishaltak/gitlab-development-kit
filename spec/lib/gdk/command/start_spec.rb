@@ -13,7 +13,7 @@ RSpec.describe GDK::Command::Start do
   describe '#run' do
     context 'asking for help' do
       it 'prints help and exits' do
-        expect { subject.run(%w[--help]) }.to output(/--help            Display help/).to_stdout
+        expect { subject.run(%w[--help]) }.to output(/--help             Display help/).to_stdout
       end
     end
 

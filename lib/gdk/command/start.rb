@@ -43,9 +43,9 @@ module GDK
         help = <<~HELP
           Usage: gdk start [<args>]
 
-            --help            Display help
-            --show-progress   Indicate when GDK is ready to use
-            --open-when-ready Open the GitLab web UI running in your local GDK installation, using your default web browser
+            --help             Display help
+            --show-progress    Indicate when GDK is ready to use
+            --open-when-ready  Open the GitLab web UI running in your local GDK installation, using your default web browser
         HELP
 
         GDK::Output.puts(help)
