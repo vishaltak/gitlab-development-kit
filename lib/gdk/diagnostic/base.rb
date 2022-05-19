@@ -56,7 +56,9 @@ module GDK
         remove_socket_file(path)
         UNIXServer.new(path)
         result
-      rescue ArgumentError
+      rescue ArgumentError => e
+        raise e unless e.to_s.include?('too long unix socket path')
+
         result = false
       ensure
         remove_socket_file(path)
