@@ -4,15 +4,24 @@ module GDK
   module Command
     # Handles `gdk reconfigure` command execution
     class Open < BaseCommand
-      def run(_ = [])
-        if test_url.check_url_oneshot
-          open_exec
+      def run(args = [])
+        unless args.delete('--help').nil?
+          print_help
           return true
         end
 
-        unless test_url.wait(verbose: false)
-          GDK::Output.error('GDK is not up. Please run `gdk start` and try again.')
-          return false
+        wait_until_ready = !args.delete('--wait-until-ready').nil?
+
+        if wait_until_ready
+          if test_url.check_url_oneshot
+            open_exec
+            return true
+          end
+
+          unless test_url.wait(verbose: false)
+            GDK::Output.error('GDK is not up. Please run `gdk start` and try again.')
+            return false
+          end
         end
 
         open_exec
@@ -23,6 +32,19 @@ module GDK
       end
 
       private
+
+      def print_help
+        help = <<~HELP
+          Usage: gdk open [<args>]
+
+            --help              Display help
+            --wait-until-ready  Wait until the GitLab web UI is ready before opening in your default web browser
+        HELP
+
+        GDK::Output.puts(help)
+
+        true
+      end
 
       def test_url
         @test_url ||= GDK::TestURL.new
