@@ -80,7 +80,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
       before do
         allow(subject).to receive(:versions_ok?).and_return(true)
-        stub_can_create_socket(can_create_socket)
+        stub_can_create_socket.and_return(can_create_socket)
       end
 
       context 'when the GDK base directory length is too long' do
@@ -144,7 +144,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
       context 'when unsuccessful' do
         before do
-          stub_can_create_socket(false)
+          stub_can_create_socket.and_return(false)
         end
 
         it 'returns help message' do
@@ -160,11 +160,21 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
           expect(subject.detail).to eq(expected)
         end
       end
+
+      context 'when unhandled' do
+        before do
+          stub_can_create_socket.and_raise(ArgumentError.new('something else'))
+        end
+
+        it 'returns help message' do
+          expect { subject.detail }.to raise_error('something else')
+        end
+      end
     end
   end
 
-  def stub_can_create_socket(value)
-    allow(subject).to receive(:can_create_socket?).with('/home/git/gdk/postgresql_.s.PGSQL.XXXXX').and_return(value)
+  def stub_can_create_socket
+    allow(subject).to receive(:can_create_socket?).with('/home/git/gdk/postgresql_.s.PGSQL.XXXXX')
   end
 
   def stub_data_version(version)
