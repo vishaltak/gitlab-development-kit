@@ -68,12 +68,12 @@ RSpec.describe GDK::Command::Start do
       end
 
       context 'with --show-progress' do
-        it 'executes hooks and starts specified services and ignores --show-progress' do
+        it 'executes hooks and starts specified services and honors --show-progress', :hide_output do
           services = %w[rails-web]
 
           stub_gdk_start
           expect_runit_start_to_execute(services)
-          expect(GDK::TestURL).not_to receive(:new).with(default_url)
+          expect(GDK::TestURL).to receive_message_chain(:new, :wait)
 
           subject.run(services + %w[--show-progress])
         end
