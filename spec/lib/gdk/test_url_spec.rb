@@ -37,7 +37,7 @@ RSpec.describe GDK::TestURL do
     end
 
     shared_examples "a URL that's up" do
-      it 'checks if the URL is up but returns true' do
+      it 'checks if the URL is up and returns true' do
         allow(subject).to receive(:check_url).and_return(true)
 
         freeze_time do
@@ -86,16 +86,14 @@ RSpec.describe GDK::TestURL do
           expected_message << '..'
         end
 
-        freeze_time do
-          result = nil
-          expect { result = subject.check_url(verbose: verbose) }.to output(expected_message.join("\n")).to_stdout
-          expect(result).to be(false)
-        end
+        result = nil
+        expect { result = subject.check_url(verbose: verbose) }.to output(expected_message.join("\n")).to_stdout
+        expect(result).to be(false)
       end
     end
 
     shared_examples "a URL that's up" do
-      it 'checks if the URL is up but returns true' do
+      it 'checks if the URL is up and returns true' do
         expected_message = []
 
         allow(http_helper_double).to receive(:head_up?).and_return(true)
@@ -154,10 +152,22 @@ RSpec.describe GDK::TestURL do
   end
 
   describe '#check_url_oneshot' do
-    it 'calls #check_url, overriding max_attempts, verbose and silent' do
-      expect(subject).to receive(:check_url).with(override_max_attempts: 1, verbose: false, silent: true)
+    let(:http_helper_double) { stub_test_url_http_helper }
 
-      subject.check_url_oneshot
+    context 'when URL is down' do
+      it 'returns false' do
+        allow(http_helper_double).to receive(:head_up?).and_return(false)
+
+        expect(subject.check_url_oneshot).to be(false)
+      end
+    end
+
+    context 'when URL is up' do
+      it 'returns true' do
+        allow(http_helper_double).to receive(:head_up?).and_return(true)
+
+        expect(subject.check_url_oneshot).to be(true)
+      end
     end
   end
 

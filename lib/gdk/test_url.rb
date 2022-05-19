@@ -38,24 +38,16 @@ module GDK
       end
     end
 
-    def check_url(override_max_attempts: max_attempts, verbose: false, silent: false)
+    def check_url(verbose: false, silent: false)
       result = false
       display_output = verbose && !silent
 
-      1.upto(override_max_attempts) do |i|
+      1.upto(max_attempts) do |i|
         GDK::Output.puts("\n> Testing attempt ##{i}..") if display_output
 
-        if http_helper.head_up?
-          GDK::Output.puts("#{http_helper.last_response_reason}\n") if display_output
-          GDK::Output.puts unless silent
+        if check_url_oneshot(verbose: verbose, silent: silent)
           result = true
           break
-        end
-
-        if display_output
-          GDK::Output.puts(http_helper.last_response_reason)
-        elsif !silent
-          GDK::Output.print('.')
         end
 
         sleep(sleep_between_attempts)
@@ -65,7 +57,21 @@ module GDK
     end
 
     def check_url_oneshot(verbose: false, silent: true)
-      check_url(override_max_attempts: 1, verbose: verbose, silent: silent)
+      display_output = verbose && !silent
+
+      if http_helper.head_up?
+        GDK::Output.puts("#{http_helper.last_response_reason}\n") if display_output
+        GDK::Output.puts unless silent
+        return true
+      end
+
+      if display_output
+        GDK::Output.puts(http_helper.last_response_reason)
+      elsif !silent
+        GDK::Output.print('.')
+      end
+
+      false
     end
 
     private
