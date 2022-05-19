@@ -5,33 +5,27 @@ module GDK
     # Handles `gdk reconfigure` command execution
     class Open < BaseCommand
       def run(args = [])
-        unless args.delete('--help').nil?
-          print_help
-          return true
-        end
-
-        wait_until_ready = !args.delete('--wait-until-ready').nil?
-
-        if wait_until_ready
-          if test_url.check_url_oneshot
-            open_exec
-            return true
-          end
-
-          unless test_url.wait(verbose: false)
-            GDK::Output.error('GDK is not up. Please run `gdk start` and try again.')
-            return false
-          end
-        end
+        return print_help if args.delete('--help')
+        return wait_until_ready if args.delete('--wait-until-ready')
 
         open_exec
-        true
-      rescue Interrupt
-        # CTRL-C was pressed
-        true
       end
 
       private
+
+      def wait_until_ready
+        return open_exec if test_url.check_url_oneshot
+
+        unless test_url.wait(verbose: false)
+          GDK::Output.error('GDK is not up. Please run `gdk start` and try again.')
+          return false
+        end
+
+        open_exec
+      rescue Interrupt
+        # CTRL-C was pressed
+        false
+      end
 
       def print_help
         help = <<~HELP
