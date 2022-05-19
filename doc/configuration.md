@@ -85,7 +85,7 @@ Here are a few settings worth mentioning:
 
 | Setting                          | Default               | Description                                                                                |
 |--------------------------------- |-----------------------|--------------------------------------------------------------------------------------------|
-| `listen_address`                 | `127.0.0.1`           | Select the IP for GDK to listen on. Note, this will occasionally be used as a hostname/URL (when running feature specs for example), so using 0.0.0.0 can be problematic. |
+| `listen_address`                 | `127.0.0.1`           | Select the IP for GDK to listen on. Note, this is occasionally used as a hostname/URL (when running feature specs for example), so using 0.0.0.0 can be problematic. |
 | `port`                           | `3000`                | Select the port to run GDK on, useful when running multiple GDKs in parallel.              |
 | `webpack.port`                   | `3808`                | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings). |
 | `gitlab.rails.bundle_gemfile`    | `Gemfile`             | Set this to where GitLab should look for Gemfile. |
