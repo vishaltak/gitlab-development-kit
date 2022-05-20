@@ -325,8 +325,8 @@ production: &base
     port: <%= config.gitlab_pages.port %>
     https: false # Set to true if you serve the pages with HTTPS
     artifacts_server: true
-    # external_http: ["1.1.1.1:80", "[2001::1]:80"] # If defined, enables custom domain support in GitLab Pages
-    # external_https: ["1.1.1.1:443", "[2001::1]:443"] # If defined, enables custom domain and certificate support in GitLab Pages
+    external_http: ["1.1.1.1:80", "[2001::1]:80"] # If defined, enables custom domain support in GitLab Pages
+    external_https: ["1.1.1.1:443", "[2001::1]:443"] # If defined, enables custom domain and certificate support in GitLab Pages
     admin:
       address: unix:<%= config.gdk_root %>/gitlab/tmp/sockets/private/pages-admin.socket # TCP connections are supported too (e.g. tcp://host:port)
     secret_file: <%= config.gitlab_pages.secret_file %>
