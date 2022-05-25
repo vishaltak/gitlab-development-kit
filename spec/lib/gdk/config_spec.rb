@@ -2095,10 +2095,8 @@ RSpec.describe GDK::Config do
           }
         end
 
-        it 'configures custom domains with tls correctly' do
+        it 'configures custom domains correctly' do
           expect(config.gitlab_pages.enable_custom_domains?).to eq(true)
-          expect(config.gitlab_pages.__external_http).to eq(true)
-          expect(config.gitlab_pages.__external_https).to eq(true)
         end
       end
     end
