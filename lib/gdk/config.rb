@@ -592,7 +592,7 @@ module GDK
 
     settings :clickhouse do
       bool(:enabled) { false }
-      path(:bin) { find_executable!('clickhouse') || '/usr/bin/clickhouse' }
+      path(:bin) { find_executable!('clickhouse') || config.clickhouse.dir.join('clickhouse') }
       path(:dir) { config.gdk_root.join('clickhouse') }
       path(:data_dir) { config.clickhouse.dir.join('data') }
       path(:log_dir) { config.gdk_root.join('log', 'clickhouse') }

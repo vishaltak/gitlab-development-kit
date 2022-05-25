@@ -637,10 +637,10 @@ RSpec.describe GDK::Config do
       it { expect(default_config.clickhouse.max_thread_pool_size).to eq(1000) }
       it { expect(default_config.clickhouse.max_server_memory_usage).to eq(2_000_000_000) }
 
-      it 'defaults bin to /usr/bin/clickhouse when no executable can be found' do
+      it 'has a default bin when no executable can be found' do
         stub_env('PATH', tmp_path)
 
-        expect(default_config.clickhouse.bin).to eq(Pathname.new('/usr/bin/clickhouse'))
+        expect(default_config.clickhouse.bin).to eq(gdk_basepath.join('clickhouse/clickhouse'))
       end
 
       it 'returns bin full path based on find_executable' do

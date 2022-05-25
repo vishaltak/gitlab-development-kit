@@ -7,7 +7,7 @@ charts_gitlab:
   auto_update: true
   enabled: false
 clickhouse:
-  bin: "/usr/bin/clickhouse"
+  bin: "/home/git/gdk/clickhouse/clickhouse"
   data_dir: "/home/git/gdk/clickhouse/data"
   dir: "/home/git/gdk/clickhouse"
   enabled: false
