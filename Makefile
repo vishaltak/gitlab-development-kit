@@ -68,6 +68,7 @@ endif
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
+gdk-dependencies-task \
 gdk-reconfigure-task \
 gitlab-shell-setup \
 gitlab-workhorse-setup \
@@ -224,3 +225,7 @@ gdk-reconfigure-task:
 	@echo "Ensuring GDK managed configuration files are up-to-date"
 	@echo "${DIVIDER}"
 	$(Q)rake reconfigure
+
+.PHONY: gdk-dependencies-task
+gdk-dependencies-task:
+	$(Q)rake dependencies:all

@@ -13,7 +13,8 @@ module GDK
   # IMPORTANT: Other parts of the codebase should NEVER rely on code inside
   # TaskHelpers.
   module TaskHelpers
-    autoload :RailsMigration, 'gdk/task_helpers/rails_migration'
+    autoload :ClickhouseInstaller, 'gdk/task_helpers/clickhouse_installer'
     autoload :ConfigTasks, 'gdk/task_helpers/config_tasks'
+    autoload :RailsMigration, 'gdk/task_helpers/rails_migration'
   end
 end
