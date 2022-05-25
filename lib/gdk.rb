@@ -27,6 +27,7 @@ module GDK
   # this allows for any dependent project require only `lib/gdk`
   # and load only what it really needs
   autoload :Backup, 'gdk/backup'
+  autoload :Clickhouse, 'gdk/clickhouse'
   autoload :Command, 'gdk/command'
   autoload :Config, 'gdk/config'
   autoload :ConfigType, 'gdk/config_type'
