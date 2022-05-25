@@ -367,6 +367,21 @@ module GDK
       bool(:access_control) { false }
       string(:auth_client_id) { '' }
       string(:auth_client_secret) { '' }
+      bool(:enable_custom_domains) { false }
+      bool(:__external_http) do
+        if config.gitlab_pages.enable_custom_domains?
+          true
+        else
+          false
+        end
+      end
+      bool(:__external_https) do
+        if config.gitlab_pages.enable_custom_domains?
+          true
+        else
+          false
+        end
+      end
       # random 32-byte string
       string(:__auth_secret) { SecureRandom.alphanumeric(32) }
       string(:__auth_redirect_uri) { "http://#{config.gitlab_pages.__uri}/auth" }
