@@ -40,12 +40,12 @@ minio 2021-04-06T23-11-00Z
 nodejs 16.14.0 16.15.0
 
 # postgres:
-#   12.10:
-#     - .tool-versions-gdk
 #   13.6:
 #     - .tool-versions-gdk
+#   12.10:
+#     - .tool-versions-gdk
 #
-postgres 12.10 13.6
+postgres 13.6 12.10
 
 # redis:
 #   6.2.7:

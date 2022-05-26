@@ -13,15 +13,15 @@ RSpec.describe GDK::Postgresql do
   end
 
   describe '.target_version' do
-    it 'is 12.10 by default' do
+    it 'is 13.6 by default' do
       expect(described_class.target_version).to be_instance_of(Gem::Version)
-      expect(described_class.target_version).to eq(Gem::Version.new('12.10'))
+      expect(described_class.target_version).to eq(Gem::Version.new('13.6'))
     end
   end
 
   describe '.target_version_major' do
-    it 'is 12 by default' do
-      expect(described_class.target_version_major).to eq(12)
+    it 'is 13 by default' do
+      expect(described_class.target_version_major).to eq(13)
     end
   end
 
@@ -133,16 +133,16 @@ RSpec.describe GDK::Postgresql do
 
   describe '#current_version' do
     it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
-      stub_current_version('12')
+      stub_current_version('13')
 
-      expect(subject.current_version).to eq(12)
+      expect(subject.current_version).to eq(13)
     end
   end
 
   describe '#upgrade_needed?' do
-    context 'when current version is 12' do
+    context 'when current version is 13' do
       before do
-        stub_current_version('12')
+        stub_current_version('13')
       end
 
       context 'and target version is 9.6' do
@@ -165,10 +165,10 @@ RSpec.describe GDK::Postgresql do
         end
       end
 
-      context 'and target version is 13' do
+      context 'and target version is 14' do
         it 'returns true' do
-          expect(subject.upgrade_needed?(13)).to be(true)
-          expect(subject.upgrade_needed?('13')).to be(true)
+          expect(subject.upgrade_needed?(14)).to be(true)
+          expect(subject.upgrade_needed?('14')).to be(true)
         end
       end
     end
@@ -178,9 +178,9 @@ RSpec.describe GDK::Postgresql do
       allow(File).to receive(:exist?).and_call_original
 
       allow(File).to receive(:exist?).with(pg_version_file).and_return(true)
-      allow(File).to receive(:read).with(pg_version_file).and_return('12')
+      allow(File).to receive(:read).with(pg_version_file).and_return('13')
 
-      expect(subject.current_version).to eq(12)
+      expect(subject.current_version).to eq(13)
     end
   end
 
