@@ -2082,6 +2082,24 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '#enable_custom_domains' do
+      it 'defaults to false' do
+        expect(config.gitlab_pages.enable_custom_domains?).to eq(false)
+      end
+
+      context 'when enable_custom_domains is enabled' do
+        let(:yaml) do
+          {
+            'gitlab_pages' => { 'enable_custom_domains' => true }
+          }
+        end
+
+        it 'configures custom domains correctly' do
+          expect(config.gitlab_pages.enable_custom_domains?).to eq(true)
+        end
+      end
+    end
   end
 
   describe 'prometheus' do
