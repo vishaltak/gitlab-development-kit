@@ -237,7 +237,7 @@ openldap:
 packages: {}
 port: 3000
 postgresql:
-  active_version: '12.10'
+  active_version: '13.6'
   bin: "/usr/local/bin/postgres"
   bin_dir: "/usr/local/bin"
   data_dir: "/home/git/gdk/postgresql/data"
