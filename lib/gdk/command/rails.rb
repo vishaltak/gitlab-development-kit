@@ -5,7 +5,7 @@ module GDK
     # Handles `gdk rails <command> [<args>]` command execution
     class Rails < BaseCommand
       def run(args = [])
-        GDK::Output.abort('Usage: gdk rails <command> [<args>]') if args.length == 0
+        GDK::Output.abort('Usage: gdk rails <command> [<args>]') if args.empty?
 
         execute_command!(args)
       end
