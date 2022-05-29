@@ -168,18 +168,6 @@ command fetches Ruby 2.3 and installs it from source:
 rvm reinstall --disable-binary 2.3
 ```
 
-## 'gem install nokogiri' fails
-
-Make sure that Xcode Command Line Tools installed on your development machine. For the discussion see
-this [issue](https://gitlab.com/gitlab-org/gitlab-development-kit/issues/124).
-
-```shell
-brew unlink gcc-4.2      # you might not need this step
-gem uninstall nokogiri
-xcode-select --install
-gem install nokogiri
-```
-
 ## `gem install gpgme` `2.0.x` fails to compile native extension on macOS Mojave
 
 If building `gpgme` gem fails with an `Undefined symbols for architecture x86_64` error on macOS Mojave, build `gpgme` using system libraries instead.
