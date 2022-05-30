@@ -23,7 +23,7 @@ To enable the service and make it run as part of `gdk start`:
 
 ### Using other search engines
 
-#### Elasticsearch version 7
+#### Other versions of Elasticsearch
 
 The default Elasticsearch version is defined in [`lib/gdk/config.rb`](../../lib/gdk/config.rb).
 
@@ -43,15 +43,7 @@ For example, to use 7.5.2:
    make elasticsearch-setup
    ```
 
-#### Elasticsearch version 8.X
-
-While GDK does not support installing Elasticsearch version 8.x, it can be easily run with Docker:
-
-```shell
-docker run --rm --name es8 -p 9202:9200 -it -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.1.2
-```
-
-#### Opensearch version 1.X
+#### Opensearch
 
 While GDK does not support installing OpenSearch, it can be easily run with Docker:
 
