@@ -219,6 +219,14 @@ module GDK
       string :__listen_address do
         "#{config.workhorse.__active_host}:#{config.workhorse.__active_port}"
       end
+
+      string :__command_line_listen_addr do
+        if config.https?
+          "#{config.hostname}:0"
+        else
+          config.workhorse.__listen_address
+        end
+      end
     end
 
     settings :gitlab_shell do
