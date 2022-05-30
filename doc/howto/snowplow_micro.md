@@ -20,7 +20,7 @@ To enable GDK to manage `snowplow-micro`:
    gdk config set snowplow_micro.port 9092
    ```
 
-1. Regenerate your Procfile by reconfiguring GDK:
+1. Regenerate your Procfile and YAML config by reconfiguring GDK:
 
    ```shell
    gdk reconfigure
