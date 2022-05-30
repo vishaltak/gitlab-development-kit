@@ -70,6 +70,7 @@ gitaly:
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   dir: "/home/git/gdk/gitaly"
   enabled: false
+  gitconfig: []
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
   ruby_dir: "/home/git/gdk/gitaly/ruby"

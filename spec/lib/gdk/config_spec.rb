@@ -792,6 +792,38 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe 'gitconfig' do
+      it 'is not set by default' do
+        expect(config.gitaly.gitconfig).to eq([])
+      end
+
+      context 'with custom gitconfig' do
+        let(:gitconfig) do
+          [
+            { 'key': 'core.threads', 'value': '1' },
+            { 'key': 'core.logAllRefUpdates', 'value': 'true' }
+          ]
+        end
+
+        let(:yaml) do
+          {
+            'gitaly' => {
+              'gitconfig' => gitconfig
+            }
+          }
+        end
+
+        it 'is set' do
+          expect(config.gitaly.gitconfig).to eq(
+            [
+              { 'key': 'core.threads', 'value': '1' },
+              { 'key': 'core.logAllRefUpdates', 'value': 'true' }
+            ]
+          )
+        end
+      end
+    end
+
     describe '#__build_path' do
       it '/home/git/gdk/gitaly/_build' do
         expect(config.gitaly.__build_path).to eq(Pathname.new('/home/git/gdk/gitaly/_build'))
