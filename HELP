@@ -20,6 +20,7 @@ Manage services:
                                             #  foreground
   gdk psql [-d gitlabhq_development]        # Run Postgres console
   gdk psql-geo                              # Run Postgres console connected to the Geo tracking database
+  gdk rails <command> [<args>]              # Execute provided command on Rails bundled with GitLab
   gdk redis-cli                             # Run Redis console
 
   gdk measure                               # Generate a sitespeed.io report for given URL(s)

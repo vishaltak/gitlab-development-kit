@@ -79,6 +79,14 @@ This command is a manual command because it kills all `runsv` processes,
 which can include processes outside the current GDK. Don't use this command if you're running
 other processes with `runit`, or if you're running multiple instances of GDK (and you don't want to stop them all).
 
+## Run Rails commands
+
+To run Rails commands, like `rails console`, and be sure to invoke the Rails installation bundled with GitLab, run:
+
+```shell
+gdk rails <command> [<args>]
+```
+
 ## Update GDK
 
 To update `gitlab` and all of its dependencies, run the following commands:

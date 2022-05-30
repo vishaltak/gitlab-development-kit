@@ -20,6 +20,7 @@ module GDK
     autoload :Pristine, 'gdk/command/pristine'
     autoload :Psql, 'gdk/command/psql'
     autoload :PsqlGeo, 'gdk/command/psql_geo'
+    autoload :Rails, 'gdk/command/rails'
     autoload :Reconfigure, 'gdk/command/reconfigure'
     autoload :RedisCLI, 'gdk/command/redis_cli'
     autoload :Restart, 'gdk/command/restart'
@@ -53,6 +54,7 @@ module GDK
       'psql' => -> { GDK::Command::Psql },
       'psql-geo' => -> { GDK::Command::PsqlGeo },
       'pristine' => -> { GDK::Command::Pristine },
+      'rails' => -> { GDK::Command::Rails },
       'reconfigure' => -> { GDK::Command::Reconfigure },
       'redis-cli' => -> { GDK::Command::RedisCLI },
       'reset-data' => -> { GDK::Command::ResetData },
