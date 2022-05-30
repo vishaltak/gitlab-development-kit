@@ -116,7 +116,7 @@ advanced features.
 1. Copy the **Command to register runner**.
 1. In the terminal, switch to the GDK directory `cd /workspace/gitlab-development-kit`
 1. Run the copied command with the following added to the end `--run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml --non-interactive --executor shell`.
-1. Run `sudo gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
+1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
 
 Your runner is ready to pick up jobs for you! If you create a new project, the
 **Pages/Plain HTML** template contains a super simple and tiny pipeline that's great to
