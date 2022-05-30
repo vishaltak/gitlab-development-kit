@@ -194,7 +194,7 @@ Instructions to generate a developer license can be found in the
 [onboarding documentation](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee).
 
 For information about adding your license to GitLab, see
-[Activate GitLab EE with a license](https://docs.gitlab.com/ee/user/admin_area/license.html)
+[Activate GitLab EE with a license](https://docs.gitlab.com/ee/user/admin_area/license_file.html)
 
 ## Post-installation
 
