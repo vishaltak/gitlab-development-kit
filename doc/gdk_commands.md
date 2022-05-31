@@ -87,6 +87,46 @@ To run Rails commands, like `rails console`, and be sure to invoke the Rails ins
 gdk rails <command> [<args>]
 ```
 
+## Run specific service CLIs
+
+GDK provides shortcut for following service CLIs:
+
+- PostgreSQL `psql` (for both main and Geo Tracking database)
+- Redis `redis-cli`
+- ClickHouse `clickhouse client`
+
+### PostgreSQL client for main database
+
+To run `psql` against the bundled PostgreSQL for the main database, run:
+
+```shell
+gdk psql [<args>]
+```
+
+### PostgreSQL client for Geo Tracking database
+
+To run `psql` against the bundled PostgreSQL for Geo Tracking database, run:
+
+```shell
+gdk psql-geo [<args>]
+```
+
+### Redis CLI
+
+To run `redis-cli` against bundled Redis service, run:
+
+```shell
+gdk redis-cli [<args>]
+```
+
+### ClickHouse client
+
+To run `clickhouse client` against bundled clickhouse service, run:
+
+```shell
+gdk clickhouse [<args>]
+```
+
 ## Update GDK
 
 To update `gitlab` and all of its dependencies, run the following commands:
