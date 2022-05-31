@@ -18,8 +18,10 @@ module GDK
       end
 
       def start_thin!
+        env_vars = { 'RAILS_ENV' => 'development' }
+        env_vars['GDK_GEO_SECONDARY'] = '1' if config.geo? && config.geo.secondary?
         exec(
-          { 'RAILS_ENV' => 'development' },
+          env_vars,
           *thin_command,
           chdir: GDK.root.join('gitlab')
         )
