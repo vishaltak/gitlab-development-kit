@@ -19,10 +19,10 @@ DB = <%= config.redis.databases[:development][:shared_state] %>
   <%- end -%>
 <%- end -%>
 
+<%- if config.https? -%>
 [[listeners]]
   network = "tcp"
   addr = "<%= config.workhorse.__listen_address %>"
-<%- if config.https? -%>
 [listeners.tls]
   certificate = "<%= config.gdk_root.join(config.nginx.ssl.certificate) %>"
   key = "<%= config.gdk_root.join(config.nginx.ssl.key) %>"

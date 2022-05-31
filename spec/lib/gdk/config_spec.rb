@@ -302,6 +302,22 @@ RSpec.describe GDK::Config do
         expect(config.workhorse.__listen_address).to eq('gdk.example.com:3000')
       end
     end
+
+    describe '#__command_line_listen_addr' do
+      context 'when https is enabled' do
+        it 'is gdk.example.com:0' do
+          yaml['https'] = { 'enabled' => true }
+
+          expect(config.workhorse.__command_line_listen_addr).to eq('gdk.example.com:0')
+        end
+      end
+
+      context 'when https is not enabled' do
+        it 'is the same as #__listen_address' do
+          expect(config.workhorse.__command_line_listen_addr).to eq(config.workhorse.__listen_address)
+        end
+      end
+    end
   end
 
   describe '#__active_port' do
