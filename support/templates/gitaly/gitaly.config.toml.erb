@@ -31,7 +31,14 @@ token = "<%= config.gitaly.auth_token %>"
 [git]
 use_bundled_binaries = true
 catfile_cache_size = 10
+ignore_gitconfig = true
 
+<%- node.gitconfig.each do |gitconfig| -%>
+[[git.config]]
+key = "<%= gitconfig["key"] %>"
+value = "<%= gitconfig["value"] %>"
+
+<%- end -%>
 <%- node.__storages.each do |storage| -%>
 [[storage]]
 name = "<%= storage.name %>"

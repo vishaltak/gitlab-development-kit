@@ -574,6 +574,7 @@ module GDK
       path(:__build_bin_path) { config.gitaly.__build_path.join('bin') }
       path(:__build_bin_backup_path) { config.gitaly.__build_bin_path.join('gitaly-backup') }
       path(:__gitaly_build_bin_path) { config.gitaly.__build_bin_path.join('gitaly') }
+      array(:gitconfig) { [] }
       settings_array :__storages, size: -> { storage_count } do |i|
         string(:name) { i.zero? ? 'default' : "gitaly-#{i}" }
         path(:path) do
@@ -607,6 +608,7 @@ module GDK
         path(:storage_dir) { config.repositories_root }
         path(:repository_storages) { config.repository_storages }
         path(:runtime_dir) { config.gdk_root.join('tmp') }
+        array(:gitconfig) { [] }
         settings_array :__storages, size: 1 do |j|
           string(:name) { parent.parent.storage }
           path(:path) { i.zero? && j.zero? ? parent.parent.storage_dir : File.join(parent.parent.repository_storages, parent.parent.service_name, name) }
