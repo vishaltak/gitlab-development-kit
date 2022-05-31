@@ -192,49 +192,6 @@ If building `gpgme` gem fails with an `Undefined symbols for architecture x86_64
 
 You can now run `gdk install` or `bundle` again.
 
-## `gem install nokogumbo` fails
-
-If you see the following error installing the `nokogumbo` gem via `gdk install`:
-
-```shell
-
-Running 'configure' for libxml2 2.9.9... OK
-Running 'compile' for libxml2 2.9.9... ERROR, review
-...
-sed -e
-'s?\@XML_LIBDIR\@?-L/Users/erick/Development/gitlab-development-kit/gitlab/-?/gems/nokogiri-1.10.4/ports/x86_64-apple-darwin18.7.0/libxml2/2.9.9/lib?g'
-\
--e
-'s?\@XML_INCLUDEDIR\@?-I/Users/erick/Development/gitlab-development-kit/gitlab/-?/gems/nokogiri-1.10.4/ports/x86_64-apple-darwin18.7.0/libxml2/2.9.9/include/libxml2?g'
-\
-        -e 's?\@VERSION\@?2.9.9?g' \
-        -e 's?\@XML_LIBS\@?-lxml2 -lz -L/usr/local/Cellar/xz/5.2.4/lib -llzma -lpthread  -liconv  -lm ?g' \
-           < ./xml2Conf.sh.in > xml2Conf.tmp \
-    && mv xml2Conf.tmp xml2Conf.sh
-sed: 1: "s?\@XML_LIBDIR\@?-L/Use ...": bad flag in substitute command: '/'
-make[3]: *** [xml2Conf.sh] Error 1
-make[2]: *** [all-recursive] Error 1
-make[1]: *** [all] Error 2
-...
-An error occurred while installing nokogumbo (1.5.0), and Bundler cannot continue.
-Make sure that `gem install nokogumbo -v '1.5.0' --source 'https://rubygems.org/'` succeeds before bundling.
-
-In Gemfile:
-  sanitize was resolved to 4.6.6, which depends on
-    nokogumbo
-make: *** [.gitlab-bundle] Error 5
-```
-
-A solution is to:
-
-1. Instruct Bundler to use the system libraries when building `nokogumbo`:
-
-   ```shell
-   bundle config build.nokogumbo --use-system-libraries
-   ```
-
-1. Re-run `gdk install`
-
 ## FFI gem issues
 
 The following are problems you might encounter when installing the
