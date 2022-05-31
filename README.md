@@ -4,9 +4,8 @@
 
 ## Overview
 
-The GitLab Development Kit (GDK) helps you install a GitLab instance on your
-workstation. It includes a collection of GitLab requirements, such as Ruby,
-Node.js, Go, PostgreSQL, Redis, and more.
+The GitLab Development Kit (GDK) installs a GitLab instance on your workstation. GDK can
+manage GitLab requirements, such as development tools and databases.
 
 The GDK is recommended for anyone contributing to the GitLab codebase, whether a
 GitLab team member or a member of the wider community. It allows you to test
