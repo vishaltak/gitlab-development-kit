@@ -20,9 +20,10 @@ describe GDK::ErbRenderer do
     end
   end
 
-  subject(:renderer) { described_class.new(erb_file.to_s, out_file.to_s, config: config) }
+  subject(:renderer) { described_class.new(erb_file.to_s, out_file.to_s) }
 
   before do
+    allow(GDK).to receive(:config) { config }
     allow(renderer).to receive(:backup!)
 
     FileUtils.rm_f(out_file)

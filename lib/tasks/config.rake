@@ -56,12 +56,12 @@ task 'generate-file-at', [:file, :destination] do |_, args|
   destination = args[:destination]
   source = Rake::Task[file].source
 
-  GDK::ErbRenderer.new(source, destination, config: GDK.config).render!
+  GDK::ErbRenderer.new(source, destination).render!
 end
 
 # Define as a task instead of a file, so it's built unconditionally
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).render!
+  GDK::ErbRenderer.new(t.source, t.name).render!
   puts t.name # Print the filename, so make can include it
 end
 
@@ -70,7 +70,6 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
   GDK::ErbRenderer.new(
     t.source,
     t.name,
-    config: GDK.config,
     node: GDK.config.gitaly
   ).safe_render!
 
@@ -83,7 +82,7 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: GDK.config).render!
+  GDK::ErbRenderer.new(t.source, t.name).render!
 
   GDK.config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
@@ -96,7 +95,6 @@ GDK.config.praefect.__nodes.each do |node|
     GDK::ErbRenderer.new(
       t.source,
       t.name,
-      config: GDK.config,
       node: node
     ).safe_render!
 
@@ -159,7 +157,7 @@ tasks.add_make_task(name: 'gitaly/praefect.config.toml')
 tasks.template_tasks.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, args|
-    GDK::ErbRenderer.new(t.source, t.name, config: GDK.config, **task.erb_extra_args).safe_render!
+    GDK::ErbRenderer.new(t.source, t.name, **task.erb_extra_args).safe_render!
     task.post_render&.call(t)
   end
 end
@@ -169,7 +167,6 @@ file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
   GDK::ErbRenderer.new(
     'support/templates/makefiles/Makefile.config.mk.erb',
     t.name,
-    config: GDK.config,
     tasks: tasks.all_tasks
   ).safe_render!
 end
