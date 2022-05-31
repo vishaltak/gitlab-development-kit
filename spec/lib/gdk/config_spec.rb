@@ -304,7 +304,7 @@ RSpec.describe GDK::Config do
     end
 
     describe '#__command_line_listen_addr' do
-      context 'when https is not enabled' do
+      context 'when https is enabled' do
         it 'is gdk.example.com:0' do
           yaml['https'] = { 'enabled' => true }
 
@@ -312,7 +312,7 @@ RSpec.describe GDK::Config do
         end
       end
 
-      context 'when https is enabled' do
+      context 'when https is not enabled' do
         it 'is the same as #__listen_address' do
           expect(config.workhorse.__command_line_listen_addr).to eq(config.workhorse.__listen_address)
         end
