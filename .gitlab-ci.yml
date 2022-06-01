@@ -17,6 +17,7 @@ default:
   image: ${DEFAULT_IMAGE}
   tags:
     - gitlab-org
+    - high-cpu
   before_script:
     - test -f support/ci/display_debugging && support/ci/display_debugging
 
