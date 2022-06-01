@@ -22,6 +22,7 @@ Manage services:
   gdk psql-geo                              # Run Postgres console connected to the Geo tracking database
   gdk rails <command> [<args>]              # Execute provided command on Rails bundled with GitLab
   gdk redis-cli                             # Run Redis console
+  gdk clickhouse                            # Run ClickHouse console
 
   gdk measure                               # Generate a sitespeed.io report for given URL(s)
   gdk measure-workflow                      # Generate a sitespeed.io report for given workflow(s)

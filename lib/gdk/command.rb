@@ -5,6 +5,7 @@ module GDK
   module Command
     autoload :BaseCommand, 'gdk/command/base_command'
     autoload :Cleanup, 'gdk/command/cleanup'
+    autoload :Clickhouse, 'gdk/command/clickhouse'
     autoload :Config, 'gdk/command/config'
     autoload :DebugInfo, 'gdk/command/debug_info'
     autoload :DiffConfig, 'gdk/command/diff_config'
@@ -40,6 +41,7 @@ module GDK
     # implementation class
     COMMANDS = {
       'cleanup' => -> { GDK::Command::Cleanup },
+      'clickhouse' => -> { GDK::Command::Clickhouse },
       'config' => -> { GDK::Command::Config },
       'debug-info' => -> { GDK::Command::DebugInfo },
       'diff-config' => -> { GDK::Command::DiffConfig },
