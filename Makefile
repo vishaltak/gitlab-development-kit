@@ -159,7 +159,7 @@ touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \
 	gitlab/workhorse/config.toml.example \
-	$$(find support/templates -name "*.erb" -not -path "*/gitlab-pages-secret.erb") || true
+	$$(find support/templates -name "*.erb" -not -path "*/gitlab-pages-secret.erb") > /dev/null 2>&1 || true
 
 unlock-dependency-installers:
 	$(Q)rm -f \
