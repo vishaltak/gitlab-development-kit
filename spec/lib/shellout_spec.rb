@@ -93,11 +93,11 @@ RSpec.describe Shellout do
         it 'is unsuccessful', :hide_output do
           subject.execute
 
-          expect(subject.success?).to be_falsy
+          expect(subject.success?).to be_falsey
         end
 
         it 'displays output and errors' do
-          expect(GDK::Output).to receive(:puts).with(expected_command_stderr_puts, stderr: true)
+          expect(GDK::Output).to receive(:print).with(expected_command_stderr_puts, stderr: true)
           expect(GDK::Output).to receive(:error).with(expected_command_error)
 
           subject.execute
@@ -117,6 +117,7 @@ RSpec.describe Shellout do
           expect(subject).to receive(:sleep).with(2).twice.and_return(true)
           expect(subject).to receive(expected_execute_method).exactly(3).times # 1 for the first run + 2 retries
           expect(subject).to receive(:success?).exactly(6).times.and_return(false)
+
           expect(GDK::Output).to receive(:error).with("'#{command}' failed. Retrying in 2 secs..").twice
           expect(GDK::Output).to receive(:error).with("'#{command}' failed.")
 
@@ -127,7 +128,7 @@ RSpec.describe Shellout do
           allow(subject).to receive(:sleep).with(2).twice.and_return(true)
           subject.execute(display_output: display_output, retry_attempts: 2)
 
-          expect(subject.success?).to be_falsy
+          expect(subject.success?).to be_falsey
         end
       end
 
@@ -147,10 +148,11 @@ RSpec.describe Shellout do
         let(:expected_command_error) { "'ls /doesntexist' failed." }
 
         before do
-          stderr = double(StringIO, read: expected_command_stderr_puts) # rubocop:todo RSpec/VerifiedDoubles
-          allow(stderr).to receive(:each_line).and_yield(expected_command_stderr_puts)
-          stdout = double(StringIO, each_line: '', read: '') # rubocop:todo RSpec/VerifiedDoubles
+          stderr = StringIO.new(expected_command_stderr_puts)
+          stdout = StringIO.new('')
           stdin = instance_double(StringIO, write: '', close: nil)
+
+          allow(IO).to receive(:select).and_return true
           allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new {})
         end
 
