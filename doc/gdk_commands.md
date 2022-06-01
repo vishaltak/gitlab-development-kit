@@ -89,11 +89,11 @@ gdk rails <command> [<args>]
 
 ## Run specific service CLIs
 
-GDK provides shortcut for following service CLIs:
+GDK provides shortcuts for the following service CLIs:
 
-- PostgreSQL `psql` (for both main and Geo Tracking database)
-- Redis `redis-cli`
-- ClickHouse `clickhouse client`
+- PostgreSQL: `psql` (for both main and Geo Tracking database)
+- Redis: `redis-cli`
+- ClickHouse: `clickhouse client`
 
 ### PostgreSQL client for main database
 
@@ -113,7 +113,7 @@ gdk psql-geo [<args>]
 
 ### Redis CLI
 
-To run `redis-cli` against bundled Redis service, run:
+To run `redis-cli` against the bundled Redis service, run:
 
 ```shell
 gdk redis-cli [<args>]
@@ -121,7 +121,7 @@ gdk redis-cli [<args>]
 
 ### ClickHouse client
 
-To run `clickhouse client` against bundled clickhouse service, run:
+To run `clickhouse client` against the bundled ClickHouse service, run:
 
 ```shell
 gdk clickhouse [<args>]

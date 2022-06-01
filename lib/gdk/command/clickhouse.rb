@@ -6,7 +6,7 @@ module GDK
     class Clickhouse < BaseCommand
       def run(args = [])
         unless GDK.config.clickhouse.enabled?
-          GDK::Output.error('Clickhouse is not enabled. Please check your gdk.yml configuration')
+          GDK::Output.error('ClickHouse is not enabled. Please check your gdk.yml configuration.')
 
           exit(-1)
         end

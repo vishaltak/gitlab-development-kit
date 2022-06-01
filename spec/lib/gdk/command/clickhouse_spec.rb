@@ -31,7 +31,7 @@ RSpec.describe GDK::Command::Clickhouse do
 
   context 'with clickhouse disabled' do
     it 'outputs an error message' do
-      expect { subject.run }.to raise_error(SystemExit).and output(/Clickhouse is not enabled. Please check your gdk.yml configuration/).to_stderr
+      expect { subject.run }.to raise_error(SystemExit).and output(/ClickHouse is not enabled. Please check your gdk.yml configuration/).to_stderr
     end
   end
 
