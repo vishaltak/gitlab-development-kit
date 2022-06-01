@@ -126,36 +126,6 @@ Check if you have `gawk` installed >= 5.0.0 and uninstall it.
 
 Re-run the `gdk install` again and follow any on-screen instructions related to installing `gpgme`.
 
-## `charlock_holmes` `0.7.5` cannot be installed with icu4c 61.1
-
-The installation of the `charlock_holmes` v0.7.5 gem during `bundle install`
-may fail with the following error:
-
-```plaintext
-[SNIPPED]
-
-transliterator.cpp:108:3: error: no template named 'StringByteSink'; did you mean 'icu_61::StringByteSink'?
-  StringByteSink<std::string> sink(&result);
-  ^~~~~~~~~~~~~~
-  icu_61::StringByteSink
-/usr/local/include/unicode/bytestream.h:232:7: note: 'icu_61::StringByteSink' declared here
-class StringByteSink : public ByteSink {
-    ^
-transliterator.cpp:106:34: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int32_t' (aka 'int') [-Wshorten-64-to-32]
-  u_txt = new UnicodeString(txt, txt_len);
-            ~~~~~~~~~~~~~      ^~~~~~~
-1 warning and 9 errors generated.
-make: *** [transliterator.o] Error 1
-```
-
-To fix this, you can run:
-
-```shell
-gem install charlock_holmes -v '0.7.5' -- --with-cppflags=-DU_USING_ICU_NAMESPACE=1
-```
-
-0.7.6 fixes this issue. See [this issue](https://github.com/brianmario/charlock_holmes/issues/126) for more details.
-
 ## undefined symbol: SSLv2_method
 
 This happens if your local OpenSSL library is updated and your Ruby binary is
