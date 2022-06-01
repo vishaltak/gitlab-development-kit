@@ -12,6 +12,7 @@ variables:
   GDK_DEBUG: "false"
 
 default:
+  timeout: 2 hours
   interruptible: true
   image: ${DEFAULT_IMAGE}
   tags:
