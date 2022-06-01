@@ -14,5 +14,6 @@ module GDK
   # TaskHelpers.
   module TaskHelpers
     autoload :RailsMigration, 'gdk/task_helpers/rails_migration'
+    autoload :ConfigTasks, 'gdk/task_helpers/config_tasks'
   end
 end

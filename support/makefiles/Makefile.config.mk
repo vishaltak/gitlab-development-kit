@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------
-# This file is used by the GDK to get interoperatability between Make and Rake with the end
+# This file is used by the GDK to get interoperability between Make and Rake with the end
 # goal of getting rid of Make in the future: https://gitlab.com/groups/gitlab-org/-/epics/1556.
 # This file can be generated with the `rake support/makefiles/Makefile.config.mk` task.
 # ---------------------------------------------------------------------------------------------
@@ -107,6 +107,14 @@ redis/redis.conf:
 .PHONY: registry/config.yml
 registry/config.yml: registry_host.crt
 	$(Q)rake registry/config.yml
+
+.PHONY: snowplow/snowplow_micro.conf
+snowplow/snowplow_micro.conf: 
+	$(Q)rake snowplow/snowplow_micro.conf
+
+.PHONY: snowplow/iglu.json
+snowplow/iglu.json: 
+	$(Q)rake snowplow/iglu.json
 
 .PHONY: clickhouse/config.xml
 clickhouse/config.xml: 

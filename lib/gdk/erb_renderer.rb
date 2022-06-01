@@ -11,10 +11,10 @@ module GDK
   class ErbRenderer
     attr_reader :source, :target
 
-    def initialize(source, target, args = {})
+    def initialize(source, target, **args)
       @source = source
       @target = target
-      @args = args
+      @args = args.merge(config: config)
     end
 
     def render!(target = @target)
@@ -125,7 +125,7 @@ module GDK
     end
 
     def config
-      @args[:config] || raise(::ArgumentError, "'args' argument should have ':config' key")
+      @config ||= GDK.config
     end
   end
 end
