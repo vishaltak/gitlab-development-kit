@@ -1,6 +1,9 @@
 .verify-job:
   stage: verify
   extends: .rules:code-changes
+  tags:
+    - gitlab-org
+    - high-cpu
   needs:
     - release-image
   artifacts:
