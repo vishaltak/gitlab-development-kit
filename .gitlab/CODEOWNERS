@@ -5,5 +5,5 @@
 * @gitlab-org/maintainers/gitlab-development-kit
 
 # Technical writing team are the default reviewers for everything in `doc/`
-[Documentation]
+^[Documentation]
 /doc/ @axil @eread @marcel.amirault @kpaizee @fneill
