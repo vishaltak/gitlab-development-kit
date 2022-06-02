@@ -21,8 +21,6 @@ rubocop:
   image: ruby:2.7
   stage: test
   needs: []
-  variables:
-    BUNDLE_INSTALL_ARGS: "--path vendor/bundle"
   script:
     - make rubocop
 
@@ -33,14 +31,13 @@ rspec:
   needs: []
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
-    BUNDLE_INSTALL_ARGS: "--path vendor/bundle"
   script:
     - pwd > .gdk-install-root
     - make rspec
   cache:
     key: "ruby-2.7-bundle"
     paths:
-      - ./vendor/bundle
+      - $BUNDLE_PATH
   artifacts:
     paths:
       - rspec.xml
@@ -86,12 +83,12 @@ yard:
   needs: []
   image: ruby:2.7
   script:
-    - bundle install --jobs 4 --path vendor/bundle
+    - bundle install
     - bundle exec yardoc
   cache:
     key: "ruby-2.7-bundle"
     paths:
-      - ./vendor/bundle
+      - $BUNDLE_PATH
   artifacts:
     expire_in: 1 week
     paths:

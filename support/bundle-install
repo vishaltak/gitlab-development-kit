@@ -23,7 +23,6 @@ bundle_install() {
 }
 
 GDK_QUIET="${GDK_QUIET:-false}"
-BUNDLE_INSTALL_ARGS="${BUNDLE_INSTALL_ARGS:-}"
 
 DIR_TO_PROCESS="${1}"
 

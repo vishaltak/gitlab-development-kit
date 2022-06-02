@@ -117,7 +117,13 @@ gdk_install_gem() {
   return 0
 }
 
+update_rubygems_gem() {
+  gem update --system
+}
+
 configure_ruby_bundler() {
+  update_rubygems_gem
+
   if asdf_command_enabled "pg_config"; then
     current_pg_config_location=$(asdf which pg_config)
   else
