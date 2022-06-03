@@ -895,6 +895,9 @@ production: &base
   prometheus:
     enabled: <%= config.prometheus.enabled? %>
     server_address: '<%= config.hostname %>:<%= config.prometheus.port %>'
+  snowplow_micro:
+    enabled: <%= config.snowplow_micro.enabled? %>
+    address: '<%= config.hostname %>:<%= config.snowplow_micro.port %>'
   #
   # 5. Extra customization
   # ==========================
