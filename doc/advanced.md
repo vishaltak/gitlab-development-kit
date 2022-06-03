@@ -47,12 +47,6 @@ using rbenv, such as:
    rbenv install 2.7.5
    ```
 
-1. Workaround [`thin` installation issues on macOS](https://github.com/macournoyer/thin/issues/365) by running:
-
-   ```shell
-   bundle config --local build.thin --with-cflags='"-Wno-error=implicit-function-declaration"'
-   ```
-
 1. To ensure the `re2` gem is built correctly, explicitly set the directory where brew installed `re2`:
 
    ```shell
