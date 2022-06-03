@@ -2,12 +2,14 @@
 
 require 'open3'
 
+# Controls execution of commands delegated to the running shell
 class Shellout
   attr_reader :args, :opts
 
   DEFAULT_EXECUTE_DISPLAY_OUTPUT = true
   DEFAULT_EXECUTE_RETRY_ATTEMPTS = 0
   DEFAULT_EXECUTE_RETRY_DELAY_SECS = 2
+  BLOCK_SIZE = 1024
 
   ShelloutBaseError = Class.new(StandardError)
   ExecuteCommandFailedError = Class.new(ShelloutBaseError)
@@ -25,6 +27,7 @@ class Shellout
   def execute(display_output: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
     retried ||= false
     GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
+
     display_output ? stream : try_run
     GDK::Output.debug("result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
 
@@ -41,6 +44,7 @@ class Shellout
 
     if (retry_attempts -= 1).negative?
       GDK::Output.error(error_message)
+
       self
     else
       retried = true
@@ -52,6 +56,10 @@ class Shellout
     end
   end
 
+  # Executes the command while printing the output from both stdout and stderr
+  #
+  # This command will stream each individual character from a separate thread
+  # making it possible to visualize interactive progress bar.
   def stream(extra_options = {})
     @stdout_str = ''
     @stderr_str = ''
@@ -106,12 +114,18 @@ class Shellout
     clean_string(@stderr_str.to_s.chomp)
   end
 
+  # Return whether last run command was successful (exit 0)
+  #
+  # @return [Boolean] whether last run command was successful
   def success?
     return false unless @status
 
     @status.success?
   end
 
+  # Exit code from last run command
+  #
+  # @return [Integer] exit code
   def exit_code
     return nil unless @status
 
@@ -138,17 +152,21 @@ class Shellout
 
   def thread_read(io, meth)
     Thread.new do
-      io.each_line { |line| meth.call(line) }
+      until io.eof?
+        ready = IO.select([io])
+
+        meth.call(io.read_nonblock(BLOCK_SIZE)) if ready
+      end
     end
   end
 
   def print_out(msg)
     @stdout_str += msg
-    GDK::Output.puts(msg)
+    GDK::Output.print(msg)
   end
 
   def print_err(msg)
     @stderr_str += msg
-    GDK::Output.puts(msg, stderr: true)
+    GDK::Output.print(msg, stderr: true)
   end
 end
