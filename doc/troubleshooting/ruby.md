@@ -44,45 +44,6 @@ In which case you would run:
 gem pristine re2
 ```
 
-## An error occurred while installing thin (1.7.2) on macOS
-
-```plaintext
-[SNIPPED]
-
-thin.c:338:8: error: implicit declaration of function 'thin_http_parser_has_error' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-    if(thin_http_parser_has_error(http)) {
-       ^
-thin.c:338:8: note: did you mean 'http_parser_has_error'?
-./parser.h:44:5: note: 'http_parser_has_error' declared here
-int http_parser_has_error(http_parser *parser);
-    ^
-thin.c:359:10: error: implicit declaration of function 'thin_http_parser_has_error' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-  return thin_http_parser_has_error(http) ? Qtrue : Qfalse;
-         ^
-thin.c:374:10: error: implicit declaration of function 'thin_http_parser_is_finished' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-  return thin_http_parser_is_finished(http) ? Qtrue : Qfalse;
-         ^
-9 errors generated.
-make: *** [thin.o] Error 1
-
-make failed, exit code 2
-
-Gem files will remain installed in /Users/tkuah/.rbenv/versions/2.7.2/lib/ruby/gems/2.7.0/gems/thin-1.7.2 for inspection.
-Results logged to /Users/tkuah/.rbenv/versions/2.7.2/lib/ruby/gems/2.7.0/extensions/x86_64-darwin-19/2.7.0/thin-1.7.2/gem_make.out
-
-An error occurred while installing thin (1.7.2), and Bundler cannot continue.
-Make sure that `gem install thin -v '1.7.2' --source 'https://rubygems.org/'` succeeds before bundling.
-```
-
-To fix this, you can run the following in the `gitlab` directory:
-
-```shell
-bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
-bundle install
-```
-
-See this [issue](https://github.com/macournoyer/thin/pull/364) for more details.
-
 ## An error occurred while installing thrift (0.14.0)
 
 The installation of the `thrift` v0.14.0 gem during `bundle install` can fail with the following error due to a [known bug](https://bugs.ruby-lang.org/issues/17865).
@@ -293,35 +254,6 @@ override the Ruby gem install path with `BUNDLE_PATH`:
 # Install gems in (current directory)/vendor/bundle
 make BUNDLE_PATH=$(pwd)/vendor/bundle
 ```
-
-## 'bundle install' fails while compiling eventmachine gem
-
-On OS X El Capitan, the eventmachine gem compilation might fail with:
-
-```plaintext
-Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
-<snip>
-make "DESTDIR=" clean
-
-make "DESTDIR="
-compiling binder.cpp
-In file included from binder.cpp:20:
-./project.h:116:10: fatal error: 'openssl/ssl.h' file not found
-#include <openssl/ssl.h>
-        ^
-1 error generated.
-make: *** [binder.o] Error 1
-
-make failed, exit code 2
-```
-
-To fix it:
-
-```shell
-bundle config build.eventmachine --with-cppflags=-I/usr/local/opt/openssl/include
-```
-
-and then do `bundle install` once again.
 
 ## Bootsnap-related problems
 
