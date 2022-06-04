@@ -117,10 +117,13 @@ http {
 
     location = <%= config.gitlab_k8s_agent.__agent_listen_url_path %> {
       proxy_pass http://gitlab-k8s-agent;
+      proxy_intercept_errors off;
     }
 
     location <%= config.gitlab_k8s_agent.__k8s_api_listen_url_path %> {
       proxy_pass http://gitlab-k8s-agent-k8s-proxy;
+      proxy_buffering off;
+      proxy_intercept_errors off;
     }
 
 <%- end -%>
