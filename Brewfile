@@ -10,7 +10,7 @@ brew "gpgme"
 brew "graphicsmagick"
 brew "icu4c"
 brew "libiconv"
-brew "openssl@1.1"
+brew "openssl@1.1", link: :force
 brew "pkg-config"
 brew "re2"
 brew "runit"
