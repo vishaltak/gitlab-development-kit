@@ -6,6 +6,25 @@ Depending on your needs, you can set up Container Registry locally in the follow
 - Use the Container Registry as an insecure registry (can push and pull images).
 - Use the Container Registry with a self-signed certificate (can push and pull images).
 
+## Check AirPlay Receiver process on macOS
+
+If you are running macOS Monterey, the `AirPlay Receiver` process [may be
+listening on port 5000](https://developer.apple.com/forums/thread/682332). This
+interferes with the Container Registry if it's bound to localhost, as it
+listens on the same port. See the [Apple support
+thread](https://developer.apple.com/forums/thread/682332) for instructions on
+turning off AirPlay Receiver temporarily.
+
+To check if AirPlay Receiver is listening on port 5000, you can run
+`curl` with the `-i` flag to include protocol response headers:
+
+```shell
+curl -i registry.test:5000
+```
+
+If you see `Server: AirTunes/605.1` in the response, AirPlay Receiver is
+listening on the port and should be disabled.
+
 ## Set up Container Registry to display in UI only
 
 To set up Container Registry to display it the UI only (but not be able to push or pull images) add the following your `gdk.yml`:
