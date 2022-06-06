@@ -180,7 +180,7 @@ In the terminal, switch to the `GDK:bash` tab and run the following:
 
 ```shell
 gdk stop
-export GITLAB_SIMULATE_SAAS=1
+eval $(gp env -e GITLAB_SIMULATE_SAAS=1)
 gdk start
 ```
 
