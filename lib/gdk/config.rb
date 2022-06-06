@@ -421,6 +421,20 @@ module GDK
       string(:k8s_api_listen_network) { 'tcp' }
       string(:k8s_api_listen_address) { "#{config.listen_address}:8154" }
       string(:__k8s_api_listen_url_path) { '/-/k8s-proxy/' }
+      string(:__k8s_api_url) do
+        if config.nginx?
+          # kas is behind nginx
+          if config.https?
+            "https://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__k8s_api_listen_url_path}"
+          else
+            "http://#{config.nginx.__listen_address}#{config.gitlab_k8s_agent.__k8s_api_listen_url_path}"
+          end
+        elsif config.gitlab_k8s_agent.k8s_api_listen_network == 'tcp'
+          "http://#{config.gitlab_k8s_agent.k8s_api_listen_address}"
+        else
+          raise UnsupportedConfiguration, "Unsupported listen network #{config.gitlab_k8s_agent.k8s_api_listen_network}"
+        end
+      end
 
       string(:internal_api_listen_network) { 'tcp' }
       string(:internal_api_listen_address) { "#{config.listen_address}:8153" }
