@@ -143,6 +143,8 @@ registry is running, the output of `gdk tail` changes.
 If your're not using a self-signed certificate, you can instruct Docker to consider the registry as insecure. For example, Docker-in-Docker builds require an additional flag, `--insecure-registry`:
 
 ```yaml
+# .gitlab-ci.yml
+
 services:
   - name: docker:stable-dind
     command: ["--insecure-registry=registry.test:5000"]
