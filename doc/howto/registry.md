@@ -45,6 +45,7 @@ To set up Container Registry to allow pushing and pulling of images over HTTP, y
 installed. For example:
 
 - [Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/).
+- [Colima](https://github.com/abiosoft/colima).
 - [`lima nerdctl`](https://github.com/containerd/nerdctl).
 - [Rancher Desktop](https://rancherdesktop.io).
 
@@ -61,17 +62,29 @@ In these instructions, we assume you [set up `registry.test`](local_network.md).
      auth_enabled: false
    ```
 
-1. Locate `daemon.json`. For information:
+1. Locate the Docker engine configuration file:
    - For Rancher Desktop, see: <https://github.com/rancher-sandbox/rancher-desktop/discussions/1477>.
-   - General information, see the [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
-1. Edit the Docker `daemon.json` file and add the following:
+   - For Colima, which uses YAML configuration, see the [FAQ](https://github.com/abiosoft/colima/blob/a90fb3a597b160f233d5d24d3e830e910ebd3aec/docs/FAQ.md?plain=1#L46).
+   - For general information, see the [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
+1. Edit the configuration file by adding the following:
 
    ```json
+   // daemon.json
+
    {
      "insecure-registries" : ["registry.test:5000"]
    }
    ```
 
+   ```yaml
+   # colima.yaml
+
+   docker:
+     insecure-registries:
+       - reigstry.test:5000
+   ```
+
+1. Restart the Docker engine.
 1. Run `gdk reconfigure`.
 1. Run `gdk restart`.
 
