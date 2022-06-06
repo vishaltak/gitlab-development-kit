@@ -1755,6 +1755,45 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '__k8s_api_url' do
+      let(:https_enabled) { nil }
+
+      let(:yaml) do
+        {
+          'nginx' => { 'enabled' => nginx_enabled },
+          'https' => { 'enabled' => https_enabled }
+        }
+      end
+
+      context 'when nginx is not enabled' do
+        let(:nginx_enabled) { false }
+
+        it 'is http://127.0.0.1:8154' do
+          expect(config.gitlab_k8s_agent.__k8s_api_url).to eq('http://127.0.0.1:8154')
+        end
+      end
+
+      context 'when nginx is enabled' do
+        let(:nginx_enabled) { true }
+
+        context 'but https is not enabled' do
+          let(:https_enabled) { false }
+
+          it 'is http://127.0.0.1:3000/-/k8s-proxy/' do
+            expect(config.gitlab_k8s_agent.__k8s_api_url).to eq('http://127.0.0.1:3000/-/k8s-proxy/')
+          end
+        end
+
+        context 'and https is enabled' do
+          let(:https_enabled) { true }
+
+          it 'is https://127.0.0.1:3000/-/k8s-proxy/' do
+            expect(config.gitlab_k8s_agent.__k8s_api_url).to eq('https://127.0.0.1:3000/-/k8s-proxy/')
+          end
+        end
+      end
+    end
   end
 
   describe 'nginx' do
