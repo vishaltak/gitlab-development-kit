@@ -19,7 +19,10 @@ require_relative '../lib/gdk/task_helpers'
 
 RSpec.configure do |config|
   config.before do |example|
-    allow(GDK::Output).to receive(:puts) if example.metadata[:hide_stdout]
+    if example.metadata[:hide_stdout]
+      allow(GDK::Output).to receive(:print)
+      allow(GDK::Output).to receive(:puts)
+    end
 
     if example.metadata[:hide_output]
       allow(GDK::Output).to receive(:print)
