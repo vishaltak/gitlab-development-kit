@@ -216,6 +216,8 @@ module Runit
       FileUtils.mkdir_p(File.dirname(path))
 
       File.open(path, 'w') { |f| f.write(content) }
+    rescue Errno::ETXTBSY
+      nil
     end
 
     # Render a template to string with optional injected local variables
