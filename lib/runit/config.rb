@@ -214,10 +214,17 @@ module Runit
     # @param [String] content that will be written to the file
     def write_file(path, content)
       FileUtils.mkdir_p(File.dirname(path))
+      return if file_contains_content?(path, content)
 
       File.open(path, 'w') { |f| f.write(content) }
     rescue Errno::ETXTBSY
       nil
+    end
+
+    def file_contains_content?(path, content)
+      return false unless File.exist?(path)
+
+      File.read(path) == content
     end
 
     # Render a template to string with optional injected local variables
