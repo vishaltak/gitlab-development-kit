@@ -27,7 +27,8 @@ module GDK
 
         check_git_installed
         check_graphicsmagick_installed
-        check_exiftool_installed
+        # TODO: Re-enable once exiftool installs cleanly - https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1519
+        # check_exiftool_installed
         check_minio_installed
         check_runit_installed
       end
