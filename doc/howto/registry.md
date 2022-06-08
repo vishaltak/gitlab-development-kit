@@ -6,6 +6,25 @@ Depending on your needs, you can set up Container Registry locally in the follow
 - Use the Container Registry as an insecure registry (can push and pull images).
 - Use the Container Registry with a self-signed certificate (can push and pull images).
 
+## Check AirPlay Receiver process on macOS
+
+If you are running macOS Monterey, the `AirPlay Receiver` process [may be
+listening on port 5000](https://developer.apple.com/forums/thread/682332). This
+interferes with the Container Registry if it's bound to localhost, as it
+listens on the same port. See the [Apple support
+thread](https://developer.apple.com/forums/thread/682332) for instructions on
+turning off AirPlay Receiver temporarily.
+
+To check if AirPlay Receiver is listening on port 5000, you can run
+`curl` with the `-i` flag to include protocol response headers:
+
+```shell
+curl -i registry.test:5000
+```
+
+If you see `Server: AirTunes/605.1` in the response, AirPlay Receiver is
+listening on the port and should be disabled.
+
 ## Set up Container Registry to display in UI only
 
 To set up Container Registry to display it the UI only (but not be able to push or pull images) add the following your `gdk.yml`:
@@ -26,6 +45,7 @@ To set up Container Registry to allow pushing and pulling of images over HTTP, y
 installed. For example:
 
 - [Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/).
+- [Colima](https://github.com/abiosoft/colima).
 - [`lima nerdctl`](https://github.com/containerd/nerdctl).
 - [Rancher Desktop](https://rancherdesktop.io).
 
@@ -42,17 +62,29 @@ In these instructions, we assume you [set up `registry.test`](local_network.md).
      auth_enabled: false
    ```
 
-1. Locate `daemon.json`. For information:
+1. Locate the Docker engine configuration file:
    - For Rancher Desktop, see: <https://github.com/rancher-sandbox/rancher-desktop/discussions/1477>.
-   - General information, see the [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
-1. Edit the Docker `daemon.json` file and add the following:
+   - For Colima, which uses YAML configuration, see the [FAQ](https://github.com/abiosoft/colima/blob/a90fb3a597b160f233d5d24d3e830e910ebd3aec/docs/FAQ.md?plain=1#L46).
+   - For general information, see the [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
+1. Edit the configuration file by adding the following:
 
    ```json
+   // daemon.json
+
    {
      "insecure-registries" : ["registry.test:5000"]
    }
    ```
 
+   ```yaml
+   # colima.yaml
+
+   docker:
+     insecure-registries:
+       - reigstry.test:5000
+   ```
+
+1. Restart the Docker engine.
 1. Run `gdk reconfigure`.
 1. Run `gdk restart`.
 
@@ -111,6 +143,8 @@ registry is running, the output of `gdk tail` changes.
 If your're not using a self-signed certificate, you can instruct Docker to consider the registry as insecure. For example, Docker-in-Docker builds require an additional flag, `--insecure-registry`:
 
 ```yaml
+# .gitlab-ci.yml
+
 services:
   - name: docker:stable-dind
     command: ["--insecure-registry=registry.test:5000"]
