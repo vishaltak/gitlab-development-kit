@@ -74,3 +74,25 @@ to create an OAuth application for GitLab Pages.
    ```shell
    gdk restart
    ```
+
+## Enable custom domains
+
+1. Add the following to `gdk.yml`
+
+   ```yaml
+   gitlab_pages:
+     enabled: true
+     enable_custom_domains: true
+   ```
+
+1. Reconfigure GDK
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Restart GDK
+
+   ```shell
+   gdk restart
+   ```
