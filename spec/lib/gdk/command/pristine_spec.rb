@@ -36,18 +36,18 @@ RSpec.describe GDK::Command::Pristine do
         expect_shellout_command(described_class::GO_CLEAN_CACHE_CMD, config.gdk_root).and_return(shellout_double)
 
         # gdk_bundle
-        expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gdk_root).and_return(shellout_double)
+        expect_shellout_command(subject.bundle_install_cmd, config.gdk_root).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gdk_root).and_return(shellout_double)
 
         # reset_configs
         expect_shellout_command(described_class::RESET_CONFIGS_CMD, config.gdk_root).and_return(shellout_double)
 
         # gitlab_bundle
-        expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gitlab.dir).and_return(shellout_double)
+        expect_shellout_command(subject.bundle_install_cmd, config.gitlab.dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitlab.dir).and_return(shellout_double)
 
         # gitaly_bundle
-        expect_shellout_command(described_class::BUNDLE_INSTALL_CMD, config.gitaly.ruby_dir).and_return(shellout_double)
+        expect_shellout_command(subject.bundle_install_cmd, config.gitaly.ruby_dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitaly.ruby_dir).and_return(shellout_double)
 
         # gitlab_tmp_clean
@@ -64,6 +64,14 @@ RSpec.describe GDK::Command::Pristine do
 
     def expect_shellout_command(cmd, chdir)
       expect(Shellout).to receive(:new).with(cmd, chdir: chdir)
+    end
+  end
+
+  describe '#bundle_install_cmd' do
+    it 'returns the default bundle install command' do
+      allow(config).to receive(:restrict_cpu_count).and_return(6)
+
+      expect(subject.bundle_install_cmd).to eq('bundle install --jobs 6 --quiet')
     end
   end
 end

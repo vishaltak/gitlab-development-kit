@@ -7,7 +7,6 @@ module GDK
     # Handles `gdk pristine` command execution
     class Pristine < BaseCommand
       GO_CLEAN_CACHE_CMD = 'go clean -cache'
-      BUNDLE_INSTALL_CMD = 'bundle install --jobs 4 --quiet'
       BUNDLE_PRISTINE_CMD = 'bundle pristine'
       YARN_CLEAN_CMD = 'yarn clean'
       GIT_CLEAN_TMP_CMD = 'git clean -fX -- tmp/'
@@ -36,6 +35,10 @@ module GDK
         display_help_message
 
         false
+      end
+
+      def bundle_install_cmd
+        "bundle install --jobs #{GDK.config.restrict_cpu_count} --quiet"
       end
 
       private
@@ -74,7 +77,7 @@ module GDK
       end
 
       def gdk_bundle_install
-        shellout(BUNDLE_INSTALL_CMD, chdir: config.gdk_root)
+        shellout(bundle_install_cmd, chdir: config.gdk_root)
       end
 
       def gdk_bundle_pristine
@@ -87,7 +90,7 @@ module GDK
       end
 
       def gitlab_bundle_install
-        shellout(BUNDLE_INSTALL_CMD, chdir: config.gitlab.dir)
+        shellout(bundle_install_cmd, chdir: config.gitlab.dir)
       end
 
       def gitlab_bundle_pristine
@@ -110,7 +113,7 @@ module GDK
       end
 
       def gitaly_bundle_install
-        shellout(BUNDLE_INSTALL_CMD, chdir: config.gitaly.ruby_dir)
+        shellout(bundle_install_cmd, chdir: config.gitaly.ruby_dir)
       end
 
       def gitaly_bundle_pristine
