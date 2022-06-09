@@ -122,27 +122,31 @@ update_rubygems_gem() {
 }
 
 configure_ruby_bundler() {
-  update_rubygems_gem
+  (
+    cd "${ROOT_PATH}/gitlab" || exit
 
-  if asdf_command_enabled "pg_config"; then
-    current_pg_config_location=$(asdf which pg_config)
-  else
-    current_pg_config_location=$(command -v pg_config)
-  fi
+    update_rubygems_gem
 
-  bundle config build.pg "--with-pg-config=${current_pg_config_location}"
-  bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
-  bundle config build.gpgme --use-system-libraries
-
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
-    bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
-
-    clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
-
-    if [[ ${clang_version} -ge 13 ]]; then
-      bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
+    if asdf_command_enabled "pg_config"; then
+      current_pg_config_location=$(asdf which pg_config)
+    else
+      current_pg_config_location=$(command -v pg_config)
     fi
-  fi
+
+    bundle config build.pg "--with-pg-config=${current_pg_config_location}"
+    bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+    bundle config build.gpgme --use-system-libraries
+
+    if [[ "${OSTYPE}" == "darwin"* ]]; then
+      bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
+
+      clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
+
+      if [[ ${clang_version} -ge 13 ]]; then
+        bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
+      fi
+    fi
+  )
 }
 
 ensure_sudo_available() {
