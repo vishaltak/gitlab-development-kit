@@ -181,6 +181,24 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'restrict_cpu_count' do
+    context 'when restrict_cpu_count is not set' do
+      it 'defaults to the number of CPUS on the running machine' do
+        allow(Etc).to receive(:nprocessors).and_return(6)
+
+        expect(config.restrict_cpu_count).to eq(6)
+      end
+    end
+
+    context 'when restrict_cpu_count is set' do
+      it 'returns the value set by restrict_cpu_count' do
+        yaml['restrict_cpu_count'] = 8
+
+        expect(config.restrict_cpu_count).to eq(8)
+      end
+    end
+  end
+
   describe '__uri' do
     context 'for defaults' do
       it 'returns http://gdk.example.com:3000' do

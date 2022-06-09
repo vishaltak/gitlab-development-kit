@@ -50,5 +50,6 @@ module GDK
 
     string(:username) { 'git' }
     array(:git_repositories) { [] }
+    integer(:restrict_cpu_count) { -1 }
   end
 end
