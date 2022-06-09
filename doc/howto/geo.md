@@ -136,6 +136,9 @@ gitlab_pages:
 tracer:
   jaeger:
     enabled: false
+object_store:
+  enabled: true
+  port: 9001
 port: 3001
 webpack:
   port: 3809
