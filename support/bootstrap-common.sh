@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 CDPATH=''
-root_path="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
+ROOT_PATH="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
@@ -28,7 +28,7 @@ if [[ ${BASH_VERSION%%.*} -gt 3 ]]; then
                                    ['fedora']='Fedora RHEL' )
 fi
 
-GDK_CACHE_DIR="${root_path}/.cache"
+GDK_CACHE_DIR="${ROOT_PATH}/.cache"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
 GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
@@ -94,7 +94,7 @@ asdf_check_rvm_rbenv() {
 }
 
 gdk_install_gdk_clt() {
-  if [[ "$("${root_path}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
+  if [[ "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
     echo "INFO: Installing gdk shim.."
     gdk_install_shim
   else
