@@ -18,6 +18,7 @@ sudo chown -R gitpod:gitpod /workspace
 cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
+[[ -n "${CI_COMMIT_SHA:-}" ]] && git checkout "${CI_COMMIT_SHA}"
 make bootstrap
 
 # Set asdf dir correctly
