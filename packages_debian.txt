@@ -32,4 +32,5 @@ sudo
 tzdata
 uuid-dev
 wget
+yamllint
 zlib1g-dev
