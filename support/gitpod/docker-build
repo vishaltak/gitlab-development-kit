@@ -1,4 +1,5 @@
 #!/bin/sh
+
 GITPOD_WORKSPACE_IMAGE="${GITPOD_WORKSPACE_IMAGE:-gitpod-image}"
 
 cd ./support/gitpod || exit 1
