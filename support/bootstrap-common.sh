@@ -121,11 +121,13 @@ update_rubygems_gem() {
   gem update --system
 }
 
-configure_ruby_bundler() {
-  (
-    cd "${ROOT_PATH}/gitlab" || exit
+configure_ruby() {
+  update_rubygems_gem
+}
 
-    update_rubygems_gem
+configure_ruby_bundler_for_gitlab() {
+  (
+    cd "${ROOT_PATH}/gitlab" || return 0
 
     if asdf_command_enabled "pg_config"; then
       current_pg_config_location=$(asdf which pg_config)
