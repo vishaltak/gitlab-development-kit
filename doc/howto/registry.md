@@ -62,28 +62,10 @@ In these instructions, we assume you [set up `registry.test`](local_network.md).
      auth_enabled: false
    ```
 
-1. Locate the Docker engine configuration file:
-   - For Rancher Desktop, see: <https://github.com/rancher-sandbox/rancher-desktop/discussions/1477>.
-   - For Colima, which uses YAML configuration, see the [FAQ](https://github.com/abiosoft/colima/blob/a90fb3a597b160f233d5d24d3e830e910ebd3aec/docs/FAQ.md?plain=1#L46).
+1. Locate the Docker daemon configuration file and set the `insecure-registries` directive to point to the local registry `registry.test:5000`:
+   - For Rancher Desktop, see [modify Docker daemon configuration in Rancher Desktop VM](https://github.com/rancher-sandbox/rancher-desktop/discussions/1477).
+   - For Colima, see [How to customize Docker config e.g. add insecure registries?](https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#how-to-customize-docker-config-eg-add-insecure-registries).
    - For general information, see the [Docker documentation](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
-1. Edit the configuration file by adding the following:
-
-   ```json
-   // daemon.json
-
-   {
-     "insecure-registries" : ["registry.test:5000"]
-   }
-   ```
-
-   ```yaml
-   # colima.yaml
-
-   docker:
-     insecure-registries:
-       - reigstry.test:5000
-   ```
-
 1. Restart the Docker engine.
 1. Run `gdk reconfigure`.
 1. Run `gdk restart`.
