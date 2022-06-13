@@ -110,7 +110,7 @@ update() {
   echo "> Updating GDK.."
   # we use `make update` instead of `gdk update` to ensure the working directory
   # is not reset to the default branch.
-  make update
+  make update || (support/upgrade-postgresql && make update)
   set_gitlab_upstream
   restart
 }
