@@ -7,7 +7,7 @@ require:
   - ./rubocop/rubocop
 
 AllCops:
-  TargetRubyVersion: 2.7.2
+  TargetRubyVersion: 2.7
   Exclude:
     - 'GDK_ROOT'
     - '.backups/**/*'
