@@ -3,6 +3,8 @@
 module GDK
   # Provides information about the machine
   module Machine
+    ARM64_VARIATIONS = %w[arm64 aarch64].freeze
+
     # Is the machine running Linux?
     #
     # @return [Boolean] whether we are in a Linux machine
@@ -22,6 +24,20 @@ module GDK
     # @return [Boolean] whether we are running a supported OS
     def self.supported?
       platform != 'unknown'
+    end
+
+    # Is the machine running on an ARM64 processor?
+    #
+    # @return [Boolean] whether current architecture is using ARM64 architecture
+    def self.arm64?
+      ARM64_VARIATIONS.any?(architecture)
+    end
+
+    # Is the machine running on an x86_64 processor?
+    #
+    # @return [Boolean] whether current CPU is using x86_64 architecture
+    def self.x86_64?
+      architecture == 'x86_64'
     end
 
     # The kernel type the machine is running on

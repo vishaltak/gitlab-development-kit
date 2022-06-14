@@ -83,6 +83,58 @@ RSpec.describe GDK::Machine do
     end
   end
 
+  describe '.x86_64?' do
+    before do
+      allow(GDK::Machine).to receive(:architecture).and_return(fake_platform)
+    end
+
+    context 'when CPU is reporting an x86_64 architecture' do
+      let(:fake_platform) { 'x86_64' }
+
+      it 'returns true' do
+        expect(subject.x86_64?).to be_truthy
+      end
+    end
+
+    context 'when CPU is reporting an ARM based architecture' do
+      let(:fake_platform) { 'arm64' }
+
+      it 'returns false' do
+        expect(subject.x86_64?).to be_falsey
+      end
+    end
+  end
+
+  describe '.arm64?' do
+    before do
+      allow(GDK::Machine).to receive(:architecture).and_return(fake_platform)
+    end
+
+    context 'when CPU is reporting arm64 architecture' do
+      let(:fake_platform) { 'arm64' }
+
+      it 'returns true' do
+        expect(subject.arm64?).to be_truthy
+      end
+    end
+
+    context 'when CPU is reporting aarch64 architecture' do
+      let(:fake_platform) { 'aarch64' }
+
+      it 'returns true' do
+        expect(subject.arm64?).to be_truthy
+      end
+    end
+
+    context 'when CPU is reporting x86_64 architecture' do
+      let(:fake_platform) { 'x86_64' }
+
+      it 'returns false' do
+        expect(subject.arm64?).to be_falsey
+      end
+    end
+  end
+
   describe '.architecture' do
     context 'when in a x86_64' do
       it 'returns x86_64' do
