@@ -2,6 +2,8 @@
 GITPOD_WORKSPACE_IMAGE="${GITPOD_WORKSPACE_IMAGE:-gitpod-image}"
 
 cd ./support/gitpod || exit 1
+cp ../../.tool-versions .
+
 echo "Building ${GITPOD_WORKSPACE_IMAGE}"
 DOCKER_BUILDKIT=1 docker build --progress=plain --tag "${GITPOD_WORKSPACE_IMAGE}" .
 
