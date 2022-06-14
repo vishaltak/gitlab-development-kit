@@ -187,7 +187,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-update
 diff-config: touch-examples
 	$(Q)gdk $@
 
-support-setup: Procfile redis gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
+support-setup: Procfile gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 
 .PHONY: start
 start:

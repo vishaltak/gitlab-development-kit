@@ -9,6 +9,7 @@ CONFIGS = FileList[
   'nginx/conf/nginx.conf',
   'gitlab/config/gitlab.yml',
   'prometheus/prometheus.yml',
+  'redis/redis.conf',
   'clickhouse/config.xml',
   'clickhouse/users.xml',
   'clickhouse/config.d/data-paths.xml',
