@@ -12,8 +12,7 @@ pages:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 deploy-gitpod-workspace-image:
-  extends:
-    - .docker:build-docker-in-docker
+  image: docker:20.10.16
   stage: deploy
   needs:
     - build-gitpod-workspace-image
