@@ -4,7 +4,7 @@ GITPOD_WORKSPACE_IMAGE="${GITPOD_WORKSPACE_IMAGE:-gitpod-image}"
 
 cd ./support/gitpod || exit 1
 echo "Building ${GITPOD_WORKSPACE_IMAGE}"
-DOCKER_BUILDKIT=1 docker build --progress=plain --tag "${GITPOD_WORKSPACE_IMAGE}" .
+DOCKER_BUILDKIT=1 docker build --progress=plain --build-arg git_checkout_branch="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" --tag "${GITPOD_WORKSPACE_IMAGE}" .
 
 if [ "$CI" = "true" ]; then
   docker push "${GITPOD_WORKSPACE_IMAGE}"
