@@ -50,8 +50,10 @@ postgres 12.10 13.6
 # redis:
 #   6.0.16:
 #     - .tool-versions-gdk
+#   6.2.7:
+#     - .tool-versions-gdk
 #
-redis 6.0.16
+redis 6.0.16 6.2.7
 
 # ruby:
 #   2.7.5:
