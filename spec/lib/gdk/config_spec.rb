@@ -39,14 +39,6 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe '#__architecture' do
-    it 'delegates to GDK::Machine.architecture' do
-      expect(GDK::Machine).to receive(:architecture).and_call_original
-
-      config.__architecture
-    end
-  end
-
   describe '__platform' do
     it 'delegates to GDK::Machine.platform' do
       expect(GDK::Machine).to receive(:platform).and_call_original

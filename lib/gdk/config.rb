@@ -9,7 +9,6 @@ module GDK
     GDK_ROOT = Pathname.new(__dir__).parent.parent
     FILE = File.join(GDK_ROOT, 'gdk.yml')
 
-    string(:__architecture) { GDK::Machine.architecture }
     string(:__platform) { GDK::Machine.platform }
 
     path(:__brew_prefix_path) do
