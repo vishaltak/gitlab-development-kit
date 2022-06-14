@@ -25,4 +25,4 @@ nodejs 16.14.0
 yarn 1.22.17
 minio 2021-04-06T23-11-00Z
 postgres 12.10 13.6
-redis 6.0.16
+redis 6.2.7 6.0.16

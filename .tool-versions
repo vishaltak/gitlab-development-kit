@@ -48,10 +48,12 @@ nodejs 16.14.0 16.15.0
 postgres 12.10 13.6
 
 # redis:
+#   6.2.7:
+#     - .tool-versions-gdk
 #   6.0.16:
 #     - .tool-versions-gdk
 #
-redis 6.0.16
+redis 6.2.7 6.0.16
 
 # ruby:
 #   2.7.5:
