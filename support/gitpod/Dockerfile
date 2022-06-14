@@ -2,8 +2,13 @@ FROM jdkato/vale AS vale-source
 
 FROM gitpod/workspace-base
 
+WORKDIR /workspace/gitlab-development-kit
+
 # Install vale (scripts/lint-doc.sh dependency)
 COPY --from=vale-source /bin/vale /usr/bin/vale
+
+# Install asdf manifest for `asdf which pg_config` to work in configure_ruby_bundler() function
+COPY .tool-versions /workspace/gitlab-development-kit
 
 # Install gdk and dependencies
 COPY bootstrap-gitpod-image.sh /
