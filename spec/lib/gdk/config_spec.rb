@@ -39,104 +39,29 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe '__architecture' do
-    it 'returns x86_64' do
-      allow(RbConfig::CONFIG).to receive(:[]).with('target_cpu').and_return('x86_64')
+  describe '#__architecture' do
+    it 'delegates to GDK::Machine.architecture' do
+      expect(GDK::Machine).to receive(:architecture).and_call_original
 
-      expect(config.__architecture).to eq('x86_64')
+      config.__architecture
     end
   end
 
   describe '__platform' do
-    let(:host_os) { nil }
+    it 'delegates to GDK::Machine.platform' do
+      expect(GDK::Machine).to receive(:platform).and_call_original
 
-    before do
-      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
-    end
-
-    context 'when macOS' do
-      let(:host_os) { 'Darwin' }
-
-      it 'returns darwin' do
-        expect(config.__platform).to eq('darwin')
-      end
-    end
-
-    context 'when Linux' do
-      let(:host_os) { 'Linux' }
-
-      it 'returns linux' do
-        expect(config.__platform).to eq('linux')
-      end
-    end
-
-    context 'when neither macOS of Linux' do
-      let(:host_os) { 'NotSure' }
-
-      it 'returns unknown' do
-        expect(config.__platform).to eq('unknown')
-      end
-    end
-  end
-
-  describe '__platform_linux' do
-    before do
-      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
-      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
-    end
-
-    context 'on a macOS system' do
-      let(:host_os) { 'darwin' }
-
-      it 'returns false' do
-        expect(config.__platform_linux).to be(false)
-        expect(config.__platform_linux?).to be(false)
-      end
-    end
-
-    context 'on a Linux system' do
-      let(:host_os) { 'linux' }
-
-      it 'returns true' do
-        expect(config.__platform_linux).to be(true)
-        expect(config.__platform_linux?).to be(true)
-      end
-    end
-  end
-
-  describe '__platform_darwin' do
-    before do
-      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
-      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
-    end
-
-    context 'on a Linux system' do
-      let(:host_os) { 'linux' }
-
-      it 'returns false' do
-        expect(config.__platform_darwin).to be(false)
-        expect(config.__platform_darwin?).to be(false)
-      end
-    end
-
-    context 'on a macOS system' do
-      let(:host_os) { 'darwin' }
-
-      it 'returns true' do
-        expect(config.__platform_darwin).to be(true)
-        expect(config.__platform_darwin?).to be(true)
-      end
+      config.__platform
     end
   end
 
   describe '__brew_prefix_path' do
     before do
-      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
-      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+      allow(GDK::Machine).to receive(:platform).and_return(fake_platform)
     end
 
     context 'on a Linux system' do
-      let(:host_os) { 'linux' }
+      let(:fake_platform) { 'linux' }
 
       it 'returns an empty string' do
         expect(config.__brew_prefix_path.to_s).to eq('')
@@ -144,7 +69,7 @@ RSpec.describe GDK::Config do
     end
 
     context 'on a macOS system' do
-      let(:host_os) { 'darwin' }
+      let(:fake_platform) { 'darwin' }
 
       it 'returns the brew prefix string' do
         allow(File).to receive(:exist?).and_call_original
@@ -157,20 +82,21 @@ RSpec.describe GDK::Config do
 
   describe '__openssl_bin_path' do
     before do
-      allow(RbConfig::CONFIG).to receive(:[]).and_call_original
-      allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+      allow(GDK::Machine).to receive(:platform).and_return(fake_platform)
     end
 
     context 'on a Linux system' do
-      let(:host_os) { 'linux' }
+      let(:fake_platform) { 'linux' }
 
       it 'returns the location of the pathed openssl as a string' do
+        allow(MakeMakefile).to receive(:find_executable).and_return('/usr/bin/openssl')
+
         expect(config.__openssl_bin_path.to_s).to eq('/usr/bin/openssl')
       end
     end
 
     context 'on a macOS system' do
-      let(:host_os) { 'darwin' }
+      let(:fake_platform) { 'darwin' }
 
       it 'returns the location of the openssl@1.1 bin as a string' do
         allow(File).to receive(:exist?).and_call_original
@@ -279,7 +205,7 @@ RSpec.describe GDK::Config do
 
     describe '#__architecture' do
       before do
-        allow(config).to receive(:__architecture).and_return(fake_arch)
+        allow(GDK::Machine).to receive(:architecture).and_return(fake_arch)
       end
 
       context 'when __architecture is x86_64' do
@@ -1021,12 +947,11 @@ RSpec.describe GDK::Config do
             'network_mode_host' => 'true'
           }
 
-          allow(RbConfig::CONFIG).to receive(:[]).and_call_original
-          allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+          allow(GDK::Machine).to receive(:platform).and_return(fake_platform)
         end
 
         context 'on a macOS system' do
-          let(:host_os) { 'darwin' }
+          let(:fake_platform) { 'darwin' }
 
           it 'raise an exception' do
             expect { config.runner.__network_mode_host }.to raise_error('runner.network_mode_host is only supported on Linux')
@@ -1034,7 +959,7 @@ RSpec.describe GDK::Config do
         end
 
         context 'on a Linux system' do
-          let(:host_os) { 'linux' }
+          let(:fake_platform) { 'linux' }
 
           it 'returns true' do
             expect(config.runner.__network_mode_host).to be(true)
@@ -2615,12 +2540,11 @@ RSpec.describe GDK::Config do
   describe 'packages' do
     describe '__dpkg_deb_path' do
       before do
-        allow(RbConfig::CONFIG).to receive(:[]).and_call_original
-        allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
+        allow(GDK::Machine).to receive(:platform).and_return(fake_platform)
       end
 
       context 'on a macOS system' do
-        let(:host_os) { 'darwin' }
+        let(:fake_platform) { 'darwin' }
 
         it 'returns /usr/local/bin/dpkg-deb' do
           expect(config.packages.__dpkg_deb_path.to_s).to eq('/usr/local/bin/dpkg-deb')
@@ -2628,7 +2552,7 @@ RSpec.describe GDK::Config do
       end
 
       context 'on a Linux system' do
-        let(:host_os) { 'linux' }
+        let(:fake_platform) { 'linux' }
 
         it 'returns /usr/bin/dpkg-deb' do
           expect(config.packages.__dpkg_deb_path.to_s).to eq('/usr/bin/dpkg-deb')

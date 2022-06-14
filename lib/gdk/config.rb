@@ -9,24 +9,11 @@ module GDK
     GDK_ROOT = Pathname.new(__dir__).parent.parent
     FILE = File.join(GDK_ROOT, 'gdk.yml')
 
-    string(:__architecture) { RbConfig::CONFIG['target_cpu'] }
-    string(:__platform) do
-      case RbConfig::CONFIG['host_os']
-      when /darwin/i
-        'darwin'
-      when /linux/i
-        'linux'
-      else
-        'unknown'
-      end
-    end
-
-    bool(:__platform_linux) { config.__platform == 'linux' }
-    bool(:__platform_darwin) { config.__platform == 'darwin' }
-    bool(:__platform_supported) { config.__platform != 'unknown' }
+    string(:__architecture) { GDK::Machine.architecture }
+    string(:__platform) { GDK::Machine.platform }
 
     path(:__brew_prefix_path) do
-      if config.__platform_darwin?
+      if GDK::Machine.macos?
         if File.exist?('/opt/homebrew/bin/brew')
           '/opt/homebrew'
         elsif File.exist?('/usr/local/bin/brew')
@@ -485,7 +472,7 @@ module GDK
     settings :elasticsearch do
       bool(:enabled) { false }
       string(:version) { '8.2.0' }
-      string(:__architecture) { config.__architecture == 'arm64' ? 'aarch64' : config.__architecture }
+      string(:__architecture) { GDK::Machine.architecture == 'arm64' ? 'aarch64' : GDK::Machine.architecture }
     end
 
     settings :tracer do
@@ -700,7 +687,7 @@ module GDK
       path(:bin) { find_executable!('gitlab-runner') || '/usr/local/bin/gitlab-runner' }
       bool(:network_mode_host) { false }
       bool(:__network_mode_host) do
-        raise UnsupportedConfiguration, 'runner.network_mode_host is only supported on Linux' if config.runner.network_mode_host && !config.__platform_linux?
+        raise UnsupportedConfiguration, 'runner.network_mode_host is only supported on Linux' if config.runner.network_mode_host && !GDK::Machine.linux?
 
         config.runner.network_mode_host
       end
@@ -864,7 +851,7 @@ module GDK
 
     settings :packages do
       path(:__dpkg_deb_path) do
-        if config.__platform_darwin?
+        if GDK::Machine.macos?
           '/usr/local/bin/dpkg-deb'
         else
           '/usr/bin/dpkg-deb'

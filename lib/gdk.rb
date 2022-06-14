@@ -40,6 +40,7 @@ module GDK
   autoload :Hooks, 'gdk/hooks'
   autoload :HTTPHelper, 'gdk/http_helper'
   autoload :Logo, 'gdk/logo'
+  autoload :Machine, 'gdk/machine'
   autoload :Output, 'gdk/output'
   autoload :OutputBuffered, 'gdk/output_buffered'
   autoload :Postgresql, 'gdk/postgresql'

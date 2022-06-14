@@ -49,7 +49,7 @@ module GDK
       end
 
       def open_command
-        @open_command ||= config.__platform_linux? ? 'xdg-open' : 'open'
+        @open_command ||= GDK::Machine.linux? ? 'xdg-open' : 'open'
       end
     end
   end
