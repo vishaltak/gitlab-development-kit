@@ -126,18 +126,6 @@ Check if you have `gawk` installed >= 5.0.0 and uninstall it.
 
 Re-run the `gdk install` again and follow any on-screen instructions related to installing `gpgme`.
 
-## undefined symbol: SSLv2_method
-
-This happens if your local OpenSSL library is updated and your Ruby binary is
-built against an older version.
-
-If you are using `rvm`, you should reinstall the Ruby binary. The following
-command fetches Ruby 2.3 and installs it from source:
-
-```shell
-rvm reinstall --disable-binary 2.3
-```
-
 ## `gem install gpgme` `2.0.x` fails to compile native extension on macOS Mojave
 
 If building `gpgme` gem fails with an `Undefined symbols for architecture x86_64` error on macOS Mojave, build `gpgme` using system libraries instead.
