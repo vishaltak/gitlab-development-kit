@@ -26,18 +26,39 @@ After installing PostgreSQL with brew, you have to set the proper path to Postgr
 You may run into the following errors on running `gdk install`
 
 ```plaintext
-Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+ERROR:  Error installing pg:
+        ERROR: Failed to build gem native extension.
 
-    current directory: /Users/gdk/.rvm/gems/ruby-2.3.3/gems/pg-0.18.4/ext
-/Users/gdk/.rvm/rubies/ruby-2.3.3/bin/ruby -r ./siteconf20180330-95521-1k5x76v.rb extconf.rb
+    current directory: /usr/local/bundle/gems/pg-1.3.5/ext
+/usr/local/bin/ruby -I /usr/local/lib/ruby/2.7.0 -r ./siteconf20220614-29-ofphd.rb extconf.rb
+Calling libpq with GVL unlocked
 checking for pg_config... no
-No pg_config... trying anyway. If building fails, please try again with
- --with-pg-config=/path/to/pg_config
+checking for libpq per pkg-config... no
+Using libpq from 
+checking for libpq-fe.h... no
+Can't find the 'libpq-fe.h header
+*****************************************************************************
 
- ...
+Unable to find PostgreSQL client library.
 
-An error occurred while installing pg (0.18.4), and Bundler cannot continue.
-Make sure that `gem install pg -v '0.18.4'` succeeds before bundling.
+Please install libpq or postgresql client package like so:
+  sudo apt install libpq-dev
+  sudo yum install postgresql-devel
+  sudo zypper in postgresql-devel
+  sudo pacman -S postgresql-libs
+
+or try again with:
+  gem install pg -- --with-pg-config=/path/to/pg_config
+
+or set library paths manually with:
+  gem install pg -- --with-pg-include=/path/to/libpq-fe.h/ --with-pg-lib=/path/to/libpq.so/
+
+*** extconf.rb failed ***
+
+  [...]
+
+An error occurred while installing pg (1.3.5), and Bundler cannot continue.
+Make sure that `gem install pg -v '1.3.5' --source 'https://rubygems.org/'` succeeds before bundling.
 ```
 
 This is because the script fails to find the PostgreSQL instance in the path.
