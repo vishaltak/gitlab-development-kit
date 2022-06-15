@@ -117,11 +117,11 @@ mv postgresql/data postgresql/data.bkp
 # Initialize a new data folder
 make postgresql/data
 
-# Initialize the gitlabhq_development database
+# Initialize the gitlabhq_development / gitlabhq_development_ci database
 gdk reconfigure
 
 # Start your database.
-gdk start db
+gdk start postgresql
 ```
 
 You may remove the `data.bkp` folder if your database is working well.
@@ -137,15 +137,15 @@ cd gitlab-development-kit
 cat postgresql/data/PG_VERSION
 ```
 
-If the content of the `PG_VERSION` file is `10`, your data folder is compatible
-with PostgreSQL 10.
+If the content of the `PG_VERSION` file is `12`, your data folder is compatible
+with PostgreSQL 12.
 
 Downgrade your PostgreSQL to the compatible version. For example, to downgrade to
-PostgreSQL 10 on macOS using Homebrew:
+PostgreSQL 12 on macOS using Homebrew:
 
 ```shell
-brew install postgresql@10
-brew link --force postgresql@10
+brew install postgresql@12
+brew link --force postgresql@12
 ```
 
 You also need to update your `Procfile` to use the downgraded PostgreSQL binaries:
