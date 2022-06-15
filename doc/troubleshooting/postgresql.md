@@ -42,12 +42,12 @@ Make sure that `gem install pg -v '0.18.4'` succeeds before bundling.
 
 This is because the script fails to find the PostgreSQL instance in the path.
 The instructions for this may show up after installing PostgreSQL.
-The example below is from running `brew install postgresql@11` on a macOS installation.
+The example below is from running `brew install postgresql@12` on a macOS installation.
 For other versions, other platform install and other shell terminal please adjust the path accordingly.
 
 ```plaintext
 If you need to have this software first in your PATH run:
-  echo 'export PATH="/usr/local/opt/postgresql@11/bin:$PATH"' >> ~/.bash_profile
+  echo 'export PATH="/usr/local/opt/postgresql@12/bin:$PATH"' >> ~/.bash_profile
 ```
 
 Once this is set, run the `gdk install` command again.
@@ -81,7 +81,7 @@ by PostgreSQL.
 To resolve this, reinstall PostgreSQL with:
 
 ```shell
-brew reinstall postgresql@11
+brew reinstall postgresql@12
 ```
 
 ## ActiveRecord::PendingMigrationError at /
