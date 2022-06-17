@@ -308,7 +308,7 @@ setup_platform_linux_with() {
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo apt-get install -y $(sed -e 's/#.*//' "${1}"); then
+  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $(sed -e 's/#.*//' "${1}"); then
     return 1
   fi
 
