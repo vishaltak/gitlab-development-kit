@@ -27,8 +27,7 @@ module GDK
 
         check_git_installed
         check_graphicsmagick_installed
-        # TODO: Re-enable once exiftool installs cleanly - https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1519
-        # check_exiftool_installed
+        check_exiftool_installed
         check_minio_installed
         check_runit_installed
       end
@@ -117,7 +116,10 @@ module GDK
       end
 
       def check_exiftool_installed
-        @error_messages << missing_dependency('Exiftool') unless system("exiftool -ver >/dev/null 2>&1")
+        return if system("exiftool -ver >/dev/null 2>&1")
+
+        msg = "You may need to run 'brew reinstall exiftool'." if config.__platform_darwin?
+        @error_messages << missing_dependency('Exiftool', more_detail: msg)
       end
 
       def check_minio_installed
@@ -134,10 +136,12 @@ module GDK
         "ERROR: #{dependency} version #{actual} detected, please install #{dependency} version #{expected} or higher."
       end
 
-      def missing_dependency(dependency, minimum_version: nil)
-        message = "ERROR: #{dependency} is not installed or not available in your PATH"
-        message += ". #{minimum_version} or higher is required" unless minimum_version.nil?
-        "#{message}."
+      def missing_dependency(dependency, minimum_version: nil, more_detail: nil)
+        message = "ERROR: #{dependency} is not installed or not available in your PATH."
+        message += " #{minimum_version} or higher is required." unless minimum_version.nil?
+        message += " #{more_detail}" unless more_detail.nil?
+
+        message
       end
 
       private
