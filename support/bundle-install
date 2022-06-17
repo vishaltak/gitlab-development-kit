@@ -19,7 +19,7 @@ needed_bundler_version() {
 }
 
 bundle_install() {
-  bundle check > /dev/null 2>&1 || bundle install --jobs 4
+  bundle check > /dev/null 2>&1 || bundle install --jobs "$(nproc)"
 }
 
 GDK_QUIET="${GDK_QUIET:-false}"

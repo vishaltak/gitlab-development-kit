@@ -47,6 +47,8 @@ module GDK
       end
     end
 
+    integer(:restrict_cpu_count) { Etc.nprocessors }
+
     settings :common do
       string(:ca_path) { '' }
     end

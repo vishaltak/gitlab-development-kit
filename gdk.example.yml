@@ -315,6 +315,7 @@ repositories:
   omnibus_gitlab: https://gitlab.com/gitlab-org/omnibus-gitlab.git
 repositories_root: "/home/git/gdk/repositories"
 repository_storages: "/home/git/gdk/repository_storages"
+restrict_cpu_count: -1
 runner:
   bin: "/usr/local/bin/gitlab-runner"
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
