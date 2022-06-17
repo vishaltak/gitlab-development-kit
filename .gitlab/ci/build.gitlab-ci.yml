@@ -1,15 +1,21 @@
+.build-job:
+  stage: build
+  extends:
+    - .docker:build-docker-in-docker
+  tags:
+    - gitlab-org
+    - high-cpu
+
 release-image:
   extends:
     - .rules:code-changes
-    - .docker:build-docker-in-docker
-  stage: build
+    - .build-job
   script:
     - ./support/docker ci-build-if-necessary
 
 build-gitpod-workspace-image:
   extends:
-    - .docker:build-docker-in-docker
-  stage: build
+    - .build-job
   script:
     - ./support/gitpod/docker-build
   rules:
