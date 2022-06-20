@@ -16,7 +16,3 @@ group :test do
   gem 'rspec_junit_formatter', '~> 0.5.0', require: false
   gem 'simplecov-cobertura', '~> 2.1.0', require: false
 end
-
-group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 3.1.0', require: false
-end
