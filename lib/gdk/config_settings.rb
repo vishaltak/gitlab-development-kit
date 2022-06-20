@@ -13,6 +13,7 @@ module GDK
 
     SettingUndefined = Class.new(StandardError)
     UnsupportedConfiguration = Class.new(StandardError)
+    LooseFile = Class.new(StandardError)
 
     attr_reader :parent, :yaml, :key
 
@@ -118,16 +119,9 @@ module GDK
     end
 
     def read!(filename)
-      sanitized_read!(filename)
-    rescue Errno::ENOENT
-      nil
-    end
+      return unless File.exist?(filename)
 
-    def read_or_write!(filename, value)
-      sanitized_read!(filename)
-    rescue Errno::ENOENT
-      File.write(GDK.root.join(filename), value)
-      value
+      raise LooseFile, "Loose file '#{filename}' is no longer supported."
     end
 
     def user_defined?
@@ -258,10 +252,6 @@ module GDK
 
     def from_yaml(slug, default: nil)
       yaml.has_slug?(slug) ? yaml[slug] : default
-    end
-
-    def sanitized_read!(filename)
-      File.read(GDK.root.join(filename)).chomp
     end
   end
 end

@@ -367,29 +367,29 @@ See [configuring NGINX](howto/nginx.md) for a comprehensive guide.
 Before `gdk.yml` was introduced, GDK could be configured through a
 bunch of loose files, where each file sets one setting.
 
-It is still possible to use these loose files, but it's deprecated and
-is scheduled to be removed in the future. A migration path is planned.
+It is no longer possible to have these, and GDK will fail when it detects a
+loose file. To continue using GDK, you'll have to move these settings to
+`gdk.yml`. Below is a table of all the loose files and their corresponding
+setting.
 
-Below is a table of all the settings that can be set this way:
-
-| Filename                     | Type         | Default                                                                              |
-|------------------------------|--------------|--------------------------------------------------------------------------------------|
-| `host` / `hostname`          | string or IP | `127.0.0.1`                                                                          |
-| `port`                       | number       | `3000`                                                                               |
-| `https_enabled`              | boolean      | `false`                                                                              |
-| `relative_url_root`          | string       | `/`                                                                                  |
-| `webpack_host`               | string or IP | `127.0.0.1`                                                                          |
-| `webpack_port`               | number       | `3808`                                                                               |
-| `registry_enabled`           | boolean      | `false`                                                                              |
-| `registry_port`              | number       | `5000`                                                                               |
-| `registry_image`             | string       | `registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.49.0-gitlab`  |
-| `object_store_enabled`       | boolean      | `false`                                                                              |
-| `object_store_port`          | number       | `9000`                                                                               |
-| `postgresql_port`            | number       | `5432`                                                                               |
-| `postgresql_geo_port`        | number       | `5432`                                                                               |
-| `gitlab_pages_port`          | number       | `3010`                                                                               |
-| `google_oauth_client_secret` | ?            | ?                                                                                    |
-| `google_oauth_client_id`     | ?            | ?                                                                                    |
+| Filename                     | YAML setting                           |
+|------------------------------|----------------------------------------|
+| `host` / `hostname`          | `hostname`                             |
+| `port`                       | `port`                                 |
+| `https_enabled`              | `https.enabled`                        |
+| `relative_url_root`          | `relative_url_root`                    |
+| `webpack_host`               | `webpack.host`                         |
+| `webpack_port`               | `webpack.port`                         |
+| `registry_enabled`           | `registry.enabled`                     |
+| `registry_port`              | `registry.port`                        |
+| `registry_image`             | `registry.image`                       |
+| `object_store_enabled`       | `object_store.enabled`                 |
+| `object_store_port`          | `object_store.port`                    |
+| `postgresql_port`            | `postgresql.port`                      |
+| `postgresql_geo_port`        | `postgresql.geo.port`                  |
+| `gitlab_pages_port`          | `gitlab_pages.port`                    |
+| `google_oauth_client_secret` | `omniauth.google_oauth2.client_secret` |
+| `google_oauth_client_id`     | `omniauth.google_oauth2.client_id`     |
 
 ### Configuration precedence
 
@@ -397,7 +397,6 @@ GDK uses the following order of precedence when selecting the
 configuration method to use:
 
 - `gdk.yml`
-- Loose file
 - Default value
 
 ### Reading the configuration
