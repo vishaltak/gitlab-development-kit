@@ -100,6 +100,7 @@ Here are a few settings worth mentioning:
 | `registry.enabled`               | `false`               | Set this to `true` to enable container registry.                                           |
 | `geo.enabled`                    | `false`               | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
 | `gitlab.rails.puma.workers`      | `2`                   | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
+| `restrict_cpu_count`             | `-1` (not restricted) | Set the number of CPUs used when calling `bundle`. Defaults to using the number of CPUs available. |
 
 For example, to change the port GDK is accessible on, you can set this in your `gdk.yml`:
 
