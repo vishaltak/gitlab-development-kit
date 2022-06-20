@@ -4,8 +4,8 @@ module GDK
   module Command
     # Handles `gdk reconfigure` command execution
     class Reconfigure < BaseCommand
-      def run(args = [])
-        result = GDK.make('reconfigure')
+      def run(_ = [])
+        result = GDK.make(%w[touch-examples gitlab-runner-config.toml])
 
         unless result
           GDK::Output.error('Failed to reconfigure.')

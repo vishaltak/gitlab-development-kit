@@ -1,0 +1,49 @@
+---
+asdf:
+  opt_out: false
+elasticsearch:
+  enabled: false
+gdk:
+  auto_rebase_projects: true
+  protected_config_files:
+  - gitlab/config/gitlab.yml
+  update_hooks:
+    after:
+    - cd gitlab ; git checkout db/structure.sql
+  use_bash_shim: true
+gitlab:
+  rails:
+    address: gdk.test:3001
+    puma:
+      threads_max: 2
+      threads_min: 3
+      workers: 3
+    sherlock: false
+gitlab_docs:
+  enabled: false
+gitlab_pages:
+  enabled: false
+gitlab_spamcheck:
+  enabled: false
+gitlab_ui:
+  enabled: false
+grafana:
+  enabled: false
+hostname: gdk.test
+nginx:
+  enabled: false
+object_store:
+  enabled: false
+port: 3000
+prometheus:
+  enabled: false
+sshd:
+  enabled: true
+tracer:
+  jaeger:
+    enabled: false
+webpack:
+  live_reload: false
+  sourcemaps: false
+  static: true
+  vendor_dll: true

@@ -59,8 +59,8 @@ module GDK
       diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..]
       return unless diff
 
-      GDK::Output.puts
-      GDK::Output.info("'#{target}' has incoming changes:")
+      GDK::Output.eputs
+      GDK::Output.info("'#{target}' has incoming changes:", stderr: true)
 
       diff_output = <<~DIFF_OUTPUT
         -------------------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ module GDK
         -------------------------------------------------------------------------------------------------------------
       DIFF_OUTPUT
 
-      GDK::Output.puts(diff_output, stderr: true)
+      GDK::Output.eputs(diff_output)
     end
 
     def target_protected?
@@ -85,7 +85,7 @@ module GDK
 
     def warn_overwritten!
       GDK::Output.warn "'#{target}' has been overwritten. To recover the previous version, run:"
-      GDK::Output.puts <<~OVERWRITTEN
+      GDK::Output.eputs <<~OVERWRITTEN
 
         #{backup.recover_cmd_string}
         If you want to protect this file from being overwritten, see:

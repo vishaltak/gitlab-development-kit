@@ -69,6 +69,10 @@ module GDK
         stderr ? stderr_handle.puts(message) : stdout_handle.puts(message)
       end
 
+      def eputs(message = nil)
+        puts(message, stderr: true)
+      end
+
       def divider(symbol: '-', length: 80, stderr: false)
         puts(symbol * length, stderr: stderr)
       end
@@ -81,8 +85,8 @@ module GDK
         "=> #{message}"
       end
 
-      def info(message)
-        puts(icon(:info) + message)
+      def info(message, stderr: false)
+        puts(icon(:info) + message, stderr: stderr)
       end
 
       def warn(message)

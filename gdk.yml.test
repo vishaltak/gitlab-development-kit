@@ -1,0 +1,16 @@
+---
+gdk:
+  protected_config_files:
+    - gitlab-runner-config.toml
+hostname: gdk.test
+relative_url_root: ""
+port: 3002
+webpack:
+  host: gdk.test
+  port: 3810
+runner:
+  enabled: true
+  token: "some token"
+  extra_hosts: ["gdk.test:172.16.123.1"]
+gitlab:
+  cache_classes: false
