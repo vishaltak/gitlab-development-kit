@@ -70,7 +70,7 @@ gitlab/public/uploads:
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
-	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler
+	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler_for_gitlab
 	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_clone_dir)
 	$(Q)touch $@
 

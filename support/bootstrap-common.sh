@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 CDPATH=''
-root_path="$(cd "$(dirname "$0")/.." || exit ; pwd -P)"
+ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit ; pwd -P)"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
@@ -28,7 +28,7 @@ if [[ ${BASH_VERSION%%.*} -gt 3 ]]; then
                                    ['fedora']='Fedora RHEL' )
 fi
 
-GDK_CACHE_DIR="${root_path}/.cache"
+GDK_CACHE_DIR="${ROOT_PATH}/.cache"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
 GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
@@ -94,7 +94,7 @@ asdf_check_rvm_rbenv() {
 }
 
 gdk_install_gdk_clt() {
-  if [[ "$("${root_path}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
+  if [[ "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
     echo "INFO: Installing gdk shim.."
     gdk_install_shim
   else
@@ -121,28 +121,34 @@ update_rubygems_gem() {
   gem update --system
 }
 
-configure_ruby_bundler() {
+configure_ruby() {
   update_rubygems_gem
+}
 
-  if asdf_command_enabled "pg_config"; then
-    current_pg_config_location=$(asdf which pg_config)
-  else
-    current_pg_config_location=$(command -v pg_config)
-  fi
+configure_ruby_bundler_for_gitlab() {
+  (
+    cd "${ROOT_PATH}/gitlab" || return 0
 
-  bundle config build.pg "--with-pg-config=${current_pg_config_location}"
-  bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
-  bundle config build.gpgme --use-system-libraries
-
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
-    bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
-
-    clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
-
-    if [[ ${clang_version} -ge 13 ]]; then
-      bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
+    if asdf_command_enabled "pg_config"; then
+      current_pg_config_location=$(asdf which pg_config)
+    else
+      current_pg_config_location=$(command -v pg_config)
     fi
-  fi
+
+    bundle config build.pg "--with-pg-config=${current_pg_config_location}"
+    bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
+    bundle config build.gpgme --use-system-libraries
+
+    if [[ "${OSTYPE}" == "darwin"* ]]; then
+      bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
+
+      clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
+
+      if [[ ${clang_version} -ge 13 ]]; then
+        bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
+      fi
+    fi
+  )
 }
 
 ensure_sudo_available() {

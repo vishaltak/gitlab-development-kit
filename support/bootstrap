@@ -123,9 +123,9 @@ if ! gdk_prepare_directory; then
   error "Failed to prepare GDK directory." >&2
 fi
 
-echo "INFO: Configuring Ruby Bundler.."
-if ! configure_ruby_bundler; then
-  error "Failed to configure Ruby Bundler." >&2
+echo "INFO: Configure Ruby.."
+if ! configure_ruby; then
+  error "Failed to configure Ruby." >&2
 fi
 
 gdk_mark_bootstrapped
