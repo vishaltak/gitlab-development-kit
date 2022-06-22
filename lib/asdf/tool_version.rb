@@ -6,6 +6,8 @@ module Asdf
   class ToolVersion
     UninstallFailedError = Class.new(StandardError)
 
+    attr_reader :name, :version
+
     def initialize(name, version)
       @name = name
       @version = version
@@ -17,9 +19,5 @@ module Asdf
 
       true
     end
-
-    private
-
-    attr_reader :name, :version
   end
 end

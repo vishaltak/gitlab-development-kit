@@ -12,6 +12,25 @@ RSpec.describe Asdf::ToolVersions do
 
   subject { described_class.new }
 
+  describe '#default_tool_version_for' do
+    context 'postgres' do
+      it 'returns instance of Asdf::ToolVersion' do
+        tool_version = subject.default_tool_version_for('postgres')
+
+        expect(tool_version).to be_instance_of(Asdf::ToolVersion)
+        expect(tool_version.version).to eq('12.10')
+      end
+    end
+  end
+
+  describe '#default_version_for' do
+    context 'postgres' do
+      it 'returns 12.10' do
+        expect(subject.default_version_for('postgres')).to eq('12.10')
+      end
+    end
+  end
+
   describe '#unnecessary_software_to_uninstall?' do
     before do
       stub_env_lookups
@@ -241,7 +260,7 @@ RSpec.describe Asdf::ToolVersions do
     allow(Asdf::ToolVersion).to receive(:new).and_call_original
 
     wanted_software_lines = ['# line to be ignored', "#{software_name} #{wanted_version}"]
-    allow(subject).to receive(:tool_versions_lines).and_return(wanted_software_lines)
+    allow(subject).to receive(:raw_tool_versions_lines).and_return(wanted_software_lines)
     allow(Asdf::ToolVersion).to receive(:new).with(software_name, wanted_version).and_return(wanted_tool_version)
 
     software_install_dirs = [Pathname.new("/tmp/.asdf_fake/installs/#{software_name}/#{installed_version}")]

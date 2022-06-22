@@ -36,9 +36,16 @@ RSpec.configure do |config|
 
     unless example.metadata[:gdk_root]
       # isolate configs for the testing environment
-      allow(GDK).to receive(:root) { Pathname.new(temp_path) }
       stub_const('GDK::Config::GDK_ROOT', '/home/git/gdk')
       stub_const('GDK::Config::FILE', 'gdk.example.yml')
+
+      gdk_root_tmp_path = temp_path
+
+      real_tool_versions_file = Pathname.new('.tool-versions').expand_path
+      allow(gdk_root_tmp_path).to receive(:join).and_call_original
+      allow(gdk_root_tmp_path).to receive(:join).with('.tool-versions').and_return(real_tool_versions_file)
+
+      allow(GDK).to receive(:root).and_return(gdk_root_tmp_path)
     end
   end
 

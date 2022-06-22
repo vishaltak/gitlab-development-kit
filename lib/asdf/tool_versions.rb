@@ -4,6 +4,14 @@ require 'pathname'
 
 module Asdf
   class ToolVersions
+    def default_tool_version_for(tool)
+      tool_versions[tool].default_tool_version
+    end
+
+    def default_version_for(tool)
+      default_tool_version_for(tool).version
+    end
+
     def unnecessary_software_to_uninstall?
       work_to_do?(output: false)
     end
@@ -108,21 +116,21 @@ module Asdf
       GDK::Output.prompt('Are you sure? [y/N]').match?(/\Ay(?:es)*\z/i)
     end
 
-    def tool_versions_lines
+    def raw_tool_versions_lines
       GDK.root.join('.tool-versions').readlines
     end
 
-    def wanted_software
-      tool_versions_lines.each_with_object({}) do |line, all|
-        match = line.chomp.match(/\A(?<name>\w+) (?<versions>[\d. ]+)\z/)
-        next unless match
-
-        match[:versions].split(' ').each do |version|
-          name = match[:name]
-          all[name] ||= {}
-          all[name][version] = ToolVersion.new(name, version)
+    def tool_versions
+      @tool_versions ||= begin
+        raw_tool_versions_lines.each_with_object({}) do |line, all|
+          match = line.chomp.match(/\A(?<name>\w+) (?<versions>[\d. ]+)\z/)
+          all[match[:name]] = Tool.new(match[:name], match[:versions].split(' ')) if match
         end
       end
+    end
+
+    def wanted_software
+      tool_versions.transform_values(&:tool_versions)
     end
 
     def asdf_data_dir
