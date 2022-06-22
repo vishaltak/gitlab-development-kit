@@ -14,7 +14,7 @@ Installation requires [Git](https://git-scm.com/downloads), `make`, `curl`, and 
 ### Debian, Ubuntu, and derivatives based on Ubuntu
 
 NOTE:
-The GDK installation depends on OpenSSL 1.1.1. Ubuntu 22.04 and Fedora 36 and some other Linux distributions only provide OpenSSL 3.x. If your Linux distribution does not have OpenSSL 1.1.1 in its repositories, you must [manually compile and insatll OpenSSL](troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
+The GDK installation depends on OpenSSL 1.1.1. Ubuntu 22.04 and Fedora 36 and some other Linux distributions only provide OpenSSL 3.x. If your Linux distribution does not have OpenSSL 1.1.1 in its repositories, you must [manually compile and install OpenSSL](troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
 
   1. Update the list of available packages:
 

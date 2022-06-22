@@ -319,7 +319,7 @@ the status of GitLab FIPS compliance.
       sudo ./package/install
       ```
 
-   1. Install asdf: https://asdf-vm.com/guide/getting-started.html
+   1. Install [asdf](https://asdf-vm.com/guide/getting-started.html).
 
    1. Add the Ruby plugin for asdf: 
    
