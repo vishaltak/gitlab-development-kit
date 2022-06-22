@@ -8,6 +8,18 @@ RSpec.describe Asdf::ToolVersion do
 
   subject { described_class.new(name, version) }
 
+  describe '#name' do
+    it 'returns golang' do
+      expect(subject.name).to eq(name)
+    end
+  end
+
+  describe '#version' do
+    it 'returns 1.17.2' do
+      expect(subject.version).to eq(version)
+    end
+  end
+
   describe '#uninstall!' do
     let(:success) { nil }
     let(:shellout_double) { instance_double(Shellout, success?: success) }

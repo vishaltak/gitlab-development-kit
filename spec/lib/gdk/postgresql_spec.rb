@@ -12,10 +12,10 @@ RSpec.describe GDK::Postgresql do
     stub_gdk_yaml(yaml)
   end
 
-  describe '::TARGET_VERSION' do
+  describe '.target_version' do
     it 'is 12.10 by default' do
-      expect(described_class::TARGET_VERSION).to be_instance_of(Gem::Version)
-      expect(described_class::TARGET_VERSION).to eq(Gem::Version.new('12.10'))
+      expect(described_class.target_version).to be_instance_of(Gem::Version)
+      expect(described_class.target_version).to eq(Gem::Version.new('12.10'))
     end
   end
 
