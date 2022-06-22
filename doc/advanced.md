@@ -286,12 +286,90 @@ enabled, GitLab is not FIPS-compliant and doesn't run correctly with it
 enabled. [Epic &5104](https://gitlab.com/groups/gitlab-org/-/epics/5104) tracks
 the status of GitLab FIPS compliance.
 
-### OpenSUSE
+### openSUSE Tumbleweed with asdf
 
-NOTE:
-These instructions don't account for using `asdf` for managing some dependencies.
+   1. Update the repositories:
 
-This was tested on `openSUSE Tumbleweed (20200628)`.
+      ```shell
+      sudo zypper update
+      ```
+
+   1. Install the prerequisite packages:
+
+      ```shell
+      sudo zypper in git curl make gcc-c++ openssl libopenssl-1_1-devel yarn nodejs17-devel GraphicsMagick exiftool postgresql postgresql-server postgresql-contrib krb5-devel sqlite3-devel re2-devel cmake libicu-devel postgresql-server-devel libqgpgme-devel dirmnger gawk libcurl-devel
+      ```
+   
+   1. Install the current version of GoLang:
+
+      ```shell
+      sudo zypper install go1.19
+      ```
+   
+   1. Build and install `runit`:
+
+      ```shell
+      cd /tmp
+      wget http://smarden.org/runit/runit-2.1.2.tar.gz
+      tar xzf runit-2.1.2.tar.gz
+      cd admin/runit-2.1.2
+      sed -i -E 's/ -static$//g' src/Makefile
+      ./package/compile
+      ./package/check
+      sudo ./package/install
+      ```
+
+   1. Install asdf: https://asdf-vm.com/guide/getting-started.html
+
+   1. Add the Ruby plugin for asdf: 
+   
+      ````shell
+      asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
+      ```
+
+   1. Edit your `~/.bashrc` file and add the following environment variable:
+   
+      ```shell
+      export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/bin/openssl/"
+      ```
+
+   1. Reload your updated `~/.bashrc`:
+   
+      ```shell
+      source ~./bashrc
+      ```
+
+   1. Use asdf to install Ruby 2.7.5: 
+   
+      ```shell
+      asdf install ruby 2.7.5`
+      ```
+   
+   1. Edit `~/.tool-versions` and add the Ruby version:
+
+      ```shell
+      ruby 2.7.5
+      ```
+
+   1. Use asdf to install Node.js 16.14.0:
+
+      ```shell
+      asdf install nodejs 16.14.0
+      ```
+
+   1. Configure the build options for gpgme:
+
+      ```shell
+      bundle config build.gpgme --use-system-libraries
+      ```
+
+   1. Follow the steps in [Manually install the dependencies](index.md#manually-install-the-dependencies) to install the GDK dependencies.
+   
+   1. Follow the steps in [Install GDK](index.md#install-gdk) to install the GDK.
+
+### openSUSE Tumbleweed without asdf
+
+This was tested on `openSUSE Tumbleweed (20200628)` and the steps may no longer be applicable to newer versions of openSUSE Tumbleweed.
 
 NOTE:
 OpenSUSE LEAP is currently not supported, because since a8e2f74d PostgreSQL 11+

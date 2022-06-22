@@ -5,13 +5,16 @@ and related projects.
 
 ## Install prerequisites
 
-Installation requires [Git](https://git-scm.com/downloads) and `make` are installed.
+Installation requires [Git](https://git-scm.com/downloads), `make`, `curl`, and OpenSSL1.1.1.
 
 ### macOS
 
 `git` and `make` are installed by default.
 
-### Ubuntu/Debian
+### Debian, Ubuntu, and derivatives based on Ubuntu
+
+NOTE:
+The GDK installation depends on OpenSSL 1.1.1. Ubuntu 22.04 and Fedora 36 and some other Linux distributions only provide OpenSSL 3.x. If your Linux distribution does not have OpenSSL 1.1.1 in its repositories, you must [manually compile and insatll OpenSSL](troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
 
   1. Update the list of available packages:
 
@@ -19,9 +22,9 @@ Installation requires [Git](https://git-scm.com/downloads) and `make` are instal
      sudo apt update
      ```
 
-  1. Add an `apt` repository for the latest version of Git.
+  1. Add a repository for the latest version of Git.
 
-     - For Ubuntu, install `add-apt-repository` and add a PPA repository:
+     - For Ubuntu, install `software-properties-common` and add the git-core PPA repository:
 
        ```shell
        sudo apt install software-properties-common
@@ -31,25 +34,28 @@ Installation requires [Git](https://git-scm.com/downloads) and `make` are instal
      - For Debian, add a [backport repository](https://backports.debian.org/Instructions/) for your
        Debian version.
 
-  1. Install Git and Make:
+  1. Install Git, make, and curl:
 
      ```shell
-     sudo apt install git make
+     sudo apt install git make curl
      ```
 
 ### Arch and Manjaro Linux
 
-Update the list of available packages and install Git and Make:
+Update the list of available packages and install Git and make:
 
 ```shell
 sudo pacman -Syu git make
 ```
 
-### Other
+### Other Linux distributions
 
-Install using your system's package manager.
+Install the prerequisites using your distribution's package manager.
 
 ## One-line installation
+
+NOTE:
+Only supported on Ubuntu, Debian, Arch, and Fedora.
 
 The one-line installation:
 
@@ -75,7 +81,7 @@ After prerequisites are installed, you can install GDK dependencies and GDK itse
 
 Before [installing GDK](#install-gdk), your local environment must have third-party software
 installed and configured. These can be installed and managed automatically
-[using `asdf`](#automatically-using-asdf) or [manually](#manually).
+[using `asdf`](#automatically-using-asdf) or [manually](#manually-install-the-dependencies).
 
 If you've previously [managed your own dependencies](advanced.md), you can
 [migrate to `asdf`](migrate_to_asdf.md) to allow GDK to manage dependencies for you.
@@ -107,16 +113,16 @@ Installing and managing dependencies automatically lets GDK manage dependencies 
    [`legacy_version_file`](https://asdf-vm.com/manage/configuration.html#legacy-version-file) in `.asdfrc` to load the
    Ruby version from a different configuration file like `.ruby-version`.
 
-#### Manually
+#### Manually install the dependencies
 
-Use your operating system's package manager to install and managed dependencies.
+Use your operating system's package manager to install and manage the prerequisites.
 [Advanced instructions](advanced.md) are available to help. These include instructions for macOS,
 Ubuntu, and Debian (and other Linux distributions), FreeBSD, and Windows 10. You should
 regularly update these. Generally, the latest versions of these dependencies work fine. Install,
 configure, and update all of these dependencies as a non-root user. If you don't know what a root
 user is, you very likely run everything as a non-root user already.
 
-After installing GDK dependencies:
+After installing the GDK dependencies:
 
 1. Install the `gitlab-development-kit` gem:
 
@@ -218,5 +224,5 @@ After you have set up GDK initially, you can create new *fresh installations*. Y
 you have problems with existing installation that are complicated to fix. You can get up and running
 quickly again by:
 
-1. In the parent folder for GDK, run [`git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git`](#manually).
+1. In the parent folder for GDK, run [`git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git`](#manually-install-the-dependencies).
 1. In the new directory, run [`gdk install`](#install-gdk).
