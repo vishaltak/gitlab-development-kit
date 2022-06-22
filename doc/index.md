@@ -24,7 +24,7 @@ The GDK installation depends on OpenSSL 1.1.1. Ubuntu 22.04 and Fedora 36 and so
 
   1. Add a repository for the latest version of Git.
 
-     - For Ubuntu, install `software-properties-common` and add the git-core PPA repository:
+     - For Ubuntu, install `software-properties-common` and add the `git-core/ppa` repository:
 
        ```shell
        sudo apt install software-properties-common
