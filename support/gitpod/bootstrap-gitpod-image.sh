@@ -7,6 +7,13 @@ sudo apt-get update
 sudo add-apt-repository ppa:git-core/ppa -y
 sudo apt-get install -y make git
 
+# Install Chrome (required for running tests)
+wget -P /tmp/ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt -y install /tmp/google-chrome-stable_current_amd64.deb
+wget -P /tmp/ https://chromedriver.storage.googleapis.com/102.0.5005.61/chromedriver_linux64.zip
+unzip /tmp/chromedriver_linux64.zip
+sudo mv /tmp/chromedriver /usr/bin
+
 # Install GitLab Runner
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
 export GITLAB_RUNNER_DISABLE_SKEL=true
