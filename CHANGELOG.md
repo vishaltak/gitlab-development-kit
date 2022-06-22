@@ -4,6 +4,9 @@ This Changelog tracks major changes to the GitLab Development Kit,
 such as dependency updates (those not handled by Bundler) and new
 features.
 
+## 2022-06-22
+- PostgreSQL now defaults to PostgreSQL 13.6 from 12.10 !2574
+
 ## 2021-03-19
 
 - Replace GDK master refs with main !1885
