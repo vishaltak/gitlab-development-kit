@@ -46,7 +46,7 @@ module GDK
       end
 
       def backup_data
-        move_postgres_data && move_rails_uploads && move_git_repository_data
+        move_postgres_data && move_redis_dump_rdb && move_rails_uploads && move_git_repository_data
       end
 
       def current_timestamp
@@ -92,6 +92,10 @@ module GDK
 
       def move_postgres_data
         backup_path('PostgreSQL data', %w[postgresql data])
+      end
+
+      def move_redis_dump_rdb
+        backup_path('redis dump.rdb', %w[redis dump.rdb])
       end
 
       def move_rails_uploads
