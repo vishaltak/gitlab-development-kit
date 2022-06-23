@@ -1,3 +1,12 @@
 port 0
 unixsocket <%= config.redis.__socket_file %>
 dir <%= config.redis.dir %>
+<%- if config.redis.persistence? -%>
+appendonly yes
+save 900 1
+save 300 10
+save 60 10000
+<%- else -%>
+appendonly no
+save ""
+<%- end -%>
