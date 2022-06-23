@@ -288,10 +288,10 @@ the status of GitLab FIPS compliance.
 
 ### openSUSE Tumbleweed with asdf
 
-   1. Update the repositories:
+   1. Refresh the repositories:
 
       ```shell
-      sudo zypper update
+      sudo zypper refresh
       ```
 
    1. Install the prerequisite packages:
