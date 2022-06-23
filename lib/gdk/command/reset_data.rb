@@ -63,20 +63,20 @@ module GDK
         false
       end
 
-      def backup_directory(message, *directory)
-        backup_directory = gdk_backup_pathed_timestamped(*directory)
-        directory = gdk_root_pathed(*directory)
-        return true unless directory.exist?
+      def backup_path(message, *path)
+        path_to_backup = gdk_backup_pathed_timestamped(*path)
+        path = gdk_root_pathed(*path)
+        return true unless path.exist?
 
-        GDK::Output.notice("Moving #{message} from '#{directory.basename}/' to '#{backup_directory}/'")
+        GDK::Output.notice("Moving #{message} from '#{path}' to '#{path_to_backup}/'")
 
-        # Ensure the base directory exists
-        FileUtils.mkdir_p(backup_directory.dirname)
-        File.rename(directory, backup_directory)
+        # Ensure the base path exists
+        FileUtils.mkdir_p(path_to_backup.dirname)
+        File.rename(path, path_to_backup)
 
         true
       rescue SystemCallError => e
-        GDK::Output.error("Failed to rename directory '#{directory.basename}/' to '#{backup_directory}/' - #{e}")
+        GDK::Output.error("Failed to rename path '#{path}' to '#{path_to_backup}/' - #{e}")
         false
       end
 
@@ -91,17 +91,17 @@ module GDK
       end
 
       def move_postgres_data
-        backup_directory('PostgreSQL data', %w[postgresql data])
+        backup_path('PostgreSQL data', %w[postgresql data])
       end
 
       def move_rails_uploads
-        backup_directory('Rails uploads', %w[gitlab public uploads])
+        backup_path('Rails uploads', %w[gitlab public uploads])
       end
 
       def move_git_repository_data
-        backup_directory('git repository data', 'repositories') &&
+        backup_path('git repository data', 'repositories') &&
           restore_repository_data_dir &&
-          backup_directory('more git repository data', 'repository_storages')
+          backup_path('more git repository data', 'repository_storages')
       end
 
       def restore_repository_data_dir

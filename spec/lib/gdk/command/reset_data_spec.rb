@@ -59,7 +59,7 @@ RSpec.describe GDK::Command::ResetData do
           stub_postgres_data_move
           allow(File).to receive(:rename).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
 
-          expect(GDK::Output).to receive(:error).with("Failed to rename directory '#{postgresql_data_directory.basename}/' to '#{backup_postgresql_data_directory}/' - No such file or directory")
+          expect(GDK::Output).to receive(:error).with("Failed to rename path '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/' - No such file or directory")
           expect(GDK::Output).to receive(:error).with('Failed to backup data.')
           expect(subject).to receive(:display_help_message)
           expect(GDK).not_to receive(:make)
@@ -100,10 +100,10 @@ RSpec.describe GDK::Command::ResetData do
 
             expect(GDK).to receive(:make).with('ensure-databases-running', 'reconfigure').and_return(true)
 
-            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory.basename}/' to '#{backup_postgresql_data_directory}/'")
-            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory.basename}/' to '#{backup_rails_uploads_directory}/'")
-            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repositories_data_directory.basename}/' to '#{backup_git_repositories_data_directory}/'")
-            expect(GDK::Output).to receive(:notice).with("Moving more git repository data from '#{git_repository_storages_data_directory.basename}/' to '#{backup_git_repository_storages_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory}' to '#{backup_rails_uploads_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repositories_data_directory}' to '#{backup_git_repositories_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving more git repository data from '#{git_repository_storages_data_directory}' to '#{backup_git_repository_storages_data_directory}/'")
             expect(GDK::Output).to receive(:notice).with('Successfully reset data!')
             expect_any_instance_of(GDK::Command::Start).to receive(:run)
 
