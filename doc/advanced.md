@@ -342,7 +342,7 @@ the status of GitLab FIPS compliance.
    1. Use asdf to install Ruby 2.7.5: 
    
       ```shell
-      asdf install ruby 2.7.5`
+      asdf install ruby 2.7.5
       ```
    
    1. Edit `~/.tool-versions` and add the Ruby version:
