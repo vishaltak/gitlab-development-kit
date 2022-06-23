@@ -45,6 +45,8 @@ RSpec.describe GDK::Command::ResetData do
     let!(:current_timestamp) { now.strftime('%Y-%m-%d_%H.%M.%S') }
     let!(:postgresql_data_directory) { root.join('postgresql', 'data') }
     let!(:backup_postgresql_data_directory) { backup_base_dir.join('postgresql', "data.#{current_timestamp}") }
+    let!(:redis_dump_rdb_path) { root.join('redis', 'dump.rdb') }
+    let!(:backup_redis_dump_rdb_path) { backup_base_dir.join('redis', "dump.rdb.#{current_timestamp}") }
 
     before do
       allow(GDK).to receive(:remember!)
@@ -59,7 +61,7 @@ RSpec.describe GDK::Command::ResetData do
           stub_postgres_data_move
           allow(File).to receive(:rename).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
 
-          expect(GDK::Output).to receive(:error).with("Failed to rename directory '#{postgresql_data_directory.basename}/' to '#{backup_postgresql_data_directory}/' - No such file or directory")
+          expect(GDK::Output).to receive(:error).with("Failed to rename path '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/' - No such file or directory")
           expect(GDK::Output).to receive(:error).with('Failed to backup data.')
           expect(subject).to receive(:display_help_message)
           expect(GDK).not_to receive(:make)
@@ -100,10 +102,11 @@ RSpec.describe GDK::Command::ResetData do
 
             expect(GDK).to receive(:make).with('ensure-databases-running', 'reconfigure').and_return(true)
 
-            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory.basename}/' to '#{backup_postgresql_data_directory}/'")
-            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory.basename}/' to '#{backup_rails_uploads_directory}/'")
-            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repositories_data_directory.basename}/' to '#{backup_git_repositories_data_directory}/'")
-            expect(GDK::Output).to receive(:notice).with("Moving more git repository data from '#{git_repository_storages_data_directory.basename}/' to '#{backup_git_repository_storages_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving redis dump.rdb from '#{redis_dump_rdb_path}' to '#{backup_redis_dump_rdb_path}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving Rails uploads from '#{rails_uploads_directory}' to '#{backup_rails_uploads_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving git repository data from '#{git_repositories_data_directory}' to '#{backup_git_repositories_data_directory}/'")
+            expect(GDK::Output).to receive(:notice).with("Moving more git repository data from '#{git_repository_storages_data_directory}' to '#{backup_git_repository_storages_data_directory}/'")
             expect(GDK::Output).to receive(:notice).with('Successfully reset data!')
             expect_any_instance_of(GDK::Command::Start).to receive(:run)
 
@@ -126,6 +129,9 @@ RSpec.describe GDK::Command::ResetData do
       stub_postgres_data_move
       expect_rename_success(postgresql_data_directory, backup_postgresql_data_directory)
 
+      stub_redis_dump_rdb_move
+      expect_rename_success(redis_dump_rdb_path, backup_redis_dump_rdb_path)
+
       stub_rails_uploads_move
       expect_rename_success(rails_uploads_directory, backup_rails_uploads_directory)
 
@@ -142,6 +148,14 @@ RSpec.describe GDK::Command::ResetData do
 
       allow(postgresql_data_directory).to receive(:exist?).and_return(true)
       allow_make_backup_base_dir(backup_postgresql_data_directory)
+    end
+
+    def stub_redis_dump_rdb_move
+      allow(root).to receive(:join).with('.backups', 'redis', "dump.rdb.#{current_timestamp}").and_return(backup_redis_dump_rdb_path)
+      allow(root).to receive(:join).with('redis', 'dump.rdb').and_return(redis_dump_rdb_path)
+
+      allow(redis_dump_rdb_path).to receive(:exist?).and_return(true)
+      allow_make_backup_base_dir(backup_redis_dump_rdb_path)
     end
 
     def stub_rails_uploads_move
