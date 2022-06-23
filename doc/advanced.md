@@ -297,7 +297,7 @@ the status of GitLab FIPS compliance.
    1. Install the prerequisite packages:
 
       ```shell
-      sudo zypper in git curl make gcc-c++ openssl libopenssl-1_1-devel yarn nodejs17-devel GraphicsMagick exiftool postgresql postgresql-server postgresql-contrib krb5-devel sqlite3-devel re2-devel cmake libicu-devel postgresql-server-devel libqgpgme-devel dirmnger gawk libcurl-devel
+      sudo zypper in git curl make gcc-c++ openssl libopenssl-1_1-devel yarn nodejs17-devel GraphicsMagick exiftool postgresql postgresql-server postgresql-contrib krb5-devel sqlite3-devel re2-devel cmake libicu-devel postgresql-server-devel libqgpgme-devel dirmngr gawk libcurl-devel
       ```
    
    1. Install the current version of GoLang:
