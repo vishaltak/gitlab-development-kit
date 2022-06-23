@@ -330,7 +330,7 @@ the status of GitLab FIPS compliance.
    1. Edit your `~/.bashrc` file and add the following environment variable:
    
       ```shell
-      export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/bin/openssl/"
+      export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/bin/openssl"
       ```
 
    1. Reload your updated `~/.bashrc`:
