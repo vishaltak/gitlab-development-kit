@@ -2798,6 +2798,12 @@ RSpec.describe GDK::Config do
   end
 
   describe 'redis' do
+    describe '#persistence?' do
+      it 'returns false by default' do
+        expect(config.redis.persistence?).to be(false)
+      end
+    end
+
     describe 'databases' do
       describe 'development' do
         describe 'rate_limiting' do

@@ -835,6 +835,7 @@ module GDK
 
     settings :redis do
       path(:dir) { config.gdk_root.join('redis') }
+      bool(:persistence) { false }
       path(:__socket_file) { dir.join('redis.socket') }
 
       settings(:databases) do

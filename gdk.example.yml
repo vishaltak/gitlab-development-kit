@@ -285,6 +285,7 @@ redis:
       shared_state: 10
       trace_chunks: 13
   dir: "/home/git/gdk/redis"
+  persistence: false
 registry:
   api_host: 127.0.0.1
   auth_enabled: true
