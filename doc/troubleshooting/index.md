@@ -21,6 +21,7 @@ by:
 GDK troubleshooting information is available for the following:
 
 - [Installing the GDK](#installing-the-gdk)
+- [asdf](asdf.md)
 - [Ruby](ruby.md)
 - [Node.js](node_js.md)
 - [PostgreSQL](postgresql.md)
