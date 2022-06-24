@@ -3,7 +3,7 @@
 module GDK
   class PostgresqlGeo < Postgresql
     def bin_dir
-      postgresql_config.bin_dir
+      postgresql_config.__bin_dir
     end
 
     private

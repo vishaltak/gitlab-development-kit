@@ -113,7 +113,7 @@ module GDK
     end
 
     def bin_dir
-      config.bin_dir
+      config.__bin_dir
     end
   end
 end

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Postgresql do
-  let(:yaml) { {} }
+  let(:yaml) { { 'postgresql' => { 'bin_dir' => '/opt/local/bin' } } }
   let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) } # rubocop:todo RSpec/VerifiedDoubles
   let(:pg_version_file) { '/home/git/gdk/postgresql/data/PG_VERSION' }
 
@@ -82,7 +82,7 @@ RSpec.describe GDK::Postgresql do
 
   describe '#db_exists?' do
     it 'calls psql with the correct arguments' do
-      expect(Shellout).to receive(:new).with(array_including('/usr/local/bin/psql', '--dbname=blaat'), any_args).and_return(shellout_mock)
+      expect(Shellout).to receive(:new).with(array_including('/opt/local/bin/psql', '--dbname=blaat'), any_args).and_return(shellout_mock)
 
       expect(subject.db_exists?('blaat')).to be_truthy
     end
@@ -90,7 +90,7 @@ RSpec.describe GDK::Postgresql do
 
   describe '#createdb' do
     it 'calls createdb' do
-      expect(Shellout).to receive(:new).with(array_including('/usr/local/bin/createdb', 'blaat'), any_args).and_return(shellout_mock)
+      expect(Shellout).to receive(:new).with(array_including('/opt/local/bin/createdb', 'blaat'), any_args).and_return(shellout_mock)
 
       subject.createdb('blaat')
     end
@@ -98,7 +98,7 @@ RSpec.describe GDK::Postgresql do
 
   describe '#in_recovery?' do
     it 'queries pg_is_in_recovery()' do
-      expect(Shellout).to receive(:new).with(array_including('/usr/local/bin/psql', '--command=SELECT pg_is_in_recovery();'), any_args).and_return(shellout_mock)
+      expect(Shellout).to receive(:new).with(array_including('/opt/local/bin/psql', '--command=SELECT pg_is_in_recovery();'), any_args).and_return(shellout_mock)
 
       subject.in_recovery?
     end

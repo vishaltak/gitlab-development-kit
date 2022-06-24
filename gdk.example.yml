@@ -253,6 +253,7 @@ postgresql:
   replica_data_dir: "/home/git/gdk/postgresql-replica/data"
   replica_dir: "/home/git/gdk/postgresql-replica"
   replication_user: gitlab_replication
+postgresql_bin: "/usr/local/bin/postgres"
 praefect:
   address: "/home/git/gdk/praefect.socket"
   config_file: "/home/git/gdk/gitaly/praefect.config.toml"

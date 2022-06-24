@@ -521,10 +521,32 @@ module GDK
       end
     end
 
+    path(:postgresql_bin) do
+      if config.asdf.__available?
+        config.asdf.__installs_dir.join('postgres', config.postgresql.active_version, 'bin', 'postgres')
+      else
+        config.postgresql.bin_dir.join('postgres')
+      end
+    end
+
     settings :postgresql do
       integer(:port) { read!('postgresql_port') || 5432 }
-      path(:bin_dir) { cmd!(%w[support/pg_bindir]) || '/usr/local/bin' }
-      path(:bin) { config.postgresql.bin_dir.join('postgres') }
+      path(:bin_dir) { '/usr/local/bin' } # kept for backwards compatibility
+      path(:bin) { config.postgresql.bin_dir.join('postgres') } # kept for backwards compatibility
+      path(:__bin_dir) do
+        if config.postgresql.bin_dir.to_s != '/usr/local/bin'
+          config.postgresql.bin_dir
+        else
+          config.postgresql.__bin.dirname
+        end
+      end
+      path(:__bin) do
+        if config.postgresql.bin.to_s != '/usr/local/bin/postgres'
+          config.postgresql.bin
+        else
+          config.postgresql_bin
+        end
+      end
       string(:replication_user) { 'gitlab_replication' }
       path(:dir) { config.gdk_root.join('postgresql') }
       path(:data_dir) { config.postgresql.dir.join('data') }
@@ -847,6 +869,14 @@ module GDK
     end
 
     settings :asdf do
+      bool(:__available?) { !config.asdf.opt_out? && (ENV.keys & %w[ASDF_DATA_DIR ASDF_DIR]).any? }
+      anything(:__installs_dir) do
+        if config.asdf.__available?
+          Pathname.new(ENV['ASDF_DATA_DIR'] || ENV['ASDF_DIR']).join('installs')
+        else
+          ''
+        end
+      end
       bool(:opt_out) { false }
     end
 
