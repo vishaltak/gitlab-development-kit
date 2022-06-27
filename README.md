@@ -71,7 +71,7 @@ supported installation methods:
 - GitLab team members can use the `#gdk` channel on the GitLab Slack workspace.
 - Review the [troubleshooting information](doc/troubleshooting).
 - Wider community members can use the [Gitter contributors room](https://gitter.im/gitlab/contributors)
-  or [GitLab Forum](https://forum.gitlab.com/c/community/community-contributions/15).
+  or [GitLab Forum](https://forum.gitlab.com/c/community/39).
 
 ## Contributing to GitLab Development Kit
 
