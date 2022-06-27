@@ -4,21 +4,52 @@
 # or on workspace start (when no prebuild is available)
 # https://www.gitpod.io/docs/config-start-tasks/
 
-set -eo pipefail
+set -e
 
 source "$HOME/gitpod-common"
 
+if [[ -d /workspace ]]; then
+  echo "INFO: A /workspace directory already exists in the current working directory, continuing.."
+else
+  sudo mkdir -p /workspace
+  sudo chown gitpod /workspace
+fi
+
+if [[ -d /workspace/gitlab ]]; then
+  echo "INFO: A /workspace/gitlab directory already exists in the current working directory, continuing.."
+else
+  log "Cloning Gitlab"
+  git clone --depth 1 https://gitlab.com/gitlab-org/gitlab.git /workspace/gitlab
+fi
+
+# Set GITPOD_REPO_ROOT
+if [ -n "$GITPOD_REPO_ROOT" ]; then
+  echo "INFO: GITPOD_REPO_ROOT is already defined, continuing.."
+else
+  echo "GITPOR_REPO_ROOT is not defined. Setting default value.."
+  export GITPOD_REPO_ROOT="/workspace/gitlab"
+fi
+
+log "Copying GDK"
+cp -r "$HOME/gitlab-development-kit" /workspace
 cd /workspace/gitlab-development-kit
 
-# reconfigure GDK
+# Ensure GitLab directory is symlinked under the GDK
+ln -nfs "$GITPOD_REPO_ROOT" /workspace/gitlab-development-kit/gitlab
+mv /workspace/gitlab-development-kit/secrets.yml /workspace/gitlab-development-kit/gitlab/config
+
+# Ensure gdk.yml has correct instance settings
+set_config
+
+# Reconfigure GDK
 log "Reconfiguring GDK"
 gdk reconfigure
 
-# run DB migrations
+# Run DB migrations
 log "Running DB migrations"
 make gitlab-db-migrate
 
-# stopping GitLab
+# Stop GDK
 log "Stopping GDK"
 gdk stop
 log "GDK stopped"
