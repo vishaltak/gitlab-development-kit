@@ -5,7 +5,11 @@ require 'spec_helper'
 describe GDK::Services do
   describe 'ALL' do
     it 'contains Service classes' do
-      service_classes = %i[Clickhouse Redis]
+      service_classes = %i[
+        Clickhouse
+        Minio
+        Redis
+      ]
 
       expect(described_class::ALL).to eq(service_classes)
     end
