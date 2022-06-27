@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DOCKER_IMAGE=registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main
+
+# Running with specified script fails with `gdk: command not found`
+exec docker run -t -v "$PWD/support/gitpod/startup-scripts/:/home/gitpod/startup-scripts" \
+  $DOCKER_IMAGE \
+  bash -c "cp /home/gitpod/startup-scripts/* /home/gitpod/; ./docker-entrypoint;"
+
+# Running with interactive mode `-i` works
+# $ docker run -ti --rm -v "$PWD/support/gitpod/startup-scripts/:/home/gitpod/startup-scripts registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main"
+# $ cp /home/gitpod/startup-scripts/* /home/gitpod/
+# $ ./docker-entrypoint

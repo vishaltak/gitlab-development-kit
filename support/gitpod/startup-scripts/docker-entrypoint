@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Temporarily override /startup-scripts added by docker image
+cp /home/gitpod/startup-scripts/* /home/gitpod/
+
+./gitpod-init
+./gitpod-command
