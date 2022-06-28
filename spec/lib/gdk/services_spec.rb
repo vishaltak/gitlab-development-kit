@@ -7,6 +7,7 @@ describe GDK::Services do
     it 'contains Service classes' do
       service_classes = %i[
         Clickhouse
+        GitLabWorkhorse
         Minio
         Redis
       ]
@@ -18,6 +19,7 @@ describe GDK::Services do
   describe '.enabled' do
     it 'contains enabled Service classes' do
       service_classes = [
+        GDK::Services::GitLabWorkhorse,
         GDK::Services::Redis
       ]
 
