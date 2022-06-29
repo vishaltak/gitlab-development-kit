@@ -552,6 +552,7 @@ module GDK
       path(:data_dir) { config.postgresql.dir.join('data') }
       string(:host) { config.postgresql.dir.to_s }
       string(:active_version) { GDK::Postgresql.target_version.to_s }
+      integer(:__active_version_major) { Gem::Version.new(config.postgresql.active_version).canonical_segments[0] }
       string(:__active_host) { GDK::Postgresql.new.use_tcp? ? config.postgresql.host : '' }
       path(:replica_dir) { config.gdk_root.join('postgresql-replica') }
       path(:replica_data_dir) { config.postgresql.replica_dir.join('data') }

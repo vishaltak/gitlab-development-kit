@@ -59,7 +59,7 @@ module GDK
     end
 
     def upgrade_needed?(target_version = self.class.target_version_major)
-      current_version < target_version.to_f
+      current_version.to_f < target_version.to_f
     end
 
     def db_exists?(dbname)

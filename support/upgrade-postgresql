@@ -13,8 +13,8 @@ class PostgresUpgrader
 
   def_delegators :postgresql, :current_data_dir, :current_version, :upgrade_needed?
 
-  def initialize(target_version = GDK::Postgresql.target_version_major)
-    @target_version = target_version
+  def initialize(active_version_major)
+    @active_version_major = active_version_major
 
     check!
   end
@@ -22,15 +22,17 @@ class PostgresUpgrader
   def check!
     GDK::Output.info "Available PostgreSQL versions: #{available_versions}"
 
-    GDK::Output.abort "Unable to find target PostgreSQL version #{target_version}" unless available_versions.include?(target_version)
+    GDK::Output.abort "Unable to find target PostgreSQL version #{active_version_major}" unless available_versions.include?(active_version_major)
     GDK::Output.abort "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
   end
 
   def upgrade!
-    unless upgrade_needed?(target_version)
-      GDK::Output.success "'#{current_data_dir}' is already compatible with PostgreSQL #{target_version}."
+    unless upgrade_needed?(active_version_major)
+      GDK::Output.success "'#{current_data_dir}' is already compatible with PostgreSQL #{active_version_major}."
       return
     end
+
+    GDK::Output.info "Upgrading '#{current_data_dir}' from PostgreSQL #{current_version} to #{active_version_major}."
 
     gdk_stop
     init_db_in_target_path
@@ -39,7 +41,7 @@ class PostgresUpgrader
     promote_new_db
     gdk_reconfigure
 
-    GDK::Output.success "Upgraded '#{current_data_dir}' from PostgreSQL #{current_version} to #{target_version}."
+    GDK::Output.success "Upgraded '#{current_data_dir}' from PostgreSQL #{current_version} to #{active_version_major}."
   rescue StandardError => e
     GDK::Output.error "An error occurred: #{e}"
     GDK::Output.warn "Rolling back.."
@@ -48,7 +50,7 @@ class PostgresUpgrader
 
   private
 
-  attr_reader :target_version
+  attr_reader :active_version_major
 
   def postgresql
     @postgresql ||= GDK::Postgresql.new
@@ -59,7 +61,7 @@ class PostgresUpgrader
   end
 
   def target_path
-    @target_path ||= File.join(current_data_dir + ".#{target_version}.#{Time.now.to_i}")
+    @target_path ||= File.join(current_data_dir + ".#{active_version_major}.#{Time.now.to_i}")
   end
 
   def gdk_stop
@@ -67,8 +69,8 @@ class PostgresUpgrader
   end
 
   def init_db_in_target_path
-    cmd = "#{initdb_bin(target_version)} --locale=C -E utf-8 #{target_path}"
-    GDK::Output.info "Initializing '#{target_path}' for PostgreSQL #{target_version}.."
+    cmd = "#{initdb_bin(active_version_major)} --locale=C -E utf-8 #{target_path}"
+    GDK::Output.info "Initializing '#{target_path}' for PostgreSQL #{active_version_major}.."
     run_in_tmp!(cmd)
   end
 
@@ -85,13 +87,13 @@ class PostgresUpgrader
   end
 
   def pg_upgrade
-    cmd = "#{pg_upgrade_bin(target_version)} \
+    cmd = "#{pg_upgrade_bin(active_version_major)} \
       --old-bindir #{bin_path(current_version)} \
-      --new-bindir #{bin_path(target_version)} \
+      --new-bindir #{bin_path(active_version_major)} \
       --old-datadir #{renamed_current_data_dir} \
       --new-datadir #{target_path}"
 
-    GDK::Output.info "Upgrading '#{renamed_current_data_dir}' (PostgreSQL #{current_version}) to '#{target_path}' PostgreSQL #{target_version}.."
+    GDK::Output.info "Upgrading '#{renamed_current_data_dir}' (PostgreSQL #{current_version}) to '#{target_path}' PostgreSQL #{active_version_major}.."
     run_in_tmp!(cmd)
   end
 
@@ -216,5 +218,4 @@ class PostgresUpgrader
   end
 end
 
-upgrader = PostgresUpgrader.new
-upgrader.upgrade!
+PostgresUpgrader.new(GDK.config.postgresql.__active_version_major).upgrade!
