@@ -22,7 +22,7 @@ Start by kicking off the normal GDK processes via `gdk start`. Then open a new
 terminal session and run:
 
 ```shell
-gdk stop rails-web && gdk rails s
+gdk stop rails-web && gdk rails s -e GITLAB_RAILS_RACK_TIMEOUT_ENABLE=false
 ```
 
 This starts a Puma server in the foreground instead of the background. Once the

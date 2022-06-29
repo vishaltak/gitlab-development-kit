@@ -5,7 +5,7 @@ module GDK
     # Handles `gdk thin` command execution
     class Thin < BaseCommand
       def run(args = [])
-        GDK::Output.puts "gdk thin is deprecated. Use 'gdk rails s' instead."
+        GDK::Output.puts "gdk thin is deprecated. Use 'gdk rails s -e GITLAB_RAILS_RACK_TIMEOUT_ENABLE=false' instead."
 
         false
       end
