@@ -320,6 +320,12 @@ class GeoSecondaryAdder
   def gitlab_geo_checks
     run_command_arr(primary_gitlab, %w[bin/rake gitlab:geo:check])
     run_command_arr(secondary_gitlab, %w[bin/rake gitlab:geo:check])
+
+    $stdout.puts "The `geo-install` and `geo-add-secondary` scripts do not configure SSH at the moment."
+    $stdout.puts "So the following failures during `rake gitlab:geo:check` can be ignored if Git over SSH is not needed:\n"
+    $stdout.puts "Git user has default SSH configuration? ... no"
+    $stdout.puts "OpenSSH configured to use AuthorizedKeysCommand ... no"
+    $stdout.puts "GitLab configured to disable writing to authorized_keys file ... no"
   end
 end
 
