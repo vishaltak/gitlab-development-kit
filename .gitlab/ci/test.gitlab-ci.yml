@@ -46,10 +46,15 @@ rspec:
       coverage_report:
         coverage_format: cobertura
         path: coverage/coverage.xml
+
 code_quality:
   tags:
     # See https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/7019 for tag descriptions
     - gitlab-org-docker
+  # See https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1517
+  before_script:
+    - rm -f package.json
+    - echo "Removing package.json only in this CI job to work around a limitation of Code Quality 0.85.26"
   rules: !reference ['.rules:code-changes', rules]
 
 container_scanning:
