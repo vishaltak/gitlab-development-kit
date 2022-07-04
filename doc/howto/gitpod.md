@@ -108,6 +108,44 @@ advanced features.
 
 ### Enable runners
 
+You can add a runner with a Docker executor or a shell executor. You can also add multiple runners with different executors.
+
+#### Option 1: Docker executor
+
+1. To create a Docker runner, run the commands in [Use Docker volumes to start the Runner container](https://docs.gitlab.com/runner/install/docker.html#option-2-use-docker-volumes-to-start-the-runner-container) in Gitpod. The commands are also listed here:
+
+   ```shell
+   docker volume create gitlab-runner-config
+
+   docker run -d --name gitlab-runner --restart always \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v gitlab-runner-config:/etc/gitlab-runner \
+     gitlab/gitlab-runner:latest
+   ```
+
+1. Register the runner by running the interactive command mentioned in the [Docker section](https://docs.gitlab.com/runner/register/index.html#docker) under "For Docker volume mounts",
+   and enter the appropriate values when asked.
+
+   - For the GitLab instance URL, use `http://10.0.5.2:3000/`, which is the IP of the ceth0 interface in Gitpod.
+   - For the default image, you can enter `alpine:latest`.
+
+   Or use this non-interactive command to register your runner with all the required values pre-filled:
+
+   ```shell
+   cd /workspace/gitlab-development-kit/gitlab
+
+   docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest register \
+     --non-interactive \
+     --url "http://10.0.5.2:3000/" \
+     --registration-token "$(bundle exec rails runner 'puts Gitlab::CurrentSettings.current_application_settings.runners_registration_token')" \
+     --executor "docker" \
+     --docker-image alpine:latest \
+     --description "docker-runner" \
+     --run-untagged="true"
+   ```
+
+#### Option 2: Shell executor
+
 1. On the top bar, select **Menu > Admin** in the GitLab UI running in GDK.
 1. On the left sidebar, select **Overview > Runners**.
 1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the
