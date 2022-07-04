@@ -5,7 +5,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/gitlab-org/gitlab-development-kit.git"
+    "url": "https://gitlab.com/gitlab-org/gitlab-development-kit.git"
   },
   "author": "GDK Team <gitlab_rubygems@gitlab.com>",
   "bugs": {
