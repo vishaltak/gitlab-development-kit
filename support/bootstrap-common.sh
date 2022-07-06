@@ -136,7 +136,6 @@ configure_ruby_bundler_for_gitlab() {
     fi
 
     bundle config build.pg "--with-pg-config=${current_pg_config_location}"
-    bundle config build.thin --with-cflags="-Wno-error=implicit-function-declaration"
     bundle config build.gpgme --use-system-libraries
 
     if [[ "${OSTYPE}" == "darwin"* ]]; then

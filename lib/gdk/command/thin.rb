@@ -5,38 +5,11 @@ module GDK
     # Handles `gdk thin` command execution
     class Thin < BaseCommand
       def run(args = [])
-        stop_rails_web!
+        GDK::Output.puts 'This command is deprecated. Use the following command instead:'
+        GDK::Output.puts
+        GDK::Output.puts '    gdk rails s -e GITLAB_RAILS_RACK_TIMEOUT_ENABLE=false'
 
-        start_thin!
-      end
-
-      private
-
-      def stop_rails_web!
-        # We cannot use Runit.sv because that calls Kernel#exec. Use system instead.
-        system('gdk', 'stop', 'rails-web')
-      end
-
-      def start_thin!
-        env_vars = { 'RAILS_ENV' => 'development' }
-        env_vars['GDK_GEO_SECONDARY'] = '1' if config.geo? && config.geo.secondary?
-        exec(
-          env_vars,
-          *thin_command,
-          chdir: GDK.root.join('gitlab')
-        )
-      end
-
-      def thin_command
-        args =
-          if config.gitlab.rails.__listen_settings.__protocol == 'unix'
-            %W[--socket #{config.gitlab.rails.__socket_file}]
-          else
-            url = URI(config.gitlab.rails.__bind)
-            %W[--address #{url.host} --port #{url.port}]
-          end
-
-        %w[bundle exec thin] + args + %w[start]
+        false
       end
     end
   end

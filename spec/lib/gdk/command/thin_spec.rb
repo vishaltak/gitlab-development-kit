@@ -3,52 +3,13 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Command::Thin do
-  it 'stops rails-web before starting thin server' do
-    expect(subject).to receive(:stop_rails_web!)
-    expect(subject).to receive(:start_thin!)
+  let(:args) { [] }
 
-    subject.run
-  end
+  it 'displays deprecation warning and returns false' do
+    msg = 'This command is deprecated. Use the following command instead:'
 
-  context 'when thin is configured to use sockets' do
-    before do
-      allow(subject).to receive(:stop_rails_web!)
-      yaml = {
-        'gitlab' => {
-          'rails' => {
-            'socket' => '/home/git/gdk/gitaly.socket'
-          }
-        }
-      }
-      stub_gdk_yaml(yaml)
-    end
-
-    it 'starts thin with socket params' do
-      expect(subject.send(:thin_command)).to eq(%w[bundle exec thin --socket /home/git/gdk/gitlab.socket start])
-      expect(subject).to receive(:exec)
-
-      subject.run
-    end
-  end
-
-  context 'when thin is configured to use TCP address and port' do
-    before do
-      allow(subject).to receive(:stop_rails_web!)
-      yaml = {
-        'gitlab' => {
-          'rails' => {
-            'address' => 'myhost:1234'
-          }
-        }
-      }
-      stub_gdk_yaml(yaml)
-    end
-
-    it 'starts thin with address and port params' do
-      expect(subject.send(:thin_command)).to eq(%w[bundle exec thin --address myhost --port 1234 start])
-      expect(subject).to receive(:exec)
-
-      subject.run
-    end
+    allow(GDK::Output).to receive(:puts)
+    expect(GDK::Output).to receive(:puts).with(msg)
+    expect(subject.run(args)).to be(false)
   end
 end
