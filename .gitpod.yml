@@ -11,16 +11,19 @@ tasks:
   - init: |
       echo "$(date) – Copying GDK" | tee -a /workspace/startup.log
       cp -r $HOME/gitlab-development-kit /workspace/
+      git clean -df
+      git checkout nao-hashizume-test-gitpod-commands
       (
         set -e
-        ./gitpod-init
+        ./support/gitpod/startup-scripts/gitpod-init
       )
     command: |
       (
         gp sync-await gitpod-start
         set -e
         gp sync-done gdk-copied
-        ./gitpod-command
+        git checkout nao-hashizume-test-gitpod-commands
+        ./support/gitpod/startup-scripts/gitpod-command
       )
 
 ports:
