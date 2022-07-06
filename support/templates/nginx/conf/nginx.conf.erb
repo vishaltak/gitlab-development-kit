@@ -93,13 +93,7 @@ http {
 <%- if config.webpack.live_reload? -%>
 
     location /_hmr/ {
-    <%- if config.https? -%>
-      proxy_pass https://<%= config.webpack.host %>:<%= config.webpack.port %>/ws;
-      proxy_ssl_certificate <%= config.gdk_root.join(config.nginx.ssl.certificate) %>;
-      proxy_ssl_certificate_key <%= config.gdk_root.join(config.nginx.ssl.key) %>;
-    <%- else -%>
       proxy_pass http://<%= config.webpack.host %>:<%= config.webpack.port %>/ws;
-    <%- end -%>
     }
 
 <%- end -%>
