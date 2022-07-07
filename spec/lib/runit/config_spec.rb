@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'tempfile'
 
 RSpec.describe Runit::Config do
   let(:tmp_root) { File.expand_path('../../../tmp', __dir__) }
