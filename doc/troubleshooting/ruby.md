@@ -390,8 +390,8 @@ you must compile and install OpenSSL 1.1.1:
 1. Compile OpenSSL 1.1.1:
 
    ```shell
-   cd ~/Downloads/openssl-1.1.1o
-   ./config --prefix=/opt/openssl-1.1.1o --openssldir=/opt/openssl-1.1.1o shared zlib
+   cd ~/Downloads/openssl-1.1.1p
+   ./config --prefix=/opt/openssl-1.1.1p --openssldir=/opt/openssl-1.1.1p shared zlib
    make
    make test
    sudo make install
