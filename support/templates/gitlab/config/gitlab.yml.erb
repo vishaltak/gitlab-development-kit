@@ -467,7 +467,7 @@ production: &base
   # access by running:
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
-    enabled: false
+    enabled: <%= config.openldap.enabled? %>
     servers:
       ##########################################################################
       #
@@ -488,14 +488,14 @@ production: &base
         label: 'LDAP'
 
         # Example: 'ldap.mydomain.com'
-        host: '_your_ldap_server'
+        host: 127.0.0.1
         # This port is an example, it is sometimes different but it is always an integer and not a string
-        port: 389 # usually 636 for SSL
-        uid: 'sAMAccountName' # This should be the attribute, not the value that maps to uid.
+        port: 3890
+        uid: 'uid'
 
         # Examples: 'america\\momo' or 'CN=Gitlab Git,CN=Users,DC=mydomain,DC=com'
-        bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-        password: '_the_password_of_the_bind_user'
+        # bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+        # password: '_the_password_of_the_bind_user'
 
         # Encryption method. The "method" key is deprecated in favor of
         # "encryption".
@@ -568,7 +568,7 @@ production: &base
         # This setting specifies if LDAP server is Active Directory LDAP server.
         # For non AD servers it skips the AD specific queries.
         # If your LDAP server is not AD, set this to false.
-        active_directory: true
+        active_directory: false
 
         # If allow_username_or_email_login is enabled, GitLab will ignore everything
         # after the first '@' in the LDAP username submitted by the user on login.
@@ -590,7 +590,8 @@ production: &base
         #
         #   Ex. 'ou=People,dc=gitlab,dc=example' or 'DC=mydomain,DC=com'
         #
-        base: ''
+        base: 'dc=example,dc=com'
+        group_base: 'ou=groups,dc=example,dc=com'
 
         # Filter LDAP users
         #
@@ -627,14 +628,16 @@ production: &base
         # If lowercase_usernames is enabled, GitLab will lower case the username.
         lowercase_usernames: false
 
-      # GitLab EE only: add more LDAP servers
-      # Choose an ID made of a-z and 0-9 . This ID will be stored in the database
-      # so that GitLab can remember which LDAP server a user belongs to.
-      # uswest2:
-      #   label:
-      #   host:
-      #   ....
-
+      alt:
+        label: LDAP-alt
+        host: 127.0.0.1
+        port: 3890
+        uid: 'uid'
+        encryption: 'plain' # "tls" or "ssl" or "plain"
+        base: 'dc=example-alt,dc=com'
+        user_filter: ''
+        group_base: 'ou=groups,dc=example-alt,dc=com'
+        admin_group: ''
 
   ## OmniAuth settings
   omniauth:

@@ -73,6 +73,7 @@ gitlab-k8s-agent-setup \
 support-setup \
 gitaly-setup \
 geo-config \
+openldap-setup \
 prom-setup \
 object-storage-setup \
 gitlab-elasticsearch-indexer-setup \
