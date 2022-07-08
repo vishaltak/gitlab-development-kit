@@ -29,37 +29,46 @@ users with `dc=example=alt` (example: `bob`) can sign in on the
 
 The following users are added to the LDAP server:
 
-| uid      | Password | DN                                          | Last     |
-| -------- | -------- | -------                                     | ----     |
-| john     | password | `uid=john,ou=people,dc=example,dc=com`      |          |
-| john0    | password | `uid=john0,ou=people,dc=example,dc=com`     | john9999 |
-| mary     | password | `uid=mary,ou=people,dc=example,dc=com`      |          |
-| mary0    | password | `uid=mary0,ou=people,dc=example,dc=com`     | mary9999 |
-| bob      | password | `uid=bob,ou=people,dc=example-alt,dc=com`   |          |
-| alice    | password | `uid=alice,ou=people,dc=example-alt,dc=com` |          |
+| uid      | Password | DN                                          |
+| -------- | -------- | -------                                     |
+| john     | password | `uid=john,ou=people,dc=example,dc=com`      |
+| mary     | password | `uid=mary,ou=people,dc=example,dc=com`      |
+| bob      | password | `uid=bob,ou=people,dc=example-alt,dc=com`   |
+| alice    | password | `uid=alice,ou=people,dc=example-alt,dc=com` |
 
 ### LDAP groups
 
 For testing of GitLab Enterprise Edition the following groups are created:
 
-| cn            | DN                                              | Members | Last          |
-| -------       | --------                                        | ------- | ----          |
-| group1        | `cn=group1,ou=groups,dc=example,dc=com`         | 2       |               |
-| group2        | `cn=group2,ou=groups,dc=example,dc=com`         | 1       |               |
-| group-a       | `cn=group-a,ou=groups,dc=example-alt,dc=com`    | 2       |               |
-| group-b       | `cn=group-b,ou=groups,dc=example-alt,dc=com`    | 1       |               |
-| group-10-0    | `cn=group-10-0,ou=groups,dc=example,dc=com`     | 10      | group-10-1000 |
-| group-100-0   | `cn=group-100-0,ou=groups,dc=example,dc=com`    | 100     | group-100-100 |
-| group-1000-0  | `cn=group-1000-0,ou=groups,dc=example,dc=com`   | 1,000   | group-1000-10 |
-| group-10000-0 | `cn=group-10000-0,ou=groups,dc=example,dc=com`  | 10,000  | group-10000-1 |
+| cn            | DN                                              | Members     |
+| -------       | --------                                        | ----------  |
+| group1        | `cn=group1,ou=groups,dc=example,dc=com`         | john, mary  |
+| group2        | `cn=group2,ou=groups,dc=example,dc=com`         | mary        |
+| group-a       | `cn=group-a,ou=groups,dc=example-alt,dc=com`    | bob, alice  |
+| group-b       | `cn=group-b,ou=groups,dc=example-alt,dc=com`    | bob         |
 
-By default, only `group1`, `group2`, `group-a`, and `group-b` are created. If you wish
-to create more users and groups, run:
+### Testing with many users and groups
+
+If you wish to create more users and groups, run:
 
 ```shell
 cd <gdk-directory>/gitlab-openldap
 make large
 ```
+
+More groups will be created with the following username and group ranges:
+
+| uid      | Password | DN                                          | Last     |
+| -------- | -------- | -------                                     | ----     |
+| john0    | password | `uid=john0,ou=people,dc=example,dc=com`     | john9999 |
+| mary0    | password | `uid=mary0,ou=people,dc=example,dc=com`     | mary9999 |
+
+| cn            | DN                                              | Member count | Last          |
+| -------       | --------                                        | ------------ | ----          |
+| group-10-0    | `cn=group-10-0,ou=groups,dc=example,dc=com`     | 10           | group-10-1000 |
+| group-100-0   | `cn=group-100-0,ou=groups,dc=example,dc=com`    | 100          | group-100-100 |
+| group-1000-0  | `cn=group-1000-0,ou=groups,dc=example,dc=com`   | 1,000        | group-1000-10 |
+| group-10000-0 | `cn=group-10000-0,ou=groups,dc=example,dc=com`  | 10,000       | group-10000-1 |
 
 ## Manual setup instructions
 
