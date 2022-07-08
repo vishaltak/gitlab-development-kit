@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/bin/bash -e
 
-# Temporarily override /startup-scripts added by docker image
-cp /home/gitpod/startup-scripts/* /home/gitpod/
+# Override startup-scripts added in docker image with the startup-scripts in the current branch
+cp /tmp/startup-scripts/* /home/gitpod/
 
+# Simulate how .gitpod.yml starts up GDK by running Gitpod init and command tasks
 ./gitpod-init
 ./gitpod-command

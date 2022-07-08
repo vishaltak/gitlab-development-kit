@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # This script is executed during the Gitpod prebuild
 # or on workspace start (when no prebuild is available)
@@ -6,6 +6,7 @@
 
 set -eo pipefail
 
+# shellcheck disable=SC1091
 source "$HOME/gitpod-common"
 
 if ! is_gitpod_instance; then

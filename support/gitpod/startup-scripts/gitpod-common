@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 log() {
   echo "$(date) – $1" | tee -a /workspace/startup.log
@@ -14,4 +14,13 @@ set_config() {
 
 is_gitpod_instance() {
   [ -n "$GITPOD_WORKSPACE_ID" ]
+}
+
+is_gitlab_available() {
+  # Check /-/readiness which returns JSON, but we're only interested in the exit code
+  # 
+  # We use http://127.0.0.1:3000 instead of the public hostname 
+  # because it's no longer possible to access as specific cookies are required
+  printf "Waiting for GitLab at %s ..." "$1"
+  until curl --silent --no-buffer --fail http://127.0.0.1:3000/-/readiness > /dev/null 2>&1; do printf '.'; sleep 5; done && echo ""
 }

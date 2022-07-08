@@ -1,13 +1,17 @@
-#!/bin/bash
+#!/bin/bash -e
+set -e
 
+ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/../.." || exit ; pwd -P)"
 DOCKER_IMAGE=registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main
+HOME=/home/gitpod
 
-# Running with specified script fails with `gdk: command not found`
-exec docker run -t -v "$PWD/support/gitpod/startup-scripts/:/home/gitpod/startup-scripts" \
+if ! docker run --rm -t \
+  -v "${ROOT_PATH}/support/gitpod/startup-scripts/:/tmp/startup-scripts" \
   $DOCKER_IMAGE \
-  bash -c "cp /home/gitpod/startup-scripts/* /home/gitpod/; ./docker-entrypoint;"
-
-# Running with interactive mode `-i` works
-# $ docker run -ti --rm -v "$PWD/support/gitpod/startup-scripts/:/home/gitpod/startup-scripts registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main"
-# $ cp /home/gitpod/startup-scripts/* /home/gitpod/
-# $ ./docker-entrypoint
+  bash -ic "/tmp/startup-scripts/; /tmp/startup-scripts/docker-entrypoint;"; 
+then
+  echo "ERROR: Failed to run Gitlab in Gitpod workspace docker image." >&2
+  exit 1
+else
+  echo "INFO: Successfully runs GitLab in Gitpod workspace docker image."
+fi
