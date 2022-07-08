@@ -15,10 +15,12 @@
 #     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
+#     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
 #   1.17.7:
-#     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_METRICS_EXPORTER_VERSION
 #
 golang 1.18.3 1.17.9 1.17.7
 
@@ -49,10 +51,8 @@ postgres 12.10 13.6
 # redis:
 #   6.2.7:
 #     - .tool-versions-gdk
-#   6.0.16:
-#     - .tool-versions-gdk
 #
-redis 6.2.7 6.0.16
+redis 6.2.7
 
 # ruby:
 #   2.7.5:
@@ -72,12 +72,11 @@ redis 6.2.7 6.0.16
 ruby 2.7.5 3.0.4 2.7.6
 
 # yarn:
-#   1.22.17:
-#     - .tool-versions-gdk
 #   1.22.19:
+#     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #
-yarn 1.22.17 1.22.19
+yarn 1.22.19
 
