@@ -3,11 +3,6 @@
 # software:
 #
 # * Ruby - The majority of GDK is written in Ruby.
-# * Node.js - Linting tools GDK uses require Node.js.
-# * Yarn - Supports Node.js.
-# * Minio - Provides object storage for gitlab-org/gitlab Rails.
-# * PostgreSQL - Provides RDBMS for gitlab-org/gitlab Rails/Sidekiq.
-# * Redis - Provides data storage for gitlab-org/gitlab Rails/Sidekiq.
 #
 # Each project GDK manages should ideally provide its own .tool-versions
 # file that contains the project's specific software and versions, resulting
@@ -20,9 +15,6 @@
 # script, which should be run when this file is updated.
 #
 # <default-version> <other-version>
-ruby 2.7.5 3.0.4
-nodejs 16.14.0
-yarn 1.22.19
-minio 2021-04-06T23-11-00Z
+#
 postgres 12.10 13.6
-redis 6.2.7
+ruby 2.7.5 3.0.4
