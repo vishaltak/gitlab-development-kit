@@ -1,63 +1,32 @@
-const mouse_utils = require("./utils/mouse_utils");
-
-const baseURL = "http://host.docker.internal:3000";
-const baseRepo = "/flightjs/Flight";
+const sourceCodeRepoWorkflow = require("./shared/sourcecode_repo");
 
 module.exports = async function (context, commands) {
-  // we fetch the selenium webdriver from context
-  const webdriver = context.selenium.webdriver;
-  const driver = context.selenium.driver;
-
-  const click_simulation = async (css_path) => {
-    await mouse_utils.moveToAndClickElement(
-      css_path,
-      commands,
-      driver,
-      webdriver
-    );
-  };
-
-  commands.meta.setTitle("Test Repository Browser Workflows");
-  commands.meta.setDescription(
-    "Tests the workflow of loading a project and then clicking through to a file 2 directories deep"
-  );
-
-  // Preloading and pre-setting the performance bar cookie
-  await commands.navigate(baseURL + "/users/sign_in");
-  driver.manage().addCookie({ name: "perf_bar_enabled", value: "false" });
-
-  // Reset display
-  await commands.js.run(
-    'document.body.innerHTML = ""; document.body.style.backgroundColor = "white";'
-  );
-
-  await commands.navigate(baseURL + "/explore");
-  await commands.wait.byPageToComplete();
-  await commands.wait.byTime(3000);
-
-  await mouse_utils.injectFakeMouseCursor(commands);
-
-  // Lets start measuring
-  await commands.measure.start("RepoJourney");
-
-  await click_simulation(`a[href="${baseRepo}"]`);
-
-  await click_simulation('a[href="/flightjs/Flight/-/tree/master/test"]');
-
-  await click_simulation('a[href="/flightjs/Flight/-/tree/master/test/spec"]');
-
-  await click_simulation(
-    'a[href="/flightjs/Flight/-/blob/master/test/spec/attribute_spec.js"]'
-  );
-
-  await click_simulation('a[href="/flightjs/Flight/-/tree/master/test/spec"]');
-
-  await click_simulation(
-    'a[href="/flightjs/Flight/-/blob/master/test/spec/constructor_spec.js"]'
-  );
-
-  // Lets wait for text in the actual file
-  await commands.wait.bySelector("#LC34", 35000);
-
-  return await commands.measure.stop();
+  return sourceCodeRepoWorkflow(context, commands, {
+    workflow: {
+      baseURL: "https://gitlab.com",
+      baseRepo: "/gitlab-org/gitlab",
+      branch: "master",
+      title: "Test Repository Browser Workflows",
+      description:
+        "Tests the workflow of loading a project and then clicking through to a file 2 directories deep",
+      journeyName: "RepoJourney",
+    },
+    stopwatches: {
+      dir1Loaded: "DirectorySpecLoaded",
+      dir2Loaded: "DirectoryFrontendLoaded",
+      file1Loaded: "FileSpecAlertHandlerLoaded",
+      dir1LoadedAgain: "DirectoryFrontendAgainLoaded",
+      file2Loaded: "FileSpecApiLoaded",
+    },
+    navigation: {
+      dir1: "spec",
+      dir2: "frontend",
+      file1: "alert_handler_spec.js",
+      file2: "api_spec.js",
+    },
+    selectors: {
+      selector1: "#L1",
+      selector2: "#L33",
+    },
+  });
 };

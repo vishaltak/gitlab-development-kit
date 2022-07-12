@@ -13,19 +13,37 @@ const injectFakeMouseCursor = async (commands) => {
   }
 };
 
-const moveToAndClickElement = async (selector, commands, driver, webdriver) => {
+const moveToAndClickElement = async (selector, commands, context, driver, webdriver) => {
   await injectFakeMouseCursor(commands);
 
-  await commands.wait.bySelector(selector);
+  try {
+    await commands.wait.bySelector(selector);
 
-  await injectFakeMouseCursor(commands);
+    await injectFakeMouseCursor(commands);
 
-  // Simulating checking the page
-  await commands.wait.byTime(1000);
+    const actions = driver.actions({ async: true });
+    const selected = await driver.findElement(webdriver.By.css(selector));
 
-  const selected = await driver.findElement(webdriver.By.css(selector));
-  const actions = driver.actions({ async: true });
-  return await actions.move({ origin: selected }).pause(300).click().perform();
+    await commands.wait.byTime(100); 
+
+    console.log('CLICK SIMULATION FOR - ' + selector);   
+    await commands.js.run("document.querySelector('" + selector + "').scrollIntoViewIfNeeded();");
+
+    await actions.move({ origin: selected }).perform();
+    await commands.js.run("if (document.querySelector('.gl-tooltip')) document.querySelector('.gl-tooltip').style.display = 'none';"); // tooltips from other elements can sometimes get in the way of click simulations
+    await actions.pause(300).click(selected).perform();
+
+    const url = await commands.js.run('return window.location.href');
+    context.log.info(`We ended up on ${url}`);
+    
+    return;
+  } catch(e) {
+    context.log.error('Could not click on - ' + selector + ' - ', e);
+    const afterContent = await commands.js.run('return document.body.innerHTML');
+    context.log.info(`After Error Content ${afterContent}`);
+
+    await commands.screenshot.take('failedclick');
+  }
 };
 
 module.exports = { injectFakeMouseCursor, moveToAndClickElement };
