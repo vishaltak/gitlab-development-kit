@@ -26,31 +26,32 @@ golang 1.18.3 1.17.9 1.17.7
 
 # minio:
 #   2021-04-06T23-11-00Z:
-#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
 minio 2021-04-06T23-11-00Z
 
 # nodejs:
-#   16.14.0:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #   16.15.0:
+#     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+#   16.14.0:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-nodejs 16.14.0 16.15.0
+nodejs 16.15.0 16.14.0
 
 # postgres:
 #   12.10:
 #     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #   13.6:
 #     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
 postgres 12.10 13.6
 
 # redis:
 #   6.2.7:
-#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
 redis 6.2.7
 
@@ -73,7 +74,6 @@ ruby 2.7.5 3.0.4 2.7.6
 
 # yarn:
 #   1.22.19:
-#     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
