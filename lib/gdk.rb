@@ -22,6 +22,7 @@ module GDK
   MAKE = RUBY_PLATFORM.include?('bsd') ? 'gmake' : 'make'
   # TODO: Touching .gdk-install-root will be redundant shortly.
   ROOT_CHECK_FILE = '.gdk-install-root' unless defined?(ROOT_CHECK_FILE)
+  SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION = %w[version].freeze
 
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`
@@ -51,9 +52,8 @@ module GDK
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
   def self.main
-    validate_yaml!
-
     subcommand = ARGV.shift
+    validate_yaml! unless SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION.include?(subcommand)
 
     exit(::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV)) if ::GDK::Command::COMMANDS.key?(subcommand)
 

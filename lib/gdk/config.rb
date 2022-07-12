@@ -458,7 +458,7 @@ module GDK
 
     settings :omniauth do
       settings :google_oauth2 do
-        string(:enabled) { !!read!('google_oauth_client_secret') || '' }
+        string(:enabled) { client_secret }
         string(:client_id) { read!('google_oauth_client_id') || '' }
         string(:client_secret) { read!('google_oauth_client_secret') || '' }
       end
@@ -691,7 +691,7 @@ module GDK
 
     settings :runner do
       path(:config_file) { config.gdk_root.join('gitlab-runner-config.toml') }
-      bool(:enabled) { !!read!(config.runner.config_file) }
+      bool(:enabled) { config_file.exist? }
       string(:install_mode) { "binary" }
       string(:executor) { "docker" }
       array(:extra_hosts) { [] }

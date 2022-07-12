@@ -976,10 +976,6 @@ RSpec.describe GDK::Config do
   end
 
   describe 'runner' do
-    before do
-      allow_any_instance_of(GDK::ConfigSettings).to receive(:read!).with(config.runner.config_file) { file_contents }
-    end
-
     describe '#install_mode' do
       it 'returns binary' do
         expect(config.runner.install_mode).to eq('binary')
@@ -1049,8 +1045,6 @@ RSpec.describe GDK::Config do
 
     describe '__install_mode_binary' do
       context 'when runner is not enabled' do
-        let(:file_contents) { nil }
-
         it 'returns false' do
           expect(config.runner.__install_mode_binary).to be(false)
         end
@@ -1109,8 +1103,6 @@ RSpec.describe GDK::Config do
 
     describe '__install_mode_docker' do
       context 'when runner is not enabled' do
-        let(:file_contents) { nil }
-
         it 'returns false' do
           expect(config.runner.__install_mode_docker).to be(false)
         end
@@ -1195,33 +1187,10 @@ RSpec.describe GDK::Config do
     end
 
     context 'when config_file exists' do
-      let(:file_contents) do
-        <<~CONTENTS
-          concurrent = 1
-          check_interval = 0
-
-          [session_server]
-            session_timeout = 1800
-
-          [[runners]]
-            name = "MyRunner"
-            url = "http://example.com"
-            token = "XXXXXXXXXX"
-            executor = "docker"
-            [runners.custom_build_dir]
-            [runners.docker]
-              tls_verify = false
-              image = "ruby:2.6"
-              privileged = false
-              disable_entrypoint_overwrite = false
-              oom_kill_disable = false
-              disable_cache = false
-              volumes = ["/cache"]
-              shm_size = 0
-            [runners.cache]
-              [runners.cache.s3]
-              [runners.cache.gcs]
-        CONTENTS
+      before do
+        yaml['runner'] = {
+          'config_file' => Tempfile.new
+        }
       end
 
       describe 'enabled' do

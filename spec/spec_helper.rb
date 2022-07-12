@@ -3,6 +3,7 @@
 require 'simplecov-cobertura'
 require 'tzinfo'
 require 'tmpdir'
+require 'tempfile'
 
 # rubocop:disable Layout/FirstArrayElementIndentation
 SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
