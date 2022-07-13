@@ -1,3 +1,5 @@
+# Jobs that are generally executable locally (as well as within CI)
+#
 include:
   - template: Jobs/Code-Quality.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
