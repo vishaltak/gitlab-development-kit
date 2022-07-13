@@ -100,7 +100,7 @@ yard:
     paths:
       - yard/*
 
-verify-gdk-example-yml:
+gdk-example-yml:
   extends: .rules:code-changes
   image: ruby:2.7
   stage: test
@@ -108,7 +108,7 @@ verify-gdk-example-yml:
   script:
     - make verify-gdk-example-yml
 
-verify-asdf-combine:
+asdf-combine:
   extends: .rules:code-changes
   image: ruby:2.7
   stage: test
@@ -127,7 +127,7 @@ verify-asdf-combine:
         - "support/asdf-combine"
         - "support/ci/verify-asdf-combine"
 
-verify-makefile-config:
+makefile-config:
   extends: .rules:code-changes
   image: ruby:2.7
   stage: test
