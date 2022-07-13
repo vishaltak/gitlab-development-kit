@@ -18,11 +18,10 @@
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
-#   1.17.7:
 #     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_METRICS_EXPORTER_VERSION
 #
-golang 1.18.3 1.17.9 1.17.7
+golang 1.18.3 1.17.9
 
 # minio:
 #   2021-04-06T23-11-00Z:
