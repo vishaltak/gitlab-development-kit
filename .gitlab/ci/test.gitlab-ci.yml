@@ -1,26 +1,30 @@
 # Jobs that are generally executable locally (as well as within CI)
 #
-docs-lint:
-  extends: .rules:docs-changes
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.17.0-markdownlint-0.31.1
+.test-job:
   stage: test
   needs: []
+
+docs-lint:
+  extends:
+    - .test-job
+    - .rules:docs-changes
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.17.0-markdownlint-0.31.1
   script:
     - make lint
 
 rubocop:
-  extends: .rules:code-changes
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: ruby:2.7
-  stage: test
-  needs: []
   script:
     - make rubocop
 
 rspec:
-  extends: .rules:code-changes
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: ruby:2.7
-  stage: test
-  needs: []
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
   script:
@@ -40,25 +44,24 @@ rspec:
         path: coverage/coverage.xml
 
 shellcheck:
-  extends: .rules:code-changes
-  stage: test
-  needs: []
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: ruby:2.7
   script:
     - apt-get update
     - make shellcheck
 
 checkmake:
-  stage: test
-  needs: []
-  extends: .rules:code-changes
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: registry.gitlab.com/gitlab-org/gitlab-development-kit/asdf-bootstrapped-verify:main
   script:
     - make checkmake
 
 yard:
-  stage: test
-  needs: []
+  extends: .test-job
   image: ruby:2.7
   script:
     - bundle install
@@ -73,18 +76,18 @@ yard:
       - yard/*
 
 gdk-example-yml:
-  extends: .rules:code-changes
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: ruby:2.7
-  stage: test
-  needs: []
   script:
     - make verify-gdk-example-yml
 
 asdf-combine:
-  extends: .rules:code-changes
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: ruby:2.7
-  stage: test
-  needs: []
   artifacts:
     when: on_failure
     paths:
@@ -100,9 +103,9 @@ asdf-combine:
         - "support/ci/verify-asdf-combine"
 
 makefile-config:
-  extends: .rules:code-changes
+  extends:
+    - .test-job
+    - .rules:code-changes
   image: ruby:2.7
-  stage: test
-  needs: []
   script:
     - support/ci/verify-makefile-config
