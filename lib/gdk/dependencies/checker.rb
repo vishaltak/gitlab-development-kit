@@ -118,7 +118,7 @@ module GDK
       def check_exiftool_installed
         return if system("exiftool -ver >/dev/null 2>&1")
 
-        msg = "You may need to run 'brew reinstall exiftool'." if config.__platform_darwin?
+        msg = "You may need to run 'brew reinstall exiftool'." if GDK::Machine.macos?
         @error_messages << missing_dependency('Exiftool', more_detail: msg)
       end
 
