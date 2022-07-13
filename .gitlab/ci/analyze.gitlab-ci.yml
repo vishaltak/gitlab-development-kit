@@ -1,5 +1,4 @@
-# Jobs that are generally only executable by CI and appear in the 'test' stage
-# despite the desire to have them appear in the 'analyze' stage.
+# Jobs that are generally only executable by CI
 #
 include:
   - template: Jobs/Code-Quality.gitlab-ci.yml
@@ -11,7 +10,14 @@ include:
     file:
       - '/ci/danger-review.yml'
 
+danger-review:
+  stage: analyze
+
+untamper-my-lockfile:
+  stage: analyze
+
 code_quality:
+  stage: analyze
   tags:
     # See https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/7019 for tag descriptions
     - gitlab-org-docker
@@ -22,6 +28,7 @@ code_quality:
   rules: !reference ['.rules:code-changes', rules]
 
 container_scanning:
+  stage: analyze
   before_script:
     - export DOCKER_IMAGE=${DEFAULT_IMAGE}
   needs:
@@ -29,4 +36,5 @@ container_scanning:
   rules: !reference ['.rules:code-changes', rules]
 
 gemnasium-dependency_scanning:
+  stage: analyze
   rules: !reference ['.rules:code-changes', rules]
