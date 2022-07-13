@@ -9,6 +9,7 @@ describe GDK::Services do
         Clickhouse
         GitLabWorkhorse
         Minio
+        OpenLDAP
         Redis
       ]
 
