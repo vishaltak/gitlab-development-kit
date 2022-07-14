@@ -171,11 +171,14 @@ RSpec.describe GDK::Postgresql do
     end
   end
 
-  def stub_pg_version_file(version = nil, exists: true)
+  def stub_pg_data_dir
     allow(config).to receive(:postgresql).and_return(postgresql_config)
     allow(pg_data_dir).to receive(:join).with('PG_VERSION').and_return(pg_version_file)
-    allow(pg_version_file).to receive(:exist?).and_return(exists)
+  end
 
+  def stub_pg_version_file(version = nil, exists: true)
+    stub_pg_data_dir
+    allow(pg_version_file).to receive(:exist?).and_return(exists)
     allow(pg_version_file).to receive(:read).and_return(version) if version
   end
 end
