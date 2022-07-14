@@ -45,6 +45,37 @@ RSpec.describe GDK::Postgresql do
     end
   end
 
+  describe '#ready?' do
+    let(:error_msg) { nil }
+    let(:success) { nil }
+    let(:shellout_double) { instance_double(Shellout, read_stderr: error_msg, success?: success) }
+
+    before do
+      allow(Shellout).to receive(:new).with(%w[/usr/local/bin/psql --host=/home/git/gdk/postgresql --port=5432 --dbname=template1]).and_return(shellout_double)
+      allow(shellout_double).to receive(:try_run).and_return(shellout_double)
+      allow(subject).to receive(:sleep).with(1)
+    end
+
+    context 'when DB is not ready' do
+      let(:error_msg) { 'an error has occurred' }
+      let(:success) { false }
+
+      it 'returns false' do
+        expect(GDK::Output).to receive(:error).with(error_msg)
+
+        expect(subject.ready?(try_times: 1)).to be_falsey
+      end
+    end
+
+    context 'when DB is ready' do
+      let(:success) { true }
+
+      it 'returns true' do
+        expect(subject.ready?(try_times: 1)).to be_truthy
+      end
+    end
+  end
+
   describe '#installed?' do
     let(:pg_version_file_exists) { nil }
 

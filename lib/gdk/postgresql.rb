@@ -37,13 +37,12 @@ module GDK
       pg_version_file.exist?
     end
 
-    def ready?
+    def ready?(try_times: 10)
       last_error = nil
       cmd = pg_cmd(database: 'template1')
 
-      10.times do
-        shellout = Shellout.new(cmd)
-        shellout.run
+      try_times.times do
+        shellout = Shellout.new(cmd).tap(&:try_run)
         last_error = shellout.read_stderr
 
         return true if shellout.success?
