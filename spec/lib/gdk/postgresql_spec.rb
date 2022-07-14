@@ -29,6 +29,22 @@ RSpec.describe GDK::Postgresql do
     end
   end
 
+  describe '#current_data_dir' do
+    it 'returns the computed data dir' do
+      stub_pg_data_dir
+
+      expect(subject.current_data_dir).to eq(pg_data_dir)
+    end
+  end
+
+  describe '#psql_cmd' do
+    it 'calls pg_cmd' do
+      expect(subject).to receive(:pg_cmd).with('--version', database: 'gitlabhq_development').and_call_original
+
+      subject.psql_cmd('--version')
+    end
+  end
+
   describe '#installed?' do
     let(:pg_version_file_exists) { nil }
 

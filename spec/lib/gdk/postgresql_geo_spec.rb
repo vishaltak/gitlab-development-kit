@@ -3,10 +3,13 @@
 require 'spec_helper'
 
 RSpec.describe GDK::PostgresqlGeo do
+  let(:yaml) { {} }
   let(:config) { GDK::Config.new(yaml: yaml) }
 
+  subject { described_class.new(config) }
+
   before do
-    allow(GDK).to receive(:config) { config }
+    stub_pg_bindir
   end
 
   describe '#use_tcp?' do
@@ -40,6 +43,14 @@ RSpec.describe GDK::PostgresqlGeo do
       it 'returns true' do
         expect(subject).to be_use_tcp
       end
+    end
+  end
+
+  describe '#psql_cmd' do
+    it 'calls pg_cmd' do
+      expect(subject).to receive(:pg_cmd).with('--version', database: 'gitlabhq_geo_development').and_call_original
+
+      subject.psql_cmd('--version')
     end
   end
 end
