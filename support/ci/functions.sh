@@ -24,7 +24,6 @@ init() {
   fi
 
   install_gdk_clt
-  install
 }
 
 clone() {

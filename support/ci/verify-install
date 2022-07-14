@@ -7,5 +7,6 @@ source "${parent_path}"/functions.sh
 
 # shellcheck disable=SC2119
 init
+install
 stop_start
 test_url
