@@ -33,7 +33,7 @@ RSpec.describe GDK::Postgresql do
     let(:pg_version_file_exists) { nil }
 
     before do
-      stub_pg_version(exists: pg_version_file_exists)
+      stub_pg_version_file(exists: pg_version_file_exists)
     end
 
     context 'when postgresql/data/PG_VERSION does not exist' do
@@ -130,7 +130,7 @@ RSpec.describe GDK::Postgresql do
 
   describe '#current_version' do
     it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
-      stub_pg_version('12')
+      stub_pg_version_file('12')
 
       expect(subject.current_version).to eq(12)
     end
@@ -139,7 +139,7 @@ RSpec.describe GDK::Postgresql do
   describe '#upgrade_needed?' do
     context 'when current version is 12' do
       before do
-        stub_pg_version('12')
+        stub_pg_version_file('12')
       end
 
       context 'and target version is 9.6' do
@@ -171,7 +171,7 @@ RSpec.describe GDK::Postgresql do
     end
   end
 
-  def stub_pg_version(version = nil, exists: true)
+  def stub_pg_version_file(version = nil, exists: true)
     allow(config).to receive(:postgresql).and_return(postgresql_config)
     allow(pg_data_dir).to receive(:join).with('PG_VERSION').and_return(pg_version_file)
     allow(pg_version_file).to receive(:exist?).and_return(exists)
