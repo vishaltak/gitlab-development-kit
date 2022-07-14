@@ -78,7 +78,7 @@ module Runit
     #
     # @deprecated This will be removed when all services have been converted to GDK::Services
     def services_from_procfile
-      abort 'fatal: need Procfile to continue, make it with `make Procfile`?' unless procfile_path.exist?
+      GDK::Output.abort 'GDK services appear missing, have you run `gdk install` ?' unless procfile_path.exist?
 
       procfile_path.readlines.map do |line|
         line.chomp!

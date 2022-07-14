@@ -201,6 +201,7 @@ RSpec.describe Runit do
     stub_const('Runit::ALL_DATA_ORIENTED_SERVICE_NAMES', data_service_names)
 
     allow(described_class::SERVICES_DIR).to receive(:join).and_call_original
+    allow(described_class::SERVICES_DIR).to receive(:exist?).and_return(true)
 
     children_doubles = (data_service_names + non_data_service_names).map do |service_name|
       pathname_double = Pathname.new(described_class::SERVICES_DIR.join(service_name))
