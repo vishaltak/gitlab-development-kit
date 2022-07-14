@@ -31,7 +31,7 @@ pages:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
-deploy-gitpod-workspace-image:
+gitpod-workspace-image:
   extends:
     - .deploy-job
     - .docker:build-docker-in-docker
