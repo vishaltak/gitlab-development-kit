@@ -1,5 +1,25 @@
-pages:
+.deploy-job:
   stage: deploy
+
+yard:
+  extends: .deploy-job
+  image: ruby:2.7
+  script:
+    - bundle install
+    - bundle exec yardoc
+  cache:
+    key: "ruby-2.7-bundle"
+    paths:
+      - $BUNDLE_PATH
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - yard/*
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+pages:
+  extends: .deploy-job
   needs:
     - job: yard
       artifacts: true
@@ -11,10 +31,10 @@ pages:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
-deploy-gitpod-workspace-image:
+gitpod-workspace-image:
   extends:
+    - .deploy-job
     - .docker:build-docker-in-docker
-  stage: deploy
   needs:
     - build-gitpod-workspace-image
   script:
