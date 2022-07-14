@@ -5,11 +5,15 @@ require 'spec_helper'
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
   let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) } # rubocop:todo RSpec/VerifiedDoubles
-  let(:pg_version_file) { '/home/git/gdk/postgresql/data/PG_VERSION' }
+  let(:config) { GDK::Config.new(yaml: yaml) }
+  let(:pg_data_dir) { Pathname.new('/home/git/gdk/postgresql/data') }
+  let(:pg_version_file) { pg_data_dir.join('PG_VERSION') }
+  let(:postgresql_config) { double('GDK::Config', data_dir: pg_data_dir) } # rubocop:todo RSpec/VerifiedDoubles
+
+  subject { described_class.new(config) }
 
   before do
     stub_pg_bindir
-    stub_gdk_yaml(yaml)
   end
 
   describe '.target_version' do
@@ -29,8 +33,7 @@ RSpec.describe GDK::Postgresql do
     let(:pg_version_file_exists) { nil }
 
     before do
-      allow(File).to receive(:exist?).and_call_original
-      allow(File).to receive(:exist?).with(pg_version_file).and_return(pg_version_file_exists)
+      stub_pg_version(exists: pg_version_file_exists)
     end
 
     context 'when postgresql/data/PG_VERSION does not exist' do
@@ -125,15 +128,9 @@ RSpec.describe GDK::Postgresql do
     end
   end
 
-  describe '#current_data_dir' do
-    it 'returns the path to the postgresql data directory' do
-      expect(subject.current_data_dir).to eq('/home/git/gdk/postgresql/data')
-    end
-  end
-
   describe '#current_version' do
     it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
-      stub_current_version('12')
+      stub_pg_version('12')
 
       expect(subject.current_version).to eq(12)
     end
@@ -142,7 +139,7 @@ RSpec.describe GDK::Postgresql do
   describe '#upgrade_needed?' do
     context 'when current version is 12' do
       before do
-        stub_current_version('12')
+        stub_pg_version('12')
       end
 
       context 'and target version is 9.6' do
@@ -172,23 +169,13 @@ RSpec.describe GDK::Postgresql do
         end
       end
     end
-
-    it 'returns the PostgreSQL version set within postgresql/data/PG_VERSION' do
-      allow(File).to receive(:read).and_call_original
-      allow(File).to receive(:exist?).and_call_original
-
-      allow(File).to receive(:exist?).with(pg_version_file).and_return(true)
-      allow(File).to receive(:read).with(pg_version_file).and_return('12')
-
-      expect(subject.current_version).to eq(12)
-    end
   end
 
-  def stub_current_version(version)
-    allow(File).to receive(:read).and_call_original
-    allow(File).to receive(:exist?).and_call_original
+  def stub_pg_version(version = nil, exists: true)
+    allow(config).to receive(:postgresql).and_return(postgresql_config)
+    allow(pg_data_dir).to receive(:join).with('PG_VERSION').and_return(pg_version_file)
+    allow(pg_version_file).to receive(:exist?).and_return(exists)
 
-    allow(File).to receive(:exist?).with(pg_version_file).and_return(true)
-    allow(File).to receive(:read).with(pg_version_file).and_return(version)
+    allow(pg_version_file).to receive(:read).and_return(version) if version
   end
 end

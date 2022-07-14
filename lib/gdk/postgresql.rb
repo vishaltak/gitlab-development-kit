@@ -10,22 +10,23 @@ module GDK
       target_version.canonical_segments[0]
     end
 
+    def initialize(config = GDK.config)
+      @config = config
+    end
+
     def psql_cmd(args)
       pg_cmd(args, database: default_database).flatten
     end
 
     def current_data_dir
-      @current_data_dir ||= begin
-        config = GDK::Config.new
-        File.join(config.postgresql.dir, 'data')
-      end
+      @current_data_dir ||= postgresql_config.data_dir
     end
 
     def current_version
       @current_version ||= begin
         raise "PG_VERSION not found in #{pg_version_file}. Is PostgreSQL initialized?" unless installed?
 
-        version = File.read(pg_version_file).to_f
+        version = pg_version_file.read.to_f
 
         # After PostgreSQL 9.6, PG_VERSION uses a single integer (10, 11, 12, etc.)
         version >= 10 ? version.to_i : version
@@ -33,7 +34,7 @@ module GDK
     end
 
     def installed?
-      File.exist?(pg_version_file)
+      pg_version_file.exist?
     end
 
     def ready?
@@ -55,7 +56,7 @@ module GDK
     end
 
     def use_tcp?
-      !config.host.start_with?('/')
+      !postgresql_config.host.start_with?('/')
     end
 
     def upgrade_needed?(target_version = self.class.target_version_major)
@@ -82,26 +83,24 @@ module GDK
 
     private
 
-    def config
-      @config ||= GDK.config.postgresql
+    attr_reader :config
+
+    def base_postgresql_config
+      @base_postgresql_config ||= config.postgresql
     end
 
-    def host
-      config.dir.to_s
-    end
-
-    def port
-      config.port.to_s
+    def postgresql_config
+      @postgresql_config ||= base_postgresql_config
     end
 
     def pg_version_file
-      @pg_version_file ||= File.join(current_data_dir, 'PG_VERSION')
+      @pg_version_file ||= current_data_dir.join('PG_VERSION')
     end
 
     def pg_cmd(*args, program: 'psql', database: nil, command: nil)
-      cmd = [bin_dir.join(program).to_s]
-      cmd << "--host=#{host}"
-      cmd << "--port=#{port}"
+      cmd = [base_postgresql_config.bin_dir.join(program).to_s]
+      cmd << "--host=#{postgresql_config.dir}"
+      cmd << "--port=#{postgresql_config.port}"
       cmd << "--dbname=#{database}" if database
       cmd << "--command=#{command}" if command
 
@@ -110,10 +109,6 @@ module GDK
 
     def default_database
       'gitlabhq_development'
-    end
-
-    def bin_dir
-      config.bin_dir
     end
   end
 end
