@@ -1,0 +1,40 @@
+# Jobs that are generally only executable by CI
+#
+include:
+  - template: Jobs/Code-Quality.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - project: gitlab-org/frontend/untamper-my-lockfile
+    file: templates/merge_request_pipelines.yml
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+
+danger-review:
+  stage: analyze
+
+untamper-my-lockfile:
+  stage: analyze
+
+code_quality:
+  stage: analyze
+  tags:
+    # See https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/7019 for tag descriptions
+    - gitlab-org-docker
+  # See https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1517
+  before_script:
+    - rm -f package.json
+    - echo "Removing package.json only in this CI job to work around a limitation of Code Quality 0.85.26"
+  rules: !reference ['.rules:code-changes', rules]
+
+container_scanning:
+  stage: analyze
+  before_script:
+    - export DOCKER_IMAGE=${DEFAULT_IMAGE}
+  needs:
+    - release-image
+  rules: !reference ['.rules:code-changes', rules]
+
+gemnasium-dependency_scanning:
+  stage: analyze
+  rules: !reference ['.rules:code-changes', rules]

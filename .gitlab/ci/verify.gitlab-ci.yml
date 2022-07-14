@@ -1,3 +1,5 @@
+# Jobs that are generally only executable by CI and not locally.
+#
 .verify-job:
   stage: verify
   extends: .rules:code-changes
