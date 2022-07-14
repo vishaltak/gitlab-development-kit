@@ -9,7 +9,7 @@ module GDK
       end
 
       def command
-        %(support/postgresql-signal-wrapper #{postgresql_bin} -D #{postgresql_data_dir} -k #{postgresql_dir} -h #{postgresql_active_host})
+        %(support/postgresql-signal-wrapper #{postgresql_bin} -D #{postgresql_data_dir} -k #{postgresql_dir} -h '#{postgresql_active_host}')
       end
 
       private

@@ -11,7 +11,7 @@ describe GDK::Services::PostgreSQL do # rubocop:disable RSpec/FilePath
 
   describe '#command' do
     it 'returns the necessary command to run PostgreSQL' do
-      expect(subject.command).to eq("support/postgresql-signal-wrapper /usr/local/bin/postgres -D /home/git/gdk/postgresql/data -k /home/git/gdk/postgresql -h ")
+      expect(subject.command).to eq("support/postgresql-signal-wrapper /usr/local/bin/postgres -D /home/git/gdk/postgresql/data -k /home/git/gdk/postgresql -h ''")
     end
   end
 
