@@ -41,6 +41,11 @@ install:
   script:
     - support/ci/verify-install
 
+install-experimental:
+  extends: .verify-job
+  script:
+    - support/ci/verify-install-experimental
+
 one-line-install:
   extends: .verify-job
   script:
