@@ -43,7 +43,7 @@ module GDK
         return {} unless database_yml_file_exists?
 
         raw_yaml = File.read(database_yml_file)
-        YAML.safe_load(raw_yaml, [], [], true, symbolize_names: true) || {}
+        YAML.safe_load(raw_yaml, aliases: true, symbolize_names: true) || {}
       end
 
       def database_names
