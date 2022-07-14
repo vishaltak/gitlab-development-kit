@@ -31,12 +31,11 @@ minio 2021-04-06T23-11-00Z
 
 # nodejs:
 #   16.15.0:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
-#   16.14.0:
-#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-nodejs 16.15.0 16.14.0
+nodejs 16.15.0
 
 # postgres:
 #   12.10:
