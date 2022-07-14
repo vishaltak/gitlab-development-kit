@@ -60,21 +60,6 @@ checkmake:
   script:
     - make checkmake
 
-yard:
-  extends: .test-job
-  image: ruby:2.7
-  script:
-    - bundle install
-    - bundle exec yardoc
-  cache:
-    key: "ruby-2.7-bundle"
-    paths:
-      - $BUNDLE_PATH
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - yard/*
-
 gdk-example-yml:
   extends:
     - .test-job
