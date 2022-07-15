@@ -367,3 +367,6 @@ webpack:
   vendor_dll: false
 workhorse:
   configured_port: 3333
+toxiproxy:
+  enabled: false
+  port: 8474

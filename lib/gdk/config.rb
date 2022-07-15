@@ -844,6 +844,11 @@ module GDK
       end
     end
 
+    settings :toxiproxy do
+      bool(:enabled) { false }
+      integer(:port) { 8474 }
+    end
+
     settings :asdf do
       bool(:opt_out) { false }
     end

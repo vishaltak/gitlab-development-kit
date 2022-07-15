@@ -2740,6 +2740,20 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'toxiproxy' do
+    describe '#enabled' do
+      it 'defaults to false' do
+        expect(config.toxiproxy.enabled).to eq(false)
+      end
+    end
+
+    describe '#port' do
+      it 'defaults to 8474' do
+        expect(config.toxiproxy.port).to eq(8474)
+      end
+    end
+  end
+
   def create_dummy_executable(name)
     path = File.join(tmp_path, name)
     FileUtils.touch(path)
