@@ -77,3 +77,7 @@ rails-web: exec /usr/bin/env PATH="<%= config.gitlab_metrics_exporter.dir %>/bin
 # Snowplow Micro
 #
 <%= '#' unless config.snowplow_micro? %>snowplow-micro: exec docker run --rm --mount type=bind,source=<%= config.gdk_root.join('snowplow') %>,destination=/config -p <%= config.snowplow_micro.port %>:9091 <%= config.snowplow_micro.image %> --collector-config /config/snowplow_micro.conf --iglu /config/iglu.json
+
+# Toxiproxy
+#
+<%= '#' unless config.toxiproxy? %>toxiproxy-server: exec toxiproxy-server -host <%= config.listen_address %> -port <%= config.toxiproxy.port %>
