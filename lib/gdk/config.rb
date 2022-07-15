@@ -847,6 +847,13 @@ module GDK
     settings :toxiproxy do
       bool(:enabled) { false }
       integer(:port) { 8474 }
+
+      settings :object_store_proxy do
+        string(:name) { 'object_store_proxy' }
+        bool(:enabled) { config.object_store.enabled }
+        integer(:upstream_object_store_port) { config.object_store.port }
+        integer(:port) { 9090 }
+      end
     end
 
     settings :asdf do

@@ -2752,6 +2752,26 @@ RSpec.describe GDK::Config do
         expect(config.toxiproxy.port).to eq(8474)
       end
     end
+
+    describe 'object_store_proxy' do
+      describe '#name' do
+        it 'defaults to object_store_proxy' do
+          expect(config.toxiproxy.object_store_proxy.name).to eq('object_store_proxy')
+        end
+      end
+
+      describe '#enabled' do
+        it 'defaults to false' do
+          expect(config.toxiproxy.object_store_proxy.enabled).to eq(false)
+        end
+      end
+
+      describe '#port' do
+        it 'defaults to 9090' do
+          expect(config.toxiproxy.object_store_proxy.port).to eq(9090)
+        end
+      end
+    end
   end
 
   def create_dummy_executable(name)
