@@ -11,6 +11,7 @@ describe GDK::Services do
         Minio
         OpenLDAP
         Redis
+        Toxiproxy
       ]
 
       expect(described_class::ALL).to eq(service_classes)

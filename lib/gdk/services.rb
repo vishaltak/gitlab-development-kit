@@ -13,6 +13,7 @@ module GDK
     autoload :OpenLDAP, 'gdk/services/openldap'
     autoload :Redis, 'gdk/services/redis'
     autoload :Required, 'gdk/services/required'
+    autoload :Toxiproxy, 'gdk/services/toxiproxy'
 
     ALL = %i[
       Clickhouse
@@ -20,6 +21,7 @@ module GDK
       Minio
       OpenLDAP
       Redis
+      Toxiproxy
     ].freeze
 
     # Returns an Array of all services, including enabled and not
