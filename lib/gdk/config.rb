@@ -328,7 +328,7 @@ module GDK
       string(:host) { config.listen_address }
       integer(:port) { read!('object_store_port') || 9000 }
       string(:backup_remote_directory) { '' }
-      string(:__connection_port) { config.toxiproxy.object_store_proxy.enabled ? config.toxiproxy.object_store_proxy.port : config.object_store.port }
+      integer(:__connection_port) { config.toxiproxy.object_store_proxy.enabled ? config.toxiproxy.object_store_proxy.port : config.object_store.port }
       hash_setting(:connection) do
         {
           'provider' => 'AWS',
