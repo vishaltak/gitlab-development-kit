@@ -1906,9 +1906,21 @@ RSpec.describe GDK::Config do
   end
 
   describe 'object_store' do
+    describe '#enabled' do
+      it 'is disabled by default' do
+        expect(config.object_store.enabled?).to be(false)
+      end
+    end
+
     describe '#host' do
       it 'returns the default hostname' do
         expect(config.object_store.host).to eq('127.0.0.1')
+      end
+    end
+
+    describe '#port' do
+      it 'returns the default port' do
+        expect(config.object_store.port).to eq(9000)
       end
     end
 
