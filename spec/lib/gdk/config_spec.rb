@@ -1924,6 +1924,24 @@ RSpec.describe GDK::Config do
       end
     end
 
+
+    describe '#__endpoint' do
+      context 'when toxiproxy is disabled' do
+        it 'returns the default endpoint' do
+          expect(config.object_store.__endpoint).to eq('http://127.0.0.1:9000')
+        end
+      end
+
+      context 'when toxiproxy and object_store are enabled' do
+        it 'returns the toxiproxy based endpoint' do
+          yaml['toxiproxy'] = { 'enabled' => true }
+          yaml['object_store'] = { 'enabled' => true }
+
+          expect(config.object_store.__endpoint).to eq('http://127.0.0.1:9090')
+        end
+      end
+    end
+
     describe '#connection' do
       context 'default settings' do
         let(:default_connection) do

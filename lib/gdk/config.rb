@@ -329,13 +329,14 @@ module GDK
       integer(:port) { read!('object_store_port') || 9000 }
       string(:backup_remote_directory) { '' }
       integer(:__connection_port) { config.toxiproxy.object_store_proxy.enabled ? config.toxiproxy.object_store_proxy.port : config.object_store.port }
+      string(:__endpoint) { "http://#{config.object_store.host}:#{config.object_store.__connection_port}" }
       hash_setting(:connection) do
         {
           'provider' => 'AWS',
           'aws_access_key_id' => 'minio',
           'aws_secret_access_key' => 'gdk-minio',
           'region' => 'gdk',
-          'endpoint' => "http://#{config.object_store.host}:#{config.object_store.__connection_port}",
+          'endpoint' => config.object_store.__endpoint,
           'path_style' => true
         }
       end

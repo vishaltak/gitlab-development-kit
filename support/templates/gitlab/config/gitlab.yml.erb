@@ -193,7 +193,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -210,7 +210,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -227,7 +227,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -246,7 +246,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -264,7 +264,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -281,7 +281,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -297,7 +297,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -313,7 +313,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
     <%- end -%>
 
@@ -341,7 +341,7 @@ production: &base
         aws_access_key_id: minio
         aws_secret_access_key: gdk-minio
         region: gdk
-        endpoint: 'http://<%= config.object_store.host %>:<%= config.object_store.port %>'
+        endpoint: '<%= config.object_store.__endpoint %>'
         path_style: true
      <%- end -%>
 
