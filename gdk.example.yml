@@ -350,12 +350,12 @@ sshd:
   web_listen: 127.0.0.1:9122
 toxiproxy:
   enabled: false
+  port: 8474
   object_store_proxy:
     enabled: false
     name: object_store_proxy
-    port: 9090
-    upstream_object_store_port: 9000
-  port: 8474
+    listen_port: 9090
+    upstream_port: 9000
 tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:

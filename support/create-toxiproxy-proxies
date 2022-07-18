@@ -14,6 +14,6 @@ Toxiproxy.host = "http://#{config.listen_address}:#{config.toxiproxy.port}"
 
 Toxiproxy.populate([{
                       name: config.toxiproxy.object_store_proxy.name,
-                      listen: "#{config.listen_address}:#{config.toxiproxy.object_store_proxy.port}",
-                      upstream: "#{config.listen_address}:#{config.toxiproxy.object_store_proxy.upstream_object_store_port}",
+                      listen: "#{config.listen_address}:#{config.toxiproxy.object_store_proxy.listen_port}",
+                      upstream: "#{config.listen_address}:#{config.toxiproxy.object_store_proxy.upstream_port}",
                     }])

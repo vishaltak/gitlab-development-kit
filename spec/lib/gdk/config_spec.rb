@@ -2814,7 +2814,7 @@ RSpec.describe GDK::Config do
 
       describe '#port' do
         it 'defaults to 9090' do
-          expect(config.toxiproxy.object_store_proxy.port).to eq(9090)
+          expect(config.toxiproxy.object_store_proxy.listen_port).to eq(9090)
         end
       end
     end

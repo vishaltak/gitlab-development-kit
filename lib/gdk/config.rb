@@ -328,7 +328,7 @@ module GDK
       string(:host) { config.listen_address }
       integer(:port) { read!('object_store_port') || 9000 }
       string(:backup_remote_directory) { '' }
-      integer(:__connection_port) { config.toxiproxy.object_store_proxy.enabled ? config.toxiproxy.object_store_proxy.port : config.object_store.port }
+      integer(:__connection_port) { config.toxiproxy.object_store_proxy.enabled ? config.toxiproxy.object_store_proxy.listen_port : config.object_store.port }
       string(:__endpoint) { "http://#{config.object_store.host}:#{config.object_store.__connection_port}" }
       hash_setting(:connection) do
         {
@@ -853,8 +853,8 @@ module GDK
       settings :object_store_proxy do
         string(:name) { 'object_store_proxy' }
         bool(:enabled) { config.toxiproxy.enabled && config.object_store.enabled }
-        integer(:upstream_object_store_port) { config.object_store.port }
-        integer(:port) { 9090 }
+        integer(:upstream_port) { config.object_store.port }
+        integer(:listen_port) { 9090 }
       end
     end
 
