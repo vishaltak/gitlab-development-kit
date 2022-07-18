@@ -1924,6 +1924,22 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#__connection_port' do
+      context 'when toxiproxy is disabled' do
+        it 'returns 9000' do
+          expect(config.object_store.__connection_port).to eq(9000)
+        end
+      end
+
+      context 'when toxiproxy and object_store are enabled' do
+        it 'returns 9090' do
+          yaml['toxiproxy'] = { 'enabled' => true }
+          yaml['object_store'] = { 'enabled' => true }
+
+          expect(config.object_store.__connection_port).to eq(9090)
+        end
+      end
+    end
 
     describe '#__endpoint' do
       context 'when toxiproxy is disabled' do
