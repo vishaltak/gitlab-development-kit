@@ -19,4 +19,5 @@ end
 
 group :development, :test, :danger do
   gem 'gitlab-dangerfiles', '~> 3.4.0', require: false
+  gem 'toxiproxy', '~> 2.0.1', require: false
 end

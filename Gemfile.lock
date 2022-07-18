@@ -174,6 +174,7 @@ GEM
     simplecov_json_formatter (0.1.3)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
+    toxiproxy (2.0.1)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.8.0)
@@ -192,6 +193,7 @@ DEPENDENCIES
   rspec_junit_formatter (~> 0.5.0)
   rubocop
   simplecov-cobertura (~> 2.1.0)
+  toxiproxy (~> 2.0.1)
   yard (~> 0.9.0)
 
 BUNDLED WITH

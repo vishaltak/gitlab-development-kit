@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+#
+# frozen_string_literal: true
+
+require_relative '../lib/gdk'
+
+require 'toxiproxy'
+
+config = GDK.config
+
+return unless config.toxiproxy.enabled?
+
+Toxiproxy.host = "http://#{config.listen_address}:#{config.toxiproxy.port}"
+
+Toxiproxy.populate([{
+                      name: config.toxiproxy.object_store_proxy.name,
+                      listen: "#{config.listen_address}:#{config.toxiproxy.object_store_proxy.port}",
+                      upstream: "#{config.listen_address}:#{config.toxiproxy.object_store_proxy.upstream_object_store_port}",
+                    }])
