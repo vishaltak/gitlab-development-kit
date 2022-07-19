@@ -1962,6 +1962,22 @@ RSpec.describe GDK::Config do
         expect(config.object_store.backup_remote_directory).to eq('')
       end
     end
+
+    describe '#console_port' do
+      it 'is set to 9001 by default' do
+        expect(config.object_store.console_port).to eq(9002)
+      end
+
+      context 'with a custom port' do
+        before do
+          yaml.merge!('object_store' => { 'console_port' => 1337 })
+        end
+
+        it 'is set to the custom value' do
+          expect(config.object_store.console_port).to eq(1337)
+        end
+      end
+    end
   end
 
   describe 'omniauth' do

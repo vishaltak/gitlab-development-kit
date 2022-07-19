@@ -195,6 +195,7 @@ object_store:
     region: gdk
     endpoint: http://127.0.0.1:9000
     path_style: true
+  console_port: 9002
   consolidated_form: false
   enabled: false
   host: 127.0.0.1
