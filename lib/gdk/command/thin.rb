@@ -7,7 +7,7 @@ module GDK
       def run(args = [])
         GDK::Output.puts 'This command is deprecated. Use the following command instead:'
         GDK::Output.puts
-        GDK::Output.puts '    GITLAB_RAILS_RACK_TIMEOUT_ENABLE_LOGGING=false gdk rails s'
+        GDK::Output.puts '    gdk stop rails-web && GITLAB_RAILS_RACK_TIMEOUT_ENABLE_LOGGING=false gdk rails s'
 
         false
       end
