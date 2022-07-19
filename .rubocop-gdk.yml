@@ -37,6 +37,7 @@ AllCops:
     - 'influxdb/**/*'
     - 'jaeger/**/*'
     - 'log/**/*'
+    - 'minio/**/*'
     - 'node_modules/**/*'
     - 'omnibus-gitlab/**/*'
     - 'postgresql-geo/**/*'
