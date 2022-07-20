@@ -93,7 +93,6 @@ gitpod-docker-image:
   stage: !reference ['.verify-job', stage]
   needs: []
   script:
-    - bash --version
     - support/ci/verify-gitpod-docker-image
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'

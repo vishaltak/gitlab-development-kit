@@ -8,7 +8,7 @@ HOME=/home/gitpod
 if ! docker run --rm -t \
   -v "${ROOT_PATH}/support/gitpod/startup-scripts/:/tmp/startup-scripts" \
   $DOCKER_IMAGE \
-  bash -ic "/tmp/startup-scripts/; /tmp/startup-scripts/docker-entrypoint;"; 
+  bash -ic "/tmp/startup-scripts/docker-entrypoint;"; 
 then
   echo "ERROR: Failed to run Gitlab in Gitpod workspace docker image." >&2
   exit 1
