@@ -10,6 +10,8 @@ describe GDK::Services do
         GitLabWorkhorse
         Minio
         OpenLDAP
+        PostgreSQL
+        PostgreSQLReplica
         Redis
       ]
 
@@ -21,6 +23,7 @@ describe GDK::Services do
     it 'contains enabled Service classes' do
       service_classes = [
         GDK::Services::GitLabWorkhorse,
+        GDK::Services::PostgreSQL,
         GDK::Services::Redis
       ]
 

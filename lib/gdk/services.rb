@@ -11,6 +11,8 @@ module GDK
     autoload :GitLabWorkhorse, 'gdk/services/gitlab_workhorse'
     autoload :Minio, 'gdk/services/minio'
     autoload :OpenLDAP, 'gdk/services/openldap'
+    autoload :PostgreSQL, 'gdk/services/postgresql'
+    autoload :PostgreSQLReplica, 'gdk/services/postgresql_replica'
     autoload :Redis, 'gdk/services/redis'
     autoload :Required, 'gdk/services/required'
 
@@ -19,6 +21,8 @@ module GDK
       GitLabWorkhorse
       Minio
       OpenLDAP
+      PostgreSQL
+      PostgreSQLReplica
       Redis
     ].freeze
 
