@@ -10,8 +10,8 @@ if ! docker run --rm -t \
   $DOCKER_IMAGE \
   bash -ic "/tmp/startup-scripts/docker-entrypoint;"; 
 then
-  echo "ERROR: Failed to run Gitlab in Gitpod workspace docker image." >&2
+  echo "ERROR: Failed to run GitLab in Gitpod workspace Docker image." >&2
   exit 1
 else
-  echo "INFO: Successfully runs GitLab in Gitpod workspace docker image."
+  echo "INFO: Successfully ran GitLab in Gitpod workspace Docker image."
 fi
