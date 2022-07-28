@@ -192,11 +192,11 @@ errors. If these errors occur:
 
 ## Use GitLab Enterprise features
 
-Instructions to generate a developer license can be found in the
-[onboarding documentation](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee).
+For instructions on how to generate a developer license, see [Developer onboarding](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses).
 
-For information about adding your license to GitLab, see
-[Activate GitLab EE with a license](https://docs.gitlab.com/ee/user/admin_area/license_file.html)
+The developer license is generated for you to get access to [Premium or Ultimate](https://about.gitlab.com/handbook/marketing/strategic-marketing/tiers/) features in your GDK. You must add this license to your GDK instance, not your GitLab.com account.
+
+For information about adding your license to GitLab, see [Activate GitLab EE with a license file or key](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
 
 ## Post-installation
 
