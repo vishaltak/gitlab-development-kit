@@ -194,7 +194,7 @@ errors. If these errors occur:
 
 For instructions on how to generate a developer license, see [Developer onboarding](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses).
 
-The developer license is generated for you to get access to [GitLab Ultimate](https://about.gitlab.com/handbook/marketing/strategic-marketing/tiers/) features in your GDK. You must add this license to your GDK instance, not your GitLab.com account.
+The developer license is generated for you to get access to [Premium or Ultimate](https://about.gitlab.com/handbook/marketing/strategic-marketing/tiers/) features in your GDK. You must add this license to your GDK instance, not your GitLab.com account.
 
 For information about adding your license to GitLab, see [Activate GitLab EE with a license file or key](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
 
