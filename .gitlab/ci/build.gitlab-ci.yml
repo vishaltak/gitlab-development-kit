@@ -16,10 +16,6 @@ release-image:
 build-gitpod-workspace-image:
   extends:
     - .build-job
+    - .rules:gitpod-code-changes
   script:
     - ./support/gitpod/docker-build
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_MERGE_REQUEST_IID'
-      changes:
-        - "support/gitpod/**/*"

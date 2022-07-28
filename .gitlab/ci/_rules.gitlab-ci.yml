@@ -1,3 +1,15 @@
+##############
+# Conditions #
+##############
+.if-merge-request: &if-merge-request
+  if: '$CI_MERGE_REQUEST_IID'
+
+.if-default-branch-schedule: &if-default-branch-schedule
+  if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"'
+
+####################
+# Changes patterns #
+####################
 .docs-changes: &docs-changes
   - "**/*.{md}"
   - "{doc}/**/*"
@@ -44,6 +56,13 @@
   - "gitlab-openldap/**/*"
   - "vagrant/assets/**/*"
 
+.gitpod-code-changes: &gitpod-code-changes
+  - "support/gitpod/**/*"
+  - "support/ci/verify-gitpod-docker-image"
+
+#########
+# Rules #
+#########
 .rules:docs-changes:
   rules:
     - changes: *docs-changes
@@ -55,3 +74,9 @@
 .rules:docs-code-changes:
   rules:
     - changes: *docs-code-changes
+
+.rules:gitpod-code-changes:
+  rules:
+    - <<: *if-default-branch-schedule
+    - <<: *if-merge-request
+      changes: *gitpod-code-changes

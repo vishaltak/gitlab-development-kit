@@ -89,14 +89,9 @@ update-from-mr-branch:
 gitpod-docker-image:
   extends:
     - .docker:build-docker-in-docker
-    - .rules:code-changes
+    - .rules:gitpod-code-changes
   stage: !reference ['.verify-job', stage]
-  needs: []
+  needs:
+    - build-gitpod-workspace-image
   script:
     - support/ci/verify-gitpod-docker-image
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_MERGE_REQUEST_IID'
-      changes:
-        - "support/ci/verify-gitpod-docker-image"
-        - "support/gitpod/**/*"
