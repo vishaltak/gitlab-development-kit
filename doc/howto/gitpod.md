@@ -244,10 +244,7 @@ Docker image which uses the `stable` tag.
 
 ### Promote `main` tag to `stable`
 
-1. Visit the [Gitpod Image Integration test MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/60384) which utilizes the `main` GDK Gitpod image.
-1. Rebase the [Gitpod Image Integration test MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/60384) using the `/rebase` quick action.
-1. Once rebased, launch a new Gitpod instance by visiting the [Gitpod Image Integration test Git branch](https://gitlab.com/gitlab-org/gitlab/-/tree/gdk-gitpod-integration-branch) and select the Gitpod button.
-1. Run some manual tests (manual login, `gdk update`, maybe some manual test runs of jest / RSpec).
-1. Once everything looks good, visit [GDK's scheduled CI pipelines](https://gitlab.com/gitlab-org/gitlab-development-kit/-/pipeline_schedules) and locate the last successful pipeline ID for the `Rebuild Gitpod workspace image` job.
-1. Create a new comment on [Gitpod Image Integration test MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/60384) detailing you checked the GDK Gitpod `main` image created via the pipeline ID located in step 5.
-1. Using the pipeline located in step 5., promote the GDK Gitpod `main` image to `stable` by selecting **Run** on the manual `deploy-gitpod-workspace-image` job once it is available.
+1. Visit [GDK's scheduled CI pipelines](https://gitlab.com/gitlab-org/gitlab-development-kit/-/pipeline_schedules) and locate the last successful pipeline ID for the `Rebuild Gitpod workspace image` pipeline.
+1. Check the GDK Gitpod `main` image is created via the pipeline ID located in step 1.
+1. Check `verify-gitpod-docker-image` job succeeded to ensure GDK started successfully in GDK Gitpod `main` image.
+1. Using the pipeline located in step 1, promote the GDK Gitpod `main` image to `stable` by selecting **Run** on the manual `deploy-gitpod-workspace-image` job once it is available.

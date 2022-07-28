@@ -80,3 +80,8 @@
     - <<: *if-default-branch-schedule
     - <<: *if-merge-request
       changes: *gitpod-code-changes
+
+.rules:deploy-gitpod-workspace-image:
+  rules:
+    - <<: *if-default-branch-schedule
+      when: manual

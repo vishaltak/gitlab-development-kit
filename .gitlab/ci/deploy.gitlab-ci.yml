@@ -35,10 +35,9 @@ gitpod-workspace-image:
   extends:
     - .deploy-job
     - .docker:build-docker-in-docker
+    - .rules:deploy-gitpod-workspace-image
   needs:
     - build-gitpod-workspace-image
+    - gitpod-docker-image
   script:
     - ./support/gitpod/docker-tag-image-as-stable
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: manual
