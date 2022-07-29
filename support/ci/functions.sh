@@ -99,7 +99,7 @@ install() {
   cd_into_checkout_path
 
   echo "> Installing GDK.."
-  gdk install
+  gdk install shallow_clone=true
   set_gitlab_upstream
 }
 
