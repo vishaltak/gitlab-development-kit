@@ -245,6 +245,6 @@ Docker image which uses the `stable` tag.
 ### Promote `main` tag to `stable`
 
 1. Visit [GDK's scheduled CI pipelines](https://gitlab.com/gitlab-org/gitlab-development-kit/-/pipeline_schedules) and locate the last successful pipeline ID for the `Rebuild Gitpod workspace image` pipeline.
-1. Check the GDK Gitpod `main` image is created via the pipeline ID located in step 1.
-1. Check `verify-gitpod-docker-image` job succeeded to ensure GDK started successfully in GDK Gitpod `main` image.
+1. Use the pipeline ID to check if the GDK Gitpod `main` image was created.
+1. Check the `verify-gitpod-docker-image` job succeeded to ensure GDK started successfully in GDK Gitpod `main` image.
 1. Using the pipeline located in step 1, promote the GDK Gitpod `main` image to `stable` by selecting **Run** on the manual `deploy-gitpod-workspace-image` job once it is available.
