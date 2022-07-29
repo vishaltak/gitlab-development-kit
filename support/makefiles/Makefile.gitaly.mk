@@ -5,7 +5,7 @@ gitaly-setup: ${gitaly_build_bin_dir}/gitaly gitaly/gitaly.config.toml gitaly/pr
 
 ${gitaly_clone_dir}/.git:
 	$(Q)if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi
-	$(Q)support/component-git-clone --quiet ${gitaly_repo} ${gitaly_clone_dir}
+	$(Q)support/component-git-clone ${git_depth_param} ${gitaly_repo} ${gitaly_clone_dir}
 	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
 
 .PHONY: gitaly-update
