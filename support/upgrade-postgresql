@@ -9,7 +9,7 @@ require_relative '../lib/gdk'
 class PostgresUpgrader
   extend Forwardable
 
-  POSTGRESQL_VERSIONS = [12, 11, 10, 9.6].freeze
+  POSTGRESQL_VERSIONS = %w[12 11 10 9.6].freeze
 
   def_delegators :postgresql, :current_data_dir, :current_version, :upgrade_needed?
 
