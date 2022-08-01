@@ -43,7 +43,7 @@ The following installation methods are supported, actively maintained, and teste
 | macOS            | 12, 11, 10.15                  |
 | Ubuntu           | 22.04 (1), 21.10, 20.04, 18.04 |
 | Fedora           | 36 (1), 35                     |
-| Debian           | 11, 10, 9                      |
+| Debian           | 11, 10                         |
 | Arch             | latest                         |
 | Manjaro          | latest                         |
 
