@@ -52,7 +52,7 @@ From GitLab this would then be [configured](https://docs.gitlab.com/ee/user/grou
 ### Signing in
 
 Unlike instance-wide SAML, this doesn't add a button to the GitLab global `/users/sign_in` page.
-Instead you can use `https://<gitlab-host>:<gitlab-port>/<group-name>/-/saml/sso` as displayed on the group configuration page.
+Instead you can use `https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/sso` as displayed on the group configuration page.
 
 Sign in can also be initiated from the identity provider at `https://localhost:8443/simplesaml/saml2/idp/SSOService.php?spentityid=https%3A%2F%2F<gitlab-host>%3A3443%2Fgroups%2Fzebra`
 
