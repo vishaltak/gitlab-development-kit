@@ -26,7 +26,7 @@ gitlab-pages/bin/gitlab-pages: ${gitlab_pages_clone_dir}/.git
 	$(Q)$(MAKE) -C ${gitlab_pages_clone_dir} ${QQ}
 
 ${gitlab_pages_clone_dir}/.git:
-	$(Q)support/move-existing-gitlab-pages-directory || support/component-git-clone --quiet --branch "${gitlab_pages_version}" ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
+	$(Q)support/move-existing-gitlab-pages-directory || support/component-git-clone ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} --revision "${gitlab_pages_version}" ${QQ}
 
 gitlab-pages/.git/pull:
 	@echo
