@@ -1,12 +1,19 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Example:
+#
+#   ./support/component-git-clone <depth_param> <repo_name> <component_name> --revision <revision>
+#
+
+require 'optparse'
 require_relative '../lib/gdk'
 
 PROGNAME = File.basename(__FILE__)
 
-def main(git_clone_args)
-  command = %w[git clone] + git_clone_args
+def clone(git_clone_args)
+  default_args = ['--quiet']
+  command = %w[git clone] + default_args + git_clone_args
 
   3.times do
     sh = Shellout.new(command)
@@ -17,6 +24,22 @@ def main(git_clone_args)
   false
 end
 
-abort "usage: #{PROGNAME} GIT_CLONE_ARGS" if ARGV.count < 1
+def checkout(revision)
+  %W[git checkout #{revision}]
+end
+
+def main(argv)
+  options = {}
+  OptionParser.new do |opt|
+    opt.on('--revision [string]') do |value|
+      options[:revision] = value
+    end
+  end.parse!
+
+  clone(argv)
+  checkout(options[:revision]) unless options[:revision].nil?
+end
+
+abort "Usage: #{PROGNAME} [options] --revision [string]" if ARGV.count < 1
 
 main(ARGV)
