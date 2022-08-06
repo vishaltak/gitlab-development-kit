@@ -30,13 +30,23 @@ end
 
 def main(argv)
   options = {}
-  OptionParser.new do |opt|
+  extra_options = []
+
+  opts = OptionParser.new do |opt|
     opt.on('--revision [string]') do |value|
       options[:revision] = value
     end
-  end.parse!
+  end
 
-  clone(argv)
+  begin
+    opts.parse!(argv)
+  rescue OptionParser::InvalidOption => e
+    extra_options << e.args
+    retry
+  end
+
+  args = argv.concat(extra_options.flatten)
+  clone(args)
   checkout(options[:revision]) unless options[:revision].nil?
 end
 
