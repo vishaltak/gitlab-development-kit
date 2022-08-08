@@ -9,7 +9,7 @@ Installation requires [Git](https://git-scm.com/downloads) and `make` are instal
 
 ### macOS
 
-`git` and `make` are installed by default.
+`git` and `make` are installed by default. Homebrew must be installed. Follow the guide at [brew.sh](https://brew.sh/).
 
 ### Ubuntu/Debian
 
