@@ -7,10 +7,9 @@ Prerequisites:
 
 ## Exposing the Prometheus endpoint for a GitLab-managed cluster
 
-> The following instructions are for
-> [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine).
-> If you are using a local cluster such as Minikube, you only need to find the
-> external IP address and port of the Prometheus service.
+The following instructions are for [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine). If you
+are using a local cluster such as minikube, you only need to find the external IP address and port of the Prometheus
+service.
 
 1. Log in to the cluster management page in GKE. For the Monitor stage, this is the [monitoring-development cluster](https://console.cloud.google.com/kubernetes/list?project=monitoring-development-241420).
 1. Navigate to **Services & Ingress**.

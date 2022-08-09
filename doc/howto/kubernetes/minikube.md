@@ -1,6 +1,6 @@
-# Install GDK on Minikube
+# Install GDK on minikube
 
-GDK can be deployed to Minikube / Kubernetes.
+GDK can be deployed to minikube / Kubernetes.
 
 Note that this setup is an experimental phase and [not officially supported](../../../README.md#installation).
 
@@ -10,9 +10,9 @@ See [issue about](https://gitlab.com/gitlab-org/gitlab-development-kit/issues/24
 
 ## How to use it?
 
-1. [Install Minikube](https://minikube.sigs.k8s.io/docs/start/)
+1. [Install minikube](https://minikube.sigs.k8s.io/docs/start/)
 1. Clone GDK repository
-1. Start Minikube using `minikube start`
+1. Start minikube using `minikube start`
 1. Create pod using `kubectl create -f gdkube.yml`
 1. See starting pod using `kubectl get pods`
 1. Wait until GDK starts, see a progress in logs `kubectl logs -f gdk-[pod-id]`

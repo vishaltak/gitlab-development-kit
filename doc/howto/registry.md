@@ -575,8 +575,8 @@ build:
       command: ["--insecure-registry=gdk.test:5000"]
 ```
 
-And for example, if you have Minikube as a Kubernetes runner
-and you configured a self-signed registry, you can add a generated certificate to Docker inside of Minikube:
+And for example, if you have minikube as a Kubernetes runner
+and you configured a self-signed registry, you can add a generated certificate to Docker inside of minikube:
 
 1. Run the following on your GDK instance:
 
@@ -587,7 +587,7 @@ and you configured a self-signed registry, you can add a generated certificate t
    -----END CERTIFICATE-----
    ```
 
-1. Copy this certificate to Minikube:
+1. Copy this certificate to minikube:
 
    ```shell
    $ minikube ssh
@@ -601,7 +601,7 @@ and you configured a self-signed registry, you can add a generated certificate t
    $ logout
    ```
 
-Or if you are using insecure registry, you can run Minikube with command like:
+Or if you are using insecure registry, you can run minikube with command like:
 
 ```shell
 minikube start --insecure-registry="gdk.test:5000"

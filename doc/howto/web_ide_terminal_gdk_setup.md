@@ -13,8 +13,8 @@ To run Web IDE terminals on GDK, the following are required:
   1. Expand **Visibility, project features, permissions**.
   1. Confirm **Pipelines** is enabled.
 - [GitLab Runner](runner.md) installed.
-- [Minikube](https://docs.gitlab.com/charts/development/minikube/#getting-started-with-minikube)
-  installed and started. Start Minikube with a driver of your choice (VirtualBox in this case):
+- [minikube](https://docs.gitlab.com/charts/development/minikube/#getting-started-with-minikube)
+  installed and started. Start minikube with a driver of your choice (VirtualBox in this case):
 
   ```shell
   minikube start --driver=virtualbox
@@ -42,7 +42,7 @@ To configure GDK for Web IDE terminals:
 
 1. (Optional) Check you can access the app at `http://<local IP address>:3000`.
 
-## Minikube setup
+## minikube setup
 
 1. Create a [`role.yml`](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole)
    file somewhere and add the following to it:
@@ -85,7 +85,7 @@ To configure GDK for Web IDE terminals:
    kubectl apply -f role.yml
    ```
 
-1. Restart Minikube:
+1. Restart minikube:
 
    ```shell
    minikube stop

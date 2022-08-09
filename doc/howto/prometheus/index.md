@@ -20,19 +20,19 @@ Because of this, you need to either:
 - Use a service like the [Google Container Engine (GKE)](https://cloud.google.com/kubernetes-engine).
 
 GKE is recommended for GitLab team members who intend to frequently develop against this setup. For
-infrequent use or while waiting for GKE access, Minikube is a good option.
+infrequent use or while waiting for GKE access, minikube is a good option.
 
-Setting it up locally with [Minikube](https://github.com/kubernetes/minikube)
+Setting it up locally with [minikube](https://github.com/kubernetes/minikube)
 is often easier, as you do not have to worry about Runners in GKE requiring
 network access to your local GDK instance.
 
-### Instructions for Minikube
+### Instructions for minikube
 
-The following steps help you set up Minikube locally.
+The following steps help you set up minikube locally.
 
 #### Install `kubectl` if you do not have it
 
-`kubectl` is required for Minikube to function. You can also use `homebrew` to install it using `brew install kubernetes-cli`.
+`kubectl` is required for minikube to function. You can also use `homebrew` to install it using `brew install kubernetes-cli`.
 
 1. First, download it:
 
@@ -51,7 +51,7 @@ The following steps help you set up Minikube locally.
    sudo mv ./kubectl /usr/local/bin/
    ```
 
-#### Install Minikube
+#### Install minikube
 
 For macOS with homebrew, run `brew install minikube`. You may need to `brew link minikube` if the link is not created automatically.
 
@@ -74,18 +74,18 @@ For macOS with homebrew, run `brew install minikube`. You may need to `brew link
 
 ### Install a virtualization driver
 
-Minikube requires virtualization. Install the appropriate driver for your operation system:
+minikube requires virtualization. Install the appropriate driver for your operation system:
 
 - [macOS](https://minikube.sigs.k8s.io/docs/reference/drivers/hyperkit/)
 - [Linux](https://minikube.sigs.k8s.io/docs/reference/drivers/kvm2/)
 
-#### Start Minikube
+#### Start minikube
 
 NOTE:
 If you are using a network filter such as [LittleSnitch](https://www.obdev.at/products/littlesnitch/index.html) you may need to disable it or permit `minikube`,
-as Minikube needs to download multiple ISO's to operate correctly.
+as minikube needs to download multiple ISO's to operate correctly.
 
-The following command starts Minikube, running the first few containers with Kubernetes components.
+The following command starts minikube, running the first few containers with Kubernetes components.
 
 **Compatibility Note:** We are not yet supporting Kubernetes 1.16, please use 1.15 the following until <https://gitlab.com/gitlab-org/gitlab/issues/32721> is resolved.
 
@@ -102,11 +102,11 @@ minikube start --vm-driver kvm2 --disk-size=20g --kubernetes-version=v1.15.4
 ```
 
 NOTE:
-If running Linux, you may need to install a handful of extra packages alongside Minikube, like `ebtables`, `dnsmasq`, `libvirtd`, `virt-manager`, and then ensure `libvirtd` is running correctly with `sudo systemctl restart libvirtd`.
+If running Linux, you may need to install a handful of extra packages alongside minikube, like `ebtables`, `dnsmasq`, `libvirtd`, `virt-manager`, and then ensure `libvirtd` is running correctly with `sudo systemctl restart libvirtd`.
 
 ### Open the Kubernetes Dashboard
 
-Once Minikube starts, open the Kubernetes dashboard to ensure things are working
+Once minikube starts, open the Kubernetes dashboard to ensure things are working
 You can use this for future troubleshooting.
 
 ```shell
@@ -142,16 +142,16 @@ This is because GDK returns this information to the Runner and if it is wrong, p
 
 Now that we have GDK running, we need to go and create a project with CI/CD
 set up. The easiest way to do this, is to simply import from an existing project
-with a simplified `gitlab-ci.yml`.
+with a simplified `.gitlab-ci.yml`.
 
 Import `https://gitlab.com/joshlambert/autodevops-deploy.git` as a public project, to use a very simple
 CI/CD pipeline with no requirements, based on AutoDevOps. It contains just the `deploy` stages and uses a static image, since the GDK does not contain a registry.
 
 ### Allow requests to the local network
 
-We have CSRF protection in place on the cluster URL so if we try to connect Minikube now, we get
+We have CSRF protection in place on the cluster URL so if we try to connect minikube now, we get
 a `Requests to the local network are not allowed` error. The below steps disable this protection
-for use with Minikube.
+for use with minikube.
 
 1. As root user, navigate to **Admin Area** (the little wrench in the top nav) > **Settings** > **Network**.
 1. Expand the **Outbound requests** section, check the box to *Allow requests to the local network from hooks and services*, and save your changes.
@@ -226,10 +226,10 @@ a new button appearing that looks like a chart. Click on it to view the metrics.
 
 It may take 30-60 seconds for the Prometheus server to get a few sets of data points.
 
-### Configuring multiple Minikube instances
+### Configuring multiple minikube instances
 
-Use the `--profile` or `-p` flag to define the Minikube machine name. This allows multiple instances to run simultaneously.
-For instance, running a Minikube instance for working in GitLab CE and GitLab EE at the same time can be accomplished by using all of the same commands outlined above with the additional `--profile` flag added:
+Use the `--profile` or `-p` flag to define the minikube machine name. This allows multiple instances to run simultaneously.
+For instance, running a minikube instance for working in GitLab CE and GitLab EE at the same time can be accomplished by using all of the same commands outlined above with the additional `--profile` flag added:
 
 For macOS:
 
@@ -250,8 +250,8 @@ To look at the EE instance dashboard:
 minikube dashboard --profile ee-instance
 ```
 
-Electing to use a specified machine name means appending the `--profile` flag and name to each Minikube command you would like to execute.
-Without the flag, Minikube assumes you mean the default instance named `minikube`. All machines are stored by default in `~/.minikube/machines`.
+Electing to use a specified machine name means appending the `--profile` flag and name to each minikube command you would like to execute.
+Without the flag, minikube assumes you mean the default instance named `minikube`. All machines are stored by default in `~/.minikube/machines`.
 
 ## Monitoring the GDK with Prometheus
 
