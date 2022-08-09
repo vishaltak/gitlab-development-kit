@@ -12,9 +12,9 @@ Instead of installing GDK locally, you can install GDK to other platforms.
 You can install GDK under a
 [virtualized environment using Vagrant with Virtualbox or Docker](howto/vagrant.md).
 
-### Minikube install
+### minikube install
 
-You can also install GDK on [Minikube](https://github.com/kubernetes/minikube);
+You can also install GDK on [minikube](https://github.com/kubernetes/minikube);
 see [Kubernetes docs](howto/kubernetes/minikube.md).
 
 ### Gitpod integration
@@ -28,8 +28,8 @@ projects.
 
 ### Install using GitLab FOSS project
 
-> Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
-> of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
+Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
+of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
 
 After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
 
@@ -50,8 +50,8 @@ space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/do
 
 ### Install using your own GitLab fork
 
-> Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
-> of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
+Learn [how to create a fork](https://docs.gitlab.com/ee/user/project/repository/forking_workflow.html#creating-a-fork)
+of [GitLab FOSS](https://gitlab.com/gitlab-org/gitlab-foss).
 
 After cloning the `gitlab-development-kit` project and running `make bootstrap`, to:
 

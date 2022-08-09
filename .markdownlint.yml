@@ -28,6 +28,7 @@ proper-names:
   names: [
     "Akismet",
     "Alertmanager",
+    "AlmaLinux",
     "API",
     "Asana",
     "Auth0",
@@ -93,7 +94,7 @@ proper-names:
     "markdownlint",
     "Mattermost",
     "Microsoft",
-    "Minikube",
+    "minikube",
     "MinIO",
     "ModSecurity",
     "NGINX Ingress",
@@ -105,6 +106,7 @@ proper-names:
     "OpenID",
     "OpenShift",
     "PgBouncer",
+    "Postfix",
     "PostgreSQL",
     "Praefect",
     "Prometheus",
@@ -119,7 +121,9 @@ proper-names:
     "runit",
     "Salesforce",
     "SAML",
+    "Sendmail",
     "Sentry",
+    "Service Desk",
     "Sidekiq",
     "Shibboleth",
     "Slack",
@@ -138,6 +142,8 @@ proper-names:
     "unicorn-worker-killer",
     "URL",
     "WebdriverIO",
+    "Workload Identity Pool",
+    "Workload Identity Provider",
     "YAML",
     "YouTrack"
   ]
