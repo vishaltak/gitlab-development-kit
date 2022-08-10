@@ -1,0 +1,11 @@
+#!/bin/bash -ex
+
+GITPOD_WORKSPACE_IMAGE_MAIN="${GITPOD_WORKSPACE_IMAGE_BASE:-gitpod-image}:main"
+GITPOD_WORKSPACE_IMAGE_TESTED="${GITPOD_WORKSPACE_IMAGE_BASE:-gitpod-image}:tested"
+
+docker pull "${GITPOD_WORKSPACE_IMAGE_MAIN}"
+docker tag "${GITPOD_WORKSPACE_IMAGE_MAIN}" "${GITPOD_WORKSPACE_IMAGE_TESTED}"
+
+if [[ "$CI" == "true" ]]; then
+  docker push "${GITPOD_WORKSPACE_IMAGE_TESTED}"
+fi
