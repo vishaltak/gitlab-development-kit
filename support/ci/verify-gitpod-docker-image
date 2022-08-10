@@ -1,5 +1,4 @@
-#!/bin/bash -e
-set -e
+#!/bin/bash -ex
 
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/../.." || exit ; pwd -P)"
 DOCKER_IMAGE=registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main
