@@ -11,6 +11,8 @@ cd_into_checkout_path() {
 }
 
 init() {
+  sudo /sbin/sysctl fs.inotify.max_user_watches=524288
+
   clone
 
   if [ -n "${1}" ]; then
