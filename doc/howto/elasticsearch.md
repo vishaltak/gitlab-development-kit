@@ -10,6 +10,9 @@ environment.
 
 The default version of Elasticsearch is automatically downloaded into your GDK root under `/elasticsearch`.
 
+Elasticsearch is deployed with a minimum (`Xms`) and maximum (`Xmx`) [JVM Heap Size](https://www.elastic.co/guide/en/elasticsearch/reference/current//advanced-configuration.html#set-jvm-heap-size)
+of 2GB. The options are defined in `<gdk root directory>/elasticsearch/config/jvm.options.d/custom.options`.
+
 To enable the service and make it run as part of `gdk start`:
 
 1. Add these lines to your [`gdk.yml`](../configuration.md):

@@ -146,6 +146,8 @@ tasks.add_template(name: 'clickhouse/config.d/logger.xml')
 tasks.add_template(name: 'clickhouse/config.d/openssl.xml')
 tasks.add_template(name: 'clickhouse/config.d/user-directories.xml')
 tasks.add_template(name: 'clickhouse/users.d/gdk.xml')
+tasks.add_template(name: 'elasticsearch/config/elasticsearch.yml', template: 'support/templates/elasticsearch/config/elasticsearch.yml', no_op_condition: 'elasticsearch_enabled')
+tasks.add_template(name: 'elasticsearch/config/jvm.options.d/custom.options', template: 'support/templates/elasticsearch/config/jvm.options.d/custom.options', no_op_condition: 'elasticsearch_enabled')
 
 # Make targets
 tasks.add_make_task(name: 'gitlab-db-migrate', make_dependencies: ['ensure-databases-running'])
