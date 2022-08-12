@@ -148,6 +148,22 @@ clickhouse/config.d/user-directories.xml:
 clickhouse/users.d/gdk.xml: 
 	$(Q)rake clickhouse/users.d/gdk.xml
 
+.PHONY: elasticsearch/config/elasticsearch.yml
+elasticsearch/config/elasticsearch.yml: 
+ifeq ($(elasticsearch_enabled),true)
+	$(Q)rake elasticsearch/config/elasticsearch.yml
+else
+	@true
+endif
+
+.PHONY: elasticsearch/config/jvm.options.d/custom.options
+elasticsearch/config/jvm.options.d/custom.options: 
+ifeq ($(elasticsearch_enabled),true)
+	$(Q)rake elasticsearch/config/jvm.options.d/custom.options
+else
+	@true
+endif
+
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab-db-migrate
