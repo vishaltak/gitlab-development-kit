@@ -14,6 +14,7 @@ variables:
   BUNDLE_JOBS: "$(nproc)"
   BUNDLE_FROZEN: "true"
   GDK_DEBUG: "false"
+  ENABLE_BOOTSNAP: "false"
 
 default:
   timeout: 2 hours
