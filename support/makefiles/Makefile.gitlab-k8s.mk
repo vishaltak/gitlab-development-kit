@@ -46,7 +46,7 @@ endif
 	$(Q)brew install bazelisk
 
 ${gitlab_k8s_agent_clone_dir}/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} --revision "${gitlab_k8s_agent_version}" ${QQ}
+	$(Q)GIT_REVISION="${gitlab_k8s_agent_version}" support/component-git-clone ${git_depth_param} ${gitlab_k8s_agent_repo} ${gitlab_k8s_agent_clone_dir} ${QQ}
 
 gitlab-k8s-agent/.git/pull:
 	@echo

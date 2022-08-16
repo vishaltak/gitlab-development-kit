@@ -3,10 +3,9 @@
 
 # Example:
 #
-#   ./support/component-git-clone <depth_param> <repo_name> <component_name> --revision <revision>
+#   GIT_REVISION=<revision> ./support/component-git-clone <depth_param> <repo_name> <component_name>
 #
 
-require 'optparse'
 require_relative '../lib/gdk'
 
 PROGNAME = File.basename(__FILE__)
@@ -29,27 +28,11 @@ def checkout(revision)
 end
 
 def main(argv)
-  options = {}
-  extra_options = []
-
-  opts = OptionParser.new do |opt|
-    opt.on('--revision [string]') do |value|
-      options[:revision] = value
-    end
-  end
-
-  begin
-    opts.parse!(argv)
-  rescue OptionParser::InvalidOption => e
-    extra_options << e.args
-    retry
-  end
-
-  args = argv.concat(extra_options.flatten)
-  clone(args)
-  checkout(options[:revision]) unless options[:revision].nil?
+  revision = ENV['GIT_REVISION']
+  clone(argv)
+  checkout(revision) if revision
 end
 
-abort "Usage: #{PROGNAME} [options] --revision [string]" if ARGV.count < 1
+abort "Usage: #{PROGNAME} [options]" if ARGV.count < 1
 
 main(ARGV)
