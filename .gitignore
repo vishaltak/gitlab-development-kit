@@ -15,6 +15,7 @@
 /.gettext
 /.gitaly-ruby-bundle
 /.gitlab-bundle
+/.gitlab-lefthook
 /.gitlab-npm
 /.gitlab-shell-bundle
 /.gitlab-translations

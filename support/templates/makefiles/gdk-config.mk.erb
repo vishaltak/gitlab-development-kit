@@ -47,6 +47,7 @@ gitlab_spamcheck_repo = <%= config.repositories.gitlab_spamcheck %>
 <%-# -%>
 gitlab_ui_enabled = <%= config.gitlab_ui? %>
 gitlab_ui_repo = <%= config.repositories.gitlab_ui %>
+gitlab_lefthook_enabled = <%= config.gitlab.lefthook_enabled? %>
 grafana_enabled = <%= config.grafana.enabled? %>
 hostname = <%= config.hostname %>
 https = <%= config.https? %>
