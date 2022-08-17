@@ -26,7 +26,7 @@ gitlab-shell-git-pull-run:
 # symlink, if necessary. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/1086
 .PHONY: ${gitlab_shell_clone_dir}/.git
 ${gitlab_shell_clone_dir}/.git:
-	$(Q)support/move-existing-gitlab-shell-directory || support/component-git-clone ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir} --revision "${gitlab_shell_version}"
+	$(Q)support/move-existing-gitlab-shell-directory || GIT_REVISION="${gitlab_shell_version}" support/component-git-clone ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 .gitlab-shell-bundle:
 	@echo

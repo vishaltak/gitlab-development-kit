@@ -22,7 +22,7 @@ gitlab-elasticsearch-indexer-clean-bin:
 	$(Q)rm -rf gitlab-elasticsearch-indexer/bin
 
 gitlab-elasticsearch-indexer/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer --revision "${gitlab_elasticsearch_indexer_version}"
+	$(Q)GIT_REVISION="${gitlab_elasticsearch_indexer_version}" support/component-git-clone ${git_depth_param} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
 
 .PHONY: gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
 gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git/pull
