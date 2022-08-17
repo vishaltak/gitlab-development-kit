@@ -4,7 +4,7 @@ gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
 
-gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-yarn .gitlab-translations
+gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-lefthook .gitlab-yarn .gitlab-translations
 
 .PHONY: gitlab-update
 gitlab-update: gitlab-update-timed
@@ -73,6 +73,19 @@ gitlab/public/uploads:
 	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler_for_gitlab
 	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_clone_dir)
 	$(Q)touch $@
+
+ifeq ($(gitlab_lefthook_enabled),true)
+.gitlab-lefthook:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing Lefthook for gitlab-org/gitlab"
+	@echo "${DIVIDER}"
+	$(Q)$(in_gitlab) gem install lefthook && ${BUNDLE} exec lefthook install
+	$(Q)touch $@
+else
+.gitlab-lefthook:
+	@true
+endif
 
 .gitlab-yarn:
 	@echo

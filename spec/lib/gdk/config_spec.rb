@@ -1142,6 +1142,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe 'lefthook_enabled' do
+      it 'is enabled by default' do
+        expect(config.gitlab.lefthook_enabled?).to be(true)
+      end
+    end
+
     describe '#dir' do
       it 'returns the GitLab directory' do
         expect(config.gitlab.dir).to eq(Pathname.new('/home/git/gdk/gitlab'))

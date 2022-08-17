@@ -82,6 +82,7 @@ gitlab:
   cache_classes: false
   dir: "/home/git/gdk/gitlab"
   gitaly_disable_request_limits: false
+  lefthook_enabled: true
   log_dir: "/home/git/gdk/gitlab/log"
   rails:
     address: ''
