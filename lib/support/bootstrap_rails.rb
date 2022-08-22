@@ -8,8 +8,9 @@ require_relative '../gdk'
 module Support
   class BootstrapRails
     # The log file should be in the "support" folder, not in "suppport/lib"
-    LOG_FILE            = '../bootstrap-rails.log'
-    RAKE_DEV_SETUP_CMD  = %w[support/exec-cd gitlab bundle exec rake dev:setup].freeze
+    LOG_FILE = '../bootstrap-rails.log'
+    RAKE_DEV_DB_RESET_CMD = %w[support/exec-cd gitlab bundle exec rake db:reset].freeze
+    RAKE_DEV_DB_SEED_CMD = %w[support/exec-cd gitlab bundle exec rake db:seed_fu].freeze
     RAKE_COPY_DB_CI_CMD = %w[support/exec-cd gitlab bundle exec rake dev:copy_db:ci].freeze
 
     def execute
@@ -27,32 +28,50 @@ module Support
     private
 
     def bootstrap_main_db
-      run_rake_task_if_db_not_found('gitlabhq_development', RAKE_DEV_SETUP_CMD)
+      if_db_not_found('gitlabhq_development') do
+        run_command(RAKE_DEV_DB_RESET_CMD) && set_feature_flags && seed_main_db
+      end
+    end
+
+    def set_feature_flags
+      # Nothing set right now
+      true
+    end
+
+    def seed_main_db
+      run_command(RAKE_DEV_DB_SEED_CMD)
     end
 
     def bootstrap_ci_db
       return if !config.gitlab.rails.databases.ci.__enabled || config.gitlab.rails.databases.ci.__use_main_database
 
-      run_rake_task_if_db_not_found('gitlabhq_development_ci', RAKE_COPY_DB_CI_CMD)
+      if_db_not_found('gitlabhq_development_ci') do
+        run_command(RAKE_COPY_DB_CI_CMD)
+      end
     end
 
-    def run_rake_task_if_db_not_found(db, rake_task)
-      if postgresql.db_exists?(db)
-        GDK::Output.info("#{db} exists, nothing to do here.")
-      else
-        test_gitaly_up!
+    def run_command(cmd)
+      test_gitaly_up!
 
-        result = Shellout.new(rake_task).execute(retry_attempts: 3)
-        unless result.success?
-          GDK::Output.abort <<~MESSAGE
-            The command "#{rake_task.drop(2).join(' ')}" failed. Try to run it again with:
+      result = Shellout.new(cmd).execute(retry_attempts: 3)
+      unless result.success?
+        GDK::Output.abort <<~MESSAGE
+          The command '#{cmd.join(' ')}' failed. Try to run it again with:
 
-            #{rake_task.join(' ')}
-          MESSAGE
-        end
+          #{cmd.join(' ')}
+        MESSAGE
       end
 
       true
+    end
+
+    def if_db_not_found(db)
+      if postgresql.db_exists?(db)
+        GDK::Output.info("#{db} exists, nothing to do here.")
+        true
+      else
+        yield
+      end
     end
 
     def postgresql
