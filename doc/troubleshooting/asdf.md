@@ -1,8 +1,8 @@
 # Troubleshooting asdf
 
-The following are possible solutions to problems you might encounter with asdf and GDK.
+The following are possible solutions to problems you might encounter with [`asdf`](https://asdf-vm.com) and GDK.
 
-## GDK update fails to find the asdf path
+## GDK update fails to find the `asdf` path
 
 GDK update might fail at the "Updating asdf release, plugins, and tools" step
 
@@ -24,10 +24,37 @@ make: *** [asdf-update-timed] Error 2
 ❌️ ERROR: Failed to update.
 ```
 
-This happens when `asdf` is updated to a new version during the GDK update. This a [known issue](https://github.com/asdf-vm/asdf/issues/531) that `asdf reshim` does not update the `asdf` path.
+This happens when `asdf` is updated to a new version during the GDK update. This a
+[known issue](https://github.com/asdf-vm/asdf/issues/531) that `asdf reshim` does not update the `asdf` path.
 
 To fix this, you can run the following command:
 
 ```shell
 rm -rf ~/.asdf/shims && asdf reshim
 ```
+
+## Error: `command not found: gdk`
+
+Access to the `gdk` command requires a properly configured Ruby installation. If the Ruby installation isn't properly
+configured, your shell can't find the `gdk` command, and running commands like `gdk install` and `gdk start`
+cause the following error:
+
+```shell
+command not found: gdk
+```
+
+A common cause of this error is an incomplete set up of `asdf`. To determine if `asdf` is set up correctly, run:
+
+```shell
+which asdf
+```
+
+If this command produces the error `asdf not found`, `asdf` set up isn't complete. This commonly occurs on GDK installations
+on new workstations that have no custom shell configuration. A common solution to an `asdf` installation problem is to
+follow the [Install `asdf`](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf) instructions.
+
+The required instructions depend on your operating system and method of installing `asdf`. For macOS, the most common
+combination is:
+
+- ZSH shell.
+- Installation using Homebrew.

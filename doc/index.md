@@ -67,6 +67,9 @@ The one-line installation:
     curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
     ```
 
+If you have any post-installation problems, see [Resolve installation errors](#resolve-installation-errors). A common
+post-installation problem is [incomplete `asdf` installation](troubleshooting/asdf.md#error-command-not-found-gdk).
+
 ## Simple Installation
 
 After prerequisites are installed, you can install GDK dependencies and GDK itself.
@@ -161,6 +164,9 @@ Install GDK by cloning and configuring GitLab and other projects using
     ```shell
     gdk install
     ```
+
+If `gdk install` doesn't work, see [Resolve installation errors](#resolve-installation-errors). A common
+installation problem is [incomplete `asdf` installation](troubleshooting/asdf.md#error-command-not-found-gdk).
 
 Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space. The clone
 process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
