@@ -167,9 +167,7 @@ module Runit
 
     command = ['sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *expanded_services.map(&:to_s)]
 
-    sh = Shellout.new(command, chdir: GDK.root)
-    quiet ? sh.run : sh.stream
-    sh.success?
+    Shellout.new(command, chdir: GDK.root).execute(display_output: !quiet).success?
   end
 
   def self.ensure_services_are_supervised(services)

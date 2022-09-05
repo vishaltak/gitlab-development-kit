@@ -77,6 +77,10 @@ module GDK
       @yaml = yaml || load_yaml!
     end
 
+    def each
+      yield attributes.values
+    end
+
     def validate!
       attributes.each_value do |attribute|
         next if attribute.ignore?

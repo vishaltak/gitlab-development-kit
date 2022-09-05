@@ -4,7 +4,7 @@ require 'open3'
 
 # Controls execution of commands delegated to the running shell
 class Shellout
-  attr_reader :args, :opts
+  attr_reader :args, :opts, :env
 
   DEFAULT_EXECUTE_DISPLAY_OUTPUT = true
   DEFAULT_EXECUTE_RETRY_ATTEMPTS = 0
@@ -18,6 +18,7 @@ class Shellout
   def initialize(*args, **opts)
     @args = args.flatten
     @opts = opts
+    @env = { 'GDK_INTERACTIVE' => STDOUT.isatty.to_s }
 
     @stdout_str = ''
     @stderr_str = ''
@@ -28,11 +29,16 @@ class Shellout
     @command ||= args.join(' ')
   end
 
-  def execute(display_output: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
+  def execute(display_output: true, combine_output: false, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
     retried ||= false
     GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
 
-    display_output ? stream : try_run
+    if display_output
+      combine_output ? stream_combine_output : stream
+    else
+      try_run
+    end
+
     GDK::Output.debug("result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
 
     raise ExecuteCommandFailedError unless success?
@@ -62,40 +68,62 @@ class Shellout
 
   # Executes the command while printing the output from both stdout and stderr
   #
-  # This command will stream each individual character from a separate thread
-  # making it possible to visualize interactive progress bar.
   def stream(extra_options = {})
     jobs = []
     @stdout_str = ''
     @stderr_str = ''
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
-    Open3.popen3(*args, opts.merge(extra_options)) do |stdin, stdout, stderr, thread|
+    Open3.popen3(env, *args, opts.merge(extra_options)) do |stdin, stdout, stderr, thread|
       jobs = [
-        thread_read('stdout', stdout, method(:print_out)),
-        thread_read('stderr', stderr, method(:print_err)),
+        thread_read(stdout, method(:print_out)),
+        thread_read(stderr, method(:print_err)),
         read_from_write_to($stdin, stdin)
       ]
 
-      # Give the read (stdin) and write (stdout, stderr) threads a chance to get going.
-      sleep(0.01)
-
-      begin
-        thread.join
-      rescue Interrupt
-        # handle if/when CTRL-C is pressed
-        exit
-      end
-
-      @status = thread.value
+      @status = stream_core(thread, jobs)
     end
 
     read_stdout
+  end
+
+  def stream_core(thread, jobs)
+    # Give the read (stdin) and write (stdout, stderr) threads a chance to get going.
+    sleep(0.01)
+
+    begin
+      thread.join
+    rescue Interrupt
+      # handle if/when CTRL-C is pressed
+      exit
+    end
+
+    thread.value
   rescue Errno::ENOENT => e
     print_err(e.message)
     raise StreamCommandFailedError, e
   ensure
     jobs.each(&:kill)
+  end
+
+  # Executes the command while printing the combined output from both stdout and stderr
+  #
+  def stream_combine_output(extra_options = {})
+    jobs = []
+    @stdout_str = ''
+    @stderr_str = ''
+
+    # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
+    Open3.popen2e(env, *args, opts.merge(extra_options)) do |stdin, stdout_and_stderr, thread|
+      jobs = [
+        thread_read(stdout_and_stderr, method(:print_out)),
+        read_from_write_to($stdin, stdin)
+      ]
+
+      @status = stream_core(thread, jobs)
+    end
+
+    read_stdout
   end
 
   def readlines(limit = -1)
@@ -175,7 +203,7 @@ class Shellout
     end
   end
 
-  def thread_read(label, io, meth)
+  def thread_read(io, meth)
     Thread.start do
       while (c = io.getc)
         break if io.closed?

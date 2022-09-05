@@ -136,11 +136,18 @@ update-summarize:
 
 # This is used by `gdk reconfigure`
 #
+# .PHONY: reconfigure
+# reconfigure: unlock-dependency-installers \
+# touch-examples \
+# all \
+# show-reconfigured-at \
+# ask-to-restart
+
 .PHONY: reconfigure
 reconfigure: unlock-dependency-installers \
 touch-examples \
-all \
-show-reconfigured-at
+Procfile \
+ask-to-restart
 
 .PHONY: clean
 clean:

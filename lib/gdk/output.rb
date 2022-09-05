@@ -118,7 +118,8 @@ module GDK
       end
 
       def interactive?
-        STDOUT.isatty # rubocop:disable Style/GlobalStdStream
+        ENV['GDK_INTERACTIVE'] == 'true' ||
+          STDOUT.isatty # rubocop:disable Style/GlobalStdStream
       end
 
       def colorize?

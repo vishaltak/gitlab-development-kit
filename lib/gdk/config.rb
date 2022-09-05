@@ -572,6 +572,17 @@ module GDK
       integer(:max_server_memory_usage) { 2 * 1000 * 1000 * 1000 } # 2 GB
     end
 
+    settings :toxiproxy do
+      settings :proxies do
+        settings :object_store do
+          string(:name) { 'object_store' }
+        end
+        settings :other_proxy do
+          string(:name) { 'other_proxy' }
+        end
+      end
+    end
+
     settings :gitaly do
       path(:dir) { config.gdk_root.join('gitaly') }
       path(:ruby_dir) { config.gitaly.dir.join('ruby') }
