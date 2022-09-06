@@ -24,8 +24,8 @@ make: *** [asdf-update-timed] Error 2
 ❌️ ERROR: Failed to update.
 ```
 
-This happens when `asdf` is updated to a new version during the GDK update. This a
-[known issue](https://github.com/asdf-vm/asdf/issues/531) that `asdf reshim` does not update the `asdf` path.
+This happens when `asdf` is updated to a new version during the GDK update. The `asdf reshim` command not updating the `asdf`
+path is a [known issue](https://github.com/asdf-vm/asdf/issues/531).
 
 To fix this, you can run the following command:
 
@@ -43,7 +43,7 @@ cause the following error:
 command not found: gdk
 ```
 
-A common cause of this error is an incomplete set up of `asdf`. To determine if `asdf` is set up correctly, run:
+A common cause of this error is an incomplete `asdf` setup. To determine if `asdf` setup is complete, run:
 
 ```shell
 which asdf
