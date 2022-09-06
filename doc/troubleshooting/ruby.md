@@ -314,16 +314,17 @@ you must compile and install OpenSSL 1.1.1:
 1. Download OpenSSL 1.1.1:
 
    ```shell
+   OPENSSL_VERSION=openssl-1.1.1q
    cd ~/Downloads
-   wget https://www.openssl.org/source/openssl-1.1.1o.tar.gz
-   tar xf openssl-1.1.1o.tar.gz
+   wget https://www.openssl.org/source/$OPENSSL_VERSION.tar.gz
+   tar -xf $OPENSSL_VERSION.tar.gz
    ```
 
 1. Compile OpenSSL 1.1.1:
 
    ```shell
-   cd ~/Downloads/openssl-1.1.1p
-   ./config --prefix=/opt/openssl-1.1.1p --openssldir=/opt/openssl-1.1.1p shared zlib
+   cd ~/Downloads/$OPENSSL_VERSION
+   ./config --prefix=/opt/$OPENSSL_VERSION --openssldir=/opt/$OPENSSL_VERSION shared zlib
    make
    make test
    sudo make install
@@ -332,14 +333,14 @@ you must compile and install OpenSSL 1.1.1:
 1. Link the system's certs to OpenSSL's 1.1.1 directory:
 
    ```shell
-   sudo rm -rf /opt/openssl-1.1.1o/certs
-   sudo ln -s /etc/ssl/certs /opt/openssl-1.1.1o
+   sudo rm -rf /opt/$OPENSSL_VERSION/certs
+   sudo ln -s /etc/ssl/certs /opt/$OPENSSL_VERSION
    ```
 
 1. Add the following line to your `.bashrc` or `.zshrc`:
 
    ```plaintext
-   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/openssl-1.1.1o/"
+   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/openssl-1.1.1q/"
    ```
 
 1. Start a new shell for the environment variable to apply, or source your
