@@ -14,9 +14,8 @@ _() {
 
 set -eo pipefail
 
-GDK_INSTALL_DIR="${2-gitlab-development-kit}"
-GDK_CLONE_BRANCH="${3-main}"
-
+DEFAULT_GDK_INSTALL_DIR="gitlab-development-kit"
+DEFAULT_GITLAB_REPO_URL="https://gitlab.com/gitlab-org/gitlab.git"
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
 
@@ -64,7 +63,7 @@ bootstrap() {
 gdk_install() {
   # shellcheck disable=SC1090
   source "${ASDF_SH_PATH}"
-  gdk install
+  gdk install gitlab_repo="$GITLAB_REPO_URL"
 }
 
 echo
@@ -74,6 +73,22 @@ echo "INFO:"
 echo "INFO: The source for the installation script can be viewed at:"
 echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/support/install"
 echo
+
+if [ $# -eq 1 ]; then
+  echo "Where would you like to install the GDK? [./${DEFAULT_GDK_INSTALL_DIR}]"
+  read -r GDK_INSTALL_DIR </dev/tty
+
+  echo "Which GitLab repo URL would you like to clone? [${DEFAULT_GITLAB_REPO_URL}]"
+  echo "ATTENTION: Non-GitLab team members, please fork the GitLab project, ensuring it's public and paste your URL here."
+  read -r GITLAB_REPO_URL </dev/tty
+else
+  GDK_INSTALL_DIR="${2-gitlab-development-kit}"
+  GDK_CLONE_BRANCH="${3-main}"
+fi
+
+GDK_INSTALL_DIR=${GDK_INSTALL_DIR:-${DEFAULT_GDK_INSTALL_DIR}}
+GDK_CLONE_BRANCH=${GDK_CLONE_BRANCH:-main}
+GITLAB_REPO_URL=${GITLAB_REPO_URL:-${DEFAULT_GITLAB_REPO_URL}}
 
 if ! ensure_not_root; then
   error "Running as root is not supported."
