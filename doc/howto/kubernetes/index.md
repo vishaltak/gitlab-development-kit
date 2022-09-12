@@ -20,7 +20,7 @@ brew install --cask google-cloud-sdk
 
 NOTE:
 If you have installed `gcloud` via Homebrew Cask, as described
-above, you need to add the following lines in your `~/.bash_profile`
+above, bash users need to add the following lines in your `~/.bash_profile`
 to set the correct PATH to be able to run `gcloud` and the `kubectl` binary below.
 
 ```shell
@@ -28,6 +28,9 @@ to set the correct PATH to be able to run `gcloud` and the `kubectl` binary belo
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
 source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
 ```
+
+zsh users can add `gcloud` to the plugins list in `.zshrc`
+
 
 After you have installed `gcloud`, run the
 [init](https://cloud.google.com/sdk/docs/quickstart-macos#initialize_the_sdk) step:
