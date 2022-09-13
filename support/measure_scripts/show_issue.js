@@ -18,9 +18,9 @@ module.exports = async function (context, commands) {
     );
   };
 
-  commands.meta.setTitle("Test Repository Browser Workflows");
+  commands.meta.setTitle("Test Issue List and Detail Workflows");
   commands.meta.setDescription(
-    "Tests the workflow of loading a project and then clicking through to a file 2 directories deep"
+    "Tests the workflow of loading own issue list, go to issue detail, write somethin in notes box and go back to list"
   );
 
   // Preloading and pre-setting the performance bar cookie
