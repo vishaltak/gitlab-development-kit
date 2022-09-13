@@ -121,12 +121,6 @@ user is, you very likely run everything as a non-root user already.
 
 After installing GDK dependencies:
 
-1. Install the `gitlab-development-kit` gem:
-
-   ```shell
-   gem install gitlab-development-kit
-   ```
-
 1. Clone the `gitlab-development-kit` repository into your preferred location:
 
    ```shell
@@ -139,6 +133,12 @@ After installing GDK dependencies:
 
    ```shell
    cd gitlab-development-kit
+   ```
+
+1. Install the `gitlab-development-kit` gem:
+
+   ```shell
+   gem install gitlab-development-kit
    ```
 
 1. Install all the Ruby dependencies:
