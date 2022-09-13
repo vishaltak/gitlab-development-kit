@@ -13,6 +13,7 @@ module GDK
     autoload :Doctor, 'gdk/command/doctor'
     autoload :Help, 'gdk/command/help'
     autoload :Install, 'gdk/command/install'
+    autoload :SwitchRuby, 'gdk/command/switch_ruby'
     autoload :Kill, 'gdk/command/kill'
     autoload :MeasureBase, 'gdk/command/measure_base'
     autoload :MeasureUrl, 'gdk/command/measure_url'
@@ -48,6 +49,7 @@ module GDK
       'doctor' => -> { GDK::Command::Doctor },
       'env' => -> { GDK::Command::Env },
       'install' => -> { GDK::Command::Install },
+      'switch-ruby' => -> { GDK::Command::SwitchRuby },
       'kill' => -> { GDK::Command::Kill },
       'help' => -> { GDK::Command::Help },
       'measure' => -> { GDK::Command::MeasureUrl },
