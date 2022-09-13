@@ -59,10 +59,37 @@ The following are instructions for Ubuntu and Debian users that don't want
 [GDK to manage their dependencies](index.md#install-dependencies).
 
 These instructions help you install dependencies for Ubuntu, assuming you're using an active
-LTS release (16.04, 18.04, 20.04) or higher, and Debian:
+LTS release (16.04, 18.04, 20.04, 22.04) or higher, and Debian:
 
 1. [Install `git` and `make`](index.md#install-prerequisites).
-1. Install [Yarn](https://classic.yarnpkg.com/en/docs/install#debian-stable).
+1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't previously:
+
+   ```shell
+   git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
+   ```
+
+1. Change to the GDK project directory:
+
+   ```shell
+   cd gitlab-development-kit
+   ```
+
+1. Install NodeJS and Yarn.
+   1. Check the required versions of NodeJS in the [`.tool-versions`](../.tool-versions) file.
+   1. Install any of the required versions of NodeJS [using one of the installation methods](https://nodejs.org/en/download/package-manager/), for example via the `nodesource` repo or `nvm`. The following example uses `nvm`:
+      1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). This should automatically configure it for your shell as well.
+      1. Install the required version via `nvm`:
+      
+         ```shell
+         nvm install <NODEJS_VERSION>
+         ```
+
+   1. Install Yarn via `npm`:
+   
+      ```shell
+      npm install --global yarn
+      ```
+
 1. Run `make bootstrap-packages`. This is a light subset of `make bootstrap` that runs
    `apt-get update` and then `apt-get install` on the packages found in [`packages_debian.txt`](../packages_debian.txt).
 
@@ -70,43 +97,49 @@ LTS release (16.04, 18.04, 20.04) or higher, and Debian:
    make bootstrap-packages
    ```
 
-1. Install PostgreSQL and MinIO. Run the following commands:
+   - Check that `make bootstrap-packages` installed `redis-server` version 5.0 or later (`apt list
+   redis-server`). Install [Redis](https://redis.io) 5.0 or later manually, if you don't already have
+   it.
+
+1. Install PostgreSQL.
+   1. Check the required _major_ versions of PostgreSQL in the [`.tool-versions`](../.tool-versions) file.
+      - Installation methods for PostgreSQL are typically limited to the latest _major_ version. When you select the version of PostgreSQL to install, you should only select the _major_ version. For example, if the [`.tool-versions`](../.tool-versions) file lists PostgreSQL version 13.6, install the latest version of PostgreSQL 13.
+   1. Install the selected _major_ version of PostgreSQL via its official repo - [Debian](https://www.postgresql.org/download/linux/debian/), [Ubuntu](https://www.postgresql.org/download/linux/ubuntu/).
+
+1. Install MinIO.
 
    ```shell
-   sudo apt update && sudo apt install postgresql postgresql-contrib
    sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
    sudo chmod +x /usr/local/bin/minio
    ```
 
-1. Check the required Go version in `.tool-versions`. You may be able to install the required
-   version using `apt`. Check the available versions for:
-    - [Ubuntu](https://packages.ubuntu.com/search?keywords=golang-go).
-    - [Debian](https://packages.debian.org/search?keywords=golang-go).
-1. Install Go using one of the following methods:
-   - If available for your version of Ubuntu or Debian, run `sudo apt install golang`.
-   - If the required version is only available as a backport in [Ubuntu](https://help.ubuntu.com/community/UbuntuBackports),
-     or [Debian](https://backports.debian.org/Instructions/#index2h2), use the backport package. You
-     may have to update your `$PATH` so the backported version of Go is used.
-   - If unavailable, install it manually. See the official [Go installation](https://golang.org/doc/install#install)
-     instructions.
+1. Install Go.
+   1. Check the required versions of Go in the [`.tool-versions`](../.tool-versions) file.
+   1. Install any of the required versions of Go via the official instructions:
+      1. [Download the correct Go package](https://go.dev/dl/) for your machine.
+      1. [Install the package](https://go.dev/doc/install).
+   1. Alternative methods of installing Go are available, for example [goenv](https://github.com/syndbg/goenv). You can use these if the version is correct and the Go binary is available on the PATH.
 
-1. Check that `make bootstrap-packages` installed `redis-server` version 5.0 or newer (`apt list
-   redis-server`). Install [Redis](https://redis.io) 5.0 or newer manually, if you don't already have
-   it.
-1. Install Ruby using [`rbenv`](https://github.com/rbenv/rbenv). Install `rbenv`:
+1. Install Ruby.
+   1. Check the required versions of Ruby in the [`.tool-versions`](../.tool-versions) file.
+   1. Install any of the required versions of Ruby [using one of the installation methods](https://www.ruby-lang.org/en/documentation/installation/), for example `rbenv` or `RVM`. The following example uses `rbenv`:
+      1. Install [`rbenv`](https://github.com/rbenv/rbenv#using-package-managers).
+      1. Install the [`ruby-build` plugin](https://github.com/rbenv/ruby-build#installation).
+      1. Install the required version of Ruby via `rbenv`:
+
+         ```shell
+         rbenv install <RUBY_VERSION>
+         ```
+
+      1. A [`.ruby-version`](../.ruby-version) file is provided in the GDK for convenience. When Ruby has been installed via a manager like `rbenv` it [follows what's given in this file](https://github.com/rbenv/rbenv#choosing-the-ruby-version). If you've installed a supported version that differs from the one given in this file you should update it accordingly in your checkout before installing GDK.
+
+1. Reload your chosen shell to ensure everything is picked up, for example with `bash`:
 
    ```shell
-   sudo apt install rbenv
+   source ~/.bashrc
    ```
 
-1. Run `rbenv init` to get instructions for what to add to your shell configuration file. For more
-   information, see [the `rbenv` docs](https://github.com/rbenv/rbenv#how-rbenv-hooks-into-your-shell). Note:
-   - If the required Ruby version in `.tool-versions` isn't installable, you must get the
-     [`ruby-build` plugin](https://github.com/rbenv/ruby-build#installation) and build it.
-   - You must select the Ruby version instead of your distributions default one (if any). See the
-     [the `rbenv` instructions](https://github.com/rbenv/rbenv#choosing-the-ruby-version). For example,
-     `echo 2.7.5 >~/.rbenv/version`.
-1. [Install GDK](index.md#install-gdk).
+1. Complete the rest of the [Manual Instructions](index.md#manually) and then proceed to [Install GDK](index.md#install-gdk).
 
 ## Install dependencies for other Linux distributions
 
