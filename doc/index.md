@@ -6,6 +6,7 @@ and related projects.
 ## Install prerequisites
 
 Installation requires [Git](https://git-scm.com/downloads) and `make` are installed.
+Use a [supported version](../README.md#supported-platforms) of your operating system.
 
 ### macOS
 
