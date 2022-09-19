@@ -30,14 +30,12 @@ module GDK
       end
 
       def workflow_script_paths
-        @workflow_script_paths ||= begin
-          workflows.each_with_object([]) do |path, all|
-            file = "#{WORKFLOW_SCRIPTS_FOLDER}/#{path}.js"
-            next unless File.exist?(file)
+        @workflow_script_paths ||= workflows.each_with_object([]) do |path, all|
+          file = "#{WORKFLOW_SCRIPTS_FOLDER}/#{path}.js"
+          next unless File.exist?(file)
 
-            all << file
-          end.uniq
-        end
+          all << file
+        end.uniq
       end
       alias_method :items, :workflow_script_paths
 

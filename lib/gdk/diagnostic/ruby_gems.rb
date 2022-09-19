@@ -21,10 +21,8 @@ module GDK
       private
 
       def failed_to_load_gems
-        @failed_to_load_gems ||= begin
-          GEMS_TO_CHECK.reject do |name|
-            gem_ok?(name)
-          end
+        @failed_to_load_gems ||= GEMS_TO_CHECK.reject do |name|
+          gem_ok?(name)
         end
       end
 

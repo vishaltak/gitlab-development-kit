@@ -60,7 +60,7 @@ end
 def http_get(url)
   uri = URI.parse(url)
   response = Net::HTTP.get_response(uri)
-  raise FileNotFoundError, "Unable to get '#{url}'" unless response.class == Net::HTTPOK
+  raise FileNotFoundError, "Unable to get '#{url}'" unless response.instance_of?(Net::HTTPOK)
 
   response.body
 end

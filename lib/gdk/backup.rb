@@ -28,9 +28,7 @@ module GDK
     end
 
     def destination_file
-      @destination_file ||= begin
-        backup_root.join("#{relative_source_file.to_s.gsub('/', '__')}.#{Time.now.strftime('%Y%m%d%H%M%S')}")
-      end
+      @destination_file ||= backup_root.join("#{relative_source_file.to_s.gsub('/', '__')}.#{Time.now.strftime('%Y%m%d%H%M%S')}")
     end
 
     def relative_source_file
