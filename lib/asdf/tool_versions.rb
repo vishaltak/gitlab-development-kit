@@ -121,11 +121,9 @@ module Asdf
     end
 
     def tool_versions
-      @tool_versions ||= begin
-        raw_tool_versions_lines.each_with_object({}) do |line, all|
-          match = line.chomp.match(/\A(?<name>\w+) (?<versions>[\d. ]+)\z/)
-          all[match[:name]] = Tool.new(match[:name], match[:versions].split(' ')) if match
-        end
+      @tool_versions ||= raw_tool_versions_lines.each_with_object({}) do |line, all|
+        match = line.chomp.match(/\A(?<name>\w+) (?<versions>[\d. ]+)\z/)
+        all[match[:name]] = Tool.new(match[:name], match[:versions].split(' ')) if match
       end
     end
 

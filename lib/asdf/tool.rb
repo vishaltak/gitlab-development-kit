@@ -23,10 +23,8 @@ module Asdf
     end
 
     def tool_versions
-      @tool_versions ||= begin
-        versions.each_with_object({}) do |version, all|
-          all[version] = ToolVersion.new(name, version)
-        end
+      @tool_versions ||= versions.each_with_object({}) do |version, all|
+        all[version] = ToolVersion.new(name, version)
       end
     end
   end

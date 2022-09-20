@@ -37,13 +37,11 @@ module GDK
       end
 
       def migrations_needing_attention
-        @migrations_needing_attention ||= begin
-          Shellout.new(migrations_check_command).readlines.each_with_object([]) do |e, a|
-            m = e.match(/\A\|\s(?<migration>[^\s]+)\s+\| (?:no|unknown migration)\s+\|\z/)
-            next unless m
+        @migrations_needing_attention ||= Shellout.new(migrations_check_command).readlines.each_with_object([]) do |e, a|
+          m = e.match(/\A\|\s(?<migration>[^\s]+)\s+\| (?:no|unknown migration)\s+\|\z/)
+          next unless m
 
-            a << m[:migration]
-          end
+          a << m[:migration]
         end
       end
 
