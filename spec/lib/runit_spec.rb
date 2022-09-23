@@ -48,11 +48,9 @@ RSpec.describe Runit do
     end
 
     describe '.start' do
-      subject(:start) { described_class.start(*full_args) }
+      subject(:start) { described_class.start(services, **args) }
 
       shared_examples 'starts services' do |quiet|
-        let(:full_args) { [services, args] }
-
         context 'with empty args array' do
           let(:services) { [] }
 
@@ -105,7 +103,7 @@ RSpec.describe Runit do
     end
 
     describe '.stop' do
-      subject(:stop) { described_class.stop(args) }
+      subject(:stop) { described_class.stop(**args) }
 
       shared_examples 'stops all services' do |quiet|
         it 'stops all services', :hide_output do
@@ -137,9 +135,8 @@ RSpec.describe Runit do
     end
 
     describe '.sv' do
-      subject(:sv) { described_class.sv(*full_args) }
+      subject(:sv) { described_class.sv(command, services, **args) }
 
-      let(:full_args) { [command, services, args] }
       let(:command) { 'stop' }
       let(:services) { data_service_names }
       let(:args) { {} }
