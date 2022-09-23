@@ -103,16 +103,13 @@ mkdir /tmp/gitlab-runner
 docker run --rm -it -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
 ```
 
-(optional) If you have [SSL enabled with NGINX](nginx.md), a
-Docker-based runner needs access to your self-signed certificate
-(for example, `gdk.test.pem`). Suppose your certificate is in
-`/Users/example/gdk/gdk.test.pem`, you can register your runner in this
-way:
+(optional) If you have [SSL enabled with NGINX](nginx.md), a Docker-based runner needs access to your self-signed
+certificate (for example, `gdk.test.crt`). Your certificate **must** have a `.crt` extension, _not_ `.pem`. GDK will
+automatically mount your certificate into the Docker container when the runner is started, but you need to include it
+manually when registering your runner:
 
 ```shell
-mkdir /tmp/gitlab-runner
-cp /Users/example/gdk/gdk.test.pem /tmp/gitlab-runner
-docker run --rm -it --env=SSL_CERT_FILE=/etc/gitlab-runner/gdk.test.pem -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
+docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
 ```
 
 The following prompts appear:

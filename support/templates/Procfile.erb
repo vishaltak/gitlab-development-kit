@@ -64,7 +64,11 @@ rails-web: exec /usr/bin/env PATH="<%= config.gitlab_metrics_exporter.dir %>/bin
 
 # Gitlab Runner Docker
 #
-<%= '#' unless config.runner.__install_mode_docker %>runner: exec docker run --rm <%= config.runner.__add_host_flags %> -v '<%= config.runner.config_file %>:/etc/gitlab-runner/config.toml' -v /var/run/docker.sock:/var/run/docker.sock <%= config.runner.image %>
+<%= '#' unless config.runner.__install_mode_docker && !config.https? %>runner: exec docker run --rm <%= config.runner.__add_host_flags %> -v '<%= config.runner.config_file %>:/etc/gitlab-runner/config.toml' -v /var/run/docker.sock:/var/run/docker.sock <%= config.runner.image %>
+
+# Gitlab Runner Docker with HTTPS
+#
+<%= '#' unless config.runner.__install_mode_docker && config.https? %>runner: exec docker run --rm <%= config.runner.__add_host_flags %> -v '<%= config.runner.config_file %>:/etc/gitlab-runner/config.toml' -v '<%= config.gdk_root.join(config.nginx.ssl.certificate) %>:/etc/gitlab-runner/certs/<%= config.nginx.ssl.certificate %>' -v /var/run/docker.sock:/var/run/docker.sock <%= config.runner.image %>
 
 # Gitlab Spamcheck
 #
