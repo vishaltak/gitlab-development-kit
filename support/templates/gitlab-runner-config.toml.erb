@@ -9,7 +9,7 @@ check_interval = 0
   url = "<%= "#{config.__uri}" %>"
   token = "<%= config.runner.token %>"
   executor = "<%= config.runner.executor %>"
-<%- if config.https? -%>
+<%- if config.https? && !config.runner.__install_mode_docker -%>
   tls-ca-file = "<%= config.gdk_root.join('localhost.crt') %>"
 <%- end -%>
   [runners.custom_build_dir]
