@@ -7,7 +7,7 @@ RSpec.describe Shellout do
   let(:opts) { {} }
   let(:tmp_directory) { File.realpath('/tmp') }
 
-  subject { described_class.new(command, opts) }
+  subject { described_class.new(command, **opts) }
 
   describe '#args' do
     let(:command_as_array) { %w[echo foo] }

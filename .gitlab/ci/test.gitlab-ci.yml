@@ -16,22 +16,25 @@ rubocop:
   extends:
     - .test-job
     - .rules:code-changes
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   script:
     - make rubocop
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0']
 
 rspec:
   extends:
     - .test-job
     - .rules:code-changes
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
   script:
     - pwd > .gdk-install-root
     - make rspec
   cache:
-    key: "ruby-2.7-bundle"
+    key: "ruby-${RUBY_VERSION}-bundle"
     paths:
       - $BUNDLE_PATH
   artifacts:
@@ -42,15 +45,21 @@ rspec:
       coverage_report:
         coverage_format: cobertura
         path: coverage/coverage.xml
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0']
 
 shellcheck:
   extends:
     - .test-job
     - .rules:code-changes
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   script:
     - apt-get update
     - make shellcheck
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0']
 
 checkmake:
   extends:
@@ -64,15 +73,18 @@ gdk-example-yml:
   extends:
     - .test-job
     - .rules:code-changes
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   script:
     - make verify-gdk-example-yml
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0']
 
 asdf-combine:
   extends:
     - .test-job
     - .rules:code-changes
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   artifacts:
     when: on_failure
     paths:
@@ -86,6 +98,9 @@ asdf-combine:
         - ".tool-versions*"
         - "support/asdf-combine"
         - "support/ci/verify-asdf-combine"
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0']
 
 makefile-config:
   extends:
