@@ -49,7 +49,7 @@ To set up `gdk.test` and `registry.test` as hostnames:
 ## Create loopback interface
 
 Some functionality may not work if GDK processes listen on `localhost` or `127.0.0.1` (for example,
-services running under Docker). Therefore, an IP address on a different private network should be
+services [running under Docker](runner.md#docker-configuration)). Therefore, an IP address on a different private network should be
 used.
 
 `172.16.123.1` is a useful [private network address](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses)
@@ -71,22 +71,29 @@ address:
    sudo ip link set dummy0 up
    ```
 
-1. Set `gitlab.rails.hostname` to `172.16.123.1`:
+1. Set `listen_address` to `172.16.123.1`:
 
     ```shell
-    gdk config set gitlab.rails.hostname 172.16.123.1
+    gdk config set listen_address 172.16.123.1
     ```
 
     Or, if you added `gdk.test` to your `/etc/hosts` file:
 
     ```shell
-    gdk config set gitlab.rails.hostname gdk.test
+   gdk config set hostname gdk.test
     ```
 
 1. Reconfigure GDK:
 
    ```shell
    gdk reconfigure
+   ``` 
+
+   Your `gdk.yaml` should contain these lines afterwards:
+  
+   ```yaml
+   hostname: gdk.test
+   listen_address: 172.16.123.1
    ```
 
 1. Restart GDK to use the new configuration:
