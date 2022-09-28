@@ -12,7 +12,7 @@ Before you can run the spec, you need `gcloud` and `kubectl` installed.
 Follow the instructions at <https://cloud.google.com/sdk/docs/quickstarts>
 for the operating system that you are using to install `gcloud`.
 Alternatively, if you are using Homebrew on MacOS, you can install
-`gcloud` with :
+[`gcloud` via Homebrew Cask](https://formulae.brew.sh/cask/google-cloud-sdk):
 
 ```shell
 brew install --cask google-cloud-sdk
@@ -20,13 +20,17 @@ brew install --cask google-cloud-sdk
 
 NOTE:
 If you have installed `gcloud` via Homebrew Cask, as described
-above, you need to add the following lines in your `~/.bash_profile`
+above, you need to add the following lines in your profile
 to set the correct PATH to be able to run `gcloud` and the `kubectl` binary below.
 
 ```shell
-# Add to ~/.bash_profile
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
-source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
+# For bash users, add to ~/.bash_profile
+source '$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc'
+source '$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc'
+
+# For zsh users, add to ~/.zprofile
+source '$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
+source '$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 ```
 
 After you have installed `gcloud`, run the
