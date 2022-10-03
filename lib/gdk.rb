@@ -43,6 +43,7 @@ module GDK
   autoload :Machine, 'gdk/machine'
   autoload :Output, 'gdk/output'
   autoload :OutputBuffered, 'gdk/output_buffered'
+  autoload :PortManager, 'gdk/port_manager'
   autoload :Postgresql, 'gdk/postgresql'
   autoload :Project, 'gdk/project'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
