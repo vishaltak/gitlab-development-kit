@@ -4,18 +4,16 @@
 
 ## Overview
 
-The GitLab Development Kit (GDK) installs a GitLab instance on your workstation. GDK can
-manage GitLab requirements, such as development tools and databases.
+The GitLab Development Kit (GDK) installs GitLab on your workstation. GDK
+manages GitLab requirements, development tools and databases.
 
-The GDK is recommended for anyone contributing to the GitLab codebase, whether a
-GitLab team member or a member of the wider community. It allows you to test
-your changes locally on your workstation in an isolated manner. This can speed
-up the time it takes to make successful contributions.
+The GDK is used by GitLab team members and contributors to test changes
+locally in isolation to speed up the time to make successful contributions.
 
 ## Goals
 
-- Provide developer tooling to install, update, and develop against a local GitLab instance.
-- Offer GDK users an automated method for installing [required software](https://docs.gitlab.com/ee/install/requirements.html#software-requirements).
+- Provide tools to install, update, and develop against a local GitLab instance.
+- Automate installing [required software](https://docs.gitlab.com/ee/install/requirements.html#software-requirements).
 - Only manage projects, software, and services that may be needed to run a GitLab instance.
 - Out of the box, only enable the services GitLab strictly requires to operate.
 - Support native operating systems as listed below.
