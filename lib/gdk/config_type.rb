@@ -12,6 +12,7 @@ module GDK
     autoload :Integer, 'gdk/config_type/integer'
     autoload :Mergable, 'gdk/config_type/mergable'
     autoload :Path, 'gdk/config_type/path'
+    autoload :Port, 'gdk/config_type/port'
     autoload :Settings, 'gdk/config_type/settings'
     autoload :SettingsArray, 'gdk/config_type/settings_array'
     autoload :String, 'gdk/config_type/string'
