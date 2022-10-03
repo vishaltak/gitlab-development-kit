@@ -128,8 +128,8 @@ GEM
     rspec-mocks (3.11.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
-    rspec-support (3.11.0)
-    rspec_junit_formatter (0.5.1)
+    rspec-support (3.11.1)
+    rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (1.36.0)
       json (~> 2.3)
@@ -189,10 +189,10 @@ DEPENDENCIES
   lefthook (~> 1.1.1)
   rake (~> 13.0.6)
   rspec (~> 3.11.0)
-  rspec_junit_formatter (~> 0.5.1)
+  rspec_junit_formatter (~> 0.6.0)
   rubocop
   simplecov-cobertura (~> 2.1.0)
   yard (~> 0.9.28)
 
 BUNDLED WITH
-   2.3.15
+   2.3.22
