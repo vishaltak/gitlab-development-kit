@@ -417,7 +417,7 @@ RSpec.describe GDK::Config do
       let(:raw_yaml) { "---\ngdk:\n  debug: fals" }
 
       it 'raises an exception' do
-        expect { described_class.new.gdk.validate! }.to raise_error(/Value 'fals' for gdk.debug is not a valid bool/)
+        expect { described_class.new.gdk.validate! }.to raise_error(/Value 'fals' for setting 'gdk.debug' is not a valid bool/)
       end
     end
   end
@@ -2460,12 +2460,12 @@ RSpec.describe GDK::Config do
       context 'when port is specified' do
         let(:yaml) do
           {
-            'gitlab_docs' => { 'port_https' => 3333 }
+            'gitlab_docs' => { 'port_https' => 3006 }
           }
         end
 
         it 'returns the configured port' do
-          expect(config.gitlab_docs.port_https).to eq(3333)
+          expect(config.gitlab_docs.port_https).to eq(3006)
         end
       end
     end
@@ -2668,7 +2668,7 @@ RSpec.describe GDK::Config do
     describe '#external_port' do
       context 'when external_port is not specified' do
         it 'returns the default external_port' do
-          expect(config.gitlab_spamcheck.external_port).to eq(8080)
+          expect(config.gitlab_spamcheck.external_port).to eq(8081)
         end
       end
 

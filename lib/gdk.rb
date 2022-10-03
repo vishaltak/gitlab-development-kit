@@ -16,6 +16,7 @@ autoload :Shellout, 'shellout'
 
 # GitLab Development Kit
 module GDK
+  StandardErrorWithMessage = Class.new(StandardError)
   HookCommandError = Class.new(StandardError)
 
   PROGNAME = 'gdk'

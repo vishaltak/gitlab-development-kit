@@ -212,6 +212,24 @@ RSpec.describe GDK::ConfigSettings do
         expect { config.validate! }.to raise_error(TypeError)
       end
     end
+
+    context 'with a nested port conflict' do
+      let(:test_klass) do
+        new_test_klass do |s|
+          s.settings(:service_a) do
+            port(:port, 'a') { 3333 }
+          end
+
+          s.settings(:service_b) do
+            port(:port, 'b') { 3333 }
+          end
+        end
+      end
+
+      it 'raises an error' do
+        expect { test_klass.new.validate! }.to raise_error("Value '3333' for setting 'service_b.port' is not a valid port - Port 3333 is already allocated for service 'a'.")
+      end
+    end
   end
 
   describe '#dump!' do
@@ -279,7 +297,7 @@ RSpec.describe GDK::ConfigSettings do
       described_class.integer(key) { '333' }
       current_port = config[key]
 
-      expect { config.bury!(key, false) }.to raise_error(TypeError, "Value 'false' for #{key} is not a valid integer")
+      expect { config.bury!(key, false) }.to raise_error(TypeError, "Value 'false' for setting '#{key}' is not a valid integer.")
 
       expect(config[key]).to eq(current_port)
     end

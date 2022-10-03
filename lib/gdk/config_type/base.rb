@@ -26,8 +26,10 @@ module GDK
 
       def value=(val)
         @value = parse(val)
+      rescue StandardErrorWithMessage => e
+        raise e, "Value '#{val}' for setting '#{slug}' is not a valid #{type} - #{e.message}."
       rescue ::TypeError, ::NoMethodError
-        raise ::TypeError, "Value '#{val}' for #{slug} is not a valid #{type}"
+        raise ::TypeError, "Value '#{val}' for setting '#{slug}' is not a valid #{type}."
       end
 
       def user_defined?
