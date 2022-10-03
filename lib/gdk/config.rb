@@ -3,6 +3,7 @@
 require 'cgi'
 require 'etc'
 require 'uri'
+require 'pathname'
 
 module GDK
   class Config < ConfigSettings
