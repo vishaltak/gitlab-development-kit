@@ -60,6 +60,7 @@ In these instructions, we assume you [set up `registry.test`](local_network.md).
      host: registry.test
      self_signed: false
      auth_enabled: false
+     listen_address: 0.0.0.0
    ```
 
 1. Locate the Docker daemon configuration file and set the `insecure-registries` directive to point to the local registry `registry.test:5000`:
