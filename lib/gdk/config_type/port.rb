@@ -17,6 +17,10 @@ module GDK
         end
       end
 
+      def default_value
+        super || config.port_manager.default_port_for_service(service_name)
+      end
+
       private
 
       attr_reader :service_name

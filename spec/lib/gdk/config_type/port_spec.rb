@@ -5,11 +5,14 @@ require 'spec_helper'
 RSpec.describe GDK::ConfigType::Port do
   let(:config) { GDK.config }
   let(:parent) { config }
-  let(:key) { 'fake-port' }
+  let(:key) { 'port' }
+  let(:service_name) { 'gdk' }
+  let(:value) { nil }
   let(:yaml) { { key => value } }
-  let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &proc { value }) }
+  let(:blk) { nil }
+  let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &blk) }
 
-  subject { described_class.new(parent: parent, builder: builder, service_name: 'gdk') }
+  subject { described_class.new(parent: parent, builder: builder, service_name: service_name) }
 
   before do
     stub_pg_bindir
@@ -18,7 +21,7 @@ RSpec.describe GDK::ConfigType::Port do
 
   describe '#parse' do
     context 'when value is initialized with an integer' do
-      let(:value) { '123' }
+      let(:value) { 123 }
 
       it 'returns parsed value' do
         expect(subject.parse(value)).to eq(123)
@@ -62,6 +65,34 @@ RSpec.describe GDK::ConfigType::Port do
 
           expect { subject.parse(value) }.to raise_error(GDK::StandardErrorWithMessage, "Value '#{value}' for setting '#{key}' is not a valid port - Port 3808 is already allocated for service 'webpack'.")
         end
+      end
+    end
+  end
+
+  describe '#default_value' do
+    context 'when the service and port have not been defined' do
+      let(:yaml) { {} }
+      let(:service_name) { 'unknown-service' }
+
+      it 'raises an error' do
+        expect { subject.default_value }.to raise_error(/Service '#{service_name}' is unknown, please add to GDK::PortManager::DEFAULT_PORTS_FOR_SERVICES/)
+      end
+    end
+
+    context 'when a default value is not defined' do
+      let(:yaml) { {} }
+
+      it 'returns the default value from PortManager::DEFAULT_PORTS_FOR_SERVICES' do
+        expect(subject.default_value).to eq(3000)
+      end
+    end
+
+    context 'when a default value is defined' do
+      let(:yaml) { {} }
+      let(:blk) { proc { 456 } }
+
+      it 'returns the defined value' do
+        expect(subject.default_value).to eq(456)
       end
     end
   end

@@ -119,7 +119,7 @@ module GDK
 
     string(:listen_address) { '127.0.0.1' }
     string(:hostname) { read!('hostname') || read!('host') || config.listen_address }
-    port(:port, 'gdk') { read!('port') || port_manager.default_port_for_service('gdk') }
+    port(:port, 'gdk') { read!('port') }
 
     settings :https do
       bool(:enabled) { read!('https_enabled') || false }
@@ -145,7 +145,7 @@ module GDK
 
     settings :webpack do
       string(:host) { read!('webpack_host') || config.gitlab.rails.hostname }
-      port(:port, 'webpack') { port_manager.default_port_for_service('webpack') }
+      port(:port, 'webpack')
       string(:public_address) { "" }
       bool(:static) { false }
       bool(:vendor_dll) { false }
@@ -177,7 +177,7 @@ module GDK
     end
 
     settings :workhorse do
-      port(:configured_port, 'workhorse') { port_manager.default_port_for_service('workhorse') }
+      port(:configured_port, 'workhorse')
 
       settings :__listen_settings do
         string(:__type) do
@@ -232,8 +232,8 @@ module GDK
       bool(:enabled) { false }
       bool(:auto_update) { true }
       bool(:https) { false }
-      port(:port, 'gitlab_docs') { port_manager.default_port_for_service('gitlab_docs') }
-      port(:port_https, 'gitlab_docs_https') { port_manager.default_port_for_service('gitlab_docs_https') }
+      port(:port, 'gitlab_docs')
+      port(:port_https, 'gitlab_docs_https')
 
       anything :__uri do
         klass = config.gitlab_docs.https? ? URI::HTTPS : URI::HTTP
@@ -253,15 +253,15 @@ module GDK
 
     settings :snowplow_micro do
       bool(:enabled) { false }
-      port(:port, 'snowplow_micro') { port_manager.default_port_for_service('snowplow_micro') }
+      port(:port, 'snowplow_micro')
       string(:image) { 'snowplow/snowplow-micro:latest' }
     end
 
     settings :gitlab_spamcheck do
       bool(:enabled) { false }
       bool(:auto_update) { true }
-      port(:port, 'gitlab_spamcheck') { port_manager.default_port_for_service('gitlab_spamcheck') }
-      port(:external_port, 'gitlab_spamcheck_external') { port_manager.default_port_for_service('gitlab_spamcheck_external') }
+      port(:port, 'gitlab_spamcheck')
+      port(:external_port, 'gitlab_spamcheck_external')
       string(:output) { 'stdout' }
       bool(:monitor_mode) { false }
       string(:inspector_url) { "http://#{config.hostname}:8888/api/v1/isspam/issue" }
@@ -304,7 +304,7 @@ module GDK
       string(:listen_address) { config.listen_address }
       string(:api_host) { config.hostname }
 
-      port(:port, 'registry') { read!('registry_port') || port_manager.default_port_for_service('registry') }
+      port(:port, 'registry') { read!('registry_port') }
 
       string :image do
         read!('registry_image') ||
@@ -325,8 +325,8 @@ module GDK
       bool(:consolidated_form) { false }
       bool(:enabled) { read!('object_store_enabled') || false }
       string(:host) { config.listen_address }
-      port(:port, 'object_store') { read!('object_store') || port_manager.default_port_for_service('object_store') }
-      port(:console_port, 'object_store_console') { port_manager.default_port_for_service('object_store_console') }
+      port(:port, 'object_store') { read!('object_store') }
+      port(:console_port, 'object_store_console')
       string(:backup_remote_directory) { '' }
       hash_setting(:connection) do
         {
@@ -355,7 +355,7 @@ module GDK
     settings :gitlab_pages do
       bool(:enabled) { false }
       string(:host) { "#{config.listen_address}.nip.io" }
-      port(:port, 'gitlab_pages') { read!('gitlab_pages_port') || port_manager.default_port_for_service('gitlab_pages') }
+      port(:port, 'gitlab_pages') { read!('gitlab_pages_port') }
       string(:__uri) { "#{config.gitlab_pages.host}:#{config.gitlab_pages.port}" }
       bool(:auto_update) { true }
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
@@ -504,7 +504,7 @@ module GDK
       end
       settings :http do
         bool(:enabled) { false }
-        port(:port, 'nginx') { port_manager.default_port_for_service('nginx') }
+        port(:port, 'nginx')
       end
       settings :http2 do
         bool(:enabled) { false }
@@ -521,7 +521,7 @@ module GDK
     end
 
     settings :postgresql do
-      port(:port, 'postgresql') { read!('postgresql_port') || port_manager.default_port_for_service('postgresql') }
+      port(:port, 'postgresql') { read!('postgresql_port') }
       path(:bin_dir) { cmd!(%w[support/pg_bindir]) || '/usr/local/bin' }
       path(:bin) { config.postgresql.bin_dir.join('postgres') }
       string(:replication_user) { 'gitlab_replication' }
@@ -536,7 +536,7 @@ module GDK
         bool(:enabled) { false }
       end
       settings :geo do
-        port(:port, 'postgresql_geo') { port_manager.default_port_for_service('postgresql_geo') }
+        port(:port, 'postgresql_geo')
         path(:dir) { config.gdk_root.join('postgresql-geo') }
         string(:host) { config.postgresql.geo.dir.to_s }
         string(:__active_host) { GDK::PostgresqlGeo.new.use_tcp? ? config.postgresql.geo.host : '' }
@@ -550,9 +550,9 @@ module GDK
       path(:data_dir) { config.clickhouse.dir.join('data') }
       path(:log_dir) { config.gdk_root.join('log', 'clickhouse') }
       string(:log_level) { 'trace' }
-      port(:http_port, 'clickhouse_http') { port_manager.default_port_for_service('clickhouse_http') }
-      port(:tcp_port, 'clickhouse_tcp') { port_manager.default_port_for_service('clickhouse_tcp') }
-      port(:interserver_http_port, 'interserver') { port_manager.default_port_for_service('interserver') }
+      port(:http_port, 'clickhouse_http')
+      port(:tcp_port, 'clickhouse_tcp')
+      port(:interserver_http_port, 'interserver')
       integer(:max_memory_usage) { 1000 * 1000 * 1000 } # 1 GB
       integer(:max_thread_pool_size) { 1000 }
       integer(:max_server_memory_usage) { 2 * 1000 * 1000 * 1000 } # 2 GB
@@ -646,7 +646,7 @@ module GDK
       bool(:enabled) { true }
       bool(:use_gitlab_sshd) { true }
       string(:listen_address) { config.hostname }
-      port(:listen_port, 'sshd') { port_manager.default_port_for_service('sshd') }
+      port(:listen_port, 'sshd')
       string(:user) do
         if config.sshd.use_gitlab_sshd?
           'git'
@@ -699,16 +699,16 @@ module GDK
 
     settings :grafana do
       bool(:enabled) { false }
-      port(:port, 'grafana') { port_manager.default_port_for_service('grafana') }
+      port(:port, 'grafana')
     end
 
     settings :prometheus do
       bool(:enabled) { false }
-      port(:port, 'prometheus') { port_manager.default_port_for_service('prometheus') }
-      port(:gitaly_exporter_port, 'gitaly_exporter') { port_manager.default_port_for_service('gitaly_exporter') }
-      port(:praefect_exporter_port, 'praefect_exporter') { port_manager.default_port_for_service('praefect_exporter') }
-      port(:workhorse_exporter_port, 'workhorse_exporter') { port_manager.default_port_for_service('workhorse_exporter') }
-      port(:gitlab_shell_exporter_port, 'gitlab_shell_exporter') { port_manager.default_port_for_service('gitlab_shell_exporter') }
+      port(:port, 'prometheus')
+      port(:gitaly_exporter_port, 'gitaly_exporter')
+      port(:praefect_exporter_port, 'praefect_exporter')
+      port(:workhorse_exporter_port, 'workhorse_exporter')
+      port(:gitlab_shell_exporter_port, 'gitlab_shell_exporter')
     end
 
     settings :openldap do
@@ -717,7 +717,7 @@ module GDK
 
     settings :mattermost do
       bool(:enabled) { false }
-      port(:port, 'mattermost') { port_manager.default_port_for_service('mattermost') }
+      port(:port, 'mattermost')
       string(:image) { 'mattermost/mattermost-preview' }
     end
 
@@ -821,9 +821,9 @@ module GDK
         bool(:verbose) { false }
         integer(:timeout) { config.gdk.runit_wait_secs / 2 }
         bool(:sidekiq_exporter_enabled) { false }
-        port(:sidekiq_exporter_port, 'sidekiq_exporter') { port_manager.default_port_for_service('sidekiq_exporter') }
+        port(:sidekiq_exporter_port, 'sidekiq_exporter')
         bool(:sidekiq_health_check_enabled) { false }
-        port(:sidekiq_health_check_port, 'sidekiq_health_check') { port_manager.default_port_for_service('sidekiq_health_check') }
+        port(:sidekiq_health_check_port, 'sidekiq_health_check')
       end
     end
 
