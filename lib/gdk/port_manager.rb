@@ -11,38 +11,36 @@ module GDK
     PortAlreadyAllocated = Class.new(StandardErrorWithMessage)
     PortInUseError = Class.new(StandardError)
 
-    # rubocop:disable Layout/HashAlignment
     DEFAULT_PORTS_FOR_SERVICES = {
-      2222  => 'sshd',
-      3000  => 'gdk',
-      3005  => 'gitlab_docs',
-      3010  => 'gitlab_pages',
-      3030  => 'gitlab_docs_https',
-      3333  => 'workhorse',
-      3807  => 'sidekiq_exporter',
-      3808  => 'webpack',
-      3907  => 'sidekiq_health_check',
-      4000  => 'grafana',
-      5000  => 'registry',
-      5431  => 'postgresql_geo',
-      5432  => 'postgresql',
-      8001  => 'gitlab_spamcheck',
-      8065  => 'mattermost',
-      8080  => 'nginx',
-      8081  => 'gitlab_spamcheck_external', # was 8080
-      8123  => 'clickhouse_http',
-      9000  => 'object_store',
-      9001  => 'clickhouse_tcp',
-      9002  => 'object_store_console',
-      9009  => 'interserver',
-      9090  => 'prometheus',
-      9091  => 'snowplow_micro',
-      9122  => 'gitlab_shell_exporter',
-      9229  => 'workhorse_exporter',
-      9236  => 'gitaly_exporter',
+      2222 => 'sshd',
+      3000 => 'gdk',
+      3005 => 'gitlab_docs',
+      3010 => 'gitlab_pages',
+      3030 => 'gitlab_docs_https',
+      3333 => 'workhorse',
+      3807 => 'sidekiq_exporter',
+      3808 => 'webpack',
+      3907 => 'sidekiq_health_check',
+      4000 => 'grafana',
+      5000 => 'registry',
+      5431 => 'postgresql_geo',
+      5432 => 'postgresql',
+      8001 => 'gitlab_spamcheck',
+      8065 => 'mattermost',
+      8080 => 'nginx',
+      8081 => 'gitlab_spamcheck_external', # was 8080
+      8123 => 'clickhouse_http',
+      9000 => 'object_store',
+      9001 => 'clickhouse_tcp',
+      9002 => 'object_store_console',
+      9009 => 'interserver',
+      9090 => 'prometheus',
+      9091 => 'snowplow_micro',
+      9122 => 'gitlab_shell_exporter',
+      9229 => 'workhorse_exporter',
+      9236 => 'gitaly_exporter',
       10101 => 'praefect_exporter'
     }.freeze
-    # rubocop:enable Layout/HashAlignment
 
     def initialize(config)
       @config = config
