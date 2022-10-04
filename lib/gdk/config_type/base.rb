@@ -17,7 +17,7 @@ module GDK
       end
 
       def default_value
-        parent.instance_eval(&blk)
+        parent.instance_eval(&blk) if blk
       rescue ::GDK::ConfigSettings::LooseFile => e
         GDK::Output.warn(e)
         GDK::Output.info("Instead, set '#{slug}' in your gdk.yml.")
