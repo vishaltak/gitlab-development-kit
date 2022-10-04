@@ -44,6 +44,7 @@ task reconfigure: [:all]
 desc 'Generate all config files'
 task all: CONFIGS
 
+desc nil
 task 'clobber:gdk.example.yml' do |t|
   Rake::Cleaner.cleanup_files([t.name])
 end
@@ -52,6 +53,7 @@ file GDK::Config::FILE do |t|
   FileUtils.touch(t.name)
 end
 
+desc nil
 task 'generate-file-at', [:file, :destination] do |_, args|
   file = args[:file]
   destination = args[:destination]
@@ -61,6 +63,7 @@ task 'generate-file-at', [:file, :destination] do |_, args|
 end
 
 # Define as a task instead of a file, so it's built unconditionally
+desc nil
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
   GDK::ErbRenderer.new(t.source, t.name).render!
   puts t.name # Print the filename, so make can include it

@@ -6,6 +6,7 @@ group :development do
   gem 'lefthook', '~> 1.1.1', require: false
   gem 'rake', '~> 13.0.6'
   gem 'rubocop', require: false
+  gem "rubocop-rake", "~> 0.6.0", require: false
   gem 'yard', '~> 0.9.28', require: false
 end
 
