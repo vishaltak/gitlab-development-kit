@@ -21,6 +21,7 @@ by:
 GDK troubleshooting information is available for the following:
 
 - [Installing the GDK](#installing-the-gdk)
+- [Apple M1/M2 machines](apple_mx_machines.md)
 - [asdf](asdf.md)
 - [Ruby](ruby.md)
 - [Node.js](node_js.md)
