@@ -147,3 +147,7 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
 
 If you want to run GitLab Agent Server and Agent locally with Bazel instead of GDK, see
 the [GitLab Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
+
+## Troubleshooting
+
+See [Bad CPU type in executable Target](../troubleshooting/apple_mx_machines.md#bad-cpu-type-in-executable-target).
