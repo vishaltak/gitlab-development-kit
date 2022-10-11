@@ -912,6 +912,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#pull_policy' do
+      it 'returns if-not-present' do
+        expect(config.runner.pull_policy).to eq('if-not-present')
+      end
+    end
+
     describe '#bin' do
       it 'returns gitlab-runner' do
         found = find_executable('gitlab-runner')

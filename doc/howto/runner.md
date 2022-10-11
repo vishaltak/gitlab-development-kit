@@ -174,7 +174,7 @@ Configuration (with the authentication token) was saved in "/etc/gitlab-runner/c
 ```
 
 Once the registration is complete, you should see the registered runner on the admin page:
-![never contacted runner](img/gitlab-runners-never-contacted.png) 
+![never contacted runner](img/gitlab-runners-never-contacted.png)
 
 ### Set up GDK to use the registered runner
 
@@ -208,7 +208,7 @@ default.
 </details>
 <p/>
 
-Run 
+Run
 
 ```shell
 gdk reconfigure
@@ -216,7 +216,7 @@ gdk reconfigure
 
 which will create `<path-to-gdk>/gitlab-runner-config.toml` in your GDK directory and enable the runner inside a Docker container.
 
-After that just run 
+After that just run
 
 ```shell
 gdk restart
@@ -248,7 +248,7 @@ You are good to go! Now you can assign the runner to a project and verify your j
 1. Create a new project and ensure the new runner is available:
    ![GitLab Runner is available](img/gitlab-runners-runner-available.png)
 1. Add a `.gitlab-ci.yml` file like this one:
-   
+
    ```yaml
    build-job:       # This job runs in the build stage, which runs first.
     stage: build
@@ -303,10 +303,10 @@ At the end of all these steps, your config files should look something like this
 ```toml
    concurrent = 1
    check_interval = 0
-  
+
    [session_server]
      session_timeout = 1800
-  
+
    [[runners]]
      name = "example description"
      url = "http://gdk.test:3000/"
@@ -328,10 +328,11 @@ At the end of all these steps, your config files should look something like this
        oom_kill_disable = false
        disable_cache = false
        volumes = ["/cache"]
+       extra_hosts = ["gdk.test:172.16.123.1"]
        shm_size = 0
 ```
 
-`gdk.yaml`
+`gdk.yml`
 
 ```yaml
 ---
@@ -342,7 +343,7 @@ runner:
   install_mode: docker
   executor: docker
   token: <runner-token>
-  extra_hosts: ["gdk.test:172.16.123.1"] 
+  extra_hosts: ["gdk.test:172.16.123.1"]
 ```
 
 </details>
