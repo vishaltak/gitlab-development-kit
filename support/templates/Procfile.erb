@@ -81,3 +81,7 @@ rails-web: exec /usr/bin/env PATH="<%= config.gitlab_metrics_exporter.dir %>/bin
 # Snowplow Micro
 #
 <%= '#' unless config.snowplow_micro? %>snowplow-micro: exec docker run --rm --mount type=bind,source=<%= config.gdk_root.join('snowplow') %>,destination=/config -p <%= config.snowplow_micro.port %>:9091 <%= config.snowplow_micro.image %> --collector-config /config/snowplow_micro.conf --iglu /config/iglu.json
+
+# Vault
+#
+<%= '#' unless config.vault? %>vault: exec vault server -dev -dev-listen-address=<%=config.vault.listen_address %>:8200
