@@ -89,7 +89,7 @@ address:
    gdk reconfigure
    ``` 
 
-   Your `gdk.yaml` should contain these lines afterwards:
+   Your `gdk.yml` should contain these lines afterwards:
   
    ```yaml
    hostname: gdk.test
