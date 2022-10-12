@@ -720,6 +720,11 @@ module GDK
       string(:image) { 'mattermost/mattermost-preview' }
     end
 
+    settings :vault do
+      bool(:enabled) { false }
+      string(:listen_address) { config.listen_address }
+    end
+
     settings :gitlab do
       bool(:auto_update) { true }
       bool(:lefthook_enabled) { true }
