@@ -684,6 +684,7 @@ module GDK
       array(:extra_hosts) { [] }
       string(:token) { 'DEFAULT TOKEN: Register your runner to get a valid token' }
       string(:image) { "gitlab/gitlab-runner:latest" }
+      string(:pull_policy) { "if-not-present" }
       path(:bin) { find_executable!('gitlab-runner') || '/usr/local/bin/gitlab-runner' }
       bool(:network_mode_host) { false }
       bool(:__network_mode_host) do
