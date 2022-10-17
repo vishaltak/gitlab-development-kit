@@ -297,8 +297,65 @@ gdk:
 Ubuntu 22.04 and Fedora 36 ship with OpenSSL 3.0, which causes Ruby builds and gem failures.
 Ruby 2.7.x and 3.0.x [don't support OpenSSL 3](https://bugs.ruby-lang.org/issues/18658).
 
-As a [workaround](https://github.com/rbenv/ruby-build/discussions/1940#discussioncomment-2663209),
-you must compile and install OpenSSL 1.1.1:
+For example, the `openssl` gem may fail to install with these error
+messages:
+
+```plaintext
+Installing openssl 2.2.1 with native extensions
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+---
+checking for LIBRESSL_VERSION_NUMBER in openssl/opensslv.h... no
+checking for OpenSSL version >= 1.0.1 and < 3.0.0... no
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+---
+An error occurred while installing openssl (2.2.1), and Bundler cannot continue.
+
+In Gemfile:
+  webauthn was resolved to 2.3.0, which depends on
+    openssl
+```
+
+The error above might happen if you've previously installed the GDK and
+upgraded from an older Linux version. The upgrade may have replaced the
+OpenSSL 1.1.1 development headers with headers from 3.0.
+
+### Workaround 1: Reinstall Ruby
+
+The easiest way is to reinstall Ruby using `asdf`:
+
+1. Remove Ruby 2.7.5 with `asdf`:
+
+   ```shell
+   asdf uninstall ruby 2.7.5
+   ```
+
+1. Bootstrap GDK:
+
+   ```shell
+   rm <path/to/gdk>/.cache/.gdk_platform_setup
+   rm <path/to/gdk>/.cache/.gdk_bootstrapped
+   make bootstrap
+   ```
+
+1. Update GDK:
+
+   ```shell
+   gdk update
+   ```
+
+`asdf-ruby` uses `ruby-build`, which [installs OpenSSL 1.1.1](https://github.com/rbenv/ruby-build/pull/1974) inside
+`~/.asdf/installs/ruby/<RUBY VERSION>/openssl`. `asdf-ruby` always
+installs OpenSSL 1.1.1 for macOS systems, but on Linux it only installs
+this if the OpenSSL library and development headers are not available on the
+system.
+
+### Workaround 2: Install OpenSSL 1.1.1
+
+If the first workaround doesn't work, you can also compile and
+install OpenSSL 1.1.1:
 
 1. Install the dependencies:
 
