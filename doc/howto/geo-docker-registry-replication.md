@@ -31,9 +31,9 @@ Add the following lines to `registry/config.yml` of your primary node:
 notifications:
   endpoints:
     - name: geo_event
-      url: http://docker.for.mac.localhost:3001/api/v4/container_registry_event/events
+      url: http://host.docker.internal:3001/api/v4/container_registry_event/events
       headers:
-        Authorization: [Bearer <secret>]
+        Authorization: [<secret>]
       timeout: 500ms
       threshold: 5
       backoff: 1s
@@ -43,8 +43,6 @@ In this example:
 
 - `secret` is a secret word used for communication between Registry and the primary node.
 - The primary node is running on port `3001` of your localhost.
-- The host name is for macOS. If you use Linux, use `host.docker.internal` instead of
-  `docker.for.mac.localhost`,
 
 ### Configure the primary node
 
