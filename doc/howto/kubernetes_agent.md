@@ -13,7 +13,7 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
       enabled: true
     ```
 
-1. (Optional) To use the CI tunnel functionality, you must:
+1. (Optional) To use the [CI tunnel](https://docs.gitlab.com/ee/user/clusters/agent/ci_cd_workflow.html) functionality, you must:
    1. Enable [NGINX](nginx.md) in HTTPS mode. `kubectl` never sends credentials over a plain
       text connection.
    1. Specify concrete IP addresses for `kas` to listen on. `gdk.yml` looks like this
@@ -22,7 +22,7 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
    ```yaml
    gitlab_k8s_agent:
      enabled: true
-     agent_listen_address: 172.16.123.1:8159
+     agent_listen_address: 172.16.123.1:8150
      k8s_api_listen_address: 172.16.123.1:8154
    hostname: gdk.test
    port: 3443
@@ -46,7 +46,12 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
     => GitLab Agent Server (KAS) available at grpc://127.0.0.1:8150.
     ```
 
-1. You now have two pieces of information to connect `agentk` to GDK - the URL and the token.
+    If you are using NGINX+HTTPS, the URL would show something like:
+
+    ```plaintext
+    => GitLab available at https://gdk.test:3443.
+    => GitLab Agent Server (KAS) available at wss://gdk.test:3443/-/kubernetes-agent.
+    ```
 
 1. To verify that `kas` is running you can:
     - Run `gdk tail gitlab-k8s-agent` to check the logs. You should see no errors in the logs. Empty logs are normal too.
@@ -60,7 +65,7 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
 
         This is normal because gRPC is a binary protocol.
 
-    - If running with NGINX enabled, run `curl gdk.test:3000/-/kubernetes-agent`. It should print
+    - If running with NGINX enabled, run using the loopback address: `curl 172.16.123.1:8150`. It should print
 
         ```plaintext
         WebSocket protocol violation: Connection header "close" does not contain Upgrade
@@ -68,34 +73,74 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
 
         This is a normal response from `kas` for such a request because it's expecting a WebSocket connection upgrade.
 
-1. (Optional) To use the CI tunnel, supply the `rootCA.pem` from the generated certificate by running:
+1. Once your GitLab Agent Server is running, you can connect to a Kubernetes cluster by [installing `agentk` to the cluster](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#install-the-agent-in-the-cluster). The `kasAddress` should be the GitLab Agent Server URL outputted when you ran `gdk start` or from the listed URLs when you run `gdk status`.
 
-   ```shell
-   kubectl config set clusters.gitlab.certificate-authority "$(pwd)/rootCA.pem"
-   ```
+    - To connect to a Kubernetes cluster on `k3d`, read the instructions below for [deploying `agentk` with `k3d`](#optional-deploy-the-gitlab-agent-agentk-with-k3d)
 
-   Commit the file into the repository you are using the CI tunnel functionality from. Get the
-   file location by running:
+## (Optional) Connecting your project to `agentk` using CI Tunnel
 
-   ```shell
-   ls "$(mkcert -CAROOT)/rootCA.pem"
-   ```
+The GitLab Agent Server communicates with `agentk` through a Kubernetes proxy. You can check the proxy address by running `gdk status`, which will output it as one of the URLs:
 
-   To copy the contents to the clipboard:
+```plaintext
+=> GitLab available at https://gdk.test:3443.
+=> GitLab Agent Server (KAS) available at wss://gdk.test:3443/-/kubernetes-agent.
+=> Kubernetes proxy (via KAS) available at https://gdk.test:3443/-/k8s-proxy/.
+```
 
-   ```shell
-   cat "$(mkcert -CAROOT)/rootCA.pem" | pbcopy
-   ```
+The [GitLab Runner](runner.md) must be authorized to access the `https` address. This is done by adding the NGINX SSL certificate to the relevant places.
 
-   Then add the same file to the runner. See
-   [the relevant docs](https://docs.gitlab.com/runner/configuration/tls-self-signed.html).
+### Runner configuration
 
-   Add `tls-ca-file = "/etc/gitlab-runner/ca/rootCA.pem"` to the runner's `config.toml` and
-   run it. For example:
+If your runner is configured with a `docker` executor, you must add your certificate to the volumes in your runner's `config.toml`:
 
-   ```shell
-   docker run --rm -it -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v "$(mkcert -CAROOT):/etc/gitlab-runner/ca" gitlab/gitlab-runner
-   ```
+  ```plaintext
+  [[runners]]
+    name = "GDK local runner"
+    url = "https://gdk.test:3443"
+    # other config here
+    [runners.docker]
+    volumes = [
+      "path/to/gdk/directory/gdk.test.crt:/etc/ssl/certs/gdk.test.crt",
+      # other volumes here
+      "/certs/client",
+      "/cache"
+    ]
+  ```
+
+Alternatively, you can set the `certificate-authority` of `agentk`'s Kubernetes cluster:
+
+1. Commit the `gdk.test` certificate into your project that is using CI Tunnel. You can also use the root certificate if there is one, e.g.: the `rootCA.pem` generated by `mkcert`.
+
+    1. Copy the contents of the certificate to the clipboard
+    1. Create a `gdk.test.crt` or `rootCA.pem` file in the root directory of your project and paste the contents from the previous step.
+
+1. In the project's `.gitlab-ci.yml`, for steps that need to connect to `agentk` (e.g.: the deploy step), add a command to set the certificate authority of the associated Kubernetes cluster:
+
+    ```shell
+    kubectl config set clusters.gitlab.certificate-authority "$(pwd)/gdk.test.crt"
+    ```
+
+    OR
+
+    ```shell
+    kubectl config set clusters.gitlab.certificate-authority "$(pwd)/rootCA.pem"
+    ```
+
+    This reads the reads the certificate that you committed to your project's root directory.
+
+    An example `.gitlab-ci.yml`, extended from [this guide](https://docs.gitlab.com/ee/user/clusters/agent/ci_cd_workflow.html#update-your-gitlab-ciyml-file-to-run-kubectl-commands), looks like this:
+
+    ```yaml
+    deploy:
+      image:
+        name: bitnami/kubectl:latest
+        entrypoint: ['']
+      script:
+        - kubectl config get-contexts
+        - kubectl config use-context path/to/project:agentk-name
+        - kubectl config set clusters.gitlab.certificate-authority "$(pwd)/gdk.test.crt"
+        - kubectl get pods --namespace gitlab-agent
+    ```
 
 ## (Optional) Deploy the GitLab Agent (agentk) with k3d
 
@@ -127,21 +172,21 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
 1. Run `gdk reconfigure` to apply the above change.
 1. Deploy `agentk`:
 
-   1. [Create the secret](https://docs.gitlab.com/ee/user/clusters/agent/#create-the-kubernetes-secret)
-      as you normally would to deploy it to any cluster.
-   1. [Install the Agent to the cluster](https://docs.gitlab.com/ee/user/clusters/agent/#install-the-agent-into-the-cluster).
-      At this step, be sure to set your `resources.yml` with the `kas-address` using the loopback alias.
+   1. [Register the agent](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#register-the-agent-with-gitlab) as you normally would to deploy it to any cluster. Take note of the token.
+   1. [Install the Agent to the cluster](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html#install-the-agent-in-the-cluster).
 
-      ```yaml
-      args:
-          - --token-file=/config/token
-          - --kas-address
-          - grpc://172.16.123.1:8150
-          # - wss://172.16.123.1:8150/-/kubernetes-agent # when using nginx WITH https
-          # - ws://172.16.123.1:8150/-/kubernetes-agent # when using nginx WITHOUT https
+      At this step, be sure to use the loopback alias as the KAS address instead of the `gdk.test` URL. This is necessary because `k3d` is running on Docker, which will not be able to resolve `gdk.test`.
+
+      You can do this by changing the `config.kasAddress` in the Helm installation command:
+
+      ```shell
+      helm upgrade --install agentk-test gitlab/gitlab-agent \
+      --namespace gitlab-agent \
+      --create-namespace \
+      --set image.tag=v15.4.0 \
+      --set config.token=<token generated from the previous step> \
+      --set config.kasAddress=grpc://172.16.123.1:8150
       ```
-
-   Your above address scheme can be checked with `gdk config get gitlab_k8s_agent.__url_for_agentk`
 
 ## (Optional) Run using Bazel instead of GDK
 
