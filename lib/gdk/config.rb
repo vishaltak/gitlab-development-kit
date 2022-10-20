@@ -572,6 +572,7 @@ module GDK
       path(:runtime_dir) { config.gdk_root.join('tmp') }
       string(:auth_token) { '' }
       bool(:auto_update) { true }
+      bool(:enable_all_feature_flags) { false }
       integer(:storage_count) { 1 }
       path(:__build_path) { config.gitaly.dir.join('_build') }
       path(:__build_bin_path) { config.gitaly.__build_path.join('bin') }

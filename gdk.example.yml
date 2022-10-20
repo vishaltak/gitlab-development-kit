@@ -69,6 +69,7 @@ gitaly:
   auto_update: true
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   dir: "/home/git/gdk/gitaly"
+  enable_all_feature_flags: false
   enabled: false
   gitconfig: []
   log_dir: "/home/git/gdk/log/gitaly"
