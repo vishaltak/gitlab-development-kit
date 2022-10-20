@@ -46,8 +46,6 @@ module GDK
         true
       end
 
-      private
-
       def os_name
         shellout('uname -a')
       end
@@ -58,6 +56,10 @@ module GDK
 
       def ruby_version
         shellout('ruby --version')
+      end
+
+      def node_version
+        shellout('node --version')
       end
 
       def gdk_version

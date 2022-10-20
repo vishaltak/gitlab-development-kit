@@ -854,6 +854,7 @@ module GDK
 
     settings :asdf do
       bool(:opt_out) { false }
+      bool(:__available?) { !config.asdf.opt_out? && ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any? }
     end
 
     settings :packages do

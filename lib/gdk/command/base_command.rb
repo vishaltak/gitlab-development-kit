@@ -38,8 +38,11 @@ module GDK
       end
 
       def print_url_ready_message
+        debug_info = GDK::Command::DebugInfo.new
         GDK::Output.puts
         GDK::Output.notice("GitLab available at #{config.__uri}.")
+        GDK::Output.notice("  - Ruby: #{debug_info.ruby_version}.")
+        GDK::Output.notice("  - Node.js: #{debug_info.node_version}.")
         GDK::Output.notice("GitLab Docs available at http://#{config.hostname}:#{config.gitlab_docs.port}.") if config.gitlab_docs.enabled?
 
         if config.gitlab_k8s_agent?

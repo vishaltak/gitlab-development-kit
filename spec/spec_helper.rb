@@ -87,14 +87,8 @@ def temp_path
   spec_path.parent.join('tmp')
 end
 
-def stub_env_lookups
-  allow(ENV).to receive(:fetch).and_call_original
-  allow(ENV).to receive(:[]).and_call_original
-end
-
-def stub_env(var, return_value, default_value: '')
-  allow(ENV).to receive(:fetch).with(var, default_value).and_return(return_value)
-  allow(ENV).to receive(:[]).with(var).and_return(return_value)
+def stub_env(var, return_value)
+  stub_const('ENV', ENV.to_hash.merge(var => return_value))
 end
 
 def stub_gdk_yaml(yaml)

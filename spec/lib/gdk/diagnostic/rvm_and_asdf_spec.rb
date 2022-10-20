@@ -46,7 +46,6 @@ RSpec.describe GDK::Diagnostic::RvmAndAsdf do
   end
 
   def stub_rvm_and_asdf_enabled(enabled)
-    stub_env_lookups
     stub_env('ASDF_DIR', '/tmp/asdf')
 
     if enabled
