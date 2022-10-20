@@ -2,6 +2,16 @@
 
 <!-- Details of the issue. Include any console output or screenshots. -->
 
+## Impacted categories
+
+The following categories relate to the issue:
+
+- [ ] ~"gdk-reliability" - e.g. When a GDK action fails to complete.
+- [ ] ~"gdk-usability" - e.g. Improvements or suggestions around how the GDK functions.
+- [ ] ~"gdk-performance" - e.g. When a GDK action is slow or times out.
+
+<!-- Please add the selected labels to the Issue, thanks ♥️ -->
+
 ## Steps to replicate (optional)
 
 <!-- Clear steps of how to replicate the issue. -->
