@@ -2368,6 +2368,44 @@ RSpec.describe GDK::Config do
         expect(config.asdf.opt_out?).to be(false)
       end
     end
+
+    describe '__available?' do
+      let(:yaml) do
+        { 'asdf' => { 'opt_out' => asdf_opt_out } }
+      end
+
+      context 'when asdf.opt_out? is true' do
+        let(:asdf_opt_out) { true }
+
+        it 'returns false' do
+          expect(config.asdf.__available?).to be(false)
+        end
+      end
+
+      context 'when asdf.opt_out? is false' do
+        let(:asdf_opt_out) { false }
+
+        before do
+          stub_env('ASDF_DIR', nil)
+        end
+
+        context 'but asdf is not installed / configured' do
+          it 'returns false' do
+            stub_env('ASDF_DATA_DIR', nil)
+
+            expect(config.asdf.__available?).to be(false)
+          end
+        end
+
+        context 'and asdf is installed / configured' do
+          it 'returns true' do
+            stub_env('ASDF_DATA_DIR', '/home/gdk/.asdf')
+
+            expect(config.asdf.__available?).to be(true)
+          end
+        end
+      end
+    end
   end
 
   describe 'gitlab_docs' do

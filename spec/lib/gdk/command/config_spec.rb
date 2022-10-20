@@ -5,7 +5,6 @@ require 'spec_helper'
 RSpec.describe GDK::Command::Config do
   before do
     stub_gdk_yaml({})
-    stub_env_lookups
     stub_pg_bindir
     stub_no_color_env('true')
     stub_backup

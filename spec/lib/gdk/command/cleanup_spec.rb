@@ -72,8 +72,7 @@ RSpec.describe GDK::Command::Cleanup do
 
         context 'by setting GDK_CLEANUP_CONFIRM to true' do
           it 'calls execute' do
-            stub_env_lookups
-            stub_env('GDK_CLEANUP_CONFIRM', 'true', default_value: 'false')
+            stub_env('GDK_CLEANUP_CONFIRM', 'true')
 
             expect_warn_and_puts
             expect_rake_truncate_and_uninstall

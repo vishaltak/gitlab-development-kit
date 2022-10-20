@@ -42,10 +42,10 @@ module GDK
       end
 
       def rake(tasks)
-        sh = Shellout.new(%w[bin/rake] + tasks,
-                          chdir: config.gdk_root.join('gitlab'))
-        sh.stream
-        sh.success?
+        cmd = %w[bundle exec rake] + tasks
+        cmd = %w[asdf exec] + cmd if config.asdf.__available?
+
+        Shellout.new(cmd, chdir: config.gitlab.dir).execute.success?
       end
 
       def geo_secondary?

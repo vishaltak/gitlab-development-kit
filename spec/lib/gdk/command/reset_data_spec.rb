@@ -14,7 +14,6 @@ RSpec.describe GDK::Command::ResetData do
       allow(GDK::Output).to receive(:warn).with("Backups will be made in '#{backup_base_dir}', just in case!")
       allow(GDK::Output).to receive(:interactive?).and_return(true)
       allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(prompt_response)
-      stub_env_lookups
     end
 
     context 'when the user does not accept / aborts the prompt' do

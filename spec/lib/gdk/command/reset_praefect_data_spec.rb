@@ -11,7 +11,6 @@ RSpec.describe GDK::Command::ResetPraefectData do
     allow(GDK::Output).to receive(:warn).with("We're about to remove Praefect PostgreSQL data.")
     allow(GDK::Output).to receive(:interactive?).and_return(true)
     allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(prompt_response)
-    stub_env_lookups
   end
 
   context 'when the user does not accept / aborts the prompt' do

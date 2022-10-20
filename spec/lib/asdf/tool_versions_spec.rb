@@ -33,7 +33,6 @@ RSpec.describe Asdf::ToolVersions do
 
   describe '#unnecessary_software_to_uninstall?' do
     before do
-      stub_env_lookups
       stub_asdf_data_installs_dir(tmp_dir_we_pretend_exists, exist: true)
     end
 
@@ -71,10 +70,6 @@ RSpec.describe Asdf::ToolVersions do
   end
 
   describe '#uninstall_unnecessary_software!' do
-    before do
-      stub_env_lookups
-    end
-
     context 'when asdf installs directory does not exist (asdf not in use)' do
       it 'informs and returns true' do
         non_existent_asdf_dir = '/tmp/dir/that/doesnt/exist/asdf'
@@ -157,7 +152,7 @@ RSpec.describe Asdf::ToolVersions do
             context 'and the user accepts' do
               context 'by setting GDK_ASDF_UNINSTALL_UNNECESSARY_SOFTWARE_CONFIRM to true' do
                 it 'uninstalls returns true' do
-                  stub_env('GDK_ASDF_UNINSTALL_UNNECESSARY_SOFTWARE_CONFIRM', 'true', default_value: 'false')
+                  stub_env('GDK_ASDF_UNINSTALL_UNNECESSARY_SOFTWARE_CONFIRM', 'true')
 
                   expect_warn_and_puts
                   expect(unnecessary_software_tool_version).to receive(:uninstall!).and_return(true)
@@ -232,7 +227,7 @@ RSpec.describe Asdf::ToolVersions do
 
   def stub_asdf_data_installs_dir(dir, exist:)
     stub_env('HOME', '/home/gdk')
-    stub_env('ASDF_DATA_DIR', dir, default_value: '/home/gdk/.asdf')
+    stub_env('ASDF_DATA_DIR', dir)
 
     asdf_data_installs_dir_double = instance_double(Pathname, exist?: exist, to_s: "#{dir}/installs")
     asdf_data_dir_double = instance_double(Pathname, join: asdf_data_installs_dir_double)
