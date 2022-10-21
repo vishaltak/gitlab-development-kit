@@ -723,6 +723,8 @@ module GDK
 
     settings :vault do
       bool(:enabled) { false }
+      string(:__listen) { "#{listen_address}:#{port}" }
+      port(:port, 'vault')
       string(:listen_address) { config.listen_address }
     end
 

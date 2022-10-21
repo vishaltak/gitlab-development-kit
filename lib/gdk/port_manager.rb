@@ -30,6 +30,7 @@ module GDK
       8080 => 'nginx',
       8081 => 'gitlab_spamcheck_external', # was 8080
       8123 => 'clickhouse_http',
+      8200 => 'vault',
       9000 => 'object_store',
       9001 => 'clickhouse_tcp',
       9002 => 'object_store_console',

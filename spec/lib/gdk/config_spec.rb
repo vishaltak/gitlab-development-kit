@@ -2806,6 +2806,26 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'vault' do
+    describe '#__listen' do
+      it 'defaults 127.0.0.1:8200' do
+        expect(config.vault.__listen).to eq('127.0.0.1:8200')
+      end
+    end
+
+    describe '#listen_address' do
+      it 'defaults 127.0.0.1' do
+        expect(config.vault.listen_address).to eq('127.0.0.1')
+      end
+    end
+
+    describe '#port' do
+      it 'defaults to 8200' do
+        expect(config.vault.port).to eq(8200)
+      end
+    end
+  end
+
   def create_dummy_executable(name)
     path = File.join(tmp_path, name)
     FileUtils.touch(path)

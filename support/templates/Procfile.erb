@@ -84,4 +84,4 @@ rails-web: exec /usr/bin/env PATH="<%= config.gitlab_metrics_exporter.dir %>/bin
 
 # Vault
 #
-<%= '#' unless config.vault? %>vault: exec vault server -dev -dev-listen-address=<%=config.vault.listen_address %>:8200
+<%= '#' unless config.vault? %>vault: exec vault server -dev -dev-listen-address=<%=config.vault.__listen %>
