@@ -43,6 +43,8 @@ module GDK
       10101 => 'praefect_exporter'
     }.freeze
 
+    attr_reader :claimed_ports_and_services
+
     def initialize(config)
       @config = config
       @claimed_ports_and_services = {}
@@ -76,6 +78,6 @@ module GDK
     private
 
     attr_reader :config
-    attr_accessor :claimed_ports_and_services
+    attr_writer :claimed_ports_and_services
   end
 end
