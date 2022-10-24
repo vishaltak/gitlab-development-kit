@@ -16,6 +16,29 @@ In GDK, you can change Gitaly and Praefect configuration in the following ways:
 See also [Automate different Praefect configurations](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/827)
 for information about automating more of these processes.
 
+## Feature flags
+
+You can set Gitaly feature flags in two ways:
+
+- Set the feature flags in GitLab Rails. These are passed to Gitaly as they would be in production. This way is recommended and you can
+  read more in the [GitLab documentation](https://docs.gitlab.com/ee/development/feature_flags/). As
+  [documented](https://gitlab.com/gitlab-org/gitaly/-/blob/master/doc/PROCESS.md#use-and-limitations), prepend the feature flag name
+  with `gitaly_`.
+- Enable all feature flags.
+
+### Enable all feature flags
+
+To enable all Gitaly feature flags:
+
+1. Set the following in `gdk.yml`:
+
+   ```yaml
+   gitaly:
+     enable_all_feature_flags: true
+   ```
+
+1. Run `gdk reconfigure`.
+
 ## Gitaly and Praefect options
 
 By default, GDK is set up use Praefect as a proxy to Gitaly. To disable Praefect, set the following
