@@ -1,21 +1,14 @@
-# Below are software and versions the GDK requires to operate correctly.
-# Currently GDK itself (excluding other projects) requires the following
-# software:
+# This file declares dependencies for GDK itself.
 #
-# * Ruby - The majority of GDK is written in Ruby.
+# For more information, see doc/asdf.md.
 #
-# Each project GDK manages should ideally provide its own .tool-versions
-# file that contains the project's specific software and versions, resulting
-# in the .tool-versions-gdk file containing _just_ GDK-only software requirements.
+# When combined, the order of preference for conflicting versions of dependencies is:
 #
-# New versions must be introduced alongside the current version, and are
-# automatically installed by GDK for asdf users.
-#
-# This file is incorporated into .tool-versions via the support/asdf-combine
-# script, which should be run when this file is updated.
+# 1. Dependencies declared in this file.
+# 2. Dependencies declared in other files.
 #
 # <default-version> <other-version(s)>
 #
-# postgres line required until 13.6 is ready to be the new default
+# postgres is not required by GDK, but must be set until 13.6 is ready to be the new default
 postgres 12.10 13.6
 ruby 2.7.5 3.0.4 2.7.6
