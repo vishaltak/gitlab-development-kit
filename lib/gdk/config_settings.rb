@@ -43,6 +43,10 @@ module GDK
         def_attribute(key, ConfigType::Integer, &blk)
       end
 
+      def port(key, service_name, &blk)
+        def_attribute(key, ConfigType::Port, service_name: service_name, &blk)
+      end
+
       def path(key, &blk)
         def_attribute(key, ConfigType::Path, &blk)
       end
@@ -218,6 +222,13 @@ module GDK
 
     def settings_klass
       ::GDK::ConfigSettings
+    end
+
+    def port_manager
+      # Only the root should hold the PortManager
+      return root.port_manager if parent
+
+      @port_manager ||= PortManager.new(self)
     end
 
     private

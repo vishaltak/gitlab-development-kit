@@ -28,7 +28,7 @@ RSpec.describe GDK::ConfigType::Path do
       let(:value) { 123 }
 
       it 'raises an exception' do
-        expect { subject.parse(value) }.to raise_error(TypeError, "Value '123' for #{key} is not a valid path")
+        expect { subject.parse(value) }.to raise_error(TypeError, "Value '123' for setting '#{key}' is not a valid path.")
       end
     end
   end

@@ -88,7 +88,7 @@ RSpec.describe GDK do
     context 'with partially invalid YAML' do
       let(:raw_yaml) { "---\ngdk:\n  debug: fals" }
 
-      it_behaves_like 'invalid YAML', "Value 'fals' for gdk.debug is not a valid bool"
+      it_behaves_like 'invalid YAML', "Value 'fals' for setting 'gdk.debug' is not a valid bool."
     end
   end
 end

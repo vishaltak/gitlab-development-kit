@@ -176,3 +176,15 @@ file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
     tasks: tasks.all_tasks
   ).safe_render!
 end
+
+desc 'Show all the claimed ports'
+task :claimed_ports do
+  config = GDK::Config.new.tap(&:validate!)
+
+  printf("\n| %5s | %-20s |\n", 'Port', 'Service')
+  printf("| %5s | %20s |\n", '-' * 5, '-' * 20)
+
+  config.port_manager.claimed_ports_and_services.keys.sort.each do |p|
+    printf("| %5d | %-20s |\n", p, config.port_manager.claimed_service_for_port(p))
+  end
+end

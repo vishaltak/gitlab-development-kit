@@ -28,7 +28,7 @@ RSpec.describe GDK::ConfigType::Integer do
       let(:value) { 'test' }
 
       it 'raises an exception' do
-        expect { subject.parse(value) }.to raise_error(TypeError, "Value 'test' for #{key} is not a valid integer")
+        expect { subject.parse(value) }.to raise_error(TypeError, "Value 'test' for setting '#{key}' is not a valid integer.")
       end
     end
   end

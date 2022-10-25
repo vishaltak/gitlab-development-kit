@@ -57,7 +57,7 @@ RSpec.describe GDK::Command::Config do
 
     context 'with an invalid value' do
       it 'issues the usage warning' do
-        expect { subject.run(%w[set port a]) }.to raise_error(SystemExit).and output(/ERROR: Value 'a' for port is not a valid integer/).to_stderr
+        expect { subject.run(%w[set port a]) }.to raise_error(SystemExit).and output(/ERROR: Value 'a' for setting 'port' is not a valid port/).to_stderr
       end
     end
 

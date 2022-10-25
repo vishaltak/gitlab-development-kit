@@ -156,7 +156,7 @@ gitlab_shell:
 gitlab_spamcheck:
   auto_update: true
   enabled: false
-  external_port: 8080
+  external_port: 8081
   inspector_url: http://127.0.0.1:8888/api/v1/isspam/issue
   monitor_mode: false
   output: stdout
@@ -363,6 +363,7 @@ username: git
 vault:
   enabled: false
   listen_address: 127.0.0.1
+  port: 8200
 webpack:
   host: 127.0.0.1
   incremental: true

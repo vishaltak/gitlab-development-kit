@@ -17,7 +17,7 @@ module GDK
       end
 
       def default_value
-        parent.instance_eval(&blk)
+        parent.instance_eval(&blk) if blk
       rescue ::GDK::ConfigSettings::LooseFile => e
         GDK::Output.warn(e)
         GDK::Output.info("Instead, set '#{slug}' in your gdk.yml.")
@@ -26,8 +26,10 @@ module GDK
 
       def value=(val)
         @value = parse(val)
+      rescue StandardErrorWithMessage => e
+        raise e, "Value '#{val}' for setting '#{slug}' is not a valid #{type} - #{e.message}."
       rescue ::TypeError, ::NoMethodError
-        raise ::TypeError, "Value '#{val}' for #{slug} is not a valid #{type}"
+        raise ::TypeError, "Value '#{val}' for setting '#{slug}' is not a valid #{type}."
       end
 
       def user_defined?
