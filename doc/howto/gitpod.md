@@ -212,15 +212,7 @@ For information on enabling higher GitLab tiers in GDK to test out features, lea
 
 ### How to test features only available on SaaS (GitLab.com)
 
-By default GDK runs as self-managed, but can be switched to run as the SaaS version. For more information, see [Act as SaaS](https://docs.gitlab.com/ee/development/ee_features.html#act-as-saas).
-
-In the terminal, switch to the `GDK:bash` tab and run the following:
-
-```shell
-gdk stop
-export GITLAB_SIMULATE_SAAS=1
-gdk start
-```
+By default GDK runs as self-managed, but can be switched to run as the SaaS version. For more information, see [Act as SaaS](https://docs.gitlab.com/ee/development/ee_features.html#simulate-a-saas-instance).
 
 ## How to update the Gitpod GDK Docker image
 
