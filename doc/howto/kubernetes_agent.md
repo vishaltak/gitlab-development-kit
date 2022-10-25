@@ -193,6 +193,33 @@ Alternatively, you can set the `certificate-authority` of `agentk`'s Kubernetes 
 If you want to run GitLab Agent Server and Agent locally with Bazel instead of GDK, see
 the [GitLab Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
 
+## (Optional) Run KAS directly from source (with `go run`)
+
+When working on KAS, it can be convenient to run directly from source instead of
+having to rebuild every time.
+
+```shell
+gdk config set gitlab_k8s_agent.run_from_source true
+gdk reconfigure
+```
+
+That way, changes to the code get picked up immediately every time you restart
+KAS:
+
+```shell
+gdk restart gitlab-k8s-agent
+```
+
+## (Optional) Disable automatic repository updates 
+
+When working on the agent, you probably want to manage the repository on your
+own, to avoid having `gdk update` stash your changes:
+
+```shell
+gdk config set gitlab_k8s_agent.auto_update false
+gdk reconfigure
+```
+
 ## Troubleshooting
 
 See [Bad CPU type in executable Target](../troubleshooting/apple_mx_machines.md#bad-cpu-type-in-executable-target).

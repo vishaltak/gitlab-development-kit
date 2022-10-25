@@ -402,6 +402,16 @@ module GDK
         end
       end
 
+      bool(:run_from_source) { false }
+
+      string(:__command) do
+        if config.gitlab_k8s_agent.run_from_source?
+          'support/exec-cd gitlab-k8s-agent go run -race cmd/kas/main.go'
+        else
+          'gitlab-k8s-agent/build/gdk/bin/kas_race'
+        end
+      end
+
       string(:private_api_listen_network) { 'tcp' }
       string(:private_api_listen_address) { "#{config.listen_address}:8155" }
       string(:__private_api_secret_file) { config.gitlab_k8s_agent.__secret_file }
