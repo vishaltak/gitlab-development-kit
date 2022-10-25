@@ -34,7 +34,7 @@ module GDK
       9000 => 'object_store',
       9001 => 'clickhouse_tcp',
       9002 => 'object_store_console',
-      9009 => 'interserver',
+      9009 => 'clickhouse_interserver',
       9090 => 'prometheus',
       9091 => 'snowplow_micro',
       9122 => 'gitlab_shell_exporter',

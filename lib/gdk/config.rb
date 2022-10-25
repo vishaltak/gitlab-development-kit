@@ -552,7 +552,7 @@ module GDK
       string(:log_level) { 'trace' }
       port(:http_port, 'clickhouse_http')
       port(:tcp_port, 'clickhouse_tcp')
-      port(:interserver_http_port, 'interserver')
+      port(:interserver_http_port, 'clickhouse_interserver')
       integer(:max_memory_usage) { 1000 * 1000 * 1000 } # 1 GB
       integer(:max_thread_pool_size) { 1000 }
       integer(:max_server_memory_usage) { 2 * 1000 * 1000 * 1000 } # 2 GB
