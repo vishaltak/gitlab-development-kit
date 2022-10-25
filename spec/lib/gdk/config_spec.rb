@@ -1710,6 +1710,18 @@ RSpec.describe GDK::Config do
         end
       end
     end
+
+    describe '__command' do
+      subject { config.gitlab_k8s_agent.__command }
+
+      it { is_expected.to eq 'gitlab-k8s-agent/build/gdk/bin/kas_race' }
+
+      context 'when run_from_source is true' do
+        let(:yaml) { { 'gitlab_k8s_agent' => { 'run_from_source' => true } } }
+
+        it { is_expected.to eq('support/exec-cd gitlab-k8s-agent go run -race cmd/kas/main.go') }
+      end
+    end
   end
 
   describe 'nginx' do
