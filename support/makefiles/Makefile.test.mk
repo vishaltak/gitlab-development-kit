@@ -50,7 +50,7 @@ endif
 .PHONY: markdownlint
 markdownlint: yarn-install
 	@echo -n "MarkdownLint: "
-	@${YARN} run --silent markdownlint --config .markdownlint.yml 'doc/**/*.md' 'README.md' && echo "OK"
+	@${YARN} run --silent markdownlint-cli2-config .markdownlint.yml 'doc/**/*.md' 'README.md' && echo "OK"
 
 # Checks:
 #   - Internal links.
