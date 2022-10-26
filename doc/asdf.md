@@ -39,11 +39,11 @@ Before `asdf` was integrated into the GDK, the related software had to be instal
 We chose `asdf` as the standard for installing software for the GDK because:
 
 - It's the only cross platform solution that provides support for _all_ of the required software.
-- It supports installing multiple versions of software. This is critical in the testing and verification before we move to newer versions of software, something other tools did not support.
+- It supports installing multiple versions of software, which is critical in the testing and verification before we move to newer versions of software, something other tools did not support.
 
 ## `.tool-versions` file
 
-The `.tool-versions` file is a plaintext file that is typically checked into a project at the root directory, but can exist in any directory. The file describes the software and versions a project requires. If the file is present, `asdf` inspects the file and attempta to make the software and the version available at the command line. The following is an example of the `.tool-versions` file:
+The `.tool-versions` file is a plaintext file that is typically checked into a project at the root directory, but can exist in any directory. The file describes the software and versions a project requires. If the file is present, `asdf` inspects the file and attempts to make the software and the version available at the command line. The following is an example of the `.tool-versions` file:
 
 ```plaintext
 # <software> <default-version> <other-version(s)>
