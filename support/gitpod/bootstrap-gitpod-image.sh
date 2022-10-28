@@ -3,11 +3,6 @@
 set -xeuo pipefail
 IFS=$'\n\t'
 
-echo "# --- Install GitLab Runner"
-curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
-export GITLAB_RUNNER_DISABLE_SKEL=true
-sudo apt-get install gitlab-runner -y
-
 echo "# --- Install GDK into /workspace "
 sudo mkdir -p /workspace/gitlab
 sudo chown -R gitpod:gitpod /workspace
@@ -49,11 +44,6 @@ mv gitlab-development-kit "$HOME/"
 # Set up a symlink in order to have our .tool-versions as defaults.
 # A symlink ensures that it'll work even after a gdk update
 ln -s /workspace/gitlab-development-kit/.tool-versions "$HOME/.tool-versions"
-
-echo "# --- Cleanup apt caches"
-sudo apt-get clean -y
-sudo apt-get autoremove -y
-sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/*
 
 echo "# --- Cleanup build caches"
 sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/git/source"
