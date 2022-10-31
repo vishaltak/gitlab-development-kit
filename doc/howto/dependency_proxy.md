@@ -5,7 +5,7 @@ in your GDK environment.
 
 ## License
 
-An [`Ultimate` license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee)
+An [`Ultimate` license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses)
 is needed to use the dependency proxy.
 
 ## Configuration
