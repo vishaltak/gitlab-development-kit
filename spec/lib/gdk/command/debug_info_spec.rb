@@ -64,7 +64,7 @@ RSpec.describe GDK::Command::DebugInfo do
 
     context 'an error is raised during shellout' do
       before do
-        allow(Shellout).to receive(:new).with('uname -a').and_raise('halt and catch fire')
+        allow(Shellout).to receive(:new).with('uname -a', any_args).and_raise('halt and catch fire')
       end
 
       it 'displays the error message and continues' do
