@@ -75,12 +75,14 @@ gitlab/public/uploads:
 	$(Q)touch $@
 
 ifeq ($(gitlab_lefthook_enabled),true)
+.PHONY: .gitlab-lefthook
 .gitlab-lefthook:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Installing Lefthook for gitlab-org/gitlab"
 	@echo "${DIVIDER}"
 	$(Q)$(in_gitlab) gem install lefthook && ${BUNDLE} exec lefthook install
+	$(Q)./support/lefthook/inject-pre-push
 	$(Q)touch $@
 else
 .gitlab-lefthook:

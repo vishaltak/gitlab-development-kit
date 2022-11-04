@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+PRE_PUSH_HOOK_PATH = 'gitlab/.git/hooks/pre-push'
+GDK_MANAGED_CONTENT_HEADER = '# begin gdk managed content'
+GDK_MANAGED_CONTENT_FOOTER = '# end gdk managed content'
+REPLACEMENT_REGEXP = /#{GDK_MANAGED_CONTENT_HEADER}[\s\S]+#{GDK_MANAGED_CONTENT_FOOTER}/.freeze
+
+def replace_gdk_managed_content(script, content)
+  script.gsub(REPLACEMENT_REGEXP, content)
+end
+
+def insert_gdk_managed_content(script, content)
+  first_line, _, remainder = script.partition("\n")
+
+  "#{first_line}\n#{content}\n#{remainder}"
+end
+
+prepend_script = File.read('support/lefthook/pre-push-prepend.sh')
+                     .delete_prefix("#!/bin/sh\n")
+                     .delete_suffix("\n")
+
+pre_push_hook_script = File.read(PRE_PUSH_HOOK_PATH)
+
+new_script = if pre_push_hook_script.include?(GDK_MANAGED_CONTENT_HEADER)
+               replace_gdk_managed_content(pre_push_hook_script, prepend_script)
+             else
+               insert_gdk_managed_content(pre_push_hook_script, prepend_script)
+             end
+
+File.write(PRE_PUSH_HOOK_PATH, new_script)
