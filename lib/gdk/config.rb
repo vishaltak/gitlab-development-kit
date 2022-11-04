@@ -872,7 +872,7 @@ module GDK
     settings :packages do
       path(:__dpkg_deb_path) do
         if GDK::Machine.macos?
-          '/usr/local/bin/dpkg-deb'
+          config.__brew_prefix_path.join('bin', 'dpkg-deb')
         else
           '/usr/bin/dpkg-deb'
         end

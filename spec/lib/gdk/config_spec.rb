@@ -63,11 +63,25 @@ RSpec.describe GDK::Config do
     context 'on a macOS system' do
       let(:fake_platform) { 'darwin' }
 
-      it 'returns the brew prefix string' do
-        allow(File).to receive(:exist?).and_call_original
-        allow(File).to receive(:exist?).with('/opt/homebrew/bin/brew').and_return(true)
+      before do
+        allow(File).to receive(:exist?).and_return(false)
+        allow(File).to receive(:exist?).with(brew_path).and_return(true)
+      end
 
-        expect(config.__brew_prefix_path.to_s).to eq('/opt/homebrew')
+      context 'with Apple Silicon' do
+        let(:brew_path) { '/opt/homebrew/bin/brew' }
+
+        it 'returns the brew prefix string' do
+          expect(config.__brew_prefix_path.to_s).to eq('/opt/homebrew')
+        end
+      end
+
+      context 'with Intel' do
+        let(:brew_path) { '/usr/local/bin/brew' }
+
+        it 'returns the brew prefix string' do
+          expect(config.__brew_prefix_path.to_s).to eq('/usr/local')
+        end
       end
     end
   end
@@ -2616,8 +2630,25 @@ RSpec.describe GDK::Config do
       context 'on a macOS system' do
         let(:fake_platform) { 'darwin' }
 
-        it 'returns /usr/local/bin/dpkg-deb' do
-          expect(config.packages.__dpkg_deb_path.to_s).to eq('/usr/local/bin/dpkg-deb')
+        before do
+          allow(File).to receive(:exist?).and_return(false)
+          allow(File).to receive(:exist?).with(brew_path).and_return(true)
+        end
+
+        context 'with Intel' do
+          let(:brew_path) { '/usr/local/bin/brew' }
+
+          it 'returns /usr/local/bin/dpkg-deb' do
+            expect(config.packages.__dpkg_deb_path.to_s).to eq('/usr/local/bin/dpkg-deb')
+          end
+        end
+
+        context 'with Apple Silicon' do
+          let(:brew_path) { '/opt/homebrew/bin/brew' }
+
+          it 'returns /opt/homebrew/bin/dpkg-deb' do
+            expect(config.packages.__dpkg_deb_path.to_s).to eq('/opt/homebrew/bin/dpkg-deb')
+          end
         end
       end
 
