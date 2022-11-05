@@ -175,6 +175,7 @@ To enable feature flags:
 
 1. Open a [Rails console](rails_console.md).
 1. Run `ApplicationSetting.first.update(check_namespace_plan: true)`.
+1. Run `gdk restart` to apply the changes.
 
 The billing page is now accessible at **Group > Settings > Billing**.
 
