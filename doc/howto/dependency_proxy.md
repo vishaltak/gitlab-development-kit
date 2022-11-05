@@ -12,7 +12,7 @@ is needed to use the dependency proxy.
 
 ### Linux
 
-With the License and Puma requirements met above, there is no additional set up required,
+With the License requirement met above, there is no additional set up required,
 the dependency proxy is already enabled and configured.
 
 Test it with
