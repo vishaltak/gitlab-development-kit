@@ -171,6 +171,7 @@ installation problem is [incomplete `asdf` installation](troubleshooting/asdf.md
 
 Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-space. The clone
 process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+This cloning strategy could slow down some Git commands such as `git push`.
 
 ### Install GDK using GitLab FOSS project
 
