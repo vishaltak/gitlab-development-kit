@@ -19,16 +19,30 @@ RSpec.describe GDK::Command::Start do
 
     context 'with no extra arguments' do
       context 'without progress' do
-        it 'executes hooks and starts all enabled services' do
-          stub_gdk_start
+        context 'when rails_web.enabled is true' do
+          it "executes hooks and starts all enabled services, with 'GitLab available' message" do
+            allow(GDK.config).to receive(:rails_web?).and_return(true)
+            stub_gdk_start
 
-          expect_runit_start_to_execute([])
+            expect_runit_start_to_execute([])
 
-          expect { subject.run }.to output(/GitLab available at/).to_stdout
+            expect { subject.run }.to output(/GitLab available at/).to_stdout
+          end
+        end
+
+        context 'when rails_web.enabled is false' do
+          it "executes hooks and starts all enabled services, without 'GitLab available' message" do
+            allow(GDK.config).to receive(:rails_web?).and_return(false)
+            stub_gdk_start
+
+            expect_runit_start_to_execute([])
+
+            expect { subject.run }.not_to output(/GitLab available at/).to_stdout
+          end
         end
       end
 
-      context 'with --show-progress' do
+      context 'with --show-progress', :hide_output do
         it 'executes hooks, starts all enabled services and waits until up' do
           stub_gdk_start
 
@@ -37,7 +51,7 @@ RSpec.describe GDK::Command::Start do
           test_url_double = instance_double(GDK::TestURL, wait: true)
           expect(GDK::TestURL).to receive(:new).and_return(test_url_double)
 
-          expect { subject.run(%w[--show-progress]) }.to output(/GitLab available at/).to_stdout
+          subject.run(%w[--show-progress])
         end
       end
 

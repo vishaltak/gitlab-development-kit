@@ -4,10 +4,24 @@ require 'spec_helper'
 
 RSpec.describe GDK::Command::Status do
   context 'with no extra arguments' do
-    it 'queries runit for status to all enabled services' do
-      expect_runit_to_execute(command: 'status')
+    context 'when rails_web.enabled is true' do
+      it "displays 'GitLab available' message" do
+        allow(GDK.config).to receive(:rails_web?).and_return(true)
 
-      expect { subject.run }.to output(/GitLab available at/).to_stdout
+        expect_runit_to_execute(command: 'status')
+
+        expect { subject.run }.to output(/GitLab available at/).to_stdout
+      end
+    end
+
+    context 'when rails_web.enabled is false' do
+      it "does not display 'GitLab available' message" do
+        allow(GDK.config).to receive(:rails_web?).and_return(false)
+
+        expect_runit_to_execute(command: 'status')
+
+        expect { subject.run }.not_to output(/GitLab available at/).to_stdout
+      end
     end
   end
 
