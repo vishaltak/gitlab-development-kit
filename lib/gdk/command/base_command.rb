@@ -37,7 +37,7 @@ module GDK
         HELP_MESSAGE
       end
 
-      def print_url_ready_message
+      def print_ready_message
         debug_info = GDK::Command::DebugInfo.new
         GDK::Output.puts
         GDK::Output.notice("GitLab available at #{config.__uri}.")
