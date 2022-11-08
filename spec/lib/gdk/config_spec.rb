@@ -1932,6 +1932,18 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#port' do
+      it 'returns 5000 by default' do
+        expect(config.registry.port).to eq(5000)
+      end
+    end
+
+    describe '#__listen' do
+      it 'returns gdk.example.com:5000 by default' do
+        expect(config.registry.__listen).to eq('gdk.example.com:5000')
+      end
+    end
+
     describe '#listen_address' do
       it 'returns 127.0.0.1 by default' do
         expect(config.registry.listen_address).to eq('127.0.0.1')

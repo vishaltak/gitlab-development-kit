@@ -310,6 +310,8 @@ module GDK
 
       port(:port, 'registry') { read!('registry_port') }
 
+      string(:__listen) { "#{host}:#{port}" }
+
       string :image do
         read!('registry_image') ||
           'registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:'\
