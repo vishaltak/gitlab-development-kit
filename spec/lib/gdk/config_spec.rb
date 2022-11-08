@@ -2213,6 +2213,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#__uri' do
+      it 'returns http://gdk.example.com:4000 by default' do
+        expect(config.grafana.__uri.to_s).to eq('http://gdk.example.com:4000')
+      end
+    end
+
     describe '#port' do
       it 'defaults to 4000' do
         expect(config.grafana.port).to eq(4000)

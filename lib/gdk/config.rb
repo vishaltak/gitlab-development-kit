@@ -716,6 +716,7 @@ module GDK
     settings :grafana do
       bool(:enabled) { false }
       port(:port, 'grafana')
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
     end
 
     settings :prometheus do
