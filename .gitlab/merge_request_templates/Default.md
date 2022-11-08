@@ -2,6 +2,16 @@
 
 <!-- Briefly describe what this Merge Request does and why. -->
 
+## Impacted categories
+
+The following categories relate to this Merge Request:
+
+- [ ] ~"gdk-reliability" - e.g. When a GDK action fails to complete.
+- [ ] ~"gdk-usability" - e.g. Improvements or suggestions around how the GDK functions.
+- [ ] ~"gdk-performance" - e.g. When a GDK action is slow or times out.
+
+<!-- Please add the selected labels to this Merge Request, thanks ♥️ -->
+
 ## Merge Request checklist
 
 - [ ] This change is backward compatible. If not, please include steps to communicate to our users.
