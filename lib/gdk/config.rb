@@ -722,6 +722,7 @@ module GDK
     settings :prometheus do
       bool(:enabled) { false }
       port(:port, 'prometheus')
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
       port(:gitaly_exporter_port, 'gitaly_exporter')
       port(:praefect_exporter_port, 'praefect_exporter')
       port(:workhorse_exporter_port, 'workhorse_exporter')

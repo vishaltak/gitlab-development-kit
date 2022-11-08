@@ -2174,6 +2174,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#__uri' do
+      it 'returns http://gdk.example.com:9090 by default' do
+        expect(config.prometheus.__uri.to_s).to eq('http://gdk.example.com:9090')
+      end
+    end
+
     describe '#port' do
       it 'defaults to 9090' do
         expect(config.prometheus.port).to eq(9090)
