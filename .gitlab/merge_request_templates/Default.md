@@ -1,11 +1,21 @@
-## What does this Merge Request do and why?
+## What does this merge request do and why?
 
-<!-- Briefly describe what this Merge Request does and why. -->
+<!-- Briefly describe what this merge request does and why. -->
 
-## Merge Request checklist
+## Impacted categories
+
+The following categories relate to this merge request:
+
+- [ ] ~"gdk-reliability" - e.g. When a GDK action fails to complete.
+- [ ] ~"gdk-usability" - e.g. Improvements or suggestions around how the GDK functions.
+- [ ] ~"gdk-performance" - e.g. When a GDK action is slow or times out.
+
+<!-- Please add the selected labels to this merge request, thanks ♥️ -->
+
+## Merge request checklist
 
 - [ ] This change is backward compatible. If not, please include steps to communicate to our users.
-- [ ] Tests added for new functionality. If not, please raise Issue to follow-up.
+- [ ] Tests added for new functionality. If not, please raise an issue to follow-up.
 - [ ] Documentation added/updated, if needed.
 - [ ] `gdk doctor` test added, if needed.
 - [ ] Add the `~highlight` label if this MR should be included in the [`CHANGELOG.md`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/CHANGELOG.md).
