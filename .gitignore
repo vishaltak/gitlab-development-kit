@@ -7,6 +7,7 @@
 .cache/
 .gdkrc.custom
 .idea
+.nova
 .yardoc
 /*.log
 /.backups/

@@ -22,10 +22,10 @@ Start by kicking off the normal GDK processes via `gdk start`. Then open a new
 terminal session and run:
 
 ```shell
-gdk stop rails-web && GITLAB_RAILS_RACK_TIMEOUT_ENABLE_LOGGING=false gdk rails s
+gdk stop rails-web && GITLAB_RAILS_RACK_TIMEOUT_ENABLE_LOGGING=false PUMA_SINGLE_MODE=true gdk rails s
 ```
 
-This starts a Puma server in the foreground instead of the background. Once the
+This starts a single mode Puma server in the foreground with only one thread. Once the
 `binding.pry` breakpoint has been reached, Pry prompts appear in the window
 that runs `gdk rails s`.
 

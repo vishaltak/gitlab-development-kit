@@ -43,7 +43,13 @@ queue_requests false
 # accepted protocols.
 bind '<%= config.gitlab.rails.__bind %>'
 
-workers <%= config.gitlab.rails.puma.workers %>
+if ENV['PUMA_SINGLE_MODE']
+  # single worker/thread to support using `binding.pry` for debugging
+  workers 0
+  threads 0, 1
+else
+  workers <%= config.gitlab.rails.puma.workers %>
+end
 
 require_relative "<%= config.gitlab.dir %>/lib/gitlab/cluster/lifecycle_events"
 
