@@ -188,6 +188,38 @@ Alternatively, you can set the `certificate-authority` of `agentk`'s Kubernetes 
       --set config.kasAddress=grpc://172.16.123.1:8150
       ```
 
+## (Optional) Run `agentk` from source using `support/agentk`
+
+To increase development velocity, GDK includes a script `support/agentk` to run
+agentk with `go run`, skipping the build and deploy steps associated with
+running `agentk` in a cluster. The script takes a single mandatory argument, the
+agent token, and runs the agent in the foreground:
+
+```shell
+support/agentk TOKEN [EXTRA ARGS FOR AGENTK]
+```
+
+When run in this way, `agentk` implicitly uses the currently selected context in
+your kubeconfig, similar to how `kubectl` works.
+
+To pick up new changes to the code, simply restart the script. If you are also
+making changes to KAS, consider running [KAS from source as
+well](#optional-run-kas-directly-from-source-with-go-run).
+
+When running the script, all arguments following the token get forwarded
+directly to `agentk`. For example, to use a different kubeconfig context, you
+can use the `--context` flag:
+
+```shell
+support/agentk TOKEN --context YOUR_CONTEXT
+```
+
+To see the list of available flags, you can run
+
+```shell
+support/agentk "" --help
+```
+
 ## (Optional) Run using Bazel instead of GDK
 
 If you want to run GitLab Agent Server and Agent locally with Bazel instead of GDK, see
