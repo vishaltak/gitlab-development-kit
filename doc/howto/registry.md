@@ -48,6 +48,7 @@ installed. For example:
 - [Colima](https://github.com/abiosoft/colima).
 - [`lima nerdctl`](https://github.com/containerd/nerdctl).
 - [Rancher Desktop](https://rancherdesktop.io).
+- [Podman](https://podman.io/)
 
 In these instructions, we assume you [set up `registry.test`](local_network.md).
 
@@ -609,3 +610,72 @@ minikube start --insecure-registry="gdk.test:5000"
 ```
 
 Then the AutoDevOps pipeline should be able to build images and run them inside of Kubernetes.
+
+### Troubleshooting Container Registry when it is failing to start
+
+The Container Registry is failing to start if you run:
+
+- `gdk tail registry`, and this shows output similar to the following:
+
+  ```plaintext
+  2022-10-28_21:41:21.24738 registry              : runit control/t: sending TERM to -18831
+  2022-10-28_21:41:21.24741 registry              : runit control/t: sending TERM to 18831
+  ```
+
+- `docker ps` repeatedly, and this occasionally and briefly shows a container, similar to the following:
+
+  ```plaintext
+  f791ddfd5a10  registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.49.0- 
+  gitlab  /scripts/process-...  Less than a second ago  Up Less than a second ago (starting)  
+  0.0.0.0:5000->5000/tcp  awesome_benz
+  ```
+
+The container error is not visible anywhere, and the container is immediately removed. To see the error in the container's logs, you must prevent the container from being immediately removed:
+
+1. Remove the `--rm` option from [the `docker run` command](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/991bfff80de158d78d48b479852398a60a4c22ee/support/docker-registry#L23).
+1. To see exactly what is being run, copy the `docker run` command and `echo` it before the `exec` line.
+1. Run `gdk start registry && gdk tail registry`.
+1. Wait until the command is outputted.
+1. To exit `gdk tail registry`, press <kbd>Control</kbd>+<kbd>C</kbd>.
+1. To stop GDK from creating containers, run `gdk stop registry`.
+
+Now you can find the container and view its logs:
+
+1. Run `docker ps -a` to find the container name.
+1. Run `docker logs <container_name>`.
+
+The output should look similar to the following:
+
+```plaintext
+$ gdk start registry && gdk tail registry
+ok: run: /Users/mkozonogitlab/Developer/gdk/services/registry: (pid 20314) 0s, normally down
+2022-10-28_21:41:21.24738 registry              : runit control/t: sending TERM to -18831
+2022-10-28_21:41:21.24741 registry              : runit control/t: sending TERM to 18831
+2022-10-28_21:46:38.72345 registry              : docker run -p 172.16.123.1:5000:5000 -u 0:0 -v /Users/mkozonogitlab/Developer/gdk/registry/config.yml:/etc/docker/registry/config.yml:ro -v /Users/mkozonogitlab/Developer/gdk/registry/storage:/var/lib/registry -v /Users/mkozonogitlab/Developer/gdk/localhost.crt:/etc/docker/registry/localhost.crt:ro -v /Users/mkozonogitlab/Developer/gdk/registry_host.crt:/etc/docker/registry/registry_host.crt:ro -v /Users/mkozonogitlab/Developer/gdk/registry_host.key:/etc/docker/registry/registry_host.key:ro registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.49.0-gitlab
+^C
+$ gdk stop registry
+ok: down: /Users/mkozonogitlab/Developer/gdk/services/registry: 0s
+$ docker ps -a
+CONTAINER ID  IMAGE                                                                              COMMAND               CREATED         STATUS                                PORTS                                           NAMES
+e73941e70bec  registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.49.0-gitlab  /scripts/process-...  24 seconds ago  Exited (1) 24 seconds ago (starting)  172.16.123.1:5000->5000/tcp                     focused_aryabhata
+$ docker logs focused_aryabhata
+configuration error: open /etc/docker/registry/config.yml: permission denied
+Usage:
+  registry serve <config> [flags]
+
+Flags:
+  -h, --help   help for serve
+```
+
+### Running the Container Registry in Podman
+
+If the [Container Registry is failing to start](#troubleshooting-container-registry-when-it-is-failing-to-start), and the container logs contain `configuration error: open /etc/docker/registry/config.yml: permission denied`, you may be able to get the container to work by specifying the `uid` and `gid` for the [`docker run -u` option](https://docs.podman.io/en/latest/markdown/podman-run.1.html#user-u-user-group) in your `gdk.yml`:
+
+```yaml
+registry:
+  uid: '0'
+  gid: '0'
+```
+
+WARNING:
+Running containers as root is not best practice.
