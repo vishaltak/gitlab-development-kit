@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -e
+
+gdk_root=$(gdk config get gdk_root)
+kas_address=$(gdk config get gitlab_k8s_agent.__url_for_agentk)
+https_enabled=$(gdk config get https.enabled)
+token_file=$(mktemp)
+
+token=$1
+shift
+extra_args=( "$@" )
+
+# For convenience, we take the token as a positional argument
+echo -n "${token}" > "${token_file}"
+
+optional_args=()
+if [[ "$https_enabled" == "true" ]]; then
+    optional_args+=("--ca-cert-file" "${gdk_root}/localhost.crt")
+fi
+
+# dummy variables for agentk
+export POD_NAMESPACE=default
+export POD_NAME=agentk
+
+"${gdk_root}/support/exec-cd" "${gdk_root}/gitlab-k8s-agent" \
+    go run cmd/agentk/main.go \
+    --kas-address "${kas_address}" \
+    --token-file "${token_file}" \
+    "${optional_args[@]}" \
+    "${extra_args[@]}"
