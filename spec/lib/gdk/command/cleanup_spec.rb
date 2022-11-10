@@ -80,6 +80,35 @@ RSpec.describe GDK::Command::Cleanup do
             expect(subject.run).to be_truthy
           end
         end
+
+        context 'by setting GDK_CLEANUP_SOFTWARE to false' do
+          it 'does not prompt about uninstalling unnecessary software' do
+            stub_env('GDK_CLEANUP_SOFTWARE', 'false')
+            stub_prompt('n')
+            expect(GDK::Output).not_to receive(:puts).with('- Uninstall any asdf software that is not defined in .tool-versions', stderr: true)
+            expect(subject.run).to be_truthy
+          end
+
+          it 'does not uninstall unnecessary software' do
+            stub_env('GDK_CLEANUP_SOFTWARE', 'false')
+            stub_prompt('y')
+            allow(stub_rake_truncate).to receive(:invoke)
+
+            expect(stub_rake_uninstall).not_to receive(:invoke)
+            expect(subject.run).to be_truthy
+          end
+        end
+
+        context 'by setting GDK_CLEANUP_SOFTWARE to true' do
+          it 'uninstalls unnecessary software' do
+            stub_env('GDK_CLEANUP_SOFTWARE', 'true')
+            stub_prompt('y')
+            allow(stub_rake_truncate).to receive(:invoke)
+
+            expect(stub_rake_uninstall).to receive(:invoke)
+            expect(subject.run).to be_truthy
+          end
+        end
       end
     end
 

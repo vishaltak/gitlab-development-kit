@@ -219,6 +219,14 @@ run:
 GDK_CLEANUP_CONFIRM=true gdk cleanup
 ```
 
+The `gdk cleanup` command may remove asdf software that you are using
+for other projects outside of the GDK. If you would like to avoid removing
+asdf-installed software you can make use of the `GDK_CLEANUP_SOFTWARE` variable.
+
+```shell
+GDK_CLEANUP_SOFTWARE=false gdk cleanup
+```
+
 ## Measure performance
 
 You can easily create a Sitespeed report for local `gdk` URLs or online URLs with our standardized
