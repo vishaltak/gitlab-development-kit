@@ -228,6 +228,10 @@ module GDK
       bool(:auto_update) { true }
     end
 
+    settings :rails_web do
+      bool(:enabled) { true }
+    end
+
     settings :gitlab_docs do
       bool(:enabled) { false }
       bool(:auto_update) { true }

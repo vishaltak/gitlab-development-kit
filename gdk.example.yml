@@ -272,6 +272,8 @@ prometheus:
   port: 9090
   praefect_exporter_port: 10101
   workhorse_exporter_port: 9229
+rails_web:
+  enabled: true
 redis:
   databases:
     development:
