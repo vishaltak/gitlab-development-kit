@@ -28,6 +28,10 @@ module GDK
         result
       end
 
+      def delete_software?
+        ENV.fetch('GDK_CLEANUP_SOFTWARE', 'true') == 'true'
+      end
+
       def execute
         truncate_log_files
         uninstall_unnecessary_software
@@ -41,6 +45,8 @@ module GDK
       end
 
       def unnecessary_software_to_uninstall?
+        return false unless delete_software?
+
         @unnecessary_software_to_uninstall ||= Asdf::ToolVersions.new.unnecessary_software_to_uninstall?
       end
 
