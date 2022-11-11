@@ -220,8 +220,8 @@ GDK_CLEANUP_CONFIRM=true gdk cleanup
 ```
 
 The `gdk cleanup` command may remove asdf software that you are using
-for other projects outside of the GDK. If you would like to avoid removing
-asdf-installed software you can make use of the `GDK_CLEANUP_SOFTWARE` variable.
+for other projects outside of the GDK. To avoid removing
+asdf-installed software, run `gdk cleanup` with the `GDK_CLEANUP_SOFTWARE` variable:
 
 ```shell
 GDK_CLEANUP_SOFTWARE=false gdk cleanup
