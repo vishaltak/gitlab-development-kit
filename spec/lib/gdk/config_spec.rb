@@ -1794,6 +1794,14 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'rails_web' do
+    describe 'enabled' do
+      it 'is enabled by default' do
+        expect(config.rails_web.enabled).to be(true)
+      end
+    end
+  end
+
   describe 'webpack' do
     describe '#incremental' do
       it 'is true by default' do
