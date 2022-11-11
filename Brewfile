@@ -13,6 +13,7 @@ brew "libiconv"
 brew "openssl@1.1", link: :force
 brew "pkg-config"
 brew "re2"
+brew "ripsecrets"
 brew "runit"
 brew "sqlite"
 brew "vale"
