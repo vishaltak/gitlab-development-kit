@@ -5,7 +5,8 @@
 require_relative '../../lib/gdk'
 
 dev = GDK.config.dev
-
+dev_bins = dev.__bins
+go_binary = dev.__go_binary
 checkmake = dev.checkmake
 checkmake_version = checkmake.version
 checkmake_binary = checkmake.__binary
@@ -16,11 +17,14 @@ unless dev.__go_binary_available?
   GDK::Output.abort("Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details")
 end
 
-go_binary = dev.__go_binary
-
 unless checkmake_versioned_binary.exist?
   GDK::Output.info("Installing checkmake #{checkmake_version}..")
-  Shellout.new("GOPATH=#{dev.__go_path} GO111MODULE=off #{go_binary} get github.com/mrtazz/checkmake").stream
-  Shellout.new("mv #{checkmake_binary} #{checkmake_versioned_binary}").stream
+  Shellout.new("mkdir -p #{dev_bins}").stream
+  checkmake_uri = 'github.com/mrtazz/checkmake'
+  checkmake_src_path = dev.__go_path.join("src/#{checkmake_uri}")
+  checkmake_src_path.rmtree if checkmake_src_path.exist?
+  checkmake_binary.delete if checkmake_binary.exist?
+  Shellout.new("GOPATH=#{dev.__go_path} GO111MODULE=off #{go_binary} get #{checkmake_uri}").stream
+  FileUtils.mv(checkmake_binary, checkmake_versioned_binary)
   Shellout.new("ln -nfs #{checkmake_versioned_binary} #{checkmake_binary}").stream
 end

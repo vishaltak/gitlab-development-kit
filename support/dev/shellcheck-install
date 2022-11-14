@@ -15,10 +15,10 @@ shellcheck_architecture = config.__architecture
 shellcheck_binary = shellcheck.__binary
 shellcheck_versioned_binary = shellcheck.__versioned_binary
 
-unless config.__platform_supported?
+unless config.__platform_supported? && (!config.__platform_darwin? && shellcheck_architecture != 'arm64')
   GDK::Output.warn("Need shellcheck #{shellcheck_version} to be installed at #{shellcheck_versioned_binary}")
   GDK::Output.info('To install shellcheck, please consult the docs at https://github.com/koalaman/shellcheck#installing')
-  GDK::Output.abort('Installing shellcheck automatically only supported on macOS and Linux.')
+  GDK::Output.abort('Installing shellcheck automatically only supported on macOS x86_64 and Linux.')
 end
 
 unless shellcheck_versioned_binary.exist?

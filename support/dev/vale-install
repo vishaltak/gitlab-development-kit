@@ -7,23 +7,30 @@ require_relative '../../lib/gdk'
 config = GDK.config
 dev = config.dev
 dev_bins = dev.__bins
-
+go_binary = dev.__go_binary
 vale = dev.vale
 vale_version = vale.version
-vale_platform = vale.__platform
+# vale_platform = vale.__platform
 vale_binary = vale.__binary
 vale_versioned_binary = vale.__versioned_binary
 
-unless config.__platform_supported?
+unless config.__platform_supported? # && (!config.__platform_darwin? && config.__architecture != 'arm64')
   GDK::Output.warn("Need vale #{vale_version} to be installed at #{vale_versioned_binary}")
   GDK::Output.info('To install vale, please consult the docs at https://docs.errata.ai/vale/install')
-  GDK::Output.abort('Installing vale automatically only supported on macOS and Linux.')
+  GDK::Output.abort('Installing vale automatically only supported on macOS x86_64 and Linux.')
 end
 
 unless vale_versioned_binary.exist?
   GDK::Output.info("Installing vale #{vale_version}..")
   Shellout.new("mkdir -p #{dev_bins}").stream
-  Shellout.new("curl -C - -L --fail --silent 'https://github.com/errata-ai/vale/releases/download/v#{vale_version}/vale_#{vale_version}_#{vale_platform}_64-bit.tar.gz' | tar xzf - -C #{dev_bins} vale").stream
-  Shellout.new("mv #{vale_binary} #{vale_versioned_binary}").stream
+  # Shellout.new("curl -C - -L --fail --silent 'https://github.com/errata-ai/vale/releases/download/v#{vale_version}/vale_#{vale_version}_#{vale_platform}_64-bit.tar.gz' | tar xzf - -C #{dev_bins} vale").stream
+
+  vale_uri = 'github.com/errata-ai/vale'
+  vale_src_path = dev.__go_path.join("src/#{vale_uri}")
+  vale_src_path.rmtree if vale_src_path.exist?
+  vale_binary.delete if vale_binary.exist?
+  Shellout.new("GOPATH=#{dev.__go_path} GO111MODULE=off #{go_binary} get #{vale_uri}").stream
+
+  FileUtils.mv(vale_binary, vale_versioned_binary)
   Shellout.new("ln -nfs #{vale_versioned_binary} #{vale_binary}").stream
 end
