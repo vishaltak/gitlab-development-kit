@@ -11,26 +11,23 @@ require_relative '../lib/gdk'
 PROGNAME = File.basename(__FILE__)
 
 def clone(git_clone_args)
-  default_args = ['--quiet']
-  command = %w[git clone] + default_args + git_clone_args
+  command = %w[git clone --quiet] + git_clone_args
 
-  3.times do
-    sh = Shellout.new(command)
-    sh.stream
-    return true if sh.success?
-  end
-
-  false
+  Shellout.new(command).execute(retry_attempts: 3).success?
 end
 
-def checkout(revision)
-  %W[git checkout #{revision}]
+def checkout(revision, dir)
+  Shellout.new(%W[git checkout #{revision}], chdir: dir).execute.success?
 end
 
 def main(argv)
   revision = ENV['GIT_REVISION']
-  clone(argv)
-  checkout(revision) if revision
+  _, dir = argv
+
+  abort "ERROR: Unable to clone '#{argv}'" unless clone(argv)
+  return true unless revision
+
+  abort "ERROR: Unable to checkout '#{revision}'" unless checkout(revision, dir)
 end
 
 abort "Usage: #{PROGNAME} [options]" if ARGV.count < 1
