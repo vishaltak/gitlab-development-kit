@@ -109,6 +109,7 @@ gitlab:
     sidekiq_health_check_port: 3907
     timeout: 10
     verbose: false
+  version: master
 gitlab_docs:
   auto_update: true
   enabled: false

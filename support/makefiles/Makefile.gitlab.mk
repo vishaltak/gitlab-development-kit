@@ -41,10 +41,10 @@ gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" master master
+	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" ${gitlab_version} master
 
 gitlab/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
+	$(Q)GIT_REVISION="${gitlab_version}" support/component-git-clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
 gitlab-config: \
 	touch-examples \
