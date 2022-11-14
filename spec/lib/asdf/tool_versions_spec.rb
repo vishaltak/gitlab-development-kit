@@ -18,15 +18,15 @@ RSpec.describe Asdf::ToolVersions do
         tool_version = subject.default_tool_version_for('postgres')
 
         expect(tool_version).to be_instance_of(Asdf::ToolVersion)
-        expect(tool_version.version).to eq('12.10')
+        expect(tool_version.version).to eq('12.13')
       end
     end
   end
 
   describe '#default_version_for' do
     context 'postgres' do
-      it 'returns 12.10' do
-        expect(subject.default_version_for('postgres')).to eq('12.10')
+      it 'returns 12.13' do
+        expect(subject.default_version_for('postgres')).to eq('12.13')
       end
     end
   end
