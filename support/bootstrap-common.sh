@@ -148,12 +148,8 @@ configure_ruby_bundler_for_gitlab() {
       fi
 
       if [[ ${clang_version} -ge 14 ]]; then
-        # Workaround until https://github.com/pganalyze/pg_query/pull/256 is available
-        bundle config build.pg_query --with-ldflags="-Wl,-undefined,dynamic_lookup"
         # Workaround until https://github.com/chef/ffi-yajl/pull/114 is available
         bundle config build.ffi-yajl --with-ldflags="-Wl,-undefined,dynamic_lookup"
-        # Workaround until https://github.com/meinac/oj-introspect/pull/3 is available
-        bundle config build.oj-introspect --with-ldflags="-Wl,-undefined,dynamic_lookup"
       fi
     fi
   )
