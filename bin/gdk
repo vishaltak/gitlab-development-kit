@@ -8,12 +8,12 @@ find_gdk_root() {
   if [[ -f "${1}/GDK_ROOT" && -x "${1}/gem/bin/gdk" ]]; then
     echo "${1}"
   else
-    one_path_back="$(cd "${1}/.." || exit ; pwd -P)"
+    one_path_back="$(cd "${1}/.." || exit ; pwd)"
     find_gdk_root "${one_path_back}"
   fi
 }
 
-gdk_root_path=$(find_gdk_root "$(pwd -P)")
+gdk_root_path=$(find_gdk_root "$(pwd)")
 
 if [[ -d "${gdk_root_path}" ]]; then
   exec "${gdk_root_path}/gem/bin/gdk" "${@}"
