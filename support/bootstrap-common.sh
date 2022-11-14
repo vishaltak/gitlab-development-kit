@@ -108,7 +108,7 @@ asdf_check_rvm_rbenv() {
 }
 
 gdk_install_gdk_clt() {
-  if [[ "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
+  if [[ -x "${ROOT_PATH}/bin/gdk" && "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
     echo "INFO: Installing gdk shim.."
     gdk_install_shim
   else
@@ -124,11 +124,21 @@ gdk_install_shim() {
 }
 
 gdk_install_gem() {
-  if ! echo_if_unsuccessful prefix_with_asdf_if_available gem install gitlab-development-kit; then
-    return 1
-  fi
+  (
+    cd "${ROOT_PATH}/gem" || return 1
 
-  return 0
+    rm -f gitlab-development-kit-*.gem
+
+    if ! echo_if_unsuccessful prefix_with_asdf_if_available gem build gitlab-development-kit.gemspec; then
+      return 1
+    fi
+
+    if ! echo_if_unsuccessful prefix_with_asdf_if_available gem install gitlab-development-kit-*.gem; then
+      return 1
+    fi
+
+    return 0
+  )
 }
 
 update_rubygems_gem() {

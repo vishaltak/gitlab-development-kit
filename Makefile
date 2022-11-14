@@ -168,7 +168,9 @@ unlock-dependency-installers:
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
-	.gitlab-ui-yarn
+	.gitlab-ui-yarn \
+	.gitlab-gdk-gem \
+	.gitlab-lefthook
 
 gdk.yml:
 	$(Q)touch $@

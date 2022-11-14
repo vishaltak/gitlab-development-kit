@@ -16,6 +16,7 @@
 /.gettext
 /.gitaly-ruby-bundle
 /.gitlab-bundle
+/.gitlab-gdk-gem
 /.gitlab-lefthook
 /.gitlab-npm
 /.gitlab-shell-bundle
@@ -29,8 +30,8 @@
 /Procfile
 /bootstrap-rails.log
 /builds
-/clickhouse
 /charts-gitlab
+/clickhouse
 /coverage
 /dev/
 /elasticsearch*
@@ -45,9 +46,9 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
-/gitlab-metrics-exporter
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
+/gitlab-metrics-exporter
 /gitlab-operator
 /gitlab-pages
 /gitlab-pages-secret
