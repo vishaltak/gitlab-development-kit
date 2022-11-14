@@ -44,6 +44,10 @@ gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" master master
 
 gitlab/.git:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Cloning gitlab-org/gitlab"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
 gitlab-config: \
