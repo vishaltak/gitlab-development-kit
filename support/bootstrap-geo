@@ -8,10 +8,10 @@ success &&= system(*%w[gdk start postgresql-geo])
 
 # This creates databases, seeds, and runs migrations as needed.
 # It creates gitlabhq_geo_development but unfortunately not gitlabhq_geo_test.
-success &&= system({ 'force' => 'yes', 'BOOTSTRAP' => '1' }, *%w[bundle exec rails db:prepare], chdir: 'gitlab')
+success &&= system({ 'force' => 'yes', 'BOOTSTRAP' => '1' }, *%w[../support/bundle-exec rails db:prepare], chdir: 'gitlab')
 
 # RAILS_ENV=test rails db:create:geo is not idempotent, and it's also not a huge deal if it fails.
-system({ 'force' => 'yes', 'BOOTSTRAP' => '1', 'RAILS_ENV' => 'test' }, *%w[bundle exec rails db:create:geo], chdir: 'gitlab')
+system({ 'force' => 'yes', 'BOOTSTRAP' => '1', 'RAILS_ENV' => 'test' }, *%w[../support/bundle-exec rails db:create:geo], chdir: 'gitlab')
 
 # To recreate the Praefect DB
 success &&= system(*%w[gdk reconfigure], chdir: 'gitlab')

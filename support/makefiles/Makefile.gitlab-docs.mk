@@ -3,7 +3,7 @@ gitlab_runner_clone_dir = gitlab-runner
 omnibus_gitlab_clone_dir = omnibus-gitlab
 charts_gitlab_clone_dir = charts-gitlab
 gitlab_operator_clone_dir = gitlab-operator
-nanoc_cmd = ${BUNDLE} exec nanoc
+nanoc_cmd = ${support_bundle_exec} nanoc
 
 ifeq ($(gitlab_docs_enabled),true)
 gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-operator gitlab-docs-deps

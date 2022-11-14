@@ -21,7 +21,7 @@ gitlab-metrics-exporter-update-run: gitlab-metrics-exporter/.git/pull gitlab-met
 
 .PHONY: gitlab-metrics-exporter-clean-bin
 gitlab-metrics-exporter-clean-bin:
-	$(Q)$(MAKE) -C gitlab-metrics-exporter clean
+	$(Q)support/asdf-exec gitlab-metrics-exporter $(MAKE) clean
 
 gitlab-metrics-exporter/.git:
 	$(Q)GIT_REVISION="${gitlab_metrics_exporter_version}" support/component-git-clone ${git_depth_param} ${gitlab_metrics_exporter_repo} gitlab-metrics-exporter
@@ -32,7 +32,7 @@ gitlab-metrics-exporter/bin/gitlab-metrics-exporter: gitlab-metrics-exporter/.gi
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitlab-metrics-exporter version ${gitlab_metrics_exporter_version}"
 	@echo "${DIVIDER}"
-	$(Q)$(MAKE) -C gitlab-metrics-exporter ${QQ}
+	$(Q)support/asdf-exec gitlab-metrics-exporter $(MAKE) ${QQ}
 
 .PHONY: gitlab-metrics-exporter/.git/pull
 gitlab-metrics-exporter/.git/pull: gitlab-metrics-exporter/.git

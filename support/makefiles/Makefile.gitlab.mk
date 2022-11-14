@@ -1,5 +1,5 @@
 gitlab_clone_dir = gitlab
-gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
+gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
@@ -78,9 +78,9 @@ ifeq ($(gitlab_lefthook_enabled),true)
 .gitlab-lefthook:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Installing Lefthook for gitlab-org/gitlab"
+	@echo "Enabling Lefthook for gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) gem install lefthook && ${BUNDLE} exec lefthook install
+	$(Q)$(in_gitlab) ${support_bundle_exec} lefthook install
 	$(Q)touch $@
 else
 .gitlab-lefthook:

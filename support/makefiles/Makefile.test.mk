@@ -17,7 +17,7 @@ rubocop:
 else
 rubocop: gdk_bundle_install
 	@echo -n "RuboCop: "
-	@${BUNDLE} exec $@ --config .rubocop-gdk.yml --parallel
+	@${support_bundle_exec} $@ --config .rubocop-gdk.yml --parallel
 endif
 
 .PHONY: rspec
@@ -28,7 +28,7 @@ rspec:
 else
 rspec: gdk_bundle_install
 	@echo -n "RSpec: "
-	@${BUNDLE} exec $@ ${RSPEC_ARGS}
+	@${support_bundle_exec} $@ ${RSPEC_ARGS}
 endif
 
 .PHONY: lint

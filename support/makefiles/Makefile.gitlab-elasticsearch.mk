@@ -30,7 +30,7 @@ gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsea
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitlab-elasticsearch-indexer version ${gitlab_elasticsearch_indexer_version}"
 	@echo "${DIVIDER}"
-	$(Q)$(MAKE) -C gitlab-elasticsearch-indexer build ${QQ}
+	$(Q)support/asdf-exec gitlab-elasticsearch-indexer build $(MAKE) ${QQ}
 
 .PHONY: gitlab-elasticsearch-indexer/.git/pull
 gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
