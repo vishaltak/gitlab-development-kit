@@ -17,7 +17,7 @@ variables:
   ENABLE_BOOTSNAP: "false"
 
 default:
-  timeout: 2 hours
+  timeout: 3 hours
   interruptible: true
   image: ${DEFAULT_IMAGE}
   tags:
