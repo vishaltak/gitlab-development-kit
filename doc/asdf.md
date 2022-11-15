@@ -14,6 +14,7 @@ The GDK currently leverages the following `asdf` plugins:
 - [`postgres`](https://github.com/smashedtoatoms/asdf-postgres)
 - [`redis`](https://github.com/smashedtoatoms/asdf-redis)
 - [`ruby`](https://github.com/asdf-vm/asdf-ruby)
+- [`rust`](https://github.com/asdf-community/asdf-rust)
 - [`yarn`](https://github.com/twuni/asdf-yarn)
 
 The [GDK `.tool-versions` file](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) contains the specifics plugins and versions GDK requires.
@@ -51,6 +52,7 @@ golang       1.18.3            1.17.9
 nodejs       16.15.0
 postgres     12.10             13.6
 ruby         2.7.5             3.0.4 2.7.6
+rust         1.65.0
 ```
 
 We can summarize the contents as:
@@ -59,6 +61,7 @@ We can summarize the contents as:
 - Require `nodejs`, versions `16.15.0`, making `16.15.0` the default version available
 - Require `postgres`, versions `12.10` and `13.6`, making `12.10` the default version available
 - Require `ruby`, versions `2.7.5`, `3.0.4` and `2.7.6`, making `2.7.5` the default version available
+- Require `rust`, versions `1.65.0`, making `1.65.0` the default version available
 
 The `.tool-versions` file describes the project's software requirements, but it does not install them. To install the project's software requirements, run:
 
