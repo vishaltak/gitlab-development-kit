@@ -231,7 +231,6 @@ If the supported version is not available for you from pre-compiled packages, tr
 instructions for [Ubuntu/Debian](../index.md#ubuntudebian) or [Arch/Manjaro](../index.md#arch-and-manjaro-linux). If
 that doesn't give you the supported version, you might have to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
 
-
 ### `your socket path is likely too long, please change Gitaly's runtime directory`
 
 If you see the following error when running `rspec`:
