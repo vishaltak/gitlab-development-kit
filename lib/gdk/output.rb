@@ -63,6 +63,7 @@ module GDK
 
       def print(message = nil, stderr: false)
         stderr ? stderr_handle.print(message) : stdout_handle.print(message)
+      rescue IOError
       end
 
       def puts(message = nil, stderr: false)

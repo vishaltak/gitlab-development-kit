@@ -81,7 +81,7 @@ RSpec.describe GDK::Command::Cleanup do
           end
         end
 
-        context 'by setting GDK_CLEANUP_SOFTWARE to false' do
+        context 'by setting GDK_CLEANUP_SOFTWARE to false', :hide_output do
           it 'does not prompt about uninstalling unnecessary software' do
             stub_env('GDK_CLEANUP_SOFTWARE', 'false')
             stub_prompt('n')
@@ -99,7 +99,7 @@ RSpec.describe GDK::Command::Cleanup do
           end
         end
 
-        context 'by setting GDK_CLEANUP_SOFTWARE to true' do
+        context 'by setting GDK_CLEANUP_SOFTWARE to true', :hide_output do
           it 'uninstalls unnecessary software' do
             stub_env('GDK_CLEANUP_SOFTWARE', 'true')
             stub_prompt('y')
