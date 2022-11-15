@@ -57,7 +57,8 @@ The one-line installation:
 - Clones the GDK project into a new `gitlab-development-kit` directory in the current working
   directory.
 - Installs `asdf` and necessary `asdf` plugins.
-- Runs `gdk install`.
+- Runs `gdk install`. This will install dependencies and pull GitLab repos under the GDK install
+  directory.
 - Runs `gdk start`.
 
 1. Follow [dependency installation instructions](index.md#install-prerequisites).

@@ -231,6 +231,22 @@ If the supported version is not available for you from pre-compiled packages, tr
 instructions for [Ubuntu/Debian](../index.md#ubuntudebian) or [Arch/Manjaro](../index.md#arch-and-manjaro-linux). If
 that doesn't give you the supported version, you might have to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
 
+
+### `your socket path is likely too long, please change Gitaly's runtime directory`
+
+If you see the following error when running `rspec`:
+
+```shell
+RuntimeError:
+  gitaly spawn failed
+
+  Check log/gitaly-test.log & log/praefect-test.log for errors.
+```
+
+If you find the error message above within the test log, the GDK path is too long. socket paths are
+limited to 104 (macOS) or 108 (Linux) characters. Move or reinstall GDK to a shorter path on your
+development machine.
+
 ## Elasticsearch
 
 Running a spec locally may give you something like the following:
