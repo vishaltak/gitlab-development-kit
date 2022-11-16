@@ -63,7 +63,8 @@ endif
 # This is used by `gdk install` and `gdk reconfigure`
 #
 .PHONY: all
-all: preflight-checks \
+all: .tool-versions \
+preflight-checks \
 gitlab-setup \
 gdk-reconfigure-task \
 gitlab-shell-setup \
@@ -168,6 +169,10 @@ unlock-dependency-installers:
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
 	.gitlab-ui-yarn
+
+.PHONY: .tool-versions
+.tool-versions:
+	$(Q)support/asdf-combine --quiet
 
 gdk.yml:
 	$(Q)touch $@

@@ -47,7 +47,7 @@ end
 
 HEADER_CONTENT = <<~CONTENT
   # support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
-  # files from GDK sub-projects.
+  # files from projects the GDK manages.
   #
   # Do not modify this file directly.
   #
@@ -65,9 +65,27 @@ def http_get(url)
   response.body
 end
 
-def read_tool_versions_from(origin, content)
+def extract_software_from_content(content)
   content.lines.each_with_object({}) do |entry, object|
     next unless (match = entry.match(/^(?<software>\w+) (?<versions>.+)$/))
+
+    yield [match, object]
+  end
+end
+
+def read_tool_versions_from(origin, content)
+  extract_software_from_content(content) do |match, object|
+    object[match[:software]] = match[:versions].split.each_with_object({}) { |e, all| all[e] = [origin] }
+  end
+end
+
+def optional_software
+  @optional_software ||= GDK.config.asdf.optional_software
+end
+
+def read_tool_versions_optional_from(origin, content)
+  extract_software_from_content(content) do |match, object|
+    next unless optional_software[match[:software]]
 
     object[match[:software]] = match[:versions].split.each_with_object({}) { |e, all| all[e] = [origin] }
   end
@@ -93,17 +111,23 @@ def tool_versions_gdk_file
   @tool_versions_gdk_file ||= gdk_root.join('.tool-versions-gdk')
 end
 
+def tool_versions_optional_file
+  @tool_versions_optional_file ||= gdk_root.join('.tool-versions-optional')
+end
+
 def format_software_and_versions_data(data)
   output = []
 
   data.each do |software, version_and_origins|
     output << "# #{software}:"
+
     version_and_origins.each do |version, origins|
       output << "#   #{version}:"
       origins.each do |origin|
         output << "#     - #{origin}"
       end
     end
+
     output << '#'
     output << "#{software} #{version_and_origins.keys.join(' ')}"
     output << ''
@@ -125,12 +149,18 @@ def process_tool_versions_files(tool_versions_files, tool_versions_data, quiet: 
 
     tool_versions_data_for_entry = read_tool_versions_from(entry.line_comment, tool_versions_contents)
 
-    tool_versions_data_for_entry.each do |software, versions|
-      tool_versions_data[software] ||= {}
-      versions.each do |version, origin|
-        tool_versions_data[software][version] ||= []
-        tool_versions_data[software][version] |= origin
-      end
+    tool_versions_data = merge_data(tool_versions_data_for_entry, tool_versions_data)
+  end
+
+  tool_versions_data
+end
+
+def merge_data(new_data, tool_versions_data)
+  new_data.each do |software, versions|
+    tool_versions_data[software] ||= {}
+    versions.each do |version, origin|
+      tool_versions_data[software][version] ||= []
+      tool_versions_data[software][version] |= origin
     end
   end
 
@@ -139,10 +169,13 @@ end
 
 def main(tool_versions_files, quiet: false)
   tool_versions_data_from_gdk_file = read_tool_versions_from('.tool-versions-gdk', tool_versions_gdk_file.read)
+  tool_versions_data_from_optional_file = read_tool_versions_optional_from('.tool-versions-optional', tool_versions_optional_file.read)
 
-  tool_versions_data = process_tool_versions_files(tool_versions_files, tool_versions_data_from_gdk_file.clone, quiet: quiet).sort.each_with_object({}) do |(software, versions), all|
+  tool_versions_data_from_gdk_file_and_optional = merge_data(tool_versions_data_from_optional_file, tool_versions_data_from_gdk_file)
+
+  tool_versions_data = process_tool_versions_files(tool_versions_files, tool_versions_data_from_gdk_file_and_optional.clone, quiet: quiet).sort.each_with_object({}) do |(software, versions), all|
     # We only sort by newest version first *if* not defined in .tool-versions-gdk
-    sorted_versions = if tool_versions_data_from_gdk_file[software]
+    sorted_versions = if tool_versions_data_from_gdk_file_and_optional[software]
                         versions
                       else
                         versions.sort { |(x_version, _), (y_version, _)| Gem::Version.new(x_version) <=> Gem::Version.new(y_version) }.reverse

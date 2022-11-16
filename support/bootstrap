@@ -28,6 +28,13 @@ asdf_add_initializer() {
   [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/${2}" >> "${1}"
 }
 
+asdf_install_ruby() {
+  asdf plugin update ruby
+
+  asdf install ruby 2.7.5
+  asdf local ruby 2.7.5
+}
+
 asdf_install_update_plugins() {
   cut -d ' ' -f 1 .tool-versions | grep -Ev "^#|^$" | while IFS= read -r plugin
   do
@@ -97,6 +104,11 @@ fi
 echo "INFO: Installing asdf.."
 if ! asdf_install; then
   error "Failed to install asdf." >&2
+fi
+
+echo "INFO: Installing Ruby via asdf.."
+if ! asdf_install_ruby; then
+  error "Failed to install Ruby via asdf." >&2
 fi
 
 echo "INFO: Installing/updating asdf plugins.."
