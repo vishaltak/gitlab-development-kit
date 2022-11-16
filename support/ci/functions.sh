@@ -101,6 +101,7 @@ install() {
   cd_into_checkout_path
 
   echo "> Installing GDK.."
+  gdk config set gitlab.version v15.5.5-ee
   gdk install
   set_gitlab_upstream
 }
