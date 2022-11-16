@@ -25,12 +25,13 @@
 /.node-version
 /.ruby-gemset
 /.ssh/
+/.tool-versions
 /.vagrant/
 /Procfile
 /bootstrap-rails.log
 /builds
-/clickhouse
 /charts-gitlab
+/clickhouse
 /coverage
 /dev/
 /elasticsearch*
@@ -45,9 +46,9 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
-/gitlab-metrics-exporter
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
+/gitlab-metrics-exporter
 /gitlab-operator
 /gitlab-pages
 /gitlab-pages-secret
