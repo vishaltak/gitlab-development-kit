@@ -2,13 +2,15 @@
 
 This document describes the required steps to enable and test the [database load balancing](https://docs.gitlab.com/ee/administration/database_load_balancing.html) feature in GDK.
 
+To also test service discovery for database replicas, see the [database load balancing with service discovery documentation](database_load_balancing_with_service_discovery.md).
+
 ## Prerequisites
 
 Database load balancing is an Enterprise feature, so you will need to generate a license for your GDK installation. See [Use GitLab Enterprise features](../index.md#use-gitlab-enterprise-features) for instructions.
 
 ## Assumptions
 
-For these instructions, we will assume that your GDK root is located at `/full/path/to/gdk-root` and that you are located there. Make sure to use the correct path for your installation.
+For these instructions, we assume that you are running all commands from the GDK root.
 
 ## Prepare
 
@@ -35,7 +37,7 @@ The first step is to prepare both primary and secondary databases for replicatio
 1. Copy data from primary to secondary with `pg_basebackup`:
 
     ```shell
-    pg_basebackup -R -h /full/path/to/gdk-root/postgresql -D /full/path/to/gdk-root/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
+    pg_basebackup -R -h $(pwd)/postgresql -D $(pwd)/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
     ```
 
    This automatically creates `postgresql.auto.conf` in the PostgreSQL data directory. Older
@@ -43,19 +45,6 @@ The first step is to prepare both primary and secondary databases for replicatio
    PostgreSQL 12 to function.
 
 ## Configure GDK
-
-1. Edit `gitlab/config/database.yml`:
-
-   ```yaml
-   development:
-     # ...
-     load_balancing:
-       hosts:
-         - /full/path/to/gdk-root/postgresql
-         - /full/path/to/gdk-root/postgresql-replica
-   ```
-
-   Note that `hosts` contains both primary and secondary hosts.
 
 1. Edit `gdk.yml`:
 
@@ -65,12 +54,7 @@ The first step is to prepare both primary and secondary databases for replicatio
        enabled: true
    load_balancing:
      enabled: true
-   gdk:
-     protected_config_files:
-     - 'gitlab/config/database.yml'
    ```
-
-   Note that we are protecting `gitlab/config/database.yml` to avoid GDK removing the `postgresql-replica` host line that we just added to `gitlab/config/database.yml`.
 
 1. Reconfigure GDK:
 

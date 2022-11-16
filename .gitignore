@@ -93,6 +93,8 @@
 /postgresql-primary
 /postgresql-replica/.s.*
 /postgresql-replica/data
+/postgresql-replica-2/.s.*
+/postgresql-replica-2/data
 /postgresql/.s.*
 /postgresql/data*
 /postgresql_geo_port
@@ -118,3 +120,5 @@
 Brewfile.lock.json
 haproxy/haproxy.cfg
 node_modules/
+/pgbouncers/
+/consul/

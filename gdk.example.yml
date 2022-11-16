@@ -172,6 +172,8 @@ https:
   enabled: false
 listen_address: 127.0.0.1
 load_balancing:
+  discover:
+    enabled: false
   enabled: false
 mattermost:
   enabled: false
@@ -237,6 +239,8 @@ omnibus_gitlab:
 openldap:
   enabled: false
 packages: {}
+pgbouncer_replicas:
+  enabled: false
 port: 3000
 postgresql:
   active_version: '12.13'
@@ -249,9 +253,23 @@ postgresql:
     host: "/home/git/gdk/postgresql-geo"
     port: 5431
   host: "/home/git/gdk/postgresql"
+  multiple_replicas:
+    enabled: false
   port: 5432
   replica:
+    data_directory: "/home/git/gdk/postgresql-replica/data"
     enabled: false
+    host: "/home/git/gdk/postgresql-replica"
+    port1: 6432
+    port2: 6433
+    root_directory: "/home/git/gdk/postgresql-replica"
+  replica_2:
+    data_directory: "/home/git/gdk/postgresql-replica-2/data"
+    enabled: false
+    host: "/home/git/gdk/postgresql-replica-2"
+    port1: 6434
+    port2: 6435
+    root_directory: "/home/git/gdk/postgresql-replica-2"
   replica_data_dir: "/home/git/gdk/postgresql-replica/data"
   replica_dir: "/home/git/gdk/postgresql-replica"
   replication_user: gitlab_replication

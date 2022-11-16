@@ -164,6 +164,30 @@ else
 	@true
 endif
 
+.PHONY: pgbouncers/pgbouncer-replica-1.ini
+pgbouncers/pgbouncer-replica-1.ini: 
+	$(Q)rake pgbouncers/pgbouncer-replica-1.ini
+
+.PHONY: pgbouncers/pgbouncer-replica-2.ini
+pgbouncers/pgbouncer-replica-2.ini: 
+	$(Q)rake pgbouncers/pgbouncer-replica-2.ini
+
+.PHONY: pgbouncers/pgbouncer-replica-2-1.ini
+pgbouncers/pgbouncer-replica-2-1.ini: 
+	$(Q)rake pgbouncers/pgbouncer-replica-2-1.ini
+
+.PHONY: pgbouncers/pgbouncer-replica-2-2.ini
+pgbouncers/pgbouncer-replica-2-2.ini: 
+	$(Q)rake pgbouncers/pgbouncer-replica-2-2.ini
+
+.PHONY: pgbouncers/userlist.txt
+pgbouncers/userlist.txt: 
+	$(Q)rake pgbouncers/userlist.txt
+
+.PHONY: consul/config.json
+consul/config.json: 
+	$(Q)rake consul/config.json
+
 .PHONY: gitlab-db-migrate
 gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab-db-migrate
