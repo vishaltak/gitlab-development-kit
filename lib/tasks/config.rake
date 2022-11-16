@@ -17,7 +17,13 @@ CONFIGS = FileList[
   'clickhouse/config.d/logger.xml',
   'clickhouse/config.d/openssl.xml',
   'clickhouse/config.d/user-directories.xml',
-  'clickhouse/users.d/gdk.xml'
+  'clickhouse/users.d/gdk.xml',
+  'pgbouncers/pgbouncer-replica-1.ini',
+  'pgbouncers/pgbouncer-replica-2.ini',
+  'pgbouncers/pgbouncer-replica-2-1.ini',
+  'pgbouncers/pgbouncer-replica-2-2.ini',
+  'pgbouncers/userlist.txt',
+  'consul/config.json'
 ]
 CLOBBER.include(*CONFIGS)
 
@@ -151,6 +157,12 @@ tasks.add_template(name: 'clickhouse/config.d/user-directories.xml')
 tasks.add_template(name: 'clickhouse/users.d/gdk.xml')
 tasks.add_template(name: 'elasticsearch/config/elasticsearch.yml', template: 'support/templates/elasticsearch/config/elasticsearch.yml', no_op_condition: 'elasticsearch_enabled')
 tasks.add_template(name: 'elasticsearch/config/jvm.options.d/custom.options', template: 'support/templates/elasticsearch/config/jvm.options.d/custom.options', no_op_condition: 'elasticsearch_enabled')
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-1.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica.host, port: GDK.config.postgresql.replica.port1 })
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-2.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica.host, port: GDK.config.postgresql.replica.port2 })
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-2-1.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica_2.host, port: GDK.config.postgresql.replica_2.port1 })
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-2-2.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica_2.host, port: GDK.config.postgresql.replica_2.port2 })
+tasks.add_template(name: 'pgbouncers/userlist.txt', template: 'support/templates/pgbouncer/pgbouncer-userlist.txt.erb')
+tasks.add_template(name: 'consul/config.json', template: 'support/templates/consul/config.json.erb', erb_extra_args: { min_port: 6432, max_port: 6435 })
 
 # Make targets
 tasks.add_make_task(name: 'gitlab-db-migrate', make_dependencies: ['ensure-databases-running'])
