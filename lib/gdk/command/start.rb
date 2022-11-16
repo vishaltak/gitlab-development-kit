@@ -32,7 +32,7 @@ module GDK
 
         if args.empty?
           # Only print if run like `gdk start`, not like `gdk start rails-web`
-          print_url_ready_message
+          print_ready_message
         end
 
         if show_progress

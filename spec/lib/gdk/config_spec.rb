@@ -1932,6 +1932,18 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#port' do
+      it 'returns 5000 by default' do
+        expect(config.registry.port).to eq(5000)
+      end
+    end
+
+    describe '#__listen' do
+      it 'returns gdk.example.com:5000 by default' do
+        expect(config.registry.__listen).to eq('gdk.example.com:5000')
+      end
+    end
+
     describe '#listen_address' do
       it 'returns 127.0.0.1 by default' do
         expect(config.registry.listen_address).to eq('127.0.0.1')
@@ -2162,6 +2174,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#__uri' do
+      it 'returns http://gdk.example.com:9090 by default' do
+        expect(config.prometheus.__uri.to_s).to eq('http://gdk.example.com:9090')
+      end
+    end
+
     describe '#port' do
       it 'defaults to 9090' do
         expect(config.prometheus.port).to eq(9090)
@@ -2198,6 +2216,12 @@ RSpec.describe GDK::Config do
       it 'defaults to false' do
         expect(config.grafana.enabled).to eq(false)
         expect(config.grafana.enabled?).to eq(false)
+      end
+    end
+
+    describe '#__uri' do
+      it 'returns http://gdk.example.com:4000 by default' do
+        expect(config.grafana.__uri.to_s).to eq('http://gdk.example.com:4000')
       end
     end
 

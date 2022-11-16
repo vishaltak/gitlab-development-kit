@@ -310,6 +310,8 @@ module GDK
 
       port(:port, 'registry') { read!('registry_port') }
 
+      string(:__listen) { "#{host}:#{port}" }
+
       string :image do
         read!('registry_image') ||
           'registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:'\
@@ -714,11 +716,13 @@ module GDK
     settings :grafana do
       bool(:enabled) { false }
       port(:port, 'grafana')
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
     end
 
     settings :prometheus do
       bool(:enabled) { false }
       port(:port, 'prometheus')
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
       port(:gitaly_exporter_port, 'gitaly_exporter')
       port(:praefect_exporter_port, 'praefect_exporter')
       port(:workhorse_exporter_port, 'workhorse_exporter')
