@@ -16,13 +16,15 @@ gitlab-pages-update:
 endif
 
 .PHONY: gitlab-pages-update-run
-gitlab-pages-update-run: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages-clean-bin gitlab-pages/bin/gitlab-pages gitlab-pages/gitlab-pages.conf
-
-gitlab-pages-clean-bin:
-	$(Q)rm -f gitlab-pages/bin/gitlab-pages
+gitlab-pages-update-run: ${gitlab_pages_clone_dir}/.git gitlab-pages/.git/pull gitlab-pages/bin/gitlab-pages gitlab-pages/gitlab-pages.conf
 
 .PHONY: gitlab-pages/bin/gitlab-pages
 gitlab-pages/bin/gitlab-pages: ${gitlab_pages_clone_dir}/.git
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Compiling gitlab-org/gitlab-pages"
+	@echo "${DIVIDER}"
+	$(Q)rm -f gitlab-pages/bin/gitlab-pages
 	$(Q)$(MAKE) -C ${gitlab_pages_clone_dir} ${QQ}
 
 ${gitlab_pages_clone_dir}/.git:
