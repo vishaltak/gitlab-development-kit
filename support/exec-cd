@@ -11,7 +11,8 @@ abort "Usage: #{$PROGRAM_NAME} DIRECTORY COMMAND [ARGUMENTS ...]" if ARGV.count 
 
 Dir.chdir(ARGV.shift)
 
-cmd = ARGV
-cmd = %w[asdf env ruby] + cmd if GDK.config.asdf.__available?
+args = ARGV.join(' ')
+shell = ENV['SHELL'] || '/bin/sh'
+cmd = [shell, '-l', '-c', args]
 
 exec(*cmd)
