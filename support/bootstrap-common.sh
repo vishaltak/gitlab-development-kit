@@ -257,10 +257,9 @@ common_preflight_checks() {
 linux_platform_distro_selector() {
   local platform="${1}"
 
-  if setup_platform_linux_with "packages_${platform}.txt"; then
+  if install_apt_packages "packages_${platform}.txt"; then
     mark_platform_as_setup "packages_${platform}.txt"
   else
-    shopt -u nocasematch
     return 1
   fi
 }
@@ -316,7 +315,7 @@ mark_platform_as_setup() {
   sha256sum "${platform_file}" > "${GDK_PLATFORM_SETUP_FILE}"
 }
 
-setup_platform_linux_with() {
+install_apt_packages() {
   if ! echo_if_unsuccessful sudo apt-get update; then
     return 1
   fi
