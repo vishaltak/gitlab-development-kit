@@ -255,6 +255,7 @@ common_preflight_checks() {
 }
 
 setup_platform() {
+  echo "INFO: Setting up platform for ${OSTYPE}.."
   if platform_files_checksum_matches; then
     echo "INFO: This GDK has already had platform packages installed."
     echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
