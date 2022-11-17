@@ -254,16 +254,6 @@ common_preflight_checks() {
   fi
 }
 
-linux_platform_distro_selector() {
-  local platform="${1}"
-
-  if install_apt_packages "packages_${platform}.txt"; then
-    mark_platform_as_setup "packages_${platform}.txt"
-  else
-    return 1
-  fi
-}
-
 setup_platform() {
   if platform_files_checksum_matches; then
     echo "INFO: This GDK has already had platform packages installed."
@@ -287,7 +277,11 @@ setup_platform() {
 
     for platform in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
       if [[ ${SUPPORTED_LINUX_PLATFORMS[${platform}]} =~ ${os_id}|${os_id_like} ]]; then
-        linux_platform_distro_selector "${platform}"
+        if install_apt_packages "packages_${platform}.txt"; then
+          mark_platform_as_setup "packages_${platform}.txt"
+        else
+          return 1
+        fi
       fi
     done
 
