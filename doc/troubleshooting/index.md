@@ -240,6 +240,11 @@ RuntimeError:
   gitaly spawn failed
 
   Check log/gitaly-test.log & log/praefect-test.log for errors.
+```
+
+Check the test log. If you see `your socket path is likely too long, please change Gitaly's runtime directory`
+in the test log, the GDK path is too long. Socket paths are limited to 104 characters on macOS,
+and 108 on Linux. Move or reinstall GDK to a shorter path on your development machine.
 
 ## Elasticsearch
 
