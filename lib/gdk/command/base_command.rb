@@ -37,22 +37,31 @@ module GDK
         HELP_MESSAGE
       end
 
-      def print_url_ready_message
-        debug_info = GDK::Command::DebugInfo.new
-        GDK::Output.puts
-        GDK::Output.notice("GitLab available at #{config.__uri}.")
-        GDK::Output.notice("  - Ruby: #{debug_info.ruby_version}.")
-        GDK::Output.notice("  - Node.js: #{debug_info.node_version}.")
-        GDK::Output.notice("GitLab Docs available at http://#{config.hostname}:#{config.gitlab_docs.port}.") if config.gitlab_docs.enabled?
+      def print_ready_message
+        notices = []
 
-        if config.gitlab_k8s_agent?
-          GDK::Output.notice("GitLab Agent Server (KAS) available at #{config.gitlab_k8s_agent.__url_for_agentk}.")
-          GDK::Output.notice("Kubernetes proxy (via KAS) available at #{config.gitlab_k8s_agent.__k8s_api_url}.")
+        if config.rails_web?
+          debug_info = GDK::Command::DebugInfo.new
+          notices << "GitLab available at #{config.__uri}."
+          notices << "  - Ruby: #{debug_info.ruby_version}."
+          notices << "  - Node.js: #{debug_info.node_version}."
         end
 
-        GDK::Output.notice("Prometheus available at http://#{config.hostname}:#{config.prometheus.port}.") if config.prometheus?
-        GDK::Output.notice("Grafana available at http://#{config.hostname}:#{config.grafana.port}.") if config.grafana?
-        GDK::Output.notice("A container registry is available at #{config.registry.host}:#{config.registry.port}.") if config.registry?
+        notices << "GitLab Docs available at #{config.gitlab_docs.__uri}." if config.gitlab_docs?
+
+        if config.gitlab_k8s_agent?
+          notices << "GitLab Agent Server (KAS) available at #{config.gitlab_k8s_agent.__url_for_agentk}."
+          notices << "Kubernetes proxy (via KAS) available at #{config.gitlab_k8s_agent.__k8s_api_url}."
+        end
+
+        notices << "Prometheus available at #{config.prometheus.__uri}." if config.prometheus?
+        notices << "Grafana available at #{config.grafana.__uri}." if config.grafana?
+        notices << "A container registry is available at #{config.registry.__listen}." if config.registry?
+
+        return if notices.empty?
+
+        GDK::Output.puts
+        notices.each { |msg| GDK::Output.notice(msg) }
       end
     end
   end

@@ -138,9 +138,13 @@ module GDK
     end
 
     string(:username) { Etc.getpwuid.name }
+    string(:__whoami) { Etc.getpwuid.name }
 
     settings :load_balancing do
       bool(:enabled) { false }
+      settings :discover do
+        bool(:enabled) { false }
+      end
     end
 
     settings :webpack do
@@ -309,6 +313,8 @@ module GDK
       string(:api_host) { config.hostname }
 
       port(:port, 'registry') { read!('registry_port') }
+
+      string(:__listen) { "#{host}:#{port}" }
 
       string :image do
         read!('registry_image') ||
@@ -544,9 +550,31 @@ module GDK
       string(:host) { config.postgresql.dir.to_s }
       string(:active_version) { GDK::Postgresql.target_version.to_s }
       string(:__active_host) { GDK::Postgresql.new.use_tcp? ? config.postgresql.host : '' }
+
+      # Kept for backward compatibility. Use replica:root_directory instead
       path(:replica_dir) { config.gdk_root.join('postgresql-replica') }
+      # Kept for backward compatibility. Use replica:data_directory instead
       path(:replica_data_dir) { config.postgresql.replica_dir.join('data') }
+
       settings :replica do
+        bool(:enabled) { false }
+        path(:root_directory) { config.postgresql.replica_dir } # fallback to config.postgresql.replica_dir for backward compatibility
+        path(:data_directory) { config.postgresql.replica_data_dir } # fallback to config.postgresql.replica_data_dir for backward compatibility
+        string(:host) { root_directory.to_s }
+        port(:port1, 'pgbouncer_replica-1')
+        port(:port2, 'pgbouncer_replica-2')
+      end
+
+      settings :replica_2 do
+        bool(:enabled) { false }
+        path(:root_directory) { config.gdk_root.join('postgresql-replica-2') }
+        path(:data_directory) { root_directory.join('data') }
+        string(:host) { root_directory.to_s }
+        port(:port1, 'pgbouncer_replica-2-1')
+        port(:port2, 'pgbouncer_replica-2-2')
+      end
+
+      settings :multiple_replicas do
         bool(:enabled) { false }
       end
       settings :geo do
@@ -555,6 +583,10 @@ module GDK
         string(:host) { config.postgresql.geo.dir.to_s }
         string(:__active_host) { GDK::PostgresqlGeo.new.use_tcp? ? config.postgresql.geo.host : '' }
       end
+    end
+
+    settings :pgbouncer_replicas do
+      bool(:enabled) { false }
     end
 
     settings :clickhouse do
@@ -714,11 +746,13 @@ module GDK
     settings :grafana do
       bool(:enabled) { false }
       port(:port, 'grafana')
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
     end
 
     settings :prometheus do
       bool(:enabled) { false }
       port(:port, 'prometheus')
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
       port(:gitaly_exporter_port, 'gitaly_exporter')
       port(:praefect_exporter_port, 'praefect_exporter')
       port(:workhorse_exporter_port, 'workhorse_exporter')

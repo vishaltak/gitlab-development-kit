@@ -23,11 +23,11 @@ module GDK
       end
 
       def postgresql_replica_dir
-        config.postgresql.replica_dir
+        config.postgresql.replica.root_directory
       end
 
       def postgresql_data_dir
-        postgresql_replica_dir.join('data')
+        config.postgresql.replica.data_directory
       end
 
       def postgresql_active_host

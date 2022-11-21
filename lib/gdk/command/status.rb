@@ -6,7 +6,7 @@ module GDK
     class Status < BaseCommand
       def run(args = [])
         Runit.sv('status', args).tap do
-          print_url_ready_message if args.empty?
+          print_ready_message if args.empty?
         end
       end
     end

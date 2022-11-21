@@ -11,7 +11,13 @@ postgresql-replication-primary-create-slot: postgresql-replication/slot
 postgresql-replication/data:
 	${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_replica_data_dir}
 
+postgresql-replication-2/data:
+	${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_replica_data_dir2}
+
 postgresql-replication/access:
+	$(Q)cat support/pg_hba.conf.add >> ${postgresql_replica_data_dir}/pg_hba.conf
+
+postgresql-replication-2/access:
 	$(Q)cat support/pg_hba.conf.add >> ${postgresql_replica_data_dir}/pg_hba.conf
 
 postgresql-replication/role:

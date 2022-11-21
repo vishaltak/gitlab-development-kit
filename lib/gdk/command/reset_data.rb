@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 module GDK
   module Command
     # Handles `gdk reset-data` command execution
@@ -72,7 +74,7 @@ module GDK
 
         # Ensure the base path exists
         FileUtils.mkdir_p(path_to_backup.dirname)
-        File.rename(path, path_to_backup)
+        FileUtils.mv(path, path_to_backup)
 
         true
       rescue SystemCallError => e

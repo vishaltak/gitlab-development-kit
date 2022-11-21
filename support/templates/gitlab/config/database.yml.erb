@@ -9,11 +9,27 @@ development:
     prepared_statements: false
     variables:
       statement_timeout: 120s
-<%- if config.load_balancing.enabled -%>
+<%- if config.load_balancing.discover? -%>
+    username: <%= config.__whoami %>
+    password: gitlab
+    load_balancing:
+      discover:
+        record: replica.pgbouncer.service.consul
+        nameserver: 127.0.0.1
+        port: 8600
+        record_type: SRV
+        use_tcp: true
+<%- elsif config.load_balancing? -%>
   <%- unless config.geo? -%>
     load_balancing:
       hosts:
         - <%= config.postgresql.host %>
+        <%- if config.postgresql.replica? %>
+        - <%= config.postgresql.replica.host %>
+        <%- end -%>
+        <%- if config.postgresql.replica_2? %>
+        - <%= config.postgresql.replica_2.host %>
+        <%- end -%>
   <%- end -%>
 <%- end -%>
 <%- if config.gitlab.rails.databases.ci.__enabled -%>
@@ -32,6 +48,17 @@ development:
     prepared_statements: false
     variables:
       statement_timeout: 120s
+    <%- if config.load_balancing.discover? -%>
+    username: <%= config.__whoami %>
+    password: gitlab
+    load_balancing:
+      discover:
+        record: replica.pgbouncer.service.consul
+        nameserver: 127.0.0.1
+        port: 8600
+        record_type: SRV
+        use_tcp: true
+    <%- end -%>
 <%- end -%>
 <%- if config.geo? -%>
   geo:

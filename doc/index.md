@@ -1,18 +1,34 @@
 # Install and configure GDK
 
-GitLab Development Kit (GDK) provides a local environment for developing GitLab
-and related projects.
+GitLab Development Kit (GDK) provides a local environment for developing GitLab and related projects. For example:
+
+- [Gitaly](https://gitlab.com/gitlab-org/gitaly).
+- [GitLab Docs](https://gitlab.com/gitlab-org/gitlab-docs).
+
+To install GDK, you must:
+
+1. Install prerequisites.
+1. Install dependencies and the GDK:
+   - In a single step with the [one-line installation](#one-line-installation). This method installs dependencies
+     and the GDK with one command.
+   - In two steps with the [simple installation](#simple-installation). This method separates dependency installation
+     and GDK installation, for more control and customization. When using the simple installation method, you:
+
+     1. Install dependencies [using `asdf`](#install-dependencies-using-asdf) or [manually](#install-dependencies-manually).
+     1. [Install the GDK](#install-gdk).
+
+Use a [supported operating system](../README.md#supported-platforms).
 
 ## Install prerequisites
 
-Installation requires [Git](https://git-scm.com/downloads) and `make` are installed.
-Use a [supported version](../README.md#supported-platforms) of your operating system.
+You must have [Git](https://git-scm.com/downloads) and `make` installed to install GDK.
 
 ### macOS
 
-`git` and `make` are installed by default. Homebrew must be installed. Follow the guide at [brew.sh](https://brew.sh/).
+The macOS installation requires Homebrew as well as Git and `make`. Git and `make` are installed by default, but
+Homebrew must be installed manually. Follow the guide at [brew.sh](https://brew.sh/).
 
-### Ubuntu/Debian
+### Ubuntu or Debian
 
   1. Update the list of available packages:
 
@@ -32,7 +48,7 @@ Use a [supported version](../README.md#supported-platforms) of your operating sy
      - For Debian, add a [backport repository](https://backports.debian.org/Instructions/) for your
        Debian version.
 
-  1. Install Git and Make:
+  1. Install `git` and `make`:
 
      ```shell
      sudo apt install git make
@@ -40,13 +56,13 @@ Use a [supported version](../README.md#supported-platforms) of your operating sy
 
 ### Arch and Manjaro Linux
 
-Update the list of available packages and install Git and Make:
+Update the list of available packages and install `git` and `make`:
 
 ```shell
 sudo pacman -Syu git make
 ```
 
-### Other
+### Other platforms
 
 Install using your system's package manager.
 
@@ -54,38 +70,38 @@ Install using your system's package manager.
 
 The one-line installation:
 
-- Clones the GDK project into a new `gitlab-development-kit` directory in the current working
+1. Clones the GDK project into a new `gitlab-development-kit` directory in the current working directory.
+1. Installs `asdf` and necessary `asdf` plugins.
+1. Runs `gdk install`. This will install dependencies and pull GitLab repos under the GDK install
   directory.
-- Installs `asdf` and necessary `asdf` plugins.
-- Runs `gdk install`. This will install dependencies and pull GitLab repos under the GDK install
-  directory.
-- Runs `gdk start`.
+1. Runs `gdk start`.
 
-1. Follow [dependency installation instructions](index.md#install-prerequisites).
+Before running the one-line installation, ensure [the prerequisites are installed](#install-prerequisites).
+Then install GDK with:
 
-1. Install GDK:
-
-    ```shell
-    curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
-    ```
+```shell
+curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
+```
 
 If you have any post-installation problems, see [Resolve installation errors](#resolve-installation-errors). A common
 post-installation problem is [incomplete `asdf` installation](troubleshooting/asdf.md#error-command-not-found-gdk).
 
-## Simple Installation
+## Simple installation
 
 After prerequisites are installed, you can install GDK dependencies and GDK itself.
 
 ### Install dependencies
 
 Before [installing GDK](#install-gdk), your local environment must have third-party software
-installed and configured. These can be installed and managed automatically
-[using `asdf`](#automatically-using-asdf) or [manually](#manually).
+installed and configured. These can be installed and managed:
 
-If you've previously [managed your own dependencies](advanced.md), you can
-[migrate to `asdf`](migrate_to_asdf.md) to allow GDK to manage dependencies for you.
+- [Using `asdf`](#install-dependencies-using-asdf)
+- [Manually](#install-dependencies-manually).
 
-#### Automatically using `asdf`
+If you've previously [managed your own dependencies](advanced.md), you can [migrate to `asdf`](migrate_to_asdf.md)
+so that GDK can manage dependencies for you.
+
+#### Install dependencies using `asdf`
 
 Installing and managing dependencies automatically lets GDK manage dependencies for you using
 [`asdf`](https://asdf-vm.com/#/core-manage-asdf):
@@ -112,7 +128,7 @@ Installing and managing dependencies automatically lets GDK manage dependencies 
    [`legacy_version_file`](https://asdf-vm.com/manage/configuration.html#legacy-version-file) in `.asdfrc` to load the
    Ruby version from a different configuration file like `.ruby-version`.
 
-#### Manually
+#### Install dependencies manually
 
 Use your operating system's package manager to install and managed dependencies.
 [Advanced instructions](advanced.md) are available to help. These include instructions for macOS,
@@ -161,11 +177,11 @@ Install GDK by cloning and configuring GitLab and other projects using
   gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
   ```
 
-- Otherwise, install using HTTPs:
+- Otherwise, install using HTTPS:
 
-    ```shell
-    gdk install
-    ```
+  ```shell
+  gdk install
+  ```
 
 If `gdk install` doesn't work, see [Resolve installation errors](#resolve-installation-errors). A common
 installation problem is [incomplete `asdf` installation](troubleshooting/asdf.md#error-command-not-found-gdk).
@@ -186,7 +202,7 @@ If you want to run GitLab from your own fork, install GDK using
 
 ## Set up `gdk.test` hostname
 
-We recommend setting up `gdk.test` as a local hostname. For more information, see
+You should set up `gdk.test` as a local hostname. For more information, see
 [Local network binding](howto/local_network.md).
 
 ## Resolve installation errors
@@ -214,8 +230,7 @@ After successful installation, see:
 - [GDK commands](gdk_commands.md).
 - [GDK configuration](configuration.md).
 
-After installation, [learn how to use GDK](howto/index.md) to enable other
-features.
+After installation, [learn how to use GDK](howto/index.md) to enable other features.
 
 ## Update GDK
 
@@ -227,5 +242,5 @@ After you have set up GDK initially, you can create new *fresh installations*. Y
 you have problems with existing installation that are complicated to fix. You can get up and running
 quickly again by:
 
-1. In the parent folder for GDK, run [`git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git`](#manually).
+1. In the parent folder for GDK, run [`git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git`](#install-dependencies-manually).
 1. In the new directory, run [`gdk install`](#install-gdk).

@@ -58,7 +58,7 @@ RSpec.describe GDK::Command::ResetData do
       it 'errors out', :hide_stdout do
         travel_to(now) do
           stub_postgres_data_move
-          allow(File).to receive(:rename).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
+          allow(FileUtils).to receive(:mv).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
 
           expect(GDK::Output).to receive(:error).with("Failed to rename path '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/' - No such file or directory")
           expect(GDK::Output).to receive(:error).with('Failed to backup data.')
@@ -116,7 +116,7 @@ RSpec.describe GDK::Command::ResetData do
     end
 
     def expect_rename_success(directory, new_directory)
-      expect(File).to receive(:rename).with(directory, new_directory).and_return(true)
+      expect(FileUtils).to receive(:mv).with(directory, new_directory).and_return(true)
     end
 
     def allow_make_backup_base_dir(directory)
