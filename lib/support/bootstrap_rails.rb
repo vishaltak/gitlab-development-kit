@@ -11,7 +11,6 @@ module Support
     LOG_FILE = '../bootstrap-rails.log'
     RAKE_DEV_DB_RESET_CMD = %w[support/exec-cd gitlab bundle exec rake db:reset].freeze
     RAKE_DEV_DB_SEED_CMD = %w[support/exec-cd gitlab bundle exec rake db:seed_fu].freeze
-    RAKE_COPY_DB_CI_CMD = %w[support/exec-cd gitlab bundle exec rake dev:copy_db:ci].freeze
 
     def execute
       if config.geo.secondary?
@@ -22,7 +21,7 @@ module Support
       GDK::Output.abort('Cannot connect to PostgreSQL.') unless postgresql.ready?
       FileUtils.rm_f(LOG_FILE)
 
-      bootstrap_main_db && bootstrap_ci_db
+      bootstrap_main_db
     end
 
     private
@@ -40,14 +39,6 @@ module Support
 
     def seed_main_db
       run_command(RAKE_DEV_DB_SEED_CMD)
-    end
-
-    def bootstrap_ci_db
-      return if !config.gitlab.rails.databases.ci.__enabled || config.gitlab.rails.databases.ci.__use_main_database
-
-      if_db_not_found('gitlabhq_development_ci') do
-        run_command(RAKE_COPY_DB_CI_CMD)
-      end
     end
 
     def run_command(cmd)

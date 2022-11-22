@@ -140,8 +140,9 @@ update-summarize:
 .PHONY: reconfigure
 reconfigure: unlock-dependency-installers \
 touch-examples \
+gitlab-reconfigure \
 all \
-show-reconfigured-at
+show-reconfigured-at \
 
 .PHONY: clean
 clean:

@@ -113,3 +113,14 @@ gitlab-translations-run: .gitlab-translations
 	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
 	$(Q)$(gitlab_git_cmd) checkout locale/*/gitlab.po
 	$(Q)touch $@
+
+.PHONY: gitlab-reconfigure
+gitlab-reconfigure: .gitlab-copy-db-ci
+
+.gitlab-copy-db-ci:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Copy gitlab-org/gitlab CI database"
+	@echo "${DIVIDER}"
+	$(Q)$(gitlab_rake_cmd) dev:copy_db:ci
+	$(Q)touch $@
