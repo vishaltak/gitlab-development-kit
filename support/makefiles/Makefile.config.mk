@@ -61,7 +61,7 @@ gitlab-k8s-agent-config.yml:
 	$(Q)rake gitlab-k8s-agent-config.yml
 
 .PHONY: gitlab-pages/gitlab-pages.conf
-gitlab-pages/gitlab-pages.conf: gitlab-pages/.git
+gitlab-pages/gitlab-pages.conf: gitlab-pages/.git/pull
 	$(Q)rake gitlab-pages/gitlab-pages.conf
 
 .PHONY: gitlab-pages-secret

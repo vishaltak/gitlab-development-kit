@@ -134,7 +134,7 @@ tasks.add_template(name: 'gitlab/config/redis.trace_chunks.yml', template: 'supp
 tasks.add_template(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
 tasks.add_template(name: 'gitlab/workhorse/config.toml')
 tasks.add_template(name: 'gitlab-k8s-agent-config.yml')
-tasks.add_template(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git'])
+tasks.add_template(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git/pull'])
 tasks.add_template(name: 'gitlab-pages-secret')
 tasks.add_template(name: 'gitlab-runner-config.toml', no_op_condition: 'runner_enabled')
 tasks.add_template(name: 'gitlab-shell/config.yml', make_dependencies: ['gitlab-shell/.git'])
