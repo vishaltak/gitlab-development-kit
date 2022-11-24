@@ -2564,8 +2564,7 @@ RSpec.describe GDK::Config do
       describe '__nanoc_cmd_common' do
         context 'when GDK host and GitLab Docs port not configured' do
           let(:yaml) do
-            {
-            }
+            {}
           end
 
           it 'nanoc is passed default options' do

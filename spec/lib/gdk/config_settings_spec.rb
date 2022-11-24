@@ -306,7 +306,7 @@ RSpec.describe GDK::ConfigSettings do
       described_class.settings(:foo) { string(:name) { 'bonza' } }
 
       expect { config.bury!('foo.name', 'ripper') }
-        .to change(config, :yaml).to('foo' => { 'name' => 'ripper' })
+        .to change { config.yaml }.to('foo' => { 'name' => 'ripper' })
     end
 
     it 'buries next to existing subsettings' do
@@ -314,7 +314,7 @@ RSpec.describe GDK::ConfigSettings do
       config = described_class.new(yaml: { 'foo' => { 'location' => 'down under' } })
 
       expect { config.bury!('foo.name', 'ripper') }
-        .to change(config, :yaml).to('foo' => { 'name' => 'ripper', 'location' => 'down under' })
+        .to change { config.yaml }.to('foo' => { 'name' => 'ripper', 'location' => 'down under' })
     end
   end
 
