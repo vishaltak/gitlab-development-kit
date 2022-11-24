@@ -8,6 +8,7 @@
     - high-cpu
   needs:
     - release-image
+    - verify-start
   artifacts:
     paths:
       - ./gdk/gitlab/log/*.log
@@ -35,6 +36,21 @@
         - "$CI_PROJECT_DIR/.cache/go-build"
         - "$CI_PROJECT_DIR/.cache/go-mod"
       policy: pull-push
+
+verify-start:
+  stage: pre-verify
+  image: alpine:edge
+  interruptible: false
+  needs: []
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "This job exists to allow all other verify:* jobs to be started manually"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG
+      when: always
+    - when: manual
+      allow_failure: true
 
 install:
   extends: .verify-job
