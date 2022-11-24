@@ -36,5 +36,6 @@ gitlab-shell/.git:
 	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_shell_clone_dir)
 	$(Q)touch $@
 
+.PHONY: gitlab-shell/.gitlab_shell_secret
 gitlab-shell/.gitlab_shell_secret:
 	$(Q)ln -nfs ${gitlab_development_root}/gitlab/.gitlab_shell_secret $@
