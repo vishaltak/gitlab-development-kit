@@ -1,7 +1,7 @@
 gitlab_shell_clone_dir = gitlab-shell
 gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 
-gitlab-shell-setup: ${gitlab_shell_clone_dir}/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret $(sshd_hostkeys)
+gitlab-shell-setup: gitlab-shell/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret $(sshd_hostkeys)
 	$(Q)make -C gitlab-shell build ${QQ}
 
 .PHONY: gitlab-shell-update
@@ -25,7 +25,7 @@ gitlab-shell-git-pull-run:
 # support/move-existing-gitlab-shell-directory to remove the legacy
 # symlink, if necessary. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/1086
 .PHONY: ${gitlab_shell_clone_dir}/.git
-${gitlab_shell_clone_dir}/.git:
+gitlab-shell/.git:
 	$(Q)support/move-existing-gitlab-shell-directory || GIT_REVISION="${gitlab_shell_version}" support/component-git-clone ${git_depth_param} ${gitlab_shell_repo} ${gitlab_shell_clone_dir}
 
 .gitlab-shell-bundle:
