@@ -109,7 +109,7 @@ if ! gdk_prepare_directory; then
   error "Failed to prepare GDK directory." >&2
 fi
 
-echo "INFO: Configure Ruby.."
+echo "INFO: Configuring Ruby.."
 if ! configure_ruby; then
   error "Failed to configure Ruby." >&2
 fi

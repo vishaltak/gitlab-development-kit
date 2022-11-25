@@ -255,8 +255,8 @@ module GDK
       bool(:__all_configured?) { config.gitlab_docs.enabled? && config.gitlab_runner.enabled? && config.omnibus_gitlab.enabled? && config.charts_gitlab.enabled? && config.gitlab_operator.enabled? }
 
       string(:__nanoc_cmd_common) { "--host #{config.hostname} --port #{config.gitlab_docs.port}" }
-      string(:__nanoc_live_cmd) { "bundle exec nanoc live #{config.gitlab_docs.__nanoc_cmd_common}" }
-      string(:__nanoc_view_cmd) { "bundle exec nanoc compile && bundle exec nanoc view #{config.gitlab_docs.__nanoc_cmd_common}" }
+      string(:__nanoc_live_cmd) { "../support/bundle-exec nanoc live #{config.gitlab_docs.__nanoc_cmd_common}" }
+      string(:__nanoc_view_cmd) { "../support/bundle-exec nanoc compile && ../support/bundle-exec nanoc view #{config.gitlab_docs.__nanoc_cmd_common}" }
     end
 
     settings :snowplow_micro do

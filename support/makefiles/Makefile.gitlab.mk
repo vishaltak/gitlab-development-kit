@@ -1,10 +1,10 @@
 gitlab_clone_dir = gitlab
-gitlab_rake_cmd = $(in_gitlab) ${BUNDLE} exec rake
+gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
 
-gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-lefthook .gitlab-yarn .gitlab-translations
+gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
 
 .PHONY: gitlab-update
 gitlab-update: gitlab-update-timed
@@ -44,6 +44,10 @@ gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" master master
 
 gitlab/.git:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Cloning gitlab-org/gitlab"
+	@echo "${DIVIDER}"
 	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_repo} ${gitlab_clone_dir} $(if $(realpath ${gitlab_repo}),--shared)
 
 gitlab-config: \
@@ -74,13 +78,20 @@ gitlab/public/uploads:
 	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_clone_dir)
 	$(Q)touch $@
 
+.gitlab-gdk-gem:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing the gitlab-development-kit gem"
+	@echo "${DIVIDER}"
+	${Q}. ./support/bootstrap-common.sh ; gdk_install_gem
+
 ifeq ($(gitlab_lefthook_enabled),true)
 .gitlab-lefthook:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Installing Lefthook for gitlab-org/gitlab"
+	@echo "Enabling Lefthook for gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) gem install lefthook && ${BUNDLE} exec lefthook install
+	$(Q)$(in_gitlab) ${support_bundle_exec} lefthook install
 	$(Q)touch $@
 else
 .gitlab-lefthook:

@@ -56,22 +56,21 @@ postgres 12.13 13.9
 redis 6.2.7
 
 # ruby:
-#   2.7.5:
+#   2.7.6:
 #     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
+#   3.0.4:
+#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
+#   2.7.5:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
-#   3.0.4:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
-#   2.7.6:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #
-ruby 2.7.5 3.0.4 2.7.6
+ruby 2.7.6 3.0.4 2.7.5
 
 # shellcheck:
 #   0.8.0:

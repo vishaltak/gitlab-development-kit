@@ -21,7 +21,7 @@ module GDK
       end
 
       def generate_command(args)
-        %w[bundle exec rails] + args
+        %w[../support/bundle-exec rails] + args
       end
     end
   end

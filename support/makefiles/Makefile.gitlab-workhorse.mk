@@ -14,8 +14,8 @@ gitlab-workhorse-compile:
 	@echo "${DIVIDER}"
 
 gitlab-workhorse-clean-bin: gitlab-workhorse-compile
-	$(Q)$(MAKE) -C gitlab/workhorse clean
+	$(Q)support/asdf-exec gitlab/workhorse $(MAKE) clean
 
 .PHONY: gitlab/workhorse/gitlab-workhorse
 gitlab/workhorse/gitlab-workhorse: gitlab-workhorse-compile
-	$(Q)$(MAKE) -C gitlab/workhorse ${QQ}
+	$(Q)support/asdf-exec gitlab/workhorse $(MAKE) ${QQ}

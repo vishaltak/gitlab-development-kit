@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+CDPATH=''
+ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit ; pwd -P)"
+
+GDK_QUIET="${GDK_QUIET:-false}"
+ASDF_AVAILABLE="$("${ROOT_PATH}"/bin/gdk config get asdf.__available\?)"
+
+prepare_command() {
+  local command="${1}"
+
+  [[ "${ASDF_AVAILABLE}" == "true" ]] && command="asdf exec ${command}"
+
+  echo "${command}"
+}
+
+bundle_exec() {
+  local command="bundle exec ${1}"
+
+  command=$(prepare_command "${command}")
+
+  eval "${command}"
+}
+
+bundle_exec "${*}"

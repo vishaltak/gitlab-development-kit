@@ -25,7 +25,7 @@ gitlab-pages/bin/gitlab-pages: gitlab-pages/.git/pull
 	@echo "Compiling gitlab-org/gitlab-pages"
 	@echo "${DIVIDER}"
 	$(Q)rm -f gitlab-pages/bin/gitlab-pages
-	$(Q)$(MAKE) -C ${gitlab_pages_clone_dir} ${QQ}
+	$(Q)support/asdf-exec ${gitlab_pages_clone_dir} $(MAKE) ${QQ}
 
 gitlab-pages/.git:
 	$(Q)support/move-existing-gitlab-pages-directory || GIT_REVISION="${gitlab_pages_version}" support/component-git-clone ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}

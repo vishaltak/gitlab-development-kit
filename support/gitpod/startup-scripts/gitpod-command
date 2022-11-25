@@ -50,9 +50,8 @@ if [[ "$GITLAB_RUN_DB_MIGRATIONS" == true ]]; then
     make gitlab-db-migrate
 fi
 
-# Install Lefthook
+# Ensure db/structure.sql is checked out
 cd /workspace/gitlab-development-kit/gitlab
-bundle exec lefthook install
 git checkout db/structure.sql
 
 # Waiting for GitLab ..

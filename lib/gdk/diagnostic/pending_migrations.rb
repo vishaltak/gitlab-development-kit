@@ -6,7 +6,7 @@ module GDK
       TITLE = 'Database Migrations'
 
       def diagnose
-        @shellout = Shellout.new(%w[bundle exec rails db:abort_if_pending_migrations], chdir: config.gitlab.dir)
+        @shellout = Shellout.new(%w[../support/bundle-exec rails db:abort_if_pending_migrations], chdir: config.gitlab.dir)
         @shellout.run
       end
 
@@ -18,7 +18,7 @@ module GDK
         <<~MESSAGE
           There are pending database migrations.  To update your database, run:
 
-            cd #{config.gitlab.dir} && bundle exec rails db:migrate
+            cd #{config.gitlab.dir} && ../support/bundle-exec rails db:migrate
         MESSAGE
       end
     end

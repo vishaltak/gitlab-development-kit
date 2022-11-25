@@ -31,7 +31,7 @@ gitlab-k8s-agent/build/gdk/bin/kas_race: ${gitlab_k8s_agent_clone_dir}/.git gitl
 	@echo "Installing gitlab-org/cluster-integration/gitlab-agent"
 	@echo "${DIVIDER}"
 	$(Q)mkdir -p "${gitlab_k8s_agent_clone_dir}/build/gdk/bin"
-	$(Q)$(MAKE) -C "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" ${QQ}
+	$(Q)support/asdf-exec "${gitlab_k8s_agent_clone_dir}" gdk-install TARGET_DIRECTORY="$(CURDIR)/${gitlab_k8s_agent_clone_dir}/build/gdk/bin" $(MAKE) ${QQ}
 
 ifeq ($(platform),darwin)
 gitlab-k8s-agent/bazel: /usr/local/bin/bazelisk

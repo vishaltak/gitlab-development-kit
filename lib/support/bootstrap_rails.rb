@@ -9,9 +9,9 @@ module Support
   class BootstrapRails
     # The log file should be in the "support" folder, not in "suppport/lib"
     LOG_FILE = '../bootstrap-rails.log'
-    RAKE_DEV_DB_RESET_CMD = %w[support/exec-cd gitlab bundle exec rake db:reset].freeze
-    RAKE_DEV_DB_SEED_CMD = %w[support/exec-cd gitlab bundle exec rake db:seed_fu].freeze
-    RAKE_COPY_DB_CI_CMD = %w[support/exec-cd gitlab bundle exec rake dev:copy_db:ci].freeze
+    RAKE_DEV_DB_RESET_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:reset].freeze
+    RAKE_DEV_DB_SEED_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:seed_fu].freeze
+    RAKE_COPY_DB_CI_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake dev:copy_db:ci].freeze
 
     def execute
       if config.geo.secondary?

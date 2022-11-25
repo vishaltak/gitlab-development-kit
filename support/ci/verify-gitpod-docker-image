@@ -1,14 +1,11 @@
 #!/bin/bash -ex
 
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/../.." || exit ; pwd -P)"
-DOCKER_IMAGE=registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:main
-HOME=/home/gitpod
+DOCKER_IMAGE_TAG="${CI_COMMIT_REF_SLUG:-main}"
+DOCKER_IMAGE="registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:${DOCKER_IMAGE_TAG}"
+HOME="/home/gitpod"
 
-if ! docker run --rm -t \
-  -v "${ROOT_PATH}/support/gitpod/startup-scripts/:/tmp/startup-scripts" \
-  $DOCKER_IMAGE \
-  bash -ic "/tmp/startup-scripts/docker-entrypoint;"; 
-then
+if ! docker run --rm -t -v "${ROOT_PATH}/support/gitpod/startup-scripts/:/tmp/startup-scripts" "${DOCKER_IMAGE}" bash -ic "/tmp/startup-scripts/docker-entrypoint"; then
   echo "ERROR: Failed to run GitLab in Gitpod workspace Docker image." >&2
   exit 1
 else

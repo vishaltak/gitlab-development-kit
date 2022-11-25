@@ -2,6 +2,8 @@
 # Clear build context, and include only paths used by Dockerfile
 /*
 !/.tool-versions
+!/bin
+!/gem
 !/packages*.txt
 !/support/bootstrap
 !/support/bootstrap-common.sh

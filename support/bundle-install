@@ -2,7 +2,12 @@
 
 set -euo pipefail
 
+CDPATH=''
+ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit ; pwd -P)"
+
 GDK_QUIET="${GDK_QUIET:-false}"
+DIR_TO_PROCESS="${1:-.}"
+ASDF_AVAILABLE="$("${ROOT_PATH}"/bin/gdk config get asdf.__available\?)"
 
 ensure_bundler_version_installed() {
   local gem_install_args=
@@ -11,7 +16,7 @@ ensure_bundler_version_installed() {
     gem_install_args="--silent"
   fi
 
-  gem install bundler --conservative -v="$(needed_bundler_version)" ${gem_install_args}
+  exec_command "gem install bundler --conservative -v=$(needed_bundler_version) ${gem_install_args}"
 }
 
 needed_bundler_version() {
@@ -19,12 +24,25 @@ needed_bundler_version() {
 }
 
 bundle_install() {
-  bundle check > /dev/null 2>&1 || bundle install --jobs "$(nproc)"
+  bundle_check_command=$(prepare_command "bundle check > /dev/null 2>&1")
+  bundle_install_command=$(prepare_command "bundle install --jobs $(nproc)")
+
+  exec_command "${bundle_check_command} || ${bundle_install_command}"
 }
 
-GDK_QUIET="${GDK_QUIET:-false}"
+prepare_command() {
+  local command="${1}"
 
-DIR_TO_PROCESS="${1}"
+  [[ "${ASDF_AVAILABLE}" == "true" ]] && command="asdf exec ${command}"
+
+  echo "${command}"
+}
+
+exec_command() {
+  local command="${1}"
+
+  eval "${command}"
+}
 
 if [[ ! -d ${DIR_TO_PROCESS} ]]; then
   echo "ERROR: Directory '${DIR_TO_PROCESS}' does not exist, exiting."

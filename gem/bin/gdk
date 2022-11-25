@@ -3,6 +3,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'pathname'
 
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'gitlab_development_kit'
@@ -27,8 +28,8 @@ module GDK
         return GDK::CommandBasic::Version.new.run if gdk_version?
         return GDK::CommandBasic::Init.new(args[1..]).run if gdk_init?
 
-        if gdk_dir?
-          require(File.join(gdk_root, 'lib/gdk.rb'))
+        if gdk_root
+          require(gdk_root.join('lib/gdk.rb'))
           GDK.main
         else
           warn_not_gdk_dir
@@ -53,16 +54,12 @@ module GDK
       end
 
       def gdk_root
-        @gdk_root ||= find_root(Dir.pwd)
-      end
-
-      def gdk_dir?
-        !gdk_root.nil?
+        @gdk_root ||= find_root(Pathname.new(ENV['PWD']))
       end
 
       def gdk_version?
-        # If gdk_dir? == true, fall through to allow lib/gdk.rb to handle
-        %w[version --version].include?(args.first) && !gdk_dir?
+        # If gdk_root == true, fall through to allow lib/gdk.rb to handle
+        %w[version --version].include?(args.first) && !gdk_root
       end
 
       def gdk_init?
@@ -70,12 +67,12 @@ module GDK
       end
 
       def find_root(current)
-        if File.exist?(File.join(current, 'GDK_ROOT'))
-          File.realpath(current)
-        elsif File.realpath(current) == '/'
+        if current.join('GDK_ROOT').exist?
+          current.realpath
+        elsif current.realpath.to_s == '/'
           nil
         else
-          find_root(File.join(current, '..'))
+          find_root(current.join('..'))
         end
       end
     end

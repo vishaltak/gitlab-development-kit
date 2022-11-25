@@ -43,6 +43,7 @@ OPENSSL := $(shell command -v openssl 2> /dev/null)
 endif
 
 support_bundle_install = $(gitlab_development_root)/support/bundle-install
+support_bundle_exec = $(gitlab_development_root)/support/bundle-exec
 
 # Borrowed from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile#n87
 #
@@ -167,7 +168,9 @@ unlock-dependency-installers:
 	.gitlab-bundle \
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
-	.gitlab-ui-yarn
+	.gitlab-ui-yarn \
+	.gitlab-gdk-gem \
+	.gitlab-lefthook
 
 gdk.yml:
 	$(Q)touch $@
