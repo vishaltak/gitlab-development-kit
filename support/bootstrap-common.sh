@@ -48,6 +48,20 @@ echo_if_unsuccessful() {
   fi
 }
 
+asdf_install_update_plugins() {
+  cut -d ' ' -f 1 .tool-versions | grep -Ev "^#|^$" | while IFS= read -r plugin
+  do
+    asdf plugin update "${plugin}" || asdf plugin add "${plugin}"
+  done
+
+  # Install Node.js' OpenPGP key
+  if [[ ! -f "${HOME}/.gnupg/asdf-nodejs.gpg" ]]; then
+    bash -c "${CURRENT_ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring" > /dev/null 2>&1
+  fi
+
+  return 0
+}
+
 asdf_reshim() {
   asdf reshim
 }
