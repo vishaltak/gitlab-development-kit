@@ -29,8 +29,9 @@ source "${ASDF_DIR}/asdf.sh"
 # in Docker image creation to fail
 gdk config set gitlab.rails.bootsnap false
 
-# make webpack static, prevents that GitLab tries to connect to localhost webpack from browser outside the workspace
-gdk config set webpack.static true
+# Webpack settings
+gdk config set webpack.static false
+gdk config set webpack.live_reload false
 
 cat gdk.yml
 
