@@ -6,14 +6,16 @@ source "$HOME/.asdf/asdf.sh"
 # skip if gp is not installed
 hash gp 2>/dev/null || return
 
-cd /workspace/gitlab-development-kit
+(
+  cd /workspace/gitlab-development-kit
 
-# set RAILS_HOSTS for Gitpod
-port=$(gdk config get port)
-rails_hosts=$(gp url "${port}" | sed -e 's+^http[s]*://++')
-export RAILS_HOSTS=$rails_hosts
+  # set RAILS_HOSTS for Gitpod
+  port=$(gdk config get port)
+  rails_hosts=$(gp url "${port}" | sed -e 's+^http[s]*://++')
+  export RAILS_HOSTS=$rails_hosts
 
-# set DEV_SERVER_PUBLIC_ADDR
-webpack_port=$(gdk config get webpack.port)
-webpack_url=$(gp url "${webpack_port}")
-export DEV_SERVER_PUBLIC_ADDR=$webpack_url
+  # set DEV_SERVER_PUBLIC_ADDR
+  webpack_port=$(gdk config get webpack.port)
+  webpack_url=$(gp url "${webpack_port}")
+  export DEV_SERVER_PUBLIC_ADDR=$webpack_url
+)
