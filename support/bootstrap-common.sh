@@ -133,8 +133,20 @@ gdk_install_gem() {
       return 1
     fi
 
-    if ! echo_if_unsuccessful prefix_with_asdf_if_available gem install gitlab-development-kit-*.gem; then
-      return 1
+    # Install for all Ruby versions
+    if asdf_enabled; then
+      grep '^ruby' ../.tool-versions | cut -c 6- | xargs -n1 | while read -r ruby_version
+      do
+        echo "INFO: Installing for ${ruby_version}.."
+        cmd="ASDF_RUBY_VERSION=${ruby_version} gem install gitlab-development-kit-*.gem > /dev/null"
+        if ! eval "${cmd}"; then
+          return 1
+        fi
+      done
+    else
+      if ! echo_if_unsuccessful gem install gitlab-development-kit-*.gem; then
+        return 1
+      fi
     fi
 
     return 0

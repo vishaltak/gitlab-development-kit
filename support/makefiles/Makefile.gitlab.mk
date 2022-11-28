@@ -91,6 +91,7 @@ gitlab-bundle-prepare:
 	@echo "Installing the gitlab-development-kit gem"
 	@echo "${DIVIDER}"
 	${Q}. ./support/bootstrap-common.sh ; gdk_install_gem
+	$(Q)touch $@
 
 ifeq ($(gitlab_lefthook_enabled),true)
 .gitlab-lefthook:
