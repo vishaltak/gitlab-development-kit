@@ -32,22 +32,11 @@ echo '127.0.0.1 gdk.test' | sudo tee -a /etc/hosts
 
 ### Configuring a loopback device (optional)
 
+NOTE:
+You can skip this step unless you need a [runner under Docker](runner.md#docker-configuration).
+
 If you want an isolated network space for all the services of your
-GDK, you can add a loopback network interface:
-
-```shell
-# on macOS
-sudo ifconfig lo0 alias 127.1.1.1
-
-# on GNU/Linux
-sudo ifconfig lo:1 127.1.1.1
-```
-
-And add that address to `/etc/hosts`:
-
-```shell
-echo '127.1.1.1 gdk.test' | sudo tee -a /etc/hosts
-```
+GDK, you can [add a loopback network interface](local_network.md).
 
 ## Update `gdk.yml`
 

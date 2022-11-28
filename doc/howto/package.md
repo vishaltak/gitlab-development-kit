@@ -16,7 +16,7 @@ allow it to respond to requests on port 443.
    - [Configuring a loopback device](nginx.md#configuring-a-loopback-device-optional).
    - [Update `gdk.yml` for HTTPS](nginx.md#update-gdkyml-for-https-optional).
 
-  Your local GitLab should now be available at <https://gdk.test:3443> and <https://127.1.1.1:3443>
+  Your local GitLab should now be available at <https://gdk.test:3443> and <https://172.16.123.1:3443>
 
 1. Clone the [Super Simple Proxy](https://gitlab.com/firelizzard/super-simple-proxy)
    project (authored by the same community contributor that contributed the GoProxy MVC!)
