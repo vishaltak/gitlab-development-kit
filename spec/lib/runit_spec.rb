@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe Runit do
   describe 'ALL_DATA_ORIENTED_SERVICE_NAMES' do
     it 'returns all data service names only' do
-      expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to contain_exactly(*%w[minio openldap gitaly praefect redis postgresql-geo postgresql])
+      expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to contain_exactly(*%w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql])
     end
   end
 

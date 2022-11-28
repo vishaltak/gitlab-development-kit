@@ -1,0 +1,12 @@
+development:
+  url: "redis://127.0.0.1:<%= config.redis_cluster.port%>?db=0"
+  cluster:
+  <% (0...config.redis_cluster.clusters).each do |idx| %>
+    - "redis://127.0.0.1:<%= config.redis_cluster.port + idx%>"
+  <% end %>
+test:
+  url: "redis://127.0.0.1:<%= config.redis_cluster.port + config.redis_cluster.clusters %>?db=0"
+  cluster:
+  <% (0...config.redis_cluster.clusters).each do |idx| %>
+    - "redis://127.0.0.1:<%= config.redis_cluster.port + config.redis_cluster.clusters + idx%>"
+  <% end %>

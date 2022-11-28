@@ -13,6 +13,7 @@ describe GDK::Services do
         PostgreSQL
         PostgreSQLReplica
         Redis
+        RedisCluster
         Vault
       ]
 
@@ -25,7 +26,8 @@ describe GDK::Services do
       service_classes = [
         GDK::Services::GitLabWorkhorse,
         GDK::Services::PostgreSQL,
-        GDK::Services::Redis
+        GDK::Services::Redis,
+        GDK::Services::RedisCluster
       ]
 
       expect(described_class.enabled.map(&:class)).to eq(service_classes)

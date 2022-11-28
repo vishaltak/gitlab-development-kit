@@ -106,6 +106,7 @@
 /prometheus/prometheus.yml
 /redis/*.conf
 /redis/dump.rdb
+/redis-cluster/*.conf
 /registry/config.yml
 /registry/storage/
 /registry_enabled

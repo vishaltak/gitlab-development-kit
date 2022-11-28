@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+#
+# frozen_string_literal: true
+
+def start_cluster(shards, port, dir)
+  # rubocop:disable Style/GlobalVars
+  $pids = []
+  (0...shards).each do |idx|
+    node_port = port + idx
+    $pids << spawn(
+      "redis-server --port #{node_port} --cluster-enabled yes --cluster-config-file #{dir}/nodes_#{node_port}.conf"
+    )
+  end
+  # rubocop:enable Style/GlobalVars
+
+  sleep(5)
+
+  `redis-cli --cluster-yes --cluster create #{(0...shards).map { |idx| "127.0.0.1:#{port + idx}" }.join(' ')}`
+end
+
+# Broadcast SIGTERM to all nodes of the cluster
+Signal.trap('TERM') do
+  $pids.each do |pid| # rubocop:disable Style/GlobalVars
+    puts "Sending INT to #{pid}"
+    Process.kill('TERM', pid)
+  end
+end
+
+# e.g. support/redis-cluster-signal-wrapper 4 6000 redis-cluster
+shards = (ARGV[0] || 3).to_i
+port = (ARGV[1] || 6000).to_i
+dir = (ARGV[2] || 'redis-cluster').to_s
+
+require 'fileutils'
+FileUtils.mkdir_p dir
+
+start_cluster(shards, port, dir)          # development cluster
+start_cluster(shards, port + shards, dir) # test cluster
+
+Process.waitall
+
+exit($CHILD_STATUS&.exitstatus || 0)

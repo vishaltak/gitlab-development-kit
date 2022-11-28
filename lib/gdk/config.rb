@@ -948,6 +948,12 @@ module GDK
       hash_setting(:custom_config) { {} }
     end
 
+    settings :redis_cluster do
+      path(:dir) { config.gdk_root.join('redis-cluster') }
+      integer(:clusters) { 3 }
+      integer(:port) { 6000 }
+    end
+
     settings :asdf do
       bool(:opt_out) { false }
       bool(:__available?) { !config.asdf.opt_out? && ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any? }
