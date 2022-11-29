@@ -81,6 +81,10 @@
     - <<: *if-merge-request
       changes: *gitpod-code-changes
 
+.rules:tested-deploy-gitpod-workspace-image:
+  rules:
+    - <<: *if-default-branch-schedule
+
 .rules:deploy-gitpod-workspace-image:
   rules:
     - <<: *if-default-branch-schedule

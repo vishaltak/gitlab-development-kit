@@ -111,4 +111,3 @@ gitpod-docker-image:
     - build-gitpod-workspace-image
   script:
     - support/ci/verify-gitpod-docker-image
-    - support/gitpod/docker-tag-image-tested

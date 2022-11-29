@@ -31,6 +31,17 @@ pages:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
+tested-gitpod-workspace-image:
+  extends:
+    - .deploy-job
+    - .docker:build-docker-in-docker
+    - .rules:tested-deploy-gitpod-workspace-image
+  needs:
+    - build-gitpod-workspace-image
+    - gitpod-docker-image
+  script:
+    - support/gitpod/docker-tag-image-tested
+
 gitpod-workspace-image:
   extends:
     - .deploy-job
@@ -38,6 +49,6 @@ gitpod-workspace-image:
     - .rules:deploy-gitpod-workspace-image
   needs:
     - build-gitpod-workspace-image
-    - gitpod-docker-image
+    - tested-gitpod-workspace-image
   script:
     - ./support/gitpod/docker-tag-image-as-stable
