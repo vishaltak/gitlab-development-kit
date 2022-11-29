@@ -160,7 +160,7 @@ configure_ruby_bundler_for_gitlab() {
     fi
 
     bundle config build.pg "--with-pg-config=${current_pg_config_location}"
-    bundle config build.gpgme --use-system-libraries
+    bundle config unset build.gpgme
 
     if [[ "${OSTYPE}" == "darwin"* ]]; then
       bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
