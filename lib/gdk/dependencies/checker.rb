@@ -41,7 +41,12 @@ module GDK
       def check_ruby_version
         return unless check_binary('ruby')
 
-        raw_version_match = Shellout.new('ruby --version').try_run.match(/\Aruby (.+)p\d+ \(.+\z/)
+        cmd = 'ruby --version'
+        # .tool-versions may have changed during a `gdk update`, so we
+        # should execute ruby using asdf to avoid a stale PATH.
+        cmd = "asdf exec #{cmd}" if GDK.config.asdf.__available?
+
+        raw_version_match = Shellout.new(cmd).try_run.match(/\Aruby (.+)p\d+ \(.+\z/)
         return unless raw_version_match
 
         actual = Gem::Version.new(raw_version_match[1])
