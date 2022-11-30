@@ -512,15 +512,15 @@ asdf uninstall ruby
 
 # Compile Ruby 2.7.5
 export RUBY_APPLY_PATCHES="$(cat <<EOF
-https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.5/debug-segfault.patch
-https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7.5/thread-memory-allocations-2.7.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7/debug-segfault.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/2.7/thread-memory-allocations-2.7.patch
 EOF
 )"
 asdf install ruby 2.7.5
 
 # Compile Ruby 3.0.4
 export RUBY_APPLY_PATCHES="$(cat <<EOF
-https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0.4/thread-memory-allocations-3.0.patch
+https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/master/patches/ruby/3.0/thread-memory-allocations-3.0.patch
 EOF
 )"
 asdf install ruby 3.0.4
