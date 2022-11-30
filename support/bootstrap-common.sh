@@ -274,18 +274,8 @@ common_preflight_checks() {
   fi
 }
 
-linux_platform_distro_selector() {
-  local platform="${1}"
-
-  if setup_platform_linux_with "packages_${platform}.txt"; then
-    mark_platform_as_setup "packages_${platform}.txt"
-  else
-    shopt -u nocasematch
-    return 1
-  fi
-}
-
 setup_platform() {
+  echo "INFO: Setting up platform for ${OSTYPE}.."
   if platform_files_checksum_matches; then
     echo "INFO: This GDK has already had platform packages installed."
     echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
@@ -308,7 +298,11 @@ setup_platform() {
 
     for platform in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
       if [[ ${SUPPORTED_LINUX_PLATFORMS[${platform}]} =~ ${os_id}|${os_id_like} ]]; then
-        linux_platform_distro_selector "${platform}"
+        if install_apt_packages "packages_${platform}.txt"; then
+          mark_platform_as_setup "packages_${platform}.txt"
+        else
+          return 1
+        fi
       fi
     done
 
@@ -336,7 +330,7 @@ mark_platform_as_setup() {
   sha256sum "${platform_file}" > "${GDK_PLATFORM_SETUP_FILE}"
 }
 
-setup_platform_linux_with() {
+install_apt_packages() {
   if ! echo_if_unsuccessful sudo apt-get update; then
     return 1
   fi
