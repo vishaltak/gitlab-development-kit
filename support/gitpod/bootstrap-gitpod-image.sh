@@ -39,6 +39,12 @@ gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true
 ps -ef || true
 mv gitlab/config/secrets.yml .
+
+# This is a workaround to disable the use of ActiveSupport::EventedFileUpdateChecker,
+# which requires a large number of inotify watches. Docker containers may
+# not have enough of them to make GitLab run.
+sed -i "/config.file_watcher/d" gitlab/config/environments/development.rb
+
 rm -rf gitlab/ tmp/ || true
 git restore tmp
 cp ./support/completions/gdk.bash "$HOME/.bashrc.d/90-gdk"
