@@ -50,7 +50,7 @@ to handle wildcard hostnames.
 
 ## Enable access control
 
-1. Follow steps 3-6 of [this guide](https://gitlab.com/gitlab-org/gitlab-pages/-/blob/master/doc/development.md#enable-access-control)
+1. Follow steps 3-6 in [Enabling access control](https://docs.gitlab.com/ee/development/pages/#enabling-access-control)
 to create an OAuth application for GitLab Pages.
 
 1. Add the following to `gdk.yml`
