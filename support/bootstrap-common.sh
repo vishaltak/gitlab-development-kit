@@ -318,15 +318,32 @@ setup_platform() {
 
     shopt -s nocasematch
 
-    for platform in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
-      if [[ ${SUPPORTED_LINUX_PLATFORMS[${platform}]} =~ ${os_id}|${os_id_like} ]]; then
-        if install_apt_packages "packages_${platform}.txt"; then
-          mark_platform_as_setup "packages_${platform}.txt"
-        else
-          return 1
-        fi
+    platform=""
+    for key in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
+      if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id}|${os_id_like} ]]; then
+        platform=$key
       fi
     done
+
+    if [[ "${platform}" == "debian" || "${platform}" == "ubuntu" ]]; then
+      if install_apt_packages "packages_${platform}.txt"; then
+        mark_platform_as_setup "packages_${platform}.txt"
+      else
+        return 1
+      fi
+    elif [[ "${platform}" == "arch" ]]; then
+      if setup_platform_linux_arch_like "packages_${platform}.txt"; then
+        mark_platform_as_setup "packages_${platform}.txt"
+      else
+        return 1
+      fi
+    elif [[ "${platform}" == "fedora" ]]; then
+      if setup_platform_linux_fedora_like "packages_${platform}.txt"; then
+        mark_platform_as_setup "packages_${platform}.txt"
+      else
+        return 1
+      fi
+    fi
 
     shopt -u nocasematch
   fi
