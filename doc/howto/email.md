@@ -36,8 +36,8 @@ In order to enable SMTP delivery:
 
    - Commenting out the `Rails.env.production?` conditional allows us to use
      the configuration with the `development` Rails environment.
-   - In the sample Gmail is used as SMTP provider (you need to enable 2FA, then
-     create an application password).
+   - In the sample Gmail is used as SMTP provider (you need to [enable 2FA](https://support.google.com/accounts/answer/185839), then
+     [create an application password](https://support.google.com/accounts/answer/185833)).
 1. In `gitlab/config/environments/development.rb`, make sure that ActionMailer
    logs delivery errors. This helps you troubleshoot SMTP delivery:
 
