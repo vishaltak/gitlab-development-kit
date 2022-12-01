@@ -331,25 +331,29 @@ mark_platform_as_setup() {
 }
 
 install_apt_packages() {
+  local platform_file="${1}"
+
   if ! echo_if_unsuccessful sudo apt-get update; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $(sed -e 's/#.*//' "${1}"); then
+  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $(sed -e 's/#.*//' "${platform_file}"); then
     return 1
   fi
 
   return 0
 }
 
-setup_platform_linux_arch_like_with() {
+setup_platform_linux_arch_like() {
+  local platform_file="${1}"
+
   if ! echo_if_unsuccessful sudo pacman -Syy; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo pacman -S --needed --noconfirm $(sed -e 's/#.*//' "${1}"); then
+  if ! sudo pacman -S --needed --noconfirm $(sed -e 's/#.*//' "${platform_file}"); then
     return 1
   fi
 
@@ -364,13 +368,15 @@ setup_platform_linux_arch_like_with() {
   return 0
 }
 
-setup_platform_linux_fedora_like_with() {
+setup_platform_linux_fedora_like() {
+  local platform_file="${1}"
+
   if ! echo_if_unsuccessful sudo dnf module enable postgresql:12 -y; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo dnf install -y $(sed -e 's/#.*//' "${1}" | tr '\n' ' '); then
+  if ! sudo dnf install -y $(sed -e 's/#.*//' "${platform_file}" | tr '\n' ' '); then
     return 1
   fi
 
