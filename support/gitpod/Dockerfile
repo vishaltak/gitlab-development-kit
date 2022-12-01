@@ -11,12 +11,6 @@ COPY --from=vale-source /bin/vale /usr/bin/vale
 # Install GDK and dependencies
 COPY --chown=gitpod bootstrap-gitpod-image.sh /tmp
 
-RUN parent_path=$(dirname "$0")
-# shellcheck source=support/ci/functions.sh
-RUN source "${parent_path}"/functions.sh
-# shellcheck disable=SC2119
-RUN init
-
 # `gitpod/workspace-base` image sets USER to `gitpod`,
 # making commands below run under this user
 
