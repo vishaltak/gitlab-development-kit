@@ -296,6 +296,25 @@ common_preflight_checks() {
   fi
 }
 
+# Outputs: Writes detected platform to stdout
+get_platform() {
+    os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
+    [[ -n ${os_id_like} ]] || os_id_like=unknown
+
+    shopt -s nocasematch
+
+    platform=""
+    for key in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
+      if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id}|${os_id_like} ]]; then
+        platform=$key
+      fi
+    done
+
+    shopt -u nocasematch
+    echo "$platform"
+}
+
 setup_platform() {
   echo "INFO: Setting up platform for ${OSTYPE}.."
   if platform_files_checksum_matches; then
@@ -312,19 +331,7 @@ setup_platform() {
       return 1
     fi
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    [[ -n ${os_id_like} ]] || os_id_like=unknown
-
-    shopt -s nocasematch
-
-    platform=""
-    for key in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
-      if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id}|${os_id_like} ]]; then
-        platform=$key
-      fi
-    done
-
+    platform=$(get_platform)
     if [[ "${platform}" == "debian" || "${platform}" == "ubuntu" ]]; then
       if install_apt_packages "packages_${platform}.txt"; then
         mark_platform_as_setup "packages_${platform}.txt"
@@ -344,8 +351,6 @@ setup_platform() {
         return 1
       fi
     fi
-
-    shopt -u nocasematch
   fi
 }
 
