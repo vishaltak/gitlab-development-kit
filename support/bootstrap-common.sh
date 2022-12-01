@@ -276,13 +276,20 @@ common_preflight_checks() {
 
 # Outputs: Writes detected platform to stdout
 get_platform() {
+  platform=""
+
+  # $OSTYPE is an internal Bash variable
+  # https://tldp.org/LDP/abs/html/internalvariables.html
+  if [[ "${OSTYPE}" == "darwin"* ]]; then
+    platform="darwin"
+
+  elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
     [[ -n ${os_id_like} ]] || os_id_like=unknown
 
     shopt -s nocasematch
 
-    platform=""
     for key in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
       if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id}|${os_id_like} ]]; then
         platform=$key
@@ -290,11 +297,14 @@ get_platform() {
     done
 
     shopt -u nocasematch
-    echo "$platform"
+  fi
+  echo "$platform"
 }
 
 setup_platform() {
-  echo "INFO: Setting up platform for ${OSTYPE}.."
+  platform=$(get_platform)
+
+  echo "INFO: Setting up '$platform' platform.."
   if platform_files_checksum_matches; then
     echo "INFO: This GDK has already had platform packages installed."
     echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
@@ -302,14 +312,13 @@ setup_platform() {
     return 0
   fi
 
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
+  if [[ "${platform}" == "darwin" ]]; then
     if setup_platform_darwin; then
       mark_platform_as_setup "Brewfile"
     else
       return 1
     fi
-  elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    platform=$(get_platform)
+  else
     if [[ "${platform}" == "debian" || "${platform}" == "ubuntu" ]]; then
       if install_apt_packages "packages_${platform}.txt"; then
         mark_platform_as_setup "packages_${platform}.txt"
