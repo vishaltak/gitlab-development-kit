@@ -39,26 +39,26 @@ module GDK
     end
 
     def print_example_ci_config
-      GDK::Output.notice(
-        <<~VAULT_CI_EXAMPLE
-          \n\nYou can now fetch a secret from Vault with the following CI job:
+      # GDK::Output.notice(
+      #   <<~VAULT_CI_EXAMPLE
+      #     \n\nYou can now fetch a secret from Vault with the following CI job:
 
-          test_secrets:
-            variables:
-              VAULT_AUTH_PATH: gitlab
-              VAULT_AUTH_ROLE: gitlab-test-role
-              VAULT_SERVER_URL: #{vault_address}
-            secrets:
-              TEST_ID_TOKEN:
-                id_token:
-                  aud: #{GDK.config.__uri}
-              DATABASE_PASSWORD:
-                vault: gitlab-test/db/password
-            script:
-              - echo \$DATABASE_PASSWORD
-              - cat \$DATABASE_PASSWORD
-        VAULT_CI_EXAMPLE
-      )
+      #     test_secrets:
+      #       variables:
+      #         VAULT_AUTH_PATH: gitlab
+      #         VAULT_AUTH_ROLE: gitlab-test-role
+      #         VAULT_SERVER_URL: #{vault_address}
+      #       secrets:
+      #         TEST_ID_TOKEN:
+      #           id_token:
+      #             aud: #{GDK.config.__uri}
+      #         DATABASE_PASSWORD:
+      #           vault: gitlab-test/db/password
+      #       script:
+      #         - echo \$DATABASE_PASSWORD
+      #         - cat \$DATABASE_PASSWORD
+      #   VAULT_CI_EXAMPLE
+      # )
     end
 
     private
