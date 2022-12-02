@@ -11,5 +11,6 @@ namespace :vault do
     vault.create_test_secret
     vault.create_test_policy
     vault.configure_test_auth(args[:project_id])
+    vault.print_example_ci_config
   end
 end

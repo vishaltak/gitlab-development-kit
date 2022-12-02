@@ -6,7 +6,7 @@ Gitlab::Dangerfiles.for_project(self) do |gitlab_dangerfiles|
   gitlab_dangerfiles.config.files_to_category = {
     %r{\Adoc/.*(\.(md|png|gif|jpg))\z} => :docs,
     %r{\A(CONTRIBUTING|LICENSE|MAINTENANCE|PHILOSOPHY|PROCESS|README)(\.md)?\z} => :docs,
-    %r{.*} => [nil]
+    %r{.*} => []
   }.freeze
 
   gitlab_dangerfiles.import_plugins

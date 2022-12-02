@@ -78,7 +78,8 @@ test_secrets:
     - cat $DATABASE_PASSWORD
 ```
 
-You must replace `<vault_ip_address>`, `<gdk_address>`, and `<gdk_port>` with the real values.
+The Rake task prints this job configuration with the `<gdk_address>` and `<vault_ip_address>` values filled in for your
+GDK.
 
 ### ID tokens
 
