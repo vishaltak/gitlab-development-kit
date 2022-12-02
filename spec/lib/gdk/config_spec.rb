@@ -1770,6 +1770,12 @@ RSpec.describe GDK::Config do
         it { is_expected.to eq('support/exec-cd gitlab-k8s-agent go run -race cmd/kas/main.go') }
       end
     end
+
+    describe 'remote_dev_poll_period' do
+      it 'is 1s by default' do
+        expect(config.gitlab_k8s_agent.remote_dev_poll_period).to eq('1s')
+      end
+    end
   end
 
   describe 'nginx' do

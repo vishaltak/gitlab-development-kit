@@ -8,6 +8,8 @@ agent:
       network: "<%= config.gitlab_k8s_agent.k8s_api_listen_network %>"
       address: "<%= config.gitlab_k8s_agent.k8s_api_listen_address %>"
     url_path_prefix: "<%= config.gitlab_k8s_agent.__k8s_api_listen_url_path %>"
+  remote_dev:
+    poll_period: "<%= config.gitlab_k8s_agent.remote_dev_poll_period %>"
 gitlab:
   address: "<%= config.gitlab_k8s_agent.__gitlab_address %>"
   authentication_secret_file: "<%= config.gitlab_k8s_agent.__secret_file %>"

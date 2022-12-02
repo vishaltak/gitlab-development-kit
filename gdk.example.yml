@@ -128,6 +128,7 @@ gitlab_k8s_agent:
   k8s_api_listen_network: tcp
   private_api_listen_address: 127.0.0.1:8155
   private_api_listen_network: tcp
+  remote_dev_poll_period: 1s
   run_from_source: false
 gitlab_metrics_exporter:
   auto_update: true
