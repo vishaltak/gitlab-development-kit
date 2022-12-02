@@ -245,19 +245,10 @@ ensure_supported_platform() {
 
     return 0
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    shopt -s nocasematch
-
-    os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    [[ -n ${os_id_like} ]] || os_id_like=unknown
-
-    if [[ ${SUPPORTED_LINUX_PLATFORMS[*]} =~ ${os_id}|${os_id_like} ]]; then
-      shopt -u nocasematch
+    if [[ "$(get_platform)" != "" ]]; then
       return 0
     fi
   fi
-
-  shopt -u nocasematch
 
   return 1
 }
