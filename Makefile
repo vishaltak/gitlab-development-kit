@@ -2,6 +2,8 @@
 
 START_TIME := $(shell date "+%s")
 
+MAKEFLAGS += --no-print-directory
+
 DIVIDER = "--------------------------------------------------------------------------------"
 
 SHELL = bin/gdk-shell
