@@ -26,11 +26,43 @@ gdk help
 
 ## View logs
 
-To see logs, run:
+To see logs from all services, run:
 
 ```shell
 gdk tail
 ```
+
+To limit the logs to one or more services, specify the service. For example:
+
+```shell
+gdk tail rails-web redis
+```
+
+`gdk tail` can't parse regular `tail` arguments such as `-n`.
+
+You can pipe the output of `gdk tail` through `grep` to filter by a keyword. For example, to filter
+on a correlation ID:
+
+```shell
+# get some correlation ID to track a single request
+gdk tail | grep <some_correlation_id>
+```
+
+`gdk tail` only contains `stdout` and `stderr` streams. To tail JSON logs, use `tail` itself. For example:
+
+- Using `-f`:
+
+  ```shell
+  # follow the API's JSON log
+  tail -f gitlab/log/api_json.log
+  ```
+
+- Using `-n`:
+
+  ```shell
+  # Return the last 100 lines of the GraphQL JSON log
+  tail -n 100 gitlab/log/graphql_json.log
+  ```
 
 ## Open in web browser
 
