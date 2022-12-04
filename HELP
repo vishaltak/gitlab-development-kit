@@ -13,7 +13,7 @@ Manage services:
   gdk restart redis postgresql              # Restart specific services
   gdk kill                                  # Forcibly kills services
 
-  gdk tail                                  # Tail all logs
+  gdk tail                                  # Tail logs for all services (stdout and stderr only)
   gdk tail redis postgresql                 # Tail specific logs
 
   gdk psql [-d gitlabhq_development]        # Run Postgres console
