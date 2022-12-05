@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
+# Initialize asdf
+source "$HOME/.asdf/asdf.sh"
+
 if [[ ! -d /workspace/gitlab-development-kit ]]; then
   # Depending on the state of the Gitpod image, the GDK:init task may not
   # have executed yet, so we should not attempt to go any further.
-  exit 0
+  return
 fi
-
-# Initialize asdf
-source "$HOME/.asdf/asdf.sh"
 
 # skip if gp is not installed
 hash gp 2>/dev/null || return
