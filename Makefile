@@ -102,7 +102,7 @@ asdf-update \
 preflight-checks \
 preflight-update-checks \
 gitlab-git-pull \
-gitlab-prepare \
+gitlab-bundle-prepare \
 ensure-databases-running \
 unlock-dependency-installers \
 gitlab-translations-unlock \
