@@ -5,6 +5,7 @@ ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
+DEFAULT_GEMS_PATH="${HOME}/.default-gems"
 
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
@@ -46,6 +47,27 @@ echo_if_unsuccessful() {
     echo "${output}" >&2
     return 1
   fi
+}
+
+ensure_line_in_file() {
+  grep -qxF "$1" "$2" || echo "$1" >> "$2"
+}
+
+asdf_configure() {
+  if ! asdf_enabled; then
+    return 0
+  fi
+
+  gems=(gitlab-development-kit bundler)
+
+  for gem in "${gems[@]}"
+  do
+    if ! echo_if_unsuccessful ensure_line_in_file "$gem" "${DEFAULT_GEMS_PATH}"; then
+      return 1
+    fi
+  done
+
+  return 0
 }
 
 asdf_install_update_plugins() {

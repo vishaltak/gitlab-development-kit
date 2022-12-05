@@ -42,6 +42,11 @@ if ! setup_platform; then
   error "Failed to install platform software." >&2
 fi
 
+header_print "Configuring asdf with $HOME/.default-gems"
+if ! asdf_configure; then
+  error "Failed to configure asdf." >&2
+fi
+
 header_print "Updating asdf release, plugins, and tools"
 if ! asdf_update_release; then
   error "Failed to update asdf release." >&2
