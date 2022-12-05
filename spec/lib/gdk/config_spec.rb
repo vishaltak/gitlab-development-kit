@@ -2134,7 +2134,7 @@ RSpec.describe GDK::Config do
       context 'when access_control is enabled' do
         let(:yaml) do
           {
-            'gitlab_pages' => { 'access_control' => true, 'auth_client_id' => 'client_id', 'auth_client_secret' => 'client_secret' }
+            'gitlab_pages' => { 'access_control' => true, 'auth_client_id' => 'client_id', 'auth_client_secret' => 'client_secret', 'auth_scope' => 'read_api' }
           }
         end
 
@@ -2142,6 +2142,7 @@ RSpec.describe GDK::Config do
           expect(config.gitlab_pages.access_control?).to eq(true)
           expect(config.gitlab_pages.auth_client_id).to eq('client_id')
           expect(config.gitlab_pages.auth_client_secret).to eq('client_secret')
+          expect(config.gitlab_pages.auth_scope).to eq('read_api')
           expect(config.gitlab_pages.__auth_secret.length).to eq(32)
           expect(config.gitlab_pages.__auth_redirect_uri).to eq('http://127.0.0.1.nip.io:3010/auth')
         end
@@ -2162,6 +2163,24 @@ RSpec.describe GDK::Config do
 
         it 'configures custom domains correctly' do
           expect(config.gitlab_pages.enable_custom_domains?).to eq(true)
+        end
+      end
+    end
+
+    describe '#auth_scope' do
+      it 'defaults to api' do
+        expect(config.gitlab_pages.auth_scope).to eq('api')
+      end
+
+      context 'when auth_scope is set' do
+        let(:yaml) do
+          {
+            'gitlab_pages' => { 'access_control' => true, 'auth_scope' => 'read_api' }
+          }
+        end
+
+        it 'configures auth scope' do
+          expect(config.gitlab_pages.auth_scope).to eq('read_api')
         end
       end
     end

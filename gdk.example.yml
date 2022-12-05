@@ -140,6 +140,7 @@ gitlab_pages:
   access_control: false
   auth_client_id: ''
   auth_client_secret: ''
+  auth_scope: api
   auto_update: true
   enable_custom_domains: false
   enabled: false
