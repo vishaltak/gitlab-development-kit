@@ -2,6 +2,23 @@
 
 <!-- Briefly describe what this merge request does and why. -->
 
+## How to set up and validate locally
+
+_Numbered steps to set up and validate the change are strongly suggested._
+
+<!--
+Example below:
+
+1. Ensure GitLab Pages is enabled by adding the below configuration in `gdk.yml`:
+  ```yml
+  ---
+  gitlab_pages:
+    enabled: true
+  ```
+1. Check out to this merge request's branch.
+1. Run `gdk reconfigure` to check if regenerating all configuration is successful.
+-->
+
 ## Impacted categories
 
 The following categories relate to this merge request:
