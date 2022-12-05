@@ -3,10 +3,6 @@
 set -xeuo pipefail
 IFS=$'\n\t'
 
-sudo apt-get update
-sudo add-apt-repository ppa:git-core/ppa -y
-sudo apt-get install -y make git
-
 echo "# --- Install GitLab Runner"
 curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
 export GITLAB_RUNNER_DISABLE_SKEL=true
