@@ -26,6 +26,7 @@ source "${ASDF_DIR}/asdf.sh"
 gdk config set gitlab.rails.bootsnap false
 
 # Webpack settings
+gdk config set webpack.host 127.0.0.1
 gdk config set webpack.static false
 gdk config set webpack.live_reload false
 
