@@ -294,6 +294,7 @@ prometheus:
 rails_web:
   enabled: true
 redis:
+  custom_config: {}
   databases:
     development:
       cache: 2
