@@ -901,6 +901,9 @@ module GDK
           integer(:sessions) { 15 }
         end
       end
+
+      # See doc/howto/redis.md for more detail
+      hash_setting(:custom_config) { {} }
     end
 
     settings :asdf do
