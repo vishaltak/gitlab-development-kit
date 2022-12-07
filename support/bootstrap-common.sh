@@ -413,16 +413,18 @@ setup_platform_linux_fedora_like() {
 
   if ! echo_if_unsuccessful which runit; then
     echo "INFO: Installing runit into /opt/runit/"
-    cd /tmp || return 1
-    wget http://smarden.org/runit/runit-2.1.2.tar.gz
-    tar xzf runit-2.1.2.tar.gz
-    cd admin/runit-2.1.2 || return 1
-    sed -i -E 's/ -static$//g' src/Makefile || return 1
-    ./package/compile || return 1
-    ./package/check || return 1
-    sudo mkdir -p /opt/runit || return 1
-    sudo mv command/* /opt/runit || return 1
-    sudo ln -s /opt/runit/* /usr/local/bin/ || return 1
+    (
+      cd /tmp || return 1
+      wget http://smarden.org/runit/runit-2.1.2.tar.gz
+      tar xzf runit-2.1.2.tar.gz
+      cd admin/runit-2.1.2 || return 1
+      sed -i -E 's/ -static$//g' src/Makefile || return 1
+      ./package/compile || return 1
+      ./package/check || return 1
+      sudo mkdir -p /opt/runit || return 1
+      sudo mv command/* /opt/runit || return 1
+      sudo ln -nfs /opt/runit/* /usr/local/bin/ || return 1
+    )
   fi
 
   return 0
