@@ -111,3 +111,9 @@ gitpod-docker-image:
     - build-gitpod-workspace-image
   script:
     - support/ci/verify-gitpod-docker-image
+  artifacts:
+    paths:
+      - ./artifacts/log/*
+    expire_in: 2 days
+    when: on_failure
+  timeout: 1h

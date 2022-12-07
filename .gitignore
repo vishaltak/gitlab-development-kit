@@ -123,3 +123,4 @@ haproxy/haproxy.cfg
 node_modules/
 /pgbouncers/
 /consul/
+/artifacts/
