@@ -390,10 +390,13 @@ setup_platform_linux_arch_like() {
 
   # Check for runit, which needs to be manually installed from AUR.
   if ! echo_if_unsuccessful which runit; then
-    cd /tmp || return 1
-    git clone --depth 1 https://aur.archlinux.org/runit-systemd.git
-    cd runit-systemd || return 1
-    makepkg -sri --noconfirm
+    echo "INFO: Installing runit"
+    (
+      cd /tmp || return 1
+      git clone --depth 1 https://aur.archlinux.org/runit-systemd.git
+      cd runit-systemd || return 1
+      makepkg -sri --noconfirm
+    )
   fi
 
   return 0
