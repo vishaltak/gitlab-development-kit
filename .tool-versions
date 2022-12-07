@@ -71,6 +71,12 @@ redis 6.2.7
 #
 ruby 2.7.7 3.0.5
 
+# rust:
+#   1.65.0:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+rust 1.65.0
+
 # shellcheck:
 #   0.8.0:
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
