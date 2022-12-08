@@ -9,4 +9,4 @@ elasticsearch/bin/elasticsearch: elasticsearch/lib/elasticsearch-${elasticsearch
 
 elasticsearch/lib/elasticsearch-${elasticsearch_version}.jar:
 	$(Q)rm -rf elasticsearch && mkdir -p elasticsearch
-	$(Q)curl -C - -L --fail "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${elasticsearch_version}-${platform}-${elasticsearch_architecture}.tar.gz" | tar xzf - --strip-components=1 -C elasticsearch
+	$(Q)curl -C - -L --fail "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${elasticsearch_version}-${platform}-${elasticsearch_architecture}.tar.gz" | tar xzf - --strip-components=1 -C elasticsearch --exclude=config/elasticsearch.yml
