@@ -296,21 +296,15 @@ common_preflight_checks() {
   fi
 }
 
-setup_platform() {
-  echo "INFO: Setting up platform for ${OSTYPE}.."
-  if platform_files_checksum_matches; then
-    echo "INFO: This GDK has already had platform packages installed."
-    echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
+# Outputs: Writes detected platform to stdout
+get_platform() {
+  platform=""
 
-    return 0
-  fi
-
+  # $OSTYPE is an internal Bash variable
+  # https://tldp.org/LDP/abs/html/internalvariables.html
   if [[ "${OSTYPE}" == "darwin"* ]]; then
-    if setup_platform_darwin; then
-      mark_platform_as_setup "Brewfile"
-    else
-      return 1
-    fi
+    platform="darwin"
+
   elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
     os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
     os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
@@ -318,17 +312,54 @@ setup_platform() {
 
     shopt -s nocasematch
 
-    for platform in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
-      if [[ ${SUPPORTED_LINUX_PLATFORMS[${platform}]} =~ ${os_id}|${os_id_like} ]]; then
-        if install_apt_packages "packages_${platform}.txt"; then
-          mark_platform_as_setup "packages_${platform}.txt"
-        else
-          return 1
-        fi
+    for key in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
+      if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id}|${os_id_like} ]]; then
+        platform=$key
       fi
     done
 
     shopt -u nocasematch
+  fi
+  echo "$platform"
+}
+
+setup_platform() {
+  platform=$(get_platform)
+
+  echo "INFO: Setting up '$platform' platform.."
+  if platform_files_checksum_matches; then
+    echo "INFO: This GDK has already had platform packages installed."
+    echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
+
+    return 0
+  fi
+
+  if [[ "${platform}" == "darwin" ]]; then
+    if setup_platform_darwin; then
+      mark_platform_as_setup "Brewfile"
+    else
+      return 1
+    fi
+  else
+    if [[ "${platform}" == "debian" || "${platform}" == "ubuntu" ]]; then
+      if install_apt_packages "packages_${platform}.txt"; then
+        mark_platform_as_setup "packages_${platform}.txt"
+      else
+        return 1
+      fi
+    elif [[ "${platform}" == "arch" ]]; then
+      if setup_platform_linux_arch_like "packages_${platform}.txt"; then
+        mark_platform_as_setup "packages_${platform}.txt"
+      else
+        return 1
+      fi
+    elif [[ "${platform}" == "fedora" ]]; then
+      if setup_platform_linux_fedora_like "packages_${platform}.txt"; then
+        mark_platform_as_setup "packages_${platform}.txt"
+      else
+        return 1
+      fi
+    fi
   fi
 }
 
@@ -353,61 +384,72 @@ mark_platform_as_setup() {
 }
 
 install_apt_packages() {
+  local platform_file="${1}"
+
   if ! echo_if_unsuccessful sudo apt-get update; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $(sed -e 's/#.*//' "${1}"); then
+  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y $(sed -e 's/#.*//' "${platform_file}"); then
     return 1
   fi
 
   return 0
 }
 
-setup_platform_linux_arch_like_with() {
+setup_platform_linux_arch_like() {
+  local platform_file="${1}"
+
   if ! echo_if_unsuccessful sudo pacman -Syy; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo pacman -S --needed --noconfirm $(sed -e 's/#.*//' "${1}"); then
+  if ! sudo pacman -S --needed --noconfirm $(sed -e 's/#.*//' "${platform_file}"); then
     return 1
   fi
 
   # Check for runit, which needs to be manually installed from AUR.
   if ! echo_if_unsuccessful which runit; then
-    cd /tmp || return 1
-    git clone --depth 1 https://aur.archlinux.org/runit-systemd.git
-    cd runit-systemd || return 1
-    makepkg -sri --noconfirm
+    echo "INFO: Installing runit"
+    (
+      cd /tmp || return 1
+      git clone --depth 1 https://aur.archlinux.org/runit-systemd.git
+      cd runit-systemd || return 1
+      makepkg -sri --noconfirm
+    )
   fi
 
   return 0
 }
 
-setup_platform_linux_fedora_like_with() {
+setup_platform_linux_fedora_like() {
+  local platform_file="${1}"
+
   if ! echo_if_unsuccessful sudo dnf module enable postgresql:12 -y; then
     return 1
   fi
 
   # shellcheck disable=SC2046
-  if ! sudo dnf install -y $(sed -e 's/#.*//' "${1}" | tr '\n' ' '); then
+  if ! sudo dnf install -y $(sed -e 's/#.*//' "${platform_file}" | tr '\n' ' '); then
     return 1
   fi
 
   if ! echo_if_unsuccessful which runit; then
     echo "INFO: Installing runit into /opt/runit/"
-    cd /tmp || return 1
-    wget http://smarden.org/runit/runit-2.1.2.tar.gz
-    tar xzf runit-2.1.2.tar.gz
-    cd admin/runit-2.1.2 || return 1
-    sed -i -E 's/ -static$//g' src/Makefile || return 1
-    ./package/compile || return 1
-    ./package/check || return 1
-    sudo mkdir -p /opt/runit || return 1
-    sudo mv command/* /opt/runit || return 1
-    sudo ln -s /opt/runit/* /usr/local/bin/ || return 1
+    (
+      cd /tmp || return 1
+      wget http://smarden.org/runit/runit-2.1.2.tar.gz
+      tar xzf runit-2.1.2.tar.gz
+      cd admin/runit-2.1.2 || return 1
+      sed -i -E 's/ -static$//g' src/Makefile || return 1
+      ./package/compile || return 1
+      ./package/check || return 1
+      sudo mkdir -p /opt/runit || return 1
+      sudo mv command/* /opt/runit || return 1
+      sudo ln -nfs /opt/runit/* /usr/local/bin/ || return 1
+    )
   fi
 
   return 0
