@@ -461,6 +461,9 @@ setup_platform_darwin() {
   if [ -z "$(command -v brew)" ]; then
     echo "INFO: Installing Homebrew."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+    # shellcheck disable=SC1091 disable=SC1090
+    source "${ROOT_PATH}/.gdkrc"
   fi
 
   if ! brew tap homebrew/cask; then
