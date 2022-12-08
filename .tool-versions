@@ -56,6 +56,10 @@ postgres 12.13 13.9
 redis 6.2.7
 
 # ruby:
+#   3.0.5:
+#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #   2.7.7:
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
@@ -64,12 +68,8 @@ redis 6.2.7
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
-#   3.0.5:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #
-ruby 2.7.7 3.0.5
+ruby 3.0.5 2.7.7
 
 # rust:
 #   1.65.0:
