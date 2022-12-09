@@ -21,9 +21,12 @@ make bootstrap
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 source "${ASDF_DIR}/asdf.sh"
 
+# Rails settings
 # Disable bootsnap as it can cause temporary/cache files to remain, resulting
 # in Docker image creation to fail
 gdk config set gitlab.rails.bootsnap false
+gdk config set gitlab.rails.port 443
+gdk config set gitlab.rails.https.enabled true
 
 # Webpack settings
 gdk config set webpack.host 127.0.0.1
