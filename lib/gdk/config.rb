@@ -35,6 +35,8 @@ module GDK
     end
 
     path(:gdk_root) { self.class::GDK_ROOT }
+    path(:__data_dir) { gdk_root.join('data') }
+    path(:__cache_dir) { gdk_root.join('.cache') }
     integer(:restrict_cpu_count) { Etc.nprocessors }
 
     settings :common do
