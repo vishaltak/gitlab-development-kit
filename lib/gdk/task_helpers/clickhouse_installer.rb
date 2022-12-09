@@ -18,7 +18,7 @@ module GDK
       #
       # @return [Boolean] whether installation was successful
       def fetch_linux64
-        Dir.mktmpdir('clickhouse') do |dir|
+        temporary_dir do |dir|
           compressed_file = File.join(dir, 'clickhouse.tgz')
 
           unless fetch(LINUX_URL, compressed_file)
@@ -38,6 +38,8 @@ module GDK
           GDK::Output.puts
           GDK::Output.success('Installed ClickHouse for Linux x86_64')
 
+          warn_gdk_config_change_required
+
           true
         end
       end
@@ -46,7 +48,7 @@ module GDK
       #
       # @return [Boolean] whether installation was successful
       def fetch_macos_intel
-        Dir.mktmpdir('clickhouse') do |dir|
+        temporary_dir do |dir|
           compiled_binary = File.join(dir, 'clickhouse')
 
           unless fetch(MACOS_INTEL_URL, compiled_binary)
@@ -62,7 +64,7 @@ module GDK
           GDK::Output.puts
           GDK::Output.success('Installed ClickHouse for MacOS with Intel processor')
 
-          ensure_gdk_config!
+          warn_gdk_config_change_required
 
           true
         end
@@ -72,7 +74,7 @@ module GDK
       #
       # @return [Boolean] whether installation was successful
       def fetch_macos_apple_silicon
-        Dir.mktmpdir('clickhouse') do |dir|
+        temporary_dir do |dir|
           compiled_binary = File.join(dir, 'clickhouse')
 
           unless fetch(MACOS_ARM64_URL, compiled_binary)
@@ -88,7 +90,7 @@ module GDK
           GDK::Output.puts
           GDK::Output.success('Installed ClickHouse for MacOS with an Apple Silicon processor')
 
-          ensure_gdk_config!
+          warn_gdk_config_change_required
 
           true
         end
@@ -146,16 +148,22 @@ module GDK
         false
       end
 
-      # Ensure gdk.yml is pointing to the installed clickhouse
+      # Warns if gdk.yml is not pointing to the installed ClickHouse
       #
       # If clickhouse.bin was previously set to something else that does not
       # exist anymore, when installing clickhouse we need to update the location
       # to point to the new one
-      def ensure_gdk_config!
-        return if GDK.config.clickhouse.bin == install_path
+      def warn_gdk_config_change_required
+        return if GDK.config.clickhouse.bin.nil? || GDK.config.clickhouse.bin == install_path
 
-        command = %W[bin/gdk config set clickhouse.bin #{install_path}]
-        shellout(command)
+        GDK::Output.puts
+        GDK::Output.warn('The gdk.yml is pointing clickhouse.bin to a different binary')
+        GDK::Output.info('To use the ClickHouse installed by GDK, please run the following command:')
+        GDK::Output.info("gdk config set clickhouse.bin #{install_path}")
+      end
+
+      def temporary_dir(&block)
+        Dir.mktmpdir('clickhouse', &block)
       end
     end
   end
