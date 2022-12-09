@@ -42,6 +42,8 @@ module GDK
   autoload :HTTPHelper, 'gdk/http_helper'
   autoload :Logo, 'gdk/logo'
   autoload :Machine, 'gdk/machine'
+  autoload :Message, 'gdk/message'
+  autoload :Messages, 'gdk/messages'
   autoload :Output, 'gdk/output'
   autoload :OutputBuffered, 'gdk/output_buffered'
   autoload :PortManager, 'gdk/port_manager'
