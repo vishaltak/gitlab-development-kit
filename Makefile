@@ -208,14 +208,18 @@ ask-to-restart:
 	@echo
 
 .PHONY: post-install-tasks
-post-install-tasks:
+post-install-tasks: display-messages-for-user
 	@echo
 	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: post-reconfigure-tasks
-post-reconfigure-tasks:
+post-reconfigure-tasks: display-messages-for-user
 	@echo
 	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
+
+.PHONY: display-messages-for-user
+display-messages-for-user:
+	@support/messages-display
 
 .PHONY: gdk-reconfigure-task
 gdk-reconfigure-task:
