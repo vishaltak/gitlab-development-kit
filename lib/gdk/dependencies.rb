@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require 'mkmf'
-
-MakeMakefile::Logging.quiet = true
-MakeMakefile::Logging.logfile(File::NULL)
-
 module GDK
   module Dependencies
     autoload :Checker, 'gdk/dependencies/checker'
@@ -14,17 +9,43 @@ module GDK
 
     # Homebrew
     def self.homebrew_available?
-      !!MakeMakefile.find_executable('brew')
+      executable_exist?('brew')
     end
 
     # MacPorts
     def self.macports_available?
-      !!MakeMakefile.find_executable('port')
+      executable_exist?('port')
     end
 
     # Debian / Ubuntu APT
     def self.linux_apt_available?
-      !!MakeMakefile.find_executable('apt')
+      executable_exist?('apt')
+    end
+
+    # Search on PATH or default locations for provided binary and return its fullpath
+    #
+    # @param [String] binary name
+    def self.find_executable(binary)
+      executable_file = proc { |name| next name if File.exist?(name) && File.executable?(name) }
+
+      # Retrieve PATH from ENV or use a fallback
+      path = ENV['PATH']&.split(File::PATH_SEPARATOR) || %w[/usr/local/bin /usr/bin /bin]
+
+      # check binary against each PATH
+      path.each do |dir|
+        file = File.join(dir, binary)
+
+        return file if executable_file.call(file)
+      end
+
+      nil
+    end
+
+    # Check whether provided binary name exists on PATH or default locations
+    #
+    # @param [String] binary name
+    def self.executable_exist?(name)
+      !!find_executable(name)
     end
   end
 end
