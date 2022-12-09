@@ -38,10 +38,10 @@ The following installation methods are supported, actively maintained, and teste
 
 | Operating system | Versions                       |
 |:-----------------|:-------------------------------|
-| macOS            | 12, 11, 10.15                  |
+| macOS            | 13, 12, 11, 10.15              |
 | Ubuntu           | 22.04 (1), 21.10,              |
 | Fedora           | 36 (1), 35                     |
-| Debian           | 13, 12                             |
+| Debian           | 13, 12                         |
 | Arch             | latest                         |
 | Manjaro          | latest                         |
 
