@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
-require 'mkmf'
 require 'pathname'
-
 require_relative 'shellout'
-
-MakeMakefile::Logging.quiet = true
-MakeMakefile::Logging.logfile(File::NULL)
 
 module Runit
   autoload :Config, 'runit/config'
@@ -91,7 +86,7 @@ module Runit
   end
 
   def self.runit_installed!
-    return if MakeMakefile.find_executable('runsvdir')
+    return if GDK::Dependencies.executable_exist?('runsvdir')
 
     abort <<~MESSAGE
 
