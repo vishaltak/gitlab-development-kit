@@ -193,10 +193,7 @@ configure_ruby_bundler_for_gitlab() {
         bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
       fi
 
-      if [[ ${clang_version} -ge 14 ]]; then
-        # Workaround until https://github.com/chef/ffi-yajl/pull/114 is available
-        bundle config build.ffi-yajl --with-ldflags="-Wl,-undefined,dynamic_lookup"
-      fi
+      bundle config unset build.ffi-yajl
     fi
   )
 }
