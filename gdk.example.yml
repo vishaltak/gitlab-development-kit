@@ -49,7 +49,7 @@ gdk:
   update_hooks:
     after: []
     before:
-    - cd gitlab && bin/spring stop || true
+    - support/exec-cd gitlab bin/spring stop || true
   use_bash_shim: false
 gdk_root: "/home/git/gdk"
 geo:
