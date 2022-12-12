@@ -18,8 +18,6 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   READLINE_PREFIX="${BREW_PREFIX}/opt/readline"
   ICU4C_PREFIX="${BREW_PREFIX}/opt/icu4c"
 
-  # Workaround for https://bugs.ruby-lang.org/issues/19005
-  export DLDFLAGS="-Wl,-undefined,dynamic_lookup"
   export LDFLAGS="-L${OPENSSL_PREFIX}/lib"
   export CPPFLAGS="-I${OPENSSL_PREFIX}/include"
   export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig:${ICU4C_PREFIX}/lib/pkgconfig"
