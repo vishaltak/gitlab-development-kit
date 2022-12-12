@@ -109,7 +109,7 @@ module GDK
         array(:after) { [] }
       end
       settings :update_hooks do
-        array(:before, merge: true) { ['cd gitlab && bin/spring stop || true'] }
+        array(:before, merge: true) { ['support/exec-cd gitlab bin/spring stop || true'] }
         array(:after) { [] }
       end
     end

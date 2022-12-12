@@ -2361,7 +2361,7 @@ RSpec.describe GDK::Config do
     describe '#update_hooks' do
       describe '#before' do
         it 'has spring stop || true hook by default' do
-          expect(config.gdk.update_hooks.before).to eq(['cd gitlab && bin/spring stop || true'])
+          expect(config.gdk.update_hooks.before).to eq(['support/exec-cd gitlab bin/spring stop || true'])
         end
 
         context 'with custom hooks defined' do
@@ -2370,7 +2370,7 @@ RSpec.describe GDK::Config do
           end
 
           it 'has spring stop || true hook and then our hooks also' do
-            expect(config.gdk.update_hooks.before).to eq(['cd gitlab && bin/spring stop || true', 'uptime'])
+            expect(config.gdk.update_hooks.before).to eq(['support/exec-cd gitlab bin/spring stop || true', 'uptime'])
           end
         end
       end
