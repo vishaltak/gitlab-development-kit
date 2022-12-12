@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'lefthook', '~> 1.2.3', require: false
+  gem 'lefthook', '~> 1.2.4', require: false
   gem 'rake', '~> 13.0.6'
   gem 'rubocop', require: false
   gem "rubocop-rake", "~> 0.6.0", require: false
@@ -12,7 +12,7 @@ end
 
 group :test do
   gem 'gitlab-styles', '~> 9.1.0', require: false
-  gem 'irb', '~> 1.5.1', require: false
+  gem 'irb', '~> 1.6.0', require: false
   gem 'rspec', '~> 3.12.0', require: false
   gem 'rspec_junit_formatter', '~> 0.6.0', require: false
   gem 'simplecov-cobertura', '~> 2.1.0', require: false
