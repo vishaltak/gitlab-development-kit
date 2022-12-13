@@ -106,6 +106,9 @@ makefile-config:
   extends:
     - .test-job
     - .rules:code-changes
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   script:
     - support/ci/verify-makefile-config
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0']
