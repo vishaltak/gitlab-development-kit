@@ -19,11 +19,6 @@ openssl-devel
 openssl-libs
 perl-Digest-SHA
 perl-Image-ExifTool
-postgresql
-postgresql-contrib
-postgresql-devel
-postgresql-libs
-postgresql-server
 python3-docutils
 re2
 re2-devel
