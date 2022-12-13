@@ -74,7 +74,7 @@ webpack: exec /usr/bin/env NODE_ENV=development DEV_SERVER_STATIC=<%= config.web
 
 # Gitlab Runner Docker with HTTPS
 #
-<%= '#' unless config.runner.__install_mode_docker && config.https? %>runner: exec docker run --rm <%= config.runner.__add_host_flags %> -v '<%= config.runner.config_file %>:/etc/gitlab-runner/config.toml' -v '<%= config.gdk_root.join(config.nginx.ssl.certificate) %>:/etc/gitlab-runner/certs/<%= config.nginx.ssl.certificate %>' -v /var/run/docker.sock:/var/run/docker.sock <%= config.runner.image %>
+<%= '#' unless config.runner.__install_mode_docker && config.https? %>runner: exec docker run --rm <%= config.runner.__add_host_flags %> -v '<%= config.runner.config_file %>:/etc/gitlab-runner/config.toml' -v '<%= config.gdk_root.join(config.nginx.ssl.certificate) %>:/etc/gitlab-runner/certs/<%= config.runner.__ssl_certificate %>' -v /var/run/docker.sock:/var/run/docker.sock <%= config.runner.image %>
 
 # Gitlab Spamcheck
 #

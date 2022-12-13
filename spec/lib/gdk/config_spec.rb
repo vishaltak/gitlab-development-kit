@@ -1123,6 +1123,40 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '__ssl_certificate' do
+      let(:yaml) do
+        {
+          'runner' => { 'enabled' => 'true' },
+          'nginx' => {
+            'ssl' => {
+              'certificate' => '/path/to/hostname.pem',
+              'key' => '/path/to/hostname.key'
+            }
+          }
+        }
+      end
+
+      it 'converts to a relative path' do
+        cert = config.runner.__ssl_certificate
+
+        expect(cert).to be_a(String)
+        expect(cert).to eq('hostname.crt')
+      end
+
+      context 'when __ssl_certificate is overriden' do
+        before do
+          yaml['runner']['__ssl_certificate'] = '/path/to/ssl/cert'
+        end
+
+        it 'returns an empty string' do
+          cert = config.runner.__ssl_certificate
+
+          expect(cert).to be_a(String)
+          expect(cert).to eq('/path/to/ssl/cert')
+        end
+      end
+    end
+
     context 'when config_file exists' do
       before do
         yaml['runner'] = {
