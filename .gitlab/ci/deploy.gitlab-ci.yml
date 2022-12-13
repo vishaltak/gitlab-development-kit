@@ -19,7 +19,7 @@ yard:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   parallel:
     matrix:
-      - RUBY_VERSION: ['2.7', '3.0']
+      - RUBY_VERSION: ['2.7', '3.0', '3.1']
 
 pages:
   extends: .deploy-job
