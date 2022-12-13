@@ -7,7 +7,7 @@ HOME="/home/gitpod"
 
 /sbin/sysctl fs.inotify.max_user_watches=524288
 
-if ! docker run --rm -t -v "${ROOT_PATH}/support/gitpod/startup-scripts/:/tmp/startup-scripts" "${DOCKER_IMAGE}" bash -ic "/tmp/startup-scripts/docker-entrypoint"; then
+if ! docker run --rm -t -v "${ROOT_PATH}/support/gitpod/startup-scripts/:/tmp/startup-scripts" -v "${ROOT_PATH}/artifacts/:/artifacts" "${DOCKER_IMAGE}" bash -ic "/tmp/startup-scripts/docker-entrypoint"; then
   echo "ERROR: Failed to run GitLab in Gitpod workspace Docker image." >&2
   exit 1
 else

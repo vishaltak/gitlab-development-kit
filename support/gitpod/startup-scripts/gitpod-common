@@ -22,5 +22,5 @@ is_gitlab_available() {
   # We use http://127.0.0.1:3000 instead of the public hostname 
   # because it's no longer possible to access as specific cookies are required
   printf "Waiting for GitLab at %s ..." "$1"
-  until curl --silent --no-buffer --fail http://127.0.0.1:3000/-/readiness > /dev/null 2>&1; do printf '.'; sleep 5; done && echo ""
+  timeout 10m bash -c "until curl --silent --no-buffer --fail http://127.0.0.1:3000/-/readiness > /dev/null 2>&1; do printf '.'; sleep 5; done"
 }
