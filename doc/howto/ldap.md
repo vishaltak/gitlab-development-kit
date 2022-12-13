@@ -14,7 +14,7 @@ GitLab LDAP integration.
      enabled: true
    ```
 
-1. Run `gdk reconfigure` to configure the `gitlab-openldap` service.
+1. Run `gdk reconfigure` to configure the `gitlab-openldap` service. (If on `macOS`, you will have to manually update the `port` to `3891`. See [Configuring GitLab](#configuring-gitlab))
 
 1. Run `gdk restart` to restart the modified services.
 
@@ -123,6 +123,8 @@ In GitLab EE, an alternative database can optionally be added as follows:
       group_base: 'ou=groups,dc=example-alt,dc=com'
       admin_group: ''
 ```
+
+Run `gdk restart` to restart the modified services.
 
 ### Repopulate the database
 
