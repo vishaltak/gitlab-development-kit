@@ -216,7 +216,11 @@ ensure_not_root() {
 }
 
 ensure_supported_platform() {
-  if [[ "${OSTYPE}" == "darwin"* ]]; then
+  platform=$(get_platform)
+
+  if [[ "$platform" == "" ]]; then
+    return 1
+  elif [[ "$platform" == "darwin" ]]; then
     if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
 
       if [[ $(command -v brew) == "/opt/homebrew/bin/brew" ]]; then
@@ -239,24 +243,8 @@ ensure_supported_platform() {
         sleep 3
       fi
     fi
-
-    return 0
-  elif [[ "${OSTYPE}" == "linux-gnu"* ]]; then
-    shopt -s nocasematch
-
-    os_id_like=$(awk -F= '$1=="ID_LIKE" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    os_id=$(awk -F= '$1=="ID" { gsub(/"/, "", $2); print $2 ;}' /etc/os-release)
-    [[ -n ${os_id_like} ]] || os_id_like=unknown
-
-    if [[ ${SUPPORTED_LINUX_PLATFORMS[*]} =~ ${os_id}|${os_id_like} ]]; then
-      shopt -u nocasematch
-      return 0
-    fi
   fi
-
-  shopt -u nocasematch
-
-  return 1
+  return 0
 }
 
 common_preflight_checks() {
