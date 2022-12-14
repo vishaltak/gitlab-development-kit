@@ -10,7 +10,7 @@ RSpec.describe 'gdk' do
       it 'returns version including git SHA' do
         git_sha = `git rev-parse --short HEAD`.chomp
 
-        expect(`#{gdk_bin_full_path} version`).to eql("GitLab Development Kit 0.2.15 (#{git_sha})\n")
+        expect(`#{gdk_bin_full_path} version`).to eql("GitLab Development Kit 0.2.16 (#{git_sha})\n")
       end
     end
   end
