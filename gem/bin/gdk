@@ -26,7 +26,6 @@ module GDK
 
       def run
         return GDK::CommandBasic::Version.new.run if gdk_version?
-        return GDK::CommandBasic::Init.new(args[1..]).run if gdk_init?
 
         if gdk_root
           require(gdk_root.join('lib/gdk.rb'))
@@ -45,10 +44,9 @@ module GDK
         warn <<~NOT_A_GDK_DIR
 
           The current working directory is not inside a gitlab-development-kit
-          installation. Use 'cd' to go to your gitlab-development-kit or create
-          a new one with 'gdk init'.
+          installation. Use 'cd' to go to your gitlab-development-kit.
 
-          gdk init [DIRECTORY] # Default: #{DEFAULT_INIT_DIRECTORY}
+          # Default: #{DEFAULT_INIT_DIRECTORY}
 
         NOT_A_GDK_DIR
       end
@@ -60,10 +58,6 @@ module GDK
       def gdk_version?
         # If gdk_root == true, fall through to allow lib/gdk.rb to handle
         %w[version --version].include?(args.first) && !gdk_root
-      end
-
-      def gdk_init?
-        args.first == 'init'
       end
 
       def find_root(current)
@@ -81,58 +75,6 @@ module GDK
       def run
         puts GDK::VERSION
         true
-      end
-    end
-
-    class Init
-      def initialize(args)
-        @args = args
-      end
-
-      def run
-        warn("INFO: 'gdk init' is deprecated and will be removed in a future update.")
-
-        if show_help?
-          puts('Usage: gdk init [DIR]')
-
-          return true
-        end
-
-        directory = new_gdk_directory
-        if new_gdk_directory_invalid?(directory)
-          warn("ERROR: The proposed new GDK directory '#{directory}' is invalid because it begins with a dash.")
-
-          return false
-        end
-
-        if clone_gdk(directory)
-          puts("INFO: Successfully git cloned the GDK into '#{directory}'.")
-          true
-        else
-          warn("ERROR: An error occurred while attempting to git clone the GDK into '#{directory}'.")
-          false
-        end
-      end
-
-      private
-
-      attr_reader :args
-
-      def show_help?
-        args.count > 1 || (args & %w[-help --help]).any?
-      end
-
-      def new_gdk_directory_invalid?(directory)
-        directory.start_with?('-')
-      end
-
-      def new_gdk_directory
-        args.count == 1 ? args.first : GDK::DEFAULT_INIT_DIRECTORY
-      end
-
-      def clone_gdk(directory)
-        cmd = "git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git #{directory}"
-        system(*cmd)
       end
     end
   end
