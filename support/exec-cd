@@ -5,12 +5,13 @@
 # This script implements 'cd foo && exec bar' without the need to invoke
 # /bin/sh for the ' && '.
 
+require_relative '../lib/gdk'
+
 abort "Usage: #{$PROGRAM_NAME} DIRECTORY COMMAND [ARGUMENTS ...]" if ARGV.count < 2
 
 Dir.chdir(ARGV.shift)
 
-args = ARGV.join(' ')
-shell = ENV['SHELL'] || '/bin/sh'
-cmd = [shell, '-l', '-c', args]
+cmd = ARGV
+cmd = %w[asdf env ruby] + cmd if GDK.config.asdf.__available?
 
 exec(*cmd)
