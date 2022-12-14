@@ -29,7 +29,6 @@ if [[ "$GITLAB_UPDATE_GDK" == true ]]; then
 fi
 
 # Ensure gdk.yml has correct instance settings
-set_config
 if is_gitpod_instance; then
   export DEV_SERVER_PUBLIC_ADDR=$(gp url 3808)
   export RAILS_HOSTS=$(gp url 3000 | sed -e 's+^http[s]*://++')
