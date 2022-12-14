@@ -82,7 +82,7 @@ RSpec.describe GDK do
     context 'with invalid YAML' do
       let(:raw_yaml) { "---\ngdk:\n  debug" }
 
-      it_behaves_like 'invalid YAML', %(undefined method `fetch' for "debug":String)
+      it_behaves_like 'invalid YAML', /undefined method `fetch' for "debug":String/
     end
 
     context 'with partially invalid YAML' do
