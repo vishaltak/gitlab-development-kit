@@ -17,6 +17,7 @@ libuuid-devel
 openssl
 openssl-devel
 openssl-libs
+perl-core
 perl-Digest-SHA
 perl-Image-ExifTool
 python3-docutils
