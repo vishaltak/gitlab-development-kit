@@ -20,10 +20,10 @@
 #   1.19.2:
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
-#   1.18.8:
+#   1.18.9:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.18.7 1.19.2 1.18.8
+golang 1.18.7 1.19.2 1.18.9
 
 # minio:
 #   2022-07-15T03-44-22Z:
