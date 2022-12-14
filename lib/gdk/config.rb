@@ -741,6 +741,7 @@ module GDK
       end
       bool(:__install_mode_binary) { config.runner? && config.runner.install_mode == "binary" }
       bool(:__install_mode_docker) { config.runner? && config.runner.install_mode == "docker" }
+      string(:__ssl_certificate) { Pathname.new(File.basename(config.nginx.ssl.certificate)).sub_ext('.crt') }
       string(:__add_host_flags) { config.runner.extra_hosts.map { |h| "--add-host='#{h}'" }.join(" ") }
     end
 
