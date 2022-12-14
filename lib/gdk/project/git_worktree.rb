@@ -92,8 +92,16 @@ module GDK
         execute_command('git stash pop').success?
       end
 
+      def fetch_cmd
+        if shallow_clone?
+          "git fetch --depth 1 origin #{revision}"
+        else
+          'git fetch --all --tags --prune'
+        end
+      end
+
       def fetch
-        execute_command('git fetch --all --tags --prune').success?
+        execute_command(fetch_cmd).success?
       end
 
       def rebase
@@ -112,6 +120,11 @@ module GDK
       def ref_remote_branch
         sh = execute_command("git rev-parse --abbrev-ref #{default_branch}@{upstream}")
         sh.success? ? sh.read_stdout : revision
+      end
+
+      def shallow_clone?
+        sh = execute_command("git rev-parse --is-shallow-repository")
+        sh.success? && sh.read_stdout.chomp == 'true'
       end
     end
   end

@@ -10,6 +10,7 @@ RSpec.describe GDK::Project::GitWorktree do
   let(:revision) { 'main' }
   let(:current_branch_name) { nil }
   let(:auto_rebase) { nil }
+  let(:shallow_clone) { nil }
   let(:stash_nothing_to_save) { 'No local changes to save' }
   let(:stash_saved_something) { 'Saved working directory and index state' }
 
@@ -18,34 +19,34 @@ RSpec.describe GDK::Project::GitWorktree do
       let(:current_branch_name) { 'feature-branch' }
 
       it 'fetches and updates' do
-        expect_update(stash_result: stash_nothing_to_save)
+        expect_update(stash_result: stash_nothing_to_save, shallow_clone: shallow_clone)
         auto_rebase ? expect_auto_rebase : expect_checkout_and_pull
         expect(subject.update).to be_truthy
       end
 
       it 'stash saves, fetches, updates and stash pops' do
-        expect_update(stash_result: stash_saved_something)
+        expect_update(stash_result: stash_saved_something, shallow_clone: shallow_clone)
         auto_rebase ? expect_auto_rebase : expect_checkout_and_pull
         expect_shellout('git stash pop')
         expect(subject.update).to be_truthy
       end
 
       it 'fetch fails, but stash pops' do
-        expect_update(stash_result: stash_saved_something, fetch_success: false)
+        expect_update(stash_result: stash_saved_something, fetch_success: false, shallow_clone: shallow_clone)
         expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'")
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
 
       it 'rebase/checkout fails, but stash pops' do
-        expect_update(stash_result: stash_saved_something)
+        expect_update(stash_result: stash_saved_something, shallow_clone: shallow_clone)
         auto_rebase ? expect_auto_rebase(false) : expect_checkout_and_pull(checkout_success: false)
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
 
       it 'rebase/checkout fails, but stash pops' do
-        expect_update(stash_result: stash_saved_something)
+        expect_update(stash_result: stash_saved_something, shallow_clone: shallow_clone)
         auto_rebase ? expect_auto_rebase(false) : expect_checkout_and_pull(checkout_success: true, pull_success: false)
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
@@ -56,38 +57,47 @@ RSpec.describe GDK::Project::GitWorktree do
       let(:current_branch_name) { '' }
 
       it 'fetches and updates' do
-        expect_update(stash_result: stash_nothing_to_save)
+        expect_update(stash_result: stash_nothing_to_save, shallow_clone: shallow_clone)
         auto_rebase ? expect_just_checkout : expect_checkout_and_pull
         expect(subject.update).to be_truthy
       end
 
       it 'stash saves, fetches, updates and stash pops' do
-        expect_update(stash_result: stash_saved_something)
+        expect_update(stash_result: stash_saved_something, shallow_clone: shallow_clone)
         auto_rebase ? expect_just_checkout : expect_checkout_and_pull
         expect_shellout('git stash pop')
         expect(subject.update).to be_truthy
       end
 
       it 'fetch fails, but stash pops' do
-        expect_update(stash_result: stash_saved_something, fetch_success: false)
+        expect_update(stash_result: stash_saved_something, fetch_success: false, shallow_clone: shallow_clone)
         expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'")
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
 
       it 'rebase/checkout fails, but stash pops' do
-        expect_update(stash_result: stash_saved_something)
+        expect_update(stash_result: stash_saved_something, shallow_clone: shallow_clone)
         auto_rebase ? expect_just_checkout(false) : expect_checkout_and_pull(checkout_success: false)
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
 
       it 'rebase/checkout fails, but stash pops' do
-        expect_update(stash_result: stash_saved_something)
+        expect_update(stash_result: stash_saved_something, shallow_clone: shallow_clone)
         auto_rebase ? expect_just_checkout(false) : expect_checkout_and_pull(checkout_success: true, pull_success: false)
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
+    end
+
+    context 'when the checkout is shallow' do
+      let(:shallow_clone) { true }
+
+      subject { new_subject }
+
+      it_behaves_like "it attempts to update the git worktree for 'feature-branch'"
+      it_behaves_like "it attempts to update the git worktree when branch is empty (detached head)"
     end
 
     context 'when auto_rebase is disabled' do
@@ -112,9 +122,15 @@ RSpec.describe GDK::Project::GitWorktree do
       described_class.new(worktree_path, default_branch, revision, auto_rebase: auto_rebase)
     end
 
-    def expect_update(stash_result:, fetch_success: true)
+    def expect_update(stash_result:, fetch_success: true, shallow_clone: false)
       expect_shellout('git stash save -u', stdout: stash_result)
-      expect_shellout('git fetch --all --tags --prune', success: fetch_success)
+      expect_shellout('git rev-parse --is-shallow-repository', stdout: shallow_clone.to_s)
+
+      if shallow_clone
+        expect_shellout("git fetch --depth 1 origin #{revision}", success: fetch_success)
+      else
+        expect_shellout('git fetch --all --tags --prune', success: fetch_success)
+      end
     end
 
     def expect_auto_rebase(rebase_success = true)
