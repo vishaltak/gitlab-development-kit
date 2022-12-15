@@ -28,6 +28,12 @@ You must have [Git](https://git-scm.com/downloads) and `make` installed to insta
 The macOS installation requires Homebrew as well as Git and `make`. Git and `make` are installed by default, but
 Homebrew must be installed manually. Follow the guide at [brew.sh](https://brew.sh/).
 
+If you have upgraded macOS, install the Command Line Tools package for Git to work:
+
+```shell
+xcode-select --install
+```
+
 ### Ubuntu or Debian
 
   1. Update the list of available packages:
