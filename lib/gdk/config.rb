@@ -34,6 +34,9 @@ module GDK
       end
     end
 
+    path(:gdk_root) { self.class::GDK_ROOT }
+    path(:__data_dir) { gdk_root.join('data') }
+    path(:__cache_dir) { gdk_root.join('.cache') }
     integer(:restrict_cpu_count) { Etc.nprocessors }
 
     settings :common do
@@ -81,8 +84,6 @@ module GDK
         .map { |d| File.join(gdk_root, d) }
         .select { |d| Dir.exist?(d) }
     end
-
-    path(:gdk_root) { self.class::GDK_ROOT }
 
     settings :gdk do
       bool(:ask_to_restart_after_update) { true }

@@ -91,7 +91,7 @@ postgresql-sensible-defaults \
 # This is used by `gdk install`
 #
 .PHONY: install
-install: all show-installed-at start
+install: all post-install-tasks start
 
 # This is used by `gdk update`
 #
@@ -120,14 +120,14 @@ grafana-update \
 gitlab-ui-update \
 gitlab-docs-update \
 gitlab-spamcheck-update \
-update-summarize
+post-update-tasks
 
 .PHONY: update-start
 update-start:
 	@support/dev/makefile-timeit start
 
-.PHONY: update-summarize
-update-summarize:
+.PHONY: post-update-tasks
+post-update-tasks:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Timings"
@@ -145,7 +145,7 @@ update-summarize:
 reconfigure: unlock-dependency-installers \
 touch-examples \
 all \
-show-reconfigured-at
+post-reconfigure-tasks
 
 .PHONY: clean
 clean:
@@ -207,15 +207,19 @@ ask-to-restart:
 	$(Q)support/ask-to-restart
 	@echo
 
-.PHONY: show-installed-at
-show-installed-at:
+.PHONY: post-install-tasks
+post-install-tasks: display-announcement_doubles-for-user
 	@echo
 	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
-.PHONY: show-reconfigured-at
-show-reconfigured-at:
+.PHONY: post-reconfigure-tasks
+post-reconfigure-tasks: display-announcement_doubles-for-user
 	@echo
 	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
+
+.PHONY: display-announcement_doubles-for-user
+display-announcement_doubles-for-user:
+	@support/announcements-display
 
 .PHONY: gdk-reconfigure-task
 gdk-reconfigure-task:
