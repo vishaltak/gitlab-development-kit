@@ -2,7 +2,12 @@
 # https://github.com/Arkweid/lefthook/blob/master/docs/full_guide.md
 
 pre-push:
+  parallel: true
   commands:
     # Run all tests
     test:
       run: make test
+    rubocop:
+      files: git diff --name-only --diff-filter=d $(git merge-base origin/main HEAD)..HEAD
+      glob: '*.{rb,rake}'
+      run: bundle exec rubocop --config .rubocop-gdk.yml {files}
