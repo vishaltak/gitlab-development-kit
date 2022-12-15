@@ -216,7 +216,7 @@ gdk_install_gem() {
 }
 
 update_rubygems_gem() {
-  gem update --system --no-document
+  gem update --system --no-document --silent
 }
 
 configure_ruby() {
