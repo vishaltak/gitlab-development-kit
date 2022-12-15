@@ -4,4 +4,4 @@
 
 require_relative '../lib/gdk'
 
-exit(GDK::Messages.new.render_all)
+exit(GDK::Announcements.new.render_all)

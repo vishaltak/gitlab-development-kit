@@ -3,7 +3,7 @@
 require 'yaml'
 
 module GDK
-  class Message
+  class Announcement
     VALID_FILENAME_REGEX = /\A\d{4}_\w+\.yml/.freeze
 
     attr_reader :header, :body
@@ -25,14 +25,14 @@ module GDK
     end
 
     def render?
-      cache_file_contents[message_unique_identifier] != true
+      cache_file_contents[announcement_unique_identifier] != true
     end
 
     def render
       return unless render?
 
       display
-      cache_message_rendered
+      cache_announcement_rendered
     end
 
     private
@@ -54,8 +54,8 @@ module GDK
       GDK::Output.puts(body)
     end
 
-    def cache_message_rendered
-      cache_file_contents[message_unique_identifier] = true
+    def cache_announcement_rendered
+      cache_file_contents[announcement_unique_identifier] = true
 
       update_cached_file
     end
@@ -65,12 +65,12 @@ module GDK
       cache_file.open('w') { |f| f.write(cache_file_contents.to_yaml) }
     end
 
-    def message_unique_identifier
-      @message_unique_identifier ||= filepath.basename.to_s[0..3]
+    def announcement_unique_identifier
+      @announcement_unique_identifier ||= filepath.basename.to_s[0..3]
     end
 
     def cache_file
-      @cache_file ||= config.__cache_dir.join('.gdk-messages.yml')
+      @cache_file ||= config.__cache_dir.join('.gdk-announcements.yml')
     end
 
     def read_cache_file_contents

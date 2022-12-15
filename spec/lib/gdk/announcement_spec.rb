@@ -2,15 +2,15 @@
 
 require 'spec_helper'
 
-RSpec.describe GDK::Message do
-  let(:filepath) { Pathname.new('/tmp/0001_message.yml') }
+RSpec.describe GDK::Announcement do
+  let(:filepath) { Pathname.new('/tmp/0001_announcement_double.yml') }
   let(:header) { 'the header' }
   let(:body) { 'the body' }
 
   subject { described_class.new(filepath, header, body) }
 
   describe '.from_file' do
-    it 'creates a new intance of Message' do
+    it 'creates a new intance of announcement_double' do
       yaml = { 'header' => header, 'body' => body }.to_yaml
 
       allow(filepath).to receive(:read).and_return(yaml)
@@ -44,7 +44,7 @@ RSpec.describe GDK::Message do
     end
 
     context 'when not already rendered' do
-      it 'displays the message to stdout' do
+      it 'displays the announcement_double to stdout' do
         expect { subject.render }.to output(expected_output_regex).to_stdout
       end
     end
