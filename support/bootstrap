@@ -55,7 +55,7 @@ gdk_prepare_directory() {
 
 gdk_mark_bootstrapped() {
   mkdir -p "${GDK_CACHE_DIR}"
-  touch "${GDK_BOOTSTRAPPED_FILE}"
+  sha256sum "${ROOT_PATH}/bin/gdk" "${ROOT_PATH}/support/makefiles/Makefile.bootstrap.mk" "${ROOT_PATH}"/support/bootstrap* > "${GDK_BOOTSTRAPPED_FILE}"
 
   echo
   echo "INFO: Bootstrap successful!"
@@ -67,7 +67,7 @@ gdk_mark_bootstrapped() {
 
 ###############################################################################
 
-if [[ -f "${GDK_BOOTSTRAPPED_FILE}" ]]; then
+if checksum_file_matches "${GDK_BOOTSTRAPPED_FILE}"; then
   echo "INFO: This GDK has already been bootstrapped."
   echo "INFO: Remove '${GDK_BOOTSTRAPPED_FILE}' to re-bootstrap."
   exit 0
