@@ -14,10 +14,15 @@
   - "**/*.{md}"
   - "{doc}/**/*"
 
+.ruby-version-changes: &ruby-version-changes
+  - ".ruby-version"
+  - ".tool-versions"
+
 .code-changes: &code-changes
   - "**/*.{rb,erb,sh,yml,example,types}"
   - "{lib,gem,bin}/**/*"
   - "{spec,support}/**/*"
+  - ".ruby-version"
   - ".tool-versions"
   - ".gdkrc"
   - "bin/gdk-shell"
@@ -41,6 +46,7 @@
   - "**/*.{rb,erb,sh,yml,example,types}"
   - "{lib,gem,bin}/**/*"
   - "{spec,support}/**/*"
+  - ".ruby-version"
   - ".tool-versions"
   - ".gdkrc"
   - "bin/gdk-shell"
@@ -66,6 +72,10 @@
 .rules:docs-changes:
   rules:
     - changes: *docs-changes
+
+.rules:ruby-version-changes:
+  rules:
+    - changes: *ruby-version-changes
 
 .rules:code-changes:
   rules:

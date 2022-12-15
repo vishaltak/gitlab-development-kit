@@ -112,3 +112,14 @@ makefile-config:
   parallel:
     matrix:
       - RUBY_VERSION: ['2.7', '3.0', '3.1']
+
+ruby-version:
+  extends:
+    - .test-job
+    - .rules:ruby-version-changes
+  image: "ruby:${RUBY_VERSION}"
+  script:
+    - support/ruby-check-versions
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0', '3.1']
