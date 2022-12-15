@@ -178,9 +178,23 @@ gdk_install_gdk_clt() {
 }
 
 gdk_install_shim() {
-  if ! echo_if_unsuccessful cp -f bin/gdk /usr/local/bin/gdk; then
-    return 1
+  local shim_source="${ROOT_PATH}/bin/gdk"
+  local shim_dest="/usr/local/bin"
+  local shim_full_dest="${shim_dest}/gdk"
+  local command="cp -f ${shim_source} ${shim_full_dest}"
+
+  if cmp -s "${shim_source}" "${shim_full_dest}"; then
+    return 0
   fi
+
+  if [[ -w "${shim_dest}" ]]; then
+    eval "${command}"
+  else
+    echo "INFO: Sudo needed to be able to create/update '${shim_full_dest}'"
+    eval "sudo ${command}"
+  fi
+
+  return 0
 }
 
 gdk_install_gem() {
