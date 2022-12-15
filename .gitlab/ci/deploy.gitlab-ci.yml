@@ -3,7 +3,7 @@
 
 yard:
   extends: .deploy-job
-  image: ruby:2.7
+  image: "ruby:${RUBY_VERSION}"
   script:
     - bundle install
     - bundle exec yardoc
@@ -17,6 +17,9 @@ yard:
       - yard/*
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  parallel:
+    matrix:
+      - RUBY_VERSION: ['2.7', '3.0', '3.1']
 
 pages:
   extends: .deploy-job
