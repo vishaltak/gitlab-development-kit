@@ -171,6 +171,7 @@ gdk_install_gdk_clt() {
   if [[ -x "${ROOT_PATH}/bin/gdk" && "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
     echo "INFO: Installing gdk shim.."
     gdk_install_shim
+    gdk_uninstall_gdk_gems
   else
     echo "INFO: Installing gitlab-development-kit Ruby gem.."
     gdk_install_gem
@@ -195,6 +196,25 @@ gdk_install_shim() {
   fi
 
   return 0
+}
+
+gdk_uninstall_gdk_gems() {
+  if ! asdf_enabled; then
+    return 0
+  fi
+
+  echo "INFO: Uninstalling any gitlab-development-kit gems.."
+
+  find "${CURRENT_ASDF_DATA_DIR}"/installs/ruby ! -path "${CURRENT_ASDF_DATA_DIR}"/installs/ruby -type d -maxdepth 1 -exec basename {} \; | while read -r ruby_version
+  do
+    cmd="ASDF_RUBY_VERSION=${ruby_version} gem uninstall --force -x gitlab-development-kit > /dev/null"
+    if ! eval "${cmd}"; then
+      return 1
+    fi
+  done
+
+  hash -r
+  asdf reshim ruby
 }
 
 gdk_install_gem() {
