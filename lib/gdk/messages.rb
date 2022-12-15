@@ -19,16 +19,19 @@ module GDK
       true
     end
 
-    def add_message(header, body)
-      messages << Message.new(header, body)
-    end
-
     private
 
     attr_writer :messages
 
     def parse_message_files
-      Dir.glob(GDK.config.__data_dir.join('messages/*.yml')).map { |f| Message.from_yaml(YAML.load_file(f)) }
+      Dir.glob(GDK.config.__data_dir.join('messages/*.yml')).map { |f| message_from_file(f) }.compact
+    end
+
+    def message_from_file(filepath)
+      Message.from_file(Pathname.new(filepath))
+    rescue Message::FilenameInvalidError
+      GDK::Output.warn("Ignoring #{f} as it's invalid.")
+      nil
     end
   end
 end

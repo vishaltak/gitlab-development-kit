@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe GDK::Messages do
+RSpec.describe GDK::Messages, :gdk_root do
   let(:header) { 'the header' }
   let(:body) { 'the body' }
 
@@ -12,23 +12,9 @@ RSpec.describe GDK::Messages do
 
       allow(GDK::Message).to receive(:new).and_return(message_double)
 
-      subject.add_message(header, body)
-
       expect(message_double).to receive(:render).and_return(true)
 
       subject.render_all
-    end
-  end
-
-  describe '#add_message' do
-    it 'adds a message to the end of the messages array' do
-      subject.add_message(header, body)
-
-      last_message = subject.messages.last
-
-      expect(last_message).to be_instance_of(GDK::Message)
-      expect(last_message.header).to eq(header)
-      expect(last_message.body).to eq(body)
     end
   end
 end

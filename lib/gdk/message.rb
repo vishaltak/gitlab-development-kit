@@ -1,20 +1,27 @@
 # frozen_string_literal: true
 
-require 'openssl'
 require 'yaml'
 
 module GDK
   class Message
+    VALID_FILENAME_REGEX = /\A\d{4}_\w+\.yml/.freeze
+
     attr_reader :header, :body
 
-    def initialize(header, body)
+    FilenameInvalidError = Class.new(StandardError)
+
+    def initialize(filepath, header, body)
+      @filepath = Pathname.new(filepath)
+      raise FilenameInvalidError unless filename_valid?
+
       @header = header
       @body = body
       @cache_file_contents = read_cache_file_contents
     end
 
-    def self.from_yaml(yaml)
-      new(yaml['header'], yaml['body'])
+    def self.from_file(filepath)
+      yaml = YAML.safe_load(filepath.read)
+      new(filepath, yaml['header'], yaml['body'])
     end
 
     def render?
@@ -30,7 +37,12 @@ module GDK
 
     private
 
+    attr_reader :filepath
     attr_accessor :cache_file_contents
+
+    def filename_valid?
+      filepath.basename.to_s.match?(VALID_FILENAME_REGEX)
+    end
 
     def config
       @config ||= GDK.config
@@ -54,7 +66,7 @@ module GDK
     end
 
     def message_unique_identifier
-      @message_unique_identifier ||= OpenSSL::Digest::SHA256.hexdigest(header + body)
+      @message_unique_identifier ||= filepath.basename.to_s[0..3]
     end
 
     def cache_file

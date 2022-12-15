@@ -3,16 +3,19 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Message do
+  let(:filepath) { Pathname.new('/tmp/0001_message.yml') }
   let(:header) { 'the header' }
   let(:body) { 'the body' }
 
-  subject { described_class.new(header, body) }
+  subject { described_class.new(filepath, header, body) }
 
-  describe '.from_yaml' do
+  describe '.from_file' do
     it 'creates a new intance of Message' do
       yaml = { 'header' => header, 'body' => body }.to_yaml
 
-      expect(described_class.from_yaml(yaml)).to be_instance_of(described_class)
+      allow(filepath).to receive(:read).and_return(yaml)
+
+      expect(described_class.from_file(filepath)).to be_instance_of(described_class)
     end
   end
 
