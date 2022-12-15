@@ -3,7 +3,8 @@ MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
 
 .PHONY: test
-test: checkmake lint shellcheck rubocop rspec verify-gdk-example-yml verify-makefile-config
+test: gdk_bundle_install
+	@${support_bundle_exec} lefthook run pre-push
 
 .PHONY: gdk_bundle_install
 gdk_bundle_install:
