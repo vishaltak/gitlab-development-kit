@@ -2386,8 +2386,8 @@ RSpec.describe GDK::Config do
     end
 
     describe '#use_bash_shim' do
-      it 'defaults to false' do
-        expect(config.gdk.use_bash_shim?).to be(false)
+      it 'defaults to true' do
+        expect(config.gdk.use_bash_shim?).to be(true)
       end
     end
 

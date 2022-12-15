@@ -12,8 +12,8 @@ RSpec.describe GDK::Announcements, :gdk_root do
 
       allow(GDK::Announcement).to receive(:new).and_return(announcement_double)
 
-      expect(GDK::Output).to receive(:puts)
-      expect(announcement_double).to receive(:render).and_return(true)
+      expect(GDK::Output).to receive(:puts).twice
+      expect(announcement_double).to receive(:render).twice
 
       subject.render_all
     end
