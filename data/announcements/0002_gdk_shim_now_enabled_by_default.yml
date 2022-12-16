@@ -1,0 +1,12 @@
+---
+header: gdk Bash shim is now enabled by default
+body: |
+  With this change, we're setting the 'gdk.use_bash_shim' default to 'true'
+  which means the 'gdk' command line tool will be Bash based, and installed as
+  '/usr/local/bin/gdk'
+
+  Both the Ruby and Bash version of the 'gdk' command line tool can co-exist
+  but ideally you should remove the 'gitlab-development-kit' gem for all
+  Ruby versions that are installed.
+
+  See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/2881 for more details.

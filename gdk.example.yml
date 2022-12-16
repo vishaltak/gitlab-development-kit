@@ -50,7 +50,7 @@ gdk:
     after: []
     before:
     - support/exec-cd gitlab bin/spring stop || true
-  use_bash_shim: false
+  use_bash_shim: true
 gdk_root: "/home/git/gdk"
 geo:
   enabled: false
