@@ -9,8 +9,6 @@ source "${parent_path}"/bootstrap-common.sh
 
 ASDF_VERSION_TO_INSTALL="v0.10.2"
 
-GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
-
 asdf_install() {
   if [[ ! -d "${CURRENT_ASDF_DIR}" ]]; then
     git clone https://github.com/asdf-vm/asdf.git "${CURRENT_ASDF_DIR}" --branch ${ASDF_VERSION_TO_INSTALL}
@@ -55,7 +53,7 @@ gdk_prepare_directory() {
 
 gdk_mark_bootstrapped() {
   mkdir -p "${GDK_CACHE_DIR}"
-  touch "${GDK_BOOTSTRAPPED_FILE}"
+  sha256sum "${ROOT_PATH}/bin/gdk" "${ROOT_PATH}/support/makefiles/Makefile.bootstrap.mk" "${ROOT_PATH}"/support/bootstrap* > "${GDK_BOOTSTRAPPED_FILE}"
 
   echo
   echo "INFO: Bootstrap successful!"
@@ -67,7 +65,7 @@ gdk_mark_bootstrapped() {
 
 ###############################################################################
 
-if [[ -f "${GDK_BOOTSTRAPPED_FILE}" ]]; then
+if bootstrap_files_checksum_matches; then
   echo "INFO: This GDK has already been bootstrapped."
   echo "INFO: Remove '${GDK_BOOTSTRAPPED_FILE}' to re-bootstrap."
   exit 0

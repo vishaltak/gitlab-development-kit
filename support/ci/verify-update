@@ -18,6 +18,5 @@ else
 fi
 
 # test GDK components update
-install_gdk_clt
 update
 test_url
