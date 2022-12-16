@@ -38,7 +38,7 @@ The following categories relate to this merge request:
 - [ ] `gdk doctor` test added, if needed.
 - [ ] Add the `~highlight` label if this MR should be included in the [`CHANGELOG.md`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/CHANGELOG.md).
 
-/label ~"Category:GDK" ~Quality ~"Engineering Productivity"
+/label ~"Category:GDK" ~Quality ~"Engineering Productivity" ~"type::feature" ~"feature::enhancement" 
 /assign me
 
 <!-- template sourced from https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.gitlab/merge_request_templates/Default.md -->
