@@ -36,12 +36,10 @@ RSpec.describe GDK do
     context 'with an invalid command' do
       let(:command) { 'rstart' }
 
-      it "shows a helpful error message" do
+      it 'shows a helpful error message' do
         stub_const('ARGV', [command])
 
-        expect_output(:warn, message: 'rstart is not a GDK command.')
-        expect_output(:warn, message: 'Did you mean?  restart')
-        expect_output(:warn, message: '               start')
+        expect_output(:warn, message: "rstart is not a GDK command, did you mean - 'gdk restart' or 'gdk start'?")
         expect_output(:puts)
         expect_output(:info, message: "See 'gdk help' for more detail.")
 

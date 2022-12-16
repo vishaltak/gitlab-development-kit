@@ -76,22 +76,20 @@ module GDK
     when /-{0,2}help/, '-h', nil
       GDK::Command::Help.new.run(ARGV)
     else
-      GDK::Output.warn "#{subcommand} is not a GDK command."
-
       all_commands = ::GDK::Command::COMMANDS.keys + %w[status start restart stop]
       suggestions = DidYouMean::SpellChecker.new(dictionary: all_commands).correct(subcommand)
+      message = ["#{subcommand} is not a GDK command"]
 
       if suggestions.any?
-        prefix = 'Did you mean?  '
-
-        GDK::Output.warn prefix + suggestions.shift
-
-        suggestions.each do |suggestion|
-          GDK::Output.warn ' ' * prefix.length + suggestion
-        end
-
-        GDK::Output.puts
+        message << ', did you mean - '
+        message << suggestions.map { |suggestion| "'gdk #{suggestion}'" }.join(' or ')
+        message << '?'
+      else
+        message << '.'
       end
+
+      GDK::Output.warn message.join('')
+      GDK::Output.puts
 
       GDK::Output.info "See 'gdk help' for more detail."
       false
