@@ -15,6 +15,11 @@ cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
 [[ -n "${GIT_CHECKOUT_BRANCH:-}" ]] && git checkout "${GIT_CHECKOUT_BRANCH}"
+
+# WIP - trim down .tool-versions
+sed -Ei 's/^golang (.+) (.+)$/golang \1/' .tool-versions
+sed -Ei 's/^postgres (.+) (.+)$/postgres \1/' .tool-versions
+
 make bootstrap
 
 # Set asdf dir correctly
