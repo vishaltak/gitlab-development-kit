@@ -93,7 +93,7 @@ module GDK
       bool(:quiet) { true }
       bool(:auto_reconfigure) { true }
       bool(:auto_rebase_projects) { false }
-      bool(:use_bash_shim) { true }
+      bool(:use_bash_shim) { false }
       settings :experimental do
         bool(:quiet) { config.gdk.quiet? }
         bool(:auto_reconfigure) { config.gdk.auto_reconfigure? }

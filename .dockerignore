@@ -5,5 +5,5 @@
 !/bin
 !/gem
 !/packages*.txt
-!/support/bootstrap*
-!/support/makefiles/Makefile.bootstrap.mk
+!/support/bootstrap
+!/support/bootstrap-common.sh
