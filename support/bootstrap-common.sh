@@ -30,7 +30,6 @@ if [[ ${BASH_VERSION%%.*} -gt 3 ]]; then
 fi
 
 GDK_CACHE_DIR="${ROOT_PATH}/.cache"
-GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
 GDK_PLATFORM_SETUP_FILE="${GDK_CACHE_DIR}/.gdk_platform_setup"
 GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 
@@ -134,7 +133,6 @@ gdk_install_gdk_clt() {
   if [[ -x "${ROOT_PATH}/bin/gdk" && "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
     echo "INFO: Installing gdk shim.."
     gdk_install_shim
-    gdk_uninstall_gdk_gems
   else
     echo "INFO: Installing gitlab-development-kit Ruby gem.."
     gdk_install_gem
@@ -142,42 +140,9 @@ gdk_install_gdk_clt() {
 }
 
 gdk_install_shim() {
-  local shim_source="${ROOT_PATH}/bin/gdk"
-  local shim_dest="/usr/local/bin"
-  local shim_full_dest="${shim_dest}/gdk"
-  local command="cp -f ${shim_source} ${shim_full_dest}"
-
-  if cmp -s "${shim_source}" "${shim_full_dest}"; then
-    return 0
+  if ! echo_if_unsuccessful cp -f bin/gdk /usr/local/bin/gdk; then
+    return 1
   fi
-
-  if [[ -w "${shim_dest}" ]]; then
-    eval "${command}"
-  else
-    echo "INFO: Sudo needed to be able to create/update '${shim_full_dest}'"
-    eval "sudo ${command}"
-  fi
-
-  return 0
-}
-
-gdk_uninstall_gdk_gems() {
-  if ! asdf_enabled; then
-    return 0
-  fi
-
-  echo "INFO: Uninstalling any gitlab-development-kit gems.."
-
-  find "${CURRENT_ASDF_DATA_DIR}"/installs/ruby ! -path "${CURRENT_ASDF_DATA_DIR}"/installs/ruby -type d -maxdepth 1 -exec basename {} \; | while read -r ruby_version
-  do
-    cmd="ASDF_RUBY_VERSION=${ruby_version} gem uninstall --force -x gitlab-development-kit > /dev/null"
-    if ! eval "${cmd}"; then
-      return 1
-    fi
-  done
-
-  hash -r
-  asdf reshim ruby
 }
 
 gdk_install_gem() {
@@ -199,7 +164,7 @@ gdk_install_gem() {
 }
 
 update_rubygems_gem() {
-  gem update --system --no-document --silent
+  gem update --system --no-document
 }
 
 configure_ruby() {
@@ -381,20 +346,6 @@ setup_platform() {
       fi
     fi
   fi
-}
-
-
-bootstrap_files_checksum_matches() {
-  if [[ ! -f "${GDK_BOOTSTRAPPED_FILE}" ]]; then
-    return 1
-  fi
-
-  # sha256sum _may_ not exist at this point
-  if ! which sha256sum > /dev/null 2>&1; then
-    return 1
-  fi
-
-  sha256sum --check --status "${GDK_BOOTSTRAPPED_FILE}" 2> /dev/null
 }
 
 platform_files_checksum_matches() {
