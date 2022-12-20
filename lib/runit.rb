@@ -11,7 +11,7 @@ module Runit
     'tunnel' => 'tunnel_*',
     'praefect' => 'praefect*',
     'gitaly' => '{gitaly,praefect*}',
-    'db' => '{redis,postgresql,postgresql-geo}',
+    'db' => '{redis,postgresql,postgresql-geo,clickhouse}',
     'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
