@@ -2,7 +2,7 @@
 
 This document describes how to enable and test the [database load balancing with service discovery of replicas](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html#service-discovery) feature in GDK. To do this, you must run multiple TCP ports for Postgres as well as a DNS server to respond with those different Postgres ports.
 
-If you only want to test load balancing features but do not want to test service discovery, see the [Database load balancing documentation](database_load_balancing_with_service_discovery.md).
+If you only want to test load balancing features but do not want to test service discovery, see the [Database load balancing documentation](database_load_balancing.md).
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ For these instructions, we assume that you are running all commands from the GDK
 
 ## Prepare your environment
 
-1. Set up multiple Postgres instances and your first replica following the [database load balancing documentation](database_load_balancing_with_service_discovery.md).
+1. Set up multiple Postgres instances and your first replica following the [database load balancing documentation](database_load_balancing.md).
 1. Create another replica:
 
     ```shell
