@@ -58,7 +58,7 @@ Sign in can also be initiated from the identity provider at `https://localhost:8
 
 You might get a notification that the user email is not verified and has to be confirmed first. You can either [disable email confirmation](https://docs.gitlab.com/ee/security/user_email_confirmation.html), or you can confirm the user's email manually from:
 
-- **UI:** By logging in to your instance as admin/root, and go to https://<gitlab-host>:<gitlab-port>/admin/users/<username> then click the button to confirm the email.
+- **UI:** By logging in to your instance as admin/root, and go to `https://<gitlab-host>:<gitlab-port>/admin/users/<username>` then click the button to confirm the email.
 - **CLI:** By opening a Rails console and running:
 
   ```shell
