@@ -17,7 +17,7 @@ For these instructions, we assume that you are running all commands from the GDK
 
 ## Prepare your environment
 
-1. Set up multiple Postgres instances and your first replica following the [database load balancing documentation](database_load_balancing_with_service_discovery.md).
+1. Set up multiple Postgres instances and your first replica following the [database load balancing documentation](database_load_balancing.md).
 1. Create another replica:
 
     ```shell
@@ -131,4 +131,4 @@ ActiveRecord::Base.connection.load_balancer.host_list.hosts.map(&:port)
 
 ## Simulating replication delay
 
-To simulate replication delay, see the [database load balancing documentation](database_load_balancing_with_service_discovery.md#simulating-replication-delay). You can simulate replication delay on specific replicas only, to test the behavior of load balancing to choose an up-to-date replica.
+To simulate replication delay, see the [database load balancing documentation](database_load_balancing.md#simulating-replication-delay). You can simulate replication delay on specific replicas only, to test the behavior of load balancing to choose an up-to-date replica.
