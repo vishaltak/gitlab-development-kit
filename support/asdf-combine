@@ -173,7 +173,7 @@ tool_versions_files = [
   RemoteToolVersionFile.new(GITLAB_SHELL_URL, ref: 'main'),
   RemoteToolVersionFile.new(GITLAB_SHELL_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_SHELL_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_SHELL_VERSION')),
   RemoteToolVersionFile.new(GITLAB_PAGES_URL),
-  RemoteToolVersionFile.new(GITLAB_PAGES_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')),
+  RemoteToolVersionFile.new(GITLAB_PAGES_URL, ref: ref_from_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION'), label_ref: url_for_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')),
   RemoteToolVersionFile.new(GITALY_URL),
   RemoteToolVersionFile.new(GITALY_URL, ref: ref_from_remote_file_for_gitlab_project('GITALY_SERVER_VERSION'), label_ref: url_for_remote_file_for_gitlab_project('GITALY_SERVER_VERSION')),
   RemoteToolVersionFile.new(GITLAB_RUNNER_URL, ref: 'main'),
