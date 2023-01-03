@@ -84,7 +84,7 @@ GEM
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
-    irb (1.6.1)
+    irb (1.6.2)
       reline (>= 0.3.0)
     json (2.6.3)
     kramdown (2.4.0)
@@ -187,7 +187,7 @@ PLATFORMS
 DEPENDENCIES
   gitlab-dangerfiles (~> 3.6.4)
   gitlab-styles (~> 9.2.0)
-  irb (~> 1.6.1)
+  irb (~> 1.6.2)
   lefthook (~> 1.2.6)
   rake (~> 13.0.6)
   rspec (~> 3.12.0)
