@@ -193,6 +193,14 @@ RSpec.describe Runit do
     end
   end
 
+  describe 'SERVICE_SHORTCUTS' do
+    describe 'db' do
+      it do
+        expect(described_class::SERVICE_SHORTCUTS['db']).to eq('{redis,postgresql,postgresql-geo,clickhouse}')
+      end
+    end
+  end
+
   def stub_services
     stub_const('Runit::SERVICES_DIR', Pathname.new('/tmp/gdk/services'))
     stub_const('Runit::ALL_DATA_ORIENTED_SERVICE_NAMES', data_service_names)
