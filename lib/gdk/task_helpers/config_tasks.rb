@@ -4,7 +4,7 @@ module GDK
   module TaskHelpers
     # A rake or make task
     Task = Struct.new(:name, :make_dependencies, :template, :erb_extra_args, :post_render,
-                      :no_op_condition, :timed, keyword_init: true) do
+      :no_op_condition, :timed, keyword_init: true) do
       def initialize(attributes)
         super
 

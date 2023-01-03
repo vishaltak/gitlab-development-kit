@@ -66,12 +66,12 @@ module Runit
         service_names.include?(svc) || dir_matcher.include?(svc)
       end
 
-      stale_entries.map do |entry|
+      stale_entries.filter_map do |entry|
         path = services_dir.join(entry)
         next unless File.symlink?(path)
 
         path
-      end.compact
+      end
     end
 
     # Load a list of services from Procfile
@@ -80,7 +80,7 @@ module Runit
     def services_from_procfile
       GDK::Output.abort 'GDK services appear missing, have you run `gdk install` ?' unless procfile_path.exist?
 
-      procfile_path.readlines.map do |line|
+      procfile_path.readlines.filter_map do |line|
         line.chomp!
         next if line.start_with?('#')
 
@@ -90,7 +90,7 @@ module Runit
         delete_exec_prefix!(name, command)
 
         Service.new(name, command)
-      end.compact
+      end
     end
 
     private
@@ -115,9 +115,9 @@ module Runit
     # Create runit `run` executable
     def create_runit_service(service)
       run = render_template('runit/run.sh.erb',
-                            gdk_root: gdk_root,
-                            run_env: run_env,
-                            service: service)
+        gdk_root: gdk_root,
+        run_env: run_env,
+        service: service)
 
       run_path = sv_dir(service).join('run')
       write_executable_file(run_path, run)
@@ -139,8 +139,8 @@ module Runit
       pid_path = sv_dir(service).join('supervise/pid')
 
       control_t = render_template('runit/control/t.rb.erb',
-                                  pid_path: pid_path,
-                                  term_signal: term_signal)
+        pid_path: pid_path,
+        term_signal: term_signal)
 
       control_t_path = sv_dir(service).join('control/t')
       write_executable_file(control_t_path, control_t)
@@ -170,10 +170,10 @@ module Runit
       reset_color = GDK::Output.reset_color
 
       log_config = render_template('runit/log/config.erb',
-                                   log_prefix: log_prefix,
-                                   log_label: log_label,
-                                   reset_color: reset_color,
-                                   service: service)
+        log_prefix: log_prefix,
+        log_label: log_label,
+        reset_color: reset_color,
+        service: service)
 
       log_config_path = log_dir.join(service.name, 'config')
       write_readonly_file(log_config_path, log_config)

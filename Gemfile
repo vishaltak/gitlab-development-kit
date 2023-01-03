@@ -11,7 +11,7 @@ group :development do
 end
 
 group :test do
-  gem 'gitlab-styles', '~> 9.1.0', require: false
+  gem 'gitlab-styles', '~> 9.2.0', require: false
   gem 'irb', '~> 1.6.1', require: false
   gem 'rspec', '~> 3.12.0', require: false
   gem 'rspec_junit_formatter', '~> 0.6.0', require: false

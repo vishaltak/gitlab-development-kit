@@ -237,18 +237,18 @@ RSpec.describe Asdf::ToolVersions do
 
   def stub_no_unnecessary_installed_software
     stub_software(wanted_version: wanted_software_version,
-                  wanted_tool_version: wanted_software_tool_version,
-                  installed_version: wanted_software_version,
-                  installed_tool_version: wanted_software_tool_version
-                 )
+      wanted_tool_version: wanted_software_tool_version,
+      installed_version: wanted_software_version,
+      installed_tool_version: wanted_software_tool_version
+    )
   end
 
   def stub_some_unnecessary_installed_software
     stub_software(wanted_version: wanted_software_version,
-                  wanted_tool_version: wanted_software_tool_version,
-                  installed_version: unnecessary_software_version,
-                  installed_tool_version: unnecessary_software_tool_version
-                 )
+      wanted_tool_version: wanted_software_tool_version,
+      installed_version: unnecessary_software_version,
+      installed_tool_version: unnecessary_software_tool_version
+    )
   end
 
   def stub_software(wanted_version:, wanted_tool_version:, installed_version:, installed_tool_version:)

@@ -5,14 +5,11 @@ require 'tzinfo'
 require 'tmpdir'
 require 'tempfile'
 
-# rubocop:disable Layout/FirstArrayElementIndentation
 SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::SimpleFormatter,
   SimpleCov::Formatter::HTMLFormatter,
   SimpleCov::Formatter::CoberturaFormatter
 ])
-# rubocop:enable Layout/FirstArrayElementIndentation
-
 SimpleCov.start
 
 require_relative '../lib/gdk'

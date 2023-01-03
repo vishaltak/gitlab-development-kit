@@ -17,14 +17,14 @@ RSpec.describe GDK::Command::Clickhouse do
     context 'with no extra arguments' do
       it 'executes clickhouse client with default params' do
         expect_exec(%w[clickhouse],
-                    %w[/usr/bin/clickhouse client --port=9001])
+          %w[/usr/bin/clickhouse client --port=9001])
       end
     end
 
     context 'with extra arguments' do
       it 'executes clickhouse client passing extra arguments to the cli' do
         expect_exec(%w[clickhouse --database=gitlab],
-                    %w[/usr/bin/clickhouse client --port=9001 --database=gitlab])
+          %w[/usr/bin/clickhouse client --port=9001 --database=gitlab])
       end
     end
   end

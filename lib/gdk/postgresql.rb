@@ -74,8 +74,8 @@ module GDK
 
     def in_recovery?
       cmd = pg_cmd('--no-psqlrc', '--tuples-only',
-                   database: 'postgres',
-                   command: 'SELECT pg_is_in_recovery();')
+        database: 'postgres',
+        command: 'SELECT pg_is_in_recovery();')
 
       Shellout.new(cmd).try_run.downcase.strip.chomp == 't'
     end

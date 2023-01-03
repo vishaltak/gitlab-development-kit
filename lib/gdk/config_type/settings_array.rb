@@ -8,7 +8,7 @@ module GDK
       attr_accessor :size, :elems
       alias_method :value, :itself
       def_delegators :@elems, :[], :count, :each, :each_with_index, :fetch,
-                     :first, :last, :map, :select
+        :first, :last, :map, :select
 
       def initialize(parent:, builder:, size:)
         @size = size

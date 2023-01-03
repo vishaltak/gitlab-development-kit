@@ -24,7 +24,7 @@ module GDK
     attr_writer :announcements
 
     def parse_announcement_files
-      Dir.glob(GDK::Config.new.__data_dir.join('announcements/*.yml')).map { |f| announcement_from_file(f) }.compact
+      Dir.glob(GDK::Config.new.__data_dir.join('announcements/*.yml')).filter_map { |f| announcement_from_file(f) }
     end
 
     def announcement_from_file(filepath)
