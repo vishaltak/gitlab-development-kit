@@ -39,7 +39,7 @@ module GDK
       end
 
       def diagnostic_results
-        @diagnostic_results ||= jobs.map { |x| x.join[:results] }.compact
+        @diagnostic_results ||= jobs.filter_map { |x| x.join[:results] }
       end
 
       def jobs

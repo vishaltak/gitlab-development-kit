@@ -6,14 +6,14 @@ RSpec.describe GDK::Command::RedisCLI do
   context 'with no extra arguments' do
     it 'uses the development database by default' do
       expect_exec %w[redis-cli],
-                  ['redis-cli', '-s', GDK.config.redis.__socket_file.to_s, { chdir: GDK.root }]
+        ['redis-cli', '-s', GDK.config.redis.__socket_file.to_s, { chdir: GDK.root }]
     end
   end
 
   context 'with extra arguments' do
     it 'uses custom arguments if present' do
       expect_exec %w[redis-cli --verbose],
-                  ['redis-cli', '-s', GDK.config.redis.__socket_file.to_s, '--verbose', { chdir: GDK.root }]
+        ['redis-cli', '-s', GDK.config.redis.__socket_file.to_s, '--verbose', { chdir: GDK.root }]
     end
   end
 

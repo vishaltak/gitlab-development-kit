@@ -38,7 +38,7 @@ module GDK
         # Iterate over each file from files Array and print any output to
         # stderr that may have come from running `make <file>`.
         #
-        results = jobs.map { |x| x.join[:results] }.compact
+        results = jobs.filter_map { |x| x.join[:results] }
 
         results.each do |diff|
           output = diff.output.to_s.chomp

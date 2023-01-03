@@ -319,8 +319,8 @@ module GDK
 
       string :image do
         read!('registry_image') ||
-          'registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:'\
-        'v3.49.0-gitlab'
+          'registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:' \
+          'v3.49.0-gitlab'
       end
 
       bool(:self_signed) { false }
