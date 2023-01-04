@@ -17,13 +17,9 @@ libuuid-devel
 openssl
 openssl-devel
 openssl-libs
+perl-core
 perl-Digest-SHA
 perl-Image-ExifTool
-postgresql
-postgresql-contrib
-postgresql-devel
-postgresql-libs
-postgresql-server
 python3-docutils
 re2
 re2-devel
@@ -32,6 +28,7 @@ redis
 rpm-build
 rsync
 sqlite-devel
+uuid
 wget
 yamllint
 zlib-devel
