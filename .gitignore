@@ -9,6 +9,7 @@
 .idea
 .nova
 .yardoc
+.runner_system_id
 /*.log
 /.backups/
 /.env
