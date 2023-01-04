@@ -312,7 +312,7 @@ setup_platform() {
   platform=$(get_platform)
 
   echo "INFO: Setting up '$platform' platform.."
-  if platform_files_checksum_matches; then
+  if checksum_matches "${GDK_PLATFORM_SETUP_FILE}"; then
     echo "INFO: This GDK has already had platform packages installed."
     echo "INFO: Remove '${GDK_PLATFORM_SETUP_FILE}' to force execution."
 
@@ -348,8 +348,10 @@ setup_platform() {
   fi
 }
 
-platform_files_checksum_matches() {
-  if [[ ! -f "${GDK_PLATFORM_SETUP_FILE}" ]]; then
+checksum_matches() {
+  local checksum_file="${1}"
+
+  if [[ ! -f "${checksum_file}" ]]; then
     return 1
   fi
 
@@ -358,7 +360,7 @@ platform_files_checksum_matches() {
     return 1
   fi
 
-  sha256sum --check --status "${GDK_PLATFORM_SETUP_FILE}"
+  sha256sum --check --status "${checksum_file}"
 }
 
 mark_platform_as_setup() {
