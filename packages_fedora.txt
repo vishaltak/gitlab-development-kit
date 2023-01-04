@@ -28,6 +28,7 @@ redis
 rpm-build
 rsync
 sqlite-devel
+uuid
 wget
 yamllint
 zlib-devel
