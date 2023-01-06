@@ -255,3 +255,5 @@ gdk reconfigure
 ## Troubleshooting
 
 See [Bad CPU type in executable Target](../troubleshooting/apple_mx_machines.md#bad-cpu-type-in-executable-target).
+
+Test
