@@ -48,10 +48,10 @@ module GDK
               VAULT_AUTH_PATH: gitlab
               VAULT_AUTH_ROLE: gitlab-test-role
               VAULT_SERVER_URL: #{vault_address}
-            secrets:
+            id_tokens:
               TEST_ID_TOKEN:
-                id_token:
-                  aud: #{GDK.config.__uri}
+                aud: #{GDK.config.__uri}
+            secrets:
               DATABASE_PASSWORD:
                 vault: gitlab-test/db/password
             script:
