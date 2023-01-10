@@ -34,6 +34,7 @@ The following categories relate to this merge request:
 - [ ] This change is backward compatible. If not, please include steps to communicate to our users.
 - [ ] Tests added for new functionality. If not, please raise an issue to follow-up.
 - [ ] Documentation added/updated, if needed.
+- [ ] [Announcement added](doc/howto/announcements.md), if change is notable.
 - [ ] `gdk doctor` test added, if needed.
 - [ ] Add the `~highlight` label if this MR should be included in the [`CHANGELOG.md`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/CHANGELOG.md).
 
