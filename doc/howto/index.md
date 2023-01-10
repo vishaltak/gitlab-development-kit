@@ -22,6 +22,7 @@ to learn how to contribute to GitLab.
 
 ## Special topics
 
+- [Announcements](announcements.md)
 - [Asset Proxy / Camo Server](asset_proxy.md)
 - [Change GitLab Version](gitlab_version.md)
 - [Database load balancing](database_load_balancing.md)
