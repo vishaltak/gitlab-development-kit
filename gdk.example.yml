@@ -126,6 +126,9 @@ gitlab_k8s_agent:
   internal_api_listen_network: tcp
   k8s_api_listen_address: 127.0.0.1:8154
   k8s_api_listen_network: tcp
+  otlp_ca_certificate_file: ''
+  otlp_endpoint: ''
+  otlp_token_secret_file: ''
   private_api_listen_address: 127.0.0.1:8155
   private_api_listen_network: tcp
   run_from_source: false

@@ -225,6 +225,95 @@ support/agentk "" --help
 If you want to run GitLab Agent Server and Agent locally with Bazel instead of GDK, see
 the [GitLab Agent documentation](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md#running-the-agent-locally).
 
+## (Optional) Developing KAS observability together with GitLab Observability Stack's development environment
+
+To develop observability features of KAS, you can configure GDK and KAS so that traces are sent to a development instance of GitLab Observability Stack (GOS).
+
+To configure GDK and KAS:
+
+1. Launch a [devvm](https://gitlab.com/gitlab-org/opstrace/devvm/) - integrated development environment for GOS.
+1. Once all the steps required to launch devvm are completed, note the GitLab groupID that was provisioned.
+   You can find it in the output of the `booter` script - please refer to [the devvm documentation](https://gitlab.com/gitlab-org/opstrace/devvm/#start-monitoring-the-progress-of-booter).
+   This is referred to as `<gitlab groupID>` in this document.
+1. Create a GitLab Observability Stack API token.
+   1. In the web browser, enter `https://gob.devvm/-/<gitlab groupID>/`, for example `https://gob.devvm/-/22/`.
+   1. On the left sidebar, select **Configuration > API Keys**.
+   1. Select **New API Key**.
+   1. Enter a title for the key, select the **User** role, and then select **Add**.
+   1. Copy the created API key. You will use it in a later step.
+1. Log into the `devvm`. All the following steps must be executed from the `dev` user inside `devvm`.
+1. Store the API token in a file:
+
+   ```shell
+   echo <token> > /home/dev/otel-token.txt
+   ```
+
+1. Perform steps required to [run KAS from within GDK](#gitlab-agent-server-kas).
+1. Configure the `kubectl` plugin for `asdf`:
+
+   ```shell
+   asdf list kubectl | sort -n | head -n 1 | xargs -I{} asdf global kubectl {}
+   ```
+
+1. Fetch the CA certificate that GOB (GitLab Observability Backend) uses:
+
+   ```shell
+   KUBECONFIG=/home/dev/kubeconfig kubectl get secret self-signed-ca-secret -o jsonpath='{ .data.ca\.crt }' | base64 -d > /home/dev/gitlab-development-kit/gob-ca.crt
+   ```
+
+1. Add [OTel](https://opentelemetry.io/) configuration to `gdk.yml`:
+
+   ```yaml
+   gitlab_k8s_agent:
+     <...>
+     otlp_endpoint: https://gob.devvm/v1/traces/<gitlab groupID>
+     otlp_token_secret_file: /home/dev/otel-token.txt
+     otlp_ca_certificate_file: /home/dev/gitlab-development-kit/gob-ca.crt
+     <...>
+   ```
+
+1. Uninstall the `asdf` installation of Go to avoid issues:
+
+   ```shell
+   asdf uninstall golang 1.19.3
+   ```
+
+   Sign out and sign back in to the `dev` account in order for changes to take effect.
+   You should be using now the system version of Golang:
+
+   ```shell
+   $ which go
+   /usr/bin/go
+   ```
+
+1. Reconfigure GDK:
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Configure GDK to use the CA certificate when deploying `agentk`.
+
+   ```shell
+   export KUBECONFIG=/home/dev/kubeconfig
+   helm repo add gitlab https://charts.gitlab.io
+   helm repo update
+   helm upgrade --install mynamespace gitlab/gitlab-agent \
+      --namespace gitlab-agent-mynamespace \
+      --create-namespace \
+      --set image.tag=v15.7.0-rc1 \
+      --set config.token=<...> \
+      --set config.kasAddress=wss://gdk.devvm:3443/-/kubernetes-agent \
+      --set config.caCert="$(cat /home/dev/gitlab-development-kit/gdk.devvm.pem)"
+   ```
+
+1. Deploy the agent by following the steps in [Installing the agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/install/).
+   To keep things simple, you should deploy the agent on the same Kubernetes cluster that GOB is running on.
+1. Test if traces are properly received.
+   1. In the web browser, enter `https://gob.devvm/-/<gitlab groupID>`.
+   1. On the left sidebar, expand **Explore**, and select **Explore > Traces**.
+   If you can see a section named `gitlab-kas`, then the traces are being ingested by GOB.
+
 ## (Optional) Run KAS directly from source (with `go run`)
 
 When working on KAS, it can be convenient to run directly from source instead of
@@ -242,7 +331,7 @@ KAS:
 gdk restart gitlab-k8s-agent
 ```
 
-## (Optional) Disable automatic repository updates 
+## (Optional) Disable automatic repository updates
 
 When working on the agent, you probably want to manage the repository on your
 own, to avoid having `gdk update` stash your changes:
