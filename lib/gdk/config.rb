@@ -462,6 +462,10 @@ module GDK
       string(:__gitlab_address) { "#{config.https? ? 'https' : 'http'}://#{config.workhorse.__listen_address}" }
       string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }
       string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
+
+      string(:otlp_endpoint) { '' }
+      string(:otlp_ca_certificate_file) { '' }
+      string(:otlp_token_secret_file) { '' }
     end
 
     settings :omniauth do

@@ -31,3 +31,9 @@ private_api:
 observability:
   logging:
     level: debug
+  <%- if config.gitlab_k8s_agent.otlp_endpoint != nil and config.gitlab_k8s_agent.otlp_endpoint.length > 1 %>
+  tracing:
+    otlp_endpoint: "<%= config.gitlab_k8s_agent.otlp_endpoint %>"
+    otlp_token_secret_file: "<%= config.gitlab_k8s_agent.otlp_token_secret_file %>"
+    otlp_ca_certificate_file: "<%= config.gitlab_k8s_agent.otlp_ca_certificate_file %>"
+  <%- end %>

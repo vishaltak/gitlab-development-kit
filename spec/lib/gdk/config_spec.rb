@@ -1770,6 +1770,14 @@ RSpec.describe GDK::Config do
         it { is_expected.to eq('support/exec-cd gitlab-k8s-agent go run -race cmd/kas/main.go') }
       end
     end
+
+    describe 'tracing' do
+      it 'is disabled by default' do
+        expect(config.gitlab_k8s_agent.otlp_endpoint).to eq('')
+        expect(config.gitlab_k8s_agent.otlp_token_secret_file).to eq('')
+        expect(config.gitlab_k8s_agent.otlp_ca_certificate_file).to be('')
+      end
+    end
   end
 
   describe 'nginx' do
