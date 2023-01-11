@@ -10,7 +10,7 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   elif [[ -x "/usr/local/bin/brew" ]]; then
     BREW_PREFIX="/usr/local"
   else
-    echo "ERROR: Homebrew is required but cannot be found."
+    echo "ERROR: Homebrew is required but cannot be found." 1>&2
     exit
   fi
 
