@@ -50,6 +50,11 @@ mv gitlab-development-kit "$HOME/"
 # A symlink ensures that it'll work even after a gdk update
 ln -s /workspace/gitlab-development-kit/.tool-versions "$HOME/.tool-versions"
 
+echo "# --- Cleanup apt caches"
+sudo apt-get clean -y
+sudo apt-get autoremove -y
+sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/*
+
 echo "# --- Cleanup build caches"
 sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/git/source"
 sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/libgit2/source"
