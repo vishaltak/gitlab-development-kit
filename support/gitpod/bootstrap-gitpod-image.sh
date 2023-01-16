@@ -9,6 +9,11 @@ sudo chown -R gitpod:gitpod /workspace
 cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
+# $CI_MERGE_REQUEST_SOURCE_PROJECT_URL only exists in pipelines generated in merge requests.
+if [[ -n "${GIT_REMOTE_ORIGIN_URL:-}" ]]; then
+  git remote set-url origin "${GIT_REMOTE_ORIGIN_URL}.git"
+  git fetch
+fi
 [[ -n "${GIT_CHECKOUT_BRANCH:-}" ]] && git checkout "${GIT_CHECKOUT_BRANCH}"
 make bootstrap
 
