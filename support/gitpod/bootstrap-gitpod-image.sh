@@ -3,17 +3,17 @@
 set -xeuo pipefail
 IFS=$'\n\t'
 
-echo "# --- Install GitLab Runner"
-curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
-export GITLAB_RUNNER_DISABLE_SKEL=true
-sudo apt-get install gitlab-runner -y
-
 echo "# --- Install GDK into /workspace "
 sudo mkdir -p /workspace/gitlab
 sudo chown -R gitpod:gitpod /workspace
 cd /workspace
 git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git
 cd gitlab-development-kit
+# $CI_MERGE_REQUEST_SOURCE_PROJECT_URL only exists in pipelines generated in merge requests.
+if [[ -n "${GIT_REMOTE_ORIGIN_URL:-}" ]]; then
+  git remote set-url origin "${GIT_REMOTE_ORIGIN_URL}.git"
+  git fetch
+fi
 [[ -n "${GIT_CHECKOUT_BRANCH:-}" ]] && git checkout "${GIT_CHECKOUT_BRANCH}"
 make bootstrap
 
