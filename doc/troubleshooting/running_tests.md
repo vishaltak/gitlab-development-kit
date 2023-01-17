@@ -37,7 +37,7 @@ you need to update your version of ChromeDriver:
   brew upgrade --cask chromedriver
   ```
 
-- Otherwise you may need to [download and install](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+- Otherwise you may need to [download and install](https://sites.google.com/chromium.org/driver)
   the latest ChromeDriver directly.
 
 If ChromeDriver fails to open with an error message because the developer "cannot be verified",
