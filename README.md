@@ -63,6 +63,17 @@ supported installation methods:
 - [Update an existing installation](doc/index.md#update-gdk).
 - [Login credentials (root login and password)](doc/gdk_commands.md#get-the-login-credentials).
 
+### Using SSH remotes
+
+GDK defaults to HTTPS instead of SSH when cloning the repositories. With HTTPS, you can still use GDK without a GitLab.com account or an SSH key. However, if you have a GitLab.com account and already [added your SSH key](https://docs.gitlab.com/ee/user/ssh.html#add-an-ssh-key-to-your-gitlab-account) to your account, you can configure `git` to rewrite the URLs to use SSH via the following config change:
+
+```shell
+git config --global url.'git@gitlab.com:'.insteadOf 'https://gitlab.com/'
+```
+
+NOTE:
+This will configure `git` to use `SSH` for all GitLab.com URLs.
+
 ## Getting help
 
 - We encourage you to [create a new issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/new).
