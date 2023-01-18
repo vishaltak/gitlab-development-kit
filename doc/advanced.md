@@ -79,13 +79,13 @@ LTS release (16.04, 18.04, 20.04, 22.04) or higher, and Debian:
    1. Install any of the required versions of NodeJS [using one of the installation methods](https://nodejs.org/en/download/package-manager/), for example via the `nodesource` repo or `nvm`. The following example uses `nvm`:
       1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). This should automatically configure it for your shell as well.
       1. Install the required version via `nvm`:
-      
+
          ```shell
          nvm install <NODEJS_VERSION>
          ```
 
    1. Install Yarn via `npm`:
-   
+
       ```shell
       npm install --global yarn
       ```
@@ -104,7 +104,7 @@ LTS release (16.04, 18.04, 20.04, 22.04) or higher, and Debian:
 1. Install PostgreSQL.
    1. Check the required _major_ versions of PostgreSQL in the [`.tool-versions`](../.tool-versions) file.
       - Installation methods for PostgreSQL are typically limited to the latest _major_ version. When you select the version of PostgreSQL to install, you should only select the _major_ version. For example, if the [`.tool-versions`](../.tool-versions) file lists PostgreSQL version 13.6, install the latest version of PostgreSQL 13.
-   1. Install the selected _major_ version of PostgreSQL via its official repo - [Debian](https://www.postgresql.org/download/linux/debian/), [Ubuntu](https://www.postgresql.org/download/linux/ubuntu/).
+   1. Install the selected _major_ version of PostgreSQL via its official repository - [Debian](https://www.postgresql.org/download/linux/debian/), [Ubuntu](https://www.postgresql.org/download/linux/ubuntu/).
 
 1. Install MinIO.
 
