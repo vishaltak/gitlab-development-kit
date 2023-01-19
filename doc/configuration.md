@@ -585,14 +585,15 @@ These settings can be configured using [`env.runit`](runit.md#modifying-environm
 
 | Variable | Default | Description |
 | ------------- | ------- | ----------- |
-| DEV_SERVER_LIVERELOAD | true | Disables live reloading of frontend assets |
-| NO_COMPRESSION        | false | Disables compression of assets |
-| NO_SOURCEMAPS         | false | Disables generation of source maps (reduces size of `main.chunk.js` by ~50%) |
-| WEBPACK_MEMORY_TEST   | false | Output the in-memory heap size upon compilation and exit |
-| WEBPACK_CACHE_PATH    | `./tmp/cache` | Path string to temporary dir     |
-| WEBPACK_REPORT        | false       | Generates bundle analysis report |
-| WEBPACK_VENDOR_DLL    | false       | Reduce webpack-dev-server memory requirements when vendor bundle has been precompiled with `yarn webpack-vendor` |
-| GITLAB_UI_WATCH       | false | Use GDK's copy of `gitlab-ui` instead of the npm-installed version. |
+| DEV_SERVER_LIVERELOAD    | true  | Disables live reloading of frontend assets |
+| DEV_SERVER_ALLOWED_HOSTS | unset | Passes hosts through webpack host check |
+| NO_COMPRESSION           | false | Disables compression of assets |
+| NO_SOURCEMAPS            | false | Disables generation of source maps (reduces size of `main.chunk.js` by ~50%) |
+| WEBPACK_MEMORY_TEST      | false | Output the in-memory heap size upon compilation and exit |
+| WEBPACK_CACHE_PATH       | `./tmp/cache` | Path string to temporary dir     |
+| WEBPACK_REPORT           | false       | Generates bundle analysis report |
+| WEBPACK_VENDOR_DLL       | false       | Reduce webpack-dev-server memory requirements when vendor bundle has been precompiled with `yarn webpack-vendor` |
+| GITLAB_UI_WATCH          | false | Use GDK's copy of `gitlab-ui` instead of the npm-installed version. |
 
 ## ActionCable settings
 
