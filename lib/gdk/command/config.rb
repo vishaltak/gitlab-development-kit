@@ -47,10 +47,11 @@ module GDK
         if old_value == new_value
           GDK::Output.warn("'#{slug}' is already set to '#{old_value}'")
         else
-          config.save_yaml!
           GDK::Output.success("'#{slug}' is now set to '#{new_value}' (previously '#{old_value}').")
-          GDK::Output.info("Don't forget to run 'gdk reconfigure'")
         end
+
+        config.save_yaml!
+        GDK::Output.info("Don't forget to run 'gdk reconfigure'.")
 
         true
       rescue GDK::ConfigSettings::SettingUndefined
