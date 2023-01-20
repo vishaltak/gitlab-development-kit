@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # This is the GDK one line installation. For more information, please visit:
 # https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/index.md#one-line-installation
@@ -12,7 +12,7 @@
 # 2 = git SHA/branch to checkout once cloned, default is main (GDK_CLONE_BRANCH)
 _() {
 
-set -eo pipefail
+set -xeo pipefail
 
 DEFAULT_GDK_INSTALL_DIR="gitlab-development-kit"
 DEFAULT_GITLAB_REPO_URL="https://gitlab.com/gitlab-org/gitlab.git"
@@ -57,12 +57,19 @@ ensure_gdk_clone_branch_checked_out() {
 }
 
 bootstrap() {
-  make bootstrap
+  bash -x support/bootstrap
 }
 
 gdk_install() {
   # shellcheck disable=SC1090
   source "${ASDF_SH_PATH}"
+
+  # TODO: remove
+  which -a gdk
+  cat /home/gdk/.asdf/shims/gdk
+  find /home/gdk/.asdf/installs/ruby | grep gitlab-development-kit
+  # TODO: remove
+
   gdk install gitlab_repo="$GITLAB_REPO_URL"
 }
 

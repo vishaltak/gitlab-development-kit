@@ -205,12 +205,12 @@ gdk_uninstall_gdk_gems() {
 
   echo "INFO: Uninstalling any gitlab-development-kit gems.."
 
-  find "${CURRENT_ASDF_DATA_DIR}"/installs/ruby ! -path "${CURRENT_ASDF_DATA_DIR}"/installs/ruby -type d -maxdepth 1 -exec basename {} \; | while read -r ruby_version
+  find "${CURRENT_ASDF_DATA_DIR}"/installs/ruby -maxdepth 1 -type d ! -path "${CURRENT_ASDF_DATA_DIR}"/installs/ruby -exec basename {} \; | while read -r ruby_version
   do
-    cmd="ASDF_RUBY_VERSION=${ruby_version} gem uninstall --force -x gitlab-development-kit > /dev/null"
-    if ! eval "${cmd}"; then
-      return 1
-    fi
+    # TODO: fix
+    # cmd="source ${CURRENT_ASDF_DIR}/asdf.sh ; ASDF_RUBY_VERSION=${ruby_version} ${CURRENT_ASDF_DIR}/shims/gem uninstall --quiet --silent --force -x --all gitlab-development-kit"
+    cmd="source ${CURRENT_ASDF_DIR}/asdf.sh ; ASDF_RUBY_VERSION=${ruby_version} ${CURRENT_ASDF_DIR}/shims/gem uninstall --force -x --all gitlab-development-kit"
+    bash -c "${cmd}"
   done
 
   hash -r
