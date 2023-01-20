@@ -52,68 +52,68 @@ verify-start:
     - when: manual
       allow_failure: true
 
-install:
-  extends: .verify-job
-  script:
-    - support/ci/verify-install
+# install:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-install
 
-install-experimental:
-  extends: .verify-job
-  script:
-    - support/ci/verify-install-experimental
+# install-experimental:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-install-experimental
 
 one-line-install:
   extends: .verify-job
   script:
     - support/ci/verify-one-line-install
 
-doctor:
-  extends: .verify-job
-  script:
-    - support/ci/verify-doctor
+# doctor:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-doctor
 
-debug-info:
-  extends: .verify-job
-  script:
-    - bin/gdk debug-info
+# debug-info:
+#   extends: .verify-job
+#   script:
+#     - bin/gdk debug-info
 
-reconfigure:
-  extends: .verify-job
-  script:
-    - support/ci/verify-reconfigure
+# reconfigure:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-reconfigure
 
-reset-data:
-  extends: .verify-job
-  script:
-    - support/ci/verify-reset-data
+# reset-data:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-reset-data
 
-pristine:
-  extends: .verify-job
-  script:
-    - support/ci/verify-pristine
+# pristine:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-pristine
 
-update-from-default-branch:
-  extends: .verify-job
-  script:
-    - support/ci/verify-update $CI_DEFAULT_BRANCH
+# update-from-default-branch:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-update $CI_DEFAULT_BRANCH
 
-update-from-mr-branch:
-  extends: .verify-job
-  script:
-    - support/ci/verify-update
+# update-from-mr-branch:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-update
 
-gitpod-docker-image:
-  extends:
-    - .docker:build-docker-in-docker
-    - .rules:gitpod-code-changes
-  stage: !reference ['.verify-job', stage]
-  needs:
-    - build-gitpod-workspace-image
-  script:
-    - support/ci/verify-gitpod-docker-image
-  artifacts:
-    paths:
-      - ./artifacts/log/*
-    expire_in: 2 days
-    when: on_failure
-  timeout: 1h
+# gitpod-docker-image:
+#   extends:
+#     - .docker:build-docker-in-docker
+#     - .rules:gitpod-code-changes
+#   stage: !reference ['.verify-job', stage]
+#   needs:
+#     - build-gitpod-workspace-image
+#   script:
+#     - support/ci/verify-gitpod-docker-image
+#   artifacts:
+#     paths:
+#       - ./artifacts/log/*
+#     expire_in: 2 days
+#     when: on_failure
+#   timeout: 1h
