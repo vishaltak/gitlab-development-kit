@@ -27,7 +27,6 @@ module GDK
       klasses = %i[
         RvmAndAsdf
         MacPorts
-        Asdf
         RubyGems
         Bundler
         Version
