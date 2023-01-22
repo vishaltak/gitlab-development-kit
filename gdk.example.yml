@@ -237,6 +237,9 @@ omniauth:
     enabled: ''
   group_saml:
     enabled: false
+  openid_connect:
+    args: {}
+    enabled: false
 omnibus_gitlab:
   auto_update: true
   enabled: false
