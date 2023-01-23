@@ -57,6 +57,7 @@ gitlab-config: \
 	gitlab/config/cable.yml \
 	gitlab/config/resque.yml \
 	gitlab/config/redis.cache.yml \
+	gitlab/config/redis.repository_cache.yml \
 	gitlab/config/redis.queues.yml \
 	gitlab/config/redis.shared_state.yml \
 	gitlab/config/redis.trace_chunks.yml \

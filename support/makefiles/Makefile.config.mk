@@ -28,6 +28,10 @@ gitlab/config/puma.rb:
 gitlab/config/redis.cache.yml: 
 	$(Q)rake gitlab/config/redis.cache.yml
 
+.PHONY: gitlab/config/redis.repository_cache.yml
+gitlab/config/redis.repository_cache.yml: 
+	$(Q)rake gitlab/config/redis.repository_cache.yml
+
 .PHONY: gitlab/config/redis.queues.yml
 gitlab/config/redis.queues.yml: 
 	$(Q)rake gitlab/config/redis.queues.yml

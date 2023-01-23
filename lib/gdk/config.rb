@@ -893,6 +893,7 @@ module GDK
           integer(:shared_state) { 0 } # This inherits db=0 for compatibility reaons
           integer(:queues) { 1 }
           integer(:cache) { 2 }
+          integer(:repository_cache) { 2 }
           integer(:trace_chunks) { 3 }
           integer(:rate_limiting) { 4 }
           integer(:sessions) { 5 }
@@ -902,6 +903,7 @@ module GDK
           integer(:shared_state) { 10 }
           integer(:queues) { 11 }
           integer(:cache) { 12 }
+          integer(:repository_cache) { 12 }
           integer(:trace_chunks) { 13 }
           integer(:rate_limiting) { 14 }
           integer(:sessions) { 15 }

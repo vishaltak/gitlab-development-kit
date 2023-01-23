@@ -2891,6 +2891,12 @@ RSpec.describe GDK::Config do
             expect(config.redis.databases.development.sessions).to eq(5)
           end
         end
+
+        describe 'repository_cache' do
+          it 'is 2 by default' do
+            expect(config.redis.databases.development.repository_cache).to eq(2)
+          end
+        end
       end
 
       describe 'test' do
@@ -2903,6 +2909,12 @@ RSpec.describe GDK::Config do
         describe 'sessions' do
           it 'is 15 by default' do
             expect(config.redis.databases.test.sessions).to eq(15)
+          end
+        end
+
+        describe 'repository_cache' do
+          it 'is 12 by default' do
+            expect(config.redis.databases.test.repository_cache).to eq(12)
           end
         end
       end
