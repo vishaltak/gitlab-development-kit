@@ -2112,6 +2112,15 @@ RSpec.describe GDK::Config do
         expect(config.omniauth.github.client_secret).to eq('mysecret')
       end
     end
+
+    context 'when OpenID Connect is enabled' do
+      let(:omniauth_config) { { 'openid_connect' => { 'enabled' => true, 'args' => { 'scope' => 'openid' } } } }
+
+      it 'returns true' do
+        expect(config.omniauth.openid_connect.enabled).to be true
+        expect(config.omniauth.openid_connect.args).to eq({ 'scope' => 'openid' })
+      end
+    end
   end
 
   describe 'gitlab_pages' do

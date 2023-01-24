@@ -482,6 +482,11 @@ module GDK
       settings :group_saml do
         bool(:enabled) { false }
       end
+      settings :openid_connect do
+        bool(:enabled) { false }
+        # See https://docs.gitlab.com/ee/administration/auth/oidc.html for more detail
+        hash_setting(:args) { {} }
+      end
     end
 
     settings :geo do

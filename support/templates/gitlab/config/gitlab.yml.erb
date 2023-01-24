@@ -957,6 +957,11 @@ development:
     <%- if config.omniauth.group_saml.enabled -%>
     - { name: 'group_saml' }
     <%- end -%>
+    <%- if config.omniauth.openid_connect.enabled -%>
+    - { name: 'openid_connect',
+        label: 'OpenID Connect',
+        args: <%= config.omniauth.openid_connect.args.to_json %> }
+    <%- end -%>
 
   elasticsearch:
     indexer_path: <%= config.gdk_root %>/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
