@@ -24,7 +24,7 @@ class Shellout
     @command ||= args.join(' ')
   end
 
-  def execute(display_output: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
+  def execute(display_output: true, display_error: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
     retried ||= false
     GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
 
@@ -43,13 +43,13 @@ class Shellout
     error_message = "'#{command}' failed."
 
     if (retry_attempts -= 1).negative?
-      GDK::Output.error(error_message)
+      GDK::Output.error(error_message) if display_error
 
       self
     else
       retried = true
       error_message += " Retrying in #{retry_delay_secs} secs.."
-      GDK::Output.error(error_message)
+      GDK::Output.error(error_message) if display_error
 
       sleep(retry_delay_secs)
       retry
