@@ -127,8 +127,22 @@ test: &test
 
 ## SSH cloning
 
-To be able to clone over SSH on a secondary, follow the instruction on how
-to set up [SSH](ssh.md), including [SSH key lookup from database](ssh.md#ssh-key-lookup-from-database).
+If you used the [Easy installation](#easy-installation), then your primary site's SSH service is disabled, and your secondary site's SSH service is enabled. The listen port is unchanged. This simulates having a unified URL for SSH which happens to always route to the secondary site. With this setup, you can already observe Geo-specific behavior. For example, when you do a Git push, you will see `This request to a Geo secondary node will be forwarded to the Geo primary node`.
+
+You can enable the primary site's SSH service, but you will need to specify non-default ports so they don't conflict with the secondary site's ports. For example, in your primary site's `gdk.yml`:
+
+```yaml
+sshd:
+  enabled: true
+  listen_port: 2223
+  web_listen: localhost:9123 # the default is 9122
+```
+
+Or vice versa, you can specify non-default ports for your secondary site.
+
+Note that the Git clone over SSH URL found in project show pages will always display the primary site's Git SSH URL, even if the primary site's SSH service is disabled. There is [an issue](https://gitlab.com/gitlab-org/gitlab/-/issues/370377) to improve this behavior.
+
+For more information, see [SSH](ssh.md).
 
 ## Geo-specific GDK commands
 
