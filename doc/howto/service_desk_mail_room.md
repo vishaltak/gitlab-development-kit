@@ -105,14 +105,38 @@ GDK uses `letter_opener_web` to show sent messages in a web interface under
      address: "personal-email+%{key}@gmail.com"
      user: "personal-email@gmail.com"
      password: "<app password>"
-     gitlab_url: <gdk url>
+     gitlab_url: "<gdk url>"
+     # IMAP server host
+     host: "imap.gmail.com"
+     # IMAP server port
+     port: 993
+     # Whether the IMAP server uses SSL
+     ssl: true
+     # Whether the IMAP server uses StartTLS
+     start_tls: false
+     # The mailbox where incoming mail will end up. Usually "inbox".
+     mailbox: "inbox"
+     # The IDLE command timeout.
+     idle_timeout: 60
 
    service_desk_email:
      enabled: true
      address: "personal-email+%{key}@gmail.com"
      user: "personal-email@gmail.com"
      password: "<app password>"
-     gitlab_url: <gdk url>
+     gitlab_url: "<gdk url>"
+     # IMAP server host
+     host: "imap.gmail.com"
+     # IMAP server port
+     port: 993
+     # Whether the IMAP server uses SSL
+     ssl: true
+     # Whether the IMAP server uses StartTLS
+     start_tls: false
+     # The mailbox where incoming mail will end up. Usually "inbox".
+     mailbox: "inbox"
+     # The IDLE command timeout.
+     idle_timeout: 60
    ```
 
 1. Restart all services.
