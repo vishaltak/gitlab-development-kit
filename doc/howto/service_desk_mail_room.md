@@ -1,5 +1,7 @@
 # How to set up MailRoom and Service Desk
 
+Service Desk requires [EE Licence](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses).
+
 ## Using webhooks
 
 1. Stop any running GDK services.
