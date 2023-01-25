@@ -114,6 +114,17 @@ appropriate KDC for a specific realm.
    If you encounter a `HTTP Basic: Access denied` error, configure `git` to set
    `http.emptyAuth` to `true`.
 
+## Configure browser for Kerberos authentication
+
+To configure Firefox for Kerberos authentication:
+
+1. In Firefox, type `about:config` in the address bar to open the configuration editor.
+1. Set the following preferences:
+   - `network.negotiate-auth.allow-non-fqdn` to `true`.
+   - `network.negotiate-auth.delegation-uris` to `gdk.test:3000`.
+   - `network.negotiate-auth.trusted-uris` to `gdk.test:3000`.
+   - `network.negotiate-auth.trusted-uris` to `gdk.test:3000`.
+
 ## Troubleshooting
 
 On macOS, cloning with Kerberos authentication crashes with the following error:
