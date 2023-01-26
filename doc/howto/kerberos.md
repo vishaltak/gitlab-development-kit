@@ -123,7 +123,6 @@ To configure Firefox for Kerberos authentication:
    - `network.negotiate-auth.allow-non-fqdn` to `true`.
    - `network.negotiate-auth.delegation-uris` to `gdk.test:3000`.
    - `network.negotiate-auth.trusted-uris` to `gdk.test:3000`.
-   - `network.negotiate-auth.trusted-uris` to `gdk.test:3000`.
 
 ## Troubleshooting
 
