@@ -41,13 +41,19 @@ module GDK
       end
 
       def config_set(slug, value)
+        value_stored_in_gdk_yml = config.user_defined?(*slug)
         old_value = config.dig(*slug)
         new_value = config.bury!(slug, value)
 
-        if old_value == new_value
+        if old_value == new_value && value_stored_in_gdk_yml
           GDK::Output.warn("'#{slug}' is already set to '#{old_value}'")
-        else
+          return true
+        elsif old_value == new_value && !value_stored_in_gdk_yml
+          GDK::Output.success("'#{slug}' is now set to '#{new_value}' (explicitly setting '#{old_value}').")
+        elsif old_value != new_value && value_stored_in_gdk_yml
           GDK::Output.success("'#{slug}' is now set to '#{new_value}' (previously '#{old_value}').")
+        else
+          GDK::Output.success("'#{slug}' is now set to '#{new_value}' (previously using default '#{old_value}').")
         end
 
         config.save_yaml!

@@ -64,34 +64,68 @@ RSpec.describe GDK::Command::Config do
     context 'with a valid key and value' do
       let(:current_port) { 3000 }
 
-      context 'where the value is different' do
-        it 'advises the new value has been set' do
-          new_port = 3001
+      context 'where the new value is different' do
+        context "but the gdk.yml doesn't have any value set" do
+          it 'advises the new value has been set' do
+            new_port = 3001
 
-          stub_gdk_yaml('port' => current_port)
+            # stub_gdk_yaml('port' => current_port)
 
-          expect_set("---\nport: #{new_port}\n")
-          expect(GDK::Output).to receive(:success).with("'port' is now set to '#{new_port}' (previously '#{current_port}').")
+            expect_set("---\nport: #{new_port}\n")
+            expect(GDK::Output).to receive(:success).with("'port' is now set to '#{new_port}' (previously using default '#{current_port}').")
 
-          subject.run(%W[set port #{new_port}])
+            subject.run(%W[set port #{new_port}])
+          end
+        end
+
+        context "and the gdk.yml has some value set" do
+          it 'advises the new value has been set' do
+            new_port = 3001
+
+            stub_gdk_yaml('port' => current_port)
+
+            expect_set("---\nport: #{new_port}\n")
+            expect(GDK::Output).to receive(:success).with("'port' is now set to '#{new_port}' (previously '#{current_port}').")
+
+            subject.run(%W[set port #{new_port}])
+          end
         end
       end
 
-      context 'where the value is the same' do
-        it 'advises the new value is the same as the current value' do
-          stub_gdk_yaml('port' => current_port)
+      context 'where the new value is the same' do
+        context "but the gdk.yml doesn't contain the same value" do
+          it 'advises the value has been explicitly set' do
+            expect_set("---\nport: #{current_port}\n")
+            expect(GDK::Output).to receive(:success).with("'port' is now set to '#{current_port}' (explicitly setting '#{current_port}').")
 
-          expect_set("---\nport: #{current_port}\n")
-          expect(GDK::Output).to receive(:warn).with("'port' is already set to '#{current_port}'")
+            subject.run(%W[set port #{current_port}])
+          end
+        end
 
-          subject.run(%W[set port #{current_port}])
+        context 'and the gdk.yml already contains the same value' do
+          it 'advises the current value is already set' do
+            stub_gdk_yaml('port' => current_port)
+
+            expect_gdk_write(nil, negate: true)
+            expect(GDK::Output).to receive(:warn).with("'port' is already set to '#{current_port}'")
+
+            subject.run(%W[set port #{current_port}])
+          end
         end
       end
 
       def expect_set(yaml)
         expect(GDK::Output).to receive(:info).with("Don't forget to run 'gdk reconfigure'.")
-        expect(File).to receive(:write).with(GDK::Config::FILE, yaml)
+        expect_gdk_write(yaml)
         expect(stub_backup).to receive(:backup!)
+      end
+
+      def expect_gdk_write(yaml, negate: false)
+        if negate
+          expect(File).not_to receive(:write).with(GDK::Config::FILE, yaml)
+        else
+          expect(File).to receive(:write).with(GDK::Config::FILE, yaml)
+        end
       end
     end
   end
