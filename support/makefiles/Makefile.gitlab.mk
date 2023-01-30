@@ -56,13 +56,7 @@ gitlab-config: \
 	gitlab/config/database.yml \
 	gitlab/config/cable.yml \
 	gitlab/config/resque.yml \
-	gitlab/config/redis.cache.yml \
-	gitlab/config/redis.repository_cache.yml \
-	gitlab/config/redis.queues.yml \
-	gitlab/config/redis.shared_state.yml \
-	gitlab/config/redis.trace_chunks.yml \
-	gitlab/config/redis.rate_limiting.yml \
-	gitlab/config/redis.sessions.yml \
+	gitlab/config/redis.yml \
 	gitlab/public/uploads \
 	gitlab/config/puma.rb
 

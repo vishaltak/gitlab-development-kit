@@ -19,13 +19,7 @@ module GDK
         gitlab/config/gitlab.yml
         gitlab/config/puma.rb
         gitlab/config/resque.yml
-        gitlab/config/redis.cache.yml
-        gitlab/config/redis.repository_cache.yml
-        gitlab/config/redis.queues.yml
-        gitlab/config/redis.shared_state.yml
-        gitlab/config/redis.trace_chunks.yml
-        gitlab/config/redis.rate_limiting.yml
-        gitlab/config/redis.sessions.yml
+        gitlab/config/redis.yml
         nginx/conf/nginx.conf
         openssh/sshd_config
         prometheus/prometheus.yml
