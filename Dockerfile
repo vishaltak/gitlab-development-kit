@@ -27,13 +27,17 @@ ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
 
 RUN bash ./support/bootstrap \
   # simple tests that tools work
-  && bash -lec "asdf version; yarn --version; node --version; ruby --version" \
+  && bash -lec "asdf version; go version; yarn --version; node --version; ruby --version" \
   # Remove unneeded packages
   && sudo apt-get purge software-properties-common -y \
+  && sudo apt-get clean -y \
   && sudo apt-get autoremove -y \
   # clear tmp caches e.g. from postgres compilation
   && sudo rm -rf /tmp/* ~/.asdf/tmp/* \
   # Remove files we copied in
-  && sudo rm -rf /home/gdk/tmp
+  && sudo rm -rf /home/gdk/tmp \
+  # Remove build caches
+  # Unfortunately we cannot remove all of "$HOME/gdk/gitaly/_build/*" because we need to keep the compiled binaries in "$HOME/gdk/gitaly/_build/bin"
+  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* "$HOME/gdk/gitaly/_build/deps/git/source" "$HOME/gdk/gitaly/_build/deps/libgit2/source" "$HOME/gdk/gitaly/_build/cache" "$HOME/gdk/gitaly/_build/deps" "$HOME/gdk/gitaly/_build/intermediate" "$HOME/.cache/" /tmp/*
 
 WORKDIR /home/gdk
