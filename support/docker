@@ -86,6 +86,12 @@ case "$1" in
         docker push "${cache_image}"
         docker push "${DEFAULT_IMAGE}"
         ;;
+
+    ci-build-gitlab-e2e-image-if-necessary)
+        docker build . --squash --file support/qa/Dockerfile --build-arg release_image="${DEFAULT_IMAGE}" --build-arg url="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" --build-arg sha="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" --tag "${GITLAB_E2E_IMAGE}"
+        docker push "${GITLAB_E2E_IMAGE}"
+        ;;
+
     build)
         docker build -t "${DEFAULT_IMAGE}" .
         ;;
