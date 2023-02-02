@@ -47,7 +47,7 @@ RSpec.describe GDK::Diagnostic::PendingMigrations do
 
   def stub_pending_migrations(success)
     shellout_double = instance_double(Shellout, success?: success)
-    cmd = %w[../support/bundle-exec rails db:abort_if_pending_migrations]
+    cmd = %w[/home/git/gdk/support/bundle-exec rails db:abort_if_pending_migrations]
 
     allow(Shellout).to receive(:new).with(cmd, chdir: '/home/git/gdk/gitlab').and_return(shellout_double)
     allow(shellout_double).to receive(:execute).and_return(shellout_double)
