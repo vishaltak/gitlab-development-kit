@@ -26,7 +26,7 @@ module GDK
       private
 
       def db_migrations_shellout
-        @db_migrations_shellout ||= Shellout.new(%w[../support/bundle-exec rails db:abort_if_pending_migrations], chdir: config.gitlab.dir.to_s)
+        @db_migrations_shellout ||= Shellout.new(%W[#{config.gdk_root}/support/bundle-exec rails db:abort_if_pending_migrations], chdir: config.gitlab.dir.to_s)
       end
     end
   end
