@@ -88,6 +88,17 @@ RSpec.describe Shellout do
       end
     end
 
+    context 'with display_error: false' do
+      let(:command) { 'ls /doesntexist' }
+
+      it 'does not display the command failed message' do
+        stub_no_color_env('true')
+
+        expect { subject.execute(display_error: false) }.not_to output(%r{ERROR: 'ls /doesntexist' failed.}).to_stderr
+        expect { subject.execute(display_error: true) }.to output(%r{ERROR: 'ls /doesntexist' failed.}).to_stderr
+      end
+    end
+
     context 'when the command fails completely' do
       shared_examples 'a command that fails' do
         it 'is unsuccessful', :hide_output do
