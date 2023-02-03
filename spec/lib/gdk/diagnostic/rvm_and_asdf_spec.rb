@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::RvmAndAsdf do
-  describe '#diagnose' do
-    it 'is a no-op' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when RVM and asdf enabled' do
       it 'returns false' do

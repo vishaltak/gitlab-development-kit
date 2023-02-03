@@ -5,15 +5,13 @@ module GDK
     class Geo < Base
       TITLE = 'Geo'
 
-      def diagnose
-        @success = (geo_database_exists? && geo_enabled?) || (!geo_database_exists? && !geo_enabled?)
-      end
-
       def success?
-        @success
+        @success ||= (geo_database_exists? && geo_enabled?) || (!geo_database_exists? && !geo_enabled?)
       end
 
       def detail
+        return if success?
+
         <<~MESSAGE
           #{database_yml_file} contains the geo database settings but
           geo.enabled is not set to true in your gdk.yml.

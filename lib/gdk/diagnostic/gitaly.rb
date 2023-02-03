@@ -6,10 +6,6 @@ module GDK
       TITLE = 'Gitaly'
       MAX_GITALY_INTERNAL_SOCKET_PATH_LENGTH = 100
 
-      def diagnose
-        nil
-      end
-
       def success?
         dir_length_ok?
       end

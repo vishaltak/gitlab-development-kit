@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::Praefect do
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'focusing on checking DB migrations' do
       before do

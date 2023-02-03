@@ -42,7 +42,7 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
     let(:diagnostics) { [successful_diagnostic, successful_diagnostic] }
 
     it 'runs all diagnosis' do
-      expect(successful_diagnostic).to receive(:diagnose).twice
+      expect(successful_diagnostic).to receive(:success?).twice
 
       subject.run
     end
@@ -58,7 +58,7 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
     let(:diagnostics) { [failing_diagnostic, failing_diagnostic] }
 
     it 'runs all diagnosis' do
-      expect(failing_diagnostic).to receive(:diagnose).twice
+      expect(failing_diagnostic).to receive(:success?).twice
 
       subject.run
     end
@@ -76,8 +76,8 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
     let(:diagnostics) { [failing_diagnostic, successful_diagnostic, failing_diagnostic] }
 
     it 'runs all diagnosis' do
-      expect(failing_diagnostic).to receive(:diagnose).twice
-      expect(successful_diagnostic).to receive(:diagnose).once
+      expect(failing_diagnostic).to receive(:success?).twice
+      expect(successful_diagnostic).to receive(:success?).once
 
       subject.run
     end

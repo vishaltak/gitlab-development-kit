@@ -3,18 +3,12 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::Golang do
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     let(:go_get_success) { nil }
 
     before do
       stub_clone_exists?(clone_exists)
-      stub_go_get(nil, success: go_get_success)
+      stub_go_get(go_get_success)
     end
 
     context 'when gitlab-elasticsaerch-indexer clone does not exist' do
@@ -47,12 +41,14 @@ RSpec.describe GDK::Diagnostic::Golang do
   end
 
   describe '#detail' do
+    let(:success) { nil }
+
     before do
-      stub_go_get(nil, success: go_get_success)
+      allow(subject).to receive(:success?).and_return(success)
     end
 
     context 'but go get fails' do
-      let(:go_get_success) { false }
+      let(:success) { false }
 
       it 'returns help message' do
         expect(subject.detail).to eq("Golang is currently unable to build binaries that use the icu4c package.\nYou can try the following to fix:\n\ngo clean -cache\n")
@@ -60,7 +56,7 @@ RSpec.describe GDK::Diagnostic::Golang do
     end
 
     context 'and go get succeeds' do
-      let(:go_get_success) { true }
+      let(:success) { true }
 
       it 'returns nil' do
         expect(subject.detail).to be_nil
@@ -75,11 +71,9 @@ RSpec.describe GDK::Diagnostic::Golang do
     allow(dir).to receive(:exist?).and_return(exists)
   end
 
-  def stub_go_get(result, success: true)
-    # rubocop:todo RSpec/VerifiedDoubles
-    shellout = double('Shellout', try_run: result, read_stdout: result, success?: success)
-    # rubocop:enable RSpec/VerifiedDoubles
+  def stub_go_get(success)
+    shellout = instance_double(Shellout, success?: success)
     allow(Shellout).to receive(:new).with(%w[go get], chdir: '/home/git/gdk/gitlab-elasticsearch-indexer').and_return(shellout)
-    allow(shellout).to receive(:try_run).and_return(result)
+    allow(shellout).to receive(:execute).and_return(shellout)
   end
 end

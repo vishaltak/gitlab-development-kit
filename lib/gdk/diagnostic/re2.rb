@@ -6,10 +6,6 @@ module GDK
       TITLE = 're2'
       SCRIPT = %{\"require 're2'; regexp = RE2::Regexp.new('\{', log_errors: false); regexp.error unless regexp.ok?\"}
 
-      def diagnose
-        # no-op
-      end
-
       def success?
         # When re2 and libre2 are out of sync, a seg fault can occur due
         # to some memory corruption (https://github.com/mudge/re2/issues/43).

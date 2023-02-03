@@ -5,10 +5,6 @@ module GDK
     class Asdf < Base
       TITLE = 'asdf'
 
-      def diagnose
-        nil
-      end
-
       def success?
         no_unnecessary_software_to_uninstall?
       end

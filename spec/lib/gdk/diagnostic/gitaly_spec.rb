@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::Gitaly do
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when the Gitaly internal socket path length is >= the max' do
       it 'returns false' do

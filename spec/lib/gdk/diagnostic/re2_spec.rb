@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::Re2 do
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when re2 is not installed or bad' do
       it 'returns false' do

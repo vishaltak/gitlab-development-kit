@@ -6,12 +6,6 @@ RSpec.describe GDK::Diagnostic::Bundler do
   let(:gitlab_dir) { Pathname.new('/home/git/gdk/gitlab') }
   let(:gitaly_ruby_dir) { Pathname.new('/home/git/gdk/gitaly/ruby') }
 
-  describe '#diagnose' do
-    it 'is a no-op' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when gitaly has a BUNDLE_PATH configured' do
       it 'returns false' do

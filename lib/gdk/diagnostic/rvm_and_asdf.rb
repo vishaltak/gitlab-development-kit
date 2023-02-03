@@ -5,10 +5,6 @@ module GDK
     class RvmAndAsdf < Base
       TITLE = 'RVM and asdf'
 
-      def diagnose
-        nil
-      end
-
       def success?
         !rvm_and_asdf_enabled?
       end

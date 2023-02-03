@@ -5,12 +5,6 @@ module GDK
     class Golang < Base
       TITLE = 'Golang'
 
-      def diagnose
-        go_get_command.try_run
-
-        nil
-      end
-
       def success?
         # Let's return success if the gitlab-elasticsearch-indexer clone does
         # not exist.
@@ -20,7 +14,7 @@ module GDK
       end
 
       def detail
-        return icu4c_issue_detail unless go_get_command.success?
+        return icu4c_issue_detail unless success?
       end
 
       private
@@ -30,11 +24,11 @@ module GDK
       end
 
       def clone_dir
-        config.gitlab_elasticsearch_indexer.__dir
+        @clone_dir ||= config.gitlab_elasticsearch_indexer.__dir
       end
 
       def go_get_command
-        @go_get_command ||= Shellout.new(%w[go get], chdir: clone_dir.to_s)
+        @go_get_command ||= Shellout.new(%w[go get], chdir: clone_dir.to_s).execute(display_output: false, display_error: false)
       end
 
       def icu4c_issue_detail

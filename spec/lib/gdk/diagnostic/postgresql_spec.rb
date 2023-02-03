@@ -11,12 +11,6 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
     FileUtils.rm(@tmp_file) if File.exist?(@tmp_file) # rubocop:todo RSpec/InstanceVariable
   end
 
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     let(:psql_success) { true }
 
@@ -186,10 +180,8 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   end
 
   def stub_psql_version(result, success: true)
-    # rubocop:todo RSpec/VerifiedDoubles
-    shellout = double('Shellout', try_run: result, read_stdout: result, success?: success)
-    # rubocop:enable RSpec/VerifiedDoubles
+    shellout = instance_double(Shellout, read_stdout: result, success?: success)
     allow(Shellout).to receive(:new).with(%w[psql --version]).and_return(shellout)
-    allow(shellout).to receive(:try_run).and_return(result)
+    allow(shellout).to receive(:execute).and_return(shellout)
   end
 end

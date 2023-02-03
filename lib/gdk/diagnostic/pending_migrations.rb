@@ -5,10 +5,6 @@ module GDK
     class PendingMigrations < Base
       TITLE = 'Database Migrations'
 
-      def diagnose
-        # no-op
-      end
-
       def success?
         db_migrations_shellout.execute(display_output: false, display_error: false).success?
       end
