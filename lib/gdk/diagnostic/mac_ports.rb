@@ -9,10 +9,6 @@ module GDK
       MAC_PORTS_UNINSTALLATION_LINK = 'https://guide.macports.org/chunked/installing.macports.uninstalling.html'
       MIGRATE_TO_ASDF_LINK = 'https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/migrate_to_asdf.md'
 
-      def diagnose
-        nil
-      end
-
       def success?
         !File.exist?(MAC_PORTS_BIN)
       end

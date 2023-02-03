@@ -5,18 +5,14 @@ module GDK
     class Dependencies < Base
       TITLE = 'GDK Dependencies'
 
-      def diagnose
-        @checker = GDK::Dependencies::Checker.new
-        @checker.check_all
-      end
-
       def success?
-        @checker.error_messages.empty?
+        checker.error_messages.empty?
       end
 
       def detail
-        messages = @checker.error_messages.join("\n").chomp
-        return if messages.empty?
+        return if success?
+
+        messages = checker.error_messages.join("\n").chomp
 
         <<~MESSAGE
           #{messages}
@@ -25,6 +21,12 @@ module GDK
 
           https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md
         MESSAGE
+      end
+
+      private
+
+      def checker
+        @checker ||= GDK::Dependencies::Checker.new.tap(&:check_all)
       end
     end
   end

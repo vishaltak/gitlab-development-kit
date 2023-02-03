@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::MacPorts do
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when MacPorts is installed' do
       before do

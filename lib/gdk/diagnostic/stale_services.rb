@@ -5,31 +5,33 @@ module GDK
     class StaleServices < Base
       TITLE = 'Stale Services'
 
-      def diagnose
-        ps_command.try_run
-
-        nil
-      end
-
       def success?
-        return true unless ps_command.success?
-
-        stale_processes.empty?
+        @success ||= ps_command_success? && stale_processes.empty?
       end
 
       def detail
-        return stale_services_detail unless success?
+        return if success?
+
+        stale_services_detail
       end
 
       private
 
       StaleProcess = Struct.new(:pid, :service)
 
+      def ps_command_success?
+        # For this particular command, pgrep will return a 0 if there are matches
+        # or 1 if there are no matches. We consider these exit codes a success and
+        # any _other_ codes a failure.
+        @ps_command_success ||= [0, 1].include?(ps_command.exit_code)
+      end
+
       def ps_command
-        @ps_command ||= begin
-          joined_service_mames = service_names.join('|')
-          Shellout.new(%(pgrep -l -P 1 -f "runsv (#{joined_service_mames})"))
-        end
+        @ps_command ||= Shellout.new(command).execute(display_output: false, display_error: false)
+      end
+
+      def command
+        @command ||= %(pgrep -l -P 1 -f "runsv (#{service_names.join('|')})")
       end
 
       def service_names
@@ -69,7 +71,7 @@ module GDK
 
       def stale_processes
         @stale_processes ||= begin
-          return [] unless ps_command.success?
+          return [] unless ps_command_success?
 
           ps_command.read_stdout.split("\n").each_with_object([]) do |process, all|
             m = process.match(/^(?<pid>\d+) +runsv (?<service>.+)$/)
@@ -83,6 +85,8 @@ module GDK
       def stale_services_detail
         return if success?
 
+        return "Unable to run '#{command}'." if stale_processes.empty?
+
         stale_services = stale_processes.map(&:service).join("\n")
         stale_pids = stale_processes.map(&:pid).join(' ')
 
@@ -93,7 +97,7 @@ module GDK
 
           You can try killing them by running 'gdk kill' or:
 
-          kill #{stale_pids}
+           kill #{stale_pids}
         MESSAGE
       end
     end

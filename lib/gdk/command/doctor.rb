@@ -52,7 +52,6 @@ module GDK
       end
 
       def perform_diagnosis_for(diagnostic)
-        diagnostic.diagnose
         diagnostic.message unless diagnostic.success?
       rescue StandardError => e
         diagnostic.message(([e.message] + e.backtrace).join("\n"))

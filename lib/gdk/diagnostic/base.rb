@@ -6,10 +6,6 @@ require 'socket'
 module GDK
   module Diagnostic
     class Base
-      def diagnose
-        raise NotImplementedError
-      end
-
       def success?
         raise NotImplementedError
       end

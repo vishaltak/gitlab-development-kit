@@ -8,10 +8,6 @@ module GDK
       TITLE = 'Ruby Gems'
       GITLAB_GEMS_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
 
-      def diagnose
-        # no-op
-      end
-
       def success?
         failed_to_load_gitlab_gems.empty?
       end

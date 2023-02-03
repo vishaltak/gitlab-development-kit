@@ -6,12 +6,6 @@ RSpec.describe GDK::Diagnostic::Gitlab do
   let(:not_ok_log_dir_size) { described_class::GitlabLogDirDiagnostic::LOG_DIR_SIZE_NOT_OK_MB + 1 }
   let(:ok_log_dir_size) { described_class::GitlabLogDirDiagnostic::LOG_DIR_SIZE_NOT_OK_MB - 1 }
 
-  describe '#diagnose' do
-    it 'returns nil' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'for .gitlab_shell_secret' do
       before do

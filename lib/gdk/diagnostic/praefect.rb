@@ -5,10 +5,6 @@ module GDK
     class Praefect < Base
       TITLE = 'Praefect'
 
-      def diagnose
-        nil
-      end
-
       def success?
         migrations_ok?
       end

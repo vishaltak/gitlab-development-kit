@@ -5,17 +5,8 @@ module GDK
     class PostgreSQL < Base
       TITLE = 'PostgreSQL'
 
-      # Check if the version of PostgreSQL in the PATH matches the
-      # version in the data directory.
-      def diagnose
-        psql_command.try_run
-        data_dir_version
-
-        nil
-      end
-
       def success?
-        versions_ok? && can_create_postgres_socket?
+        @success ||= data_dir_version && versions_ok? && can_create_postgres_socket?
       end
 
       def detail
@@ -88,7 +79,7 @@ module GDK
       end
 
       def psql_command
-        @psql_command ||= Shellout.new(%w[psql --version])
+        @psql_command ||= Shellout.new(%w[psql --version]).execute(display_output: false, display_error: false)
       end
 
       def data_dir_version

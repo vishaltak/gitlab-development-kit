@@ -5,10 +5,6 @@ module GDK
     class PGUser < Base
       TITLE = 'PGUSER environment variable'
 
-      def diagnose
-        nil
-      end
-
       def success?
         !pguser_set?
       end

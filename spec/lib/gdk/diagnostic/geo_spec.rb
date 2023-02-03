@@ -45,29 +45,25 @@ RSpec.describe GDK::Diagnostic::Geo do
     CONTENT
   end
 
-  describe '#diagnose' do
+  describe '#success?' do
     context "when Geo database settings doesn't exist" do
       before do
         stub_database_yml_content(default_content)
       end
 
       context 'and geo.enabled is set to false' do
-        it 'sets @success to true' do
+        it 'returns true' do
           stub_geo_enabled(false)
 
-          subject.diagnose
-
-          expect(subject).to be_success
+          expect(subject.success?).to be_truthy
         end
       end
 
       context 'and geo.enabled is set to true' do
-        it 'sets @success to false' do
+        it 'returns false' do
           stub_geo_enabled(true)
 
-          subject.diagnose
-
-          expect(subject).not_to be_success
+          expect(subject.success?).to be_falsy
         end
       end
     end
@@ -78,64 +74,54 @@ RSpec.describe GDK::Diagnostic::Geo do
       end
 
       context 'and geo.enabled is set to false' do
-        it 'sets @success to false' do
+        it 'returns false' do
           stub_geo_enabled(false)
 
-          subject.diagnose
-
-          expect(subject).not_to be_success
+          expect(subject.success?).to be_falsy
         end
       end
 
       context 'and geo.enabled is set to true' do
-        it 'sets @success to true' do
+        it 'returns true' do
           stub_geo_enabled(true)
 
-          subject.diagnose
-
-          expect(subject).to be_success
+          expect(subject.success?).to be_truthy
         end
       end
     end
   end
 
-  describe '#success?' do
+  describe '#detail' do
+    let(:success) { nil }
+
     before do
-      subject.instance_variable_set(:@success, success)
+      allow(subject).to receive(:success?).and_return(success)
     end
 
-    context 'when #diagnose has not yet be run' do
-      let(:success) { nil }
-
-      it { is_expected.not_to be_success }
-    end
-
-    context 'when #diagnose is unsuccessful' do
-      let(:success) { false }
-
-      it { is_expected.not_to be_success }
-    end
-
-    context 'when #diagnose is successful' do
+    context 'when #success? returns true' do
       let(:success) { true }
 
-      it { is_expected.to be_success }
+      it 'returns nil' do
+        expect(subject.detail).to be_nil
+      end
     end
-  end
 
-  describe '#detail' do
-    it 'returns a message advising how to detail with the situation' do
-      expected_detail = <<~MESSAGE
-        #{database_yml_file} contains the geo database settings but
-        geo.enabled is not set to true in your gdk.yml.
+    context 'when #success? returns false' do
+      let(:success) { false }
 
-        Either update your gdk.yml to set geo.enabled to true or remove
-        the geo database settings from #{database_yml_file}
+      it 'returns a message advising how to detail with the situation' do
+        expected_detail = <<~MESSAGE
+          #{database_yml_file} contains the geo database settings but
+          geo.enabled is not set to true in your gdk.yml.
 
-        https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/howto/geo.md
-      MESSAGE
+          Either update your gdk.yml to set geo.enabled to true or remove
+          the geo database settings from #{database_yml_file}
 
-      expect(subject.detail).to eq(expected_detail)
+          https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/howto/geo.md
+        MESSAGE
+
+        expect(subject.detail).to eq(expected_detail)
+      end
     end
   end
 

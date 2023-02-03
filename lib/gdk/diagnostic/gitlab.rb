@@ -7,10 +7,6 @@ module GDK
     class Gitlab < Base
       TITLE = 'GitLab'
 
-      def diagnose
-        nil
-      end
-
       def success?
         gitlab_shell_secret_diagnostic.success? && gitlab_log_dir_diagnostic.success?
       end

@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::PendingMigrations do
-  describe '#diagnose' do
-    it 'is a no-op' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when there are pending DB migrations' do
       it 'returns false' do

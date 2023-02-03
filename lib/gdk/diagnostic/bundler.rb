@@ -5,10 +5,6 @@ module GDK
     class Bundler < Base
       TITLE = 'Bundler'
 
-      def diagnose
-        nil
-      end
-
       def success?
         gitlab_bundle_config.bundle_path_not_set? &&
           gitaly_bundle_config.bundle_path_not_set?

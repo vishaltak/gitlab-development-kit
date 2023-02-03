@@ -7,12 +7,6 @@ RSpec.describe GDK::Diagnostic::RubyGems do
     stub_const('GDK::Diagnostic::RubyGems::GITLAB_GEMS_TO_CHECK', %w[bad_gem])
   end
 
-  describe '#diagnose' do
-    it 'is a no-op' do
-      expect(subject.diagnose).to be_nil
-    end
-  end
-
   describe '#success?' do
     context 'when bad_gem can not be loaded' do
       it 'returns false' do
