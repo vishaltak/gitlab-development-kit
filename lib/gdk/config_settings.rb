@@ -124,7 +124,14 @@ module GDK
       raise LooseFile, "Loose file '#{filename}' is no longer supported."
     end
 
-    def user_defined?
+    def user_defined?(*slugs)
+      if slugs.any?
+        slugs = slugs.first.to_s.split('.') if slugs.one?
+        key = slugs.shift
+
+        return build(key).user_defined?(*slugs)
+      end
+
       attributes.values.any? do |attribute|
         next if attribute.ignore?
 
