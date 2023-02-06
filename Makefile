@@ -80,6 +80,7 @@ openldap-setup \
 prom-setup \
 object-storage-setup \
 gitlab-elasticsearch-indexer-setup \
+zoekt-setup \
 gitlab-metrics-exporter-setup \
 grafana-setup \
 gitlab-ui-setup \

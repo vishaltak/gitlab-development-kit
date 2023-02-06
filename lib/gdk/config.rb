@@ -505,6 +505,16 @@ module GDK
       string(:__architecture) { GDK::Machine.architecture == 'arm64' ? 'aarch64' : GDK::Machine.architecture }
     end
 
+    settings :zoekt do
+      bool(:enabled) { false }
+      string(:repo) { 'https://github.com/sourcegraph/zoekt.git' }
+      string(:version) { 'c08faec66fc26a41007b2176fbea86c52b0efe4b' }
+      port(:index_port_test, 'zoekt-dynamic-indexserver-test')
+      port(:index_port_dev, 'zoekt-dynamic-indexserver-development')
+      port(:web_port_test, 'zoekt-webserver-test')
+      port(:web_port_dev, 'zoekt-webserver-development')
+    end
+
     settings :tracer do
       string(:build_tags) { 'tracer_static tracer_static_jaeger' }
       settings :jaeger do
