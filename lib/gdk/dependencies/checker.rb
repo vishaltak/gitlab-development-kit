@@ -30,6 +30,8 @@ module GDK
         check_exiftool_installed
         check_minio_installed
         check_runit_installed
+
+        check_ruby_gems_ok
       end
 
       def check_binary(binary, name: binary)
@@ -147,6 +149,14 @@ module GDK
         message += " #{more_detail}" unless more_detail.nil?
 
         message
+      end
+
+      def check_ruby_gems_ok
+        checker = GDK::Diagnostic::RubyGems.new(allow_gem_not_installed: true)
+        return if checker.success?
+
+        @error_messages << "ERROR: #{checker.detail}"
+        @error_messages << nil
       end
 
       private
