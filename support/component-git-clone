@@ -1,14 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Example:
-#
-#   GIT_REVISION=<revision> ./support/component-git-clone <depth_param> <repo_name> <component_name>
-#
+USAGE = "GIT_REVISION=<revision> #{$PROGRAM_NAME} [git_options] <repo_url> <component_name>"
 
 require_relative '../lib/gdk'
-
-PROGNAME = File.basename(__FILE__)
 
 def clone(git_clone_args)
   default_args = ['--quiet']
@@ -23,16 +18,20 @@ def clone(git_clone_args)
   false
 end
 
-def checkout(revision)
-  %W[git checkout #{revision}]
+def checkout(clone_dir, revision)
+  Shellout.new(%w[git -C] + [clone_dir, 'checkout', revision]).execute
 end
 
 def main(argv)
   revision = ENV['GIT_REVISION']
   clone(argv)
-  checkout(revision) if revision
+
+  return unless revision
+
+  clone_dir = argv.last
+  checkout(clone_dir, revision)
 end
 
-abort "Usage: #{PROGNAME} [options]" if ARGV.count < 1
+abort USAGE unless ARGV.count > 1
 
 main(ARGV)
