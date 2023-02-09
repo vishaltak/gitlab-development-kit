@@ -77,9 +77,19 @@ appropriate KDC for a specific realm.
 
 1. Open `/etc/krb5.conf` and add the following under `[realms]`:
 
+   When using `Heimdal Kerberos` utilities (typically on macOS):
+
    ```plaintext
    GDK.TEST = {
        kdc = tcp/krb5.gdk.test:1088
+   }
+   ```
+
+   When using `MIT Kerberos` utilities (typically on Linux):
+
+   ```plaintext
+   GDK.TEST = {
+       kdc = krb5.gdk.test:1088
    }
    ```
 
