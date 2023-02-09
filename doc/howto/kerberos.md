@@ -136,6 +136,8 @@ To configure Firefox for Kerberos authentication:
 
 ## Troubleshooting
 
+### Error during Git operations
+
 On macOS, cloning with Kerberos authentication crashes with the following error:
 
 ```plaintext
@@ -149,3 +151,26 @@ To avoid this error:
 1. Run `gdk restart`.
 
 This runs GDK with that environment variable.
+
+### Error when contacting KDC for realm `GDK.TEST`
+
+Verify that the service running in Docker is available from your host:
+
+   ```shell
+   nmap -v -A --version-all -p1088 krb5.gdk.test
+   ```
+
+In the output, the port should be open and the service should be identified:
+
+   ```shell
+   PORT     STATE SERVICE      VERSION
+   1088/tcp open  kerberos-sec MIT Kerberos (server time: 2020-01-01 10:10:10Z)
+   Service Info: Host: GDK.TEST
+   ```
+
+Debug information from `kinit` can also help to identify issues. To increase
+verbosity:
+
+   ```shell
+   KRB5_TRACE=/dev/stdout kinit root@GDK.TEST
+   ```
