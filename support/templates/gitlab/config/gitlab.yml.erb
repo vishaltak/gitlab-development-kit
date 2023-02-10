@@ -865,6 +865,7 @@ production: &base
     enabled: <%= config.gitlab_k8s_agent.enabled? %>
     internal_url: <%= config.gitlab_k8s_agent.__internal_api_url %>
     external_url: <%= config.gitlab_k8s_agent.__url_for_agentk %>
+    external_k8s_proxy_url: <%= config.gitlab_k8s_agent.__k8s_api_url %>
     secret_file: <%= config.gitlab_k8s_agent.__secret_file %>
 
   ## Git settings
