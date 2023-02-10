@@ -17,4 +17,7 @@ WORKDIR /home/gdk
 
 ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
 
-RUN curl --fail "${URL}/-/raw/${SHA}/support/install" | bash -s - gdk "${SHA}"
+RUN curl --fail "${URL}/-/raw/${SHA}/support/install" | bash -s - gdk "${SHA}" && \
+    (cd gdk && GDK_KILL_CONFIRM=true gdk kill)
+
+WORKDIR /home/gdk/gdk
