@@ -144,6 +144,9 @@ You can add a runner with a Docker executor or a shell executor. You can also ad
      --run-untagged="true"
    ```
 
+1. Check that you're using the `3000` port and that it's set to public. You can change the port from private to public by
+   going to the **Remote Explorer** tab in Gitpod and selecting the lock icon next to the port name.
+
 #### Option 2: Shell executor
 
 1. On the top bar, select **Main menu > Admin** in the GitLab UI running in GDK.
