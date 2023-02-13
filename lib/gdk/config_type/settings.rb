@@ -3,7 +3,7 @@
 module GDK
   module ConfigType
     class Settings
-      def self.new(parent:, builder:, **kwargs)
+      def self.new(parent:, builder:, **_kwargs)
         raise KeyError unless parent.yaml.is_a?(::Hash)
 
         yaml = parent.yaml[builder.key] ||= {}

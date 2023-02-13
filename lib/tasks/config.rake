@@ -175,7 +175,7 @@ tasks.add_make_task(name: 'gitaly/praefect.config.toml')
 # Generate a file task for each template we manage
 tasks.template_tasks.each do |task|
   desc "Generate #{task.name}"
-  file task.name => [task.template, GDK::Config::FILE] do |t, args|
+  file task.name => [task.template, GDK::Config::FILE] do |t, _args|
     GDK::ErbRenderer.new(t.source, t.name, **task.erb_extra_args).safe_render!
     task.post_render&.call(t)
   end

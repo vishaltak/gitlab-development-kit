@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 #
 # frozen_string_literal: true
+
 #
 # Add target GDK as a Geo secondary
 #
@@ -209,7 +210,7 @@ class GeoSecondaryAdder
   def pg_replication_prepare_secondary
     FileUtils.remove_dir(secondary_gdk.join('postgresql/data'), true)
     symlink = secondary_gdk.join('postgresql-primary')
-    File.unlink(symlink) if File.exist?(symlink)
+    FileUtils.rm_f(symlink)
     File.symlink(primary_gdk.join('postgresql'), secondary_gdk.join('postgresql-primary'))
   end
 

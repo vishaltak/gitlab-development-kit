@@ -163,8 +163,10 @@ RSpec.describe Shellout do
           stdout = StringIO.new('')
           stdin = instance_double(StringIO, write: '', close: nil)
 
-          allow(IO).to receive(:select).and_return true
-          allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new {})
+          allow(stdout).to receive(:wait_readable).and_return(true)
+          allow(stderr).to receive(:wait_readable).and_return(true)
+
+          allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new { nil })
         end
 
         it_behaves_like 'a command that fails'
