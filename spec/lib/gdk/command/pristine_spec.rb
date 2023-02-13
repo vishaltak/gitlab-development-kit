@@ -24,7 +24,7 @@ RSpec.describe GDK::Command::Pristine do
 
     context 'when all commands succeed' do
       it 'displays an informational message and returns true', :hide_stdout do
-        shellout_double = instance_double(Shellout, stream: nil, 'success?': true)
+        shellout_double = instance_double(Shellout, stream: nil, success?: true)
 
         # gdk_stop
         expect(Runit).to receive(:stop).with(quiet: true).and_return(true)

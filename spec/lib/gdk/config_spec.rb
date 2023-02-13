@@ -766,8 +766,8 @@ RSpec.describe GDK::Config do
       context 'with custom gitconfig' do
         let(:gitconfig) do
           [
-            { 'key': 'core.threads', 'value': '1' },
-            { 'key': 'core.logAllRefUpdates', 'value': 'true' }
+            { key: 'core.threads', value: '1' },
+            { key: 'core.logAllRefUpdates', value: 'true' }
           ]
         end
 
@@ -782,8 +782,8 @@ RSpec.describe GDK::Config do
         it 'is set' do
           expect(config.gitaly.gitconfig).to eq(
             [
-              { 'key': 'core.threads', 'value': '1' },
-              { 'key': 'core.logAllRefUpdates', 'value': 'true' }
+              { key: 'core.threads', value: '1' },
+              { key: 'core.logAllRefUpdates', value: 'true' }
             ]
           )
         end

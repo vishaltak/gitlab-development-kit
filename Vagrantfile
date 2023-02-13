@@ -136,7 +136,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     enable_shares(override, false)
   end
 
-  config.vm.provider "lxc" do |v, override|
+  config.vm.provider "lxc" do |_v, override|
     override.vm.box = "fgrehm/trusty64-lxc"
     enable_shares(override, true)
   end

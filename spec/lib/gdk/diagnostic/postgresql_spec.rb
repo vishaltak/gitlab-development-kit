@@ -8,7 +8,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   end
 
   after do
-    FileUtils.rm(@tmp_file) if File.exist?(@tmp_file) # rubocop:todo RSpec/InstanceVariable
+    FileUtils.rm_f(@tmp_file) # rubocop:todo RSpec/InstanceVariable
   end
 
   describe '#success?' do
