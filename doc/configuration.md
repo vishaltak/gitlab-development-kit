@@ -313,6 +313,7 @@ Under the `snowplow_micro` key, you can define the following settings:
 You can have GDK manage checkouts for these projects:
 
 - `gitlab-runner`
+- `gitlab-pages`
 - `omnibus-gitlab`
 - `charts/gitlab`
 - `cloud-native/gitlab-operator`
@@ -323,6 +324,25 @@ Under the `gitlab_runner` key, you can define the following settings:
 |:-----------------------------|:--------|:-------------------------------------------------------------------------------------------------------------|
 | `gitlab_runner.enabled`      | `false` | Set to `true` to enable [`gitlab-runner`](https://gitlab.com/gitlab-org/gitlab-runner) to be managed by GDK. |
 | `gitlab_runner.auto_update`  | `true`  | Set to `false` to disable updating the `gitlab-runner` checkout.                                             |
+
+Under the `gitlab_pages` key, you can define the following settings:
+
+| Setting                                  | Default                          | Description                                                                                                 |
+|:-----------------------------------------|:---------------------------------|:------------------------------------------------------------------------------------------------------------|
+| `gitlab_pages.enabled`                   | `false`                          | Enable [`gitlab-pages`](https://gitlab.com/gitlab-org/gitlab-pages) to be managed by GDK.                   |
+| `gitlab_pages.auto_update`               | `true`                           | Set to `false` to disable updating the `gitlab-pages` checkout.                                             |
+| `gitlab_pages.host`                      | `127.0.0.1.nip.io`               | Set `gitlab-pages` host.                                                                                    |
+| `gitlab_pages.port`                      | `3010`                           | Set `gitlab-pages` port.                                                                                    |
+| `gitlab_pages.secret_file`               | `$GDK_ROOT/gitlab-pages-secret`  | Set `gitlab-pages` file that contains the secret to communicate in the internal API.                        |
+| `gitlab_pages.verbose`                   | `false`                          | Set `gitlab-pages` verbose logging.                                                                         |
+| `gitlab_pages.propagate_correlation_id`  | `false`                          | Set `gitlab-pages` to propagate the `correlation_id` received.                                              |
+| `gitlab_pages.access_control`            | `false`                          | Enable `gitlab-pages` access control.                                                                       |
+| `gitlab_pages.auth_client_id`            | `''`                             | The OAuth application ID used when access control is enabled.                                               |
+| `gitlab_pages.auth_client_secret`        | `''`                             | The OAuth client secret used when access control is enabled.                                                |
+| `gitlab_pages.auth_scope`                | `'api'`                          | The OAuth client scope used when access control is enabled.                                                 |
+| `gitlab_pages.enable_custom_domains`     | `false`                          | Enable `gitlab-pages` custom domains.                                                                       |
+
+For further details check the [Contribute to GitLab Pages development](https://docs.gitlab.com/ee/development/pages/) documentation.
 
 Under the `omnibus_gitlab` key, you can define the following settings:
 
@@ -343,7 +363,7 @@ Under the `gitlab_operator` key, you can define the following settings:
 | Setting                       | Default | Description                                                                                                                                |
 |:------------------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------|
 | `gitlab_operator.enabled`     | `false` | Set to `true` to enable [`cloud-native/gitlab-operator`](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator) to be managed by GDK. |
-| `gitlab_operator.auto_update` | `true`  | Set to `false` to disable updating the `cloud-native/gitlab-operator` checkout.                                                            |                                         |
+| `gitlab_operator.auto_update` | `true`  | Set to `false` to disable updating the `cloud-native/gitlab-operator` checkout.                                                            |
 
 NOTE:
 If you set `enabled` to `true` for  `gitlab-runner`, `omnibus-gitlab`, `charts/gitlab`, `gitlab_operator` projects, you

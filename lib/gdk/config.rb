@@ -371,6 +371,7 @@ module GDK
       bool(:auto_update) { true }
       string(:secret_file) { config.gdk_root.join('gitlab-pages-secret') }
       bool(:verbose) { false }
+      bool(:propagate_correlation_id) { false }
       bool(:access_control) { false }
       string(:auth_client_id) { '' }
       string(:auth_client_secret) { '' }
