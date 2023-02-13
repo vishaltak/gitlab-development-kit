@@ -5,7 +5,7 @@ require 'pathname'
 module GDK
   module ConfigType
     class Path < Base
-      def dump!(user_only: false)
+      def dump!(*)
         value.to_s
       end
 

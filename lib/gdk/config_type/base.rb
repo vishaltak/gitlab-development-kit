@@ -40,7 +40,7 @@ module GDK
         true # Validated in #value=
       end
 
-      def dump!(user_only: false)
+      def dump!(*)
         value
       end
 

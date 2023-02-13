@@ -70,16 +70,17 @@ module GDK
       end
 
       def stale_processes
-        @stale_processes ||= begin
-          return [] unless ps_command_success?
+        @stale_processes ||=
+          if ps_command_success?
+            ps_command.read_stdout.split("\n").each_with_object([]) do |process, all|
+              m = process.match(/^(?<pid>\d+) +runsv (?<service>.+)$/)
+              next unless m
 
-          ps_command.read_stdout.split("\n").each_with_object([]) do |process, all|
-            m = process.match(/^(?<pid>\d+) +runsv (?<service>.+)$/)
-            next unless m
-
-            all << StaleProcess.new(m[:pid], m[:service])
+              all << StaleProcess.new(m[:pid], m[:service])
+            end
+          else
+            []
           end
-        end
       end
 
       def stale_services_detail

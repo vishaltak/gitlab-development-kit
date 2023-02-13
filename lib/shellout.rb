@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'io/wait'
 
 # Controls execution of commands delegated to the running shell
 class Shellout
@@ -153,7 +154,7 @@ class Shellout
   def thread_read(io, meth)
     Thread.new do
       until io.eof?
-        ready = IO.select([io])
+        ready = io.wait_readable
 
         meth.call(io.read_nonblock(BLOCK_SIZE)) if ready
       end

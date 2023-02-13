@@ -11,13 +11,12 @@ module GDK
         # to some memory corruption (https://github.com/mudge/re2/issues/43).
         # This test doesn't always fail the first time, so repeat the test
         # several times to be sure.
-        @success ||= begin
+        @success ||=
           5.times do
             return false unless re2_ok?
           end
 
-          true
-        end
+        true
       end
 
       def detail

@@ -117,7 +117,7 @@ module GDK
       end
 
       def touch_file(file)
-        File.open(file, 'w') {}
+        FileUtils.touch(file)
         true
       rescue SystemCallError
         false
