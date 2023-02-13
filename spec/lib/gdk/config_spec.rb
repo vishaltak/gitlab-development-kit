@@ -2169,6 +2169,44 @@ RSpec.describe GDK::Config do
           expect(config.gitlab_pages.port).to eq(5555)
         end
       end
+
+      describe '#verbose' do
+        it 'defaults to false' do
+          expect(config.gitlab_pages.verbose).to eq(false)
+          expect(config.gitlab_pages.verbose?).to eq(false)
+        end
+
+        context 'when verbose is specified' do
+          let(:yaml) do
+            {
+              'gitlab_pages' => { 'verbose' => true }
+            }
+          end
+
+          it 'returns the configured port' do
+            expect(config.gitlab_pages.verbose).to eq(true)
+          end
+        end
+      end
+
+      describe '#propagate_correlation_id' do
+        it 'defaults to false' do
+          expect(config.gitlab_pages.propagate_correlation_id).to eq(false)
+          expect(config.gitlab_pages.propagate_correlation_id?).to eq(false)
+        end
+
+        context 'when propagate_correlation_id is specified' do
+          let(:yaml) do
+            {
+              'gitlab_pages' => { 'propagate_correlation_id' => true }
+            }
+          end
+
+          it 'returns the configured port' do
+            expect(config.gitlab_pages.propagate_correlation_id).to eq(true)
+          end
+        end
+      end
     end
 
     describe '#__uri' do

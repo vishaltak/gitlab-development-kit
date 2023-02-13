@@ -5,6 +5,7 @@ pages-root=<%= config.gdk_root.join('gitlab', 'shared', 'pages') %>
 pages-domain=<%= config.gitlab_pages.host %>
 api-secret-key=<%= config.gitlab_pages.secret_file %>
 log-verbose=<%= config.gitlab_pages.verbose %>
+propagate-correlation-id=<%= config.gitlab_pages.propagate_correlation_id %>
 <%- if config.gitlab_pages.access_control? -%>
 auth-client-id=<%= config.gitlab_pages.auth_client_id %>
 auth-client-secret=<%= config.gitlab_pages.auth_client_secret %>

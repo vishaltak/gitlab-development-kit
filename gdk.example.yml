@@ -149,6 +149,7 @@ gitlab_pages:
   enabled: false
   host: 127.0.0.1.nip.io
   port: 3010
+  propagate_correlation_id: false
   secret_file: "/home/git/gdk/gitlab-pages-secret"
   verbose: false
 gitlab_runner:
