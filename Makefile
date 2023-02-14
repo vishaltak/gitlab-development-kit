@@ -114,6 +114,7 @@ gitlab-k8s-agent-update \
 gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
+zoekt-update \
 gitlab-metrics-exporter-update \
 object-storage-update \
 jaeger-update \

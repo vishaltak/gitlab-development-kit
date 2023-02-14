@@ -513,6 +513,7 @@ module GDK
       port(:index_port_dev, 'zoekt-dynamic-indexserver-development')
       port(:web_port_test, 'zoekt-webserver-test')
       port(:web_port_dev, 'zoekt-webserver-development')
+      bool(:auto_update) { true }
     end
 
     settings :tracer do
