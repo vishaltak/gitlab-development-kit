@@ -11,12 +11,7 @@ The default version of Zoekt is automatically downloaded into your GDK root unde
 
 To enable the service and run it as part of `gdk start`:
 
-1. Add these lines to your [`gdk.yml`](../configuration.md):
-
-   ```yaml
-   zoekt:
-     enabled: true
-   ```
+1. Run `gdk config set zoekt.enabled true`
 
 1. Run `gdk reconfigure`.
 
@@ -28,10 +23,10 @@ To enable the service and run it as part of `gdk start`:
 
 ### Configure Zoekt in development
 
-Zoekt must be enabled for each namespace you wish to index. Given the default
-ports for Zoekt in GDK and assuming your local instance has a namespace called
-`flightjs` (which is a GDK seed by default), run the following from the Rails
-console:
+Zoekt must be enabled for each namespace you wish to index. Launch the Rails
+console with `gdk rails c`. Given the default ports for Zoekt in GDK and
+assuming your local instance has a namespace called `flightjs` (which is a GDK
+seed by default), run the following from the Rails console:
 
 ```ruby
 ::Feature.enable(:index_code_with_zoekt)
