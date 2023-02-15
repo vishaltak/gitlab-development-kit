@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'uri'
+
 module GDK
   class TestURL
     MAX_ATTEMPTS = 90
