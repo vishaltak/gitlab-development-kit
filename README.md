@@ -74,6 +74,22 @@ git config --global url.'git@gitlab.com:'.insteadOf 'https://gitlab.com/'
 NOTE:
 This will configure `git` to use `SSH` for all GitLab.com URLs.
 
+## FAQ
+
+### Why don't we Dockerize or containerize GDK, or switch to GCK as the preferred tool?
+
+- The majority of GDK users have macOS as their primary operating system, which is
+  supported by Docker and other containerization tools but usually requires a virtual machine (VM).
+  Running and managing a VM adds to the overall complexity.
+- The performance of Docker or containerization on macOS is still unpredictable.
+  It's getting better all the time, but for some users (both GitLab team members and our community)
+  it may prove to be a blocker.
+- The ability to debug problems is another issue as getting to the root cause of
+  a problem could prove more challenging due to the different execution and operating contexts
+  of Docker or other containerization tools.
+- For users that run non-Linux operating systems, running Docker or other containerization tools
+  have their own set of hardware requirements which could be another blocker.
+
 ## Getting help
 
 - We encourage you to [create a new issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/new).
