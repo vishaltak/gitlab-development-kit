@@ -11,15 +11,13 @@ The default version of Zoekt is automatically downloaded into your GDK root unde
 
 To enable the service and run it as part of `gdk start`:
 
-1. Run `gdk config set zoekt.enabled true`
-
+1. Run `gdk config set zoekt.enabled true`.
 1. Run `gdk reconfigure`.
-
 1. Run `gdk start` which now starts 4 Zoekt servers:
-   1. `zoekt-dynamic-indexserver` for test
-   1. `zoekt-dynamic-indexserver` for development
-   1. `zoekt-webserver` for test
-   1. `zoekt-webserver` for development
+   - `zoekt-dynamic-indexserver` for test.
+   - `zoekt-dynamic-indexserver` for development.
+   - `zoekt-webserver` for test.
+   - `zoekt-webserver` for development.
 
 ### Configure Zoekt in development
 
@@ -50,12 +48,12 @@ The default Zoekt version is defined in [`lib/gdk/config.rb`](../../lib/gdk/conf
 
 You can change this by setting `repo` and/or `version`:
 
-   ```yaml
-   zoekt:
-     enabled: true
-     repo: https://github.com/MyFork/zoekt.git
-     version: v1.2.3
-   ```
+```yaml
+zoekt:
+  enabled: true
+  repo: https://github.com/MyFork/zoekt.git
+  version: v1.2.3
+```
 
 Here, `repo` is any valid repository URL that can be cloned, and
 `version` is any valid ref that can be checked out.
