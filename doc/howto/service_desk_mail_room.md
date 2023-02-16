@@ -1,5 +1,7 @@
 # How to set up MailRoom and Service Desk
 
+You can watch [a recorded video walkthrough](https://www.youtube.com/watch?v=SdqBOK43MlI) that uses this guide.
+
 ## Using Webhook (recommended setup)
 
 1. Stop any running GDK services. `gdk stop`
