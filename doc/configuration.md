@@ -276,6 +276,7 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/ruby.md#truncate-
 | `gitlab.rails.databases.ci.use_main_database` | `false` | When `true`, the CI database connection uses the same database as the main database (`gitlabhq_development`). When `false`, it uses a distinct database (`gitlabhq_development_ci`). Only relevant when `gitlab.rails.databases.ci.enabled` is enabled. |
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 | `gitlab.rails.bootsnap` | `true` | Set this to `false` to disable [Bootsnap](https://github.com/Shopify/bootsnap). |
+| `gitlab.rails.allowed_hosts` | `[]` | Allows Rails to serve requests from specified hosts, other than its GDK's host. Configure this setting to allow a Geo primary site to handle forwarded requests from a Geo secondary site using a different `hostname`. When this setting is configured, the hosts are also added to the `webpack.allowed_hosts` setting. Example value: `["gdk2.test"]`. |
 
 #### Rails background jobs (Sidekiq)
 
@@ -518,16 +519,19 @@ Under the webpack key you can define the following settings with their defaults:
 
 ```yaml
 webpack:
+  enabled: true
   host: 127.0.0.1
   port: 3808
   static: false
   vendor_dll: false
   incremental: true
   incremental_ttl: 30
+  allowed_hosts: []
 ```
 
 | Setting | Default | Description |
 | --- | ------ | ----- |
+| `enabled` | `true` | Set to `false` to disable webpack. |
 | `host` | `127.0.0.1` | The host your webpack development server is running on. Usually no need to change. |
 | `port` | `3808` | The port your webpack development server is running on. You should change this if you are running multiple GDKs |
 | `static` | `false` | Setting this to `true` replaces the webpack development server with a lightweight Ruby server with. See below for more information |
@@ -537,6 +541,7 @@ webpack:
 | `sourcemaps` | `true` | Setting this to `false` disables source maps. This reduces memory consumption for those who do not need to debug frontend code. |
 | `live_reload` | `true` | Setting this to `false` disables hot module replacement when changes are detected. |
 | `public_address` | `` | Allows to set a public address for webpack's live reloading feature. This setting is mainly utilized in GitPod, otherwise the address should be set correctly by default. |
+| `allowed_hosts` | `[]` | Webpack can serve requests from hosts other than its GDK's host. Use this setting on a Geo primary site that serves requests forwarded by Geo secondary sites. Defaults to `gitlab.rails.allowed_hosts`. You don't usually need to set this for Webpack. Example value: `["gdk2.test"]`. |
 
 #### Incremental webpack compilation
 
@@ -595,6 +600,69 @@ If you experience any problems with one of the modes, you can quickly change the
 ```shell
 gdk reconfigure
 ```
+
+#### Webpack allowed hosts
+
+By default, webpack only accepts requests with a `Host` header that matches the GDK `hostname`. This is a secure default. But sometimes you may
+want webpack to accept requests from other known hosts.
+
+The `webpack.allowed_hosts` setting takes an array of strings, for example `["gdk2.test", "gdk3.test"]`.
+
+When `webpack.allowed_hosts` is not explicitly configured in `gdk.yml`, it defaults to `gitlab.rails.allowed_hosts`. In that case, the
+configuration flow is:
+
+```mermaid
+graph LR
+  A["gdk.yml<br>(gitlab.rails.allowed_hosts)"]
+
+  subgraph Template
+  B["gitlab.yml.erb<br>(gitlab.allowed_hosts)"]
+  C["Procfile.erb<br>(DEV_SERVER_ALLOWED_HOSTS)"]
+  end
+
+  A --> B
+  A --> C
+
+  subgraph Generated
+  D["gitlab.yml<br>(gitlab.allowed_hosts)"]
+  E["Procfile<br>(DEV_SERVER_ALLOWED_HOSTS)"]
+  end
+
+  B -- gdk reconfigure --> D
+  C --> E
+  
+  subgraph Runsv
+  F[rails-web]
+  G["webpack<br>(allowedHosts)"]
+  end
+
+  D -- gdk start --> F
+  E --> G
+```
+
+##### Example
+
+As an example:
+
+- Your GDK `hostname` is `gdk.test`.
+- You are running another GDK locally as a Geo secondary site with `hostname` set to `gdk2.test`.
+
+As a result, web requests against `gdk2.test` reference webpack URLs for `gdk2.test` at the **same port** as the primary webpack. Web requests
+are made to the same port because the Geo secondary site proxies most web requests to the primary site and so the primary site renders the
+webpack links.
+
+The `Host` of the original request is propagated to the primary site, and the primary site renders URLs with that `Host`. However, the primary
+site has no way of knowing if the secondary site is running webpack at a different port. You can't run two webpack servers locally, listening on
+the same port for different hosts.
+
+So what options do you have to make this work? You can either:
+
+- Run your `gdk2.test` site on a different IP. 
+- Let the `gdk2.test` webpack requests reach the primary site's webpack server. The requests would get blocked by default, and then you could
+  unblock them with `webpack.allowed_hosts` setting.
+
+  In this case, you would already set `gitlab.rails.allowed_hosts` to `["gdk2.test"]`. This is why `webpack.allowed_hosts` defaults to 
+  `gitlab.rails.allowed_hosts`.
 
 ### Webpack environment variables
 

@@ -35,6 +35,8 @@ production: &base
 
     relative_url_root: "<%= config.relative_url_root %>"
 
+    allowed_hosts: <%= config.gitlab.rails.allowed_hosts %>
+
     # Trusted Proxies
     # Customize if you have GitLab behind a reverse proxy which is running on a different machine.
     # Add the IP address for your reverse proxy to the list, otherwise users will appear signed in from that address.

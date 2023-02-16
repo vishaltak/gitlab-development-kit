@@ -87,6 +87,7 @@ gitlab:
   log_dir: "/home/git/gdk/gitlab/log"
   rails:
     address: ''
+    allowed_hosts: []
     bootsnap: true
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
     databases:
@@ -396,6 +397,8 @@ vault:
   listen_address: 127.0.0.1
   port: 8200
 webpack:
+  allowed_hosts: []
+  enabled: true
   host: 127.0.0.1
   incremental: true
   incremental_ttl: 30

@@ -1523,6 +1523,12 @@ RSpec.describe GDK::Config do
           end
         end
       end
+
+      describe '#allowed_hosts' do
+        it 'returns empty array by default' do
+          expect(config.gitlab.rails.allowed_hosts).to eq([])
+        end
+      end
     end
 
     describe 'rails_background_jobs' do
@@ -1845,6 +1851,12 @@ RSpec.describe GDK::Config do
   end
 
   describe 'webpack' do
+    describe '#enabled' do
+      it 'is true by default' do
+        expect(config.webpack.enabled).to be true
+      end
+    end
+
     describe '#incremental' do
       it 'is true by default' do
         expect(config.webpack.incremental).to be true
@@ -1884,6 +1896,12 @@ RSpec.describe GDK::Config do
     describe '#public_address' do
       it 'is empty string by default' do
         expect(config.webpack.public_address).to be ""
+      end
+    end
+
+    describe '#allowed_hosts' do
+      it 'returns empty array by default' do
+        expect(config.webpack.allowed_hosts).to eq []
       end
     end
 
