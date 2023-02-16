@@ -32,6 +32,9 @@ gitlab_operator_repo = <%= config.repositories.gitlab_operator %>
 <%-# -%>
 gitlab_elasticsearch_indexer_enabled = <%= config.elasticsearch.enabled %>
 gitlab_elasticsearch_indexer_repo = <%= config.repositories.gitlab_elasticsearch_indexer %>
+zoekt_enabled = <%= config.zoekt.enabled? %>
+zoekt_repo = <%= config.zoekt.repo %>
+zoekt_version = <%= config.zoekt.version %>
 gitlab_metrics_exporter_enabled = <%= config.gitlab_metrics_exporter.enabled %>
 gitlab_metrics_exporter_repo = <%= config.repositories.gitlab_metrics_exporter %>
 gitlab_k8s_agent_enabled = <%= config.gitlab_k8s_agent? %>

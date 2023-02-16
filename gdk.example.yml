@@ -407,3 +407,12 @@ webpack:
   vendor_dll: false
 workhorse:
   configured_port: 3333
+zoekt:
+  auto_update: true
+  enabled: false
+  index_port_dev: 6080
+  index_port_test: 6060
+  repo: https://github.com/sourcegraph/zoekt.git
+  version: c08faec66fc26a41007b2176fbea86c52b0efe4b
+  web_port_dev: 6090
+  web_port_test: 6070

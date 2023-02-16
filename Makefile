@@ -80,6 +80,7 @@ openldap-setup \
 prom-setup \
 object-storage-setup \
 gitlab-elasticsearch-indexer-setup \
+zoekt-setup \
 gitlab-metrics-exporter-setup \
 grafana-setup \
 gitlab-ui-setup \
@@ -113,6 +114,7 @@ gitlab-k8s-agent-update \
 gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
+zoekt-update \
 gitlab-metrics-exporter-update \
 object-storage-update \
 jaeger-update \
