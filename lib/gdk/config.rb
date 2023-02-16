@@ -149,6 +149,7 @@ module GDK
     end
 
     settings :webpack do
+      bool(:enabled) { true }
       string(:host) { read!('webpack_host') || config.gitlab.rails.hostname }
       port(:port, 'webpack')
       string(:public_address) { "" }
@@ -158,6 +159,7 @@ module GDK
       integer(:incremental_ttl) { 30 }
       bool(:sourcemaps) { true }
       bool(:live_reload) { true }
+      array(:allowed_hosts) { config.gitlab.rails.allowed_hosts }
 
       string(:__dev_server_public) do
         if !config.webpack.live_reload
@@ -878,6 +880,8 @@ module GDK
           integer(:threads_min) { 1 }
           integer(:__threads_min) { config.gitlab.rails.puma.workers.zero? ? config.gitlab.rails.puma.threads_max : config.gitlab.rails.puma.threads_min }
         end
+
+        array(:allowed_hosts) { [] }
       end
 
       settings :rails_background_jobs do
