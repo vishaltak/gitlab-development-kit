@@ -83,15 +83,18 @@ To make changes to GitLab documentation and preview them:
    ```
 
 1. Make the necessary changes to the files in `<path_to_gdk>/gitlab/doc`.
-1. View the preview. If you:
-   - Enable [all documentation projects](#include-more-documentation), your preview automatically
-     reloads with the changes.
-   - Enable only some documentation projects, you must restart the `gitlab-docs` service to
-     recompile the published version of the documentation with the new changes:
+1. View the preview. You must restart the `gitlab-docs` service to recompile the published version of the documentation
+   with the new changes:
 
-     ```shell
-     gdk restart gitlab-docs
-     ```
+   ```shell
+   gdk restart gitlab-docs
+   ```
+
+   You can `tail` the `gitlab-docs` logs to see progress on rebuilding the documentation:
+
+   ```shell
+   gdk tail gitlab-docs
+   ```
 
 ### Include more documentation
 
@@ -100,7 +103,7 @@ from outside the [`gitlab` project](https://gitlab.com/gitlab-org/gitlab).
 
 To be able to make and preview changes to the additional documentation:
 
-1. Add the following to your [`gdk.yml`](../configuration.md#additional-projects) as required:
+1. Add the following to your [`gdk.yml`](../configuration.md#additional-projects-settings) as required:
 
    ```yaml
    gitlab_docs:
