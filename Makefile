@@ -111,7 +111,6 @@ gitlab-shell-update \
 gitlab-workhorse-update \
 gitlab-pages-update \
 gitlab-k8s-agent-update \
-gitaly-update \
 gitlab-update \
 gitlab-elasticsearch-indexer-update \
 zoekt-update \
