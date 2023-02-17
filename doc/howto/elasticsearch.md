@@ -95,3 +95,17 @@ After this you can see every query by tailing the logs from you GDK root:
 ```shell
 tail -f elasticsearch/logs/elasticsearch_index_search_slowlog.log
 ```
+
+### Rate limiting
+
+The search endpoints are rate-limited and you might receive the following message:
+
+`This endpoint has been requested too many times. Try again later.`
+
+To increase the rate limiting for search requests, modify the
+search rate limit in the admin settings.
+
+1. Go to **Admin Area > Settings > Network**.
+1. Expand **Search Rate Limit**.
+1. Increase the **Maximum number of requests per minute for an authenticated user**.
+1. Select **Save**.
