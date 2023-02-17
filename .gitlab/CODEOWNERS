@@ -1,6 +1,6 @@
 # Code Owners - https://docs.gitlab.com/ee/user/project/code_owners.html
 
-# Maintainers
+[Maintainers]
 * @gitlab-org/maintainers/gitlab-development-kit
 .ruby-version @gitlab-org/maintainers/gitlab-development-kit @eread
 .tool-versions* @gitlab-org/maintainers/gitlab-development-kit @eread
