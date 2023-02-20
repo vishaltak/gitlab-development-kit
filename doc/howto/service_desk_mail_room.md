@@ -119,10 +119,10 @@ GDK uses `letter_opener_web` to show sent messages in a web interface under
 
 If you have problems with issues not being created from email:
 
-1. Tail the MailRoom logs with the following command:
+1. In the `<gdk-root>/gitlab` directory, tail the MailRoom logs with the following command:
 
    ```shell
-   tail -f <gdk_root>/log/mail_room_json.log
+   tail -f log/mail_room_json.log
    ```
 
 1. Watch the MailRoom logs and ensure that the email is handled. There should be a log file stating that the email
