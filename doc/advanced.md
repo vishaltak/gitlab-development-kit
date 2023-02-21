@@ -139,7 +139,7 @@ LTS release (16.04, 18.04, 20.04, 22.04) or higher, and Debian:
    source ~/.bashrc
    ```
 
-1. Complete the rest of the [Manual Instructions](index.md#manually) and then proceed to [Install GDK](index.md#install-gdk).
+1. Complete the rest of the [manual instructions](index.md#install-dependencies-manually), then [Install GDK](index.md#install-gdk).
 
 ## Install dependencies for other Linux distributions
 

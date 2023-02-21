@@ -38,7 +38,7 @@ The new GDK's URL `http://127.0.0.1:3001` is the unified URL. You can still visi
 ### Prerequisites
 
 Development on GitLab Geo requires two GDK instances running side-by-side. You can use an existing
-GDK instance based on the [install GDK](../index.md#install-gdk) documentation as the primary
+GDK instance based on the [install GDK](../../index.md#install-gdk) documentation as the primary
 node.
 
 In these instructions we assume:

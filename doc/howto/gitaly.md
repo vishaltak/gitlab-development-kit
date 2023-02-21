@@ -126,8 +126,9 @@ virtual storage.
 
 ## Praefect on a Geo secondary
 
-Praefect needs a read-write capable database to track it's state. On a Geo
-secondary the main database is read-only. So when GDK is [configured to be a Geo secondary](geo.md#secondary),
+Praefect needs a read-write capable database to track its state. On a Geo
+secondary the main database is read-only. So when GDK is
+[configured to be a Geo secondary](geo/advanced_installation.md#secondary),
 Praefect uses the Geo tracking database instead.
 
 If you have modified this setting, you need to recreate the Praefect database

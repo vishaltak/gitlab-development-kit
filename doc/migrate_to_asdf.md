@@ -89,4 +89,4 @@ To remove other dependencies so `asdf` can manage them instead:
 
 ## Install dependencies with `asdf`
 
-To install GDK dependencies with `asdf`, follow [these instructions](index.md#automatically-using-asdf).
+To install GDK dependencies with `asdf`, follow [these instructions](index.md#install-dependencies-using-asdf).
