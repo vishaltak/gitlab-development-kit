@@ -62,13 +62,20 @@ def markdown_row_for_spin(category, spin)
   "| #{helper.label_for_category(category)} | #{reviewer_note} | #{maintainer_note} |"
 end
 
-rows = roulette.spin.map do |spin|
-  markdown_row_for_spin(spin.category, spin)
-end
+#################################################################################
+
+rows = []
+
+# FIXME: Re-enable?
+# roulette.spin.each do |spin|
+#   rows << markdown_row_for_spin(spin.category, spin)
+# end
 
 roulette.required_approvals.each do |approval|
   rows << markdown_row_for_spin(approval.category, approval.spin)
 end
+
+#################################################################################
 
 markdown(REVIEW_ROULETTE_SECTION)
 
