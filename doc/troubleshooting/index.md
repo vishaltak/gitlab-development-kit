@@ -174,8 +174,8 @@ a `gdk reconfigure`:
 1. `mv Procfile Procfile.old; make Procfile`
 1. `gdk reconfigure`
 
-For more information about Jaeger, visit the [distributed tracing GitLab developer
-documentation](https://docs.gitlab.com/ee/development/distributed_tracing.html).
+For more information about Jaeger, visit the
+[distributed tracing GitLab developer documentation](https://docs.gitlab.com/ee/development/distributed_tracing.html).
 
 ## Gitaly
 
@@ -228,8 +228,12 @@ Check which version of Git you're running with `git --version`, and compare it a
 might be running an unsupported version.
 
 If the supported version is not available for you from pre-compiled packages, try following the
-instructions for [Ubuntu/Debian](../index.md#ubuntudebian) or [Arch/Manjaro](../index.md#arch-and-manjaro-linux). If
-that doesn't give you the supported version, you might have to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
+instructions for:
+
+- [Ubuntu or Debian](../index.md#ubuntu-or-debian).
+- [Arch and Manjaro](../index.md#arch-and-manjaro-linux).
+
+If that doesn't give you the supported version, you might have to [compile Git from source](https://docs.gitlab.com/ee/install/installation.html#git).
 
 ## Elasticsearch
 
