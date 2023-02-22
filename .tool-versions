@@ -35,11 +35,11 @@ minio 2022-07-15T03-44-22Z
 #   16.15.0:
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
-#   18.14.0:
+#   18.14.1:
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #
-nodejs 16.15.0 18.14.0
+nodejs 16.15.0 18.14.1
 
 # postgres:
 #   12.13:
