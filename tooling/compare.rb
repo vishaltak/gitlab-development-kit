@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-filename = './update.txt'
-content  = File.read(filename)
-dashes   = '-' * 80
+command = ARGV[0]
+content = `#{command}`
+dashes  = '-' * 80
 
 lines_with_dashes = content.scan(/^#{dashes}\n(.*?)\n#{dashes}$/m).map(&:first)
 duplicates = lines_with_dashes.select { |line| lines_with_dashes.count(line) > 1 }.uniq

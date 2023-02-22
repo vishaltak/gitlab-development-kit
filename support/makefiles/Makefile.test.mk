@@ -65,6 +65,12 @@ check-links: yarn-install
 	@echo -n "Check internal links: "
 	@${YARN} run --silent check-links 2>&1 && echo "OK"
 
+# Usage: make check-duplicates command="gdk update"
+.PHONY: check-duplicates
+check-duplicates:
+	@echo "Checking for duplicated tasks:"
+	@ruby ./tooling/compare.rb "$(command)"
+
 .PHONY: shellcheck
 shellcheck:
 	@support/dev/shellcheck
