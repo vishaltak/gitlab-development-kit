@@ -66,14 +66,14 @@ RSpec.describe GDK::ConfigSettings do
       described_class.bool(:foo) { 'false' }
 
       expect { config.foo }.not_to raise_error
-      expect(config.foo).to eq(false)
+      expect(config.foo).to be(false)
     end
 
     it 'accepts a bool?' do
       described_class.bool(:foo) { 'false' }
 
       expect { config.foo? }.not_to raise_error
-      expect(config.foo?).to eq(false)
+      expect(config.foo?).to be(false)
     end
 
     it 'fails on non-bool value' do
@@ -200,7 +200,7 @@ RSpec.describe GDK::ConfigSettings do
         described_class.integer(:foo) { '333' }
         described_class.string(:bar) { 'howdy' }
 
-        expect(config.validate!).to eq(nil)
+        expect(config.validate!).to be_nil
       end
     end
 

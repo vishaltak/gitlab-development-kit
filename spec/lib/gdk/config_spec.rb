@@ -178,7 +178,7 @@ RSpec.describe GDK::Config do
 
     describe '#enabled' do
       it 'defaults to false' do
-        expect(config.elasticsearch.enabled).to eq(false)
+        expect(config.elasticsearch.enabled).to be(false)
       end
 
       context 'when enabled in config file' do
@@ -187,7 +187,7 @@ RSpec.describe GDK::Config do
         end
 
         it 'returns true' do
-          expect(config.elasticsearch.enabled).to eq(true)
+          expect(config.elasticsearch.enabled).to be(true)
         end
       end
     end
@@ -625,7 +625,7 @@ RSpec.describe GDK::Config do
 
   describe '#clickhouse' do
     context 'with default settings' do
-      it { expect(default_config.clickhouse.enabled).to eq(false) }
+      it { expect(default_config.clickhouse.enabled).to be(false) }
       it { expect(default_config.clickhouse.dir).to eq(gdk_basepath.join('clickhouse')) }
       it { expect(default_config.clickhouse.data_dir).to eq(gdk_basepath.join('clickhouse/data')) }
       it { expect(default_config.clickhouse.log_dir).to eq(gdk_basepath.join('log/clickhouse')) }
@@ -671,7 +671,7 @@ RSpec.describe GDK::Config do
         }
       end
 
-      it { expect(config.clickhouse.enabled).to eq(true) }
+      it { expect(config.clickhouse.enabled).to be(true) }
       it { expect(config.clickhouse.bin).to eq(Pathname.new('/tmp/clickhouse/clickhouse-123')) }
       it { expect(config.clickhouse.dir).to eq(Pathname.new('/tmp/clickhouse')) }
       it { expect(config.clickhouse.data_dir).to eq(Pathname.new('/tmp/clickhouse/data-dir')) }
@@ -894,14 +894,14 @@ RSpec.describe GDK::Config do
       let(:protected_config_files) { ['*'] }
 
       it 'returns true' do
-        expect(config.config_file_protected?('foobar')).to eq(true)
+        expect(config.config_file_protected?('foobar')).to be(true)
       end
 
       context 'but legacy overwrite_changes set to true' do
         let(:overwrite_changes) { true }
 
         it 'returns false' do
-          expect(config.config_file_protected?('foobar')).to eq(false)
+          expect(config.config_file_protected?('foobar')).to be(false)
         end
       end
     end
@@ -1241,16 +1241,16 @@ RSpec.describe GDK::Config do
 
       describe '#bootsnap' do
         it 'returns true by default' do
-          expect(config.gitlab.rails.bootsnap?).to eq(true)
+          expect(config.gitlab.rails.bootsnap?).to be(true)
         end
       end
 
       context 'https' do
         describe '#enabled' do
           it 'returns false by default' do
-            expect(config.gitlab.rails.https.enabled).to eq(false)
-            expect(config.gitlab.rails.https.enabled?).to eq(false)
-            expect(config.gitlab.rails.https?).to eq(false)
+            expect(config.gitlab.rails.https.enabled).to be(false)
+            expect(config.gitlab.rails.https.enabled?).to be(false)
+            expect(config.gitlab.rails.https?).to be(false)
           end
         end
       end
@@ -1560,7 +1560,7 @@ RSpec.describe GDK::Config do
 
       describe '#sidekiq_exporter_enabled' do
         it 'defaults to false' do
-          expect(config.gitlab.rails_background_jobs.sidekiq_exporter_enabled).to eq(false)
+          expect(config.gitlab.rails_background_jobs.sidekiq_exporter_enabled).to be(false)
         end
       end
 
@@ -1572,7 +1572,7 @@ RSpec.describe GDK::Config do
 
       describe '#sidekiq_health_check_enabled' do
         it 'defaults to false' do
-          expect(config.gitlab.rails_background_jobs.sidekiq_health_check_enabled).to eq(false)
+          expect(config.gitlab.rails_background_jobs.sidekiq_health_check_enabled).to be(false)
         end
       end
 
@@ -2144,8 +2144,8 @@ RSpec.describe GDK::Config do
   describe 'gitlab_pages' do
     describe '#enabled' do
       it 'defaults to false' do
-        expect(config.gitlab_pages.enabled).to eq(false)
-        expect(config.gitlab_pages.enabled?).to eq(false)
+        expect(config.gitlab_pages.enabled).to be(false)
+        expect(config.gitlab_pages.enabled?).to be(false)
       end
     end
 
@@ -2190,8 +2190,8 @@ RSpec.describe GDK::Config do
 
       describe '#verbose' do
         it 'defaults to false' do
-          expect(config.gitlab_pages.verbose).to eq(false)
-          expect(config.gitlab_pages.verbose?).to eq(false)
+          expect(config.gitlab_pages.verbose).to be(false)
+          expect(config.gitlab_pages.verbose?).to be(false)
         end
 
         context 'when verbose is specified' do
@@ -2202,15 +2202,15 @@ RSpec.describe GDK::Config do
           end
 
           it 'returns the configured port' do
-            expect(config.gitlab_pages.verbose).to eq(true)
+            expect(config.gitlab_pages.verbose).to be(true)
           end
         end
       end
 
       describe '#propagate_correlation_id' do
         it 'defaults to false' do
-          expect(config.gitlab_pages.propagate_correlation_id).to eq(false)
-          expect(config.gitlab_pages.propagate_correlation_id?).to eq(false)
+          expect(config.gitlab_pages.propagate_correlation_id).to be(false)
+          expect(config.gitlab_pages.propagate_correlation_id?).to be(false)
         end
 
         context 'when propagate_correlation_id is specified' do
@@ -2221,7 +2221,7 @@ RSpec.describe GDK::Config do
           end
 
           it 'returns the configured port' do
-            expect(config.gitlab_pages.propagate_correlation_id).to eq(true)
+            expect(config.gitlab_pages.propagate_correlation_id).to be(true)
           end
         end
       end
@@ -2235,7 +2235,7 @@ RSpec.describe GDK::Config do
 
     describe '#access_control' do
       it 'defaults to false' do
-        expect(config.gitlab_pages.access_control?).to eq(false)
+        expect(config.gitlab_pages.access_control?).to be(false)
       end
 
       context 'when access_control is enabled' do
@@ -2246,7 +2246,7 @@ RSpec.describe GDK::Config do
         end
 
         it 'configures auth correctly' do
-          expect(config.gitlab_pages.access_control?).to eq(true)
+          expect(config.gitlab_pages.access_control?).to be(true)
           expect(config.gitlab_pages.auth_client_id).to eq('client_id')
           expect(config.gitlab_pages.auth_client_secret).to eq('client_secret')
           expect(config.gitlab_pages.auth_scope).to eq('read_api')
@@ -2258,7 +2258,7 @@ RSpec.describe GDK::Config do
 
     describe '#enable_custom_domains' do
       it 'defaults to false' do
-        expect(config.gitlab_pages.enable_custom_domains?).to eq(false)
+        expect(config.gitlab_pages.enable_custom_domains?).to be(false)
       end
 
       context 'when enable_custom_domains is enabled' do
@@ -2269,7 +2269,7 @@ RSpec.describe GDK::Config do
         end
 
         it 'configures custom domains correctly' do
-          expect(config.gitlab_pages.enable_custom_domains?).to eq(true)
+          expect(config.gitlab_pages.enable_custom_domains?).to be(true)
         end
       end
     end
@@ -2296,7 +2296,7 @@ RSpec.describe GDK::Config do
   describe 'prometheus' do
     describe '#enabled' do
       it 'defaults to false' do
-        expect(config.prometheus.enabled).to eq(false)
+        expect(config.prometheus.enabled).to be(false)
       end
     end
 
@@ -2340,8 +2340,8 @@ RSpec.describe GDK::Config do
   describe 'grafana' do
     describe '#enabled' do
       it 'defaults to false' do
-        expect(config.grafana.enabled).to eq(false)
-        expect(config.grafana.enabled?).to eq(false)
+        expect(config.grafana.enabled).to be(false)
+        expect(config.grafana.enabled?).to be(false)
       end
     end
 
@@ -2361,33 +2361,33 @@ RSpec.describe GDK::Config do
   describe 'gdk' do
     describe '#debug' do
       it 'defaults to false' do
-        expect(config.gdk.debug?).to eq(false)
+        expect(config.gdk.debug?).to be(false)
       end
     end
 
     describe '#quiet' do
       it 'defaults to true' do
-        expect(config.gdk.quiet).to eq(true)
-        expect(config.gdk.quiet?).to eq(true)
+        expect(config.gdk.quiet).to be(true)
+        expect(config.gdk.quiet?).to be(true)
       end
     end
 
     describe '#auto_reconfigure' do
       it 'defaults to true' do
-        expect(config.gdk.auto_reconfigure).to eq(true)
-        expect(config.gdk.auto_reconfigure?).to eq(true)
+        expect(config.gdk.auto_reconfigure).to be(true)
+        expect(config.gdk.auto_reconfigure?).to be(true)
       end
     end
 
     describe '#auto_rebase_projects' do
       it 'defaults to false' do
-        expect(config.gdk.auto_rebase_projects?).to eq(false)
+        expect(config.gdk.auto_rebase_projects?).to be(false)
       end
     end
 
     describe '#use_bash_shim' do
       it 'defaults to false' do
-        expect(config.gdk.use_bash_shim?).to eq(false)
+        expect(config.gdk.use_bash_shim?).to be(false)
       end
     end
 
@@ -2995,7 +2995,7 @@ RSpec.describe GDK::Config do
   describe 'snowplow_micro' do
     describe '#enabled' do
       it 'defaults to false' do
-        expect(config.snowplow_micro.enabled).to eq(false)
+        expect(config.snowplow_micro.enabled).to be(false)
       end
     end
 

@@ -40,7 +40,7 @@ RSpec.describe GDK::Diagnostic::Re2 do
   end
 
   def stub_shellout(success)
-    shellout = instance_double('Shellout', success?: success, try_run: nil)
+    shellout = instance_double(Shellout, success?: success, try_run: nil)
 
     cmd = ["/home/git/gdk/support/bundle-exec", "ruby", "-e", "\"require 're2'; regexp = RE2::Regexp.new('{', log_errors: false); regexp.error unless regexp.ok?\""]
     allow(Shellout).to receive(:new).with(cmd, chdir: GDK.config.gitlab.dir.to_s).and_return(shellout)

@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
   spec.files         = ['lib/gitlab_development_kit.rb']
   spec.executables   = ['gdk']
 
-  spec.required_ruby_version = '>= 2.7.2'
+  spec.required_ruby_version = '>= 3.0.5'
   spec.add_dependency 'rake', '~> 13.0'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

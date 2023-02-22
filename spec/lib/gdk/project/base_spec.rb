@@ -44,7 +44,7 @@ RSpec.describe GDK::Project::Base do
 
         shared_examples "it's about to update the git worktree" do
           it 'attempts to run GitWorktree#update' do
-            git_worktree_double = instance_double('GitWorktree', update: true)
+            git_worktree_double = instance_double(GDK::Project::GitWorktree, update: true)
             expect(GDK::Project::GitWorktree).to receive(:new).with(worktree_path, default_branch, revision, auto_rebase: auto_rebase_projects).and_return(git_worktree_double)
 
             expect(subject.update(revision)).to be(true)

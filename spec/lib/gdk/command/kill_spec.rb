@@ -92,14 +92,14 @@ RSpec.describe GDK::Command::Kill, :hide_stdout do
   end
 
   def stub_pkill(command)
-    shellout_double = instance_double('Shellout', try_run: '', exit_code: 0)
+    shellout_double = instance_double(Shellout, try_run: '', exit_code: 0)
     expect(GDK::Output).to receive(:info).with("Running '#{command}'..")
     expect(Shellout).to receive(:new).with(command).and_return(shellout_double)
     expect(GDK::Output).to receive(:success).with("All 'runsv' processes have been killed.")
   end
 
   def stub_runsv_processes_to_kill(*result)
-    shellout_double = instance_double('Shellout')
+    shellout_double = instance_double(Shellout)
     allow(Shellout).to receive(:new).with('ps -ef | grep "[r]unsv"').and_return(shellout_double)
     allow(shellout_double).to receive(:try_run).and_return(*result)
   end

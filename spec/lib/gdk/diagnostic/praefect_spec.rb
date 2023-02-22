@@ -63,7 +63,7 @@ RSpec.describe GDK::Diagnostic::Praefect do
     line = "| #{migration} | #{status} |"
 
     command = '/home/git/gdk/gitaly/_build/bin/praefect -config /home/git/gdk/gitaly/praefect.config.toml sql-migrate-status'
-    shellout_double = instance_double('Shellout', readlines: [line])
+    shellout_double = instance_double(Shellout, readlines: [line])
     allow(Shellout).to receive(:new).with(command).and_return(shellout_double)
   end
 end

@@ -4,7 +4,7 @@ module GDK
   module Diagnostic
     class Re2 < Base
       TITLE = 're2'
-      SCRIPT = %{\"require 're2'; regexp = RE2::Regexp.new('\{', log_errors: false); regexp.error unless regexp.ok?\"}
+      SCRIPT = %{"require 're2'; regexp = RE2::Regexp.new('\{', log_errors: false); regexp.error unless regexp.ok?"}
 
       def success?
         # When re2 and libre2 are out of sync, a seg fault can occur due

@@ -148,7 +148,7 @@ class PostgresUpgrader
     lines = run(%w[asdf list postgres])
     return {} if lines.empty?
 
-    current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{ENV['HOME']}/.asdf")
+    current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{Dir.home}/.asdf")
 
     lines.split.each_with_object({}) do |version, paths|
       version.chomp!
@@ -178,7 +178,7 @@ class PostgresUpgrader
     available_packages = Set.new
 
     lines.split("\n").each do |line|
-      package_data = line.strip.split(' ')
+      package_data = line.strip.split
       available_packages << package_data.first.strip
     end
 

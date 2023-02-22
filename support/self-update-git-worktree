@@ -39,8 +39,8 @@ rescue StandardError
   false
 end
 
-ci_project_dir = ENV['CI_PROJECT_DIR']
-ci_sha = ENV['CI_COMMIT_SHA']
+ci_project_dir = ENV.fetch('CI_PROJECT_DIR', nil)
+ci_sha = ENV.fetch('CI_COMMIT_SHA', nil)
 
 # We need to retrieve the commit SHA if the source project is a fork
 if ci_project_dir && ci_sha
