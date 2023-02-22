@@ -52,7 +52,7 @@ module GDK
       end
 
       def gdk_root
-        @gdk_root ||= find_root(Pathname.new(ENV['PWD']))
+        @gdk_root ||= find_root(Pathname.new(ENV.fetch('PWD', nil)))
       end
 
       def gdk_version?

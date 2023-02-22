@@ -12,15 +12,15 @@ $stdout.sync = true
 FileNotFoundError = Class.new(StandardError)
 
 GITLAB_ORG_URL = 'https://gitlab.com/gitlab-org'
-GITLAB_URL = "#{GITLAB_ORG_URL}/gitlab"
-GITLAB_SHELL_URL = "#{GITLAB_ORG_URL}/gitlab-shell"
-GITLAB_PAGES_URL = "#{GITLAB_ORG_URL}/gitlab-pages"
-GITALY_URL = "#{GITLAB_ORG_URL}/gitaly"
-GITLAB_RUNNER_URL = "#{GITLAB_ORG_URL}/gitlab-runner"
-GITLAB_UI_URL = "#{GITLAB_ORG_URL}/gitlab-ui"
-GITLAB_DOCS_URL = "#{GITLAB_ORG_URL}/gitlab-docs"
-GITLAB_ELASTICSEARCH_INDEXER_URL = "#{GITLAB_ORG_URL}/gitlab-elasticsearch-indexer"
-GITLAB_METRICS_EXPORTER = "#{GITLAB_ORG_URL}/gitlab-metrics-exporter"
+GITLAB_URL = "#{GITLAB_ORG_URL}/gitlab".freeze
+GITLAB_SHELL_URL = "#{GITLAB_ORG_URL}/gitlab-shell".freeze
+GITLAB_PAGES_URL = "#{GITLAB_ORG_URL}/gitlab-pages".freeze
+GITALY_URL = "#{GITLAB_ORG_URL}/gitaly".freeze
+GITLAB_RUNNER_URL = "#{GITLAB_ORG_URL}/gitlab-runner".freeze
+GITLAB_UI_URL = "#{GITLAB_ORG_URL}/gitlab-ui".freeze
+GITLAB_DOCS_URL = "#{GITLAB_ORG_URL}/gitlab-docs".freeze
+GITLAB_ELASTICSEARCH_INDEXER_URL = "#{GITLAB_ORG_URL}/gitlab-elasticsearch-indexer".freeze
+GITLAB_METRICS_EXPORTER = "#{GITLAB_ORG_URL}/gitlab-metrics-exporter".freeze
 
 class RemoteToolVersionFile
   def initialize(base_url, ref: 'master', path: '', label_ref: '')

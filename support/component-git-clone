@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-USAGE = "GIT_REVISION=<revision> #{$PROGRAM_NAME} [git_options] <repo_url> <component_name>"
+USAGE = "GIT_REVISION=<revision> #{$PROGRAM_NAME} [git_options] <repo_url> <component_name>".freeze
 
 require_relative '../lib/gdk'
 
@@ -23,7 +23,7 @@ def checkout(clone_dir, revision)
 end
 
 def main(argv)
-  revision = ENV['GIT_REVISION']
+  revision = ENV.fetch('GIT_REVISION', nil)
   clone(argv)
 
   return unless revision

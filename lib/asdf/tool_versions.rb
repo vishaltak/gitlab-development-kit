@@ -123,7 +123,7 @@ module Asdf
     def tool_versions
       @tool_versions ||= raw_tool_versions_lines.each_with_object({}) do |line, all|
         match = line.chomp.match(/\A(?<name>\w+) (?<versions>[\d. ]+)\z/)
-        all[match[:name]] = Tool.new(match[:name], match[:versions].split(' ')) if match
+        all[match[:name]] = Tool.new(match[:name], match[:versions].split) if match
       end
     end
 
@@ -132,7 +132,7 @@ module Asdf
     end
 
     def asdf_data_dir
-      @asdf_data_dir ||= Pathname.new(ENV.fetch('ASDF_DATA_DIR', File.join(ENV['HOME'], '.asdf')))
+      @asdf_data_dir ||= Pathname.new(ENV.fetch('ASDF_DATA_DIR', File.join(Dir.home, '.asdf')))
     end
 
     def asdf_data_installs_dir

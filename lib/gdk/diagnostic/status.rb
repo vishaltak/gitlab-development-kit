@@ -26,7 +26,7 @@ module GDK
       end
 
       def down_services
-        @down_services ||= gdk_status_command.read_stdout.split("\n").select { |svc| svc.match?(/\Adown: .+, want up;.+\z/) }
+        @down_services ||= gdk_status_command.read_stdout.split("\n").grep(/\Adown: .+, want up;.+\z/)
       end
     end
   end

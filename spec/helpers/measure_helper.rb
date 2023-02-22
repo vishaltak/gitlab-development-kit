@@ -2,7 +2,7 @@
 
 module MeasureHelper
   shared_examples 'it checks if Docker and GDK are running' do |args|
-    context "when Docker isn't installed or running " do
+    context "when Docker isn't installed or running" do
       let(:docker_running) { false }
 
       it 'aborts' do

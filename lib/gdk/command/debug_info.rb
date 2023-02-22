@@ -26,7 +26,7 @@ module GDK
         stdout.puts 'Environment:'
 
         ENV_VARS.each do |var|
-          stdout.puts "#{var}=#{ENV[var]}"
+          stdout.puts "#{var}=#{ENV.fetch(var, nil)}"
         end
 
         ENV.each do |var, content|

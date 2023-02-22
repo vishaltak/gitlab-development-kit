@@ -48,7 +48,6 @@ RSpec.describe GDK::Command::ResetData do
     let!(:backup_redis_dump_rdb_path) { backup_base_dir.join('redis', "dump.rdb.#{current_timestamp}") }
 
     before do
-      allow(GDK).to receive(:remember!)
       allow(Runit).to receive(:stop).with(quiet: true)
       allow(GDK).to receive(:root).and_return(root)
       allow(subject).to receive(:continue?).and_return(true)

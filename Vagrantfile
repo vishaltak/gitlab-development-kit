@@ -94,9 +94,9 @@ $user_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
   # automatically move into the gitlab-development-kit folder, but only add the command
   # if it's not already there
   if [ -f /home/$DEV_USER/.bash_profile ]; then
-    sudo -u $DEV_USER -i bash -c "grep -q \"cd /home/$DEV_USER/gitlab-development-kit/\" /home/$DEV_USER/.bash_profile || echo \"cd /home/$DEV_USER/gitlab-development-kit/\" >> /home/$DEV_USER/.bash_profile"
+    sudo -u $DEV_USER -i bash -c "grep -q "cd /home/$DEV_USER/gitlab-development-kit/" /home/$DEV_USER/.bash_profile || echo "cd /home/$DEV_USER/gitlab-development-kit/" >> /home/$DEV_USER/.bash_profile"
   else
-    sudo -u $DEV_USER -i bash -c "touch /home/$DEV_USER/.bash_profile && echo \"cd /home/$DEV_USER/gitlab-development-kit/\" >> /home/$DEV_USER/.bash_profile"
+    sudo -u $DEV_USER -i bash -c "touch /home/$DEV_USER/.bash_profile && echo "cd /home/$DEV_USER/gitlab-development-kit/" >> /home/$DEV_USER/.bash_profile"
   fi
 
   # set up gdk

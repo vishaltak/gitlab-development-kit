@@ -216,7 +216,7 @@ module Runit
       FileUtils.mkdir_p(File.dirname(path))
       return if file_contains_content?(path, content)
 
-      File.open(path, 'w') { |f| f.write(content) }
+      File.write(path, content)
     rescue Errno::ETXTBSY
       nil
     end

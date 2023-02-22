@@ -88,7 +88,7 @@ module GDK
         message << '.'
       end
 
-      GDK::Output.warn message.join('')
+      GDK::Output.warn message.join
       GDK::Output.puts
 
       GDK::Output.info "See 'gdk help' for more detail."

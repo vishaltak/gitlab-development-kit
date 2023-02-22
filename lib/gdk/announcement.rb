@@ -4,7 +4,7 @@ require 'yaml'
 
 module GDK
   class Announcement
-    VALID_FILENAME_REGEX = /\A\d{4}_\w+\.yml/.freeze
+    VALID_FILENAME_REGEX = /\A\d{4}_\w+\.yml/
 
     attr_reader :header, :body
 

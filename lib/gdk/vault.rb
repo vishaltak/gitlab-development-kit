@@ -55,8 +55,8 @@ module GDK
               DATABASE_PASSWORD:
                 vault: gitlab-test/db/password
             script:
-              - echo \$DATABASE_PASSWORD
-              - cat \$DATABASE_PASSWORD
+              - echo $DATABASE_PASSWORD
+              - cat $DATABASE_PASSWORD
         VAULT_CI_EXAMPLE
       )
     end

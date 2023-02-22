@@ -107,7 +107,7 @@ module Support
 
       GDK::Output.error " failed to connect to #{service} after #{repeats * sleep_time}s"
       GDK::Output.puts(stderr: true)
-      system('grep', "#{service}\.1", LOG_FILE)
+      system('grep', "#{service}.1", LOG_FILE)
 
       abort
     end

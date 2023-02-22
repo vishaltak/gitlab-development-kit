@@ -116,8 +116,8 @@ def stub_no_color_env(res)
 end
 
 def stub_backup
-  instance_spy('gdk_backup').tap do |b|
-    allow(::GDK::Backup).to receive(:new).and_return(b)
+  instance_spy(GDK::Backup).tap do |b|
+    allow(GDK::Backup).to receive(:new).and_return(b)
   end
 end
 

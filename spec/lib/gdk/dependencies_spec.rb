@@ -53,7 +53,7 @@ RSpec.describe GDK::Dependencies do
     end
 
     it 'returns nil when executable cant be found' do
-      expect(described_class.find_executable('non-existent')).to eq(nil)
+      expect(described_class.find_executable('non-existent')).to be_nil
     end
   end
 

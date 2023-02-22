@@ -12,7 +12,7 @@ describe Git::Configure, :hide_stdout do
     end
 
     it 'succeeds' do
-      allow($stdin).to receive(:gets).and_return("\n")
+      expect($stdin).to receive(:gets).and_return("\n").exactly(4).times
 
       subject.run!
     end

@@ -36,7 +36,7 @@ RSpec.describe GDK::Services::Clickhouse do
 
       stub_gdk_yaml(config)
 
-      expect(subject.enabled?).to eq(true)
+      expect(subject.enabled?).to be(true)
     end
 
     it 'returns false if set `enabled: false` in the config file' do
@@ -48,7 +48,7 @@ RSpec.describe GDK::Services::Clickhouse do
 
       stub_gdk_yaml(config)
 
-      expect(subject.enabled?).to eq(false)
+      expect(subject.enabled?).to be(false)
     end
   end
 end

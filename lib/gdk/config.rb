@@ -391,14 +391,7 @@ module GDK
       string(:agent_listen_address) { "#{config.listen_address}:8150" }
       string(:__agent_listen_url_path) { '/-/kubernetes-agent' }
       bool(:__agent_listen_websocket) do
-        if config.nginx?
-          # nginx's grpc_pass requires HTTP/2 enabled which requires TLS.
-          # It's easier to use WebSockets than ask the user to generate
-          # TLS certificates.
-          true
-        else
-          false
-        end
+        config.nginx?
       end
       string(:__url_for_agentk) do
         if config.nginx?
@@ -886,7 +879,7 @@ module GDK
           integer(:workers) { 2 }
 
           integer(:threads_max) { 4 }
-          integer(:__threads_max) { config.gitlab.rails.puma.__threads_min > config.gitlab.rails.puma.threads_max ? config.gitlab.rails.puma.__threads_min : config.gitlab.rails.puma.threads_max }
+          integer(:__threads_max) { [config.gitlab.rails.puma.__threads_min, config.gitlab.rails.puma.threads_max].max }
           integer(:threads_min) { 1 }
           integer(:__threads_min) { config.gitlab.rails.puma.workers.zero? ? config.gitlab.rails.puma.threads_max : config.gitlab.rails.puma.threads_min }
         end
