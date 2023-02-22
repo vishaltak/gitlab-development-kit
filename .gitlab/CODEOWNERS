@@ -4,4 +4,4 @@
 * @gitlab-org/maintainers/gitlab-development-kit
 .ruby-version @gitlab-org/maintainers/gitlab-development-kit @eread
 .tool-versions* @gitlab-org/maintainers/gitlab-development-kit @eread
-/doc/ @axil @eread @marcel.amirault @fneill @jglassman1 @phillipwells @lciutacu
+/doc/ @axil @eread @marcel.amirault @fneill @jglassman1 @phillipwells @lciutacu @rdickenson
