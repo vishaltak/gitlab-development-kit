@@ -143,7 +143,24 @@ post-update-tasks:
 .PHONY: reconfigure
 reconfigure: unlock-dependency-installers \
 touch-examples \
-all \
+preflight-checks \
+gdk-reconfigure-task \
+geo-config \
+gitlab-docs-setup \
+gitlab-elasticsearch-indexer-setup \
+gitlab-k8s-agent-setup \
+gitlab-metrics-exporter-setup \
+gitlab-pages-setup \
+gitlab-spamcheck-setup \
+gitlab-ui-setup \
+grafana-setup \
+object-storage-setup \
+openldap-setup \
+prom-setup \
+snowplow-micro-setup \
+support-setup \
+zoekt-setup \
+postgresql-sensible-defaults \
 post-reconfigure-tasks
 
 .PHONY: clean
@@ -193,7 +210,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-update
 diff-config: touch-examples
 	$(Q)gdk $@
 
-support-setup: Procfile gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
+support-setup: Procfile jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 
 .PHONY: start
 start:
