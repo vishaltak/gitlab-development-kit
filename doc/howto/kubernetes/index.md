@@ -85,8 +85,7 @@ is outside your network.
 ### Runner on K8s cluster is outside of your network
 
 Assuming that you choose to run the K8s cluster on GKE you may also wish to use
-the [1 click
-install](https://docs.gitlab.com/ee/user/project/clusters/#installing-applications)
+the [1 click install](https://docs.gitlab.com/ee/user/project/clusters/#installing-applications)
 to install the Runner on this cluster. This means that in addition to the
 registry (which is a separate server on your machine), you also need the
 GitLab instance to be internet accessible because now the runner is not on your
@@ -140,14 +139,14 @@ deleted clusters.
 
 You can find and delete any unused load balancers following these steps:
 
-1. Open [The Load Balancers
-  page](https://console.cloud.google.com/net-services/loadbalancing/loadBalancers/list?filter=%255B%257B_22k_22_3A_22Protocol_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22TCP_5C_22_22%257D%255D)
-  in the GCP console
+1. Open
+   [The Load Balancers page](https://console.cloud.google.com/net-services/loadbalancing/loadBalancers/list?filter=%255B%257B_22k_22_3A_22Protocol_22_2C_22t_22_3A10_2C_22v_22_3A_22_5C_22TCP_5C_22_22%257D%255D)
+   in the GCP console
 1. Open every one of the TCP load balancers in new tabs
 1. Check through every tab for the yellow warning next to the nodes list saying
-  the nodes they point to no longer exist
+   the nodes they point to no longer exist
 1. Delete the load balancer if it has no green ticks and only yellow warnings
-  about nodes no longer existing
+   about nodes no longer existing
 
 ### Unused Persistent Disks
 

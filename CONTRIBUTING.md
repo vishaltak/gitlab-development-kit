@@ -17,6 +17,5 @@ _This notice should stay as the first item in the CONTRIBUTING.md file._
 
 ## Contributing to GitLab Development Kit
 
-The source of GitLab Development Kit is [hosted on
-GitLab.com](https://gitlab.com/gitlab-org/gitlab-development-kit/) and
-contributions are welcome!
+The source of GitLab Development Kit is
+[hosted on GitLab.com](https://gitlab.com/gitlab-org/gitlab-development-kit/) and contributions are welcome!

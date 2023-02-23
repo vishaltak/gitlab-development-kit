@@ -198,9 +198,8 @@ support/agentk TOKEN [EXTRA ARGS FOR AGENTK]
 When run in this way, `agentk` implicitly uses the currently selected context in
 your kubeconfig, similar to how `kubectl` works.
 
-To pick up new changes to the code, simply restart the script. If you are also
-making changes to KAS, consider running [KAS from source as
-well](#optional-run-kas-directly-from-source-with-go-run).
+To pick up new changes to the code, simply restart the script. If you are also making changes to KAS, consider running
+[KAS from source as well](#optional-run-kas-directly-from-source-with-go-run).
 
 When running the script, all arguments following the token get forwarded
 directly to `agentk`. For example, to use a different kubeconfig context, you

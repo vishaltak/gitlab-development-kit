@@ -20,7 +20,7 @@ The [GDK `.tool-versions` file](../.tool-versions) contains the specifics plugin
 
 - Some `asdf` plugins require software to be compiled from source which can at times fail or be slow.
 - Some `asdf` plugins are not well maintained.
-- Some software does not currently have `asdf` plugins, such as `jaeger` and `OpenLDAP`.
+- Some software does not have `asdf` plugins, such as `jaeger` and `OpenLDAP`.
 
 ## Reason for `asdf` as the standard for installing software in the GDK
 
