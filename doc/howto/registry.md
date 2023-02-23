@@ -8,11 +8,10 @@ Depending on your needs, you can set up Container Registry locally in the follow
 
 ## Check AirPlay Receiver process on macOS
 
-If you are running macOS Monterey, the `AirPlay Receiver` process [may be
-listening on port 5000](https://developer.apple.com/forums/thread/682332). This
+If you are running macOS Monterey, the `AirPlay Receiver` process
+[may be listening on port 5000](https://developer.apple.com/forums/thread/682332). This
 interferes with the Container Registry if it's bound to localhost, as it
-listens on the same port. See the [Apple support
-thread](https://developer.apple.com/forums/thread/682332) for instructions on
+listens on the same port. See the [Apple support thread](https://developer.apple.com/forums/thread/682332) for instructions on
 turning off AirPlay Receiver temporarily.
 
 To check if AirPlay Receiver is listening on port 5000, you can run

@@ -12,9 +12,8 @@ Besides this list of tips and troubleshooting, see our list of
 
 ### QA
 
-- Consider adding `require 'pry'; binding.pry` breakpoint before [the last
-  assertion about
-  builds](https://gitlab.com/gitlab-org/gitlab-foss/blob/eb146e9abe08c3991b5a54237c24d15312c70ee8/qa/qa/specs/features/browser_ui/7_configure/auto_devops/create_project_with_auto_devops_spec.rb#L61)
+- Consider adding `require 'pry'; binding.pry` breakpoint before
+  [the last assertion about builds](https://gitlab.com/gitlab-org/gitlab-foss/blob/eb146e9abe08c3991b5a54237c24d15312c70ee8/qa/qa/specs/features/browser_ui/7_configure/auto_devops/create_project_with_auto_devops_spec.rb#L61)
   to save yourself from setting up a full working Auto DevOps project.
 
 - Set the environment variable `CHROME_REUSE_PROFILE` to `true` which
@@ -83,5 +82,5 @@ running into the following error:
 ResponseError: code=403, message=Insufficient regional quota to satisfy request: resource "DISKS_TOTAL_GB"
 ```
 
-this would indicate you have reached your limit of persistent disks. See [how
-to clean up unused persistent disks above](index.md#unused-persistent-disks).
+this would indicate you have reached your limit of persistent disks. See
+[how to clean up unused persistent disks above](index.md#unused-persistent-disks).

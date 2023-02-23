@@ -195,8 +195,8 @@ The following are possible problems using Web IDE terminal with possible solutio
   past the initial error.
 
 - If you're still having trouble getting the terminal up and running in
-  Web IDE, it maybe worth trying the "regular" [debug terminal for
-  pipeline jobs](https://docs.gitlab.com/ee/ci/interactive_web_terminal/#debugging-a-running-job),
+  Web IDE, it maybe worth trying the "regular"
+  [debug terminal for pipeline jobs](https://docs.gitlab.com/ee/ci/interactive_web_terminal/#debugging-a-running-job),
   as it requires less configuration.
 
   That is, the GitLab instance doesn't need to ping out to the Runner like it

@@ -21,8 +21,8 @@ any steps in here.
   When installing Knative you are asked for a domain name. You later need
   to set up a DNS record for this domain name in order to reach your deployed
   serverless applications so it's necessary that you own this domain name.
-  Alternatively there are some [workarounds to avoid buying a domain
-  name](#workarounds-to-avoid-buying-a-domain-name) below.
+  Alternatively there are some
+  [workarounds to avoid buying a domain name](#workarounds-to-avoid-buying-a-domain-name) below.
 1. Assuming you used a domain name that you own, you then need to setup a
   wildcard DNS record that points to the IP address of the Knative Ingress.
   Once the IP address finishes fetching (usually a few minutes after Knative
@@ -30,9 +30,9 @@ any steps in here.
   pointing to this IP address. Assuming you used `example.com` as the domain
   for Knative and the IP address is `1.2.3.4` then you need to create an `A`
   record like `*.example.com -> 1.2.3.4`.
-1. Now clone [this minimal example Ruby
-  app](https://gitlab.com/gitlab-org/cluster-integration/knative-examples/knative-ruby-app-kubectl)
-  and push to your project to deploy a Knative service
+1. Now clone
+   [this minimal example Ruby app](https://gitlab.com/gitlab-org/cluster-integration/knative-examples/knative-ruby-app-kubectl)
+   and push to your project to deploy a Knative service
 
 ## Workarounds to avoid buying a domain name
 

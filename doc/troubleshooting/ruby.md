@@ -241,9 +241,8 @@ LoadError: dlopen(/Users/gdk/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/extension
 (See full trace by running task with --trace)
 ```
 
-In the above example, you see that the charlock_holmes gem fails to load
-`libicui18n.52.1.dylib`. You can try fixing this by [re-installing
-charlock_holmes](#rebuilding-gems-with-native-extensions).
+In the above example, you see that the `charlock_holmes` gem fails to load `libicui18n.52.1.dylib`. You can try fixing
+this by [re-installing `charlock_holmes`](#rebuilding-gems-with-native-extensions).
 
 ## 'bundle install' fails due to permission problems
 
