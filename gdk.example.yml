@@ -416,6 +416,6 @@ zoekt:
   index_port_dev: 6080
   index_port_test: 6060
   repo: https://github.com/sourcegraph/zoekt.git
-  version: c08faec66fc26a41007b2176fbea86c52b0efe4b
+  version: b65e3e6bceef2587a8a9ecaa4515c886dfbc8837
   web_port_dev: 6090
   web_port_test: 6070
