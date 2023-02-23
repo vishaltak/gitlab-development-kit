@@ -88,7 +88,7 @@ gitlab-ui-setup \
 gitlab-docs-setup \
 gitlab-spamcheck-setup \
 snowplow-micro-setup \
-postgresql-sensible-defaults \
+postgresql-sensible-defaults
 
 # This is used by `gdk install`
 #
@@ -144,7 +144,24 @@ post-update-tasks:
 .PHONY: reconfigure
 reconfigure: unlock-dependency-installers \
 touch-examples \
-all \
+preflight-checks \
+gdk-reconfigure-task \
+support-setup \
+geo-config \
+gitlab-docs-setup \
+gitlab-elasticsearch-indexer-setup \
+gitlab-k8s-agent-setup \
+gitlab-metrics-exporter-setup \
+gitlab-pages-setup \
+gitlab-spamcheck-setup \
+gitlab-ui-setup \
+grafana-setup \
+object-storage-setup \
+openldap-setup \
+postgresql-sensible-defaults \
+prom-setup \
+snowplow-micro-setup \
+zoekt-setup \
 post-reconfigure-tasks
 
 .PHONY: clean
