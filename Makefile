@@ -68,6 +68,7 @@ endif
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
+ensure-databases-running \
 gdk-reconfigure-task \
 gitlab-shell-setup \
 gitlab-workhorse-setup \
@@ -143,24 +144,7 @@ post-update-tasks:
 .PHONY: reconfigure
 reconfigure: unlock-dependency-installers \
 touch-examples \
-preflight-checks \
-gdk-reconfigure-task \
-geo-config \
-gitlab-docs-setup \
-gitlab-elasticsearch-indexer-setup \
-gitlab-k8s-agent-setup \
-gitlab-metrics-exporter-setup \
-gitlab-pages-setup \
-gitlab-spamcheck-setup \
-gitlab-ui-setup \
-grafana-setup \
-object-storage-setup \
-openldap-setup \
-prom-setup \
-snowplow-micro-setup \
-support-setup \
-zoekt-setup \
-postgresql-sensible-defaults \
+all \
 post-reconfigure-tasks
 
 .PHONY: clean
