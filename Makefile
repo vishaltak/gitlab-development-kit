@@ -63,37 +63,38 @@ ifeq ($(shallow_clone),true)
 git_depth_param = --depth=1
 endif
 
-# This is used by `gdk install` and `gdk reconfigure`
+# This is used by `gdk install`
 #
+# The 'ensure-databases-running' target performs 'gitaly-update` and verifies that all necessary data services are running.
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
+gitaly-setup \
 ensure-databases-running \
 gdk-reconfigure-task \
-gitlab-shell-setup \
-gitlab-workhorse-setup \
-gitlab-pages-setup \
-gitlab-k8s-agent-setup \
 support-setup \
-gitaly-setup \
 geo-config \
+gitlab-docs-setup \
+gitlab-elasticsearch-indexer-setup \
+gitlab-k8s-agent-setup \
+gitlab-metrics-exporter-setup \
+gitlab-pages-setup \
+gitlab-shell-setup \
+gitlab-spamcheck-setup \
+gitlab-ui-setup \
+gitlab-workhorse-setup \
+grafana-setup \
+object-storage-setup \
 openldap-setup \
 prom-setup \
-object-storage-setup \
-gitlab-elasticsearch-indexer-setup \
-zoekt-setup \
-gitlab-metrics-exporter-setup \
-grafana-setup \
-gitlab-ui-setup \
-gitlab-docs-setup \
-gitlab-spamcheck-setup \
 snowplow-micro-setup \
+zoekt-setup \
 postgresql-sensible-defaults
 
 # This is used by `gdk install`
 #
 .PHONY: install
-install: all post-install-tasks start
+install: start-task all post-install-task start
 
 # This is used by `gdk update`
 #
@@ -102,10 +103,10 @@ install: all post-install-tasks start
 .PHONY: update
 update: start-task \
 asdf-update \
-unlock-dependency-installers \
 preflight-checks \
 preflight-update-checks \
 ensure-databases-running \
+unlock-dependency-installers \
 gitlab-update \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
@@ -122,33 +123,6 @@ jaeger-update \
 object-storage-update \
 zoekt-update \
 post-update-task
-
-.PHONY: start-task
-start-task:
-	@support/dev/makefile-timeit start
-
-.PHONY: post-task
-post-task:
-	@echo
-	@echo "${DIVIDER}"
-	@echo "Timings"
-	@echo "${DIVIDER}"
-	@echo
-	@support/dev/makefile-timeit summarize
-	@echo
-	@echo "${DIVIDER}"
-	@echo "$(SUCCESS_MESSAGE) successfully as of $$(date +"%Y-%m-%d %T")"
-	@echo "${DIVIDER}"
-
-.PHONY: post-update-task
-post-update-task:
-	$(Q)$(eval SUCCESS_MESSAGE := "Updated")
-	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
-
-.PHONY: post-reconfigure-task
-post-reconfigure-task: display-announcement_doubles-for-user
-	$(Q)$(eval SUCCESS_MESSAGE := "Reconfigured")
-	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
 # This is used by `gdk reconfigure`
 #
@@ -173,6 +147,38 @@ prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
 post-reconfigure-task
+
+.PHONY: start-task
+start-task:
+	@support/dev/makefile-timeit start
+
+.PHONY: post-task
+post-task:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Timings"
+	@echo "${DIVIDER}"
+	@echo
+	@support/dev/makefile-timeit summarize
+	@echo
+	@echo "${DIVIDER}"
+	@echo "$(SUCCESS_MESSAGE) successfully as of $$(date +"%Y-%m-%d %T")"
+	@echo "${DIVIDER}"
+
+.PHONY: post-install-task
+post-install-task: display-announcement_doubles-for-user
+	$(Q)$(eval SUCCESS_MESSAGE := "Installed")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
+
+.PHONY: post-update-task
+post-update-task:
+	$(Q)$(eval SUCCESS_MESSAGE := "Updated")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
+
+.PHONY: post-reconfigure-task
+post-reconfigure-task: display-announcement_doubles-for-user
+	$(Q)$(eval SUCCESS_MESSAGE := "Reconfigured")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
 .PHONY: clean
 clean:
@@ -233,11 +239,6 @@ ask-to-restart:
 	@echo
 	$(Q)support/ask-to-restart
 	@echo
-
-.PHONY: post-install-tasks
-post-install-tasks: display-announcement_doubles-for-user
-	@echo
-	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: display-announcement_doubles-for-user
 display-announcement_doubles-for-user:
