@@ -37,6 +37,7 @@ GDK troubleshooting information is available for the following:
 - [Homebrew](#homebrew)
 - [Live reloading](#live-reloading)
 - [Praefect](#praefect)
+- [Starting the GDK](#starting-the-gdk)
 - [Stopping and restarting the GDK](#stopping-and-restarting-the-gdk)
 
 If you can't solve your problem, or if you have a problem in another area, open an
@@ -342,6 +343,16 @@ bundle install
 ```
 
 You may need to run a `gdk restart` for the changes to take effect.
+
+## Starting the GDK
+
+### Error due to `ActionController::InvalidAuthenticityToken`
+
+If you encounter an `ActionController::InvalidAuthenticityToken` error when starting GDK, try the following steps: 
+
+- Hard refresh your browser to clear the cache. For more information, see [How to hard refresh your browser](https://fabricdigital.co.nz/blog/how-to-hard-refresh-your-browser-and-clear-cache).
+- Stop all GDK processes using `gdk kill`, then restart GDK with `gdk start`.
+- Delete all browser cache, cookies, local storage, and other related data for the relevant hostname.
 
 ## Stopping and restarting the GDK
 
