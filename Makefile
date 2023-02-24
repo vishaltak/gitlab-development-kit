@@ -97,37 +97,38 @@ install: all post-install-tasks start
 
 # This is used by `gdk update`
 #
-# Pull gitlab directory first since dependencies are linked from there.
+# Pull `gitlab` directory first, since its dependencies are linked from there.
+# The 'ensure-databases-running' target performs 'gitaly-update` and verifies that all necessary data services are running.
 .PHONY: update
-update: update-start \
+update: start-task \
 asdf-update \
+unlock-dependency-installers \
 preflight-checks \
 preflight-update-checks \
 ensure-databases-running \
-unlock-dependency-installers \
-gitlab-translations-unlock \
-gitlab-shell-update \
-gitlab-workhorse-update \
-gitlab-pages-update \
-gitlab-k8s-agent-update \
 gitlab-update \
-gitlab-elasticsearch-indexer-update \
-zoekt-update \
-gitlab-metrics-exporter-update \
-object-storage-update \
-jaeger-update \
-grafana-update \
-gitlab-ui-update \
 gitlab-docs-update \
+gitlab-elasticsearch-indexer-update \
+gitlab-k8s-agent-update \
+gitlab-metrics-exporter-update \
+gitlab-pages-update \
+gitlab-shell-update \
 gitlab-spamcheck-update \
-post-update-tasks
+gitlab-translations-unlock \
+gitlab-ui-update \
+gitlab-workhorse-update \
+grafana-update \
+jaeger-update \
+object-storage-update \
+zoekt-update \
+post-update-task
 
-.PHONY: update-start
-update-start:
+.PHONY: start-task
+start-task:
 	@support/dev/makefile-timeit start
 
-.PHONY: post-update-tasks
-post-update-tasks:
+.PHONY: post-task
+post-task:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Timings"
@@ -136,15 +137,24 @@ post-update-tasks:
 	@support/dev/makefile-timeit summarize
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updated successfully as of $$(date +"%Y-%m-%d %T")"
+	@echo "$(SUCCESS_MESSAGE) successfully as of $$(date +"%Y-%m-%d %T")"
 	@echo "${DIVIDER}"
+
+.PHONY: post-update-task
+post-update-task:
+	$(Q)$(eval SUCCESS_MESSAGE := "Updated")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
+
+.PHONY: post-reconfigure-task
+post-reconfigure-task: display-announcement_doubles-for-user
+	$(Q)$(eval SUCCESS_MESSAGE := "Reconfigured")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
 # This is used by `gdk reconfigure`
 #
 .PHONY: reconfigure
-reconfigure: unlock-dependency-installers \
+reconfigure: start-task \
 touch-examples \
-preflight-checks \
 gdk-reconfigure-task \
 support-setup \
 geo-config \
@@ -162,7 +172,7 @@ postgresql-sensible-defaults \
 prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
-post-reconfigure-tasks
+post-reconfigure-task
 
 .PHONY: clean
 clean:
@@ -228,11 +238,6 @@ ask-to-restart:
 post-install-tasks: display-announcement_doubles-for-user
 	@echo
 	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
-
-.PHONY: post-reconfigure-tasks
-post-reconfigure-tasks: display-announcement_doubles-for-user
-	@echo
-	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: display-announcement_doubles-for-user
 display-announcement_doubles-for-user:
