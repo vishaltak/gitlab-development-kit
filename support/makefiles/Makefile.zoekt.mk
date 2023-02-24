@@ -25,7 +25,7 @@ zoekt/bin/%: zoekt/.git
 	@echo "${DIVIDER}"
 	@echo "Building $@ version ${zoekt_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/asdf-exec zoekt go build -o bin/$(notdir $@) cmd/$(notdir $@)/main.go
+	$(Q)support/asdf-exec zoekt go build -o bin/$(notdir $@) ./cmd/$(notdir $@)/
 
 .PHONY: zoekt-clean-bin
 zoekt-clean-bin:
