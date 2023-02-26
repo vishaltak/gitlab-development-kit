@@ -69,6 +69,7 @@ endif
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
+gitlab-shell-setup \
 gitaly-setup \
 ensure-databases-running \
 gdk-reconfigure-task \
@@ -79,7 +80,6 @@ gitlab-elasticsearch-indexer-setup \
 gitlab-k8s-agent-setup \
 gitlab-metrics-exporter-setup \
 gitlab-pages-setup \
-gitlab-shell-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
 gitlab-workhorse-setup \
@@ -108,12 +108,12 @@ preflight-update-checks \
 ensure-databases-running \
 unlock-dependency-installers \
 gitlab-update \
+gitlab-shell-update \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
 gitlab-k8s-agent-update \
 gitlab-metrics-exporter-update \
 gitlab-pages-update \
-gitlab-shell-update \
 gitlab-spamcheck-update \
 gitlab-translations-unlock \
 gitlab-ui-update \
