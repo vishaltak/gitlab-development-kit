@@ -9,4 +9,4 @@ export GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 # shellcheck disable=SC1091 disable=SC1090
 source "${ROOT_PATH}/.gdkrc"
 
-exec /usr/bin/env bash -c "$@"
+exec bash -c "$@"
