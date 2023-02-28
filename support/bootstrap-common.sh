@@ -85,7 +85,15 @@ asdf_install_update_plugins() {
 }
 
 asdf_reshim() {
-  asdf reshim
+  grep -Ev "^#|^$" "$ROOT_PATH/.tool-versions" | while IFS= read -r line
+  do
+    plugin=$(echo "$line" | cut -d ' ' -f1)
+    echo "$line" | cut -d ' ' -f2- | xargs -n1 | while IFS= read -r version
+    do
+      echo "Reshimming '$plugin': $version"
+      asdf reshim "$plugin" "$version"
+    done
+  done
 }
 
 asdf_is_available() {
