@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 MAX_ATTEMPTS=90
 SLEEP_BETWEEN_ATTEMPTS=5

@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -e
 
 log() {
   echo "$(date) – $1" | tee -a /workspace/startup.log

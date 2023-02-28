@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 # This script is executed during the Gitpod prebuild
 # or on workspace start (when no prebuild is available)

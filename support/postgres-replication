@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 replication_include="include 'replication.conf'"
 postgres_dir=$(gdk config get postgresql.data_dir 2>/dev/null)
