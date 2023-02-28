@@ -503,7 +503,7 @@ module GDK
     settings :zoekt do
       bool(:enabled) { false }
       string(:repo) { 'https://github.com/sourcegraph/zoekt.git' }
-      string(:version) { 'c08faec66fc26a41007b2176fbea86c52b0efe4b' }
+      string(:version) { 'b65e3e6bceef2587a8a9ecaa4515c886dfbc8837' }
       port(:index_port_test, 'zoekt-dynamic-indexserver-test')
       port(:index_port_dev, 'zoekt-dynamic-indexserver-development')
       port(:web_port_test, 'zoekt-webserver-test')
