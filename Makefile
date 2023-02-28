@@ -106,9 +106,9 @@ asdf-update \
 preflight-checks \
 preflight-update-checks \
 ensure-databases-running \
+gitlab-shell-update \
 unlock-dependency-installers \
 gitlab-update \
-gitlab-shell-update \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
 gitlab-k8s-agent-update \
