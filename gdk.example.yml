@@ -90,6 +90,8 @@ gitlab:
     allowed_hosts: []
     bootsnap: true
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
+    content_security_policy:
+      enabled: true
     databases:
       ci:
         enabled: true

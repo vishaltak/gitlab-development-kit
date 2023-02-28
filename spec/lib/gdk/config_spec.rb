@@ -1529,6 +1529,16 @@ RSpec.describe GDK::Config do
           expect(config.gitlab.rails.allowed_hosts).to eq([])
         end
       end
+
+      context 'content_security_policy' do
+        describe '#enabled' do
+          it 'returns true by default' do
+            expect(config.gitlab.rails.content_security_policy.enabled).to be(true)
+            expect(config.gitlab.rails.content_security_policy.enabled?).to be(true)
+            expect(config.gitlab.rails.content_security_policy?).to be(true)
+          end
+        end
+      end
     end
 
     describe 'rails_background_jobs' do
