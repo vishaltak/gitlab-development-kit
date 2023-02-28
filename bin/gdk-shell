@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Having values in `$CDPATH` makes `cd` announce the directory its moving to,
 # if the directory is within the $CDPATH values.
@@ -9,4 +9,4 @@ export GDK_MACOS_ARM64_NATIVE="${GDK_MACOS_ARM64_NATIVE:-true}"
 # shellcheck disable=SC1091 disable=SC1090
 source "${ROOT_PATH}/.gdkrc"
 
-exec /bin/bash -c "$@"
+exec bash -c "$@"

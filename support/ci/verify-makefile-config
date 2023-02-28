@@ -1,4 +1,6 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -e
 
 if [ -n "$(git diff --name-only -- support/makefiles/Makefile.config.mk)" ]; then
   printf "Changes to 'support/makefiles/Makefile.config.mk' are not cleanly committed.\n"

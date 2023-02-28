@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 find_gdk_root() {
   if [[ "${1}" == "/" ]]; then
