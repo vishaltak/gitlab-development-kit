@@ -956,6 +956,10 @@ development:
         args: <%= config.omniauth.openid_connect.args.to_json %> }
     <%- end -%>
 
+  gitlab:
+    content_security_policy:
+      enabled: <%= config.gitlab.rails.content_security_policy? %>
+
   elasticsearch:
     indexer_path: <%= config.gdk_root %>/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
 
