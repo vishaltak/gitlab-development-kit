@@ -4,6 +4,8 @@
 pre-push:
   parallel: true
   commands:
+    danger:
+      run: bundle exec danger --base=main dry_run
     checkmake:
       files: git diff --name-only --diff-filter=d $(git merge-base origin/main HEAD)..HEAD
       glob: '*.mk'
