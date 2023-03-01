@@ -810,10 +810,6 @@ module GDK
           bool(:enabled) { config.https? }
         end
 
-        settings :content_security_policy do
-          bool(:enabled) { true }
-        end
-
         bool(:bootsnap) { true }
         string(:address) { '' }
         string(:__bind) { "#{config.gitlab.rails.__listen_settings.__protocol}://#{config.gitlab.rails.__listen_settings.__address}" }
