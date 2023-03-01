@@ -40,6 +40,9 @@ docker run --name=gitlab_saml_idp -p 8080:8080 -p 8443:8443 \
 -d jamedjo/test-saml-idp
 ```
 
+In some cases, you might need to add the [`--platform` flag](https://docs.docker.com/build/building/multi-platform/). For
+example, if you are using a Mac M1, you must add a `--platform linux/amd64` flag.
+
 ### Configuring the group
 
 From GitLab this would then be [configured](https://docs.gitlab.com/ee/user/group/saml_sso/#how-to-configure) using:

@@ -18,7 +18,7 @@ GitLab LDAP integration.
 
 1. Run `gdk restart` to restart the modified services.
 
-1. On the login screen, there will now be two tabs: `LDAP` and
+1. On the login screen, there are now two tabs: `LDAP` and
 `LDAP-alt`. See the following table for username and password
 combinations that can be used. The users (example: `john`) with
 `dc=example` in the `DN` column can sign in on the `LDAP` tab, while
@@ -43,9 +43,16 @@ For testing of GitLab Enterprise Edition the following groups are created:
 | cn            | DN                                              | Members     |
 | -------       | --------                                        | ----------  |
 | group1        | `cn=group1,ou=groups,dc=example,dc=com`         | john, mary  |
-| group2        | `cn=group2,ou=groups,dc=example,dc=com`         | mary        |
+| group2        | `cn=group2,ou=groups,dc=example,dc=com`         | john        |
 | group-a       | `cn=group-a,ou=groups,dc=example-alt,dc=com`    | bob, alice  |
 | group-b       | `cn=group-b,ou=groups,dc=example-alt,dc=com`    | bob         |
+
+### LDAP group sync
+
+To test [LDAP group sync](https://docs.gitlab.com/ee/user/group/access_and_permissions.html#manage-group-memberships-via-ldap),
+[create group links through CN](https://docs.gitlab.com/ee/user/group/access_and_permissions.html#create-group-links-via-cn)
+and add a sync for `group1` or `group2`, then ensure that the correct members are
+added.
 
 ### Testing with many users and groups
 
