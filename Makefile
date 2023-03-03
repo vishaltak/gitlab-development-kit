@@ -65,13 +65,13 @@ endif
 
 # This is used by `gdk install`
 #
-# The 'ensure-databases-running' target performs 'gitaly-update` and verifies that all necessary data services are running.
+# The 'ensure-databases-setup' target performs 'gitaly-update` and verifies that all necessary data services are running.
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
 gitlab-shell-setup \
 gitaly-setup \
-ensure-databases-running \
+ensure-databases-setup \
 gdk-reconfigure-task \
 support-setup \
 geo-config \
@@ -99,13 +99,13 @@ install: start-task all post-install-task start
 # This is used by `gdk update`
 #
 # Pull `gitlab` directory first, since its dependencies are linked from there.
-# The 'ensure-databases-running' target performs 'gitaly-update` and verifies that all necessary data services are running.
+# The 'ensure-databases-setup' target performs 'gitaly-update` and verifies that all necessary data services are running.
 .PHONY: update
 update: start-task \
 asdf-update \
 preflight-checks \
 preflight-update-checks \
-ensure-databases-running \
+ensure-databases-setup \
 gitlab-shell-update \
 unlock-dependency-installers \
 gitlab-update \
@@ -215,8 +215,11 @@ gdk.yml:
 rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
+.PHONY: ensure-databases-setup
+ensure-databases-setup: Procfile postgresql/data gitaly-update ensure-databases-running
+
 .PHONY: ensure-databases-running
-ensure-databases-running: Procfile postgresql/data gitaly-update
+ensure-databases-running:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Ensuring necessary data services are running"

@@ -193,7 +193,7 @@ consul/config.json:
 	$(Q)rake consul/config.json
 
 .PHONY: gitlab-db-migrate
-gitlab-db-migrate:
+gitlab-db-migrate: ensure-databases-running
 	$(Q)rake gitlab-db-migrate
 
 .PHONY: preflight-checks
