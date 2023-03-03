@@ -68,7 +68,33 @@ gdk_install() {
   which -a gdk
   cat /home/gdk/.asdf/shims/gdk
   find /home/gdk/.asdf/installs/ruby | grep gitlab-development-kit
+
+  asdf list
+
+  which -a ruby
+  ruby --version
+
+  which -a gem
+  gem --version
+  gem list
+  gem info gitlab-development-kit
+  gem uninstall --force -x --all gitlab-development-kit
+  asdf reshim ruby
+
+  which -a gdk
+  cat /home/gdk/.asdf/shims/gdk
+  find /home/gdk/.asdf/installs/ruby | grep gitlab-development-kit
+
+  rm -f /home/gdk/.asdf/shims/gdk
+
+  env | grep ASDF
+
+  pwd
+  bundle install --jobs="$(nproc)"
   # TODO: remove
+
+  which -a gdk
+  rm -f /home/gdk/.asdf/shims/gdk
 
   gdk install gitlab_repo="$GITLAB_REPO_URL"
 }
