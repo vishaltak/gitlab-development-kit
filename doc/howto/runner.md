@@ -110,11 +110,14 @@ To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker
 your GDK, you can run the `gitlab/gitlab-runner` Docker image. You **must
 ensure** that the runner saves the configuration to a file that is
 accessible to the host after the registration is complete. Here we use
-`/tmp/gitlab-runner` as an example:
+`~/gitlab-runner` as an example. Avoid using `/tmp/gitlab-runner` because that directory doesn't for Docker Desktop 
+alternatives, such as
+[Rancher](https://docs.rancherdesktop.io/faq/#q-does-file-sharing-work-similarly-to-docker-desktop-do-i-have-to-do-any-additional-configuration-to-mount-volumes-to-vms)
+and Colima.
 
 ```shell
-mkdir /tmp/gitlab-runner
-docker run --rm -it -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
+mkdir -p ~/gitlab-runner
+docker run --rm -it -v ~/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
 ```
 
 <details>
@@ -147,9 +150,8 @@ After you run this command you will be walked through a CLI wizard:
 After you've completed the registration process, your command line prompt will look something like this:
 
 ```shell
-mkdir /tmp/gitlab-runner
-docker run --rm -it -v /tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
-mkdir: /tmp/gitlab-runner: File exists
+mkdir -p ~/gitlab-runner
+docker run --rm -it -v ~/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged
 Runtime platform                                    arch=arm64 os=linux pid=7 revision=bbcb5aba version=15.3.0
 Running in system-mode.
 
@@ -178,7 +180,7 @@ Once the registration is complete, you should see the registered runner on the a
 
 ### Set up GDK to use the registered runner
 
-Now when the runner is registered we can find the token in `/tmp/gitlab-runner/config.toml`.
+Now when the runner is registered we can find the token in `~/gitlab-runner/config.toml`.
 For example:
 
 ```shell
@@ -298,7 +300,7 @@ At the end of all these steps, your config files should look something like this
 <details>
 <summary>(expand)</summary>
 
-`/tmp/gitlab-runner/config.toml`
+`~/gitlab-runner/config.toml`
 
 ```toml
    concurrent = 1
