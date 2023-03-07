@@ -65,7 +65,6 @@ endif
 
 # This is used by `gdk install`
 #
-# The 'ensure-databases-setup' target performs 'gitaly-update` and verifies that all necessary data services are running.
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
@@ -99,7 +98,6 @@ install: start-task all post-install-task start
 # This is used by `gdk update`
 #
 # Pull `gitlab` directory first, since its dependencies are linked from there.
-# The 'ensure-databases-setup' target performs 'gitaly-update` and verifies that all necessary data services are running.
 .PHONY: update
 update: start-task \
 asdf-update \

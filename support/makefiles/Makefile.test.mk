@@ -69,7 +69,7 @@ check-links: yarn-install
 .PHONY: check-duplicates
 check-duplicates:
 	@echo "Checking for duplicated tasks:"
-	@ruby ./tooling/compare.rb "$(command)"
+	@ruby ./support/compare.rb "$(command)"
 
 .PHONY: shellcheck
 shellcheck:
