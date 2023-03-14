@@ -26,7 +26,7 @@ dev:
     version: 8915bd4
 elasticsearch:
   enabled: false
-  version: 8.5.3
+  version: 8.6.2
 gdk:
   ask_to_restart_after_update: true
   auto_rebase_projects: false
