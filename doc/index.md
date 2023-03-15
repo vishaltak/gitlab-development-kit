@@ -5,7 +5,7 @@ GitLab Development Kit (GDK) provides a local environment for developing GitLab 
 - [Gitaly](https://gitlab.com/gitlab-org/gitaly).
 - [GitLab Docs](https://gitlab.com/gitlab-org/gitlab-docs).
 
-*To ensure a smooth installation of GDK, it is recommended to delete any previously cloned repositories. This will prevent any conflicts or errors that may arise during the installation process.* 
+*To ensure a smooth installation of GDK, you should delete any previously cloned repositories. This prevents conflicts or errors that may arise during the installation process.* 
 
 To install GDK, you must:
 
