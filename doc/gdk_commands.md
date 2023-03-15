@@ -215,7 +215,7 @@ gdk doctor
 
 ## Reset data
 
-There may come a time where you wish to reset the data within your GDK. Backups
+There may come a time where you wish to reset the data in your GDK. Backups
 of any reset data are taken prior and you are prompted to confirm you
 wish to proceed:
 
