@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+parent_path=$(dirname "$0")
+
+# shellcheck source=support/bootstrap-common.sh
+source "${parent_path}"/bootstrap-common.sh
+
+ASDF_AVAILABLE="$("${ROOT_PATH}"/bin/gdk config get asdf.__available\?)"
+
+asdf_update() {
+  header_print "Configuring asdf with $HOME/.default-gems"
+  if ! asdf_configure; then
+    error "Failed to configure asdf." >&2
+  fi
+
+  header_print "Updating asdf release, plugins, and tools"
+  if ! asdf_update_release; then
+    error "Failed to update asdf release." >&2
+  fi
+
+  if ! asdf_install_update_plugins; then
+    error "Failed to update some asdf plugins." >&2
+  fi
+
+  if ! asdf_update_tools; then
+    error "Failed to update some asdf tools." >&2
+  fi
+
+  if ! asdf_reshim; then
+    error "Failed to reshim asdf." >&2
+  fi
+}
+
+###############################################################################
+
+common_preflight_checks
+
+header_print "Ensuring platform software installed"
+if ! setup_platform; then
+  error "Failed to install platform software." >&2
+fi
+
+if [[ "${ASDF_AVAILABLE}" == "true" ]]; then
+  asdf_update
+fi
+
+if ! gdk_install_gdk_clt; then
+  error "Failed to run gdk_install_gdk_clt()." >&2
+fi
+
+if ! configure_ruby; then
+  error "Failed to configure Ruby." >&2
+fi
