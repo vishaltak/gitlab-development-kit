@@ -5,7 +5,7 @@ postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
 
 .PHONY: postgresql-seed-rails
-postgresql-seed-rails: ensure-databases-running postgresql-seed-praefect
+postgresql-seed-rails: postgresql-seed-praefect
 	$(Q)support/bootstrap-rails
 
 .PHONY: postgresql-seed-praefect

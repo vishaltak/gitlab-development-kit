@@ -13,7 +13,6 @@ gitlab-update: gitlab-update-timed
 gitlab-update-run: \
 	gitlab-git-pull \
 	gitlab-config \
-	ensure-databases-running \
 	postgresql \
 	gitlab-setup \
 	gitlab-db-migrate \

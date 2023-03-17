@@ -63,73 +63,95 @@ ifeq ($(shallow_clone),true)
 git_depth_param = --depth=1
 endif
 
-# This is used by `gdk install` and `gdk reconfigure`
+# This is used by `gdk install`
 #
 .PHONY: all
 all: preflight-checks \
 gitlab-setup \
-gdk-reconfigure-task \
 gitlab-shell-setup \
-gitlab-workhorse-setup \
-gitlab-pages-setup \
-gitlab-k8s-agent-setup \
-support-setup \
 gitaly-setup \
+ensure-databases-setup \
+gdk-reconfigure-task \
+support-setup \
 geo-config \
+gitlab-docs-setup \
+gitlab-elasticsearch-indexer-setup \
+gitlab-k8s-agent-setup \
+gitlab-metrics-exporter-setup \
+gitlab-pages-setup \
+gitlab-spamcheck-setup \
+gitlab-ui-setup \
+gitlab-workhorse-setup \
+grafana-setup \
+object-storage-setup \
 openldap-setup \
 prom-setup \
-object-storage-setup \
-gitlab-elasticsearch-indexer-setup \
-zoekt-setup \
-gitlab-metrics-exporter-setup \
-grafana-setup \
-gitlab-ui-setup \
-gitlab-docs-setup \
-gitlab-spamcheck-setup \
 snowplow-micro-setup \
-postgresql-sensible-defaults \
+zoekt-setup \
+postgresql-sensible-defaults
 
 # This is used by `gdk install`
 #
 .PHONY: install
-install: all post-install-tasks start
+install: start-task all post-install-task start
 
 # This is used by `gdk update`
 #
-# Pull gitlab directory first since dependencies are linked from there.
+# Pull `gitlab` directory first, since its dependencies are linked from there.
 .PHONY: update
-update: update-start \
+update: start-task \
 asdf-update \
 preflight-checks \
 preflight-update-checks \
-gitlab-git-pull \
-gitlab-bundle-prepare \
-ensure-databases-running \
-unlock-dependency-installers \
-gitlab-translations-unlock \
+ensure-databases-setup \
 gitlab-shell-update \
-gitlab-workhorse-update \
-gitlab-pages-update \
-gitlab-k8s-agent-update \
-gitaly-update \
+unlock-dependency-installers \
 gitlab-update \
-gitlab-elasticsearch-indexer-update \
-zoekt-update \
-gitlab-metrics-exporter-update \
-object-storage-update \
-jaeger-update \
-grafana-update \
-gitlab-ui-update \
 gitlab-docs-update \
+gitlab-elasticsearch-indexer-update \
+gitlab-k8s-agent-update \
+gitlab-metrics-exporter-update \
+gitlab-pages-update \
 gitlab-spamcheck-update \
-post-update-tasks
+gitlab-translations-unlock \
+gitlab-ui-update \
+gitlab-workhorse-update \
+grafana-update \
+jaeger-update \
+object-storage-update \
+zoekt-update \
+post-update-task
 
-.PHONY: update-start
-update-start:
+# This is used by `gdk reconfigure`
+#
+.PHONY: reconfigure
+reconfigure: start-task \
+touch-examples \
+gdk-reconfigure-task \
+support-setup \
+geo-config \
+gitlab-docs-setup \
+gitlab-elasticsearch-indexer-setup \
+gitlab-k8s-agent-setup \
+gitlab-metrics-exporter-setup \
+gitlab-pages-setup \
+gitlab-spamcheck-setup \
+gitlab-ui-setup \
+grafana-setup \
+object-storage-setup \
+openldap-setup \
+postgresql-sensible-defaults \
+prom-setup \
+snowplow-micro-setup \
+zoekt-setup \
+post-reconfigure-task
+
+.PHONY: start-task
+start-task:
 	@support/dev/makefile-timeit start
 
-.PHONY: post-update-tasks
-post-update-tasks:
+.PHONY: post-task
+post-task:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Timings"
@@ -138,16 +160,23 @@ post-update-tasks:
 	@support/dev/makefile-timeit summarize
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updated successfully as of $$(date +"%Y-%m-%d %T")"
+	@echo "$(SUCCESS_MESSAGE) successfully as of $$(date +"%Y-%m-%d %T")"
 	@echo "${DIVIDER}"
 
-# This is used by `gdk reconfigure`
-#
-.PHONY: reconfigure
-reconfigure: unlock-dependency-installers \
-touch-examples \
-all \
-post-reconfigure-tasks
+.PHONY: post-install-task
+post-install-task: display-announcement_doubles-for-user
+	$(Q)$(eval SUCCESS_MESSAGE := "Installed")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
+
+.PHONY: post-update-task
+post-update-task:
+	$(Q)$(eval SUCCESS_MESSAGE := "Updated")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
+
+.PHONY: post-reconfigure-task
+post-reconfigure-task: display-announcement_doubles-for-user
+	$(Q)$(eval SUCCESS_MESSAGE := "Reconfigured")
+	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
 .PHONY: clean
 clean:
@@ -184,8 +213,11 @@ gdk.yml:
 rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
+.PHONY: ensure-databases-setup
+ensure-databases-setup: Procfile postgresql/data gitaly-update ensure-databases-running
+
 .PHONY: ensure-databases-running
-ensure-databases-running: Procfile postgresql/data gitaly-update
+ensure-databases-running:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Ensuring necessary data services are running"
@@ -196,7 +228,7 @@ ensure-databases-running: Procfile postgresql/data gitaly-update
 diff-config: touch-examples
 	$(Q)gdk $@
 
-support-setup: Procfile gitaly-setup jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
+support-setup: Procfile jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 
 .PHONY: start
 start:
@@ -208,16 +240,6 @@ ask-to-restart:
 	@echo
 	$(Q)support/ask-to-restart
 	@echo
-
-.PHONY: post-install-tasks
-post-install-tasks: display-announcement_doubles-for-user
-	@echo
-	@echo "> Installed as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
-
-.PHONY: post-reconfigure-tasks
-post-reconfigure-tasks: display-announcement_doubles-for-user
-	@echo
-	@echo "> Reconfigured as of $$(date +"%Y-%m-%d %T"). Took $$(($$(date +%s)-${START_TIME})) second(s)."
 
 .PHONY: display-announcement_doubles-for-user
 display-announcement_doubles-for-user:
