@@ -5,3 +5,4 @@
 .ruby-version @gitlab-org/maintainers/gitlab-development-kit @eread
 .tool-versions* @gitlab-org/maintainers/gitlab-development-kit @eread
 /doc/ @axil @eread @marcel.amirault @fneill @jglassman1 @phillipwells @lciutacu @rdickenson
+README.md @axil @eread @marcel.amirault @fneill @jglassman1 @phillipwells @lciutacu @rdickenson
