@@ -12,7 +12,7 @@ To create the workstation:
 1. [Set up SSH](#set-up-ssh)
 1. [Create a VM](#create-a-vm)
 1. [Set up SSH Agent Forwarding](#set-up-ssh-agent-forwarding)
-1. [Install GDK](#install-gdk)
+1. [Use GDK to install GitLab](#use-gdk-to-install-gitlab)
 1. [Set up VS Code Remote](#set-up-vs-code-remote)
 
 ## Set up SSH
@@ -177,7 +177,7 @@ Here's the Google Cloud REST API equivalent:
     # Hi [YOUR_GITHUB_HANDLE]! You've successfully authenticated, but GitHub does not provide shell access.
     ```
 
-## Install GDK
+## Use GDK to install GitLab
 
 ### One-line installation (Recommended)
 
@@ -189,7 +189,7 @@ These steps are based on the instructions in <https://gitlab.com/gitlab-org/gitl
     sudo apt install git make
     ```
 
-1. Install GDK:
+1. Use GDK to install GitLab:
 
     ```shell
     curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash
@@ -224,7 +224,7 @@ These steps are based on the instructions in <https://gitlab.com/gitlab-org/gitl
     1. Set the global Ruby version to the first Ruby version listed in `.tool-versions`, for example, `rbenv global 2.7.4`.
     1. `echo $'\n### rbenv ###\n\neval "$(rbenv init -)"' >> ~/.bashrc`
     1. `source ~/.bashrc`
-1. Install GDK:
+1. Use GDK to install GitLab:
     1. `gem install gitlab-development-kit`
     1. `gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git`
 

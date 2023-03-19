@@ -17,7 +17,7 @@ To install GDK, you must:
      and GDK installation, for more control and customization. When using the simple installation method, you:
 
      1. Install dependencies [using `asdf`](#install-dependencies-using-asdf) or [manually](#install-dependencies-manually).
-     1. [Install the GDK](#install-gdk).
+     1. [Use GDK to install GitLab](#use-gdk-to-install-gitlab).
 
 Use a [supported operating system](../README.md#supported-platforms).
 
@@ -99,10 +99,10 @@ After prerequisites are installed, you can install GDK dependencies and GDK itse
 
 ### Install dependencies
 
-Before [installing GDK](#install-gdk), your local environment must have third-party software
-installed and configured. These can be installed and managed:
+Before [using GDK to install GitLab](#use-gdk-to-install-gitlab), you must install and configure some third-party
+software, either:
 
-- [Using `asdf`](#install-dependencies-using-asdf)
+- [Using `asdf`](#install-dependencies-using-asdf).
 - [Manually](#install-dependencies-manually).
 
 If you've previously [managed your own dependencies](advanced.md), you can [migrate to `asdf`](migrate_to_asdf.md)
@@ -172,13 +172,12 @@ After installing GDK dependencies:
    bundle install
    ```
 
-### Install GDK
+### Use GDK to install GitLab
 
-Install GDK by cloning and configuring GitLab and other projects using
-`gdk install`. Use one of the following methods:
+To install GitLab by using GDK, use one of these methods:
 
-- For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org), we
-  recommend installing using SSH:
+- For those who have write access to the [GitLab.org group](https://gitlab.com/gitlab-org), you should install
+  using SSH:
 
   ```shell
   gdk install gitlab_repo=git@gitlab.com:gitlab-org/gitlab.git
@@ -197,12 +196,12 @@ Use `gdk install shallow_clone=true` for a faster clone that consumes less disk-
 process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
 This cloning strategy could slow down some Git commands such as `git push`.
 
-### Install GDK using GitLab FOSS project
+### Use GDK to install GitLab FOSS
 
 If you want to run GitLab FOSS, install GDK using
 [the GitLab FOSS project](install_alternatives.md#install-using-gitlab-foss-project).
 
-### Install GDK using your own GitLab fork
+### Use GDK to install your own GitLab fork
 
 If you want to run GitLab from your own fork, install GDK using
 [your own GitLab fork](install_alternatives.md#install-using-your-own-gitlab-fork).
@@ -250,4 +249,4 @@ you have problems with existing installation that are complicated to fix. You ca
 quickly again by:
 
 1. In the parent folder for GDK, run [`git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git`](#install-dependencies-manually).
-1. In the new directory, run [`gdk install`](#install-gdk).
+1. In the new directory, run [`gdk install`](#use-gdk-to-install-gitlab).

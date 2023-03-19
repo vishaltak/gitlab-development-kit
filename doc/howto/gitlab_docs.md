@@ -135,7 +135,7 @@ components are:
 
 - Updated automatically when you run `gdk update`. To disable this, set `auto_update: false` against
   whichever project to disable.
-- Cloned using HTTPS. If you originally [cloned `gitlab` using SSH](../index.md#install-gdk), you
+- Cloned using HTTPS. If you originally [cloned `gitlab` using SSH](../index.md#use-gdk-to-install-gitlab), you
   might want to set these cloned repositories to SSH also. To set these repositories to SSH:
 
   1. Go into each cloned repository and run `git remote -v` to review the current settings.
