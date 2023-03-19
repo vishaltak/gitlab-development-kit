@@ -200,7 +200,15 @@ make[1]: *** [/Users/gdk/code/ee-gdk/gitaly/.ruby-bundle] Error 5
 make: *** [gitaly/bin/gitaly] Error 2
 ```
 
-A solution on macOS is to re-install [Xcode Command Line Tools](https://apple.stackexchange.com/questions/93573/how-to-reinstall-xcode-command-line-tools).
+This error happens because macOS 10.14 [ships with an old version of the ffi library](https://github.com/ffi/ffi/issues/791#issuecomment-645594873),
+which is not compatible with recent versions of the `ffi` gem. You
+need to upgrade macOS and [XCode](https://apple.stackexchange.com/questions/93573/how-to-reinstall-xcode-command-line-tools).
+
+Another workaround is to disable the system `ffi` library when installing the gem:
+
+```shell
+gem install ffi -- --disable-system-libffi
+```
 
 ## LoadError due to readline
 
