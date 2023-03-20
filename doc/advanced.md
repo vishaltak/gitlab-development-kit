@@ -16,7 +16,7 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
    [`Brewfile`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/Brewfile).
    You can:
      - Reuse an existing checkout if you have one, but make sure it's up to date.
-     - Use this check out again when you [install GDK](index.md#install-gdk).
+     - Use this check out again when you [use GDK to install GitLab](index.md#use-gdk-to-install-gitlab).
 
 1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). It should automatically
    configure it for your shell.
@@ -139,7 +139,8 @@ LTS release (16.04, 18.04, 20.04, 22.04) or higher, and Debian:
    source ~/.bashrc
    ```
 
-1. Complete the rest of the [manual instructions](index.md#install-dependencies-manually), then [Install GDK](index.md#install-gdk).
+1. Complete the rest of the [manual instructions](index.md#install-dependencies-manually), then
+   [use GDK to install GitLab](index.md#use-gdk-to-install-gitlab).
 
 ## Install dependencies for other Linux distributions
 
@@ -535,4 +536,4 @@ false
 
 ## Next Steps
 
-After you've completed the steps on this page, [install GDK](index.md#install-gdk).
+After you've completed the steps on this page, [use GDK to install GitLab](index.md#use-gdk-to-install-gitlab).

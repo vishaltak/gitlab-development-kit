@@ -1,6 +1,6 @@
 # Alternative GDK installation methods
 
-In addition to the [primary GDK installation process](index.md#install-gdk), you can install GDK
+In addition to the [primary installation process](index.md#use-gdk-to-install-gitlab), you can install GDK
 using alternative methods.
 
 ## Install GDK to alternative platforms
