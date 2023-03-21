@@ -2,19 +2,21 @@
 
 The following are possible solutions to problems you might encounter with PostgreSQL and GDK.
 
-## `gdk update` leaves `gitlab/db/structure.sql` with uncommitted changes
+## `gdk update` leaves `gitlab/db/` with uncommitted changes
 
-If you have uncommitted changes in `gitlab/db/structure.sql` after a `gdk update` (see
-[GitLab#300251](https://gitlab.com/gitlab-org/gitlab/-/issues/300251)), you can either:
+When you run `gdk update`, you can have uncommitted changes in `gitlab/db/`. For more information, see
+[issue 300251](https://gitlab.com/gitlab-org/gitlab/-/issues/300251).
 
-- Add [GDK hook](../configuration.md#hooks) to your `gdk.yml` with the following (do this if you are
-  unfamiliar with `db/structure.sql`):
+To avoid leaving uncommitted changes in `gitlab/db/` from a `gdk update`, either:
+
+- If you are unfamiliar with `db/`, add [GDK hook](../configuration.md#hooks) to your 
+  `gdk.yml`:
 
   ```yaml
   gdk:
     update_hooks:
       after:
-        - cd gitlab && git checkout db/structure.sql
+        - cd gitlab && git checkout db/*
   ```
 
 - Refer to the developer documentation for
@@ -34,7 +36,7 @@ ERROR:  Error installing pg:
 Calling libpq with GVL unlocked
 checking for pg_config... no
 checking for libpq per pkg-config... no
-Using libpq from 
+Using libpq from
 checking for libpq-fe.h... no
 Can't find the 'libpq-fe.h header
 *****************************************************************************
