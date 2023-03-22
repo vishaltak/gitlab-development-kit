@@ -8,7 +8,7 @@ yard:
     - bundle install
     - bundle exec yardoc
   cache:
-    key: "ruby-2.7-bundle"
+    key: "ruby-bundle"
     paths:
       - $BUNDLE_PATH
   artifacts:
@@ -19,7 +19,7 @@ yard:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   parallel:
     matrix:
-      - RUBY_VERSION: ['2.7', '3.0', '3.1']
+      - RUBY_VERSION: ['3.0', '3.1', '3.2']
 
 pages:
   extends: .deploy-job
