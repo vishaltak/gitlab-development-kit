@@ -153,6 +153,10 @@ prefix_with_asdf_if_available() {
 }
 
 asdf_check_rvm_rbenv() {
+  if ! asdf_enabled; then
+    return 0
+  fi
+
   # RVM and rbenv can conflict with asdf
   if type rvm > /dev/null 2>&1; then
     return 1
