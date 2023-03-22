@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+parent_path=$(dirname "$0")
+
+# shellcheck source=support/bootstrap-common.sh
+source "${parent_path}"/bootstrap-common.sh
+
+DIVIDER="--------------------------------------------------------------------------------"
+
+header_print() {
+  echo
+  echo "${DIVIDER}"
+  echo "${1}"
+  echo "${DIVIDER}"
+}
+
+asdf_update_release() {
+  # Look for v1.2.3-<SHA>, which indicates asdf has been installed via the
+  # git clone method, which supports 'asdf update'
+  if asdf version | grep -E 'v\d+\.\d+\.\d+-\w{7}' > /dev/null 2>&1; then
+    asdf update
+  else
+    echo "INFO: asdf installed using non-Git method. Attempt to update asdf skipped."
+  fi
+}
+
+asdf_update_tools() {
+  # Install all tools specified in .tool-versions
+  bash -c "MAKELEVEL=0 asdf install"
+
+  return $?
+}
+
+###############################################################################
+
+common_preflight_checks
+
+header_print "Ensuring platform software installed"
+if ! setup_platform; then
+  error "Failed to install platform software." >&2
+fi
+
+header_print "Configuring asdf with $HOME/.default-gems"
+if ! asdf_configure; then
+  error "Failed to configure asdf." >&2
+fi
+
+header_print "Updating asdf release, plugins, and tools"
+if ! asdf_update_release; then
+  error "Failed to update asdf release." >&2
+fi
+
+if ! asdf_install_update_plugins; then
+  error "Failed to update some asdf plugins." >&2
+fi
+
+if ! asdf_update_tools; then
+  error "Failed to update some asdf tools." >&2
+fi
+
+if ! asdf_reshim; then
+  error "Failed to reshim asdf." >&2
+fi
+
+if ! gdk_install_gdk_clt; then
+  error "Failed to run gdk_install_gdk_clt()." >&2
+fi
+
+if ! configure_ruby; then
+  error "Failed to configure Ruby." >&2
+fi

@@ -100,7 +100,7 @@ install: start-task all post-install-task start
 # Pull `gitlab` directory first, since its dependencies are linked from there.
 .PHONY: update
 update: start-task \
-platform-update \
+asdf-update \
 preflight-checks \
 preflight-update-checks \
 ensure-databases-setup \

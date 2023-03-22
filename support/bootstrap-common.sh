@@ -11,8 +11,6 @@ export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
-DIVIDER="--------------------------------------------------------------------------------"
-
 # Add supported linux platform IDs extracted from /etc/os-release into the
 # appropriate varible variables below. SUPPORTED_LINUX_PLATFORMS ends up containing
 # all supported platforms and is displayed to the user if their platform is not
@@ -41,13 +39,6 @@ error() {
   exit 1
 }
 
-header_print() {
-  echo
-  echo "${DIVIDER}"
-  echo "${1}"
-  echo "${DIVIDER}"
-}
-
 echo_if_unsuccessful() {
   output="$("${@}" 2>&1)"
 
@@ -60,23 +51,6 @@ echo_if_unsuccessful() {
 
 ensure_line_in_file() {
   grep -qxF "$1" "$2" || echo "$1" >> "$2"
-}
-
-asdf_update_release() {
-  # Look for v1.2.3-<SHA>, which indicates asdf has been installed via the
-  # git clone method, which supports 'asdf update'
-  if asdf version | grep -E 'v\d+\.\d+\.\d+-\w{7}' > /dev/null 2>&1; then
-    asdf update
-  else
-    echo "INFO: asdf installed using non-Git method. Attempt to update asdf skipped."
-  fi
-}
-
-asdf_update_tools() {
-  # Install all tools specified in .tool-versions
-  bash -c "MAKELEVEL=0 asdf install"
-
-  return $?
 }
 
 asdf_configure() {

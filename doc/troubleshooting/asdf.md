@@ -19,6 +19,8 @@ Unknown command: `asdf install`
 /usr/local/Cellar/asdf/0.10.2/libexec/bin/asdf: line 82: /usr/local/Cellar/asdf/0.8.1_1/libexec/lib/commands/command-help.bash: No such file or directory
 
 ERROR: Failed to update some asdf tools.
+make[1]: *** [asdf-update-run] Error 1
+make: *** [asdf-update-timed] Error 2
 ❌️ ERROR: Failed to update.
 ```
 
