@@ -97,6 +97,7 @@ You can watch [a recorded video walkthrough](https://www.youtube.com/watch?v=Sdq
      idle_timeout: 60
    ```
 
+1. Optional. Consider adding `gitlab/config/gitlab.yml` as a [protected config file](../configuration.md#overwriting-configuration-files) to retain these changes when running the `gdk reconfigure` command.
 1. Restart all services. `gdk start`
 1. Start MailRoom in a console (pointing to your `gitlab` folder e.g. `cd ~/gitlab-development-kit/gitlab`) with the following command:
 
