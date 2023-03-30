@@ -39,9 +39,10 @@ You can watch [a recorded video walkthrough](https://www.youtube.com/watch?v=Sdq
    cd ~ && echo `pwd`/`ls .gitlab-mailroom-secret`
    ```
 
-1. (Optional) Using a new Gmail account for testing purposes is recommended. If using Gmail, create an
-   [App Password](https://support.google.com/accounts/answer/185833) (you need to set up 2FA for new Gmail accounts 
-   to be allowed to create an App Password). Store this password securely and use it as an environment variable.
+1. (Optional) Using a new Gmail account for testing purposes is recommended. If using Gmail, you need to 
+   [set up 2FA](https://myaccount.google.com/u/1/signinoptions/two-step-verification) and then 
+   [add an App Password](https://myaccount.google.com/u/1/apppasswords) to be able to use SMTP-Auth.
+   Store this password securely and use it as an environment variable.
 1. Set [incoming_email](https://docs.gitlab.com/ee/administration/incoming_email.html) and
    [service_desk_email](https://docs.gitlab.com/ee/user/project/service_desk.html#using-a-custom-email-address)
    configuration to point to an email inbox. If you want to test all features of Incoming Email and Service Desk, 
