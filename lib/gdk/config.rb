@@ -791,7 +791,7 @@ module GDK
       bool(:enabled) { false }
       string(:__listen) { "#{listen_address}:#{port}" }
       port(:port, 'vault')
-      string(:listen_address) { config.listen_address }
+      string(:listen_address) { config.hostname }
     end
 
     settings :gitlab do

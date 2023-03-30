@@ -3014,14 +3014,14 @@ RSpec.describe GDK::Config do
 
   describe 'vault' do
     describe '#__listen' do
-      it 'defaults 127.0.0.1:8200' do
-        expect(config.vault.__listen).to eq('127.0.0.1:8200')
+      it 'defaults to gdk hostname on port 8200' do
+        expect(config.vault.__listen).to eq("#{config.hostname}:8200")
       end
     end
 
     describe '#listen_address' do
-      it 'defaults 127.0.0.1' do
-        expect(config.vault.listen_address).to eq('127.0.0.1')
+      it 'defaults to gdk hostname' do
+        expect(config.vault.listen_address).to eq(config.hostname)
       end
     end
 
