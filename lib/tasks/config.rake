@@ -65,13 +65,13 @@ task 'generate-file-at', [:file, :destination] do |_, args|
   destination = args[:destination]
   source = Rake::Task[file].source
 
-  GDK::ErbRenderer.new(source, destination).render!
+  GDK::ErbRenderer.new(source, destination).safe_render!
 end
 
 # Define as a task instead of a file, so it's built unconditionally
 desc nil
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
-  GDK::ErbRenderer.new(t.source, t.name).render!
+  GDK::ErbRenderer.new(t.source, t.name).safe_render!
   puts t.name # Print the filename, so make can include it
 end
 
@@ -92,7 +92,7 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name).render!
+  GDK::ErbRenderer.new(t.source, t.name).safe_render!
 
   GDK.config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
