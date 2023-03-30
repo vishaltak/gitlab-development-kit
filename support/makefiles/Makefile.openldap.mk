@@ -6,6 +6,8 @@ openldap-setup:
 	@true
 endif
 
+openldap-update: openldap-setup
+
 gitlab-openldap/libexec/slapd:
 	$(Q)make -C gitlab-openldap sbin/slapadd
 

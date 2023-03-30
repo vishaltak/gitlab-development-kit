@@ -31,6 +31,10 @@ module GDK
 
       private
 
+      def bundle_exec_cmd
+        @bundle_exec_cmd ||= config.gdk_root.join('support', 'bundle-exec')
+      end
+
       def diagnostic_header
         @diagnostic_header ||= '=' * 80
       end

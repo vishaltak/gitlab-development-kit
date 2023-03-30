@@ -25,11 +25,11 @@ class Shellout
     @command ||= args.join(' ')
   end
 
-  def execute(display_output: true, display_error: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
+  def execute(display_output: true, display_error: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS, extra_options: {})
     retried ||= false
     GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
 
-    display_output ? stream : try_run
+    display_output ? stream(extra_options) : try_run(extra_options)
     GDK::Output.debug("result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
 
     raise ExecuteCommandFailedError unless success?
@@ -100,8 +100,8 @@ class Shellout
     read_stdout
   end
 
-  def try_run
-    capture(err: '/dev/null')
+  def try_run(extra_options = {})
+    capture(extra_options.merge(err: '/dev/null'))
     read_stdout
   rescue Errno::ENOENT
     ''

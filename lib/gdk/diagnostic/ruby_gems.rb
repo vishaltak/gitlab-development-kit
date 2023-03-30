@@ -1,74 +1,92 @@
 # frozen_string_literal: true
 
 require 'shellout'
+require 'thread'
 
 module GDK
   module Diagnostic
     class RubyGems < Base
       TITLE = 'Ruby Gems'
       GITLAB_GEMS_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
+      RE2_CHECK_SCRIPT = %{"require 're2'; regexp = RE2::Regexp.new('\{', log_errors: false); regexp.error unless regexp.ok?"}
 
-      def initialize(allow_gem_not_installed: false)
-        @allow_gem_not_installed = allow_gem_not_installed
+      def gitlab_bundle_check_ok?
+        return @gitlab_bundle_check_ok if defined?(@gitlab_bundle_check_ok)
 
-        super()
+        @gitlab_bundle_check_ok ||= gitlab_cmd_success?('bundle check')
       end
 
       def success?
-        failed_to_load_gitlab_gems.empty?
+        gitlab_bundle_check_ok? && gitlab_gems_with_problems.empty? && gitlab_re2_ok?
       end
 
       def detail
-        return gitlab_error_message unless success?
+        return gitlab_bundle_check_error_message unless gitlab_bundle_check_ok?
+        return gitlab_gems_with_problems_error_message unless gitlab_gems_with_problems.empty?
+        return gitlab_re2_error_message unless gitlab_re2_ok?
       end
 
       private
 
-      attr_reader :allow_gem_not_installed
+      def gitlab_re2_ok?
+        return @gitlab_re2_ok if defined?(@gitlab_re2_ok)
 
-      def allow_gem_not_installed?
-        @allow_gem_not_installed == true
+        @gitlab_re2_ok ||= begin
+          5.times do
+            return false unless gitlab_re2_success?
+          end
+
+          true
+        end
       end
 
-      def failed_to_load_gitlab_gems
-        @failed_to_load_gitlab_gems ||= GITLAB_GEMS_TO_CHECK.reject { |name| gem_ok?(name) }
+      def gitlab_re2_success?
+        gitlab_cmd_success?([bundle_exec_cmd.to_s, 'ruby', '-e', RE2_CHECK_SCRIPT])
+      end
+
+      def gitlab_gems_with_problems
+        @gitlab_gems_with_problems ||= begin
+          jobs = GITLAB_GEMS_TO_CHECK.map { |name| Thread.new { Thread.current[:results] = { name => gem_ok?(name) } } }
+
+          jobs.each_with_object([]) do |job, all|
+            name, result = job.join[:results].flatten
+            all << name unless result
+          end
+        end
       end
 
       def gem_ok?(name)
-        # We need to support the situation where it's OK if a Ruby gem is not
-        # installed because we could be about to install the GDK for the very
-        # first time and the Ruby gem won't be installed.
-        gem_installed?(name) ? gem_loads_ok?(name) : allow_gem_not_installed?
+        gitlab_cmd_success?("#{bundle_exec_cmd} ruby -r #{name} -e 'nil'")
       end
 
-      def bundle_exec_cmd
-        @bundle_exec_cmd ||= config.gdk_root.join('support', 'bundle-exec')
+      def gitlab_cmd_success?(cmd)
+        Shellout.new({ 'BUNDLE_GEMFILE' => nil }, cmd, chdir: config.gitlab.dir.to_s).execute(display_output: false, display_error: false).success?
       end
 
-      def gem_installed?(name)
-        exec_cmd("#{bundle_exec_cmd} gem list -i #{name}")
-      end
-
-      def gem_loads_ok?(name)
-        exec_cmd("#{bundle_exec_cmd} ruby -r #{name} -e 'nil'")
-      end
-
-      def exec_cmd(cmd)
-        GDK::Output.debug("cmd=[#{cmd}]")
-
-        Shellout.new(cmd, chdir: config.gitlab.dir.to_s).execute(display_output: false, display_error: false).success?
-      end
-
-      def gitlab_error_message
+      def gitlab_bundle_check_error_message
         <<~MESSAGE
-          The following Ruby Gems appear to have issues:
-
-          #{@failed_to_load_gitlab_gems.join("\n")}
+          There appears to be Ruby gems that are not installed in the GitLab project.
 
           Try running the following to fix:
 
-          cd #{config.gitlab.dir} && gem pristine #{@failed_to_load_gitlab_gems.join(' ')}
+          cd #{config.gitlab.dir} && bundle install
         MESSAGE
+      end
+
+      def gitlab_gems_with_problems_error_message
+        <<~MESSAGE
+          The following Ruby Gems appear to have issues in the GitLab project:
+
+          #{@gitlab_gems_with_problems.join("\n")}
+
+          Try running the following to fix:
+
+          cd #{config.gitlab.dir} && gem pristine #{@gitlab_gems_with_problems.join(' ')}
+        MESSAGE
+      end
+
+      def gitlab_re2_error_message
+        're2 seems to have a problem?'
       end
     end
   end

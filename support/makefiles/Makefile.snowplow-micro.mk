@@ -4,3 +4,5 @@ else
 snowplow-micro-setup:
 	@true
 endif
+
+snowplow-micro-update: snowplow-micro-setup

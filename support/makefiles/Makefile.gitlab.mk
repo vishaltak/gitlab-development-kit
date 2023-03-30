@@ -113,10 +113,6 @@ endif
 	$(Q)$(in_gitlab) ${YARN} install --pure-lockfile ${QQ}
 	$(Q)touch $@
 
-.PHONY: gitlab-translations-unlock
-gitlab-translations-unlock:
-	$(Q)rm -f .gitlab-translations
-
 .PHONY: gitlab-translations
 gitlab-translations: gitlab-translations-timed
 

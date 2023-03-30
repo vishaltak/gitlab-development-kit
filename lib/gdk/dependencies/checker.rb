@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'thread'
+
 module GDK
   module Dependencies
     class Checker
@@ -19,19 +21,20 @@ module GDK
       end
 
       def check_all
-        check_ruby_version
-        check_go_version
-        check_nodejs_version
-        check_yarn_version
-        check_postgresql_version
+        jobs = [
+          Thread.new { check_ruby_version },
+          Thread.new { check_go_version },
+          Thread.new { check_nodejs_version },
+          Thread.new { check_yarn_version },
+          Thread.new { check_postgresql_version },
+          Thread.new { check_git_installed },
+          Thread.new { check_graphicsmagick_installed },
+          Thread.new { check_exiftool_installed },
+          Thread.new { check_minio_installed },
+          Thread.new { check_runit_installed },
+        ]
 
-        check_git_installed
-        check_graphicsmagick_installed
-        check_exiftool_installed
-        check_minio_installed
-        check_runit_installed
-
-        check_ruby_gems_ok
+        jobs.each(&:join)
       end
 
       def check_binary(binary, name: binary)
@@ -149,14 +152,6 @@ module GDK
         message += " #{more_detail}" unless more_detail.nil?
 
         message
-      end
-
-      def check_ruby_gems_ok
-        checker = GDK::Diagnostic::RubyGems.new(allow_gem_not_installed: true)
-        return if checker.success?
-
-        @error_messages << "ERROR: #{checker.detail}"
-        @error_messages << nil
       end
 
       private

@@ -31,6 +31,9 @@ endif
 
 export GDK_QUIET = $(gdk_quiet)
 
+.PHONY: all
+all: install
+
 ###############################################################################
 # Include all support/makefiles/*.mk files here                               #
 ###############################################################################
@@ -65,87 +68,76 @@ endif
 
 # This is used by `gdk install`
 #
-.PHONY: all
-all: preflight-checks \
+.PHONY: install
+install: start-task \
+preflight-checks \
 gitlab-setup \
-gitlab-shell-setup \
 gitaly-setup \
-ensure-databases-setup \
 gdk-reconfigure-task \
-support-setup \
+postgresql \
+ensure-databases-setup \
 geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
 gitlab-k8s-agent-setup \
 gitlab-metrics-exporter-setup \
 gitlab-pages-setup \
+gitlab-runner-setup \
+gitlab-shell-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
 gitlab-workhorse-setup \
+elasticsearch-setup \
 grafana-setup \
+jaeger-setup \
 object-storage-setup \
+nginx-setup \
 openldap-setup \
+openssh-setup \
 prom-setup \
+registry-setup \
 snowplow-micro-setup \
 zoekt-setup \
-postgresql-sensible-defaults
-
-# This is used by `gdk install`
-#
-.PHONY: install
-install: start-task all post-install-task start
+post-install-task \
+start
 
 # This is used by `gdk update`
 #
 # Pull `gitlab` directory first, since its dependencies are linked from there.
 .PHONY: update
 update: start-task \
-platform-update \
 preflight-checks \
 preflight-update-checks \
-ensure-databases-setup \
-gitlab-shell-update \
 unlock-dependency-installers \
+platform-update \
 gitlab-update \
+gitaly-update \
+gdk-reconfigure-task \
+ensure-databases-setup \
+geo-config \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
 gitlab-k8s-agent-update \
 gitlab-metrics-exporter-update \
 gitlab-pages-update \
+gitlab-runner-update \
+gitlab-shell-update \
 gitlab-spamcheck-update \
-gitlab-translations-unlock \
 gitlab-ui-update \
 gitlab-workhorse-update \
 grafana-update \
 jaeger-update \
 object-storage-update \
+openldap-update \
+prom-update \
+snowplow-micro-update \
 zoekt-update \
 post-update-task
 
 # This is used by `gdk reconfigure`
 #
 .PHONY: reconfigure
-reconfigure: start-task reconfigure-tasks post-reconfigure-task
-
-.PHONY: reconfigure-tasks
-reconfigure-tasks: \
-gdk-reconfigure-task \
-support-setup \
-geo-config \
-gitlab-docs-setup \
-gitlab-elasticsearch-indexer-setup \
-gitlab-k8s-agent-setup \
-gitlab-metrics-exporter-setup \
-gitlab-pages-setup \
-gitlab-spamcheck-setup \
-gitlab-ui-setup \
-grafana-setup \
-object-storage-setup \
-openldap-setup \
-postgresql-sensible-defaults \
-prom-setup \
-snowplow-micro-setup \
-zoekt-setup
+reconfigure: start-task gdk-reconfigure-task post-reconfigure-task
 
 .PHONY: start-task
 start-task:
@@ -196,11 +188,12 @@ touch-examples:
 unlock-dependency-installers:
 	$(Q)rm -f \
 	.gitlab-bundle \
-	.gitlab-shell-bundle \
-	.gitlab-yarn \
-	.gitlab-ui-yarn \
 	.gitlab-gdk-gem \
-	.gitlab-lefthook
+	.gitlab-lefthook \
+	.gitlab-shell-bundle \
+	.gitlab-translations \
+	.gitlab-yarn \
+	.gitlab-ui-yarn
 
 gdk.yml:
 	$(Q)touch $@
@@ -210,7 +203,7 @@ rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
 .PHONY: ensure-databases-setup
-ensure-databases-setup: Procfile postgresql/data gitaly-update ensure-databases-running
+ensure-databases-setup: postgresql/data ensure-databases-running
 
 .PHONY: ensure-databases-running
 ensure-databases-running:
@@ -223,8 +216,6 @@ ensure-databases-running:
 .PHONY: diff-config
 diff-config:
 	$(Q)gdk $@
-
-support-setup: Procfile jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 
 .PHONY: start
 start:

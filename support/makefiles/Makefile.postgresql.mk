@@ -1,5 +1,5 @@
 .PHONY: postgresql
-postgresql: postgresql/data postgresql/port postgresql-seed-rails postgresql-seed-praefect
+postgresql: postgresql/data postgresql/port postgresql-sensible-defaults postgresql-seed-rails postgresql-seed-praefect
 
 postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
