@@ -49,6 +49,7 @@ to learn how to contribute to GitLab.
 - [Puma](puma.md)
 - [Preview and test the docs site locally](gitlab_docs.md)
 - [Preview GitLab changes](preview_gitlab_changes.md)
+- [Product Analytics](product_analytics.md)
 - [SSH](ssh.md)
 - [Serverless (Knative)](serverless.md)
 - [Service Desk and MailRoom](service_desk_mail_room.md)
