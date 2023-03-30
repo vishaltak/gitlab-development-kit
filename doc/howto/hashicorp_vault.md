@@ -67,12 +67,13 @@ test_secrets:
     VAULT_AUTH_PATH: gitlab
     VAULT_AUTH_ROLE: gitlab-test-role
     VAULT_SERVER_URL: http://<vault_ip_address>:8200
-  secrets:
+  id_tokens:
     TEST_ID_TOKEN:
-      id_token:
-        aud: <gdk_address>  # For example: https://gdk.test:3443
+      aud: <gdk_address>  # For example: https://gdk.test:3443
+  secrets:
     DATABASE_PASSWORD:
       vault: gitlab-test/db/password
+      token: $TEST_ID_TOKEN
   script:
     - echo $DATABASE_PASSWORD
     - cat $DATABASE_PASSWORD
