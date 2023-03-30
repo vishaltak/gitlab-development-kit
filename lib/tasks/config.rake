@@ -1,30 +1,9 @@
 # frozen_string_literal: true
 
+require_relative '../gdk'
 require_relative '../gdk/task_helpers'
 
-CONFIGS = FileList[
-  'Procfile',
-  'gdk.example.yml',
-  'support/makefiles/Makefile.config.mk',
-  'nginx/conf/nginx.conf',
-  'gitlab/config/gitlab.yml',
-  'prometheus/prometheus.yml',
-  'redis/redis.conf',
-  'clickhouse/config.xml',
-  'clickhouse/users.xml',
-  'clickhouse/config.d/data-paths.xml',
-  'clickhouse/config.d/gdk.xml',
-  'clickhouse/config.d/logger.xml',
-  'clickhouse/config.d/openssl.xml',
-  'clickhouse/config.d/user-directories.xml',
-  'clickhouse/users.d/gdk.xml',
-  'pgbouncers/pgbouncer-replica-1.ini',
-  'pgbouncers/pgbouncer-replica-2.ini',
-  'pgbouncers/pgbouncer-replica-2-1.ini',
-  'pgbouncers/pgbouncer-replica-2-2.ini',
-  'pgbouncers/userlist.txt',
-  'consul/config.json'
-]
+CONFIGS = GDK::DIFFABLE_FILES
 CLOBBER.include(*CONFIGS)
 
 desc 'Dump the configured settings'

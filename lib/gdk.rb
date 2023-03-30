@@ -25,6 +25,50 @@ module GDK
   ROOT_CHECK_FILE = '.gdk-install-root' unless defined?(ROOT_CHECK_FILE)
   SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION = %w[version].freeze
 
+  DIFFABLE_FILES = %w[
+    clickhouse/config.d/data-paths.xml
+    clickhouse/config.d/gdk.xml
+    clickhouse/config.d/logger.xml
+    clickhouse/config.d/openssl.xml
+    clickhouse/config.d/user-directories.xml
+    clickhouse/config.xml
+    clickhouse/users.d/gdk.xml
+    clickhouse/users.xml
+    consul/config.json
+    gdk.example.yml
+    gitaly/gitaly.config.toml
+    gitaly/praefect.config.toml
+    gitlab-pages/gitlab-pages.conf
+    gitlab-runner-config.toml
+    gitlab-shell/.gitlab_shell_secret
+    gitlab-shell/config.yml
+    gitlab/config/cable.yml
+    gitlab/config/database.yml
+    gitlab/config/gitlab.yml
+    gitlab/config/puma.rb
+    gitlab/config/redis.cache.yml
+    gitlab/config/redis.queues.yml
+    gitlab/config/redis.rate_limiting.yml
+    gitlab/config/redis.repository_cache.yml
+    gitlab/config/redis.sessions.yml
+    gitlab/config/redis.shared_state.yml
+    gitlab/config/redis.trace_chunks.yml
+    gitlab/config/resque.yml
+    gitlab/workhorse/config.toml
+    nginx/conf/nginx.conf
+    openssh/sshd_config
+    pgbouncers/pgbouncer-replica-1.ini
+    pgbouncers/pgbouncer-replica-2-1.ini
+    pgbouncers/pgbouncer-replica-2-2.ini
+    pgbouncers/pgbouncer-replica-2.ini
+    pgbouncers/userlist.txt
+    Procfile
+    prometheus/prometheus.yml
+    redis/redis.conf
+    registry/config.yml
+    support/makefiles/Makefile.config.mk
+  ].freeze
+
   # dependencies are always declared via autoload
   # this allows for any dependent project require only `lib/gdk`
   # and load only what it really needs

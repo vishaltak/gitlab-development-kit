@@ -10,7 +10,7 @@ module GDK
       BUNDLE_PRISTINE_CMD = 'bundle pristine'
       YARN_CLEAN_CMD = 'yarn clean'
       GIT_CLEAN_TMP_CMD = 'git clean -fX -- tmp/'
-      RESET_CONFIGS_CMD = 'make touch-examples reconfigure'
+      RESET_CONFIGS_CMD = 'make reconfigure'
 
       def run(_args = [])
         %i[

@@ -5,34 +5,6 @@ require 'fileutils'
 module GDK
   module Command
     class DiffConfig < BaseCommand
-      DIFFABLE_FILES = %w[
-        Procfile
-        gitaly/gitaly.config.toml
-        gitaly/praefect.config.toml
-        gitlab-pages/gitlab-pages.conf
-        gitlab-runner-config.toml
-        gitlab-shell/.gitlab_shell_secret
-        gitlab-shell/config.yml
-        gitlab/workhorse/config.toml
-        gitlab/config/cable.yml
-        gitlab/config/database.yml
-        gitlab/config/gitlab.yml
-        gitlab/config/puma.rb
-        gitlab/config/resque.yml
-        gitlab/config/redis.cache.yml
-        gitlab/config/redis.repository_cache.yml
-        gitlab/config/redis.queues.yml
-        gitlab/config/redis.shared_state.yml
-        gitlab/config/redis.trace_chunks.yml
-        gitlab/config/redis.rate_limiting.yml
-        gitlab/config/redis.sessions.yml
-        nginx/conf/nginx.conf
-        openssh/sshd_config
-        prometheus/prometheus.yml
-        redis/redis.conf
-        registry/config.yml
-      ].freeze
-
       def run(_ = [])
         Shellout.new(GDK::MAKE, 'touch-examples').run
 

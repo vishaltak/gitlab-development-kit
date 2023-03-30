@@ -126,7 +126,6 @@ post-update-task
 #
 .PHONY: reconfigure
 reconfigure: start-task \
-touch-examples \
 gdk-reconfigure-task \
 support-setup \
 geo-config \
@@ -225,7 +224,7 @@ ensure-databases-running:
 	$(Q)gdk start rails-migration-dependencies
 
 .PHONY: diff-config
-diff-config: touch-examples
+diff-config:
 	$(Q)gdk $@
 
 support-setup: Procfile jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
@@ -246,7 +245,7 @@ display-announcement_doubles-for-user:
 	@support/announcements-display
 
 .PHONY: gdk-reconfigure-task
-gdk-reconfigure-task:
+gdk-reconfigure-task: touch-examples
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Ensuring GDK managed configuration files are up-to-date"
