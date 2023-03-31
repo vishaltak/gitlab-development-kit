@@ -26,8 +26,7 @@ gitlab-metrics-exporter-clean-bin:
 gitlab-metrics-exporter/.git:
 	$(Q)GIT_REVISION="${gitlab_metrics_exporter_version}" support/component-git-clone ${git_depth_param} ${gitlab_metrics_exporter_repo} gitlab-metrics-exporter
 
-.PHONY: gitlab-metrics-exporter/bin/gitlab-metrics-exporter
-gitlab-metrics-exporter/bin/gitlab-metrics-exporter: gitlab-metrics-exporter/.git/pull
+gitlab-metrics-exporter/bin/gitlab-metrics-exporter: gitlab-metrics-exporter/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitlab-metrics-exporter version ${gitlab_metrics_exporter_version}"
