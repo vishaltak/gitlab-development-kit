@@ -26,7 +26,7 @@ listening on the port and should be disabled.
 
 ## Set up Container Registry to display in UI only
 
-To set up Container Registry to display it the UI only (but not be able to push or pull images) add the following your `gdk.yml`:
+To set up Container Registry to display in the UI only (but not be able to push or pull images) add the following to your `gdk.yml`:
 
 ```yaml
 registry:
@@ -610,7 +610,25 @@ minikube start --insecure-registry="gdk.test:5000"
 
 Then the AutoDevOps pipeline should be able to build images and run them inside of Kubernetes.
 
-### Troubleshooting Container Registry when it is failing to start
+### Troubleshooting
+
+#### Container Registry fails to start in Podman
+
+If the [container registry is failing to start](#container-registry-fails-to-start) while using Podman,
+check if the container logs contain `configuration error: open /etc/docker/registry/config.yml: permission denied`.
+If so, you can specify the `uid` and `gid` for the [`docker run -u` option](https://docs.podman.io/en/latest/markdown/podman-run.1.html#user-u-user-group)
+in your `gdk.yml`:
+
+```yaml
+registry:
+  uid: '0'
+  gid: '0'
+```
+
+WARNING:
+Using a `uid` of `0` sets the containers to run as root, which is not considered best practice.
+
+#### Container Registry fails to start
 
 The Container Registry is failing to start if you run:
 
@@ -666,15 +684,19 @@ Flags:
   -h, --help   help for serve
 ```
 
-### Running the Container Registry in Podman
+#### Missing container repositories in the UI
 
-If the [Container Registry is failing to start](#troubleshooting-container-registry-when-it-is-failing-to-start), and the container logs contain `configuration error: open /etc/docker/registry/config.yml: permission denied`, you may be able to get the container to work by specifying the `uid` and `gid` for the [`docker run -u` option](https://docs.podman.io/en/latest/markdown/podman-run.1.html#user-u-user-group) in your `gdk.yml`:
+The container registry UI may only show one repository even after pushing two or more repositories.
+This may happen if authentication between the registry and GitLab is disabled.
+To enable authentication follow these steps:
 
-```yaml
-registry:
-  uid: '0'
-  gid: '0'
-```
+1. Under the `registry` section in your `gdk.yml` file set:
 
-WARNING:
-Running containers as root is not best practice.
+   ```yaml
+   registry:
+     auth_enabled: true
+   ```
+
+1. Run `gdk reconfigure`.
+1. Run `gdk restart`.
+1. Navigate to your project's **Container Registry** page and verify more images show up in the UI.
