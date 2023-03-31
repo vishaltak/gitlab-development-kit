@@ -96,7 +96,7 @@ RSpec.describe GDK::Command::Start do
   end
 
   def expect_runit_start_to_execute(args = [])
-    expect(Runit).to receive(:start).with(args).and_return(true)
+    expect(Runit).to receive(:start).with(args, quiet: false).and_return(true)
   end
 
   def stub_gdk_start
