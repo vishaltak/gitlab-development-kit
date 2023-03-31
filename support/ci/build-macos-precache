@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -ex
+
+ruby_version="3.0.5"
+parent_path=$(dirname "$0")
+
+DEFAULT_GITLAB_REPO_URL="https://gitlab.com/gitlab-org/gitlab.git"
+GITLAB_REPO_URL=${GITLAB_REPO_URL:-${DEFAULT_GITLAB_REPO_URL}}
+
+# shellcheck source=support/ci/functions.sh
+source "${parent_path}"/functions.sh
+
+macos_system_info
+
+# FIX-ME: Our MacOS Runner imagem contains `asdf` pre-installed
+# Uninstall asdf (from: https://asdf-vm.com/manage/core.html#uninstall)
+macos_uninstall_asdf
+
+# FIX-ME: Remove the workaround below after https://gitlab.com/gitlab-org/gitlab-shell/-/merge_requests/724 is merged and a new version
+# has been released
+sudo ln -s /usr/local /opt/homebrew
+
+# HomeBrew
+#
+# Our Mac OS Runner image already contains HomeBrew so we don't need to install it via:
+# NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+#
+# We apply the following customizations:
+# - Disable sending analytics
+# - Disable dependents check (when upgrading a package like gnupg it will not trigger an upgrade on other installed packages)
+brew analytics off
+export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+
+# Install RVM
+macos_install_rvm
+
+# Install Ruby
+rvm install $ruby_version --default
+
+macos_system_info
+
+# shellcheck disable=SC2119
+init
+
+# FIX-ME: Mac OS Runner image has linked git@2.39.2, we need to unlink it first so brew bundle doesn't break
+brew unlink git@2.39.2
+
+# FIX-ME: Brew should install nodejs
+brew install node@16 && brew link --overwrite node@16
+
+# FIX-ME: GDK should run brew bundle install before checking for missing dependencies
+cd_into_checkout_path
+brew bundle
+
+# Run Bundle install on GDK
+support/bundle-install
+
+# Clone gitlab repository and run bundle install on gitlab folder
+git clone "$GITLAB_REPO_URL"
+support/bundle-install 'gitlab'

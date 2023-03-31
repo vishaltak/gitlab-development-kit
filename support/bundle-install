@@ -26,7 +26,7 @@ needed_bundler_version() {
 
 bundle_install() {
   bundle_check_command=$(prepare_command "bundle check > /dev/null 2>&1")
-  bundle_install_command=$(prepare_command "bundle install --jobs $(nproc)")
+  bundle_install_command=$(prepare_command "bundle install --prefer-local --jobs $(nproc)")
 
   (exec_command "${bundle_check_command}" && echo "Bundle check passed.") || (echo "Bundle check failed. Installing gems using bundle install..." && exec_command "${bundle_install_command}")
 }

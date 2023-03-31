@@ -1,0 +1,4 @@
+.macos_runner:
+  tags:
+    - saas-macos-medium-m1
+  image: macos-12-xcode-14

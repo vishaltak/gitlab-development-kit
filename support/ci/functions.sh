@@ -1,17 +1,29 @@
 # shellcheck shell=bash
 
+BASE_PATH="$(pwd)"
 GDK_CHECKOUT_PATH="${HOME}/gdk"
 
 if [[ ${GDK_DEBUG} == "1" ]]; then
   export GIT_CURL_VERBOSE=1
 fi
 
+cd_into_base_path() {
+  cd "${BASE_PATH}" || exit
+}
+
 cd_into_checkout_path() {
   cd "${GDK_CHECKOUT_PATH}/${1}" || exit
 }
 
 init() {
-  sudo /sbin/sysctl fs.inotify.max_user_watches=1048576
+  os=$(uname -s)
+  maxfiles=1048576
+
+  if [ "${os}" == "Darwin" ]; then
+    sudo /usr/sbin/sysctl -w kern.maxfiles=${maxfiles}
+  elif [ "${os:0:5}" == "Linux" ]; then
+    sudo /sbin/sysctl fs.inotify.max_user_watches=${maxfiles}
+  fi
 
   install_gdk_clt
 }
@@ -212,4 +224,48 @@ setup_geo() {
       exit 1
     fi
   done
+}
+
+#
+# MacOS specific functions
+#
+
+macos_system_info() {
+  uname -a
+  arch
+  brew --prefix
+  env
+}
+
+macos_uninstall_asdf() {
+  rm -rf "${ASDF_DATA_DIR:-$HOME/.asdf}"
+  rm -rf "$HOME/.tool-versions" "$HOME/.asdfrc"
+
+  sed "/. \$HOME\/.asdf\/asdf.sh/d" "$HOME/.zshrc" > "$HOME/.zshrc.tmp" && mv "$HOME/.zshrc.tmp" "$HOME/.zshrc"
+  unset ASDF_DATA_DIR
+  unset ASDF_DIR
+}
+
+macos_install_rvm() {
+  gpg --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+  \curl -sSL https://get.rvm.io | bash -s stable --autolibs=homebrew
+
+  # Load RVM in order to use it inside the script
+  # shellcheck disable=SC1090
+  source "${HOME}/.rvm/scripts/rvm"
+
+  # Symlink to the project folder so it can be cached
+  ln -s "${HOME}/.rvm" "$RVM_PATH"
+}
+
+macos_install_rvm_ruby() {
+  # RVM will compile ruby for the first time and then cache it
+  # to just install the pre-compiled version if we run `rvm prepare`
+  ruby_version=$1
+
+  rvm install "${ruby_version}"
+
+  # Install Ruby
+  rvm use "${ruby_version}" --default
+  cd_into_base_path
 }

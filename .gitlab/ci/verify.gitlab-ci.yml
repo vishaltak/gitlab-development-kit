@@ -34,6 +34,25 @@
     when: always
   timeout: 2h
 
+.verify-job-macos:
+  stage: verify
+  extends:
+    - .rules:code-changes
+    - .macos_runner
+    - .verify-job-cached_variables
+  needs:
+    - build-verify-image
+  before_script:
+    - test -f support/ci/display_debugging && support/ci/display_debugging || true
+    - cd /home/gdk/gdk
+  artifacts:
+    paths:
+      - ./gdk/gitlab/log/*.log
+      - ./gdk/log
+      - ./gdk/sv/*/run
+    expire_in: 2 days
+    when: always
+
 start:
   extends: .verify-job
   script:
@@ -43,6 +62,11 @@ start-experimental:
   extends: .verify-job
   script:
     - run_timed_command "support/ci/verify-start-experimental"
+
+install-macos-homebrew-rvm:
+  extends: .verify-job-macos
+  script:
+    - support/ci/verify-install-homebrew-rvm
 
 doctor:
   extends: .verify-job

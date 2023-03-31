@@ -59,8 +59,10 @@ default:
 
 .cached_variables: &cached_variables
   BUNDLE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle
+  BUNDLE_CACHE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle-cache
   GEM_HOME: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
   GEM_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
+  GEM_SPEC_CACHE: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gemspec
   GOCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/build
   GOMODCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/mod
   NODE_PATH: $GDK_INTERNAL_CACHE_FULL_DIR/nodejs
@@ -87,6 +89,7 @@ include:
   - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
   - local: .gitlab/ci/_rules.gitlab-ci.yml
   - local: .gitlab/ci/_docker.gitlab-ci.yml
+  - local: .gitlab/ci/_macos.gitlab-ci.yml
   - local: .gitlab/ci/pre.gitlab-ci.yml
   - local: .gitlab/ci/build.gitlab-ci.yml
   - local: .gitlab/ci/test.gitlab-ci.yml
