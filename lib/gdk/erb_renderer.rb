@@ -17,19 +17,6 @@ module GDK
       @args = args.merge(config: config)
     end
 
-    def render!(target = @target)
-      return unless should_render?(target)
-
-      str = File.read(source)
-      # A trim_mode of '-' allows omitting empty lines with <%- -%>
-      result = ERB.new(str, trim_mode: '-').result_with_hash(@args)
-
-      File.write(target, result)
-    rescue GDK::ConfigSettings::UnsupportedConfiguration => e
-      GDK::Output.abort("#{e.message}.")
-      false
-    end
-
     def safe_render!
       return unless should_render?(target)
 
@@ -54,6 +41,19 @@ module GDK
     end
 
     private
+
+    def render!(target = @target)
+      return unless should_render?(target)
+
+      str = File.read(source)
+      # A trim_mode of '-' allows omitting empty lines with <%- -%>
+      result = ERB.new(str, trim_mode: '-').result_with_hash(@args)
+
+      File.write(target, result)
+    rescue GDK::ConfigSettings::UnsupportedConfiguration => e
+      GDK::Output.abort("#{e.message}.")
+      false
+    end
 
     def warn_changes!(temp_file)
       diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..]
