@@ -4,7 +4,14 @@ gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
 
-gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
+.PHONY: gitlab-setup
+gitlab-setup: \
+	gitlab/.git \
+	.gitlab-bundle \
+	.gitlab-gdk-gem \
+	.gitlab-lefthook \
+	.gitlab-yarn \
+	.gitlab-translations
 
 .PHONY: gitlab-update
 gitlab-update: gitlab-update-timed
@@ -12,7 +19,6 @@ gitlab-update: gitlab-update-timed
 .PHONY: gitlab-update-run
 gitlab-update-run: \
 	gitlab-git-pull \
-	gitlab-config \
 	postgresql \
 	gitlab-setup \
 	gitlab-db-migrate \
@@ -48,22 +54,6 @@ gitlab/.git:
 	@echo "Cloning gitlab-org/gitlab"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-clone ${git_depth_param} $(if $(realpath ${gitlab_repo}),--shared) ${gitlab_repo} ${gitlab_clone_dir}
-
-gitlab-config: \
-	touch-examples \
-	gitlab/config/gitlab.yml \
-	gitlab/config/database.yml \
-	gitlab/config/cable.yml \
-	gitlab/config/resque.yml \
-	gitlab/config/redis.cache.yml \
-	gitlab/config/redis.repository_cache.yml \
-	gitlab/config/redis.queues.yml \
-	gitlab/config/redis.shared_state.yml \
-	gitlab/config/redis.trace_chunks.yml \
-	gitlab/config/redis.rate_limiting.yml \
-	gitlab/config/redis.sessions.yml \
-	gitlab/public/uploads \
-	gitlab/config/puma.rb
 
 gitlab/public/uploads:
 	$(Q)mkdir $@

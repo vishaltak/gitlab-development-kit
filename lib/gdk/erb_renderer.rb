@@ -31,13 +31,19 @@ module GDK
     end
 
     def safe_render!
-      return unless should_render?(target)
+      unless should_render?(target)
+        GDK::Output.debug("Should not render '#{target}.")
+        return
+      end
 
       temp_file = Tempfile.open(target)
       render!(temp_file.path)
 
       if File.exist?(target)
-        return if FileUtils.identical?(target, temp_file.path)
+        if FileUtils.identical?(target, temp_file.path)
+          GDK::Output.debug("No changes for '#{target}'.")
+          return
+        end
 
         warn_changes!(temp_file.path)
         backup!

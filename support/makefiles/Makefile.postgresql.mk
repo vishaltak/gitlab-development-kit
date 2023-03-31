@@ -1,15 +1,15 @@
 .PHONY: postgresql
-postgresql: postgresql/data postgresql/port postgresql-seed-rails postgresql-seed-praefect
+postgresql: postgresql/data postgresql/port postgresql-seed-rails _postgresql-seed-praefect
 
 postgresql/data:
 	$(Q)${postgresql_bin_dir}/initdb --locale=C -E utf-8 ${postgresql_data_dir}
 
 .PHONY: postgresql-seed-rails
-postgresql-seed-rails: postgresql-seed-praefect
+postgresql-seed-rails: _postgresql-seed-praefect
 	$(Q)support/bootstrap-rails
 
 .PHONY: postgresql-seed-praefect
-postgresql-seed-praefect: Procfile postgresql/data postgresql-geo/data postgresql/geo/port
+_postgresql-seed-praefect: postgresql/data postgresql-geo/data postgresql/geo/port
 	$(Q)gdk start db
 	$(Q)support/bootstrap-praefect
 

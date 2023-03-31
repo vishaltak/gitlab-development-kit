@@ -123,7 +123,7 @@ module GDK
       end
 
       def colorize?
-        interactive? && ENV.fetch('NO_COLOR', '').empty?
+        ENV.fetch('NO_COLOR', '').empty?
       end
 
       def prompt(message)

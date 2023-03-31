@@ -6,7 +6,7 @@ module GDK
   module Command
     class DiffConfig < BaseCommand
       def run(_ = [])
-        Shellout.new(GDK::MAKE, 'touch-examples').run
+        Shellout.new(GDK::MAKE, '_touch-examples').run
 
         # Iterate over each file from files Array and print any output to
         # stderr that may have come from running `make <file>`.

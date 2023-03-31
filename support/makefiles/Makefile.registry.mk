@@ -1,4 +1,15 @@
-registry-setup: registry/storage registry/config.yml localhost.crt
+.PHONY: registry-setup
+registry-setup: _gdk-clear-needed-configs _registry-configs _registry-setup _gdk-update-needed-configs
+
+###
+
+.PHONY: _registry-configs
+_registry-configs:
+	${Q}touch support/templates/registry/config.yml.erb
+	${Q}echo "registry/config.yml" >> tmp/.gdk-configs-to-update
+
+.PHONY: _registry-setup
+_registry-setup: registry/storage registry/config.yml localhost.crt
 
 localhost.crt: localhost.key
 

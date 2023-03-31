@@ -67,18 +67,17 @@ endif
 #
 .PHONY: all
 all: preflight-checks \
+_unlock-dependency-installers \
 gitlab-setup \
-gitlab-shell-setup \
 gitaly-setup \
-ensure-databases-setup \
-gdk-reconfigure-task \
-support-setup \
+_support-setup \
 geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
 gitlab-k8s-agent-setup \
 gitlab-metrics-exporter-setup \
 gitlab-pages-setup \
+gitlab-shell-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
 gitlab-workhorse-setup \
@@ -103,16 +102,18 @@ update: start-task \
 platform-update \
 preflight-checks \
 preflight-update-checks \
-ensure-databases-setup \
-gitlab-shell-update \
-unlock-dependency-installers \
+_unlock-dependency-installers \
 gitlab-update \
+gitaly-update \
+_support-setup \
+geo-config \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
 gitlab-k8s-agent-update \
 gitlab-metrics-exporter-update \
 gitlab-pages-update \
 gitlab-spamcheck-update \
+gitlab-shell-update \
 gitlab-translations-unlock \
 gitlab-ui-update \
 gitlab-workhorse-update \
@@ -126,8 +127,8 @@ post-update-task
 #
 .PHONY: reconfigure
 reconfigure: start-task \
-gdk-reconfigure-task \
-support-setup \
+_unlock-dependency-installers \
+_support-setup \
 geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
@@ -181,7 +182,7 @@ post-reconfigure-task: display-announcement_doubles-for-user
 clean:
 	@true
 
-self-update: unlock-dependency-installers
+self-update:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Running self-update on GDK"
@@ -189,21 +190,23 @@ self-update: unlock-dependency-installers
 	$(Q)git stash ${QQ}
 	$(Q)support/self-update-git-worktree ${QQ}
 
-.PHONY: touch-examples
-touch-examples:
+.PHONY: _touch-examples
+_touch-examples:
 	$(Q)touch \
 	gitlab-shell/config.yml.example \
 	gitlab/workhorse/config.toml.example \
 	$$(find support/templates -name "*.erb" -not -path "*/gitlab-pages-secret.erb") > /dev/null 2>&1 || true
 
-unlock-dependency-installers:
+_unlock-dependency-installers:
 	$(Q)rm -f \
+	.gdk-configs-update-all \
+	.gdk-configs-to-update \
 	.gitlab-bundle \
+	.gitlab-gdk-gem \
+	.gitlab-lefthook \
 	.gitlab-shell-bundle \
 	.gitlab-yarn \
-	.gitlab-ui-yarn \
-	.gitlab-gdk-gem \
-	.gitlab-lefthook
+	.gitlab-ui-yarn
 
 gdk.yml:
 	$(Q)touch $@
@@ -212,8 +215,8 @@ gdk.yml:
 rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
-.PHONY: ensure-databases-setup
-ensure-databases-setup: Procfile postgresql/data gitaly-update ensure-databases-running
+.PHONY: _ensure-databases-setup
+_ensure-databases-setup: postgresql/data ensure-databases-running
 
 .PHONY: ensure-databases-running
 ensure-databases-running:
@@ -227,7 +230,27 @@ ensure-databases-running:
 diff-config:
 	$(Q)gdk $@
 
-support-setup: Procfile jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
+.PHONY: _support-setup
+_support-setup: \
+_touch-examples \
+_unlock-dependency-installers \
+_gdk-clear-needed-configs \
+\
+_nginx-configs \
+_openssh-configs \
+_registry-configs \
+\
+_gdk-update-needed-configs \
+\
+_ensure-databases-setup \
+postgresql \
+elasticsearch-setup \
+runner-setup \
+\
+_jaeger-setup \
+_nginx-setup \
+_openssh-setup \
+_registry-setup
 
 .PHONY: start
 start:
@@ -244,10 +267,19 @@ ask-to-restart:
 display-announcement_doubles-for-user:
 	@support/announcements-display
 
-.PHONY: gdk-reconfigure-task
-gdk-reconfigure-task: touch-examples
+.PHONY: _gdk-clear-needed-configs
+_gdk-clear-needed-configs:
+	${Q}rm -f tmp/.gdk-configs-to-update
+
+.PHONY: _gdk-update-needed-configs
+_gdk-update-needed-configs:
+	${Q}sort tmp/.gdk-configs-to-update | uniq | xargs rake
+	${Q}rm -f tmp/.gdk-configs-to-update
+
+.gdk-configs-update-all:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Ensuring GDK managed configuration files are up-to-date"
 	@echo "${DIVIDER}"
 	$(Q)rake reconfigure
+	$(Q)touch $@

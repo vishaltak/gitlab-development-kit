@@ -1,9 +1,12 @@
+.PHONY: jaeger-setup
+jaeger-setup: _jaeger-setup
+
 ifeq ($(jaeger_server_enabled),true)
-.PHONY: jaeger-setup
-jaeger-setup: jaeger/jaeger-${jaeger_version}/jaeger-all-in-one
+.PHONY: _jaeger-setup
+_jaeger-setup: jaeger/jaeger-${jaeger_version}/jaeger-all-in-one
 else
-.PHONY: jaeger-setup
-jaeger-setup:
+.PHONY: _jaeger-setup
+_jaeger-setup:
 	@true
 endif
 

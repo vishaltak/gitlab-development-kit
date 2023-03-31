@@ -5,7 +5,7 @@ grafana-setup:
 	@true
 endif
 
-performance-metrics-setup: Procfile grafana-setup
+performance-metrics-setup: grafana-setup
 
 grafana/grafana/bin/grafana-server:
 	$(Q)cd grafana && ${MAKE} ${QQ}

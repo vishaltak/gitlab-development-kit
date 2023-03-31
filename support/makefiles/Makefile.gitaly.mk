@@ -40,5 +40,5 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitaly_clone_dir)/ruby
 
 .PHONY: praefect-migrate
-praefect-migrate: postgresql-seed-praefect
+praefect-migrate: _postgresql-seed-praefect
 	$(Q)support/migrate-praefect
