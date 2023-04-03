@@ -70,6 +70,9 @@ when 'time-service-end'
   end
 when 'summarize'
   updated_timings = current_timings.merge('end' => now)
+
+  puts unless updated_timings['services'].empty?
+
   updated_timings['services'].each do |name, timings|
     took = if timings['end'] && timings['start']
              timings['end'] - timings['start']
@@ -81,6 +84,6 @@ when 'summarize'
   end
 
   if updated_timings['start'] && updated_timings['end'] # rubocop:disable Style/IfUnlessModifier
-    puts "\nTook #{updated_timings['end'] - updated_timings['start']} sec(s) total."
+    puts "\nTook #{updated_timings['end'] - updated_timings['start']} sec(s) total"
   end
 end

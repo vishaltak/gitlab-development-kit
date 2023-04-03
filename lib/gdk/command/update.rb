@@ -29,7 +29,7 @@ module GDK
       end
 
       def reconfigure!
-        GDK::Command::Reconfigure.new.run
+        GDK.make('reconfigure-tasks')
       end
     end
   end

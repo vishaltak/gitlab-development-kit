@@ -125,7 +125,10 @@ post-update-task
 # This is used by `gdk reconfigure`
 #
 .PHONY: reconfigure
-reconfigure: start-task \
+reconfigure: start-task reconfigure-tasks post-reconfigure-task
+
+.PHONY: reconfigure-tasks
+reconfigure-tasks: \
 gdk-reconfigure-task \
 support-setup \
 geo-config \
@@ -142,8 +145,7 @@ openldap-setup \
 postgresql-sensible-defaults \
 prom-setup \
 snowplow-micro-setup \
-zoekt-setup \
-post-reconfigure-task
+zoekt-setup
 
 .PHONY: start-task
 start-task:
@@ -153,13 +155,8 @@ start-task:
 post-task:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Timings"
-	@echo "${DIVIDER}"
-	@echo
-	@support/dev/makefile-timeit summarize
-	@echo
-	@echo "${DIVIDER}"
 	@echo "$(SUCCESS_MESSAGE) successfully as of $$(date +"%Y-%m-%d %T")"
+	@support/dev/makefile-timeit summarize
 	@echo "${DIVIDER}"
 
 .PHONY: post-install-task
