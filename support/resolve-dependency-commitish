@@ -23,6 +23,6 @@ case "$version" in
       echo "${version#"="}"
       ;;
   *)
-      echo "v${version}"
+      echo "v${version#v}"
       ;;
 esac
