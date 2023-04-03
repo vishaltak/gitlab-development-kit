@@ -40,8 +40,6 @@ module GDK
       temp_file&.close
     end
 
-    private
-
     def render!(target = @target)
       return unless should_render?(target)
 
@@ -54,6 +52,8 @@ module GDK
       GDK::Output.abort("#{e.message}.")
       false
     end
+
+    private
 
     def warn_changes!(temp_file)
       diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..]

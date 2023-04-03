@@ -50,7 +50,7 @@ end
 # Define as a task instead of a file, so it's built unconditionally
 desc nil
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
-  GDK::ErbRenderer.new(t.source, t.name).safe_render!
+  GDK::ErbRenderer.new(t.source, t.name).render!
   puts t.name # Print the filename, so make can include it
 end
 
