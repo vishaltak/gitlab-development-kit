@@ -9,6 +9,7 @@ module GDK
           Usage: gdk start [<args>]
 
             --help             Display help
+            --quiet            Don't display any output
             --show-progress    Indicate when GDK is ready to use
               or
             --open-when-ready  Open the GitLab web UI running in your local GDK installation, using your default web browser
@@ -23,11 +24,12 @@ module GDK
           return true
         end
 
+        quiet = !args.delete('--quiet').nil?
         show_progress = !args.delete('--show-progress').nil?
         open_when_ready = !args.delete('--open-when-ready').nil?
 
         result = GDK::Hooks.with_hooks(config.gdk.start_hooks, 'gdk start') do
-          Runit.start(args)
+          Runit.start(args, quiet: quiet)
         end
 
         if args.empty?
