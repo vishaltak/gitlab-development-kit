@@ -10,6 +10,7 @@ agent:
     url_path_prefix: "<%= config.gitlab_k8s_agent.__k8s_api_listen_url_path %>"
 gitlab:
   address: "<%= config.gitlab_k8s_agent.__gitlab_address %>"
+  external_url: "<%= config.gitlab_k8s_agent.__gitlab_external_url %>"
   authentication_secret_file: "<%= config.gitlab_k8s_agent.__secret_file %>"
   <%- if config.https? %>
   ca_certificate_file: "<%= config.gdk_root.join('localhost.crt') %>"

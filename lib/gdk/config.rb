@@ -455,6 +455,13 @@ module GDK
       end
 
       string(:__gitlab_address) { "#{config.https? ? 'https' : 'http'}://#{config.workhorse.__listen_address}" }
+      string(:__gitlab_external_url) do
+        if config.nginx?
+          "#{config.https? ? 'https' : 'http'}://#{config.nginx.__listen_address}"
+        else
+          "#{config.https? ? 'https' : 'http'}://#{config.workhorse.__listen_address}"
+        end
+      end
       string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }
       string(:__secret_file) { config.gdk_root.join('gitlab', '.gitlab_kas_secret') }
 
