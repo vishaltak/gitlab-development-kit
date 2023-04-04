@@ -15,6 +15,10 @@ Product Analytics is currently behind the `product_analytics_dashboards` feature
 
 To enable the feature flag and make the dashboards available, run: `echo "Feature.enable(:product_analytics_dashboards)" | rails c`.
 
+The product analytics settings under admin settings is currently behind the `product_analytics_admin_settings` feature flag.
+
+To enable the feature flag and make the settings visible, run: `echo "Feature.enable(:product_analytics_admin_settings)" | rails c`.
+
 The project menu item is currently behind the `combined_analytics_dashboards` feature flag.
 
 To enable the feature flag and make the menu item visible, run: `echo "Feature.enable(:combined_analytics_dashboards)" | rails c`.
