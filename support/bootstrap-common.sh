@@ -219,6 +219,7 @@ configure_ruby_bundler_for_gitlab() {
       current_pg_config_location=$(command -v pg_config)
     fi
 
+    bundle config build.ffi "--disable-system-libffi"
     bundle config build.pg "--with-pg-config=${current_pg_config_location}"
     bundle config unset build.gpgme
 
