@@ -459,7 +459,7 @@ module GDK
         if config.nginx?
           "#{config.https? ? 'https' : 'http'}://#{config.nginx.__listen_address}"
         else
-          "#{config.https? ? 'https' : 'http'}://#{config.workhorse.__listen_address}"
+          config.gitlab_k8s_agent.__gitlab_address
         end
       end
       string(:__config_file) { config.gdk_root.join('gitlab-k8s-agent-config.yml') }

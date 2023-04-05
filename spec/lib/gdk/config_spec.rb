@@ -1651,6 +1651,26 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '__gitlab_external_url' do
+      let(:yaml) do
+        {
+          'nginx' => { 'enabled' => nginx_enabled }
+        }
+      end
+
+      context 'when nginx is enabled' do
+        let(:nginx_enabled) { true }
+
+        it { expect(config.gitlab_k8s_agent.__gitlab_external_url).to eq("http://#{config.nginx.__listen_address}") }
+      end
+
+      context 'when nginx is disabled' do
+        let(:nginx_enabled) { false }
+
+        it { expect(config.gitlab_k8s_agent.__gitlab_external_url).to eq(config.gitlab_k8s_agent.__gitlab_address) }
+      end
+    end
+
     describe '__url_for_agentk' do
       let(:https_enabled) { nil }
 
