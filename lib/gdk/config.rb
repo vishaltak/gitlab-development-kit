@@ -749,6 +749,7 @@ module GDK
     settings :runner do
       path(:config_file) { config.gdk_root.join('gitlab-runner-config.toml') }
       bool(:enabled) { config_file.exist? }
+      integer(:concurrent) { 1 }
       string(:install_mode) { "binary" }
       string(:executor) { "docker" }
       array(:extra_hosts) { [] }

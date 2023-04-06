@@ -908,6 +908,12 @@ RSpec.describe GDK::Config do
   end
 
   describe 'runner' do
+    describe '#concurrent' do
+      it 'defaults to 1' do
+        expect(config.runner.concurrent).to eq(1)
+      end
+    end
+
     describe '#install_mode' do
       it 'returns binary' do
         expect(config.runner.install_mode).to eq('binary')
