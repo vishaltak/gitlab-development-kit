@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -ex
+
+/sbin/sysctl fs.inotify.max_user_watches=524288
+
+# Build an image as in https://gitlab.com/gitlab-org/gitlab/-/blob/671562f9d3516e7379a700ef7eb017f38a223543/.gitlab/ci/build-images.gitlab-ci.yml#L34
+# Then run the e2e tests using that image as in https://gitlab.com/gitlab-org/gitlab/-/blob/671562f9d3516e7379a700ef7eb017f38a223543/.gitlab/ci/qa.gitlab-ci.yml#L91-92
+# If the tests pass, push the image built in this pipeline in `gitlab-e2e-test-image`
