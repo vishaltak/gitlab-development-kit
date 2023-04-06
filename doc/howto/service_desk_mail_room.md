@@ -5,21 +5,6 @@ You can watch [a recorded video walkthrough](https://www.youtube.com/watch?v=Sdq
 ## Using Webhook (recommended setup)
 
 1. Stop any running GDK services. `gdk stop`
-1. Upgrade MailRoom gem to the [latest version](https://rubygems.org/gems/gitlab-mail_room/) in `/gitlab/Gemfile`.
-1. For [historical reasons](https://docs.gitlab.com/ee/development/emails.html#mailroom-gem-updates), `gitlab-mail_room`
-   is kept at version `0.0.9` in the `Gemfile`. Upgrade MailRoom gem to the
-   [latest version](https://rubygems.org/gems/gitlab-mail_room/) in `<gdk_root>/gitlab/Gemfile`. For example:
-
-   ```diff
-   -gem 'gitlab-mail_room', '~> 0.0.9', require: 'mail_room'
-   +gem 'gitlab-mail_room', '~> 0.0.21', require: 'mail_room'
-   ```
-
-   In the `<gdk_root>/gitlab/` directory:
-   
-   ```shell
-   bundle install
-   ```
 
 1. Generate a secret file for MailRoom. For example:
 
