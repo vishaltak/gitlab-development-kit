@@ -26,7 +26,7 @@ module GDK
     #
     # @param [String] binary name
     def self.find_executable(binary)
-      executable_file = proc { |name| next name if File.exist?(name) && File.executable?(name) }
+      executable_file = proc { |name| next name if File.file?(name) && File.executable?(name) }
 
       # Retrieve PATH from ENV or use a fallback
       path = ENV['PATH']&.split(File::PATH_SEPARATOR) || %w[/usr/local/bin /usr/bin /bin]
