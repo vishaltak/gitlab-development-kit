@@ -394,6 +394,7 @@ tracer:
     version: 1.21.0
 username: git
 vault:
+  bin: "/usr/local/bin/vault"
   enabled: false
   listen_address: 127.0.0.1
   port: 8200

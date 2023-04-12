@@ -797,6 +797,8 @@ module GDK
 
     settings :vault do
       bool(:enabled) { false }
+      path(:bin) { find_executable!('vault') || '/usr/local/bin/vault' }
+      string(:__server_command) { "#{bin} server --dev --dev-listen-address=#{__listen}" }
       string(:__listen) { "#{listen_address}:#{port}" }
       port(:port, 'vault')
       string(:listen_address) { config.hostname }

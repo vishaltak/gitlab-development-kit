@@ -15,6 +15,7 @@ module GDK
     autoload :PostgreSQLReplica, 'gdk/services/postgresql_replica'
     autoload :Redis, 'gdk/services/redis'
     autoload :Required, 'gdk/services/required'
+    autoload :Vault, 'gdk/services/vault'
 
     ALL = %i[
       Clickhouse
@@ -24,6 +25,7 @@ module GDK
       PostgreSQL
       PostgreSQLReplica
       Redis
+      Vault
     ].freeze
 
     # Returns an Array of all services, including enabled and not
