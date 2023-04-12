@@ -3039,6 +3039,27 @@ RSpec.describe GDK::Config do
   end
 
   describe 'vault' do
+    describe '#bin' do
+      it 'defaults bin to /usr/local/bin/clickhouse when no executable can be found' do
+        stub_env('PATH', tmp_path)
+
+        expect(default_config.vault.bin).to eq(Pathname.new('/usr/local/bin/vault'))
+      end
+
+      it 'returns bin full path based on find_executable' do
+        stub_env('PATH', tmp_path)
+        custom_bin_path = Pathname.new(create_dummy_executable('vault'))
+
+        expect(default_config.vault.bin).to eq(custom_bin_path)
+      end
+    end
+
+    describe '#__server_command' do
+      it 'defaults to dev mode' do
+        expect(config.vault.__server_command).to eq("#{config.vault.bin} server --dev --dev-listen-address=#{config.vault.__listen}")
+      end
+    end
+
     describe '#__listen' do
       it 'defaults to gdk hostname on port 8200' do
         expect(config.vault.__listen).to eq("#{config.hostname}:8200")
