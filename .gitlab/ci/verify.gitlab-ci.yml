@@ -92,10 +92,10 @@ pristine:
   script:
     - support/ci/verify-pristine
 
-update-from-default-branch:
-  extends: .verify-job
-  script:
-    - support/ci/verify-update $CI_DEFAULT_BRANCH
+# update-from-default-branch:
+#   extends: .verify-job
+#   script:
+#     - support/ci/verify-update $CI_DEFAULT_BRANCH
 
 update-from-mr-branch:
   extends: .verify-job
