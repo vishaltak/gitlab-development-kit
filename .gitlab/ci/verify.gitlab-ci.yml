@@ -14,11 +14,13 @@
       - ./gdk/gitlab/log/*.log
       - ./gdk/log
       - ./gdk/sv/*/run
+      - ./.cache
     expire_in: 2 days
     when: always
   variables:
-    GEM_HOME: "$CI_PROJECT_DIR/.gem"
-    GEM_PATH: "$CI_PROJECT_DIR/.gem"
+    BUNDLE_GLOBAL_GEM_CACHE: "1"
+    BUNDLE_USER_CACHE: "$CI_PROJECT_DIR/.cache/bundle"
+    GEM_SPEC_CACHE: "$CI_PROJECT_DIR/.cache/gemspec"
     GOCACHE: "$CI_PROJECT_DIR/.cache/go-build"
     GOMODCACHE: "$CI_PROJECT_DIR/.cache/go-mod"
   cache:
@@ -27,14 +29,15 @@
           - '.ruby-version'
           - '.gitlab/ci/verify.gitlab-ci.yml'
       paths:
-        - "$CI_PROJECT_DIR/.gem"
+        - "$BUNDLE_USER_CACHE"
+        - "$GEM_SPEC_CACHE"
       policy: pull-push
     - key:
         files:
           - '.tool-versions'
       paths:
-        - "$CI_PROJECT_DIR/.cache/go-build"
-        - "$CI_PROJECT_DIR/.cache/go-mod"
+        - "$GOCACHE"
+        - "$GOMODCACHE"
       policy: pull-push
 
 verify-start:
