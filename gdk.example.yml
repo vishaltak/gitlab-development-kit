@@ -328,7 +328,7 @@ registry:
   enabled: false
   gid: ''
   host: 127.0.0.1
-  image: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.69.0-gitlab
+  image: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.70.0-gitlab
   listen_address: 127.0.0.1
   port: 5000
   self_signed: false
