@@ -908,6 +908,22 @@ RSpec.describe GDK::Config do
   end
 
   describe 'runner' do
+    describe '#enabled' do
+      it 'defaults to false' do
+        expect(config.runner.enabled).to be(false)
+      end
+
+      context 'when enabled in config file' do
+        let(:yaml) do
+          { 'runner' => { 'enabled' => true } }
+        end
+
+        it 'returns true' do
+          expect(config.runner.enabled).to be(true)
+        end
+      end
+    end
+
     describe '#concurrent' do
       it 'defaults to 1' do
         expect(config.runner.concurrent).to eq(1)
@@ -1169,16 +1185,6 @@ RSpec.describe GDK::Config do
           'config_file' => Tempfile.new
         }
       end
-
-      describe 'enabled' do
-        it 'returns true' do
-          expect(config.runner.enabled).to be(true)
-        end
-      end
-    end
-
-    context 'when config_file does not exist' do
-      let(:file_contents) { nil }
 
       describe 'enabled' do
         it 'is disabled by default' do
