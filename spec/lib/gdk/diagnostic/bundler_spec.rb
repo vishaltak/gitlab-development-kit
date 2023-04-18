@@ -4,22 +4,11 @@ require 'spec_helper'
 
 RSpec.describe GDK::Diagnostic::Bundler do
   let(:gitlab_dir) { Pathname.new('/home/git/gdk/gitlab') }
-  let(:gitaly_ruby_dir) { Pathname.new('/home/git/gdk/gitaly/ruby') }
 
   describe '#success?' do
-    context 'when gitaly has a BUNDLE_PATH configured' do
-      it 'returns false' do
-        expect_bundle_path_not_set(gitlab_dir)
-        expect_bundle_path_set(gitaly_ruby_dir)
-
-        expect(subject).not_to be_success
-      end
-    end
-
-    context "when gitlab and gitaly don't have BUNDLE_PATH configured" do
+    context "when gitlab doesn't have BUNDLE_PATH configured" do
       it 'returns true' do
         expect_bundle_path_not_set(gitlab_dir)
-        expect_bundle_path_not_set(gitaly_ruby_dir)
 
         expect(subject).to be_success
       end
@@ -27,19 +16,9 @@ RSpec.describe GDK::Diagnostic::Bundler do
   end
 
   describe '#detail' do
-    context 'when gitaly has a BUNDLE_PATH configured' do
-      it 'returns a message' do
-        expect_bundle_path_not_set(gitlab_dir)
-        expect_bundle_path_set(gitaly_ruby_dir)
-
-        expect(subject.detail).to match(/#{gitaly_ruby_dir} appears to have BUNDLE_PATH configured/)
-      end
-    end
-
-    context "when gitlab and gitaly don't have BUNDLE_PATH configured" do
+    context "when gitlab doesn't have BUNDLE_PATH configured" do
       it 'returns no message' do
         expect_bundle_path_not_set(gitlab_dir)
-        expect_bundle_path_not_set(gitaly_ruby_dir)
 
         expect(subject.detail).to be_nil
       end
