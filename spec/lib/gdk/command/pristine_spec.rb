@@ -46,10 +46,6 @@ RSpec.describe GDK::Command::Pristine do
         expect_shellout_command(subject.bundle_install_cmd, config.gitlab.dir).and_return(shellout_double)
         expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitlab.dir).and_return(shellout_double)
 
-        # gitaly_bundle
-        expect_shellout_command(subject.bundle_install_cmd, config.gitaly.ruby_dir).and_return(shellout_double)
-        expect_shellout_command(described_class::BUNDLE_PRISTINE_CMD, config.gitaly.ruby_dir).and_return(shellout_double)
-
         # gitlab_tmp_clean
         expect_shellout_command(described_class::GIT_CLEAN_TMP_CMD, config.gitlab.dir).and_return(shellout_double)
 
