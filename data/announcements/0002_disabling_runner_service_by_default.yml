@@ -5,7 +5,9 @@ body: |
   ```
   runner:
     enabled: true
-  ```.
+  ```
+
+  or run `gdk config set runner.enabled true`
 
   After adding these lines, please run `gdk reconfigure` to apply the changes.
 
