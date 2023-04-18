@@ -78,7 +78,8 @@ Install using your system's package manager.
 
 The one-line installation:
 
-1. Clones the GDK project into a new `gitlab-development-kit` directory in the current working directory.
+1. Prompts the user for a GDK directory name. The default is `gitlab-development-kit`.
+1. From the current working directory, clones the GDK project into the specified directory.
 1. Installs `asdf` and necessary `asdf` plugins.
 1. Runs `gdk install`.
 1. Runs `gdk start`.
