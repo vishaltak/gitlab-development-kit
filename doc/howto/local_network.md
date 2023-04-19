@@ -1,38 +1,25 @@
 # Local network binding
 
-For ease of documentation:
-
 - `gdk.test` is the standard hostname for referring to the local GDK instance.
 - `registry.test` is the standard hostname for referring to a local [container registry](registry.md).
 
-We recommend [mapping this to a loopback interface](#create-loopback-interface), but it can be mapped to `127.0.0.1`.
+We recommend [mapping these to a loopback interface](#create-loopback-interface) because it's more flexible, but they can also be mapped to `127.0.0.1`.
 
-To set up `gdk.test` and `registry.test` as hostnames:
+## Local interface
 
-1. Map `gdk.test` to a local address. If using [loopback interface](#create-loopback-interface), add the following to
-   `/etc/hosts`:
+To set up `gdk.test` and `registry.test` as hostnames using `127.0.0.1`:
 
-   ```plaintext
-   172.16.123.1 gdk.test registry.test
-   ```
-
-   Or, if using `127.0.0.1`:
+1. Add the following to the end of `/etc/hosts` (you must use `sudo` to save the changes):
 
    ```plaintext
    127.0.0.1 gdk.test registry.test
    ```
 
-1. Set `hostname` to `gdk.test`.
+1. Set `hostname` to `gdk.test`:
 
    ```shell
    gdk config set hostname gdk.test
    ```
-
-1. If using [loopback interface](#create-loopback-interface), change `listen_address` to be the loopback alias:
-
-    ```shell
-    gdk config set listen_address 172.16.123.1
-    ```
 
 1. Reconfigure GDK:
 
@@ -53,17 +40,19 @@ services [running under Docker](runner.md#docker-configuration)). Therefore, an 
 used.
 
 `172.16.123.1` is a useful [private network address](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses)
-that can avoid clashes with `localhost` and `127.0.0.1`. To configure a loopback interface for this
-address:
+that can avoid clashes with `localhost` and `127.0.0.1`.
 
-1. Create an internal interface. On macOS, this adds an alias IP `172.16.123.1` to the loopback
-   adapter:
+To set up `gdk.test` and `registry.test` as hostnames using `172.16.123.1`:
+
+1. Create an internal interface.
+
+   For macOS, create an alias to the loopback adapter:
 
    ```shell
    sudo ifconfig lo0 alias 172.16.123.1
    ```
 
-   On Linux, you can create a dummy interface:
+   For Linux, create a dummy interface:
 
    ```shell
    sudo ip link add dummy0 type dummy
@@ -71,29 +60,22 @@ address:
    sudo ip link set dummy0 up
    ```
 
-1. Set `listen_address` to `172.16.123.1`:
+1. Add the following to the end of `/etc/hosts` (you must use `sudo` to save the changes):
 
-    ```shell
-    gdk config set listen_address 172.16.123.1
-    ```
+   ```plaintext
+   172.16.123.1 gdk.test registry.test
+   ```
 
-    Or, if you added `gdk.test` to your `/etc/hosts` file:
+1. Set `hostname` to `gdk.test`:
 
-    ```shell
+   ```shell
    gdk config set hostname gdk.test
-    ```
+   ```
 
 1. Reconfigure GDK:
 
    ```shell
    gdk reconfigure
-   ``` 
-
-   Your `gdk.yml` should contain these lines afterwards:
-  
-   ```yaml
-   hostname: gdk.test
-   listen_address: 172.16.123.1
    ```
 
 1. Restart GDK to use the new configuration:
@@ -102,11 +84,15 @@ address:
    gdk restart
    ```
 
+   1. Optional. Make the loopback alias [persist across reboots](#create-loopback-device-on-startup).
+
 ### Create loopback device on startup
 
-For this to work across reboots, the aliased IP address command must be run at startup. To
-automate this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/`
-containing:
+For the loopback alias to work across reboots, the aliased IP address must be setup upon system boot.
+
+#### macOS
+
+To automate this on macOS, create a file called `org.gitlab1.ifconfig.plist` at `/Library/LaunchDaemons/` containing:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -130,8 +116,13 @@ containing:
 </plist>
 ```
 
-The method to persist this dummy interface on Linux varies between distributions. On Ubuntu 20.04,
-you can run:
+#### Linux
+
+The method to persist this dummy interface on Linux varies between distributions.
+
+##### Ubuntu
+
+On Ubuntu, you can run:
 
 ```shell
 sudo nmcli connection add type dummy ifname dummy0 ip4 172.16.123.1
