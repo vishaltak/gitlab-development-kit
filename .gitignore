@@ -28,6 +28,7 @@
 /.ruby-gemset
 /.ssh/
 /.vagrant/
+/.vscode/
 /Procfile
 /bootstrap-rails.log
 /builds
