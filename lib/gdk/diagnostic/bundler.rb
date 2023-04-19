@@ -6,8 +6,7 @@ module GDK
       TITLE = 'Bundler'
 
       def success?
-        gitlab_bundle_config.bundle_path_not_set? &&
-          gitaly_bundle_config.bundle_path_not_set?
+        gitlab_bundle_config.bundle_path_not_set?
       end
 
       def detail
@@ -15,7 +14,6 @@ module GDK
 
         output = []
         output << gitlab_bundle_config.warning_detail
-        output << gitaly_bundle_config.warning_detail
         output.compact.join("\n")
       end
 
@@ -55,10 +53,6 @@ module GDK
 
       def gitlab_bundle_config
         @gitlab_bundle_config ||= BundleConfig.new(config.gitlab.dir)
-      end
-
-      def gitaly_bundle_config
-        @gitaly_bundle_config ||= BundleConfig.new(config.gitaly.ruby_dir)
       end
     end
   end

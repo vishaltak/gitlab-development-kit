@@ -706,12 +706,6 @@ RSpec.describe GDK::Config do
       end
     end
 
-    describe '#ruby_dir' do
-      it 'returns the ruby directory under gitaly' do
-        expect(config.gitaly.ruby_dir).to eq(Pathname.new('/home/git/gdk/gitaly/ruby'))
-      end
-    end
-
     describe '#enabled' do
       context 'when praefect is disabled' do
         let(:storage_count) { 1 }

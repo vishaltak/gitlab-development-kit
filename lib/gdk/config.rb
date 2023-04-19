@@ -630,7 +630,6 @@ module GDK
 
     settings :gitaly do
       path(:dir) { config.gdk_root.join('gitaly') }
-      path(:ruby_dir) { config.gitaly.dir.join('ruby') }
       bool(:enabled) { !config.praefect? || storage_count > 1 }
       path(:address) { config.gdk_root.join('gitaly.socket') }
       path(:assembly_dir) { config.gitaly.dir.join('assembly') }

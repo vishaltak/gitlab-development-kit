@@ -20,7 +20,6 @@ module GDK
           gdk_bundle
           reset_configs
           gitlab_bundle
-          gitaly_bundle
           gitlab_tmp_clean
           gitlab_yarn_clean
         ].each do |task_name|
@@ -105,19 +104,6 @@ module GDK
       def gitlab_tmp_clean
         notice('Cleaning gitlab/tmp/ ..')
         shellout(GIT_CLEAN_TMP_CMD, chdir: config.gitlab.dir)
-      end
-
-      def gitaly_bundle
-        notice('Ensuring gitaly/ruby/ Ruby gems are installed and pristine..')
-        gitaly_bundle_install && gitaly_bundle_pristine
-      end
-
-      def gitaly_bundle_install
-        shellout(bundle_install_cmd, chdir: config.gitaly.ruby_dir)
-      end
-
-      def gitaly_bundle_pristine
-        shellout(BUNDLE_PRISTINE_CMD, chdir: config.gitaly.ruby_dir)
       end
 
       def shellout(cmd, chdir: config.gdk_root)

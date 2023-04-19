@@ -74,7 +74,6 @@ gitaly:
   gitconfig: []
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
-  ruby_dir: "/home/git/gdk/gitaly/ruby"
   runtime_dir: "/home/git/gdk/tmp"
   storage_count: 1
   storage_dir: "/home/git/gdk/repositories"
