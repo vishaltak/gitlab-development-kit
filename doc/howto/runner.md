@@ -184,7 +184,7 @@ Now when the runner is registered we can find the token in `~/gitlab-runner/conf
 For example:
 
 ```shell
-# grep token /tmp/gitlab-runner/config.toml
+# grep token tmp/gitlab-runner/config.toml
 token = "<runner-token>"
 ```
 
