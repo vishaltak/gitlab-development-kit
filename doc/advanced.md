@@ -534,6 +534,28 @@ $ ruby -e 'puts Thread.trace_memory_allocations'
 false
 ```
 
+## Network restricted environments
+
+In a network restricted environment, you might not be able to freely access certain URLs. To validate the installation, GDK requires access to the following during bootstrap:
+
+```plaintext
+http://download.redis.io/
+https://cache.ruby-lang.org/
+https://classic.yarnpkg.com/
+https://dl.google.com/
+https://dl.min.io/
+https://dl.yarnpkg.com/
+https://ftp.postgresql.org/
+https://github.com/
+https://gitlab.com/
+https://index.rubygems.org/
+https://nodejs.org/
+https://objects.githubusercontent.com/
+https://rubygems.org/
+https://sh.rustup.rs/
+https://static.rust-lang.org/
+```
+
 ## Next Steps
 
 After you've completed the steps on this page, [use GDK to install GitLab](index.md#use-gdk-to-install-gitlab).
