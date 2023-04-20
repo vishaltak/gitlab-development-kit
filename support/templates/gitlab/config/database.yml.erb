@@ -60,6 +60,19 @@ development:
         use_tcp: true
     <%- end -%>
 <%- end -%>
+<%- if config.gitlab.rails.databases.embedding.enabled -%>
+  embedding:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_development_embedding
+    database_tasks: true
+    host: <%= config.postgresql.host %>
+    port: <%= config.postgresql.port %>
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
+<%- end -%>
 <%- if config.geo? -%>
   geo:
     adapter: postgresql
@@ -92,6 +105,19 @@ test: &test
   <%- else -%>
     database: gitlabhq_test_ci
   <%- end -%>
+    host: <%= config.postgresql.host %>
+    port: <%= config.postgresql.port %>
+    pool: 10
+    prepared_statements: false
+    variables:
+      statement_timeout: 120s
+<%- end -%>
+<%- if config.gitlab.rails.databases.embedding.enabled -%>
+  embedding:
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_test_embedding
+    database_tasks: true
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10

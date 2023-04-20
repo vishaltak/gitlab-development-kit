@@ -12,6 +12,7 @@ module Support
     RAKE_DEV_DB_RESET_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:reset].freeze
     RAKE_DEV_DB_SEED_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:seed_fu].freeze
     RAKE_COPY_DB_CI_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake dev:copy_db:ci].freeze
+    RAKE_EMBEDDING_DB_RESET_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:reset:embedding].freeze
 
     def execute
       if config.geo.secondary?
@@ -22,7 +23,7 @@ module Support
       GDK::Output.abort('Cannot connect to PostgreSQL.') unless postgresql.ready?
       FileUtils.rm_f(LOG_FILE)
 
-      bootstrap_main_db && bootstrap_ci_db
+      bootstrap_main_db && bootstrap_ci_db && bootstrap_embedding_db
     end
 
     private
@@ -47,6 +48,12 @@ module Support
 
       if_db_not_found('gitlabhq_development_ci') do
         run_command(RAKE_COPY_DB_CI_CMD)
+      end
+    end
+
+    def bootstrap_embedding_db
+      if_db_not_found('gitlabhq_development_embedding') do
+        run_command(RAKE_EMBEDDING_DB_RESET_CMD)
       end
     end
 
