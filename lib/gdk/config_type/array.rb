@@ -6,7 +6,11 @@ module GDK
       include Mergable
 
       def parse(value)
-        value.to_a
+        if value.is_a?(::String)
+          value.split(',').map(&:strip)
+        else
+          value.to_a
+        end
       end
 
       private
