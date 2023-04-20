@@ -12,8 +12,14 @@ RSpec.describe GDK::ConfigSettings do
       expect { config.foo }.not_to raise_error
     end
 
-    it 'fails on non-array value' do
-      described_class.array(:foo) { %q(a b) }
+    it 'accepts a string' do
+      described_class.array(:foo) { 'foo' }
+
+      expect { config.foo }.not_to raise_error
+    end
+
+    it 'fails on non-array and non-string value' do
+      described_class.array(:foo) { 123 }
 
       expect { config.foo }.to raise_error(TypeError)
     end
