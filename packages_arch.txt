@@ -1,6 +1,7 @@
 # Keep the file list alphabetically sorted, makes diffs and merges easier
 #
 base-devel
+clang
 cmake
 ed
 git

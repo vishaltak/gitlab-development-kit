@@ -1,5 +1,6 @@
 # Keep the file list alphabetically sorted, makes diffs and merges easier
 #
+clang
 cmake
 curl
 ed
@@ -8,6 +9,7 @@ git
 git-lfs
 gpg
 graphicsmagick
+libclang-dev
 libcurl4-openssl-dev
 libgpgme-dev
 libicu-dev
@@ -20,6 +22,7 @@ libreadline-dev
 libsqlite3-dev
 libssl-dev
 libyaml-dev
+llvm-dev
 lsb-release
 net-tools
 openssh-server
