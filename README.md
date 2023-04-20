@@ -2,13 +2,11 @@
 
 [![build status](https://gitlab.com/gitlab-org/gitlab-development-kit/badges/main/pipeline.svg)](https://gitlab.com/gitlab-org/gitlab-development-kit/pipelines)
 
-## Overview
-
 The GitLab Development Kit (GDK) installs GitLab on your workstation. GDK
 manages GitLab requirements, development tools and databases.
 
 The GDK is used by GitLab team members and contributors to test changes
-locally in isolation to speed up the time to make successful contributions.
+locally to speed up the time to make successful contributions.
 
 ## Goals
 
@@ -31,7 +29,7 @@ The following installation methods are supported, actively maintained, and teste
 
 - [One-line installation](doc/index.md#one-line-installation)
 - [Simple installation](doc/index.md#simple-installation) on your local system. Requires at least
-  8GB RAM and 12GB disk space. Available for [supported platforms](#supported-platforms).
+  8 GB RAM and 12 GB disk space. Available for [supported platforms](#supported-platforms).
 - [Gitpod](doc/howto/gitpod.md).
 
 ### Supported platforms
@@ -53,7 +51,7 @@ The following documentation is provided for those who can benefit from it, but a
 supported installation methods:
 
 - [Advanced installation](doc/advanced.md) on your local system. Requires at least
-  8GB RAM and 12GB disk space.
+  8 GB RAM and 12 GB disk space.
 - [Vagrant](doc/howto/vagrant.md).
 - [minikube](doc/howto/kubernetes/minikube.md).
 
@@ -65,14 +63,17 @@ supported installation methods:
 
 ### Using SSH remotes
 
-GDK defaults to HTTPS instead of SSH when cloning the repositories. With HTTPS, you can still use GDK without a GitLab.com account or an SSH key. However, if you have a GitLab.com account and already [added your SSH key](https://docs.gitlab.com/ee/user/ssh.html#add-an-ssh-key-to-your-gitlab-account) to your account, you can configure `git` to rewrite the URLs to use SSH via the following config change:
+GDK defaults to HTTPS instead of SSH when cloning the repositories. With HTTPS, you can still use GDK without a GitLab.com
+account or an SSH key. However, if you have a GitLab.com account and already
+[added your SSH key](https://docs.gitlab.com/ee/user/ssh.html#add-an-ssh-key-to-your-gitlab-account) to your account,
+you can configure `git` to rewrite the URLs to use SSH via the following configuration change:
 
 ```shell
 git config --global url.'git@gitlab.com:'.insteadOf 'https://gitlab.com/'
 ```
 
 NOTE:
-This will configure `git` to use `SSH` for all GitLab.com URLs.
+This command configures `git` to use `SSH` for all GitLab.com URLs.
 
 ## FAQ
 
@@ -105,9 +106,9 @@ This will configure `git` to use `SSH` for all GitLab.com URLs.
 Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md)
 for more details.
 
-### Install lefthook locally
+### Install Lefthook locally
 
-Please refer to our [Lefthook Howto page](doc/howto/lefthook.md).
+Please refer to the [Lefthook page](doc/howto/lefthook.md).
 
 ## License
 
