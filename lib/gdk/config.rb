@@ -889,6 +889,10 @@ module GDK
               end
             end
           end
+
+          settings :embedding do
+            bool(:enabled) { false }
+          end
         end
 
         settings :puma do

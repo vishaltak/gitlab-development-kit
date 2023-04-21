@@ -93,6 +93,8 @@ gitlab:
       ci:
         enabled: true
         use_main_database: false
+      embedding:
+        enabled: false
     hostname: 127.0.0.1
     https:
       enabled: false
