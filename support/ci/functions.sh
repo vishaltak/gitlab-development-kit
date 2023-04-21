@@ -11,7 +11,7 @@ cd_into_checkout_path() {
 }
 
 init() {
-  sudo /sbin/sysctl fs.inotify.max_user_watches=524288
+  sudo /sbin/sysctl fs.inotify.max_user_watches=1048576
 
   clone
 
@@ -26,6 +26,9 @@ init() {
   fi
 
   install_gdk_clt
+
+  gdk config set webpack.static false
+  gdk config set webpack.live_reload false
 }
 
 clone() {

@@ -15,7 +15,7 @@ variables:
   BUNDLE_PATH: "vendor/bundle"
   BUNDLE_JOBS: "$(nproc)"
   BUNDLE_FROZEN: "true"
-  GDK_DEBUG: "false"
+  GDK_DEBUG: "true"
   ENABLE_BOOTSNAP: "false"
 
 default:
