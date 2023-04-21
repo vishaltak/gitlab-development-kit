@@ -539,7 +539,7 @@ false
 In a network restricted environment, you might not be able to freely access certain URLs. To validate the installation, GDK requires access to the following during bootstrap:
 
 ```plaintext
-http://download.redis.io/
+https://download.redis.io/
 https://cache.ruby-lang.org/
 https://classic.yarnpkg.com/
 https://dl.google.com/
