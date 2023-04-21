@@ -85,6 +85,7 @@ gitlab-workhorse-setup \
 grafana-setup \
 object-storage-setup \
 openldap-setup \
+pgvector-setup \
 prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
@@ -119,6 +120,7 @@ gitlab-workhorse-update \
 grafana-update \
 jaeger-update \
 object-storage-update \
+pgvector-update \
 zoekt-update \
 post-update-task
 
@@ -142,6 +144,7 @@ gitlab-ui-setup \
 grafana-setup \
 object-storage-setup \
 openldap-setup \
+pgvector-setup \
 postgresql-sensible-defaults \
 prom-setup \
 snowplow-micro-setup \

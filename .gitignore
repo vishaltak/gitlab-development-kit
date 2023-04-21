@@ -91,6 +91,7 @@
 /openssh/*.pub
 /openssh/*_key
 /openssh/sshd_config
+/pgvector/
 /port
 /postgresql-geo/
 /postgresql-primary

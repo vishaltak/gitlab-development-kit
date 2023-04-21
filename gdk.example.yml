@@ -249,6 +249,11 @@ openldap:
 packages: {}
 pgbouncer_replicas:
   enabled: false
+pgvector:
+  auto_update: false
+  enabled: false
+  repo: https://github.com/pgvector/pgvector.git
+  version: v0.4.1
 port: 3000
 postgresql:
   active_version: '12.13'

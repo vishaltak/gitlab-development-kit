@@ -491,6 +491,13 @@ module GDK
       end
     end
 
+    settings :pgvector do
+      bool(:enabled) { false }
+      string(:repo) { 'https://github.com/pgvector/pgvector.git' }
+      string(:version) { 'v0.4.1' }
+      bool(:auto_update) { false }
+    end
+
     settings :geo do
       bool(:enabled) { false }
       bool(:secondary) { false }
