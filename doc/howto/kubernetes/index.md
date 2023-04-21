@@ -105,12 +105,12 @@ or Auto DevOps projects. If we had some seeds for the following tables it
 may help if you are only working on the frontend under some limited
 circumstances:
 
-- clusters
-- clusters_applications_helm
-- clusters_applications_ingress
-- clusters_applications_prometheus
-- clusters_applications_runners
-- clusters_applications_jupyter
+- `clusters`
+- `clusters_applications_helm`
+- `clusters_applications_ingress`
+- `clusters_applications_prometheus`
+- `clusters_applications_runners`
+- `clusters_applications_jupyter`
 
 ## Cleaning up unused GCP resources
 

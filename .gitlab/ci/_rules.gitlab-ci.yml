@@ -13,6 +13,9 @@
 .docs-changes: &docs-changes
   - "**/*.{md}"
   - "{doc}/**/*"
+  - ".markdownlint.yml"
+  - "package.json"
+  - "yarn.lock"
 
 .ruby-version-changes: &ruby-version-changes
   - ".ruby-version"

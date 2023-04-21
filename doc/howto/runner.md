@@ -110,7 +110,7 @@ To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker
 your GDK, you can run the `gitlab/gitlab-runner` Docker image. You **must
 ensure** that the runner saves the configuration to a file that is
 accessible to the host after the registration is complete. Here we use
-`~/gitlab-runner` as an example. Avoid using `/tmp/gitlab-runner` because that directory doesn't for Docker Desktop 
+`~/gitlab-runner` as an example. Avoid using `/tmp/gitlab-runner` because that directory doesn't for Docker Desktop
 alternatives, such as
 [Rancher](https://docs.rancherdesktop.io/faq/#q-does-file-sharing-work-similarly-to-docker-desktop-do-i-have-to-do-any-additional-configuration-to-mount-volumes-to-vms)
 and Colima.
@@ -203,12 +203,13 @@ runner:
 
 <details>
 <summary>Optional step for SSL users (expand)</summary>
+
 For SSL users, the GDK configures the Docker runner with
 [`tls_verify`](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section)
 set to `false`, so SSL verification is disabled by
 default.
+
 </details>
-<p/>
 
 Run
 

@@ -89,7 +89,9 @@ To ensure the tracking database is started, restart GDK. You need to use
 
 ### On a secondary
 
-<!-- TODO: Add this to support/geo-add-secondary. Then the Running tests section can be moved into the Manual installation section. -->
+<!-- markdownlint-disable MD044 -->
+<!-- TODO: Add this to `support/geo-add-secondary`. Then the Running tests section can be moved into the Manual installation section. -->
+<!-- markdownlint-enable MD044 -->
 
 When you try to run tests on a GDK configured as a Geo secondary, tests
 might fail because the main database is read-only.
