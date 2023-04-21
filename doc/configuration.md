@@ -631,7 +631,7 @@ graph LR
 
   B -- gdk reconfigure --> D
   C --> E
-  
+
   subgraph Runsv
   F[rails-web]
   G["webpack<br>(allowedHosts)"]
@@ -658,11 +658,11 @@ the same port for different hosts.
 
 So what options do you have to make this work? You can either:
 
-- Run your `gdk2.test` site on a different IP. 
+- Run your `gdk2.test` site on a different IP.
 - Let the `gdk2.test` webpack requests reach the primary site's webpack server. The requests would get blocked by default, and then you could
   unblock them with `webpack.allowed_hosts` setting.
 
-  In this case, you would already set `gitlab.rails.allowed_hosts` to `["gdk2.test"]`. This is why `webpack.allowed_hosts` defaults to 
+  In this case, you would already set `gitlab.rails.allowed_hosts` to `["gdk2.test"]`. This is why `webpack.allowed_hosts` defaults to
   `gitlab.rails.allowed_hosts`.
 
 ### Webpack environment variables
@@ -671,6 +671,8 @@ The GitLab application exposes various configuration options for webpack via
 environment variables. These can be modified to improve performance or enable debugging.
 
 These settings can be configured using [`env.runit`](runit.md#modifying-environment-configuration-for-services).
+
+<!-- markdownlint-disable MD044 -->
 
 | Variable | Default | Description |
 | ------------- | ------- | ----------- |
@@ -682,6 +684,8 @@ These settings can be configured using [`env.runit`](runit.md#modifying-environm
 | WEBPACK_REPORT        | false       | Generates bundle analysis report |
 | WEBPACK_VENDOR_DLL    | false       | Reduce webpack-dev-server memory requirements when vendor bundle has been precompiled with `yarn webpack-vendor` |
 | GITLAB_UI_WATCH       | false | Use GDK's copy of `gitlab-ui` instead of the npm-installed version. |
+
+<!-- markdownlint-enable MD044 -->
 
 ## ActionCable settings
 
