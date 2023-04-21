@@ -8,6 +8,9 @@ gdk_ask_to_restart_after_update = <%= config.gdk.ask_to_restart_after_update %>
 gdk_debug = <%= config.gdk.__debug? %>
 gdk_quiet = <%= config.gdk.quiet? %>
 gdk_root = <%= config.gdk_root %>
+pgvector_enabled = <%= config.pgvector.enabled? %>
+pgvector_repo = <%= config.pgvector.repo %>
+pgvector_version = <%= config.pgvector.version %>
 geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
