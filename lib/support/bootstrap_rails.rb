@@ -52,6 +52,8 @@ module Support
     end
 
     def bootstrap_embedding_db
+      return unless config.gitlab.rails.databases.embedding.enabled
+
       if_db_not_found('gitlabhq_development_embedding') do
         run_command(RAKE_EMBEDDING_DB_RESET_CMD)
       end

@@ -16,6 +16,38 @@ RSpec.describe Support::BootstrapRails do
       allow_any_instance_of(GDK::Config).to receive_message_chain('geo.secondary?').and_return(geo_secondary)
     end
 
+    context 'embedding db' do
+      let(:embedding_enabled) { nil }
+
+      before do
+        allow_any_instance_of(GDK::Config).to receive_message_chain('gitlab.rails.databases.embedding.enabled').and_return(embedding_enabled)
+        allow_any_instance_of(GDK::Postgresql).to receive(:ready?).and_return(true)
+        allow(instance).to receive(:try_connect!)
+        allow(instance).to receive(:bootstrap_main_db).and_return(true)
+        allow(instance).to receive(:bootstrap_ci_db).and_return(true)
+      end
+
+      context 'is not enabled' do
+        it 'skips bootstrapping' do
+          expect_any_instance_of(GDK::Postgresql).not_to receive(:db_exists?).with('gitlabhq_development_embedding')
+          stub_shellout(described_class::RAKE_EMBEDDING_DB_RESET_CMD, success: false)
+
+          expect { subject }.not_to raise_error
+        end
+      end
+
+      context 'is enabled' do
+        let(:embedding_enabled) { true }
+
+        it 'tries to run bootstrapping' do
+          expect_any_instance_of(GDK::Postgresql).to receive(:db_exists?).with('gitlabhq_development_embedding')
+          stub_shellout(described_class::RAKE_EMBEDDING_DB_RESET_CMD, success: true)
+
+          expect { subject }.not_to raise_error
+        end
+      end
+    end
+
     context 'where we are a Geo secondary' do
       let(:geo_secondary) { true }
 
@@ -49,27 +81,22 @@ RSpec.describe Support::BootstrapRails do
         let(:postgres_ready) { true }
         let(:gitlabhq_development_db_exists) { nil }
         let(:gitlabhq_development_ci_db_exists) { nil }
-        let(:gitlabhq_development_embedding_db_exists) { nil }
 
         before do
           allow(instance).to receive(:try_connect!)
 
           allow(postgres_mock).to receive(:db_exists?).with('gitlabhq_development').and_return(gitlabhq_development_db_exists)
           allow(postgres_mock).to receive(:db_exists?).with('gitlabhq_development_ci').and_return(gitlabhq_development_ci_db_exists)
-          allow(postgres_mock).to receive(:db_exists?).with('gitlabhq_development_embedding').and_return(gitlabhq_development_embedding_db_exists)
         end
 
         context 'when all DBs already exist' do
           let(:gitlabhq_development_db_exists) { true }
           let(:gitlabhq_development_ci_db_exists) { true }
-          let(:gitlabhq_development_embedding_db_exists) { true }
 
           it 'advises and skips further logic' do
             expect(GDK::Output).to receive(:info).with('gitlabhq_development exists, nothing to do here.')
 
             expect(GDK::Output).to receive(:info).with('gitlabhq_development_ci exists, nothing to do here.')
-
-            expect(GDK::Output).to receive(:info).with('gitlabhq_development_embedding exists, nothing to do here.')
 
             subject
           end
@@ -78,7 +105,6 @@ RSpec.describe Support::BootstrapRails do
         context 'where no DBs exist' do
           let(:gitlabhq_development_db_exists) { false }
           let(:gitlabhq_development_ci_db_exists) { false }
-          let(:gitlabhq_development_embedding_db_exists) { false }
 
           context 'attempts to setup the gitlabhq_development DB' do
             context 'but `rake `db:reset fails' do
@@ -105,28 +131,12 @@ RSpec.describe Support::BootstrapRails do
               end
 
               context 'and `rake dev:copy_db:ci` succeeds' do
-                context 'but `rake db:reset:embedding` fails' do
-                  it 'exits with a status code of 1' do
-                    stub_shellout(described_class::RAKE_DEV_DB_RESET_CMD, success: true)
-                    stub_shellout(described_class::RAKE_DEV_DB_SEED_CMD, success: true)
-                    stub_shellout(described_class::RAKE_COPY_DB_CI_CMD, success: true)
-                    stub_shellout(described_class::RAKE_EMBEDDING_DB_RESET_CMD, success: false)
+                it 'exits with a status code of 0' do
+                  stub_shellout(described_class::RAKE_DEV_DB_RESET_CMD, success: true)
+                  stub_shellout(described_class::RAKE_DEV_DB_SEED_CMD, success: true)
+                  stub_shellout(described_class::RAKE_COPY_DB_CI_CMD, success: true)
 
-                    expect { subject }
-                      .to output(/The command '#{described_class::RAKE_EMBEDDING_DB_RESET_CMD.join(' ')}' failed/).to_stderr
-                      .and raise_error(SystemExit) { |error| expect(error.status).to eq(1) }
-                  end
-                end
-
-                context 'and `rake db:reset:embedding` succeeds' do
-                  it 'exits with a status code of 0' do
-                    stub_shellout(described_class::RAKE_DEV_DB_RESET_CMD, success: true)
-                    stub_shellout(described_class::RAKE_DEV_DB_SEED_CMD, success: true)
-                    stub_shellout(described_class::RAKE_COPY_DB_CI_CMD, success: true)
-                    stub_shellout(described_class::RAKE_EMBEDDING_DB_RESET_CMD, success: true)
-
-                    expect { subject }.not_to raise_error
-                  end
+                  expect { subject }.not_to raise_error
                 end
               end
             end
