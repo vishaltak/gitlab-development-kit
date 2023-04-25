@@ -4,17 +4,18 @@ require 'spec_helper'
 
 RSpec.describe GDK::ConfigType::Array do
   let(:key) { 'test_key' }
-  let(:yaml) { { key => value } }
-  let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &proc { value }) }
-
-  subject { described_class.new(parent: GDK.config, builder: builder) }
-
-  before do
-    stub_pg_bindir
-    stub_gdk_yaml(yaml)
-  end
 
   describe '#parse' do
+    let(:yaml) { { key => value } }
+    let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &proc { value }) }
+
+    subject { described_class.new(parent: GDK.config, builder: builder) }
+
+    before do
+      stub_pg_bindir
+      stub_gdk_yaml(yaml)
+    end
+
     context 'when value is initialized with an integer' do
       let(:value) { '123' }
 
@@ -44,6 +45,32 @@ RSpec.describe GDK::ConfigType::Array do
 
       it 'returns an array of strings' do
         expect(subject.parse(value)).to eq(%w[foo bar baz])
+      end
+    end
+  end
+
+  describe '#value' do
+    let(:default_value) { nil }
+    let(:merge) { false }
+    let(:yaml_value) { nil }
+    let(:config) do
+      defval = default_value # to make variable available in block
+
+      c = Class.new(GDK::ConfigSettings)
+      c.array(key, merge: merge, &->(_) { defval })
+
+      c.new(yaml: { key => yaml_value })
+    end
+
+    subject(:value) { config.test_key }
+
+    context 'when mergable' do
+      let(:merge) { true }
+      let(:default_value) { %i[one two] }
+      let(:yaml_value) { %i[two three two] }
+
+      it 'avoids user-set duplicates' do
+        expect(value).to eq(%i[two three two one])
       end
     end
   end

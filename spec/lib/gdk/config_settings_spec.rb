@@ -34,7 +34,7 @@ RSpec.describe GDK::ConfigSettings do
       subject(:config) { test_klass.new(yaml: { 'foo' => %w[b] }) }
 
       it 'is mergeable' do
-        expect(config.foo).to eq(%w[a b])
+        expect(config.foo).to eq(%w[b a])
       end
     end
   end
