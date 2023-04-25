@@ -2503,7 +2503,7 @@ RSpec.describe GDK::Config do
           end
 
           it 'has spring stop || true hook and then our hooks also' do
-            expect(config.gdk.update_hooks.before).to eq(['support/exec-cd gitlab bin/spring stop || true', 'uptime'])
+            expect(config.gdk.update_hooks.before).to eq(['uptime', 'support/exec-cd gitlab bin/spring stop || true'])
           end
         end
       end

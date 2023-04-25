@@ -16,7 +16,9 @@ module GDK
       private
 
       def mergable_merge(fetched, default)
-        default + Array(fetched)
+        a = Array(fetched)
+
+        a + (default - a)
       end
     end
   end
