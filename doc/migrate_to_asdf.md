@@ -87,6 +87,12 @@ To remove other dependencies so `asdf` can manage them instead:
    brew uninstall redis
    ```
 
+If you uninstall Redis, you should remove the Redis dump file to avoid errors:
+
+```shell
+rm <path-to-your-gitlab-development-kit>/redis/dump.rdb
+```
+
 ## Install dependencies with `asdf`
 
 To install GDK dependencies with `asdf`, follow [these instructions](index.md#install-dependencies-using-asdf).
