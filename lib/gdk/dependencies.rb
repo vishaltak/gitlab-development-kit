@@ -33,7 +33,7 @@ module GDK
 
       # check binary against each PATH
       path.each do |dir|
-        file = File.join(dir, binary)
+        file = File.expand_path(binary, dir)
 
         return file if executable_file.call(file)
       end

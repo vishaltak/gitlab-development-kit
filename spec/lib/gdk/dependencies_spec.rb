@@ -55,6 +55,12 @@ RSpec.describe GDK::Dependencies do
     it 'returns nil when executable cant be found' do
       expect(described_class.find_executable('non-existent')).to be_nil
     end
+
+    it 'also finds by absolute path' do
+      executable = create_dummy_executable('dummy')
+
+      expect(described_class.find_executable(executable)).to eq(executable)
+    end
   end
 
   describe '.executable_exist?' do
