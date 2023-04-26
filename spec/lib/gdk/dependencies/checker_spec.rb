@@ -46,6 +46,37 @@ RSpec.describe GDK::Dependencies::Checker do
     end
   end
 
+  describe '#check_nginx_installed' do
+    context 'nginx disabled' do
+      it 'returns nil' do
+        expect(subject.check_nginx_installed).to be_nil
+        expect(subject.error_messages).to be_empty
+      end
+    end
+
+    context 'nginx enabled' do
+      let(:nginx_bin) { 'non-existing' }
+
+      before do
+        stub_gdk_yaml('nginx' => { 'enabled' => true, 'bin' => nginx_bin })
+      end
+
+      it 'errors when not found' do
+        expect(subject.check_nginx_installed).to be_falsey
+        expect(subject.error_messages).to include('ERROR: nginx is not installed or not available in your PATH.')
+      end
+
+      context 'nginx.bin points to existing executable' do
+        let(:nginx_bin) { 'true' }
+
+        it 'returns true' do
+          expect(subject.check_nginx_installed).to be_truthy
+          expect(subject.error_messages).to be_empty
+        end
+      end
+    end
+  end
+
   def stub_check_binary(binary, result)
     allow(subject).to receive(:check_binary).with(binary).and_return(result)
   end

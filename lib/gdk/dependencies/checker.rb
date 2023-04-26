@@ -31,6 +31,7 @@ module GDK
         check_graphicsmagick_installed
         check_minio_installed
         check_runit_installed
+        check_nginx_installed
 
         check_ruby_gems_ok
       end
@@ -158,6 +159,12 @@ module GDK
 
       def check_runit_installed
         check_binary('runsvdir', name: 'Runit')
+      end
+
+      def check_nginx_installed
+        return unless config.nginx?
+
+        check_binary(config.nginx.bin, name: 'nginx')
       end
 
       def require_minimum_version(dependency, actual, expected)
