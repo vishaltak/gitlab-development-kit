@@ -80,7 +80,7 @@ if [ $# -eq 1 ]; then
 
   echo "Which GitLab repo URL would you like to clone? [${DEFAULT_GITLAB_REPO_URL}]"
   echo
-  echo "ATTENTION: For non-GitLab team members, it is recommended to use the community fork (https://gitlab.com/gitlab-community/gitlab.git)."
+  echo "ATTENTION: For members of the wider community, it is recommended to use the community fork (https://gitlab.com/gitlab-community/gitlab.git)."
   echo "See https://gitlab.com/gitlab-community/meta for instructions on how to join."
   echo "If you'd prefer to use your own repository, please ensure that its visibility is set to public."
   read -r GITLAB_REPO_URL </dev/tty
