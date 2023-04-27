@@ -25,9 +25,10 @@ module GDK
         check_yarn_version
         check_postgresql_version
 
+        check_brew_dependencies_installed
+        check_exiftool_installed
         check_git_installed
         check_graphicsmagick_installed
-        check_exiftool_installed
         check_minio_installed
         check_runit_installed
 
@@ -114,12 +115,18 @@ module GDK
         @error_messages << missing_dependency('PostgreSQL', minimum_version: expected)
       end
 
-      def check_git_installed
-        check_binary('git')
-      end
+      def check_brew_dependencies_installed
+        cmd = 'brew bundle check -v --no-upgrade'
+        result = Shellout.new(cmd).try_run
 
-      def check_graphicsmagick_installed
-        @error_messages << missing_dependency('GraphicsMagick') unless system("gm version >/dev/null 2>&1")
+        missing_dependencies = result.scan(/(Cask|Formula) (.*?) needs to be installed./).map(&:last) unless result.include?("The Brewfile's dependencies are satisfied.")
+
+        return if missing_dependencies.nil? || missing_dependencies.empty?
+
+        msg = "The following Brewfile's dependencies are missing or outdated:\n\n"
+        msg += "#{missing_dependencies.join("\n")}\n\n"
+        msg += "To install these dependencies, run the following command:\n\nbrew bundle"
+        @error_messages << msg
       end
 
       def check_exiftool_installed
@@ -127,6 +134,14 @@ module GDK
 
         msg = "You may need to run 'brew reinstall exiftool'." if GDK::Machine.macos?
         @error_messages << missing_dependency('Exiftool', more_detail: msg)
+      end
+
+      def check_git_installed
+        check_binary('git')
+      end
+
+      def check_graphicsmagick_installed
+        @error_messages << missing_dependency('GraphicsMagick') unless system("gm version >/dev/null 2>&1")
       end
 
       def check_minio_installed
