@@ -79,7 +79,10 @@ if [ $# -eq 1 ]; then
   read -r GDK_INSTALL_DIR </dev/tty
 
   echo "Which GitLab repo URL would you like to clone? [${DEFAULT_GITLAB_REPO_URL}]"
-  echo "ATTENTION: Non-GitLab team members, please fork the GitLab project, ensuring it's public and paste your URL here."
+  echo
+  echo "ATTENTION: For members of the wider community, it is recommended to use the community fork (https://gitlab.com/gitlab-community/gitlab.git)."
+  echo "See https://gitlab.com/gitlab-community/meta for instructions on how to join."
+  echo "If you'd prefer to use your own repository, please ensure that its visibility is set to public."
   read -r GITLAB_REPO_URL </dev/tty
 else
   GDK_INSTALL_DIR="${2-gitlab-development-kit}"
