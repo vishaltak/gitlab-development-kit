@@ -121,7 +121,9 @@ class PostgresUpgrader
 
   def available_versions
     @available_versions ||=
-      if asdf?
+      if rtx?
+        rtx_avaliable_versions
+      elsif asdf?
         asdf_available_versions
       elsif brew?
         brew_cellar_available_versions
@@ -130,6 +132,10 @@ class PostgresUpgrader
       else
         abort 'Only Homebrew, asdf and apt based Linux systems supported.'
       end
+  end
+
+  def rtx?
+    run(%w[rtx help]) != ''
   end
 
   def asdf?
@@ -142,6 +148,19 @@ class PostgresUpgrader
 
   def apt?
     run(%w[apt-cache help]) != ''
+  end
+
+  def rtx_avaliable_versions
+    lines = run(%w[rtx list postgres])
+    return {} if lines.empty?
+
+    current_rtx_data_dir = ENV.fetch('RTX_DATA_DIR', "#{Dir.home}/.local/share/rtx")
+
+    lines.split.each_slice(4).each_with_object({}) do |version_string, paths|
+      version = version_string[1]
+
+      paths[version.to_i] = "#{current_rtx_data_dir}/installs/postgres/#{version}/bin"
+    end
   end
 
   def asdf_available_versions
