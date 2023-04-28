@@ -123,9 +123,15 @@ module GDK
 
         return if missing_dependencies.nil? || missing_dependencies.empty?
 
-        msg = "The following Brewfile's dependencies are missing or outdated:\n\n"
-        msg += "#{missing_dependencies.join("\n")}\n\n"
-        msg += "To install these dependencies, run the following command:\n\nbrew bundle"
+        msg = <<~MESSAGE
+        The following Brewfile's dependencies are missing or outdated:
+
+        - #{missing_dependencies.join("\n- ")}
+
+        To install these dependencies, run the following command:
+
+          (cd #{config.gdk_root} && brew bundle)
+        MESSAGE
         @error_messages << msg
       end
 
