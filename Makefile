@@ -72,7 +72,14 @@ gitlab-shell-setup \
 gitaly-setup \
 ensure-databases-setup \
 gdk-reconfigure-task \
-support-setup \
+Procfile \
+jaeger-setup \
+postgresql \
+openssh-setup \
+nginx-setup \
+registry-setup \
+elasticsearch-setup \
+runner-setup \
 geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
@@ -132,7 +139,14 @@ reconfigure: start-task reconfigure-tasks post-reconfigure-task
 .PHONY: reconfigure-tasks
 reconfigure-tasks: \
 gdk-reconfigure-task \
-support-setup \
+Procfile \
+jaeger-setup \
+postgresql \
+openssh-setup \
+nginx-setup \
+registry-setup \
+elasticsearch-setup \
+runner-setup \
 geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
@@ -226,8 +240,6 @@ ensure-databases-running:
 .PHONY: diff-config
 diff-config:
 	$(Q)gdk $@
-
-support-setup: Procfile jaeger-setup postgresql openssh-setup nginx-setup registry-setup elasticsearch-setup runner-setup
 
 .PHONY: start
 start:
