@@ -25,6 +25,9 @@ run() {
 			"${root}/support/completions" \
       -maxdepth 1 \
       -type f \
+      -not -path "*/Dockerfile" \
+      -not -path "*/support/gitpod/Dockerfile" \
+      -not -path "*/support/ci/Dockerfile.verify" \
       -not -path "*/support/pg_hba.conf.add" \
       -not -path "*/support/.rubocop.yml" \
       -not -path "*.swp" \

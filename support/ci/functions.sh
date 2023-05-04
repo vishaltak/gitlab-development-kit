@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-GDK_CHECKOUT_PATH="$(pwd)/gdk"
+GDK_CHECKOUT_PATH="${HOME}/gdk"
 
 if [[ ${GDK_DEBUG} == "1" ]]; then
   export GIT_CURL_VERBOSE=1
@@ -13,25 +13,7 @@ cd_into_checkout_path() {
 init() {
   sudo /sbin/sysctl fs.inotify.max_user_watches=524288
 
-  clone
-
-  if [ -n "${1}" ]; then
-    checkout "${1}"
-  else
-    if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
-      checkout "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}"
-    else
-      checkout "${CI_COMMIT_SHA}"
-    fi
-  fi
-
   install_gdk_clt
-}
-
-clone() {
-  git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_CHECKOUT_PATH}"
-  # TODO: Touching .gdk-install-root will be redundant shortly.
-  echo "${GDK_CHECKOUT_PATH}" > "${GDK_CHECKOUT_PATH}/.gdk-install-root"
 }
 
 install_gdk_clt() {
@@ -53,7 +35,6 @@ install_gem() {
 
   gem build gitlab-development-kit.gemspec
   gem install gitlab-development-kit-*.gem
-  gdk
 }
 
 checkout() {
@@ -148,13 +129,14 @@ stop() {
   cd_into_checkout_path
 
   echo "> Stopping GDK.."
-  gdk stop || true
 
-  sleep 5
   # shellcheck disable=SC2009
   ps -ef | grep "[r]unsv" || true
 
   GDK_KILL_CONFIRM=true gdk kill || true
+
+  # shellcheck disable=SC2009
+  ps -ef | grep "[r]unsv" || true
 }
 
 restart() {
@@ -195,7 +177,10 @@ doctor() {
 test_url() {
   cd_into_checkout_path
 
-  sleep 30
+  sleep 60
+
+  status
+
   # QUIET=false support/test_url || QUIET=false support/test_url
   support/ci/test_url
 }
