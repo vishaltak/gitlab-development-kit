@@ -28,14 +28,14 @@ installed in):
      follow: true
      commands:
        rtx-install:
-         run: rtx install
+         run: rtx plugins update ruby; rtx install
 
    # When switching branches
    post-checkout:
      follow: true
      commands:
        rtx-install:
-         run: rtx install
+         run: rtx plugins update ruby; rtx install
    EOF
    ```
 
@@ -45,10 +45,18 @@ installed in):
    (cd $GDK_ROOT && lefthook install)
    ```
 
+1. Remove `asdf` from your shell configuration and [install `rtx`](https://github.com/jdxcode/rtx#how-do-i-migrate-from-asdf):
+
+   ```shell
+   brew install rtx
+   eval "$(rtx activate $SHELL)"
+   eval "$(rtx hook-env)"
+   ```
+
 1. Install the current dependencies in the `rtx` cache:
 
    ```shell
-   (cd $GDK_ROOT/gitlab && rtx install)
+   (cd $GDK_ROOT/gitlab && rtx install --install-missing)
    ```
 
 1. Reconfigure and update the GDK. This time, `rtx` is used to install the dependencies and `asdf` is not required
