@@ -1,71 +1,47 @@
 # Jobs that are generally only executable by CI and not locally.
 #
-.verify-job:
+.verify-base-job:
   stage: verify
-  extends: .rules:code-changes
+  extends:
+    - .rules:code-changes
+  image: ${VERIFY_IMAGE}
+  before_script:
+    - !reference [.default-before_script, before_script]
   tags:
     - gitlab-org
     - high-cpu
-  needs:
-    - release-image
-    - verify-start
-  artifacts:
-    paths:
-      - ./gdk/gitlab/log/*.log
-      - ./gdk/log
-      - ./gdk/sv/*/run
-    expire_in: 2 days
-    when: always
-  variables:
-    GEM_HOME: "$CI_PROJECT_DIR/.gem"
-    GEM_PATH: "$CI_PROJECT_DIR/.gem"
-    GOCACHE: "$CI_PROJECT_DIR/.cache/go-build"
-    GOMODCACHE: "$CI_PROJECT_DIR/.cache/go-mod"
-  cache:
-    - key:
-        files:
-          - '.ruby-version'
-          - '.gitlab/ci/verify.gitlab-ci.yml'
-      paths:
-        - "$CI_PROJECT_DIR/.gem"
-      policy: pull-push
-    - key:
-        files:
-          - '.tool-versions'
-      paths:
-        - "$CI_PROJECT_DIR/.cache/go-build"
-        - "$CI_PROJECT_DIR/.cache/go-mod"
-      policy: pull-push
 
-verify-start:
-  stage: pre-verify
-  image: alpine:edge
-  interruptible: false
-  needs: []
+.verify-job:
+  extends:
+    - .verify-base-job
+    - .verify-job-cached_variables
   variables:
     GIT_STRATEGY: none
-  script:
-    - echo "This job exists to allow all other verify:* jobs to be started manually"
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_TAG
-      when: always
-    - when: manual
-      allow_failure: true
+  needs:
+    - build-verify-image
+  before_script:
+    - !reference [.verify-base-job, before_script]
+    - cd /home/gdk/gdk
+  after_script:
+    - mkdir -p $CI_PROJECT_DIR/gitlab_log $CI_PROJECT_DIR/gdk_log
+    - cp -rf /home/gdk/gdk/gitlab/log/*.log $CI_PROJECT_DIR/gitlab_log/
+    - cp -rf /home/gdk/gdk/log/ $CI_PROJECT_DIR/gdk_log/
+  artifacts:
+    paths:
+      - ./gitlab_log
+      - ./gdk_log
+    expire_in: 2 days
+    when: always
 
-install:
+start:
   extends: .verify-job
   script:
-    - support/ci/verify-install
+    - support/ci/verify-start
 
-install-experimental:
+start-experimental:
   extends: .verify-job
   script:
-    - support/ci/verify-install-experimental
-
-one-line-install:
-  extends: .verify-job
-  script:
-    - support/ci/verify-one-line-install
+    - support/ci/verify-start-experimental
 
 doctor:
   extends: .verify-job
@@ -92,12 +68,7 @@ pristine:
   script:
     - support/ci/verify-pristine
 
-# update-from-default-branch:
-#   extends: .verify-job
-#   script:
-#     - support/ci/verify-update $CI_DEFAULT_BRANCH
-
-update-from-mr-branch:
+update:
   extends: .verify-job
   script:
     - support/ci/verify-update

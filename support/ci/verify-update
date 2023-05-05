@@ -7,8 +7,7 @@ parent_path=$(dirname "$0")
 # shellcheck source=support/ci/functions.sh
 source "${parent_path}"/functions.sh
 
-init "${1}"
-install
+init
 stop_start
 test_url
 

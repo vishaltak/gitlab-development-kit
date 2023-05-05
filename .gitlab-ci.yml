@@ -7,16 +7,28 @@ stages:
   - verify
   - deploy
 
-variables:
+.default_variables: &default_variables
   DEFAULT_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:$CI_COMMIT_REF_SLUG
   GITLAB_E2E_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed-gitlab-e2e:$CI_COMMIT_REF_SLUG
+  VERIFY_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed:$CI_COMMIT_REF_SLUG
   GITPOD_WORKSPACE_IMAGE_BASE: $CI_REGISTRY_IMAGE/gitpod-workspace
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
-  BUNDLE_PATH: "vendor/bundle"
-  BUNDLE_JOBS: "$(nproc)"
+  GITLAB_CI_CACHE_DIR: .gitlab-ci-cache
+  GITLAB_CI_CACHE_FULL_DIR: $CI_PROJECT_DIR/$GITLAB_CI_CACHE_DIR
+  GITLAB_CI_CACHE_FULL_GO_DIR: $GITLAB_CI_CACHE_FULL_DIR/go
+
+  GDK_INTERNAL_CACHE_FULL_DIR: /home/gdk/$GITLAB_CI_CACHE_DIR
+  GDK_INTERNAL_CACHE_RUBY_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/ruby
+  GDK_INTERNAL_CACHE_GO_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/go
+
   BUNDLE_FROZEN: "true"
-  GDK_DEBUG: "false"
+  BUNDLE_JOBS: "$(nproc)"
   ENABLE_BOOTSNAP: "false"
+  PUMA_SINGLE_MODE: "true"
+  GDK_DEBUG: "true"
+
+variables:
+  <<: *default_variables
 
 default:
   timeout: 3 hours
@@ -24,8 +36,36 @@ default:
   image: ${DEFAULT_IMAGE}
   tags:
     - gitlab-org
+
+.default-before_script:
   before_script:
-    - test -f support/ci/display_debugging && support/ci/display_debugging
+    - sysctl -n -w fs.inotify.max_user_watches=524288 || true
+    - test -f support/ci/display_debugging && support/ci/display_debugging || true
+
+.cached_variables: &cached_variables
+  BUNDLE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle
+  GEM_HOME: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
+  GEM_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
+  GOCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/build
+  GOMODCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/mod
+  NODE_PATH: $GDK_INTERNAL_CACHE_FULL_DIR/nodejs
+
+.verify-job-cached_variables:
+  variables:
+    <<: *default_variables
+    <<: *cached_variables
+
+.cached-job:
+  variables:
+    <<: *default_variables
+    <<: *cached_variables
+  cache:
+    - key:
+        files:
+          - '.tool-versions'
+      paths:
+        - "$GITLAB_CI_CACHE_DIR"
+      policy: pull-push
 
 include:
   - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
@@ -35,5 +75,6 @@ include:
   - local: .gitlab/ci/build.gitlab-ci.yml
   - local: .gitlab/ci/test.gitlab-ci.yml
   - local: .gitlab/ci/analyze.gitlab-ci.yml
+  - local: .gitlab/ci/pre-verify.gitlab-ci.yml
   - local: .gitlab/ci/verify.gitlab-ci.yml
   - local: .gitlab/ci/deploy.gitlab-ci.yml

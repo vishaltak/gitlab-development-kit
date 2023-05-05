@@ -5,21 +5,21 @@ execute_command() {
 
   echo "${command}"
   echo "-------------------------------------------------------------------------------"
-
-  if command -v "${1}" > /dev/null 2>&1; then
-    eval "${command}"
-  else
-    echo "WARNING: '${1}' is not available on this platform."
-  fi
-
+  eval "${command}"
   echo
 }
 
 if [ "${GDK_DEBUG}" = "1" ] || [ "${GDK_DEBUG}" = "true" ]; then
+  execute_command whoami
   execute_command ulimit -a
   execute_command /sbin/sysctl -a
   execute_command nproc
+  execute_command blah
   execute_command df -h
   execute_command free -m
-  execute_command env
+  execute_command 'env | grep -Ev "TOKEN|PASSWORD|LICENSE|KEY"'
+  execute_command pwd
+  execute_command ls -la
 fi
+
+true

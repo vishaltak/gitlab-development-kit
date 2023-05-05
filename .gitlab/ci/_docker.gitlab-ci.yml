@@ -16,8 +16,7 @@
     - .docker:use-docker-in-docker
   image: docker:git
   before_script:
-    - nproc
-    - free -m
+    - !reference [.default-before_script, before_script]
     - apk add --no-cache jq curl bash
     - ./support/docker ci-login
   after_script:

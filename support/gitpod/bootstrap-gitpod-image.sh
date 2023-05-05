@@ -30,8 +30,8 @@ gdk config set gitlab.rails.https.enabled true
 
 # Webpack settings
 gdk config set webpack.host 127.0.0.1
-gdk config set webpack.static false
 gdk config set webpack.live_reload false
+gdk config set webpack.sourcemaps false
 
 cat gdk.yml
 
@@ -59,6 +59,8 @@ echo "# --- Cleanup build caches"
 sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/git/source"
 sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps/libgit2/source"
 sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/cache"
+sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/deps"
+sudo rm -rf "$HOME/gitlab-development-kit/gitaly/_build/intermediate"
 sudo rm -rf "$HOME/.cache/"
 sudo rm -rf /tmp/*
 

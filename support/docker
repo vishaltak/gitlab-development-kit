@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -e
 
 if [ -z "${DEFAULT_IMAGE}" ]; then
     echo "DEFAULT_IMAGE variable must not be empty and must contain an image name"
@@ -47,10 +47,12 @@ case "$1" in
         echo "Logging in"
         docker login --username gitlab-ci-token --password "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
         ;;
+
     ci-logout)
         echo "Logging out"
         docker logout "${CI_REGISTRY}"
         ;;
+
     # The problem: We want to rebuild the image, if the Dockerfile, .tool-versions or
     # packages_ubuntu.txt change. Unfortunately that isn't possible to do that in GitLab CI,
     # because we cannot set a variable based on the contents of files. That is why we
@@ -92,9 +94,39 @@ case "$1" in
         docker push "${GITLAB_E2E_IMAGE}"
         ;;
 
+    ci-build-verify-image)
+        mkdir -p "${GITLAB_CI_CACHE_FULL_DIR}"
+
+        docker build . --progress plain --squash --file support/ci/Dockerfile.verify \
+        --build-arg release_image="${DEFAULT_IMAGE}" \
+        --build-arg URL="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" \
+        --build-arg SHA="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
+        --build-arg GITLAB_CI_CACHE_DIR="${GITLAB_CI_CACHE_DIR}" \
+        --build-arg GDK_INTERNAL_CACHE_FULL_DIR="${GDK_INTERNAL_CACHE_FULL_DIR}" \
+        --build-arg BUNDLE_PATH="${BUNDLE_PATH}" \
+        --build-arg GEM_HOME="${GEM_HOME}" \
+        --build-arg GEM_PATH="${GEM_PATH}" \
+        --build-arg GOCACHE="${GOCACHE}" \
+        --build-arg GOMODCACHE="${GOMODCACHE}" \
+        --build-arg NODE_PATH="${NODE_PATH}" \
+        --build-arg PUMA_SINGLE_MODE="${PUMA_SINGLE_MODE}" \
+        --build-arg GDK_DEBUG="${GDK_DEBUG}" \
+        --tag "${VERIFY_IMAGE}"
+
+        docker push "${VERIFY_IMAGE}"
+
+        docker rm built-image > /dev/null 2>&1 || true
+        docker create --name built-image "${VERIFY_IMAGE}"
+        docker cp built-image:"${GDK_INTERNAL_CACHE_FULL_DIR}"/ "${CI_PROJECT_DIR}"/ || true
+        docker rm built-image > /dev/null 2>&1 || true
+
+        du -smx "${GITLAB_CI_CACHE_FULL_DIR}"/*
+        ;;
+
     build)
         docker build -t "${DEFAULT_IMAGE}" .
         ;;
+
     *)
         echo "Usage: $0 [ci-login|ci-logout|ci-build-if-necessary|build]"
         exit 1

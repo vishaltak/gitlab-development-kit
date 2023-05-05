@@ -10,6 +10,6 @@ source "${parent_path}"/functions.sh
 # shellcheck disable=SC2119
 init
 gdk config set gdk.experimental.ruby_services true
-install
+gdk reconfigure
 stop_start
 test_url
