@@ -608,6 +608,7 @@ module GDK
       settings :multiple_replicas do
         bool(:enabled) { false }
       end
+
       settings :geo do
         port(:port, 'postgresql_geo')
         path(:dir) { config.gdk_root.join('postgresql-geo') }
