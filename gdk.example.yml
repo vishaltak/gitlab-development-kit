@@ -3,6 +3,11 @@ action_cable:
   worker_pool_size: 4
 asdf:
   opt_out: false
+cells:
+  enabled: false
+  postgresql:
+    host: "/home/git/gdk/postgresql"
+    port: 5432
 charts_gitlab:
   auto_update: true
   enabled: false

@@ -83,6 +83,16 @@ development:
     port: <%= config.postgresql.geo.port %>
     pool: 5
 <%- end -%>
+<%- if config.cells? -%>
+  main_clusterwide: &main_clusterwide
+    adapter: postgresql
+    encoding: unicode
+    database: gitlabhq_development
+    database_tasks: false
+    host: <%= config.cells.postgresql.host %>
+    port: <%= config.cells.postgresql.port %>
+    pool: 5
+<%- end -%>
 
 test: &test
   main:
@@ -134,4 +144,9 @@ test: &test
     host: <%= config.postgresql.geo.host %>
     port: <%= config.postgresql.geo.port %>
     pool: 5
+<%- end -%>
+<%- if config.cells? -%>
+  main_clusterwide:
+    <<: *main_clusterwide
+    database: gitlabhq_test
 <%- end -%>

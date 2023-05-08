@@ -508,6 +508,14 @@ module GDK
       end
     end
 
+    settings :cells do
+      bool(:enabled) { false }
+      settings :postgresql do
+        port(:port, 'postgresql') { config.postgresql.port }
+        string(:host) { config.postgresql.host }
+      end
+    end
+
     settings :elasticsearch do
       bool(:enabled) { false }
       string(:version) { '8.6.2' }
