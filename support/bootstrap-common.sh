@@ -7,6 +7,7 @@ CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 DEFAULT_GEMS_PATH="${HOME}/.default-gems"
 
+export ASDF_RUST_PROFILE=minimal
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
