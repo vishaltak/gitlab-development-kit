@@ -29,3 +29,5 @@ gitlab-e2e-test-image:
   script:
     - ./support/docker ci-build-gitlab-e2e-image-if-necessary
   when: manual
+  variables:
+    GITLAB_E2E_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed-gitlab-e2e:ml-create-image-for-gitlab-qa-tests
