@@ -624,10 +624,6 @@ RSpec.describe GDK::Config do
   end
 
   describe "#cells" do
-    describe "#postgresql" do
-      it { expect(default_config.cells.postgresql.host).to eq(default_config.postgresql.host) }
-      it { expect(default_config.cells.postgresql.port).to eq(default_config.postgresql.port) }
-    end
   end
 
   describe '#clickhouse' do

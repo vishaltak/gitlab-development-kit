@@ -510,10 +510,6 @@ module GDK
 
     settings :cells do
       bool(:enabled) { false }
-      settings :postgresql do
-        port(:port, 'postgresql') { config.postgresql.port }
-        string(:host) { config.postgresql.host }
-      end
     end
 
     settings :elasticsearch do
