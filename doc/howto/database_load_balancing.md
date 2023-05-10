@@ -4,10 +4,6 @@ This document describes the required steps to enable and test the [database load
 
 To also test service discovery for database replicas, see the [database load balancing with service discovery documentation](database_load_balancing_with_service_discovery.md).
 
-## Prerequisites
-
-Database load balancing is an Enterprise feature, so you will need to generate a license for your GDK installation. See [Use GitLab Enterprise features](../index.md#use-gitlab-enterprise-features) for instructions.
-
 ## Assumptions
 
 For these instructions, we assume that you are running all commands from the GDK root.
