@@ -624,6 +624,21 @@ RSpec.describe GDK::Config do
   end
 
   describe "#cells" do
+    describe "#enabled" do
+      let(:yaml) do
+        {
+          'cells' => {
+            'enabled' => true
+          }
+        }
+      end
+
+      it { expect(default_config.cells.enabled).to be(false) }
+      it { expect(default_config.cells?).to be(false) }
+
+      it { expect(config.cells.enabled).to be(true) }
+      it { expect(config.cells?).to be(true) }
+    end
   end
 
   describe '#clickhouse' do
