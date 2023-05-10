@@ -45,7 +45,7 @@ remote_image_has_dependency_sha() {
 case "$1" in
     ci-login)
         echo "Logging in"
-        docker login --username gitlab-ci-token --password "${CI_BUILD_TOKEN}" "${CI_REGISTRY}"
+        docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
         ;;
 
     ci-logout)
