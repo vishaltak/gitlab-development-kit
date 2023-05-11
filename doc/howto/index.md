@@ -3,13 +3,12 @@
 Before using the GDK features below, see [install instructions](../index.md).
 
 Main purpose of GitLab Development Kit is to make GitLab development easier.
-Please see [GitLab Contributor documentation](https://docs.gitlab.com/ee/development/README.html)
+Please see [GitLab Contributor documentation](https://docs.gitlab.com/ee/development/index.html)
 to learn how to contribute to GitLab.
 
 ## Basic
 
 - [Browse your development GitLab server](browse.md)
-- [GitLab developer documentation](https://docs.gitlab.com/ee/development/README.html)
 - [GDK commands](../gdk_commands.md)
 - [Installation, configuration, and development troubleshooting](../troubleshooting/index.md)
 - [Cheat sheet](../../HELP): `gdk help`
@@ -48,7 +47,7 @@ to learn how to contribute to GitLab.
 - [NFS](nfs.md)
 - [PostgreSQL](postgresql.md)
 - [Puma](puma.md)
-- [Preview and test the docs site locally](gitlab_docs.md)
+- [Preview and test the documentation site locally](gitlab_docs.md)
 - [Preview GitLab changes](preview_gitlab_changes.md)
 - [Product Analytics](product_analytics.md)
 - [SSH](ssh.md)
