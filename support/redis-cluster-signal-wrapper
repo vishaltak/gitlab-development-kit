@@ -9,15 +9,19 @@ def start_cluster(shards, port, dir)
   node_addrs = []
   (0...shards).each do |idx|
     node_port = port + idx
-    $pids << spawn(
-      "redis-server --port #{node_port} --cluster-enabled yes --cluster-config-file #{dir}/nodes_#{node_port}.conf"
+    $pids << spawn(<<-TEXT
+      redis-server --port #{node_port} \
+        --cluster-enabled yes \
+        --cluster-config-file #{dir}/nodes_#{node_port}.conf \
+        --cluster-node-timeout 5000
+    TEXT
     )
     node_addrs << "127.0.0.1:#{node_port}"
   end
 
   sleep(5)
 
-  `redis-cli --cluster-yes --cluster create #{node_addrs.join(' ')}`
+  `redis-cli --cluster-yes --cluster create #{node_addrs.join(' ')} --cluster-replicas 0`
 end
 # rubocop:enable Style/GlobalVars
 
