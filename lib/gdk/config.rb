@@ -508,6 +508,10 @@ module GDK
       end
     end
 
+    settings :cells do
+      bool(:enabled) { false }
+    end
+
     settings :elasticsearch do
       bool(:enabled) { false }
       string(:version) { '8.6.2' }
