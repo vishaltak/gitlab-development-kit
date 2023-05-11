@@ -14,7 +14,6 @@ if [ "${GDK_DEBUG}" = "1" ] || [ "${GDK_DEBUG}" = "true" ]; then
   execute_command ulimit -a
   execute_command /sbin/sysctl -a
   execute_command nproc
-  execute_command blah
   execute_command df -h
   execute_command free -m
   execute_command 'env | grep -Ev "TOKEN|PASSWORD|LICENSE|KEY"'
