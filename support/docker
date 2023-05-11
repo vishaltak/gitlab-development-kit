@@ -97,8 +97,8 @@ case "$1" in
     ci-build-verify-image)
         mkdir -p "${GITLAB_CI_CACHE_FULL_DIR}"
 
-        docker build . --progress plain --squash --file support/ci/Dockerfile.verify \
-        --build-arg release_image="${DEFAULT_IMAGE}" \
+        docker build . --progress plain --file support/ci/Dockerfile.verify_full \
+        --build-arg from_image="${DEFAULT_IMAGE}" \
         --build-arg URL="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" \
         --build-arg SHA="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
         --build-arg GITLAB_CI_CACHE_DIR="${GITLAB_CI_CACHE_DIR}" \
@@ -111,16 +111,22 @@ case "$1" in
         --build-arg NODE_PATH="${NODE_PATH}" \
         --build-arg PUMA_SINGLE_MODE="${PUMA_SINGLE_MODE}" \
         --build-arg GDK_DEBUG="${GDK_DEBUG}" \
-        --tag "${VERIFY_IMAGE}"
-
-        docker push "${VERIFY_IMAGE}"
+        --tag "${VERIFY_FULL_IMAGE}"
 
         docker rm built-image > /dev/null 2>&1 || true
-        docker create --name built-image "${VERIFY_IMAGE}"
+        docker create --name built-image "${VERIFY_FULL_IMAGE}"
         docker cp built-image:"${GDK_INTERNAL_CACHE_FULL_DIR}"/ "${CI_PROJECT_DIR}"/ || true
         docker rm built-image > /dev/null 2>&1 || true
 
         du -smx "${GITLAB_CI_CACHE_FULL_DIR}"/*
+
+        docker build . --progress plain --file support/ci/Dockerfile.verify \
+        --build-arg from_image="${VERIFY_FULL_IMAGE}" \
+        --build-arg GITLAB_CI_CACHE_DIR="${GITLAB_CI_CACHE_DIR}" \
+        --build-arg GITLAB_CI_CACHE_GO_DIR="${GITLAB_CI_CACHE_GO_DIR}" \
+        --tag "${VERIFY_IMAGE}"
+
+        docker push "${VERIFY_IMAGE}"
         ;;
 
     build)
