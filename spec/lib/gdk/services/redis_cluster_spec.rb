@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe GDK::Services::RedisCluster do
+RSpec.describe GDK::Services::RedisCluster do
   describe '#name' do
     it 'return redis' do
       expect(subject.name).to eq('redis-cluster')
