@@ -15,7 +15,7 @@ def start_cluster(shards, port, dir)
         --cluster-config-file #{dir}/nodes_#{node_port}.conf \
         --cluster-node-timeout 5000
     TEXT
-    )
+                  )
     node_addrs << "127.0.0.1:#{node_port}"
   end
 
