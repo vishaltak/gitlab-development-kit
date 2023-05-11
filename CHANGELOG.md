@@ -4,7 +4,7 @@ This Changelog tracks major changes to the GitLab Development Kit,
 such as dependency updates (those not handled by Bundler) and new
 features.
 
-## 2022-11-28
+## 2023-05-11
 - Add `redis-cluster` service to GDK !2839
 
 ## 2021-03-19
