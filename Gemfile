@@ -21,3 +21,5 @@ end
 group :development, :test, :danger do
   gem 'gitlab-dangerfiles', '~> 3.9.0', require: false
 end
+
+gem 'pry'
