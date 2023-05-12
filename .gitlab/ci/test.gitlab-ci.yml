@@ -31,6 +31,7 @@ rspec:
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
   script:
+    - echo $BUNDLE_PATH
     - pwd > .gdk-install-root
     - make rspec
   cache:
