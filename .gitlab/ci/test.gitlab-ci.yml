@@ -38,6 +38,7 @@ rspec:
     key: "ruby-${RUBY_VERSION}-bundle"
     paths:
       - $BUNDLE_PATH
+    policy: push
   artifacts:
     paths:
       - rspec.xml
