@@ -31,14 +31,12 @@ rspec:
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
   script:
-    - echo $BUNDLE_PATH
     - pwd > .gdk-install-root
     - make rspec
   cache:
     key: "ruby-${RUBY_VERSION}-bundle"
     paths:
       - $BUNDLE_PATH
-    policy: push
   artifacts:
     paths:
       - rspec.xml
