@@ -9,11 +9,9 @@ require_relative '../lib/gdk'
 
 abort "Usage: #{$PROGRAM_NAME} DIRECTORY COMMAND [ARGUMENTS ...]" if ARGV.count < 2
 
-target_directory = ARGV.shift
-cmd = ARGV
+Dir.chdir(ARGV.shift)
 
+cmd = ARGV
 cmd = %w[asdf env ruby] + cmd if GDK.config.asdf.__available?
 
-Dir.chdir(target_directory) do
-  exec(*cmd)
-end
+exec(*cmd)
