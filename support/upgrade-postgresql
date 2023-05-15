@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'fileutils'
 require 'forwardable'
 require 'set'
 
@@ -9,7 +10,7 @@ require_relative '../lib/gdk'
 class PostgresUpgrader
   extend Forwardable
 
-  POSTGRESQL_VERSIONS = %w[12 11 10 9.6].freeze
+  POSTGRESQL_VERSIONS = %w[13 12 11 10 9.6].freeze
 
   def_delegators :postgresql, :current_data_dir, :current_version, :upgrade_needed?
 
@@ -55,11 +56,11 @@ class PostgresUpgrader
   end
 
   def renamed_current_data_dir
-    @renamed_current_data_dir ||= File.join(current_data_dir + ".#{current_version}.#{Time.now.to_i}")
+    @renamed_current_data_dir ||= "#{current_data_dir}.#{current_version}.#{Time.now.to_i}"
   end
 
   def target_path
-    @target_path ||= File.join(current_data_dir + ".#{target_version}.#{Time.now.to_i}")
+    @target_path ||= "#{current_data_dir}.#{target_version}.#{Time.now.to_i}"
   end
 
   def gdk_stop

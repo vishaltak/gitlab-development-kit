@@ -48,14 +48,14 @@ minio 2022-07-15T03-44-22Z
 nodejs 16.15.0 18.16.0
 
 # postgres:
-#   12.13:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #   13.9:
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#   12.13:
+#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-postgres 12.13 13.9
+postgres 13.9 12.13
 
 # redis:
 #   6.2.7:
