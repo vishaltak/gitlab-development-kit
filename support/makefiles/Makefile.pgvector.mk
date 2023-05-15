@@ -1,6 +1,21 @@
+PG_CONFIG_FLAGS_FILE := tmp/.pg_flags
+
+# Define a function to generate the pg_config flags
+define generate_pg_flags_file
+    $(shell pg_config > $(PG_CONFIG_FLAGS_FILE))
+    FORCE_CLEAN=1
+endef
+
 .PHONY: pgvector-setup
 ifeq ($(pgvector_enabled),true)
-pgvector-setup: pgvector/vector.so
+# Check if the flags file is outdated, and generate it if necessary
+ifeq ($(wildcard $(PG_CONFIG_FLAGS_FILE)),)
+    $(eval $(call generate_pg_flags_file))
+else ifneq ($(shell cat $(PG_CONFIG_FLAGS_FILE)), $(shell pg_config))
+    $(eval $(call generate_pg_flags_file))
+endif
+
+pgvector-setup: pgvector-auto-clean pgvector/vector.so
 else
 pgvector-setup:
 	@true
@@ -19,6 +34,10 @@ pgvector-update-run: pgvector/.git/pull pgvector-clean pgvector/vector.so
 
 pgvector/.git:
 	$(Q)GIT_REVISION="${pgvector_version}" CLONE_DIR=pgvector support/component-git-clone ${git_depth_param} ${pgvector_repo} pgvector
+
+.PHONY: pgvector-auto-clean
+pgvector-auto-clean: $(PG_CONFIG_FLAGS_FILE)
+	$(if ${FORCE_CLEAN}, @echo "Cleaning pgvector build since pg_config flags have changed" && support/asdf-exec pgvector $(MAKE) clean ${QQ})
 
 pgvector/vector.so: pgvector/.git
 	@echo
