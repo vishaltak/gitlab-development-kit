@@ -48,7 +48,7 @@ GEM
     gitlab (4.19.0)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
-    gitlab-dangerfiles (3.9.0)
+    gitlab-dangerfiles (3.10.0)
       danger (>= 8.4.5)
       danger-gitlab (>= 8.0.0)
       rake
@@ -71,7 +71,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (1.3.12)
+    lefthook (1.3.13)
     mini_mime (1.1.2)
     minitest (5.17.0)
     multi_xml (0.6.0)
@@ -161,10 +161,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  gitlab-dangerfiles (~> 3.9.0)
+  gitlab-dangerfiles (~> 3.10.0)
   gitlab-styles (~> 10.0.0)
   irb (~> 1.6.4)
-  lefthook (~> 1.3.12)
+  lefthook (~> 1.3.13)
   rake (~> 13.0.6)
   rspec (~> 3.12.0)
   rspec_junit_formatter (~> 0.6.0)
@@ -174,4 +174,4 @@ DEPENDENCIES
   yard (~> 0.9.34)
 
 BUNDLED WITH
-   2.4.12
+   2.4.13
