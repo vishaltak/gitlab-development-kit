@@ -35,8 +35,8 @@ class PostgresUpgrader
 
     gdk_stop
     init_db_in_target_path
-    rename_current_data_dir
     pgvector_setup
+    rename_current_data_dir
     pg_upgrade
     promote_new_db
     gdk_reconfigure
