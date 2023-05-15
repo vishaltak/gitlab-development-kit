@@ -36,6 +36,7 @@ class PostgresUpgrader
     gdk_stop
     init_db_in_target_path
     rename_current_data_dir
+    pgvector_setup
     pg_upgrade
     promote_new_db
     gdk_reconfigure
@@ -83,6 +84,13 @@ class PostgresUpgrader
 
     GDK::Output.info "Renaming #{renamed_current_data_dir} to #{current_data_dir}"
     FileUtils.mv(renamed_current_data_dir, current_data_dir)
+  end
+
+  def pgvector_setup
+    return unless config.gitlab.rails.databases.embedding.enabled?
+
+    GDK::Output.info "Running 'make pgvector-setup'.."
+    run!('make pgvector-setup', config.gdk_root)
   end
 
   def pg_upgrade
