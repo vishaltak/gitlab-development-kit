@@ -184,9 +184,9 @@ RSpec.describe GDK::Postgresql do
   end
 
   describe '#upgrade_needed?' do
-    context 'when current version is 12' do
+    context 'when current version is 13' do
       before do
-        stub_pg_version_file('12')
+        stub_pg_version_file('13')
       end
 
       context 'and target version is 9.6' do
@@ -212,14 +212,14 @@ RSpec.describe GDK::Postgresql do
 
       context 'and target version is the default' do
         it 'returns true' do
-          expect(subject.upgrade_needed?).to be(true)
+          expect(subject.upgrade_needed?).to be(false)
         end
       end
 
-      context 'and target version is 13' do
+      context 'and target version is 14' do
         it 'returns true' do
-          expect(subject.upgrade_needed?(13)).to be(true)
-          expect(subject.upgrade_needed?('13')).to be(true)
+          expect(subject.upgrade_needed?(14)).to be(true)
+          expect(subject.upgrade_needed?('14')).to be(true)
         end
       end
     end
