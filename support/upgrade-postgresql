@@ -125,7 +125,7 @@ class PostgresUpgrader
       if asdf?
         asdf_available_versions
       elsif brew?
-        brew_cellar_available_versions
+        brew_cellar_available_versions.transform_keys(&:to_i)
       elsif apt?
         apt_available_versions
       else
