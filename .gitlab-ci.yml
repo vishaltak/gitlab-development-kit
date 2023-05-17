@@ -31,6 +31,8 @@ stages:
   PUMA_SINGLE_MODE: "true"
   GDK_DEBUG: "true"
 
+  NOKOGIRI_LIBXML_MEMORY_MANAGEMENT: "default"
+
 variables:
   <<: *default_variables
 
