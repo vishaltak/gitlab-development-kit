@@ -138,6 +138,22 @@ version:
 
 Your GDK should now be ready to use.
 
+## Upgrading the secondary database
+
+If you have replication configured, after you have upgraded the primary database, do the following to upgrade the secondary database as well:
+
+1. Remove the old secondary database data as we will be replacing it with primary database data:
+
+    ```shell
+    rm -rf postgresql-replica/data/*
+    ```
+
+1. Copy data from primary to secondary with `pg_basebackup`:
+
+    ```shell
+    pg_basebackup -R -h $(pwd)/postgresql -D $(pwd)/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
+    ```
+
 ## Access Geo Secondary Database
 
 ```shell
