@@ -2,6 +2,13 @@
 
 replication_include="include 'replication.conf'"
 postgres_dir=$(gdk config get postgresql.data_dir 2>/dev/null)
+postgres_version=$(gdk config get postgresql.active_version 2>/dev/null | cut -d. -f1)
+
+if [[ $postgres_version -ge 13 ]]; then
+    setting_name="wal_keep_size"
+else
+    setting_name="wal_keep_segments"
+fi
 
 if ! grep -Fxq "$replication_include" "$postgres_dir"/postgresql.conf; then
   echo "$replication_include" >> "$postgres_dir"/postgresql.conf
@@ -12,7 +19,7 @@ if [ ! -f "$postgres_dir/replication.conf" ]; then
 wal_level = hot_standby
 max_replication_slots = 2
 max_wal_senders = 10
-wal_keep_segments = 10
+${setting_name} = 10
 hot_standby = on
 EOF
 fi
