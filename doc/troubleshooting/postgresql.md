@@ -1,5 +1,7 @@
 # Troubleshooting PostgreSQL
 
+[[_TOC_]]
+
 The following are possible solutions to problems you might encounter with PostgreSQL and GDK.
 
 ## `gdk update` leaves `gitlab/db/` with uncommitted changes
@@ -126,7 +128,7 @@ is not compatible with your current PostgreSQL version.
 
 You can solve it in one of two ways, depending if you would like to retain your data or not:
 
-## If you do not need to retain your data
+### If you do not need to retain your data
 
 Note that this wipes out the existing contents of your database.
 
@@ -149,7 +151,7 @@ gdk start postgresql
 
 You may remove the `data.bkp` folder if your database is working well.
 
-## If you would like to retain your data
+### If you would like to retain your data
 
 Check the version of PostgreSQL that your data is compatible with:
 
@@ -276,3 +278,36 @@ but are present in your database, you might want to remove them.
 
 You can now run `rake db:migrate:status` again to verify that the entries are
 deleted from the database.
+
+## Fix a build error with `pgvector` extension due to XCode SDK path changes on macOS
+
+If you encounter a build error with the `pgvector` extension while upgrading PostgreSQL, it could be due to XCode SDK path changes by macOS or XCode upgrades. This error occurs when the XCode SDK path is not configured correctly for the extension.
+
+To fix this error, perform the following steps in your terminal:
+
+1. Ensure that the `pgvector` extension is already installed. If not, install it before continuing.
+1. Clean and reinstall the extension to recompile the library with the correct `ifdef`. This change was added in the extension
+   to manage changes introduced in PostgreSQL 13:
+
+   ```shell
+   cd pgvector
+   make clean && make install
+   ```
+
+   Here, `make clean` is necessary to recompile the `pgvector` extension with the correct updates for PostgreSQL 13.
+
+1. During the `make install` process, you might encounter an error related to the `sysroot` directory path:
+
+   ```shell
+   clang: warning: no such sysroot directory: '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk' [-Wmissing-sysroot]
+   ```
+
+   This error occurs because the `isysroot` parameter in `pg_config` is pointing to the wrong path. To fix this, you should uninstall and reinstall PostgreSQL using the following commands:
+
+   ```shell
+   asdf uninstall postgresql <version>
+   asdf install postgresql <version>
+   ```
+
+1. Once the reinstallation is complete, run `make install` again.
+1. After you've fixed the build error, run the `support/upgrade-postgresql` to upgrade your PostgreSQL version.
