@@ -77,7 +77,7 @@ class AddSecondaryOptionParser
 
       unless Pathname.new(options.secondary_gdk).exist?
         $stdout.puts "Secondary site must exist"
-        $stdout.puts "Run `git clone #{Pathname.new(options.primary_gdk).realpath} #{options.secondary_gdk}`"
+        $stdout.puts "Hint: Run `git clone #{Pathname.new(options.primary_gdk).realpath} #{options.secondary_gdk}`"
         raise SecondaryHelpers::Done
       end
 
@@ -117,6 +117,8 @@ class SecondaryAdder
   end
 
   def execute
+    check_env_vars
+
     initialize_vars
 
     configure_primary
@@ -126,6 +128,15 @@ class SecondaryAdder
   end
 
   private
+
+  # TODO https://gitlab.com/gitlab-org/gitlab/-/issues/412280
+  def check_env_vars
+    return unless ENV['GITLAB_VALIDATE_DATABASE_CONFIG'].nil?
+
+    $stdout.puts "GITLAB_VALIDATE_DATABASE_CONFIG env var missing. You need to set `export GITLAB_VALIDATE_DATABASE_CONFIG=0`"
+
+    raise SecondaryHelpers::Done
+  end
 
   def initialize_vars
     options.primary_gdk ||= AddSecondaryOptionParser.read_primary_gdk
