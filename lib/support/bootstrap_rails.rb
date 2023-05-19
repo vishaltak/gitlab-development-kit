@@ -39,7 +39,15 @@ module Support
       true
     end
 
+    def cells_secondary?
+      config.cells.postgresql_clusterwide.host != config.postgresql.host ||
+        config.cells.postgresql_clusterwide.port != config.postgresql.port
+    end
+
+    # TODO: Skip seeding due to https://gitlab.com/gitlab-org/gitlab/-/issues/412075
     def seed_main_db
+      return if cells_secondary?
+
       run_command(RAKE_DEV_DB_SEED_CMD)
     end
 
