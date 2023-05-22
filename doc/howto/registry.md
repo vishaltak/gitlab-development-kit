@@ -668,13 +668,13 @@ $ gdk start registry && gdk tail registry
 ok: run: /Users/mkozonogitlab/Developer/gdk/services/registry: (pid 20314) 0s, normally down
 2022-10-28_21:41:21.24738 registry              : runit control/t: sending TERM to -18831
 2022-10-28_21:41:21.24741 registry              : runit control/t: sending TERM to 18831
-2022-10-28_21:46:38.72345 registry              : docker run -p 172.16.123.1:5000:5000 -u 0:0 -v /Users/mkozonogitlab/Developer/gdk/registry/config.yml:/etc/docker/registry/config.yml:ro -v /Users/mkozonogitlab/Developer/gdk/registry/storage:/var/lib/registry -v /Users/mkozonogitlab/Developer/gdk/localhost.crt:/etc/docker/registry/localhost.crt:ro -v /Users/mkozonogitlab/Developer/gdk/registry_host.crt:/etc/docker/registry/registry_host.crt:ro -v /Users/mkozonogitlab/Developer/gdk/registry_host.key:/etc/docker/registry/registry_host.key:ro registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.70.0-gitlab
+2022-10-28_21:46:38.72345 registry              : docker run -p 172.16.123.1:5000:5000 -u 0:0 -v /Users/mkozonogitlab/Developer/gdk/registry/config.yml:/etc/docker/registry/config.yml:ro -v /Users/mkozonogitlab/Developer/gdk/registry/storage:/var/lib/registry -v /Users/mkozonogitlab/Developer/gdk/localhost.crt:/etc/docker/registry/localhost.crt:ro -v /Users/mkozonogitlab/Developer/gdk/registry_host.crt:/etc/docker/registry/registry_host.crt:ro -v /Users/mkozonogitlab/Developer/gdk/registry_host.key:/etc/docker/registry/registry_host.key:ro registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.73.1-gitlab
 ^C
 $ gdk stop registry
 ok: down: /Users/mkozonogitlab/Developer/gdk/services/registry: 0s
 $ docker ps -a
 CONTAINER ID  IMAGE                                                                              COMMAND               CREATED         STATUS                                PORTS                                           NAMES
-e73941e70bec  registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.70.0-gitlab  /scripts/process-...  24 seconds ago  Exited (1) 24 seconds ago (starting)  172.16.123.1:5000->5000/tcp                     focused_aryabhata
+e73941e70bec  registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.73.1-gitlab  /scripts/process-...  24 seconds ago  Exited (1) 24 seconds ago (starting)  172.16.123.1:5000->5000/tcp                     focused_aryabhata
 $ docker logs focused_aryabhata
 configuration error: open /etc/docker/registry/config.yml: permission denied
 Usage:
