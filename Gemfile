@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'lefthook', '~> 1.3.13', require: false
+  gem 'lefthook', '~> 1.4.0', require: false
   gem 'rake', '~> 13.0.6'
   gem 'rubocop', require: false
   gem "rubocop-rake", "~> 0.6.0", require: false
