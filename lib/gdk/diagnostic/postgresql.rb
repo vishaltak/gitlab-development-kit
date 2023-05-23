@@ -6,7 +6,7 @@ module GDK
       TITLE = 'PostgreSQL'
 
       def success?
-        @success ||= data_dir_version && versions_ok? && can_create_postgres_socket?
+        @success ||= data_dir_version && versions_ok? && can_create_postgres_socket? && valid_ldflags?
       end
 
       def detail
@@ -15,6 +15,7 @@ module GDK
         output = []
         output << version_problem_message unless versions_ok?
         output << cant_create_socket_message unless can_create_postgres_socket?
+        output << invalid_ldflags_message unless valid_ldflags?
 
         output.join("\n#{diagnostic_detail_break}\n")
       end
@@ -90,6 +91,66 @@ module GDK
 
       def data_dir_version_filename
         @data_dir_version_filename ||= File.join(GDK::Config.new.postgresql.data_dir, 'PG_VERSION')
+      end
+
+      def invalid_ldflags_message
+        <<~MESSAGE
+          #{@pgconfig_error}
+
+          This may indicate a potential issue with the PostgreSQL installation, and we recommend reinstalling PostgreSQL.
+
+          You can try running the following to reinstall PostgreSQL:
+
+          asdf uninstall postgres #{psql_version} && asdf install postgres #{psql_version}
+        MESSAGE
+      end
+
+      def valid_ldflags?
+        return @valid_ldflags if defined?(@valid_ldflags)
+
+        @valid_ldflags = pg_config_valid?
+      end
+
+      def pg_config_valid?
+        return true unless embedding_db_enabled?
+
+        unless pg_config_ldflags.include?('-isysroot')
+          @pgconfig_error = 'The `-isysroot` value not present in `pg_config --ldflags`.'
+          return false
+        end
+
+        isysroot_path = pg_config_ldflags[/-isysroot\s(\S+)/, 1]
+        unless Dir.exist?(isysroot_path)
+          @pgconfig_error = "The `-isysroot` path #{isysroot_path} does not exist."
+          return false
+        end
+
+        if macos? && !isysroot_path_matches_sdk?(isysroot_path, xcrun_sdk_path)
+          @pgconfig_error = "The `pg_config --ldflags` shows #{isysroot_path}, but `xcrun --show-sdk-path` shows #{xcrun_sdk_path}."
+          return false
+        end
+
+        true
+      end
+
+      def embedding_db_enabled?
+        config.gitlab.rails.databases.embedding.enabled
+      end
+
+      def isysroot_path_matches_sdk?(isysroot_path, xcrun_sdk_path)
+        File.realpath(isysroot_path) == File.realpath(xcrun_sdk_path)
+      end
+
+      def macos?
+        RUBY_PLATFORM.include?('darwin')
+      end
+
+      def pg_config_ldflags
+        @pg_config_ldflags ||= Shellout.new('pg_config --ldflags').execute(display_output: false).read_stdout
+      end
+
+      def xcrun_sdk_path
+        @xcrun_sdk_path ||= Shellout.new('xcrun --show-sdk-path').execute(display_output: false).read_stdout.to_s
       end
     end
   end
