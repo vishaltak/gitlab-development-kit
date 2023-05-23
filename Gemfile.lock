@@ -71,7 +71,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (1.3.13)
+    lefthook (1.4.0)
     mini_mime (1.1.2)
     minitest (5.17.0)
     multi_xml (0.6.0)
@@ -164,7 +164,7 @@ DEPENDENCIES
   gitlab-dangerfiles (~> 3.10.0)
   gitlab-styles (~> 10.0.0)
   irb (~> 1.6.4)
-  lefthook (~> 1.3.13)
+  lefthook (~> 1.4.0)
   rake (~> 13.0.6)
   rspec (~> 3.12.0)
   rspec_junit_formatter (~> 0.6.0)
