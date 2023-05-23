@@ -21,6 +21,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
     context 'versions testing' do
       before do
         allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
+        allow(subject).to receive(:valid_ldflags?).and_return(true)
       end
 
       context 'when psql --version matches PG_VERSION' do
@@ -73,6 +74,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
       before do
         allow(subject).to receive(:versions_ok?).and_return(true)
+        allow(subject).to receive(:valid_ldflags?).and_return(true)
         stub_can_create_socket.and_return(can_create_socket)
       end
 
@@ -87,6 +89,92 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
       context 'when the GDK base directory length is OK' do
         let(:can_create_socket) { true }
 
+        it 'returns true' do
+          expect(subject).to be_success
+        end
+      end
+    end
+
+    context 'ldflags testing' do
+      let(:valid_ldflags) { nil }
+      let(:embedding_enabled) { nil }
+      let(:isysroot_path) { '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' }
+      let(:isysroot_path_exists) { nil }
+      let(:pg_config_ldflags) { "-isysroot #{isysroot_path}" }
+      let(:xcrun_sdk_path) { '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' }
+      let(:realpath) { '/expected/isysroot_path' }
+
+      before do
+        allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
+        allow(subject).to receive(:data_dir_version).and_return(12)
+        allow(subject).to receive(:versions_ok?).and_return(true)
+        allow(subject).to receive(:macos?).and_return(true)
+
+        allow_any_instance_of(GDK::Config).to receive_message_chain('gitlab.rails.databases.embedding.enabled').and_return(embedding_enabled)
+
+        stub_isysroot_path_exists?(isysroot_path, isysroot_path_exists)
+        stub_pg_config_ldflags(pg_config_ldflags)
+        stub_xcrun_sdk_path(xcrun_sdk_path)
+        stub_realpath(isysroot_path, realpath)
+        stub_realpath(xcrun_sdk_path, realpath)
+      end
+
+      context 'when embedding db is enabled' do
+        let(:embedding_enabled) { true }
+        let(:isysroot_path_exists) { true }
+
+        context 'when pg_config_ldflags includes -isysroot flag, and matches xcrun_sdk_path' do
+          it 'returns true' do
+            expect(subject).to be_success
+          end
+        end
+
+        context 'when pg_config_ldflags includes -isysroot flag, but does not match xcrun_sdk_path' do
+          let(:pg_config_ldflags) { '-isysroot /wrong/path' }
+          let(:isysroot_path) { '/wrong/path' }
+          let(:isysroot_path_exists) { false }
+
+          it 'returns false' do
+            expect(subject).not_to be_success
+          end
+        end
+
+        context 'when pg_config_ldflags does not include -isysroot flag' do
+          let(:pg_config_ldflags) { '-wrong-flag' }
+
+          it 'returns false' do
+            expect(subject).not_to be_success
+          end
+        end
+
+        context 'when isysroot_path does not exist' do
+          let(:isysroot_path_exists) { false }
+
+          it 'returns false' do
+            expect(subject).not_to be_success
+          end
+        end
+
+        context 'when not on macOS' do
+          before do
+            allow(subject).to receive(:macos?).and_return(false)
+          end
+
+          it 'returns true' do
+            expect(subject).to be_success
+          end
+        end
+
+        context 'when comparing realpaths between isysroot_path and xcrun_sdk_path' do
+          it 'returns false if realpaths do not match' do
+            allow(File).to receive(:realpath).with(xcrun_sdk_path).and_return('/wrong/realpath')
+
+            expect(subject).not_to be_success
+          end
+        end
+      end
+
+      context 'when embedding db is not enabled' do
         it 'returns true' do
           expect(subject).to be_success
         end
@@ -108,6 +196,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
     context 'versions testing' do
       before do
         allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
+        allow(subject).to receive(:valid_ldflags?).and_return(true)
       end
 
       context 'when unsuccessful' do
@@ -119,10 +208,10 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
         it 'returns help message' do
           expected = <<~MESSAGE
-          `psql` is version 11.8, but your PostgreSQL data dir is using version 12.
+            `psql` is version 11.8, but your PostgreSQL data dir is using version 12.
 
-          Check that your PATH is pointing to the right PostgreSQL version, or see the PostgreSQL upgrade guide:
-          https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/postgresql.md#upgrade-postgresql
+            Check that your PATH is pointing to the right PostgreSQL version, or see the PostgreSQL upgrade guide:
+            https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/postgresql.md#upgrade-postgresql
           MESSAGE
 
           expect(subject.detail).to eq(expected)
@@ -133,6 +222,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
     context 'socket creation testing' do
       before do
         allow(subject).to receive(:versions_ok?).and_return(true)
+        allow(subject).to receive(:valid_ldflags?).and_return(true)
       end
 
       context 'when unsuccessful' do
@@ -142,15 +232,47 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
         it 'returns help message' do
           expected = <<~MESSAGE
-          GDK directory's character length (13) is too long to support the creation
-          of a UNIX socket for Postgres:
+            GDK directory's character length (13) is too long to support the creation
+            of a UNIX socket for Postgres:
 
-            /home/git/gdk
+              /home/git/gdk
 
-          Try using a shorter directory path for GDK or use TCP for Postgres.
+            Try using a shorter directory path for GDK or use TCP for Postgres.
           MESSAGE
 
           expect(subject.detail).to eq(expected)
+        end
+      end
+
+      context 'ldflags testing' do
+        before do
+          allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
+          allow(subject).to receive(:data_dir_version).and_return(12)
+          allow(subject).to receive(:versions_ok?).and_return(true)
+        end
+
+        context 'when unsuccessful' do
+          let(:error_message) { 'The `-isysroot` value not present in `pg_config --ldflags`.' }
+
+          before do
+            allow(subject).to receive(:psql_version).and_return(13.9)
+            allow(subject).to receive(:valid_ldflags?).and_return(false)
+            subject.instance_variable_set(:@pgconfig_error, error_message)
+          end
+
+          it 'returns help message' do
+            expected = <<~MESSAGE
+              #{error_message}
+
+              This may indicate a potential issue with the PostgreSQL installation, and we recommend reinstalling PostgreSQL.
+
+              You can try running the following to reinstall PostgreSQL:
+
+              asdf uninstall postgres 13.9 && asdf install postgres 13.9
+            MESSAGE
+
+            expect(subject.detail).to eq(expected)
+          end
         end
       end
 
@@ -179,9 +301,29 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
     tmpfile.path
   end
 
+  def stub_isysroot_path_exists?(isysroot_path, exists)
+    allow(Dir).to receive(:exist?).with(isysroot_path).and_return(exists)
+  end
+
   def stub_psql_version(result, success: true)
+    stub_shellout(%w[psql --version], result, success: success)
+  end
+
+  def stub_pg_config_ldflags(result)
+    stub_shellout('pg_config --ldflags', result)
+  end
+
+  def stub_realpath(path, realpath)
+    allow(File).to receive(:realpath).with(path).and_return(realpath)
+  end
+
+  def stub_shellout(command, result, success: true)
     shellout = instance_double(Shellout, read_stdout: result, success?: success)
-    allow(Shellout).to receive(:new).with(%w[psql --version]).and_return(shellout)
+    allow(Shellout).to receive(:new).with(command).and_return(shellout)
     allow(shellout).to receive(:execute).and_return(shellout)
+  end
+
+  def stub_xcrun_sdk_path(result)
+    stub_shellout('xcrun --show-sdk-path', result)
   end
 end
