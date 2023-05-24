@@ -11,8 +11,8 @@
 #
 # golang is not required by the GDK, but need to ensure 1.18.x is the default
 golang 1.18.9
-# node.js is not required by the GDK, but need to ensure 16.15.0 is the default
-nodejs 16.15.0
+# node.js is not required by the GDK, but need to ensure 18.16.0 is the default
+nodejs 18.16.0
 
 # postgres is not required by the GDK, but must be set until 13.9 is ready to be the new default
 postgres 13.9 12.13

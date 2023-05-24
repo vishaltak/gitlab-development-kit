@@ -23,7 +23,7 @@ GDK supports macOS 10.14 (Mojave) and later. To install dependencies for macOS:
 1. Install [the GDK required version of node](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.tool-versions) using `nvm`, such as:
 
    ```shell
-   nvm install 16.14.0
+   nvm install 18.16.0
    ```
 
 1. In the `gitlab-development-kit` checkout, run the following `brew` commands:
