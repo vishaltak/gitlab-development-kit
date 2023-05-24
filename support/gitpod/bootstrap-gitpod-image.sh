@@ -21,6 +21,10 @@ make bootstrap
 ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 source "${ASDF_DIR}/asdf.sh"
 
+# Check Ruby version
+RUBY_VERSION=$(asdf current ruby | awk '{print $2}')
+echo "Using Ruby version: ${RUBY_VERSION}"
+
 # Rails settings
 # Disable bootsnap as it can cause temporary/cache files to remain, resulting
 # in Docker image creation to fail
@@ -35,7 +39,7 @@ gdk config set webpack.sourcemaps false
 
 cat gdk.yml
 
-gdk install shallow_clone=true
+gdk install # shallow_clone=true
 gdk stop || true
 GDK_KILL_CONFIRM=true gdk kill || true
 ps -ef || true

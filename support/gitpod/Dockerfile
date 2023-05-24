@@ -8,7 +8,7 @@ ENV GIT_CHECKOUT_BRANCH $git_checkout_branch
 ARG git_remote_origin_url
 ENV GIT_REMOTE_ORIGIN_URL $git_remote_origin_url
 
-ENV GDK_DEBUG=true
+# ENV GDK_DEBUG=true
 
 # --- Install vale (scripts/lint-doc.sh dependency)
 COPY --from=vale-source /bin/vale /usr/bin/vale

@@ -10,6 +10,8 @@ DIR_TO_PROCESS="${1:-.}"
 ASDF_AVAILABLE="$("${ROOT_PATH}"/bin/gdk config get asdf.__available\?)"
 ASDF_RUBY_VERSION="$(grep -E '^ruby ' "${ROOT_PATH}/.tool-versions" | awk '{ print $2 }')"
 
+echo "Ruby version being used is ${ASDF_RUBY_VERSION}"
+
 ensure_bundler_version_installed() {
   local gem_install_args=
 

@@ -25,6 +25,10 @@ cd /workspace/gitlab-development-kit
 ln -nfs "$GITPOD_REPO_ROOT" /workspace/gitlab-development-kit/gitlab
 mv /workspace/gitlab-development-kit/secrets.yml /workspace/gitlab-development-kit/gitlab/config
 
+make gitlab-update
+make gitlab-shell-update
+make gitlab-workhorse-update
+
 # Reconfigure GDK
 log "Reconfiguring GDK"
 gdk reconfigure
