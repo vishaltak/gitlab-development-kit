@@ -10,11 +10,6 @@
 gitleaks 8.16.3
 
 # golang:
-#   1.18.9:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
-#     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_METRICS_EXPORTER_VERSION
 #   1.19.9:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
@@ -27,8 +22,12 @@ gitleaks 8.16.3
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter/-/raw/main/.tool-versions
+#   1.18.9:
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
+#     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_METRICS_EXPORTER_VERSION
 #
-golang 1.18.9 1.19.9
+golang 1.19.9 1.18.9
 
 # minio:
 #   2022-07-15T03-44-22Z:
@@ -47,10 +46,8 @@ nodejs 18.16.0
 
 # postgres:
 #   13.9:
-#     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #   12.13:
-#     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
 postgres 13.9 12.13
@@ -65,10 +62,10 @@ redis 6.2.7
 #   3.1.4:
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #   3.0.5:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #   3.2.2:
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
