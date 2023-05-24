@@ -329,6 +329,15 @@ redis:
       shared_state: 10
       trace_chunks: 13
   dir: "/home/git/gdk/redis"
+redis_cluster:
+  dev_port_1: 6000
+  dev_port_2: 6001
+  dev_port_3: 6002
+  dir: "/home/git/gdk/redis-cluster"
+  enabled: false
+  test_port_1: 6003
+  test_port_2: 6004
+  test_port_3: 6005
 registry:
   api_host: 127.0.0.1
   auth_enabled: true

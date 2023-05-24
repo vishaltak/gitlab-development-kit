@@ -11,14 +11,14 @@ module Runit
     'tunnel' => 'tunnel_*',
     'praefect' => 'praefect*',
     'gitaly' => '{gitaly,praefect*}',
-    'db' => '{redis,postgresql,postgresql-geo,clickhouse}',
-    'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
+    'db' => '{redis,redis-cluster,postgresql,postgresql-geo,clickhouse}',
+    'rails-migration-dependencies' => '{redis,redis-cluster,postgresql,postgresql-geo,gitaly,praefect*}'
   }.freeze
 
-  SERVICES_DIR = Pathname.new(__dir__).join("../services").expand_path
-  LOG_DIR = Pathname.new(__dir__).join("../log").expand_path
+  SERVICES_DIR = Pathname.new(__dir__).join('../services').expand_path
+  LOG_DIR = Pathname.new(__dir__).join('../log').expand_path
 
-  ALL_DATA_ORIENTED_SERVICE_NAMES = %w[minio openldap gitaly praefect redis postgresql-geo postgresql].freeze
+  ALL_DATA_ORIENTED_SERVICE_NAMES = %w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql].freeze
   STOP_RETRY_COUNT = 3
 
   def self.start_runsvdir
@@ -159,6 +159,9 @@ module Runit
     start_runsvdir
     expanded_services = expand_services(services)
     ensure_services_are_supervised(expanded_services)
+
+    expanded_services = expanded_services.filter { |es| !es.to_s.include?('redis-cluster') } unless GDK.config.redis_cluster.enabled?
+    return true if expanded_services.empty? # silent skip assuming successful
 
     command = ['sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *expanded_services.map(&:to_s)]
 

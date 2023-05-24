@@ -14,6 +14,7 @@ module GDK
     autoload :PostgreSQL, 'gdk/services/postgresql'
     autoload :PostgreSQLReplica, 'gdk/services/postgresql_replica'
     autoload :Redis, 'gdk/services/redis'
+    autoload :RedisCluster, 'gdk/services/redis_cluster'
     autoload :Required, 'gdk/services/required'
     autoload :Vault, 'gdk/services/vault'
 
@@ -25,6 +26,7 @@ module GDK
       PostgreSQL
       PostgreSQLReplica
       Redis
+      RedisCluster
       Vault
     ].freeze
 
