@@ -13,6 +13,7 @@ describe GDK::Services do
         PostgreSQL
         PostgreSQLReplica
         Redis
+        RedisCluster
         Vault
       ]
 

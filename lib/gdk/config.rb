@@ -952,6 +952,17 @@ module GDK
       hash_setting(:custom_config) { {} }
     end
 
+    settings :redis_cluster do
+      bool(:enabled) { false }
+      path(:dir) { config.gdk_root.join('redis-cluster') }
+      port(:dev_port_1, 'redis_cluster_dev_1') { 6000 }
+      port(:dev_port_2, 'redis_cluster_dev_2') { 6001 }
+      port(:dev_port_3, 'redis_cluster_dev_3') { 6002 }
+      port(:test_port_1, 'redis_cluster_test_1') { 6003 }
+      port(:test_port_2, 'redis_cluster_test_2') { 6004 }
+      port(:test_port_3, 'redis_cluster_test_3') { 6005 }
+    end
+
     settings :asdf do
       bool(:opt_out) { false }
       bool(:__available?) { !config.asdf.opt_out? && ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any? }

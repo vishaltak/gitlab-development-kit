@@ -107,11 +107,17 @@ tasks.add_template(name: 'gitlab/config/puma.rb')
 tasks.add_template(name: 'gitlab/config/redis.cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :cache })
 tasks.add_template(name: 'gitlab/config/redis.repository_cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :repository_cache })
 tasks.add_template(name: 'gitlab/config/redis.queues.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :queues })
-tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting })
 tasks.add_template(name: 'gitlab/config/redis.sessions.yml', erb_extra_args: { cluster: :sessions })
 tasks.add_template(name: 'gitlab/config/redis.shared_state.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
 tasks.add_template(name: 'gitlab/config/redis.trace_chunks.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :trace_chunks })
 tasks.add_template(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
+
+if GDK.config.redis_cluster.enabled?
+  tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.cluster.yml.erb')
+else
+  tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting })
+end
+
 tasks.add_template(name: 'gitlab/workhorse/config.toml')
 tasks.add_template(name: 'gitlab-k8s-agent-config.yml')
 tasks.add_template(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git/pull'])

@@ -5,12 +5,12 @@ require 'spec_helper'
 RSpec.describe Runit do
   describe 'ALL_DATA_ORIENTED_SERVICE_NAMES' do
     it 'returns all data service names only' do
-      expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to contain_exactly(*%w[minio openldap gitaly praefect redis postgresql-geo postgresql])
+      expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to contain_exactly(*%w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql])
     end
   end
 
   context 'with stubbed services' do
-    let(:data_service_names) { %w[praefect redis postgresql] }
+    let(:data_service_names) { %w[praefect redis postgresql redis-cluster] }
     let(:non_data_service_names) { %w[gitlab-workhorse rails-background-jobs rails-web webpack] }
 
     before do
@@ -135,20 +135,37 @@ RSpec.describe Runit do
     end
 
     describe '.sv' do
-      subject(:sv) { described_class.sv(command, services, **args) }
+      shared_examples 'send sv command' do |shellarg|
+        subject(:sv) { described_class.sv(command, services, **args) }
 
-      let(:command) { 'stop' }
-      let(:services) { data_service_names }
-      let(:args) { {} }
+        let(:command) { 'stop' }
+        let(:services) { data_service_names }
+        let(:args) { {} }
 
-      it 'sends the command to services' do
-        expect(described_class).to receive(:start_runsvdir).and_return(nil)
-        expect(described_class).to receive(:ensure_services_are_supervised)
+        it 'sends the command to services' do
+          expect(described_class).to receive(:start_runsvdir).and_return(nil)
+          expect(described_class).to receive(:ensure_services_are_supervised)
 
-        shellout_double2 = instance_double(Shellout, run: '', stream: '', success?: true)
-        expect(Shellout).to receive(:new).with(%w[sv -w 20 stop /tmp/gdk/services/postgresql /tmp/gdk/services/praefect /tmp/gdk/services/redis], chdir: GDK.root).and_return(shellout_double2)
+          shellout_double2 = instance_double(Shellout, run: '', stream: '', success?: true)
+          expect(Shellout).to receive(:new).with(shellarg, chdir: GDK.root).and_return(shellout_double2)
 
-        expect(sv).to be_truthy
+          expect(sv).to be_truthy
+        end
+      end
+
+      it_behaves_like 'send sv command', %w[sv -w 20 stop /tmp/gdk/services/postgresql /tmp/gdk/services/praefect /tmp/gdk/services/redis]
+
+      context 'when redis_cluster.enabled is true' do
+        before do
+          config = {
+            'redis_cluster' => {
+              'enabled' => true
+            }
+          }
+          stub_gdk_yaml(config)
+        end
+
+        it_behaves_like 'send sv command', %w[sv -w 20 stop /tmp/gdk/services/postgresql /tmp/gdk/services/praefect /tmp/gdk/services/redis /tmp/gdk/services/redis-cluster]
       end
     end
 
@@ -196,7 +213,7 @@ RSpec.describe Runit do
   describe 'SERVICE_SHORTCUTS' do
     describe 'db' do
       it do
-        expect(described_class::SERVICE_SHORTCUTS['db']).to eq('{redis,postgresql,postgresql-geo,clickhouse}')
+        expect(described_class::SERVICE_SHORTCUTS['db']).to eq('{redis,redis-cluster,postgresql,postgresql-geo,clickhouse}')
       end
     end
   end

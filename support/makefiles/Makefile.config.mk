@@ -36,10 +36,6 @@ gitlab/config/redis.repository_cache.yml:
 gitlab/config/redis.queues.yml: 
 	$(Q)rake gitlab/config/redis.queues.yml
 
-.PHONY: gitlab/config/redis.rate_limiting.yml
-gitlab/config/redis.rate_limiting.yml: 
-	$(Q)rake gitlab/config/redis.rate_limiting.yml
-
 .PHONY: gitlab/config/redis.sessions.yml
 gitlab/config/redis.sessions.yml: 
 	$(Q)rake gitlab/config/redis.sessions.yml
@@ -55,6 +51,10 @@ gitlab/config/redis.trace_chunks.yml:
 .PHONY: gitlab/config/resque.yml
 gitlab/config/resque.yml: 
 	$(Q)rake gitlab/config/resque.yml
+
+.PHONY: gitlab/config/redis.rate_limiting.yml
+gitlab/config/redis.rate_limiting.yml: 
+	$(Q)rake gitlab/config/redis.rate_limiting.yml
 
 .PHONY: gitlab/workhorse/config.toml
 gitlab/workhorse/config.toml: 
