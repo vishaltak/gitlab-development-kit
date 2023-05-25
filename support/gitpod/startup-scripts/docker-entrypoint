@@ -15,9 +15,6 @@ error() {
 
   combined_logs_file="${LOG_DIR}/combined_logs.txt"
   cat "$LOG_DIR"/*/current >> "$combined_logs_file"
-  echo "Content of combined logs file:"
-  cat "$combined_logs_file"
-
   sudo cp -r "$LOG_DIR" /artifacts
   exit 1
 }

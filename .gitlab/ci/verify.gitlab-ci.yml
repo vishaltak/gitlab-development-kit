@@ -77,9 +77,9 @@ gitpod-docker-image:
   extends:
     - .docker:build-docker-in-docker
     - .rules:gitpod-code-changes
-  stage: test # !reference ['.verify-job', stage]
-  # needs:
-  #   - build-gitpod-workspace-image
+  stage: !reference ['.verify-job', stage]
+  needs:
+    - build-gitpod-workspace-image
   script:
     - support/ci/verify-gitpod-docker-image
   artifacts:

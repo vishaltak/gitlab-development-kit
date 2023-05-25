@@ -13,12 +13,12 @@ release-image:
   script:
     - ./support/docker ci-build-if-necessary
 
-# build-gitpod-workspace-image:
-#   extends:
-#     - .build-job
-#     - .rules:gitpod-code-changes
-#   script:
-#     - ./support/gitpod/docker-build
+build-gitpod-workspace-image:
+  extends:
+    - .build-job
+    - .rules:gitpod-code-changes
+  script:
+    - ./support/gitpod/docker-build
 
 # Used to create a docker image with GDK installed to run QA e2e tests in gitlab-org/gitlab.
 # See https://gitlab.com/groups/gitlab-org/quality/quality-engineering/-/epics/4

@@ -40,7 +40,7 @@ tested-gitpod-workspace-image:
     - .docker:build-docker-in-docker
     - .rules:tested-deploy-gitpod-workspace-image
   needs:
-    # - build-gitpod-workspace-image
+    - build-gitpod-workspace-image
     - gitpod-docker-image
   script:
     - support/gitpod/docker-tag-image-tested
@@ -51,7 +51,7 @@ gitpod-workspace-image:
     - .docker:build-docker-in-docker
     - .rules:deploy-gitpod-workspace-image
   needs:
-    # - build-gitpod-workspace-image
+    - build-gitpod-workspace-image
     - tested-gitpod-workspace-image
   script:
     - ./support/gitpod/docker-tag-image-as-stable
