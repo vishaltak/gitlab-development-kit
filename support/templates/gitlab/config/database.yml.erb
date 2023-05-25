@@ -73,7 +73,7 @@ development:
     variables:
       statement_timeout: 120s
 <%- end -%>
-<%- if config.geo? && config.geo.secondary? -%>
+<%- if config.geo? -%>
   geo:
     adapter: postgresql
     encoding: unicode
