@@ -5,6 +5,9 @@ asdf:
   opt_out: false
 cells:
   enabled: false
+  postgresql_clusterwide:
+    host: "/home/git/gdk/postgresql"
+    port: 5432
 charts_gitlab:
   auto_update: true
   enabled: false
