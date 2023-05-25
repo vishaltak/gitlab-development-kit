@@ -510,6 +510,11 @@ module GDK
 
     settings :cells do
       bool(:enabled) { false }
+      settings :postgresql_clusterwide do
+        string(:host) { config.postgresql.host }
+        # This deliberately shares a port for postgresql
+        port(:port, 'postgresql') { config.postgresql.port }
+      end
     end
 
     settings :elasticsearch do

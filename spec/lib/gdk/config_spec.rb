@@ -639,6 +639,29 @@ RSpec.describe GDK::Config do
       it { expect(config.cells.enabled).to be(true) }
       it { expect(config.cells?).to be(true) }
     end
+
+    describe "#postgresql" do
+      context 'with default settings' do
+        it { expect(default_config.cells.postgresql_clusterwide.host).to eq(default_config.postgresql.host) }
+        it { expect(default_config.cells.postgresql_clusterwide.port).to eq(default_config.postgresql.port) }
+      end
+
+      context 'with custom settings' do
+        let(:yaml) do
+          {
+            'cells' => {
+              'postgresql_clusterwide' => {
+                'host' => '/tmp/another_gdk/postgres',
+                'port' => 5432
+              }
+            }
+          }
+        end
+
+        it { expect(config.cells.postgresql_clusterwide.host).to eq('/tmp/another_gdk/postgres') }
+        it { expect(config.cells.postgresql_clusterwide.port).to eq(5432) }
+      end
+    end
   end
 
   describe '#clickhouse' do
