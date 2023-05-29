@@ -3,21 +3,19 @@
 This document describes how to enable the [dependency proxy](https://docs.gitlab.com/ee/user/packages/dependency_proxy/)
 in your GDK environment.
 
-## License
-
-An [`Ultimate` license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses)
-is needed to use the dependency proxy.
-
 ## Configuration
 
 ### Linux
 
-With the License requirement met above, there is no additional set up required,
-the dependency proxy is already enabled and configured.
+As the dependency proxy is a core feature, it does not require a license to use. The dependency proxy is already enabled and configured by default.
 
-Test it with
+Test it with:
 
 ```shell
+# Login to the dependency proxy with your GitLab credentials
+sudo docker login 0.0.0.0:3000
+
+# Pull the hello-world image through the dependency proxy and run it
 sudo docker run localhost:3000/gitlab-org/dependency_proxy/containers/hello-world:latest
 ```
 
@@ -48,10 +46,33 @@ Run `gdk reconfigure` and `gdk restart` to invoke the changes and visit the IP
 
 #### Reconfigure the Docker daemon
 
-Edit `daemon.json` using the Docker Desktop UI or by
-editting it directly.
+Depending on the Docker daemon you are using, you will need to update your `daemon.json`
+to include the dependency proxy as an insecure registry. 
 
-##### Editting directly
+##### Colima
+
+The `daemon.json` file is located at:
+
+- MacOS: `~/.colima/default/colima.yaml`
+
+1. Add these values to the file:
+
+    ```yaml
+    docker:
+      insecure-registries:
+       - 0.0.0.0:3000
+       - 127.0.0.1:3000
+    ```
+
+1. Restart Colima:
+
+    ```shell
+    colima restart
+    ```
+
+##### Docker
+
+###### Editing directly
 
 The `daemon.json` file is located at:
 
@@ -71,7 +92,7 @@ The `daemon.json` file is located at:
 1. Restart Docker: this will vary depending on how you are running Docker.
    See the specific documentation for your platform (Rancher, Docker Desktop, etc.)
 
-##### Old Docker Desktop for Mac (< 2.2.0.0)
+###### Old Docker Desktop for Mac (< 2.2.0.0)
 
 Open Docker -> Preferences, and navigate to the tab labeled **Daemon**.
 Check the box to enable **Experimental features** and you can add
@@ -79,7 +100,7 @@ a new **Insecure registry**. Click **Apply & Restart**.
 
 ![Adding an insecure registry](img/dependency_proxy_macos_config.png)
 
-##### Docker Desktop for Mac 2.2.0.0+ (newest versions)
+###### Docker Desktop for Mac 2.2.0.0+ (newest versions)
 
 Open Docker -> Right click on status bar -> Preferences -> Docker Engine, and type in:
 
@@ -92,9 +113,15 @@ Open Docker -> Right click on status bar -> Preferences -> Docker Engine, and ty
 
 ![Adding an insecure registry on the new app](img/dependency_proxy_macos_config_new.png)
 
-Once Docker has restarted, you can test the dependency proxy with:
+##### Pulling from the dependency proxy
+
+Once your Docker daemon has restarted with the newly configured insecure registry settings, you can test the dependency proxy with:
 
 ```shell
+# Login to the dependency proxy with your GitLab credentials
+sudo docker login 0.0.0.0:3000
+
+# Pull the hello-world image through the dependency proxy and run it
 sudo docker run 0.0.0.0:3000/gitlab-org/dependency_proxy/containers/hello-world:latest
 ```
 
