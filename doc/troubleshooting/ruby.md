@@ -44,42 +44,73 @@ In which case you would run:
 gem pristine re2
 ```
 
-## An error occurred while installing thrift (0.14.0)
+## An error occurred while installing thrift
 
-The installation of the `thrift` v0.14.0 gem during `bundle install` can fail with the following error due to a [known bug](https://bugs.ruby-lang.org/issues/17865).
+The installation of the `thrift v0.16.0` gem during `bundle install` can fail with the following error because `clang <= 13` [does not properly handle `__has_declspec()`](https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57):
 
 ```plaintext
 [SNIPPED]
 
-current directory: /wrkdirs/usr/ports/devel/rubygem-thrift/work/stage/usr/local/lib/ruby/gems/2.7/gems/thrift-0.14.0/ext
-make "DESTDIR="
-compiling binary_protocol_accelerated.c
-binary_protocol_accelerated.c:404:68: error: '(' and '{' tokens introducing statement expression appear in different macro expansion contexts [-Werror,-Wcompound-token-split-by-macro]
-  VALUE thrift_binary_protocol_class = rb_const_get(thrift_module, rb_intern("BinaryProtocol"));
-                                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/local/include/ruby-2.7/ruby/ruby.h:1847:23: note: expanded from macro 'rb_intern'
-        __extension__ (RUBY_CONST_ID_CACHE((ID), (str))) : \
-                      ^
-binary_protocol_accelerated.c:404:68: note: '{' token is here
-  VALUE thrift_binary_protocol_class = rb_const_get(thrift_module, rb_intern("BinaryProtocol"));
-                                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/local/include/ruby-2.7/ruby/ruby.h:1847:24: note: expanded from macro 'rb_intern'
-        __extension__ (RUBY_CONST_ID_CACHE((ID), (str))) : \
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/local/include/ruby-2.7/ruby/ruby.h:1832:5: note: expanded from macro 'RUBY_CONST_ID_CACHE'
-    {                                                   \
-    ^
+current directory: /path/to/.asdf/installs/ruby/3.1.4/lib/ruby/gems/3.1.0/gems/thrift-0.16.0/ext
+/path/to/.asdf/installs/ruby/3.1.4/bin/ruby -I /path/to/.asdf/installs/ruby/3.1.4/lib/ruby/3.1.0 extconf.rb
+checking for strlcpy() in string.h... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+[SNIPPED]
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+ /path/to/.asdf/installs/ruby/3.1.4/lib/ruby/gems/3.1.0/extensions/x86_64-darwin-19/3.1.0/thrift-0.16.0/mkmf.log
+
+[SNIPPED]
+
+An error occurred while installing thrift (0.16.0), and Bundler cannot continue.
+
+In Gemfile:
+  gitlab-labkit was resolved to 0.32.0, which depends on
+    jaeger-client was resolved to 1.1.0, which depends on
+      thrift
 ```
 
-As a workaround, you can set the following Bundler config:
+Contents of `mkmf.log`:
 
-```shell
-bundle config build.thrift --with-cppflags="-Wno-error=compound-token-split-by-macro"
-bundle install
+```plaintext
+[SNIPPED]
+
+/path/to/.asdf/installs/ruby/3.1.4/include/ruby-3.1.0/ruby/assert.h:132:1: error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
+RBIMPL_ATTR_NORETURN()
+^
+/path/to/.asdf/installs/ruby/3.1.4/include/ruby-3.1.0/ruby/internal/attr/noreturn.h:29:33: note: expanded from macro 'RBIMPL_ATTR_NORETURN'
+# define RBIMPL_ATTR_NORETURN() __declspec(noreturn)
+
+[SNIPPED]
+
+/path/to/.asdf/installs/ruby/3.1.4/include/ruby-3.1.0/ruby/internal/core/rbasic.h:63:14: error: expected parameter declarator
+RUBY_ALIGNAS(SIZEOF_VALUE)
+             ^
+/path/to/.asdf/installs/ruby/3.1.4/include/ruby-3.1.0/ruby/internal/value.h:106:23: note: expanded from macro 'SIZEOF_VALUE'
+# define SIZEOF_VALUE SIZEOF_LONG
+
+[SNIPPED]
 ```
 
-Running `gem install thrift -v '0.14.0' --source 'https://rubygems.org'` won't work because
-`gem` bypasses the Bundler config.
+To work around this issue, either:
+
+- Set the `-fdeclspec` flag and run `gem install` manually:
+
+  ```shell
+  gem install thrift -v 0.16.0 -- --with-cppflags='-fdeclspec'
+  ```
+
+- Upgrade to the latest version of Xcode or manually upgrade to `clang >= 14`. For example:
+
+  ```shell
+  brew install llvm@14
+  echo 'export PATH="/usr/local/opt/llvm@14/bin:$PATH"' >> ~/.zshrc
+  gem install thrift -v 0.16.0
+  ```
 
 ## An error occurred while installing `gpgme` on macOS
 
