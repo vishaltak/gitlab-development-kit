@@ -29,8 +29,8 @@ code_quality:
 
 container_scanning:
   stage: analyze
-  before_script:
-    - export DOCKER_IMAGE=${DEFAULT_IMAGE}
+  variables:
+    CS_IMAGE: $DEFAULT_IMAGE
   needs:
     - release-image
   rules: !reference ['.rules:code-changes', rules]
