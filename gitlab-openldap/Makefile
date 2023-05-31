@@ -39,13 +39,13 @@ clean:
 disable_bind_anon:
 	bin/ldapmodify -H ldap://127.0.0.1:3890/ -D "cn=admin,cn=config" -w password -f disable_bind_anon.ldif
 
-openldap-2.4.44:
-	curl -OL https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.tgz
-	echo 'd7de6bf3c67009c95525dde3a0212cc110d0a70b92af2af8e3ee800e81b88400  openldap-2.4.44.tgz' | shasum -a256 -c -
-	tar zxf openldap-2.4.44.tgz
+openldap-2.6.4:
+	curl -OL https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.4.tgz
+	echo 'd51704e50178430c06cf3d8aa174da66badf559747a47d920bb54b2d4aa40991  openldap-2.6.4.tgz' | shasum -a256 -c -
+	tar zxf openldap-2.6.4.tgz
 
-sbin/slapadd: openldap-2.4.44
-	cd openldap-2.4.44 && ./configure --prefix=${gitlab_openldap_root} --enable-bdb=no --enable-hdb=no
-	cd openldap-2.4.44 && make -j 2 install
+sbin/slapadd: openldap-2.6.4
+	cd openldap-2.6.4 && ./configure --prefix=${gitlab_openldap_root} --enable-bdb=no --enable-hdb=no
+	cd openldap-2.6.4 && make -j 2 install
 
 .PHONY: clean default large contents alt_contents disable_bind_anon
