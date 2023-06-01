@@ -59,5 +59,21 @@ RSpec.describe Runit::Config do
       expect(subject.run_env).not_to match(/GITLAB_TRACING=/)
       expect(subject.run_env).not_to match(/GITLAB_TRACING_URL=/)
     end
+
+    it 'exports CUSTOMER_PORTAL_URL env variable when customer_portal_url is set' do
+      yaml = {
+        'license' => {
+          'customer_portal_url' => 'https://customers.example.com'
+        }
+      }
+      stub_gdk_yaml(yaml)
+
+      expect(subject.run_env).to match(%r{CUSTOMER_PORTAL_URL=https://customers.example.com})
+    end
+
+    it 'does include GitLab license related env variables by default' do
+      expect(subject.run_env).to match(/GITLAB_LICENSE_MODE=test/)
+      expect(subject.run_env).to match(%r{CUSTOMER_PORTAL_URL=https://customers.staging.gitlab.com})
+    end
   end
 end
