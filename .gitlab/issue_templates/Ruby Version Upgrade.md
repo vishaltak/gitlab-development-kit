@@ -17,6 +17,7 @@ The goal of this issue is to upgrade the Ruby version to `<RUBY_VERSION>`.
   - [ ] gitlab-pages
   - [ ] gitlab-shell
   - [ ] gitlab-development-kit
+- [ ] Update the version of Ruby in the [GDK E2E image](https://gitlab.com/gitlab-org/gitlab-build-images/-/blob/a1ed9f50ca0e8b8f5af221bf028cc82f02bc0748/.gitlab/ci/e2e.images.yml#L56).
 - [ ] Update any dependencies or packages that may be affected by the version change.
 - [ ] Test the GDK using the new Ruby version by running `verify-*` jobs in CI pipelines ensure the compatibility.
 - [ ] Test the Gitpod GDK docker image using the new Ruby version by running `verify-gitpod-workspace-image` job in CI pipelines.
