@@ -141,6 +141,11 @@ module GDK
     string(:username) { Etc.getpwuid.name }
     string(:__whoami) { Etc.getpwuid.name }
 
+    settings :license do
+      string(:customer_portal_url) { 'https://customers.staging.gitlab.com' }
+      string(:license_mode) { 'test' }
+    end
+
     settings :load_balancing do
       bool(:enabled) { false }
       settings :discover do
