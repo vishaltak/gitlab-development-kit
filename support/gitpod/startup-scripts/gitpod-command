@@ -21,13 +21,9 @@ source "$HOME/gitpod-common"
 
 SECONDS=0
 cd /workspace/gitlab-development-kit
-GITLAB_UPDATE_GDK=true
 
-# Update GDK when env var GITLAB_UPDATE_GDK in https://gitpod.io/settings/ is set to true
-if [[ "$GITLAB_UPDATE_GDK" == true ]]; then
-    log "Updating GDK"
-    gdk update
-fi
+log "Updating GDK"
+gdk update
 
 # Ensure gdk.yml has correct instance settings
 if is_gitpod_instance; then
