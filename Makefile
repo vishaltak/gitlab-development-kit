@@ -170,6 +170,7 @@ object-storage-setup \
 openldap-setup \
 pgvector-setup \
 postgresql-sensible-defaults \
+truncate-legacy-tables \
 prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
