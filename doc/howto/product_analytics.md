@@ -11,26 +11,49 @@
 
 ### Feature flags
 
-Product Analytics is currently behind the `product_analytics_dashboards` feature flag.
+Product analytics features are behind feature flags and must be enabled to use them in GDK.
 
-To enable the feature flag and make the dashboards available, run: `echo "Feature.enable(:product_analytics_dashboards)" | gdk rails c`.
+- To enable product analytics and make the dashboards available, run:
 
-The product analytics settings under admin settings is currently behind the `product_analytics_admin_settings` feature flag.
+  ```shell
+  echo "Feature.enable(:product_analytics_dashboards)" | gdk rails c
+  ```
 
-To enable the feature flag and make the settings visible, run: `echo "Feature.enable(:product_analytics_admin_settings)" | gdk rails c`.
+- To enable product analytics settings and make them visible, run:
 
-The project menu item is currently behind the `combined_analytics_dashboards` feature flag.
+  ```shell 
+  echo "Feature.enable(:product_analytics_admin_settings)" | gdk rails c
+  ```
 
-To enable the feature flag and make the menu item visible, run: `echo "Feature.enable(:combined_analytics_dashboards)" | gdk rails c`.
+- To enable the project menu item and make it visible, run:
 
-The snowplow support is currently behind the `product_analytics_snowplow_support` feature flag.
+  ```shell
+  echo "Feature.enable(:combined_analytics_dashboards)" | gdk rails c
+  ```
 
-To enable the feature flag and make the menu item visible, run: `echo "Feature.enable(:product_analytics_snowplow_support)" | gdk rails c`.
+- To enable Snowplow support, first [set up Snowplow instead of Jitsu](#set-up-snowplow-instead-of-jitsu) and then run:
+
+  ```shell
+  echo "Feature.enable(:product_analytics_snowplow_support)" | gdk rails c
+  ```
+
+- To enable the dashboard and visualization editors and make the editors visible, run:
+
+  ```shell
+  echo "Feature.enable(:combined_analytics_dashboards_editor)" | gdk rails c
+  ```
+
+  The editors are not compatible with Snowplow and should only be enabled with Snowplow for testing purposes.
 
 ### Set up the Product Analytics DevKit
 
-- Follow the [instructions](https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit) to set up the Product Analytics DevKit on your machine.
-- Continue following the [instructions](https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit#connecting-gdk-to-your-devkit) to connect the GDK to the Product Analytics DevKit.
+1. Follow the [instructions](https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit) to set up the Product Analytics DevKit on your machine.
+1. Continue following the [instructions](https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit#connecting-gdk-to-your-devkit) to connect the GDK to the Product Analytics DevKit.
+
+#### Set up Snowplow instead of Jitsu
+
+If you have the `product_analytics_snowplow_support` feature flag enabled, you must set up your Product Analytics DevKit to use
+[Snowplow instead of Jitsu](https://gitlab.com/gitlab-org/analytics-section/product-analytics/devkit#snowplow-instead-of-jitsu-work-in-progress).
 
 ### View Product Analytics dashboards
 
