@@ -1235,6 +1235,20 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'license' do
+    describe 'customer_portal_url' do
+      it 'returns staging customer portal URL by default' do
+        expect(config.license.customer_portal_url).to eq('https://customers.staging.gitlab.com')
+      end
+    end
+
+    describe 'license_mode' do
+      it 'returns test by default' do
+        expect(config.license.license_mode).to eq('test')
+      end
+    end
+  end
+
   describe 'gitlab' do
     describe 'auto_update' do
       it 'is enabled by default' do
