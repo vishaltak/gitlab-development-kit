@@ -6,7 +6,7 @@ GDK_CACHE_DIR := $(gitlab_development_root)/.cache
 FLAG_FILE := $(GDK_CACHE_DIR)/.truncate_tables
 
 .PHONY: truncate-legacy-tables
-truncate-legacy-tables: start-truncate do-truncate
+truncate-legacy-tables: start-truncate ensure-databases-running do-truncate
 
 .PHONY: start-truncate
 start-truncate:
