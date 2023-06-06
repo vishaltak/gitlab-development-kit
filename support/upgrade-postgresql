@@ -28,24 +28,33 @@ class PostgresUpgrader
   end
 
   def upgrade!
+    success = true
+
     unless upgrade_needed?(target_version)
       GDK::Output.success "'#{current_data_dir}' is already compatible with PostgreSQL #{target_version}."
       return
     end
 
-    gdk_stop
-    init_db_in_target_path
-    pgvector_setup
-    rename_current_data_dir
-    pg_upgrade
-    promote_new_db
-    gdk_reconfigure
+    begin
+      gdk_stop
+      init_db_in_target_path
+      pgvector_setup
+      rename_current_data_dir
+      pg_upgrade
+      promote_new_db
+      gdk_reconfigure
+    rescue StandardError => e
+      success = false
+      GDK::Output.error "An error occurred: #{e}"
+      GDK::Output.warn 'Rolling back..'
+      rename_current_data_dir_back
+    end
 
-    GDK::Output.success "Upgraded '#{current_data_dir}' from PostgreSQL #{current_version} to #{target_version}."
-  rescue StandardError => e
-    GDK::Output.error "An error occurred: #{e}"
-    GDK::Output.warn "Rolling back.."
-    rename_current_data_dir_back
+    if success
+      GDK::Output.success "Upgraded '#{current_data_dir}' from PostgreSQL #{current_version} to #{target_version}."
+    else
+      GDK::Output.warn "Upgrade failed. Rolled back to the original PostgreSQL #{current_version}."
+    end
   end
 
   private
