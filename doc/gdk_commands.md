@@ -227,7 +227,7 @@ gdk reset-data
 
 If you want to return your GDK instance to a pristine state, which installs
 Ruby gems and Node modules from scratch for GitLab, Gitaly, cleaning temporary
-directories, and cleaning the global Golang cache:
+directories, and cleaning the global Go cache:
 
 ```shell
 gdk pristine

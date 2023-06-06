@@ -199,7 +199,7 @@ These steps are based on the instructions in <https://gitlab.com/gitlab-org/gitl
 
 These steps are based on the instructions in <https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/advanced.md#ubuntu-and-debian>.
 
-1. Install `git`, `make`, `yarn`, PostgreSQL, and Golang:
+1. Install `git`, `make`, `yarn`, PostgreSQL, and Go:
     1. `sudo apt install git`
     1. `sudo apt install make`
     1. `sudo apt install yarnpkg`

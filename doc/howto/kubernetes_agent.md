@@ -274,7 +274,7 @@ To configure GDK and KAS:
    ```
 
    Sign out and sign back in to the `dev` account in order for changes to take effect.
-   You should be using now the system version of Golang:
+   You should be using now the system version of Go:
 
    ```shell
    $ which go
