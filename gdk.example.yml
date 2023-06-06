@@ -236,6 +236,8 @@ object_store:
       bucket: terraform
     pages:
       bucket: pages
+    ci_secure_files:
+      bucket: ci-secure-files
   port: 9000
 omniauth:
   github:

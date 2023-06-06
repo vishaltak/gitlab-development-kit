@@ -150,6 +150,8 @@ object_store:
       bucket: terraform
     pages:
       bucket: pages
+    ci_secure_files:
+      bucket: ci-secure-files
 ```
 
 ###### Google Cloud Storage
@@ -179,6 +181,8 @@ object_store:
       bucket: terraform
     pages:
       bucket: pages
+    ci_secure_files:
+      bucket: ci-secure-files
 ```
 
 ###### Microsoft Azure Blob storage
@@ -211,6 +215,8 @@ object_store:
       bucket: terraform
     pages:
       bucket: pages
+    ci_secure_files:
+      bucket: ci-secure-files      
 ```
 
 #### GDK settings

@@ -364,7 +364,8 @@ module GDK
           'packages' => { 'bucket' => 'packages' },
           'dependency_proxy' => { 'bucket' => 'dependency-proxy' },
           'terraform_state' => { 'bucket' => 'terraform' },
-          'pages' => { 'bucket' => 'pages' }
+          'pages' => { 'bucket' => 'pages' },
+          'ci_secure_files' => { 'bucket' => 'ci-secure-files' }
         }
       end
     end
