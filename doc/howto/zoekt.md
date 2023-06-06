@@ -70,5 +70,5 @@ No preset version installed for command go
 Please install a version by running one of the following:
 ```
 
-We cannot use the same Golang version we use for other tools because the supported
+We cannot use the same Go version we use for other tools because the supported
 version is controlled by Zoekt.
