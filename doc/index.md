@@ -1,5 +1,7 @@
 # Install and configure GDK
 
+[[_TOC_]]
+
 GitLab Development Kit (GDK) provides a local environment for developing GitLab and related projects. For example:
 
 - [Gitaly](https://gitlab.com/gitlab-org/gitaly).
@@ -228,7 +230,37 @@ For instructions on how to generate a developer license, see [Developer onboardi
 
 The developer license is generated for you to get access to [Premium or Ultimate](https://about.gitlab.com/handbook/marketing/brand-and-product-marketing/product-and-solution-marketing/tiers/) features in your GDK. You must add this license to your GDK instance, not your GitLab.com account.
 
-For information about adding your license to GitLab, see [Activate GitLab EE with a license file or key](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
+### Configure developer license in GDK
+
+To configure your developer license in GDK:
+
+1. [Add your developer license](https://docs.gitlab.com/ee/user/admin_area/license_file.html) to GitLab running in GDK.
+1. Add the following configuration to your `gdk.yml` depending on your license type:
+
+   - If you're using a license generated from the production Customers Portal, run:
+
+     ```shell
+     gdk config set license.customer_portal_url https://customers.gitlab.com
+     gdk config set license.license_mode prod
+     ```
+
+   - To use custom settings, add:
+
+     ```shell
+     gdk config set license.customer_portal_url <customer portal url>
+     gdk config set license.license_mode <license mode>
+     ```
+
+1. Run `gdk reconfigure` to reconfigure GDK.
+1. Run `gdk restart` to restart GDK.
+
+If you're using a license generated from the staging Customers Portal, you don't need to add anything to `gdk.yml`. The following environment variables are
+already set by default:
+
+```shell
+export GITLAB_LICENSE_MODE=test
+export CUSTOMER_PORTAL_URL=https://customers.staging.gitlab.com
+```
 
 ## Post-installation
 
