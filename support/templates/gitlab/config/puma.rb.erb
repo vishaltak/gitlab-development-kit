@@ -85,7 +85,9 @@ tag 'gitlab-puma-worker'
 # the given timeout. If not the worker process will be restarted. Default
 # value is 60 seconds.
 #
-worker_timeout 60
+worker_timeout ENV.fetch('PUMA_WORKER_TIMEOUT', 60)
+
+worker_boot_timeout ENV.fetch('PUMA_WORKER_BOOT_TIMEOUT', 60)
 
 # https://github.com/puma/puma/blob/master/5.0-Upgrade.md#lower-latency-better-throughput
 wait_for_less_busy_worker ENV.fetch('PUMA_WAIT_FOR_LESS_BUSY_WORKER', 0.001).to_f

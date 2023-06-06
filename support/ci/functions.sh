@@ -11,7 +11,7 @@ cd_into_checkout_path() {
 }
 
 init() {
-  sudo /sbin/sysctl fs.inotify.max_user_watches=524288
+  sudo /sbin/sysctl fs.inotify.max_user_watches=1048576
 
   install_gdk_clt
 }

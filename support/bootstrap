@@ -41,6 +41,24 @@ asdf_install_tools() {
     fi
   fi
 
+  # We need to manually install Ruby patches for now as it's not supported to
+  # set version specific patches e.g. https://github.com/asdf-vm/asdf-ruby/pull/202
+  #
+  # shellcheck disable=SC2034
+  ASDF_RUBY_PATCHES_3_1_4=$'https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.1/fix-ruby-xfree-for-libxml2.patch\nhttps://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.1/thread-memory-allocations.patch'
+  # shellcheck disable=SC2034
+  ASDF_RUBY_PATCHES_3_2_2=$'https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.2/fix-ruby-xfree-for-libxml2.patch\nhttps://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.2/thread-memory-allocations.patch'
+
+  grep -E "^ruby " ".tool-versions" | while IFS= read -r line
+  do
+    echo "$line" | cut -d ' ' -f2- | xargs -n1 | while IFS= read -r version
+    do
+      version_patches=$(echo "ASDF_RUBY_PATCHES_${version}" | tr '.' '_')
+
+      bash -c "RUBY_APPLY_PATCHES='${!version_patches}' asdf install ruby ${version}"
+    done
+  done
+
   bash -c "MAKELEVEL=0 ${asdf_arch_opts} asdf install"
 
   return $?
