@@ -12,27 +12,16 @@ For these instructions, we assume that you are running all commands from the GDK
 
 The first step is to prepare both primary and secondary databases for replication and enabling load balancing.
 
-1. Initialize the secondary database:
-
-    ```shell
-    make postgresql-replication/data
-    ```
-
 1. Set up primary replication access and role:
 
     ```shell
     make postgresql-replication-primary
     ```
 
-1. Remove the secondary database data as we will be replacing the data with that from the primary:
+1. Create the replica database:
 
     ```shell
-    rm -rf postgresql-replica/data/*
-    ```
-
-1. Copy data from primary to secondary with `pg_basebackup`:
-
-    ```shell
+    mkdir -p postgresql-replica
     pg_basebackup -R -h $(pwd)/postgresql -D $(pwd)/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
     ```
 

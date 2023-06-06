@@ -18,27 +18,11 @@ For these instructions, we assume that you are running all commands from the GDK
 ## Prepare your environment
 
 1. Set up multiple Postgres instances and your first replica following the [database load balancing documentation](database_load_balancing.md).
+
 1. Create another replica:
 
     ```shell
-    make postgresql-replication-2/data
-    ```
-
-1. Configure replication on that 2nd replica
-
-    ```shell
-    make postgresql-replication-2/access
-    ```
-
-1. Remove the 2nd replica database data as we will be replacing the data with that from the primary:
-
-    ```shell
-    rm -rf postgresql-replica-2/data/*
-    ```
-
-1. Copy data from primary instance to the 2nd replica with `pg_basebackup`:
-
-    ```shell
+    mkdir -p postgresql-replica-2
     pg_basebackup -R -h $(pwd)/postgresql -D $(pwd)/postgresql-replica-2/data -P -U gitlab_replication --wal-method=fetch
     ```
 
