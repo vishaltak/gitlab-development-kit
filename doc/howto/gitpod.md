@@ -28,7 +28,7 @@ an iPad!
 
 Hint: If you don't see a "Gitpod" button, open the dropdown of the "Web IDE" split button.
 
-![Gitpod button in repository view](img/gitpod-button-repository.png)
+![Gitpod button in repository view](img/gitpod-button-repository.jpg)
 
 If you have never used Gitpod before, you must:
 
@@ -36,10 +36,9 @@ If you have never used Gitpod before, you must:
 1. Connect the Gitpod account to your GitLab account.
 
 After that is done, you just wait 7-8 minutes for the entire setup to finish, and
-you see the GDK UI pop up in the right sidebar. If you see 504 Gateway Time-out error,
-click the reload button in the right side bar.
+you'll see a notification on the bottom right corner to open the GDK UI, Open the port in browser.
 
-![GDK in Gitpod](img/gdk-in-gitpod.png)
+![GDK in Gitpod](img/gdk-in-gitpod.jpg)
 
 Sign in to GitLab using the default username `root` and password `5iveL!fe`. You must
 immediately change that password after you log in the first time. Every new Gitpod workspace
@@ -60,13 +59,13 @@ The easiest way to switch to another branch is to use the UI functionality:
 
 1. Click on the current branch name in the blue bottom bar.
 
-   ![Switching branch in Gitpod](img/switch-branch-gitpod.png)
+   ![Switching branch in Gitpod](img/switch-branch-gitpod.jpg)
 
 1. A context menu appears with a list of other branches where you can type in
    the name of the branch you want to switch to and select it as soon as it appears in
    the list.
 
-   ![Branch context menu in Gitpod.png](img/branch-context-menu.png)
+   ![Branch context menu in Gitpod.png](img/branch-context-menu.jpg)
 
 Alternatively, you can also use the terminal to check out a branch:
 
@@ -82,7 +81,7 @@ If you have made changes to any of the files and want to push and commit them:
 1. Navigate to the **Source Control: Git** tab in the left sidebar. There you also
    see all files that have been changed.
 
-   ![Source Control Tab in Gitpod.png](img/source-control-gitpod.png)
+   ![Source Control Tab in Gitpod.png](img/source-control-gitpod.jpg)
 
 1. In this view, you can then decide which changes you want to add to the commit.
    Usually that would be all files, so you can just stage all changes by clicking on
@@ -91,13 +90,13 @@ If you have made changes to any of the files and want to push and commit them:
    you can commit by clicking the checkmark icon at the top of the **Source Control**
    section.
 
-   ![Stage and Commit workflow](img/stage-commit-icons.png)
+   ![Stage and Commit workflow](img/stage-commit-icons.jpg)
 
 1. Push your changes by using the **Synchronize changes** action in the bottom
    blue toolbar. If the Gitpod UI asks you which way you want to synchronize your
    changes, you can just choose **Push and pull**.
 
-   ![Synchronize changes in Gitpod](img/synchronize-changes.png)
+   ![Synchronize changes in Gitpod](img/synchronize-changes.jpg)
 
 ## Configure additional features
 
