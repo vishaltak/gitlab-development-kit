@@ -17,11 +17,15 @@ task 'preflight-update-checks' do
   if postgresql.installed? && postgresql.upgrade_needed?
     message = <<~MESSAGE
       PostgreSQL data directory is version #{postgresql.current_version} and must be upgraded to version #{postgresql.class.target_version} before GDK can be updated.
-
-      Run 'support/upgrade-postgresql' to back up and upgrade the PostgreSQL data directory.
-
     MESSAGE
 
-    GDK::Output.abort(message)
+    GDK::Output.warn(message)
+
+    prompt_response = GDK::Output.prompt("This will run 'support/upgrade-postgresql' to back up and upgrade the PostgreSQL data directory. Are you sure? [y/N]").match?(/\Ay(?:es)*\z/i)
+    next unless prompt_response
+
+    postgresql.upgrade
+
+    GDK::Output.success("Successfully ran 'support/upgrade-postgresql' script!")
   end
 end

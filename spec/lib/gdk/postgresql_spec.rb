@@ -225,6 +225,22 @@ RSpec.describe GDK::Postgresql do
     end
   end
 
+  describe '#upgrade' do
+    let(:cmd) { 'support/upgrade-postgresql' }
+    let(:shellout_double) { instance_double(Shellout, success?: true) }
+
+    before do
+      allow(Shellout).to receive(:new).with(cmd).and_return(shellout_double)
+      allow(shellout_double).to receive(:stream)
+    end
+
+    it 'runs the upgrade script' do
+      expect(shellout_double).to receive(:stream)
+
+      subject.upgrade
+    end
+  end
+
   def stub_pg_data_dir
     allow(config).to receive(:postgresql).and_return(postgresql_config)
     allow(pg_data_dir).to receive(:join).with('PG_VERSION').and_return(pg_version_file)

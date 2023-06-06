@@ -62,6 +62,12 @@ module GDK
       current_version < target_version.to_f
     end
 
+    def upgrade
+      cmd = 'support/upgrade-postgresql'
+
+      Shellout.new(cmd).stream
+    end
+
     def db_exists?(dbname)
       Shellout.new(pg_cmd(database: dbname)).tap(&:try_run).success?
     end
