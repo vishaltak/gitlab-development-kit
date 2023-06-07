@@ -59,7 +59,7 @@ In these instructions, we assume you [set up `registry.test`](local_network.md).
      enabled: true
      host: registry.test
      self_signed: false
-     auth_enabled: false
+     auth_enabled: true
      listen_address: 0.0.0.0
    ```
 
@@ -394,7 +394,6 @@ build:
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
-    # login only required if `auth_enabled: true`
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - docker pull $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA || true
     - docker build -t $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA .
@@ -433,7 +432,6 @@ build:
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
-    # login only required if `auth_enabled: true`
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - docker pull $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA || true
     - docker build -t $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA .
@@ -687,10 +685,10 @@ Flags:
 #### Missing container repositories in the UI
 
 The container registry UI may only show one repository even after pushing two or more repositories.
-This may happen if authentication between the registry and GitLab is disabled.
+This may happen if authentication between the registry and GitLab is disabled (`auth_enabled: false`).
 To enable authentication follow these steps:
 
-1. Under the `registry` section in your `gdk.yml` file set:
+1. Under the `registry` section in your `gdk.yml` file, make sure that `auth_enabled` is set to `true`:
 
    ```yaml
    registry:
