@@ -7,6 +7,8 @@ CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 DEFAULT_GEMS_PATH="${HOME}/.default-gems"
 
+TOOL_VERSIONS_FILE="$ROOT_PATH/.tool-versions"
+
 export ASDF_RUST_PROFILE=minimal
 export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
@@ -74,7 +76,14 @@ asdf_update_release() {
 }
 
 asdf_update_tools() {
-  # Install all tools specified in .tool-versions
+  echo "INFO: Generating '${TOOL_VERSIONS_FILE}'.."
+  echo
+  if ! bash -c "support/asdf-combine --quiet"; then
+   echo "ERROR: Failed to execute 'support/asdf-combine'."
+   exit 1
+  fi
+  bash -c "cat ${TOOL_VERSIONS_FILE}| egrep -Ev '^(#|$)'"
+  echo
   bash -c "MAKELEVEL=0 asdf install"
 
   return $?
@@ -112,7 +121,7 @@ asdf_install_update_plugins() {
 }
 
 asdf_reshim() {
-  grep -Ev "^#|^$" "$ROOT_PATH/.tool-versions" | while IFS= read -r line
+  grep -Ev "^#|^$" "$TOOL_VERSIONS_FILE" | while IFS= read -r line
   do
     plugin=$(echo "$line" | cut -d ' ' -f1)
     echo "$line" | cut -d ' ' -f2- | xargs -n1 | while IFS= read -r version
@@ -170,10 +179,10 @@ asdf_check_rvm_rbenv() {
 
 gdk_install_gdk_clt() {
   if [[ -x "${ROOT_PATH}/bin/gdk" && "$("${ROOT_PATH}/bin/gdk" config get gdk.use_bash_shim)" == "true" ]]; then
-    echo "INFO: Installing gdk shim.."
+    header_print "Installing gdk shim.."
     gdk_install_shim
   else
-    echo "INFO: Installing gitlab-development-kit Ruby gem.."
+    header_print "Installing gitlab-development-kit Ruby gem.."
     gdk_install_gem
   fi
 }

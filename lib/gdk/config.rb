@@ -593,7 +593,7 @@ module GDK
       path(:dir) { config.gdk_root.join('postgresql') }
       path(:data_dir) { config.postgresql.dir.join('data') }
       string(:host) { config.postgresql.dir.to_s }
-      string(:active_version) { GDK::Postgresql.target_version.to_s }
+      string(:active_version) { 13.9 }
       string(:__active_host) { GDK::Postgresql.new.use_tcp? ? config.postgresql.host : '' }
 
       # Kept for backward compatibility. Use replica:root_directory instead

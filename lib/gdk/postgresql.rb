@@ -2,12 +2,8 @@
 
 module GDK
   class Postgresql
-    def self.target_version
-      Gem::Version.new(Asdf::ToolVersions.new.default_version_for('postgres'))
-    end
-
     def self.target_version_major
-      target_version.canonical_segments[0]
+      Gem::Version.new(GDK.config.postgresql.active_version).canonical_segments[0]
     end
 
     def initialize(config = GDK.config)

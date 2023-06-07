@@ -47,6 +47,7 @@ default:
   before_script:
     - sysctl -n -w fs.inotify.max_user_watches=524288 || true
     - test -f support/ci/display_debugging && support/ci/display_debugging || true
+    - cp .tool-versions-gdk .tool-versions
 
 .cached_variables: &cached_variables
   BUNDLE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle

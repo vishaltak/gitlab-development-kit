@@ -27,6 +27,7 @@
 /.node-version
 /.ruby-gemset
 /.ssh/
+/.tool-versions
 /.vagrant/
 /.vscode/
 /Procfile

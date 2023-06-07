@@ -15,7 +15,7 @@ asdf_update() {
     error "Failed to configure asdf." >&2
   fi
 
-  header_print "Updating asdf release, plugins, and tools"
+  header_print "Updating asdf release and plugins"
   if ! asdf_update_release; then
     error "Failed to update asdf release." >&2
   fi
@@ -24,10 +24,12 @@ asdf_update() {
     error "Failed to update some asdf plugins." >&2
   fi
 
+  header_print "Updating asdf tools"
   if ! asdf_update_tools; then
     error "Failed to update some asdf tools." >&2
   fi
 
+  header_print "Reshimming asdf tools"
   if ! asdf_reshim; then
     error "Failed to reshim asdf." >&2
   fi
