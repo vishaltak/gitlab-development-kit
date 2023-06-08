@@ -98,7 +98,6 @@ This command configures `git` to use `SSH` for all GitLab.com URLs.
 - Review the [troubleshooting information](doc/troubleshooting).
 - Wider community members can use the following:
   - [GitLab community Discord](https://discord.gg/gitlab).
-  - [Gitter contributors room](https://gitter.im/gitlab/contributors).
   - [GitLab Forum](https://forum.gitlab.com/c/community/39).
 
 ## Contributing to GitLab Development Kit
