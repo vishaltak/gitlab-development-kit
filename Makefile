@@ -227,7 +227,7 @@ rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
 .PHONY: ensure-databases-setup
-ensure-databases-setup: Procfile postgresql/data gitaly-update ensure-databases-running
+ensure-databases-setup: Procfile postgresql/data redis/redis.conf gitaly-update ensure-databases-running
 
 .PHONY: ensure-databases-running
 ensure-databases-running:
