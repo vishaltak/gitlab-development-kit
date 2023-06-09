@@ -165,7 +165,12 @@ class SecondaryAdder
     configure_secondary_gdk_yml
 
     primary_asdf_opt_out = run_command_for_stdout(primary_gdk, 'gdk config get asdf.opt_out')
-    run_command_arr(secondary_gdk, %w[make bootstrap]) unless primary_asdf_opt_out == 'true'
+
+    if primary_asdf_opt_out == 'true'
+      gdk_set(secondary_gdk, 'asdf.opt_out', primary_asdf_opt_out)
+    else
+      run_command_arr(secondary_gdk, %w[make bootstrap])
+    end
 
     run_command_arr(secondary_gdk, %W[gdk install gitlab_repo=#{primary_gitlab}]) unless secondary_gitlab.exist?
     copy_db_key_base_to_secondary
