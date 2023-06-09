@@ -46,16 +46,11 @@ class AddSecondaryOptionParser
       parser = OptionParser.new do |opts|
         opts.banner = "Usage: #{__FILE__} [options] <target-gdk-directory>\n\n"
 
-        opts.on('--primary [string]', String, 'GDK directory of primary site') do |value|
-          unless Pathname.new(value).exist?
-            $stdout.puts "Primary site must exist"
-            raise SecondaryHelpers::Done
-          end
-
+        opts.on('--primary=STRING', String, 'GDK directory of primary site') do |value|
           options.primary_gdk = value
         end
 
-        opts.on('--secondary_port [string]', String, 'Desired port of target secondary site') do |value|
+        opts.on('--secondary_port=NUMBER', String, 'Desired port of target secondary site') do |value|
           options.secondary_port = value
         end
 
@@ -69,40 +64,25 @@ class AddSecondaryOptionParser
 
       unless argv.one?
         $stdout.puts parser.help
-        $stdout.puts
-        raise SecondaryHelpers::Abort, 'Target GDK directory is required'
+        $stdout.puts 'Target GDK directory is required'
+        raise SecondaryHelpers::Done
       end
 
       options.secondary_gdk = argv.first
 
-      unless Pathname.new(options.secondary_gdk).exist?
-        $stdout.puts "Secondary site must exist"
-        $stdout.puts "Hint: Run `git clone #{Pathname.new(options.primary_gdk).realpath} #{options.secondary_gdk}`"
+      if options.primary_gdk.nil?
+        $stdout.puts parser.help
+        $stdout.puts "--primary is required"
+        raise SecondaryHelpers::Done
+      end
+
+      if options.secondary_port.nil?
+        $stdout.puts parser.help
+        $stdout.puts "--secondary_port is required"
         raise SecondaryHelpers::Done
       end
 
       options
-    end
-
-    def read_primary_gdk
-      $stdout.puts
-      $stdout.puts '>> GDK directory of primary site:'
-
-      loop do
-        primary_gdk = Readline.readline('?> ', false)&.strip
-        return primary_gdk unless primary_gdk.empty?
-
-        warn 'GDK directory of primary site is required'
-      end
-    end
-
-    def read_secondary_port
-      $stdout.puts
-      $stdout.puts '>> Desired port of target secondary site (enter to skip):'
-
-      secondary_port = Readline.readline('?> ', false)&.strip
-      secondary_port = nil if secondary_port.empty?
-      secondary_port
     end
   end
 end
@@ -117,6 +97,8 @@ class SecondaryAdder
   end
 
   def execute
+    check_primary_gdk_exists
+    check_secondary_gdk_exists
     check_env_vars
 
     initialize_vars
@@ -129,6 +111,21 @@ class SecondaryAdder
 
   private
 
+  def check_primary_gdk_exists
+    return if Pathname.new(options.primary_gdk).exist?
+
+    $stdout.puts "Primary site must exist"
+    raise SecondaryHelpers::Done
+  end
+
+  def check_secondary_gdk_exists
+    return if Pathname.new(options.secondary_gdk).exist?
+
+    $stdout.puts "Secondary site must exist"
+    $stdout.puts "Hint: Run `git clone #{Pathname.new(options.primary_gdk).realpath} #{options.secondary_gdk}`"
+    raise SecondaryHelpers::Done
+  end
+
   # TODO https://gitlab.com/gitlab-org/gitlab/-/issues/412280
   def check_env_vars
     return unless ENV['GITLAB_VALIDATE_DATABASE_CONFIG'].nil?
@@ -139,9 +136,6 @@ class SecondaryAdder
   end
 
   def initialize_vars
-    options.primary_gdk ||= AddSecondaryOptionParser.read_primary_gdk
-    options.secondary_port ||= AddSecondaryOptionParser.read_secondary_port
-
     @primary_gdk = Pathname.new(options.primary_gdk).realpath
     @secondary_gdk = Pathname.new(options.secondary_gdk).realpath
     @primary_gitlab = primary_gdk.join('gitlab')
