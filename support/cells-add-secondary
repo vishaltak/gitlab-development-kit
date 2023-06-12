@@ -1,0 +1,267 @@
+#!/usr/bin/env ruby
+#
+# frozen_string_literal: true
+
+#
+# Add target GDK as a Cells secondary
+#
+# Prerequisites
+#
+# * Have a primary GDK working
+# * Have another clone of GDK for the secondary site, but no need to `make bootstrap` or `gdk install`
+#
+# Notes
+#
+# * Set GDK_DEBUG=true to increase output verbosity
+#
+# Example:
+#
+#   ./support/cells-add-secondary --secondary-port 3001 --primary . ../gdk2
+#
+
+require 'optparse'
+require 'yaml'
+require 'fileutils'
+require 'readline'
+require 'pathname'
+require 'English'
+require_relative '../lib/gdk'
+
+module SecondaryHelpers
+  Abort = Class.new(StandardError)
+  Done = Class.new(StandardError)
+end
+
+class AddSecondaryOptionParser
+  Options = Struct.new(
+    :primary_gdk,
+    :secondary_gdk,
+    :secondary_port
+  )
+
+  class << self
+    def parse(argv)
+      options = Options.new
+
+      parser = OptionParser.new do |opts|
+        opts.banner = "Usage: #{__FILE__} [options] <target-gdk-directory>\n\n"
+
+        opts.on('--primary=STRING', String, 'GDK directory of primary site') do |value|
+          options.primary_gdk = value
+        end
+
+        opts.on('--secondary_port=NUMBER', String, 'Desired port of target secondary site') do |value|
+          options.secondary_port = value
+        end
+
+        opts.on('-h', '--help', 'Print help message') do
+          $stdout.puts opts
+          raise SecondaryHelpers::Done
+        end
+      end
+
+      parser.parse!(argv)
+
+      unless argv.one?
+        $stdout.puts parser.help
+        $stdout.puts 'Target GDK directory is required'
+        raise SecondaryHelpers::Done
+      end
+
+      options.secondary_gdk = argv.first
+
+      if options.primary_gdk.nil?
+        $stdout.puts parser.help
+        $stdout.puts "--primary is required"
+        raise SecondaryHelpers::Done
+      end
+
+      if options.secondary_port.nil?
+        $stdout.puts parser.help
+        $stdout.puts "--secondary_port is required"
+        raise SecondaryHelpers::Done
+      end
+
+      options
+    end
+  end
+end
+
+class SecondaryAdder
+  include SecondaryHelpers
+
+  attr_reader :options, :primary_gdk, :secondary_gdk, :primary_gitlab, :secondary_gitlab, :secondary_port
+
+  def initialize(options)
+    @options = options
+  end
+
+  def execute
+    check_primary_gdk_exists
+    check_secondary_gdk_exists
+    check_env_vars
+
+    initialize_vars
+
+    configure_primary
+    configure_secondary
+
+    restart_both
+  end
+
+  private
+
+  def check_primary_gdk_exists
+    return if Pathname.new(options.primary_gdk).exist?
+
+    $stdout.puts "Primary site must exist"
+    raise SecondaryHelpers::Done
+  end
+
+  def check_secondary_gdk_exists
+    return if Pathname.new(options.secondary_gdk).exist?
+
+    $stdout.puts "Secondary site must exist"
+    $stdout.puts "Hint: Run `git clone #{Pathname.new(options.primary_gdk).realpath} #{options.secondary_gdk}`"
+    raise SecondaryHelpers::Done
+  end
+
+  # TODO https://gitlab.com/gitlab-org/gitlab/-/issues/412280
+  def check_env_vars
+    return unless ENV['GITLAB_VALIDATE_DATABASE_CONFIG'].nil?
+
+    $stdout.puts "GITLAB_VALIDATE_DATABASE_CONFIG env var missing. You need to set `export GITLAB_VALIDATE_DATABASE_CONFIG=0`"
+
+    raise SecondaryHelpers::Done
+  end
+
+  def initialize_vars
+    @primary_gdk = Pathname.new(options.primary_gdk).realpath
+    @secondary_gdk = Pathname.new(options.secondary_gdk).realpath
+    @primary_gitlab = primary_gdk.join('gitlab')
+    @secondary_gitlab = secondary_gdk.join('gitlab')
+    @secondary_port = options.secondary_port
+
+    print_vars
+  end
+
+  def print_vars
+    $stdout.puts "Primary site: #{primary_gdk}"
+    $stdout.puts "Secondary site: #{secondary_gdk}"
+    $stdout.puts "Secondary site port: #{secondary_port}"
+  end
+
+  def configure_primary
+    run_command_arr(primary_gdk, %w[gdk start])
+  end
+
+  def configure_secondary
+    configure_secondary_gdk_yml
+
+    primary_asdf_opt_out = run_command_for_stdout(primary_gdk, 'gdk config get asdf.opt_out')
+
+    if primary_asdf_opt_out == 'true'
+      gdk_set(secondary_gdk, 'asdf.opt_out', primary_asdf_opt_out)
+    else
+      run_command_arr(secondary_gdk, %w[make bootstrap])
+    end
+
+    run_command_arr(secondary_gdk, %W[gdk install gitlab_repo=#{primary_gitlab}]) unless secondary_gitlab.exist?
+    copy_db_key_base_to_secondary
+  end
+
+  def configure_secondary_gdk_yml
+    gdk_set(secondary_gdk, 'port', secondary_port)
+    gdk_set(secondary_gdk, 'sshd.enabled', false)
+
+    primary_postgresql_host = run_command_for_stdout(primary_gdk, 'gdk config get postgresql.host')
+    primary_postgresql_port = run_command_for_stdout(primary_gdk, 'gdk config get postgresql.port')
+    gdk_set(secondary_gdk, 'cells.enabled', 'true')
+    gdk_set(secondary_gdk, 'cells.postgresql_clusterwide.host', primary_postgresql_host)
+    gdk_set(secondary_gdk, 'cells.postgresql_clusterwide.port', primary_postgresql_port)
+  end
+
+  def gdk_set(pathname, key, value)
+    cmd = %w[gdk config set] << key.to_s << value.to_s
+    run_command_arr(pathname.to_s, cmd)
+  end
+
+  def secondary_gdk_gitlab_directory_exists?
+    retval = secondary_gitlab.exist? && secondary_gitlab.directory?
+    $stdout.puts "Secondary GDK gitlab directory #{retval ? 'exists' : 'does not exist'}"
+    retval
+  end
+
+  # Copy the secret key to the secondary so it can decrypt data in the PG DB
+  # which was encrypted by the primary.
+  def copy_db_key_base_to_secondary
+    db_key_base = read_db_key_base(primary_gitlab)
+    write_db_key_base(secondary_gitlab, db_key_base)
+  end
+
+  def read_db_key_base(rails_dir)
+    secrets_file = rails_dir.join('config', 'secrets.yml')
+
+    data = YAML.load_file secrets_file
+    data['development']['db_key_base']
+  end
+
+  def write_db_key_base(rails_dir, new_db_key_base)
+    secrets_file = rails_dir.join('config', 'secrets.yml')
+
+    data = YAML.load_file secrets_file
+    data['development']['db_key_base'] = new_db_key_base
+    File.open(secrets_file, 'w') { |f| YAML.dump(data, f) }
+  end
+
+  def run_command_arr(dir, cmd_arr)
+    # sh = Shellout.new(*cmd_arr, chdir: dir.to_s)
+    # TODO: Prefer `chdir` option and tokenized commands.
+    # But `chdir` does not work when calling `gdk`.
+    # Begin hack
+    cmd_arr = %W[cd #{dir} &&] + cmd_arr
+    cmd = cmd_arr.join(' ')
+    sh = Shellout.new(cmd)
+    # End hack
+
+    $stdout.puts sh.command
+    sh.execute
+
+    raise SecondaryHelpers::Abort unless sh.success?
+
+    true
+  end
+
+  def run_command_for_stdout(dir, cmd)
+    # sh = Shellout.new(cmd, chdir: dir.to_s)
+    # Begin hack
+    cmd = "cd #{dir} && #{cmd}"
+    sh = Shellout.new(cmd)
+    # End hack
+
+    $stdout.puts sh.command
+    sh.execute
+
+    raise SecondaryHelpers::Abort unless sh.success?
+
+    sh.read_stdout
+  end
+
+  def restart_both
+    run_command_arr(primary_gdk, %w[gdk restart])
+    run_command_arr(secondary_gdk, %w[gdk restart])
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  begin
+    options = AddSecondaryOptionParser.parse(ARGV)
+    SecondaryAdder.new(options).execute
+  rescue SecondaryHelpers::Abort => e
+    warn e.message
+    warn e.backtrace.join("\n")
+    exit 1
+  rescue SecondaryHelpers::Done
+    exit
+  end
+end
