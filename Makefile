@@ -96,7 +96,9 @@ pgvector-setup \
 prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
-postgresql-sensible-defaults
+postgresql-sensible-defaults \
+postgresql-replica-setup \
+postgresql-replica-2-setup
 
 # This is used by `gdk install`
 #
@@ -162,7 +164,9 @@ pgvector-setup \
 postgresql-sensible-defaults \
 prom-setup \
 snowplow-micro-setup \
-zoekt-setup
+zoekt-setup \
+postgresql-replica-setup \
+postgresql-replica-2-setup
 
 .PHONY: start-task
 start-task:

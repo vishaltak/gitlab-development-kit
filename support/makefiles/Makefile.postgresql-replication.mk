@@ -1,11 +1,28 @@
 psql := $(postgresql_bin_dir)/psql
 
-postgresql-replication-primary: postgresql-replication/role postgresql-replication/config
+.PHONY: postgresql-replica-setup
+ifeq ($(postgresql_replica_enabled),true)
+postgresql-replica-setup: postgresql-replication/config postgresql-replica/data
+else
+postgresql-replica-setup:
+	@true
+endif
+
+.PHONY: postgresql-replica-2-setup
+ifeq ($(postgresql_replica_enabled2),true)
+postgresql-replica-2-setup: postgresql-replication/config postgresql-replica-2/data
+else
+postgresql-replica-2-setup:
+	@true
+endif
+
+postgresql-replica/data:
+	pg_basebackup -R -h ${postgresql_dir} -D ${postgresql_replica_data_dir} -P -U gitlab_replication --wal-method=fetch
+
+postgresql-replica-2/data:
+	pg_basebackup -R -h ${postgresql_dir} -D ${postgresql_replica_data_dir2} -P -U gitlab_replication --wal-method=fetch
 
 postgresql-replication-primary-create-slot: postgresql-replication/slot
-
-postgresql-replication/role:
-	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "DROP ROLE IF EXISTS ${postgresql_replication_user}; CREATE ROLE ${postgresql_replication_user} WITH REPLICATION LOGIN;"
 
 postgresql-replication/backup:
 	$(Q)$(eval postgresql_primary_dir := $(realpath postgresql-primary))
@@ -28,4 +45,4 @@ postgresql-replication/drop-slot:
 	$(Q)$(psql) -h ${postgresql_host} -p ${postgresql_port} -d postgres -c "SELECT * FROM pg_drop_replication_slot('gitlab_gdk_replication_slot');"
 
 postgresql-replication/config:
-	$(Q)./support/postgres-replication ${postgresql_dir}
+	$(Q)./support/postgres-replication

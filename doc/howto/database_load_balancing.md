@@ -8,27 +8,6 @@ To also test service discovery for database replicas, see the [database load bal
 
 For these instructions, we assume that you are running all commands from the GDK root.
 
-## Prepare
-
-The first step is to prepare both primary and secondary databases for replication and enabling load balancing.
-
-1. Set up primary replication access and role:
-
-    ```shell
-    make postgresql-replication-primary
-    ```
-
-1. Create the replica database:
-
-    ```shell
-    mkdir -p postgresql-replica
-    pg_basebackup -R -h $(pwd)/postgresql -D $(pwd)/postgresql-replica/data -P -U gitlab_replication --wal-method=fetch
-    ```
-
-   This automatically creates `postgresql.auto.conf` in the PostgreSQL data directory. Older
-   versions stored this information in `recovery.conf`, a file that must be deleted for
-   PostgreSQL 12 to function.
-
 ## Configure GDK
 
 1. Edit `gdk.yml`:

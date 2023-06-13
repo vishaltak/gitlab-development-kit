@@ -17,21 +17,6 @@ For these instructions, we assume that you are running all commands from the GDK
 
 ## Prepare your environment
 
-1. Set up multiple Postgres instances and your first replica following the [database load balancing documentation](database_load_balancing.md).
-
-1. Create another replica:
-
-    ```shell
-    mkdir -p postgresql-replica-2
-    pg_basebackup -R -h $(pwd)/postgresql -D $(pwd)/postgresql-replica-2/data -P -U gitlab_replication --wal-method=fetch
-    ```
-
-1. You should now have 3 Postgres clusters:
-
-   1. Primary: `<gdk-root>/postgresql`
-   1. Replica 1: `<gdk-root>/postgresql-replica`
-   1. Replica 2: `<gdk-root>/postgresql-replica-2`
-
 1. Update your `gdk.yml`:
 
    ```yaml
@@ -52,6 +37,12 @@ For these instructions, we assume that you are running all commands from the GDK
     ```shell
     gdk reconfigure
     ```
+
+1. You should now have 3 Postgres clusters:
+
+   1. Primary: `<gdk-root>/postgresql`
+   1. Replica 1: `<gdk-root>/postgresql-replica`
+   1. Replica 2: `<gdk-root>/postgresql-replica-2`
 
 1. Restart GDK:
 
