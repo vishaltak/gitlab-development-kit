@@ -217,7 +217,7 @@ configure_ruby_bundler_for_gitlab() {
     if asdf_command_enabled "pg_config"; then
       current_pg_config_location=$(asdf which pg_config)
     else
-      current_pg_config_location=$(command -v pg_config)
+      current_pg_config_location=$(command -v "$(gdk config get postgresql.bin_dir)/pg_config")
     fi
 
     bundle config build.ffi "--disable-system-libffi"
