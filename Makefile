@@ -63,6 +63,11 @@ ifeq ($(shallow_clone),true)
 git_depth_param = --depth=1
 endif
 
+# List Makefile targets
+.PHONY: list
+list:
+	@make -qp | awk -F':' '/^[a-zA-Z0-9][^$$#\/\t=]*:([^=]|$$)/ {split($$1,A,/ /);for(i in A)print A[i]}' | sort -u
+
 # This is used by `gdk install`
 #
 .PHONY: all
