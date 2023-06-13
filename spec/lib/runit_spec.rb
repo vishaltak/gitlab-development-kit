@@ -153,7 +153,7 @@ RSpec.describe Runit do
         end
       end
 
-      it_behaves_like 'send sv command', %w[sv -w 20 stop /tmp/gdk/services/postgresql /tmp/gdk/services/praefect /tmp/gdk/services/redis]
+      it_behaves_like 'send sv command', %w[sv -w 20 stop /tmp/random-dir123/gdk/services/postgresql /tmp/random-dir123/gdk/services/praefect /tmp/random-dir123/gdk/services/redis]
 
       context 'when redis_cluster.enabled is true' do
         before do
@@ -165,7 +165,7 @@ RSpec.describe Runit do
           stub_gdk_yaml(config)
         end
 
-        it_behaves_like 'send sv command', %w[sv -w 20 stop /tmp/gdk/services/postgresql /tmp/gdk/services/praefect /tmp/gdk/services/redis /tmp/gdk/services/redis-cluster]
+        it_behaves_like 'send sv command', %w[sv -w 20 stop /tmp/random-dir123/gdk/services/postgresql /tmp/random-dir123/gdk/services/praefect /tmp/random-dir123/gdk/services/redis /tmp/random-dir123/gdk/services/redis-cluster]
       end
     end
 
@@ -219,7 +219,7 @@ RSpec.describe Runit do
   end
 
   def stub_services
-    stub_const('Runit::SERVICES_DIR', Pathname.new('/tmp/gdk/services'))
+    stub_const('Runit::SERVICES_DIR', Pathname.new('/tmp/random-dir123/gdk/services'))
     stub_const('Runit::ALL_DATA_ORIENTED_SERVICE_NAMES', data_service_names)
 
     allow(described_class::SERVICES_DIR).to receive(:join).and_call_original
