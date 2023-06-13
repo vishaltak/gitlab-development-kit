@@ -2,6 +2,25 @@
 
 The following are possible solutions to problems you might encounter with Ruby and GDK.
 
+## Error: `No preset version installed for command gdk`
+
+If `asdf` reports that it can't find the `gdk` command, it's because the `gitlab-development-kit` gem isn't available
+to Ruby.
+
+To fix the problem:
+
+1. Check you're using the `asdf` version of Ruby:
+
+   ```shell
+   which ruby
+   ```
+
+1. Restore the `gitlab-development-kit` gem that provides the `gdk` command:
+
+   ```shell
+   gem install gitlab-development-kit
+   ```
+
 ## Rebuilding gems with native extensions
 
 There may be times when local libraries that are used to build some gems'
