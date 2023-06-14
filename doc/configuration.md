@@ -90,6 +90,7 @@ Here are a few settings worth mentioning:
 | `webpack.port`                   | `3808`                | Also useful to configure when running GDKs in parallel. [See below for more webpack options](#webpack-settings). |
 | `gitlab.rails.bundle_gemfile`    | `Gemfile`             | Set this to where GitLab should look for Gemfile. |
 | `gitlab.cache_classes`           | `false`               | Set this to `true` to disable the automatic reloading of Ruby classes when Ruby code is changed. |
+| `gitlab.default_branch`          |  `master`             | Set this to the desired default branch name in the GitLab repository. |
 | `gitlab.gitaly_disable_request_limits`  | `false`        | Set this to `true` to disable Gitaly request limit checks in development. |
 | `gitlab_pages.host`              | `127.0.0.1.nip.io`    | Specify GitLab Pages hostname. See also the [Pages guide](howto/pages.md#hostname). |
 | `gitlab_pages.port`              | `3010`                | Specify on which port GitLab Pages should run. See also the [Pages guide](howto/pages.md#port). |
