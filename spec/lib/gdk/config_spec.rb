@@ -1257,6 +1257,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe 'default_branch' do
+      it 'is set to master by default' do
+        expect(config.gitlab.default_branch).to be('master')
+      end
+    end
+
     describe 'lefthook_enabled' do
       it 'is enabled by default' do
         expect(config.gitlab.lefthook_enabled?).to be(true)

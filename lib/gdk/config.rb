@@ -828,6 +828,7 @@ module GDK
 
     settings :gitlab do
       bool(:auto_update) { true }
+      string(:default_branch) { 'master' }
       bool(:lefthook_enabled) { true }
       path(:dir) { config.gdk_root.join('gitlab') }
       path(:log_dir) { config.gitlab.dir.join('log') }

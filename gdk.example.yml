@@ -85,6 +85,7 @@ gitaly:
 gitlab:
   auto_update: true
   cache_classes: false
+  default_branch: master
   dir: "/home/git/gdk/gitlab"
   gitaly_disable_request_limits: false
   lefthook_enabled: true
