@@ -70,10 +70,18 @@ list:
 
 # This is used by `gdk install`
 #
+# When GitLab boots, it checks to ensure the version of gitlab-shell it expects
+# (based off of https://gitlab.com/gitlab-org/gitlab/-/blob/b99664deef4af88ef33bcd0abef8b0845a81e00f/GITLAB_SHELL_VERSION)
+# matches what's checkout under <GDK_ROOT>/gitlab-shell (https://gitlab.com/gitlab-org/gitlab/-/blob/b99664deef4af88ef33bcd0abef8b0845a81e00f/config/initializers/5_backend.rb#L8).
+# We run gitlab-shell-setup here before gitlab-setup to ensure GitLab is happy.
+# We also need to run gitlab/.git _prior_ to gitlab-shell-setup because it
+# needs access to <GDK_ROOT>/gitlab/GITLAB_SHELL_VERSION
+#
 .PHONY: all
 all: preflight-checks \
-gitlab-setup \
+gitlab/.git \
 gitlab-shell-setup \
+gitlab-setup \
 gitaly-setup \
 ensure-databases-setup \
 gdk-reconfigure-task \
@@ -119,6 +127,7 @@ platform-update \
 preflight-checks \
 preflight-update-checks \
 ensure-databases-setup \
+gitlab/.git/pull \
 gitlab-shell-update \
 unlock-dependency-installers \
 gitlab-update \
