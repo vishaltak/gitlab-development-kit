@@ -51,6 +51,7 @@ gdk:
   stop_hooks:
     after: []
     before: []
+  system_packages_opt_out: false
   update_hooks:
     after: []
     before:

@@ -353,6 +353,13 @@ get_platform() {
 }
 
 setup_platform() {
+  opt_out=$(gdk config get gdk.system_packages_opt_out 2> /dev/null)
+
+  if [[ "${opt_out}" == "true" ]]; then
+    echo "INFO: Skipping system package installation because gdk.system_packages_opt_out is set to true."
+    return 0
+  fi
+
   platform=$(get_platform)
 
   echo "INFO: Setting up '$platform' platform.."

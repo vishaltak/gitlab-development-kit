@@ -233,6 +233,7 @@ There are also a few settings that configure the behavior of GDK itself:
 | `gdk.quiet`                       | `true`  | Set this to `false` to increase the level of output when updating the GDK. |
 | `gdk.auto_reconfigure`            | `true`  | Set this to `false` to not run a `gdk reconfigure` after a successful `gdk update`. |
 | `gdk.auto_rebase_projects`        | `false` | Set this to `true` to automatically rebase projects as part of a `gdk update`. |
+| `gdk.system_packages_opt_out`     | `false` | Set this to `true` if you don't want GDK to manage installation of system packages. |
 
 ##### Experimental GDK settings
 
