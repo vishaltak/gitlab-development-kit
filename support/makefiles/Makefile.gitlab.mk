@@ -3,6 +3,7 @@ gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
+default_branch ?= $(if $(gitlab_default_branch),$(gitlab_default_branch),master)
 
 gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
 
@@ -40,7 +41,7 @@ gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" master master
+	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" $(default_branch) master
 
 gitlab/.git:
 	@echo
