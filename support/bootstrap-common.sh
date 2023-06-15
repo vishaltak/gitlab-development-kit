@@ -127,10 +127,14 @@ asdf_is_available() {
   asdf version > /dev/null 2>&1
 }
 
-asdf_enabled() {
+asdf_opt_out() {
   opt_out=$(gdk config get asdf.opt_out 2> /dev/null)
 
-  asdf_is_available && [[ "${opt_out}" != "true" ]]
+  [[ "${opt_out}" == "true" ]]
+}
+
+asdf_enabled() {
+  ! asdf_opt_out && asdf_is_available
 }
 
 asdf_command_enabled() {

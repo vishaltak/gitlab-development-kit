@@ -77,10 +77,13 @@ gdk_mark_bootstrapped() {
 
   echo
   echo "INFO: Bootstrap successful!"
-  echo "INFO: To make sure GDK commands are available in this shell, run:"
-  echo
-  echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
-  echo
+
+  if ! asdf_opt_out; then
+    echo "INFO: To make sure GDK commands are available in this shell, run:"
+    echo
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
+    echo
+  fi
 }
 
 ###############################################################################
@@ -97,24 +100,26 @@ if ! setup_platform; then
   error "Failed to install set up platform." >&2
 fi
 
-echo "INFO: Installing asdf.."
-if ! asdf_install; then
-  error "Failed to install asdf." >&2
-fi
+if ! asdf_opt_out; then
+  echo "INFO: Installing asdf.."
+  if ! asdf_install; then
+    error "Failed to install asdf." >&2
+  fi
 
-echo "INFO: Installing/updating asdf plugins.."
-if ! asdf_install_update_plugins; then
-  error "Failed to install some asdf plugins." >&2
-fi
+  echo "INFO: Installing/updating asdf plugins.."
+  if ! asdf_install_update_plugins; then
+    error "Failed to install some asdf plugins." >&2
+  fi
 
-echo "INFO: Installing asdf tools.."
-if ! asdf_install_tools; then
-  error "Failed to install some asdf tools." >&2
-fi
+  echo "INFO: Installing asdf tools.."
+  if ! asdf_install_tools; then
+    error "Failed to install some asdf tools." >&2
+  fi
 
-echo "INFO: Reshimming asdf.."
-if ! asdf_reshim; then
-  error "Failed to reshim asdf." >&2
+  echo "INFO: Reshimming asdf.."
+  if ! asdf_reshim; then
+    error "Failed to reshim asdf." >&2
+  fi
 fi
 
 if ! gdk_install_gdk_clt; then
