@@ -81,7 +81,7 @@ to get a long-lived runner process, using the configuration you created in the
 last step. It stays in the foreground, outputting logs as it executes
 builds, so run it in its own terminal session.
 
-The **Runners** page (`/admin/CICD/runners`) now lists the runners. Create a project in the GitLab UI and add a
+The **Runners** page (`/admin/runners`) now lists the runners. Create a project in the GitLab UI and add a
 [`.gitlab-ci.yml`](https://docs.gitlab.com/ee/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
 watch as the runner processes the builds just as it would on a "real" install!
