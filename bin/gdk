@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+debug() {
+  local msg="$1"
+
+  if [ "${GDK_DEBUG}" = "1" ] || [ "${GDK_DEBUG}" = "true" ]; then
+    echo "GDK(DEBUG) $msg"
+  fi
+}
+
 find_gdk_root() {
   if [[ "${1}" == "/" ]]; then
     exit 1
@@ -14,6 +22,7 @@ find_gdk_root() {
 }
 
 gdk_root_path=$(find_gdk_root "$(pwd)")
+debug "gdk_root_path: $gdk_root_path"
 
 if [[ -d "${gdk_root_path}" ]]; then
   exec "${gdk_root_path}/gem/bin/gdk" "${@}"
