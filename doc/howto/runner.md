@@ -9,7 +9,7 @@ Before setting up a runner, you must have [set up the GDK](../index.md) for your
 
 You can set up:
 
-- A runner to run directly on your workstation
+- A runner to run directly on your workstation (local computer).
 - A runner in Docker.
 
 The GDK supports managing the runner configuration file and the process itself, either with a native binary
@@ -52,15 +52,15 @@ runner:
 
 ### Set up a local runner
 
-With a local runner installed, run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml`
-(as your normal user), and follow the prompts:
-
-- **coordinator URL**: Use `http://localhost:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
-  address.
-- **token**: Value of **Registration token** copied from `<coordinator-url>/admin/runners`.
-- **description** (optional): A description of the runner. Defaults to the hostname of the machine.
-- **tags** (optional): Comma-separated tags. Jobs can be set up to use only runners with specific tags.
-- **executor**: Because we are running directly on the host computer, choose `shell`.
+1. On the top bar, select **Main menu > Admin** in the GitLab UI running in GDK.
+1. On the left sidebar, select **CI/CD > Runners**.
+1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the
+   **Remote Explorer** tab in Gitpod UI and select the lock icon next to the port name.
+1. Select **New instance runner** and be sure to check **Run untagged jobs** if you don't specify a tag list. Optionally fill out the rest of the form.
+1. In the next screen, copy the command. 
+1. In the terminal, switch to the GDK directory `cd /workspace/gitlab-development-kit`.
+1. Run the copied command with the following added to the end `--config /workspace/gitlab-development-kit/gitlab-runner-config.toml --non-interactive --executor shell`.
+1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.  Because we are running directly on the host computer, we are choosing `shell` as the executor.
 
 The runner writes its configuration file to `gitlab-runner-config.toml`, which is in GDK's `.gitignore` file.
 
@@ -81,7 +81,7 @@ to get a long-lived runner process, using the configuration you created in the
 last step. It stays in the foreground, outputting logs as it executes
 builds, so run it in its own terminal session.
 
-The **Runners** page (`/admin/runners`) now lists the runners. Create a project in the GitLab UI and add a
+The **Runners** page (`/admin/CICD/runners`) now lists the runners. Create a project in the GitLab UI and add a
 [`.gitlab-ci.yml`](https://docs.gitlab.com/ee/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
 watch as the runner processes the builds just as it would on a "real" install!
@@ -119,7 +119,7 @@ To use the Docker configuration for your runner:
 When you have GDK running on something like `http://gdk.test:3000`, you can set up a runner. GDK can manage a
 containerized runner for you.
 
-You must generate a runner token, which you get from the configuration generated in the process of registering a runner.
+You must generate a PAT (Personal Access Token) token, which will allow you to request a runner token to register the runner.
 
 To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker) in your GDK, you can run the
 `gitlab/gitlab-runner` Docker image. You **must ensure** that the runner saves the configuration to a file that is
@@ -128,9 +128,20 @@ accessible to the host after the registration is complete.
 In these instructions, we use a location known to GDK so that GDK can manage the configuration. To register a runner,
 run the following command in the root for your GDK directory:
 
+1. Create a [Personal Access Token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token) in Gitpod with `owner` access and `api` scope and copy it.
+2. Add the PAT you created to this command in place of `$GITLAB_TOKEN` and then run it in your terminal. This command starts Runner in a Docker container and uses the Gitpod IP address, a default image, and a PAT access token to register the new runner ([learn more about why a PAT is needed](https://docs.gitlab.com/ee/ci/runners/new_creation_workflow.html#creating-runners-programmatically)):
+
 ```shell
-docker run --rm -it -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged --config /etc/gitlab-runner/gitlab-runner-config.toml
-```
+   docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest register \
+     --non-interactive \
+     --url "http://gdk.test:3000" \
+     --token "$(curl -sX POST "http://10.0.5.2:3000/api/v4/user/runners" -H "private-token: $GITLAB_TOKEN" --data runner_type=instance_type --data description=docker-runner | jq -r '.token')" \
+     --executor "docker" \
+     --docker-image alpine:latest \
+     --description "docker-runner"
+
+**--url**: Make sure to replace this with your GitLab instance URL. Use `http://gdk.test:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
+  address.
 
 <details>
 <summary>Option for SSL users (expand)</summary>
@@ -146,18 +157,6 @@ docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.cr
 
 </details>
 <p>
-
-The `register` subcommand requires the following information:
-
-- **Enter the GitLab instance URL (for example, <https://gitlab.com/>)**: Use `http://gdk.test:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
-  address.
-- **Enter the registration token**: Value of **Registration token** copied from `<gitlab-instance-url>/admin/runners`.
-- **Enter a description for the runner** (optional): A description of the runner.
-- **Enter tags for the runner (comma-separated)** (optional): Comma-separated tags. Jobs can be set up to use only runners with specific tags.
-- **Enter optional maintenance note for the runner** (optional): Add anything related to the maintenance of the runner here.
-- **Enter an executor**: Because we are running our runner in Docker, choose `docker`.
-- **Enter the default Docker image**: Provide a Docker image to use to run the job if no image is provided in a job
-  definition. By default, GDK sets `alpine:latest`.
 
 ### Set up GDK to use the registered runner
 
