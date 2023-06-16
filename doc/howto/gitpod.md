@@ -107,58 +107,35 @@ advanced features.
 
 ### Enable runners
 
-You can add a runner with a Docker executor or a shell executor. You can also add multiple runners with different executors.
+You can create a runner with a Docker executor or a shell executor. You can also create multiple runners with different executors.
 
 #### Option 1: Docker executor
 
-1. To create a Docker runner, run the commands in [Use Docker volumes to start the Runner container](https://docs.gitlab.com/runner/install/docker.html#option-2-use-docker-volumes-to-start-the-runner-container) in Gitpod. The commands are also listed here:
+1. Create a [Personal Access Token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token) in Gitpod with `owner` access and `api` scope and copy it.
+1. Add the PAT you created to this command in place of `$GITLAB_TOKEN` and then run it in your terminal. This command starts Runner in a Docker container and uses the Gitpod IP address, a default image, and a PAT access token to register the new runner ([learn more about why a PAT is needed](https://docs.gitlab.com/ee/ci/runners/new_creation_workflow.html#creating-runners-programmatically)):
 
    ```shell
-   docker volume create gitlab-runner-config
-
-   docker run -d --name gitlab-runner --restart always \
-     -v /var/run/docker.sock:/var/run/docker.sock \
-     -v gitlab-runner-config:/etc/gitlab-runner \
-     gitlab/gitlab-runner:latest
-   ```
-
-1. Register the runner by running the interactive command mentioned in the [Docker section](https://docs.gitlab.com/runner/register/index.html#docker) under "For Docker volume mounts",
-   and enter the appropriate values when asked.
-
-   - For the GitLab instance URL, use `http://10.0.5.2:3000/`, which is the IP of the ceth0 interface in Gitpod.
-   - For the default image, you can enter `alpine:latest`.
-
-   Or use this non-interactive command to register your runner with all the required values pre-filled:
-
-   ```shell
-   cd /workspace/gitlab-development-kit/gitlab
-
    docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner gitlab/gitlab-runner:latest register \
      --non-interactive \
      --url "http://10.0.5.2:3000/" \
-     --registration-token "$(bundle exec rails runner 'puts Gitlab::CurrentSettings.current_application_settings.runners_registration_token')" \
+     --token "$(curl -sX POST "http://10.0.5.2:3000/api/v4/user/runners" -H "private-token: $GITLAB_TOKEN" --data runner_type=instance_type --data description=docker-runner | jq -r '.token')" \
      --executor "docker" \
      --docker-image alpine:latest \
-     --description "docker-runner" \
-     --run-untagged="true"
-   ```
-
-1. Check that you're using the `3000` port and that it's set to public. You can change the port from private to public by
-   going to the **Remote Explorer** tab in Gitpod and selecting the lock icon next to the port name.
+     --description "docker-runner"
 
 #### Option 2: Shell executor
 
 1. On the top bar, select **Main menu > Admin** in the GitLab UI running in GDK.
-1. On the left sidebar, select **Overview > Runners**.
+1. On the left sidebar, select **CI/CD > Runners**.
 1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the
-   **Remote Explorer** tab in Gitpod UI and selecting the lock icon next to the port name.
-1. From the **Register an instance runner** dropdown, select **Show runner installation and registration instructions**.
-1. Copy the **Command to register runner**.
-1. In the terminal, switch to the GDK directory `cd /workspace/gitlab-development-kit`
-1. Run the copied command with the following added to the end `--run-untagged --config /workspace/gitlab-development-kit/gitlab-runner-config.toml --non-interactive --executor shell`.
+   **Remote Explorer** tab in Gitpod UI and select the lock icon next to the port name.
+1. Select **New instance runner** and be sure to check **Run untagged jobs** if you don't specify a tag list. Optionally fill out the rest of the form.
+1. In the next screen, copy the command. 
+1. In the terminal, switch to the GDK directory `cd /workspace/gitlab-development-kit`.
+1. Run the copied command with the following added to the end `--config /workspace/gitlab-development-kit/gitlab-runner-config.toml --non-interactive --executor shell`.
 1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
 
-Your runner is ready to pick up jobs for you! If you create a new project, the
+You should receive a confirmation message on the screen that your runner is ready to pick up jobs. If you create a new project, the
 **Pages/Plain HTML** template contains a super simple and tiny pipeline that's great to
 use to verify whether the runner is actually working.
 
