@@ -28,7 +28,7 @@ if [[ -d "${gdk_root_path}" ]]; then
   "${gdk_root_path}/gem/bin/gdk" "${@}"
   exit_status=$?
   debug "ruby GDK exit status $exit_status"
-  if (( $exit_status == 126 )); then
+  if [[ $exit_status == 126 ]]; then
     echo -e "\nERROR: failed to start 'gem/bin/gdk' ruby script, try 'asdf' recovery procedure"
     echo "  asdf update"
     echo "  asdf plugin-update ruby"
