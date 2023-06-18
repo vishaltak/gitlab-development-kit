@@ -3,8 +3,11 @@
 tasks:
   # init is executed when workspace is created
   - init: |
-      # add community fork for GDK into remotes
+      echo "--- adding community fork for GDK into remotes ---"
       git remote add patches https://gitlab.com/gitlab-community/gitlab-development-kit.git
+      echo "--- bootstrap GDK dependencies ---"
+      # install 'asdf' into /workspace/.asdf to persist restarts
+      ASDF_DIR=/workspace/.asdf support/bootstrap
       # install dev dependencies
       brew install vale
       brew install shellcheck
