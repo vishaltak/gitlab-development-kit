@@ -9,11 +9,11 @@ does_vale_exist() {
 }
 
 attempt_vale_install() {
-  eval "${root}/support/dev/package-install vale"
+  "${root}"/support/dev/package-install vale
 }
 
 run() {
-  eval "vale --minAlertLevel error *.md doc README.md"
+  vale --minAlertLevel error -- *.md doc README.md
 }
 
 if ! does_vale_exist; then
