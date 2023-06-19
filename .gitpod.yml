@@ -5,9 +5,13 @@ tasks:
   - init: |
       echo "--- adding community fork for GDK into remotes ---"
       git remote add patches https://gitlab.com/gitlab-community/gitlab-development-kit.git
-      echo "--- bootstrap GDK dependencies ---"
-      # install 'asdf' into /workspace/.asdf to persist restarts
-      ASDF_DIR=/workspace/.asdf support/bootstrap
+
+      echo "--- install pinned Ruby version ---"
+      rvm install $(cat .ruby-version)
+
+      echo "--- install rspec, lefthook and other dev gems ---"
+      bundle install
+
       # install dev dependencies
       brew install vale
       brew install shellcheck
