@@ -1,4 +1,4 @@
-# GDK with Gitpod
+# Developing GitLab with GDK on Gitpod
 
 GDK can be used with [Gitpod](https://www.gitpod.io) using the GitLab
 [Gitpod integration](https://docs.gitlab.com/ee/integration/gitpod.html).
@@ -9,8 +9,8 @@ Gitpod, you can run a pre-configured GDK instance in the cloud, which also makes
 possible to contribute, no matter how powerful your machine is. You could even just use
 an iPad!
 
-- [How to update the Gitpod GDK Docker image](#how-to-update-the-gitpod-gdk-docker-image)
 - [How to get started](#how-to-get-started)
+- [How to update the Gitpod GDK Docker image](#how-to-update-the-gitpod-gdk-docker-image)
 
 ## How to get started
 
