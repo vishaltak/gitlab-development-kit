@@ -3,8 +3,8 @@
 debug() {
   local msg="$1"
 
-  if [ "${GDK_DEBUG}" = "1" ] || [ "${GDK_DEBUG}" = "true" ]; then
-    echo "GDK(DEBUG) $msg"
+  if [[ $GDK_DEBUG == 1 || $GDK_DEBUG == true ]]; then
+    echo "DEBUG: $msg"
   fi
 }
 
