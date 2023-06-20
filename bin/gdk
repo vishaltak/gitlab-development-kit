@@ -33,7 +33,7 @@ if [[ -d "${gdk_root_path}" ]]; then
 
   if [[ $gdk_exit_status == "$ERROR_CODE_ASDF_SHIM_BINARY_NOT_FOUND" ]]; then
     echo -e "\nERROR: failed to run 'gem/bin/gdk' Ruby script, try 'asdf' recovery procedure by running:" >&2
-    echo "  cd ${gdk_root_path} && asdf update && asdf plugin-update ruby && asdf install ruby"
+    echo "  (cd ${gdk_root_path} && asdf update && asdf plugin-update ruby && asdf install ruby)"
   fi
 else
   echo "ERROR: The current working directory is not a GDK." >&2
