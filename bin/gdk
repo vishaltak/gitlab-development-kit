@@ -26,13 +26,12 @@ debug "gdk_root_path: $gdk_root_path"
 
 if [[ -d "${gdk_root_path}" ]]; then
   "${gdk_root_path}/gem/bin/gdk" "${@}"
-  exit_status=$?
-  debug "ruby GDK exit status $exit_status"
-  if [[ $exit_status == 126 ]]; then
-    echo -e "\nERROR: failed to start 'gem/bin/gdk' ruby script, try 'asdf' recovery procedure"
-    echo "  asdf update"
-    echo "  asdf plugin-update ruby"
-    echo "  asdf install ruby"
+  gdk_exit_status=$?
+  debug "ruby GDK exit status ${gdk_exit_status}"
+
+  if [[ ${gdk_exit_status} == ${ERROR_CODE_<DESCRIBE_WHAT_ERROR_CODE_126_MEANS_HERE>} ]]; then
+    echo -e "\nERROR: failed to start 'gem/bin/gdk' ruby script, try 'asdf' recovery procedure by running:" >&2
+    echo "  asdf update && asdf plugin-update ruby && asdf install ruby"
   fi
 else
   echo "ERROR: The current working directory is not a GDK." >&2
