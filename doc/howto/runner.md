@@ -7,10 +7,10 @@ do so when GitLab is running under GDK.
 
 Before setting up a runner, you must have [set up the GDK](../index.md) for your workstation.
 
-You can set up:
+You can set up a runner:
 
-- A runner to run directly on your workstation (local computer).
-- A runner in Docker.
+- To run directly on your local computer.
+- To run in Docker container.
 
 The GDK supports managing the runner configuration file and the process itself, either with a native binary
 or within a Docker container. Running jobs inside a Docker executor is supported in both cases; you can use a native
