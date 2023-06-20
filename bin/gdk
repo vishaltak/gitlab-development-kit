@@ -31,7 +31,7 @@ if [[ -d "${gdk_root_path}" ]]; then
   gdk_exit_status=$?
   debug "ruby GDK exit status ${gdk_exit_status}"
 
-  if [[ $gdk_exit_status == $ERROR_CODE_ASDF_SHIM_BINARY_NOT_FOUND ]]; then
+  if [[ $gdk_exit_status == "$ERROR_CODE_ASDF_SHIM_BINARY_NOT_FOUND" ]]; then
     echo -e "\nERROR: failed to start 'gem/bin/gdk' ruby script, try 'asdf' recovery procedure by running:" >&2
     echo "  asdf update && asdf plugin-update ruby && asdf install ruby"
   fi
