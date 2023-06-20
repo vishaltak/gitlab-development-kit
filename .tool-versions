@@ -11,17 +11,17 @@ gitleaks 8.16.3
 
 # golang:
 #   1.20.5:
-#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
-#   1.20.4:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
+#   1.20.4:
 #     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-metrics-exporter -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_METRICS_EXPORTER_VERSION
 #   1.19.9:
-#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
