@@ -11,7 +11,8 @@ tasks:
 
       echo "--- install rspec, lefthook and other dev gems ---"
       bundle install
+      lefthook install
 
       # install dev dependencies
-      brew install vale
       brew install shellcheck
+      brew install vale
