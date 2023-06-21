@@ -20,7 +20,7 @@ postgresql/geo/Procfile:
 postgresql/geo/seed-data:
 	$(Q)support/bootstrap-geo
 
-postgresql-geo-replication-primary: postgresql-replication/role postgresql-replication/config
+postgresql-geo-replication-primary: postgresql-replication/config
 
 postgresql-geo-replication-secondary: postgresql-geo-secondary-replication/data postgresql-replication/backup postgresql-replication/config
 
