@@ -77,6 +77,29 @@ RSpec.describe GDK::Dependencies::Checker do
     end
   end
 
+  describe '#check_postgresql_version' do
+    let(:tmp_path) { Dir.mktmpdir('gdk-path') }
+    let(:pg_bin_bir) { tmp_path }
+    let(:pg_version) { "psql (PostgreSQL) #{GDK::Postgresql.target_version}" }
+
+    before do
+      path = File.join(tmp_path, 'psql')
+      File.open(path, File::WRONLY | File::CREAT, 0o755) do |f|
+        f.write <<~SCRIPT
+          #!/bin/sh
+          echo '#{pg_version}'
+        SCRIPT
+      end
+
+      stub_gdk_yaml("postgresql" => { "bin_dir" => tmp_path })
+    end
+
+    it 'detects the correct version' do
+      expect(subject.check_postgresql_version).to be_nil
+      expect(subject.error_messages).to be_empty
+    end
+  end
+
   def stub_check_binary(binary, result)
     allow(subject).to receive(:check_binary).with(binary).and_return(result)
   end

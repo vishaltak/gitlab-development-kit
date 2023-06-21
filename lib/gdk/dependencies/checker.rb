@@ -103,9 +103,11 @@ module GDK
       end
 
       def check_postgresql_version
-        return unless check_binary('psql')
+        psql = config.postgresql.bin_dir.join('psql')
 
-        current_version = Checker.parse_version(`psql --version`, prefix: 'psql \(PostgreSQL\) ')
+        return unless check_binary(psql)
+
+        current_version = Checker.parse_version(`#{psql} --version`, prefix: 'psql \(PostgreSQL\) ')
         expected = Gem::Version.new(EXPECTED_POSTGRESQL_VERSION)
 
         raise MissingDependency unless current_version
