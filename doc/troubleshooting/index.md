@@ -344,6 +344,22 @@ bundle install
 
 You may need to run a `gdk restart` for the changes to take effect.
 
+### `/home/user/gitlab-development-kit/gitaly/_build/bin/praefect`: No such file or directory
+
+You might encounter the following error while running Gitaly database migrations:
+
+```shell
+support/migrate-praefect: line 4: /home/user/gitlab-development-kit/gitaly/_build/bin/praefect: No such file or directory
+migrate failed
+make: *** [_postgresql-seed-praefect] Error 1
+```
+
+This means `/gitaly/_build/bin/praefect` is missing. To re-create this executable file, run the following in your GDK directory:
+
+```shell
+make gitaly-update
+```
+
 ## Starting the GDK
 
 ### Error due to `ActionController::InvalidAuthenticityToken`
