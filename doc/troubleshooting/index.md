@@ -68,6 +68,21 @@ sudo pkill dirmngr
 
 See this [issue](https://github.com/asdf-vm/asdf-nodejs/issues/192) for more details.
 
+### `icuc4` setup failed during `make .gitlab-translations` in GDK installation
+
+If you encounter an `icuc4` setup error during the `make .gitlab-translations` step of GDK installation, try the following steps:
+
+1. Upgrade Xcode to the latest version.
+1. Run `brew cleanup` to clean up any unnecessary files.
+1. Run `brew upgrade` to upgrade outdated packages.
+1. Open a new terminal window and continue with the installation of GDK.
+
+### PostgreSQL socket creation failed due to GDK directory path being too long
+
+If you encounter a PostgreSQL socket creation failure, it might be because Gitaly is unable to create a Unix socket due to your GDK directory path exceeding the supported character limit.
+
+To fix this issue, try moving the GDK directory to a location with a shorter directory path, then continue with your GDK setup.
+
 ## Git
 
 The following are possible solutions to problems you might encounter with Git and GDK.
