@@ -50,22 +50,47 @@ runner:
   bin: <path_to_gitlab_runner_binary>/gitlab-runner-darwin-amd64
 ```
 
-### Set up a local runner
+### Create and register a local runner
 
-With a local runner installed, run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml`
-(as your normal user), and follow the prompts:
+To create and register a local runner for your instance:
 
-- **coordinator URL**: Use `http://localhost:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
-  address.
-- **token**: Value of **Registration token** copied from `<coordinator-url>/admin/runners`.
-- **description** (optional): A description of the runner. Defaults to the hostname of the machine.
-- **tags** (optional): Comma-separated tags. Jobs can be set up to use only runners with specific tags.
-- **executor**: Because we are running directly on the host computer, choose `shell`.
+1. On the left sidebar, expand the top-most chevron (**{chevron-down}**).
+1. Select **Admin Area**.
+1. On the left sidebar, select **CI/CD > Runners**.
+1. Select **New instance runner**.
+1. Select an operating system.
+1. In the **Tags** section, select the **Run untagged** checkbox. Tags specify which jobs
+   the runner can run. Tags are optional, but if you don't specify tags then you must specify
+   that the runner can run untagged jobs.
+1. Optional. If you have specific jobs you want the runner to run, in the **Tags** field, enter
+   comma-separated tags.
+1. Optional. Enter additional runner configurations.
+1. Select **Create runner**.
+1. Follow the on-screen instructions to register the runner from the command-line:
+   - Add the GDK location of the configuration file to the register command:
 
-The runner writes its configuration file to `gitlab-runner-config.toml`, which is in GDK's `.gitignore` file.
+     ```shell
+     gitlab-runner register \
+       --url http://127.0.0.1:3000 \
+       --token <TOKEN> \
+       --config <path-to-gdk>/gitlab-runner-config.toml
+     ```
 
-To ensure the runner token persists between subsequent runs of `gdk reconfigure`, add the token (from `gitlab-runner-config.toml`,
-not the **Registration token**), to your `gdk.yml` file and set `executor` to `shell`:
+   - When prompted:
+     - For `executor`, because you are running directly on the host computer, enter `shell`.
+     - For `GitLab instance URL`, use`http://localhost:3000/`, or `http://<custom_IP_address>:3000/`
+       if you customized your IP address.
+1. Start your runner:
+
+   ```shell
+   gitlab-runner run --config <path-to-gdk>/gitlab-runner-config.toml
+   ```
+
+After you register the runner, the configuration and the authentication token are stored in
+`gitlab-runner-config.toml`, which is in GDK's `.gitignore` file.
+
+To ensure the runner token persists between subsequent runs of `gdk reconfigure`, add the
+authentication token from `gitlab-runner-config.toml` to your `gdk.yml` file and set `executor` to `shell`:
 
 ```yaml
 runner:
@@ -119,7 +144,7 @@ To use the Docker configuration for your runner:
 When you have GDK running on something like `http://gdk.test:3000`, you can set up a runner. GDK can manage a
 containerized runner for you.
 
-You must generate a runner token, which you get from the configuration generated in the process of registering a runner.
+[Create a runner](#create-and-register-a-local-runner), which generates the authentication token you need before you can register the runner. After you register the runner, the authentication token is stored in `gitlab-runner-config.toml`.
 
 To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker) in your GDK, you can run the
 `gitlab/gitlab-runner` Docker image. You **must ensure** that the runner saves the configuration to a file that is
@@ -129,7 +154,7 @@ In these instructions, we use a location known to GDK so that GDK can manage the
 run the following command in the root for your GDK directory:
 
 ```shell
-docker run --rm -it -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged --config /etc/gitlab-runner/gitlab-runner-config.toml
+docker run --rm -it -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --config /etc/gitlab-runner/gitlab-runner-config.toml
 ```
 
 <details>
@@ -141,7 +166,7 @@ automatically mount your certificate into the Docker container when the runner i
 manually when registering your runner:
 
 ```shell
-docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --run-untagged --config /etc/gitlab-runner/gitlab-runner-config.toml
+docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --config /etc/gitlab-runner/gitlab-runner-config.toml
 ```
 
 </details>
@@ -151,10 +176,7 @@ The `register` subcommand requires the following information:
 
 - **Enter the GitLab instance URL (for example, <https://gitlab.com/>)**: Use `http://gdk.test:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
   address.
-- **Enter the registration token**: Value of **Registration token** copied from `<gitlab-instance-url>/admin/runners`.
 - **Enter a description for the runner** (optional): A description of the runner.
-- **Enter tags for the runner (comma-separated)** (optional): Comma-separated tags. Jobs can be set up to use only runners with specific tags.
-- **Enter optional maintenance note for the runner** (optional): Add anything related to the maintenance of the runner here.
 - **Enter an executor**: Because we are running our runner in Docker, choose `docker`.
 - **Enter the default Docker image**: Provide a Docker image to use to run the job if no image is provided in a job
   definition. By default, GDK sets `alpine:latest`.
