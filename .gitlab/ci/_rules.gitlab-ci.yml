@@ -7,6 +7,9 @@
 .if-default-branch-schedule: &if-default-branch-schedule
   if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"'
 
+.if-gitpod-image-release: &if-gitpod-image-release
+  if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULE_TYPE == "gitpod-image-release"'
+
 ####################
 # Changes patterns #
 ####################
@@ -82,6 +85,9 @@
 
 .rules:code-changes:
   rules:
+    - <<: *if-gitpod-image-release
+      when: never
+    - <<: *if-default-branch-schedule
     - changes: *code-changes
 
 .rules:docs-code-changes:
@@ -90,15 +96,15 @@
 
 .rules:gitpod-code-changes:
   rules:
-    - <<: *if-default-branch-schedule
+    - <<: *if-gitpod-image-release
     - <<: *if-merge-request
       changes: *gitpod-code-changes
 
 .rules:tested-deploy-gitpod-workspace-image:
   rules:
-    - <<: *if-default-branch-schedule
+    - <<: *if-gitpod-image-release
 
 .rules:deploy-gitpod-workspace-image:
   rules:
-    - <<: *if-default-branch-schedule
+    - <<: *if-gitpod-image-release
       when: manual
