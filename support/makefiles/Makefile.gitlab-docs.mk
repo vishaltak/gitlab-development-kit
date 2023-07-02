@@ -3,6 +3,10 @@ gitlab_runner_clone_dir = gitlab-runner
 omnibus_gitlab_clone_dir = omnibus-gitlab
 charts_gitlab_clone_dir = charts-gitlab
 gitlab_operator_clone_dir = gitlab-operator
+
+# Silence Rollup when building GitLab Docs with nanoc
+export ROLLUP_OPTIONS = --silent
+
 nanoc_cmd = ${support_bundle_exec} nanoc
 
 ifeq ($(gitlab_docs_enabled),true)
