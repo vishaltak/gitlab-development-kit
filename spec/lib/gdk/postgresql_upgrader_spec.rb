@@ -3,9 +3,20 @@
 require 'gdk/postgresql_upgrader'
 
 RSpec.describe GDK::PostgresqlUpgrader do
+  let(:tmp_path) { Pathname.new(Dir.mktmpdir('gdk-path')) }
+  let(:running_version) { 13 }
   let(:target_version) { 14 }
+  let(:available_versions) do
+    { 14 => tmp_path.join('14/bin').to_s, 13 => tmp_path.join('13/bin').to_s }
+  end
 
-  subject { described_class.new(target_version) }
+  subject { described_class.new(running_version: running_version, target_version: target_version) }
+
+  before do
+    allow_any_instance_of(GDK::Dependencies::PostgreSQL::Binaries).to receive(:available_versions)
+      .and_return(available_versions)
+    allow(subject.send(:postgresql)).to receive(:current_version).and_return(running_version)
+  end
 
   describe '#initialize' do
     it 'initializes with a target version' do
@@ -15,39 +26,26 @@ RSpec.describe GDK::PostgresqlUpgrader do
 
   describe '#upgrade!' do
     before do
+      allow(subject).to receive(:run_gdk!).with('stop').and_return(true)
       allow(subject).to receive_messages(
-        upgrade_needed?: true,
-        current_version: 13,
-        gdk_stop: true,
         init_db_in_target_path: true,
         rename_current_data_dir: true,
         pg_upgrade: true,
-        promote_new_db: true,
-        gdk_reconfigure: true,
+        promote_new_db: true
+      )
+      allow(subject).to receive(:run_gdk!).with('reconfigure').and_return(true)
+      allow(subject).to receive_messages(
         pg_replica_upgrade: true,
         rename_current_data_dir_back: true
       )
     end
 
     context 'with asdf' do
-      let(:result) { "  13.12\n  13.9\n  14.8\n  14.9\n  15.1\n  15.2\n  15.3\n" }
-      let(:version_list_double) { instance_double(Shellout, try_run: result) }
-
       before do
-        allow(GDK::Dependencies).to receive_messages(asdf_available?: true, asdf_available_versions: [13, 14, 15])
-
-        shellout_double = instance_double(Shellout, try_run: '', exit_code: 0)
-
-        allow(Shellout).to receive(:new).with(anything).and_return(shellout_double)
-        allow(Shellout).to receive(:new).with(%w[asdf list postgres]).and_return(version_list_double)
-      end
-
-      describe '#bin_path' do
-        it 'returns latest version' do
-          stub_env('ASDF_DATA_DIR', '/home/on/the/range/.asdf')
-
-          expect(subject.bin_path).to eq('/home/on/the/range/.asdf/installs/postgres/14.9/bin')
-        end
+        allow(GDK::Dependencies).to receive_messages(
+          asdf_available?: true,
+          asdf_available_versions: [13, 14, 15]
+        )
       end
 
       context 'when upgrade is needed' do
@@ -57,9 +55,7 @@ RSpec.describe GDK::PostgresqlUpgrader do
       end
 
       context 'when upgrade is not needed' do
-        before do
-          allow(subject).to receive(:upgrade_needed?).and_return(false)
-        end
+        let(:running_version) { target_version }
 
         it 'does not perform an upgrade' do
           expect { subject.upgrade! }.to output(/already compatible/).to_stdout

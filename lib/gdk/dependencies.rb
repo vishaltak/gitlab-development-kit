@@ -5,6 +5,7 @@ module GDK
   module Dependencies
     autoload :Checker, 'gdk/dependencies/checker'
     autoload :GitlabVersions, 'gdk/dependencies/gitlab_versions'
+    autoload :PostgreSQL, 'gdk/dependencies/postgresql'
 
     MissingDependency = Class.new(StandardError)
 
