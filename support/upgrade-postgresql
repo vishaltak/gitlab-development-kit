@@ -10,12 +10,14 @@ require_relative '../lib/gdk'
 class PostgresUpgrader
   extend Forwardable
 
-  POSTGRESQL_VERSIONS = %w[13 12 11 10 9.6].freeze
-
   def_delegators :postgresql, :current_data_dir, :current_version, :upgrade_needed?
 
-  def initialize(target_version = GDK::Postgresql.target_version_major)
+  attr_reader :current_pg, :new_pg
+
+  def initialize(target_version: GDK::Postgresql.target_version_major)
     @target_version = target_version
+    @current_pg = GDK::Dependencies::PostgreSQL::Binaries.new(version: current_version)
+    @new_pg = GDK::Dependencies::PostgreSQL::Binaries.new(version: target_version)
 
     check!
   end
@@ -36,13 +38,13 @@ class PostgresUpgrader
     end
 
     begin
-      gdk_stop
+      run_gdk!('stop')
       init_db_in_target_path
       pgvector_setup
       rename_current_data_dir
       pg_upgrade
       promote_new_db
-      gdk_reconfigure
+      run_gdk!('reconfigure')
     rescue StandardError => e
       success = false
       GDK::Output.error "An error occurred: #{e}"
@@ -73,18 +75,16 @@ class PostgresUpgrader
     @target_path ||= "#{current_data_dir}.#{target_version}.#{Time.now.to_i}"
   end
 
-  def gdk_stop
-    run!('gdk stop', config.gdk_root)
-  end
-
   def init_db_in_target_path
-    cmd = "#{initdb_bin(target_version)} --locale=C -E utf-8 #{target_path}"
     GDK::Output.info "Initializing '#{target_path}' for PostgreSQL #{target_version}.."
+
+    cmd = "#{new_pg.initdb_bin} --locale=C -E utf-8 #{target_path}"
     run_in_tmp!(cmd)
   end
 
   def rename_current_data_dir
     GDK::Output.info "Renaming #{current_data_dir} to #{renamed_current_data_dir}"
+
     FileUtils.mv(current_data_dir, renamed_current_data_dir)
   end
 
@@ -92,122 +92,34 @@ class PostgresUpgrader
     return unless File.exist?(renamed_current_data_dir)
 
     GDK::Output.info "Renaming #{renamed_current_data_dir} to #{current_data_dir}"
+
     FileUtils.mv(renamed_current_data_dir, current_data_dir)
   end
 
   def pgvector_setup
-    return unless config.gitlab.rails.databases.embedding.enabled?
+    return unless GDK.config.gitlab.rails.databases.embedding.enabled?
 
     GDK::Output.info "Running 'make pgvector-setup'.."
+
     run!('make pgvector-setup', config.gdk_root)
   end
 
   def pg_upgrade
-    cmd = "#{pg_upgrade_bin(target_version)} \
-      --old-bindir #{bin_path(current_version)} \
-      --new-bindir #{bin_path(target_version)} \
+    cmd = "#{new_pg.pg_upgrade_bin} \
+      --old-bindir #{current_pg.bin_path} \
+      --new-bindir #{new_pg.bin_path} \
       --old-datadir #{renamed_current_data_dir} \
       --new-datadir #{target_path}"
 
     GDK::Output.info "Upgrading '#{renamed_current_data_dir}' (PostgreSQL #{current_version}) to '#{target_path}' PostgreSQL #{target_version}.."
+
     run_in_tmp!(cmd)
   end
 
   def promote_new_db
     GDK::Output.info "Promoting newly-creating database from '#{target_path}' to '#{current_data_dir}'"
+
     FileUtils.mv(target_path, current_data_dir)
-  end
-
-  def gdk_reconfigure
-    GDK::Output.info "Running 'gdk reconfigure'.."
-    run!('gdk reconfigure', config.gdk_root)
-  end
-
-  def initdb_bin(version)
-    File.join(bin_path(version), 'initdb')
-  end
-
-  def pg_upgrade_bin(version)
-    File.join(bin_path(version), 'pg_upgrade')
-  end
-
-  def bin_path(version)
-    raise "Invalid PostgreSQL version #{version}" unless available_versions.key?(version)
-
-    available_versions[version]
-  end
-
-  def available_versions
-    @available_versions ||=
-      if GDK::Dependencies.asdf_available?
-        asdf_available_versions
-      elsif GDK::Dependencies.homebrew_available?
-        brew_cellar_available_versions.transform_keys(&:to_i)
-      elsif GDK::Dependencies.linux_apt_available?
-        apt_available_versions
-      else
-        abort 'Only Homebrew, asdf and apt based Linux systems supported.'
-      end
-  end
-
-  def asdf_available_versions
-    lines = run(%w[asdf list postgres])
-    return {} if lines.empty?
-
-    current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{Dir.home}/.asdf")
-
-    versions = lines.split.map { |x| Gem::Version.new(x) }.sort.reverse
-
-    versions.each_with_object({}) do |version, paths|
-      major_version, minor_version = version.canonical_segments[0..1]
-
-      # We only care about the latest version
-      next if paths.key?(major_version)
-
-      paths[major_version] = "#{current_asdf_data_dir}/installs/postgres/#{major_version}.#{minor_version}/bin"
-    end
-  end
-
-  def brew_cellar_available_versions
-    POSTGRESQL_VERSIONS.each_with_object({}) do |version, paths|
-      brew_cellar_pg = run(%W[brew --cellar postgresql@#{version}])
-
-      next if brew_cellar_pg.empty?
-
-      brew_cellar_pg_bin = Dir.glob(File.join(brew_cellar_pg, '/*/bin'))
-
-      paths[version] = brew_cellar_pg_bin.last if brew_cellar_pg_bin.any?
-    end
-  end
-
-  def apt_available_versions
-    versions = POSTGRESQL_VERSIONS.map { |ver| "postgresql-#{ver}" }
-    lines = run(%w[apt search -o APT::Cache::Search::Version=1 ^postgresql-[0-9]*$])
-
-    return {} if lines.empty?
-
-    available_packages = Set.new
-
-    lines.split("\n").each do |line|
-      package_data = line.strip.split
-      available_packages << package_data.first.strip
-    end
-
-    postgresql_packages = available_packages & versions
-
-    postgresql_packages.each_with_object({}) do |package, paths|
-      version = package.gsub(/^postgresql-/, '').to_i
-      pg_path = "/usr/lib/postgresql/#{version}/bin"
-      paths[version] = pg_path if Dir.exist?(pg_path)
-    end
-  end
-
-  def config
-    @config ||= GDK.config
-  end
-
-  def run(cmd)
-    Shellout.new(cmd).try_run
   end
 
   def run!(cmd, chdir)
@@ -223,7 +135,17 @@ class PostgresUpgrader
   end
 
   def run_in_tmp!(cmd)
-    run!(cmd, config.gdk_root.join('tmp'))
+    run!(cmd, GDK.config.gdk_root.join('tmp'))
+  end
+
+  # Run GDK cli with provider args
+  #
+  # @param [Array<String>] args
+  def run_gdk!(*args)
+    GDK::Output.info "Running 'gdk #{cmd.join(' ')}'.."
+
+    cmd = ['gdk'] + args
+    run!(cmd, GDK.config.gdk_root)
   end
 end
 
