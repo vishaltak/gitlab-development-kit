@@ -229,7 +229,8 @@ configure_ruby_bundler_for_gitlab() {
     bundle config unset build.gpgme
 
     if [[ "${OSTYPE}" == "darwin"* ]]; then
-      bundle config build.re2 --with-re2-dir="$(brew --prefix re2)"
+      # shellcheck disable=SC2046
+      bundle config build.re2 --with-re2-dir="$(brew --prefix re2)" --with-cppflags=\'-I$(brew --prefix abseil)/include -x c++ -std=c++20\'
 
       clang_version=$(clang --version | head -n1 | awk '{ print $4 }' | awk -F'.' '{ print $1 }')
 
