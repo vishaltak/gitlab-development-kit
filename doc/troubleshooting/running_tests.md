@@ -93,3 +93,38 @@ Gitlab::TaskFailedError: Cloning into 'tmp/tests/gitaly'...
 This repository contains hooks installed by Overcommit, but the `overcommit` gem is not installed.
 Install it with `gem install overcommit`.
 ```
+
+## Content Security Policy problems
+
+Sometimes feature specs fail when run locally, due to the hot module reload (HMR) server being disallowed by the Content Security Policy. Example error:
+
+```shell
+JSConsoleError:
+  Unexpected browser console output:
+  webpack-internal:///AjYE 15 Refused to connect to 'ws://gdk.test:3001/_hmr/' because it violates the following Content Security Policy directive: "connect-src 'self' ws://localhost localhost".
+```
+
+Another example error:  
+
+```javascript
+Uncaught runtime errors:
+
+ERROR
+Cannot read properties of null (reading 'addEventListener')
+TypeError: Cannot read properties of null (reading 'addEventListener')
+```
+
+It occurs when the GitLab hostname differs from the hostname that is allowed in the Content Security Policy, for example if `hostname` has been configured in `gdk.yml`.
+
+As a workaround:
+
+1. Disable hot module reloading in the `gdk.yml` configuration before running feature specs:
+
+   ```yaml
+   webpack:
+     live_reload: false
+   ```
+
+1. Run `gdk reconfigure`.
+
+For more information, see [issue 1875](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1875).
