@@ -170,10 +170,10 @@ object-storage-setup \
 openldap-setup \
 pgvector-setup \
 postgresql-sensible-defaults \
-truncate-legacy-tables \
 prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
+truncate-legacy-tables \
 postgresql-replica-setup \
 postgresql-replica-2-setup
 
