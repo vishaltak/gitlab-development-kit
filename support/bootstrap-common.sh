@@ -29,7 +29,8 @@ if [[ ${BASH_VERSION%%.*} -gt 3 ]]; then
   declare -A SUPPORTED_LINUX_PLATFORMS=( ['ubuntu']='Ubuntu Pop neon' \
                                    ['debian']='Debian PureOS' \
                                    ['arch']='Arch Manjaro' \
-                                   ['fedora']='Fedora RHEL' )
+                                   ['fedora']='Fedora RHEL' \
+                                   ['gentoo']='Gentoo' )
 fi
 
 GDK_CACHE_DIR="${ROOT_PATH}/.cache"
@@ -396,6 +397,12 @@ setup_platform() {
       else
         return 1
       fi
+    elif [[ "${platform}" == "gentoo" ]]; then
+      if setup_platform_linux_gentoo_like "support/advanced/packages_gentoo.txt"; then
+        mark_platform_as_setup "support/advanced/packages_gentoo.txt"
+      else
+        return 1
+      fi
     fi
   fi
 }
@@ -489,6 +496,26 @@ setup_platform_linux_fedora_like() {
       sudo mv command/* /opt/runit || return 1
       sudo ln -nfs /opt/runit/* /usr/local/bin/ || return 1
     )
+  fi
+
+  return 0
+}
+
+setup_platform_linux_gentoo_like() {
+  local platform_file="${1}"
+
+  if ! echo_if_unsuccessful sudo emerge --sync; then
+    return 1
+  fi
+
+  # shellcheck disable=SC2046
+  if ! sudo emerge --noreplace $(sed -e 's/#.*//' "${platform_file}"); then
+    return 1
+  fi
+
+  if ! curl --version | grep -E 'Protocols:.*https' > /dev/null 2>&1; then
+    echo "Please install curl with the 'ssl' USE flag."
+    return 1
   fi
 
   return 0
