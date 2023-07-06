@@ -139,7 +139,7 @@ gitlab-docs-clean:
 	$(Q)cd ${gitlab_development_root}/gitlab-docs && rm -rf tmp
 
 gitlab-docs-build:
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && make compile
+	$(make_docs) compile
 
 .PHONY: gitlab-docs-update
 ifeq ($(gitlab_docs_enabled),true)
@@ -155,7 +155,7 @@ gitlab-docs-update-run: gitlab-docs/.git/pull gitlab-runner-pull omnibus-gitlab-
 # Internal links and anchors checks for documentation
 ifeq ($(gitlab_docs_enabled),true)
 gitlab-docs-check: gitlab-runner-docs-check omnibus-gitlab-docs-check charts-gitlab-docs-check gitlab-operator-docs-check gitlab-docs-build
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && make internal-links-and-anchors-check
+	$(make_docs) internal-links-and-anchors-check
 else
 gitlab-docs-check:
 	@echo "ERROR: gitlab_docs is not enabled. See doc/howto/gitlab_docs.md"
