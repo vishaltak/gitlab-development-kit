@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe Runit do
+  let(:log_dir) { Pathname.new('/home/git/gdk/log') }
+
   describe 'ALL_DATA_ORIENTED_SERVICE_NAMES' do
     it 'returns all data service names only' do
       expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to contain_exactly(*%w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql])
@@ -199,12 +201,58 @@ RSpec.describe Runit do
       end
 
       context 'when there are logs to tail' do
+        let(:log_files) { services.map { |service| Pathname.new(log_dir.join(service, 'current')) } }
+
         it 'attempts to tail service log files' do
-          stub_const('Runit::LOG_DIR', Pathname.new('/home/git/gdk/log'))
+          allow(described_class).to receive(:log_files).and_return(log_files)
 
           expect(described_class).to receive(:exec).with('tail', '-qF', '/home/git/gdk/log/postgresql/current', '/home/git/gdk/log/redis/current')
 
           tail
+        end
+      end
+    end
+
+    describe '.log_files' do
+      subject(:log_files) { described_class.log_files(services) }
+
+      let(:services) { %w[redis] }
+
+      before do
+        stub_const('Runit::LOG_DIR', log_dir)
+      end
+
+      context 'when there are no matching logs files' do
+        it 'returns an empty array' do
+          expect(log_files).to eq([])
+        end
+      end
+
+      context 'when there are matching log_files' do
+        let(:redis_log) { log_dir.join('redis/current') }
+
+        before do
+          allow(log_dir).to receive(:join).with(services.first, 'current').and_return(redis_log)
+          allow(redis_log).to receive(:exist?).and_return(true)
+        end
+
+        it 'returns the list of log files' do
+          expect(log_files).to contain_exactly(redis_log)
+        end
+      end
+
+      context 'when there are matching shortcuts' do
+        let(:services) { %w[rails] }
+        let(:rails_web_log) { log_dir.join('rails-web/current') }
+
+        before do
+          allow(log_dir)
+            .to receive(:glob).with('rails-*/current')
+            .and_return(rails_web_log)
+        end
+
+        it 'returns the list of log files' do
+          expect(log_files).to contain_exactly(rails_web_log)
         end
       end
     end
