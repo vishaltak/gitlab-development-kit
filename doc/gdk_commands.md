@@ -188,7 +188,13 @@ gdk reconfigure
 
 ## View configuration settings
 
-With `gdk config get` you can view GDK configuration settings:
+With `gdk config list` you can view GDK configuration settings:
+
+```shell
+gdk config list
+```
+
+Use `gdk config get` to inspect specific item:
 
 ```shell
 gdk config get <configuration value>

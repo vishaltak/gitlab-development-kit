@@ -5,6 +5,7 @@ module GDK
     # Handles `gdk config` command execution
     #
     # This command accepts the following subcommands:
+    # - list
     # - get <config key>
     # - set <config key> <value>
     class Config < BaseCommand
@@ -16,8 +17,12 @@ module GDK
           GDK::Output.abort('Usage: gdk config set <name> <value>') if args.length != 2
 
           config_set(*args)
+        when 'list'
+          GDK::Output.puts(config)
+          true
         else
           GDK::Output.warn('Usage: gdk config [<get>|set] <name> [<value>]')
+          GDK::Output.warn('       gdk config list')
           abort
         end
       end

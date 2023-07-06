@@ -31,24 +31,21 @@ Manage GDK:
 
   gdk install gitlab_repo=https://my-fork           # Install everything
   gdk update                                        # Pull application changes from Git
-  gdk reconfigure                                   # Delete and regenerate all config
-                                                    #  files created by GDK
+  gdk reconfigure                                   # Delete and regenerate all config files created by GDK
 
-  gdk config get postgresql.port                    # Get configuration values
-  gdk config set postgresql.port <port>             # Set configuration values
+  gdk config list                                   # List all config keys and values
+  gdk config get postgresql.port                    # Get configuration value
+  gdk config set postgresql.port <port>             # Set configuration value
   gdk config set sshd.hostkeyalgorithms rsa,ed25519 # Set array configuration with comma-separated values
   gdk diff-config                                   # Print difference between current
                                                     #  and new configuration values
 
-  gdk reset-data                                    # Backs up and creates fresh git
-                                                    #  repository, PostgreSQL data and
-                                                    #  Rails upload directory
-  gdk reset-praefect-data                           # Backs up and creates fresh Praefect
-                                                    # PostgreSQL data
-  gdk cleanup                                       # Truncate log files and remove any
-                                                    #  unnecessarily installed dependencies
-  gdk pristine                                      # Restore your GDK to a pristine
-                                                    #  state. Deletes caches, temporary files, and
+  gdk reset-data                                    # Back up and create fresh git repository, PostgreSQL
+                                                    #  data and Rails upload directory
+  gdk reset-praefect-data                           # Back up and create fresh Praefect PostgreSQL data
+  gdk cleanup                                       # Truncate log files and remove any unnecessarily
+                                                    #  installed dependencies
+  gdk pristine                                      # Reset GDK state. Deletes caches, temporary files
                                                     #  reinstalls dependencies. Does not delete data
 
   gdk doctor                                        # Run diagnostics on GDK
