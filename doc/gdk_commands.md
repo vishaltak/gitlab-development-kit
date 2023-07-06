@@ -64,6 +64,12 @@ gdk tail | grep <some_correlation_id>
   tail -n 100 gitlab/log/graphql_json.log
   ```
 
+For usage information and a list of services and shortcuts for the `tail` command, use the `--help` flag:
+
+```shell
+gdk tail --help
+```
+
 ## Open in web browser
 
 To visit the GitLab web UI running in your local GDK installation, using your default web browser:

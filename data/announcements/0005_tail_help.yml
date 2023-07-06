@@ -1,0 +1,8 @@
+---
+header: New `gdk tail --help` information
+body: |
+  For information about how to use the `tail` command including a list of
+  services and shortcuts, run `gdk tail --help`.
+
+  For more details, see
+  https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/3228.

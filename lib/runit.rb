@@ -240,7 +240,11 @@ module Runit
   def self.tail(services)
     log_files_for_services = log_files(services)
     if log_files_for_services.empty?
-      GDK::Output.warn('There are no services to tail.')
+      GDK::Output.warn(<<~MSG)
+        No matching services to tail.
+
+        To view a list of services and shortcuts, run `gdk tail --help`.
+      MSG
       return true
     end
 
