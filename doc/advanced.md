@@ -428,6 +428,66 @@ sudo xbps-install ruby ruby-devel minio re2 re2-devel icu icu-libs icu-devel \
   postgresql13 postgresql13-client postgresql13-contrib postgresql-libs postgresql-libs-devel
 ```
 
+### Gentoo Linux
+
+This platform is not officially supported, but it is supported by wider community members.
+
+The following are instructions for Gentoo users who don't want
+[GDK to manage their dependencies with `asdf`](index.md#install-dependencies).
+
+Install the required packages:
+
+```shell
+sudo emerge --noreplace app-admin/sudo app-arch/unzip app-crypt/gnupg app-crypt/mit-krb5 dev-db/postgresql dev-db/redis dev-db/sqlite dev-lang/go dev-libs/icu dev-libs/libpcre2 dev-libs/libyaml dev-libs/openssl dev-libs/re2 dev-python/docutils dev-util/cmake dev-util/pkgconf dev-util/yamllint dev-vcs/git dev-vcs/git-lfs media-gfx/graphicsmagick media-libs/exiftool net-libs/nodejs net-misc/curl net-misc/wget sys-apps/ed sys-apps/net-tools sys-apps/which sys-apps/yarn sys-apps/util-linux sys-libs/readline sys-libs/zlib sys-process/psmisc sys-process/runit virtual/openssh
+```
+
+Read the result message from emerge, as it will tell you what you must run
+to configure PostgreSQL. It will be something like this:
+
+```shell
+sudo emerge --config dev-db/postgresql:15
+```
+
+Start the newly installed services:
+
+```shell
+sudo /etc/init.d/postgresql-15 start
+sudo /etc/init.d/redis start
+
+# And maybe you want to start them automatically on boot:
+sudo rc-update add postgresql-15 default
+sudo rc-update add redis default
+```
+
+Manually install `minio`, because it's not in Portage:
+
+```shell
+sudo curl "https://dl.min.io/server/minio/release/linux-amd64/minio" --output /usr/local/bin/minio
+sudo chmod +x /usr/local/bin/minio
+```
+
+For bundler to work with system Ruby without trying to install gems in
+system directory, you need to set the `GEM_HOME` variable. You can find
+your user Gem install path with `gem env`. The value you're after is in the
+`GEM_PATHS` list. You also need to add the `bin/` subdirectory from that
+path to your `PATH` variable, in order to be able to call Ruby commands. So,
+you should end up with something like the following in your shell config
+(`~/.bashrc`, `~/.zshrc`, etc.):
+
+```shell
+export GEM_HOME=$HOME/.gem/ruby/3.1.0
+export PATH="$GEM_HOME/bin/:$PATH"
+```
+
+If you're not familiar with using Ruby on Gentoo, note that several
+versions can coexist on your system, and you must use the `eselect` command
+to select which one you want to use. Frequently, during an update of minor
+version (for example, going from Ruby 3.0 to Ruby 3.1), the Gem path will change, so
+you will have to update `GEM_HOME` and install gems again running `bundle
+install` in the Ruby projects.
+
+Now you can proceed to [set up GDK](index.md).
+
 ## Install FreeBSD dependencies
 
 To install dependencies for FreeBSD:
