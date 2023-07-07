@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'gdk/config_type'
+require 'gdk/config_settings'
+require 'gdk/config'
+
+config = GDK::Config.new
+repositories = config.repositories.dump!
+
+puts 'Configure to use SSH instead of HTTPS:'
+
+repositories.each_value do |path|
+  directory = File.basename(path, '.git')
+
+  next unless Dir.exist?(directory)
+
+  puts "\tSetting up #{directory}"
+
+  system(
+    'git', '--git-dir', "#{directory}/.git",
+    'config', 'url.git@gitlab.com:.insteadOf', 'https://gitlab.com/'
+  )
+end
