@@ -55,4 +55,4 @@ The required instructions depend on your operating system and method of installi
 combination is:
 
 - ZSH shell.
-- Installation using Homebrew.
+- Installation using Git.
