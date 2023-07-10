@@ -11,7 +11,7 @@ module GDK
 
       def run(_ = [])
         unless installed?
-          GDK::Output.warn("GDK has not been installed so cannot run 'gdk doctor'.")
+          GDK::Output.warn("GDK has not been installed so cannot run 'gdk doctor'. Try running `gem install gitlab-development-kit` again.")
           return false
         end
 
