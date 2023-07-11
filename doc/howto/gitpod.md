@@ -70,8 +70,27 @@ The easiest way to switch to another branch is to use the UI functionality:
 Alternatively, you can also use the terminal to check out a branch:
 
 ```shell
-git fetch origin
+cd /workspace/gitlab-development-kit/gitlab
+git fetch origin &&
 git checkout -b "BRANCH_NAME" "origin/BRANCH_NAME"
+```
+
+Often your branch is behind the Ruby gems and JavaScript libraries of the `master` branch,
+so after switching branches, make sure they are installed.
+
+On the Gitpod console:
+
+```shell
+cd /workspace/gitlab-development-kit/gitlab
+bundle && yarn
+```
+
+Finally, you should restart GDK after switching branches, because changes on the branch (for example,
+workers) mean a restart is required to have the feature work:
+
+```shell
+cd /workspace/gitlab-development-kit
+gdk restart
 ```
 
 ### Commit and push changes
@@ -143,7 +162,7 @@ use to verify whether the runner is actually working.
 
 To enable feature flags:
 
-1. Run `cd ../gitlab && ./bin/rails console`.
+1. Run `cd /workspace/gitlab-development-kit/gitlab && ./bin/rails console`.
 1. Wait about 1 minute until you see the message that the development environment
    has been loaded.
 1. Run `Feature.enable(:feature_flag)`, replacing `feature_flag` with the name of the
