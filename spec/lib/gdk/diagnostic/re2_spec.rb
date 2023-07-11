@@ -26,7 +26,7 @@ RSpec.describe GDK::Diagnostic::Re2 do
       it 'returns false' do
         stub_shellout(false)
 
-        expect(subject.detail).to eq("It looks like your system re2 library may have been upgraded, and\nthe re2 gem needs to be rebuilt as a result.\n\nPlease run `cd /home/git/gdk/gitlab && gem pristine re2`.\n")
+        expect(subject.detail).to eq("It looks like your system re2 library may have been upgraded, and\nthe re2 gem needs to be rebuilt as a result.\n\nPlease run `cd /home/git/gdk/gitlab && bundle pristine re2`.\n")
       end
     end
 
