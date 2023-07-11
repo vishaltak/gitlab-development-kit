@@ -21,7 +21,7 @@ Product analytics features are behind feature flags and must be enabled to use t
 
 - To enable product analytics settings and make them visible, run:
 
-  ```shell 
+  ```shell
   echo "Feature.enable(:product_analytics_admin_settings)" | gdk rails c
   ```
 
@@ -57,5 +57,6 @@ If you have the `product_analytics_snowplow_support` feature flag enabled, you m
 
 ### View Product Analytics dashboards
 
-1. On the top bar, select **Main menu > Projects** and find the project set up in the previous section.
-1. On the left sidebar, select **Analytics > Dashboards**.
+1. On the left sidebar, at the top, select **Search GitLab** (**{search}**) to find the project set up in the previous
+   section.
+1. On the left sidebar, select **Analyze > Dashboards**.

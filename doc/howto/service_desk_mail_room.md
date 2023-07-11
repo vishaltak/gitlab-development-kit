@@ -93,7 +93,8 @@ You can watch [a recorded video walkthrough](https://www.youtube.com/watch?v=Sdq
 
 After configuring services test:
 
-1. On the top bar, select **Main menu > Projects** and find a project configured with Service Desk.
+1. On the left sidebar, at the top, select **Search GitLab** (**{search}**) to find a project configured with Service
+   Desk.
 1. Compose an email to send to the email address set in the Service Desk settings page.
 1. Check that an issue is created on the Service Desk issue board.
 

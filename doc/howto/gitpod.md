@@ -125,7 +125,8 @@ You can create a runner with a Docker executor or a shell executor. You can also
 
 #### Option 2: Shell executor
 
-1. On the top bar, select **Main menu > Admin** in the GitLab UI running in GDK.
+1. On the left sidebar, expand the top-most chevron (**{chevron-down}**).
+1. Select **Admin Area**.
 1. On the left sidebar, select **CI/CD > Runners**.
 1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the
    **Remote Explorer** tab in Gitpod UI and select the lock icon next to the port name.
