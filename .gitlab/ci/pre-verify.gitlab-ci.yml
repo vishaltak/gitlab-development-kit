@@ -9,4 +9,6 @@ build-verify-image:
   needs:
     - release-image
   script:
+    - du -sh $GITLAB_CI_CACHE_FULL_DIR
+    - exit 1
     - ./support/docker ci-build-verify-image
