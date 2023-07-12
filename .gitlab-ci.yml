@@ -19,18 +19,15 @@ stages:
   GITLAB_CI_CACHE_FULL_DIR: $CI_PROJECT_DIR/$GITLAB_CI_CACHE_DIR
   GITLAB_CI_CACHE_FULL_GO_DIR: $GITLAB_CI_CACHE_FULL_DIR/go
   GITLAB_CI_CACHE_GO_DIR: $GITLAB_CI_CACHE_DIR/go
-
   GDK_INTERNAL_CACHE_FULL_DIR: /home/gdk/$GITLAB_CI_CACHE_DIR
   GDK_INTERNAL_CACHE_RUBY_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/ruby
   GDK_INTERNAL_CACHE_GO_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/go
-
   BUNDLE_PATH: "vendor/bundle"
   BUNDLE_FROZEN: "true"
   BUNDLE_JOBS: "$(nproc)"
   ENABLE_BOOTSNAP: "false"
   PUMA_SINGLE_MODE: "true"
   GDK_DEBUG: "true"
-
   NOKOGIRI_LIBXML_MEMORY_MANAGEMENT: "default"
 
 variables:
@@ -65,13 +62,14 @@ default:
   variables:
     <<: *default_variables
     <<: *cached_variables
-  cache:
-    - key:
-        files:
-          - '.tool-versions'
-      paths:
-        - "$GITLAB_CI_CACHE_DIR"
-      policy: pull-push
+  # Temporarily disabling the cache. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1886 for more details.
+  # cache:
+  #   - key:
+  #       files:
+  #         - '.tool-versions'
+  #     paths:
+  #       - "$GITLAB_CI_CACHE_DIR"
+  #     policy: pull-push
 
 include:
   - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
