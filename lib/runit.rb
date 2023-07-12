@@ -251,8 +251,12 @@ module Runit
     return LOG_DIR.glob(File.join('*', 'current')) if services.empty?
 
     services.flat_map do |svc|
-      log_shortcut(svc) || LOG_DIR.join(svc, 'current')
-    end.uniq
+      shortcut = log_shortcut(svc)
+      next shortcut if shortcut
+
+      current_log = LOG_DIR.join(svc, 'current')
+      current_log if current_log.exist?
+    end.compact.uniq
   end
 
   def self.log_shortcut(svc)
@@ -266,7 +270,7 @@ module Runit
     end
 
     shortcut_logs = LOG_DIR.glob(File.join(glob, 'current'))
-    shortcut_logs.empty? ? nil : shortcut_logs
+    shortcut_logs unless shortcut_logs.empty?
   end
 
   def self.kill_processes(pids)
