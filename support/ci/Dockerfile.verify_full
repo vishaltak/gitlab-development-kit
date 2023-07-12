@@ -28,14 +28,14 @@ ARG GDK_DEBUG
 
 RUN env | grep -Ev "TOKEN|PASSWORD|LICENSE|KEY"
 
-RUN sudo mkdir -p ${BUNDLE_PATH} ${GEM_HOME} ${GEM_PATH} ${GOCACHE} ${GOMODCACHE} ${NODE_PATH} && \
-  sudo chown -R gdk:gdk ${GDK_INTERNAL_CACHE_FULL_DIR}
+RUN sudo mkdir -p ${BUNDLE_PATH} ${GEM_HOME} ${GEM_PATH} ${GOCACHE} ${GOMODCACHE} ${NODE_PATH}
+RUN sudo chown -R gdk:gdk ${GDK_INTERNAL_CACHE_FULL_DIR} || true
 
 WORKDIR /home/gdk
 
 COPY --chown=gdk ${GITLAB_CI_CACHE_DIR}/ ${GITLAB_CI_CACHE_DIR}/
 
-RUN du -smx ${GITLAB_CI_CACHE_DIR}/*
+RUN du -smx ${GITLAB_CI_CACHE_DIR}/* || true
 
 RUN echo "yarn-offline-mirror ${NODE_PATH}/.yarn-cache/" >> ${HOME}/.yarnrc
 RUN echo "yarn-offline-mirror-pruning true" >> ${HOME}/.yarnrc
