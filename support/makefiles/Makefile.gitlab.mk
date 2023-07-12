@@ -49,9 +49,6 @@ gitlab/.git:
 	@echo "Cloning gitlab-org/gitlab"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-clone ${git_depth_param} $(if $(realpath ${gitlab_repo}),--shared) ${gitlab_repo} ${gitlab_clone_dir}
-	@echo "Switching to branch mmj-no-logger"
-	$(Q)$(in_gitlab) git checkout mmj-no-logger && cd ..
-	@echo "Done"
 
 gitlab-config: \
 	touch-examples \
