@@ -67,7 +67,7 @@ module GDK
 
           Try running the following to fix:
 
-          cd #{config.gitlab.dir} && gem pristine #{@failed_to_load_gitlab_gems.join(' ')}
+          cd #{config.gitlab.dir} && bundle pristine #{@failed_to_load_gitlab_gems.join(' ')}
         MESSAGE
       end
     end

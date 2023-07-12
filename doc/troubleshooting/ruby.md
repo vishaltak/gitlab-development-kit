@@ -47,7 +47,7 @@ In that case, find the offending gem and use `pristine` to rebuild its native
 extensions:
 
 ```shell
-gem pristine charlock_holmes
+bundle pristine charlock_holmes
 ```
 
 Or for example `re2` on MacOS:
@@ -60,7 +60,7 @@ ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-darwin19]
 In which case you would run:
 
 ```shell
-gem pristine re2
+bundle pristine re2
 ```
 
 ## An error occurred while installing thrift

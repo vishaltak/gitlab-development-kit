@@ -26,7 +26,7 @@ module GDK
           It looks like your system re2 library may have been upgraded, and
           the re2 gem needs to be rebuilt as a result.
 
-          Please run `cd #{config.gitlab.dir} && gem pristine re2`.
+          Please run `cd #{config.gitlab.dir} && bundle pristine re2`.
         MESSAGE
       end
 

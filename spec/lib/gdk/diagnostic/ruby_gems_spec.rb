@@ -66,7 +66,7 @@ RSpec.describe GDK::Diagnostic::RubyGems do
       context 'and allow_gem_not_installed is false' do
         let(:allow_gem_not_installed) { false }
 
-        it { is_expected.to match(/gem pristine bad_gem/) }
+        it { is_expected.to match(/bundle pristine bad_gem/) }
       end
 
       context 'and allow_gem_not_installed is true' do
@@ -86,7 +86,7 @@ RSpec.describe GDK::Diagnostic::RubyGems do
       context 'and bad_gem cannot be loaded' do
         let(:gem_loads_ok) { false }
 
-        it { is_expected.to match(/gem pristine bad_gem/) }
+        it { is_expected.to match(/bundle pristine bad_gem/) }
       end
 
       context 'and bad_gem is loaded correctly' do
