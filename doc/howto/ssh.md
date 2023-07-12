@@ -3,12 +3,13 @@
 GitLab can provide access to its repositories over SSH instead of HTTPS. There
 are two ways to enable this in GDK. Either:
 
-- Run the `gitlab-sshd` binary provided by [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell).
+- Default. Run the [`gitlab-sshd`](https://docs.gitlab.com/ee/administration/operations/gitlab_sshd.html)
+  binary provided by [GitLab Shell](https://gitlab.com/gitlab-org/gitlab-shell).
   Using `gitlab-sshd` is better for multi-host deployments like GitLab.com and
-  development environments.
+  development environments. By default, `gitlab-sshd` listens to port `2222`.
 - Integrate GitLab Shell with [OpenSSH](https://openssh.org). Because integrating
   with OpenSSH allows GitLab to provide its services on the same port as the system's
-  SSH daemon, this is preferred option for most single-host deployments of GitLab.
+  SSH daemon, this is the preferred option for most single-host deployments of GitLab.
 
 GDK enables the first option by default. Only engineers working on the GitLab
 OpenSSH integration need to use the second option.
@@ -16,7 +17,7 @@ OpenSSH integration need to use the second option.
 ## Change the listen port or other configuration
 
 Copy lines into your `<gdk-root>/gdk.yml` file from `<gdk-root>/gdk.example.yml`,
-and adjust as needed. For example, to change the listen port to `2223`:
+and adjust as needed. For example, to change the listen port from the default `2222` to `2223`:
 
 1. Add the following to your `<gdk-root>/gdk.yml` file:
 
@@ -32,7 +33,7 @@ and adjust as needed. For example, to change the listen port to `2223`:
 
 Note that some settings apply:
 
-- Only to `gitlab-sshd` mode:
+- Only to OpenSSH mode:
   - `additional_config`
   - `authorized_keys_file`
   - `bin`
@@ -52,11 +53,6 @@ command:
 ```shell
 sudo setcap 'cap_net_bind_service=+ep' gitlab-shell/bin/gitlab-sshd
 ```
-
-## Try it out
-
-You can check that SSH works by cloning any project (for example, `Project.first.ssh_url_to_repo`).
-This also updates your `known_hosts` file.
 
 ## OpenSSH integration
 
@@ -138,3 +134,38 @@ directories are also owned by `root`.
    `<gdk-root>/gitlab/config/gitlab.yml` for the value of `development.gitlab.user`
    (or `production.gitlab.user`), or check which username is returned by
    `Project.first.ssh_url_to_repo`.
+
+## Add an entry to `~/.ssh/config`
+
+Prerequisites:
+
+- You [set up `gdk.test`](local_network.md) to be the hostname of your GDK.
+- You have [created and added an SSH key](https://docs.gitlab.com/ee/user/ssh.html) to your account.
+
+The following example entry of `~/.ssh/config` uses the default GDK SSH port (`2222`):
+
+```plaintext
+Host gdk.test
+  User git
+  Hostname gdk.test
+  Port 2222
+  PreferredAuthentications publickey
+  IdentityFile <path to SSH key>
+```
+
+After you add the entry,
+[verify that you can connect](https://docs.gitlab.com/ee/user/ssh.html#verify-that-you-can-connect).
+
+## Try it out
+
+You can check that SSH works by visiting GitLab and cloning any project
+using the Git protocol.
+
+Alternatively, you can find the SSH URL of the first project by using the
+[Rails console](rails_console.md) and use that to clone the repository:
+
+```ruby
+Project.first.ssh_url_to_repo
+```
+
+After you clone a project, your `known_hosts` file is also updated.
