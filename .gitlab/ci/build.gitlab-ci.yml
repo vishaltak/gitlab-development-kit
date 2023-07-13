@@ -3,8 +3,7 @@
   extends:
     - .docker:build-docker-in-docker
   tags:
-    - gitlab-org
-    - high-cpu
+    - gitlab-org-docker
 
 release-image:
   extends:

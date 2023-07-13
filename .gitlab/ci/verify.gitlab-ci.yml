@@ -8,8 +8,7 @@
   before_script:
     - !reference [.default-before_script, before_script]
   tags:
-    - gitlab-org
-    - high-cpu
+    - gitlab-org-docker
 
 .verify-job:
   extends:
