@@ -88,3 +88,10 @@ gitpod-docker-image:
     expire_in: 2 days
     when: on_failure
   timeout: 1h
+
+geo-install:
+  extends: .verify-job
+  tags:
+    - saas-linux-medium-amd64
+  script:
+    - support/ci/verify-geo
