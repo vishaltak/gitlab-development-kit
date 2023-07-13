@@ -17,7 +17,7 @@ def db_name
 end
 
 def main
-  abort 'postgres not ready' unless postgresql.ready?(try_times: 60)
+  abort 'postgres not ready' unless postgresql.ready?(try_times: 180)
   exit if postgresql.db_exists?(db_name)
   abort 'createdb failed' unless postgresql.createdb(%W[--encoding=UTF8 --locale=C --echo #{db_name}])
   abort 'migrate failed' unless system('support/migrate-praefect')
