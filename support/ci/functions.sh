@@ -184,3 +184,31 @@ test_url() {
   # QUIET=false support/test_url || QUIET=false support/test_url
   support/ci/test_url
 }
+
+setup_geo() {
+  sudo /sbin/sysctl fs.inotify.max_user_watches=524288
+
+  if [ -n "${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}" ]; then
+    sha="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA}"
+  else
+    sha="${CI_COMMIT_SHA}"
+  fi
+
+  GITLAB_LICENSE_MODE=test CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" curl --fail "${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}/-/raw/${sha}/support/geo-install" | bash -s - gdk gdk2 "${sha}"
+  output=$(cd gdk2/gitlab && bin/rake gitlab:geo:check)
+
+  matchers=(
+    "GitLab Geo is enabled ... yes"
+    "This machine's Geo node name matches a database record ... yes, found a secondary node named \"gdk2\""
+    "GitLab Geo tracking database is correctly configured ... yes"
+    "Database replication enabled? ... yes"
+    "Database replication working? ... yes"
+  )
+
+  for matcher in "${matchers[@]}"; do
+    if [[ $output != *${matcher}* ]]; then
+      echo "Geo install failed. The string is not found: ${matcher}"
+      exit 1
+    fi
+  done
+}
