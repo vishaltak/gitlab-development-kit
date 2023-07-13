@@ -7,7 +7,7 @@ gitlab_operator_clone_dir = gitlab-operator
 # Silence Rollup when building GitLab Docs with nanoc
 export ROLLUP_OPTIONS = --silent
 
-make_docs = $(Q)cd ${gitlab_development_root}/gitlab-docs && make
+make_docs = $(Q)make -C ${gitlab_development_root}/gitlab-docs
 
 ifeq ($(gitlab_docs_enabled),true)
 gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-operator gitlab-docs-deps
