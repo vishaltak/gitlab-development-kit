@@ -3,10 +3,18 @@
 build-verify-image:
   stage: pre-verify
   extends:
-    - .cached-job
+    - .verify-base-job
     - .build-job
-    - .rules:code-changes
+    - .build-verify-image-cache
+    - .rules:build-verify-image
   needs:
     - release-image
   script:
     - ./support/docker ci-build-verify-image
+
+build-verify-image update-cache:
+  extends:
+    - build-verify-image
+    # Override the cache and rules
+    - .build-verify-image-cache-push
+    - .rules:build-verify-image-update-cache
