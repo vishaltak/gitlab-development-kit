@@ -17,12 +17,8 @@ variables:
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
   GITLAB_CI_CACHE_DIR: .gitlab-ci-cache
   GITLAB_CI_CACHE_FULL_DIR: $CI_PROJECT_DIR/$GITLAB_CI_CACHE_DIR
-  GITLAB_CI_CACHE_FULL_GO_DIR: $GITLAB_CI_CACHE_FULL_DIR/go
   GITLAB_CI_CACHE_GO_DIR: $GITLAB_CI_CACHE_DIR/go
-  GDK_INTERNAL_CACHE_FULL_DIR: /home/gdk/$GITLAB_CI_CACHE_DIR
-  GDK_INTERNAL_CACHE_RUBY_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/ruby
-  GDK_INTERNAL_CACHE_GO_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/go
-  BUNDLE_PATH: "vendor/bundle"
+  BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
   BUNDLE_FROZEN: "true"
   BUNDLE_JOBS: "$(nproc)"
   ENABLE_BOOTSNAP: "false"
@@ -52,28 +48,24 @@ default:
 ## Cache definitions
 .cache-variables:
   variables:
-    BUNDLE_PATH: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
-    GEM_HOME: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
-    GEM_PATH: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
-    GOCACHE: "${GDK_INTERNAL_CACHE_GO_FULL_DIR}/build"
-    GOMODCACHE: "${GDK_INTERNAL_CACHE_GO_FULL_DIR}/mod"
-    NODE_PATH: "${GDK_INTERNAL_CACHE_FULL_DIR}/nodejs"
+    GEM_HOME: "${BUNDLE_PATH}"
+    GEM_PATH: "${BUNDLE_PATH}"
+    GOMODCACHE: "${GITLAB_CI_CACHE_DIR}/go/mod"
+    NODE_PATH: "${GITLAB_CI_CACHE_DIR}/nodejs"
 
 .build-verify-image-cache-definition: &build-verify-image-cache-definition
   key:
     files:
-      - '.tool-versions'
+      - ".tool-versions"
   paths:
-    - "${GITLAB_CI_CACHE_FULL_DIR}/ruby/gem"
-    - "${GITLAB_CI_CACHE_FULL_DIR}/go/mod"
-    - "${GITLAB_CI_CACHE_FULL_DIR}/nodejs"
+    - "${BUNDLE_PATH}/"
+    - "${GOMODCACHE}/"
+    - "${NODE_PATH}/"
   policy: pull
 
 .build-verify-image-cache-definition-push: &build-verify-image-cache-definition-push
   <<: *build-verify-image-cache-definition
-  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up but RuboCop has a mechanism
-  # for keeping only the N latest cache files, so we take advantage of it with `pull-push`.
-  policy: push
+  policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
 
 .build-verify-image-cache:
   extends: .cache-variables

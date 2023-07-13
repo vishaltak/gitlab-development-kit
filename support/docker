@@ -102,11 +102,9 @@ case "$1" in
         --build-arg URL="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" \
         --build-arg SHA="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
         --build-arg GITLAB_CI_CACHE_DIR="${GITLAB_CI_CACHE_DIR}" \
-        --build-arg GDK_INTERNAL_CACHE_FULL_DIR="${GDK_INTERNAL_CACHE_FULL_DIR}" \
         --build-arg BUNDLE_PATH="${BUNDLE_PATH}" \
         --build-arg GEM_HOME="${GEM_HOME}" \
         --build-arg GEM_PATH="${GEM_PATH}" \
-        --build-arg GOCACHE="${GOCACHE}" \
         --build-arg GOMODCACHE="${GOMODCACHE}" \
         --build-arg NODE_PATH="${NODE_PATH}" \
         --build-arg PUMA_SINGLE_MODE="${PUMA_SINGLE_MODE}" \
@@ -115,7 +113,7 @@ case "$1" in
 
         docker rm built-image > /dev/null 2>&1 || true
         docker create --name built-image "${VERIFY_FULL_IMAGE}"
-        docker cp built-image:"${GDK_INTERNAL_CACHE_FULL_DIR}"/ "${CI_PROJECT_DIR}"/ || true
+        docker cp built-image:"/home/gdk/${GITLAB_CI_CACHE_DIR}"/ "${CI_PROJECT_DIR}"/ || true
         docker rm built-image > /dev/null 2>&1 || true
 
         du -smx "${GITLAB_CI_CACHE_FULL_DIR}"/*
