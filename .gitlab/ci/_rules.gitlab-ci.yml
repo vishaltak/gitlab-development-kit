@@ -90,6 +90,25 @@
     - <<: *if-default-branch-schedule
     - changes: *code-changes
 
+.rules:build-verify-image:
+  rules:
+    - <<: *if-gitpod-image-release
+      when: never
+    - <<: *if-default-branch-schedule
+      when: never
+    - changes: *code-changes
+
+.rules:build-verify-image-update-cache:
+  rules:
+    - <<: *if-gitpod-image-release
+      when: never
+    - <<: *if-default-branch-schedule
+    - changes:
+        - ".gitlab-ci.yml"
+        - ".gitlab/ci/**/*"
+      when: manual
+      allow_failure: true
+
 .rules:docs-code-changes:
   rules:
     - changes: *docs-code-changes

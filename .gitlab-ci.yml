@@ -8,7 +8,7 @@ stages:
   - verify
   - deploy
 
-.default_variables: &default_variables
+variables:
   DEFAULT_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:$CI_COMMIT_REF_SLUG
   GITLAB_E2E_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed-gitlab-e2e:$CI_COMMIT_REF_SLUG
   VERIFY_FULL_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed-full:$CI_COMMIT_REF_SLUG
@@ -31,9 +31,6 @@ stages:
   NOKOGIRI_LIBXML_MEMORY_MANAGEMENT: "default"
   GITLAB_LAST_VERIFIED_SHA_PATH: gitlab-last-verified-sha.json
 
-variables:
-  <<: *default_variables
-
 default:
   timeout: 3h
   interruptible: true
@@ -52,31 +49,41 @@ default:
         true;
       fi
 
-.cached_variables: &cached_variables
-  BUNDLE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle
-  GEM_HOME: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
-  GEM_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
-  GOCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/build
-  GOMODCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/mod
-  NODE_PATH: $GDK_INTERNAL_CACHE_FULL_DIR/nodejs
-
-.verify-job-cached_variables:
+## Cache definitions
+.cache-variables:
   variables:
-    <<: *default_variables
-    <<: *cached_variables
+    BUNDLE_PATH: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
+    GEM_HOME: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
+    GEM_PATH: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
+    GOCACHE: "${GDK_INTERNAL_CACHE_GO_FULL_DIR}/build"
+    GOMODCACHE: "${GDK_INTERNAL_CACHE_GO_FULL_DIR}/mod"
+    NODE_PATH: "${GDK_INTERNAL_CACHE_FULL_DIR}/nodejs"
 
-.cached-job:
-  variables:
-    <<: *default_variables
-    <<: *cached_variables
-  # Temporarily disabling the cache. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1886 for more details.
-  # cache:
-  #   - key:
-  #       files:
-  #         - '.tool-versions'
-  #     paths:
-  #       - "$GITLAB_CI_CACHE_DIR"
-  #     policy: pull-push
+.build-verify-image-cache-definition: &build-verify-image-cache-definition
+  key:
+    files:
+      - '.tool-versions'
+  paths:
+    - "${GITLAB_CI_CACHE_FULL_DIR}/ruby/gem"
+    - "${GITLAB_CI_CACHE_FULL_DIR}/go/mod"
+    - "${GITLAB_CI_CACHE_FULL_DIR}/nodejs"
+  policy: pull
+
+.build-verify-image-cache-definition-push: &build-verify-image-cache-definition-push
+  <<: *build-verify-image-cache-definition
+  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up but RuboCop has a mechanism
+  # for keeping only the N latest cache files, so we take advantage of it with `pull-push`.
+  policy: push
+
+.build-verify-image-cache:
+  extends: .cache-variables
+  cache:
+    - *build-verify-image-cache-definition
+
+.build-verify-image-cache-push:
+  extends: .build-verify-image-cache
+  cache:
+    - *build-verify-image-cache-definition-push
 
 include:
   - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
