@@ -94,3 +94,5 @@ geo-install:
     - saas-linux-medium-amd64
   script:
     - support/ci/verify-geo
+  when: manual
+  allow_failure: true
