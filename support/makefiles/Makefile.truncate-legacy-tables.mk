@@ -20,6 +20,9 @@ do-truncate:
 ifeq ($(wildcard $(FLAG_FILE)),)
 	$(Q)$(gitlab_rake_cmd) gitlab:db:lock_writes
 	$(Q)$(gitlab_rake_cmd) gitlab:db:truncate_legacy_tables:main
+	$(Q)$(gitlab_rake_cmd) gitlab:db:unlock_writes
+
+	$(Q)$(gitlab_rake_cmd) gitlab:db:lock_writes
 	$(Q)$(gitlab_rake_cmd) gitlab:db:truncate_legacy_tables:ci
 	$(Q)$(gitlab_rake_cmd) gitlab:db:unlock_writes
 
