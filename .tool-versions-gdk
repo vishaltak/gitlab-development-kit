@@ -9,6 +9,5 @@
 #
 # <default-version> <other-version(s)>
 #
-golang 1.20.6
 nodejs 18.16.1
 ruby 3.1.4
