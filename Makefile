@@ -15,9 +15,6 @@ YARN := $(shell command -v yarn 2> /dev/null)
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org
 
-# Silence Rollup when building GitLab Docs with nanoc
-export ROLLUP_OPTIONS = --silent
-
 NO_RAKE_REQUIRED := bootstrap bootstrap-packages lint
 
 # Generate a Makefile from Ruby and include it
