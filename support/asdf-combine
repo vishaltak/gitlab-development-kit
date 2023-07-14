@@ -20,7 +20,6 @@ GITLAB_RUNNER_URL = "#{GITLAB_ORG_URL}/gitlab-runner".freeze
 GITLAB_UI_URL = "#{GITLAB_ORG_URL}/gitlab-ui".freeze
 GITLAB_DOCS_URL = "#{GITLAB_ORG_URL}/gitlab-docs".freeze
 GITLAB_ELASTICSEARCH_INDEXER_URL = "#{GITLAB_ORG_URL}/gitlab-elasticsearch-indexer".freeze
-GITLAB_METRICS_EXPORTER = "#{GITLAB_ORG_URL}/gitlab-metrics-exporter".freeze
 
 class RemoteToolVersionFile
   def initialize(base_url, ref: 'master', path: '', label_ref: '')
@@ -180,9 +179,7 @@ tool_versions_files = [
   RemoteToolVersionFile.new(GITLAB_UI_URL, ref: 'main'),
   RemoteToolVersionFile.new(GITLAB_DOCS_URL, ref: 'main'),
   RemoteToolVersionFile.new(GITLAB_ELASTICSEARCH_INDEXER_URL, ref: 'main'),
-  RemoteToolVersionFile.new(GITLAB_ELASTICSEARCH_INDEXER_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION')),
-  RemoteToolVersionFile.new(GITLAB_METRICS_EXPORTER, ref: 'main'),
-  RemoteToolVersionFile.new(GITLAB_METRICS_EXPORTER, ref: ref_from_remote_file_for_gitlab_project('GITLAB_METRICS_EXPORTER_VERSION'), label_ref: url_for_remote_file_for_gitlab_project('GITLAB_METRICS_EXPORTER_VERSION'))
+  RemoteToolVersionFile.new(GITLAB_ELASTICSEARCH_INDEXER_URL, ref: "v#{ref_from_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION')}", label_ref: url_for_remote_file_for_gitlab_project('GITLAB_ELASTICSEARCH_INDEXER_VERSION'))
 ].freeze
 
 main(tool_versions_files, quiet: ARGV.include?('--quiet'))

@@ -97,7 +97,6 @@ geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
 gitlab-k8s-agent-setup \
-gitlab-metrics-exporter-setup \
 gitlab-pages-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
@@ -134,7 +133,6 @@ gitlab-update \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
 gitlab-k8s-agent-update \
-gitlab-metrics-exporter-update \
 gitlab-pages-update \
 gitlab-spamcheck-update \
 gitlab-translations-unlock \
@@ -167,7 +165,6 @@ geo-config \
 gitlab-docs-setup \
 gitlab-elasticsearch-indexer-setup \
 gitlab-k8s-agent-setup \
-gitlab-metrics-exporter-setup \
 gitlab-pages-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
