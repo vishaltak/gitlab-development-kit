@@ -24,7 +24,6 @@ AllCops:
     - 'gitaly/**/*'
     - 'gitlab-docs/**/*'
     - 'gitlab-elasticsearch-indexer/**/*'
-    - 'gitlab-metrics-exporter/**/*'
     - 'gitlab-k8s-agent/**/*'
     - 'gitlab-operator/**/*'
     - 'gitlab-pages/**/*'

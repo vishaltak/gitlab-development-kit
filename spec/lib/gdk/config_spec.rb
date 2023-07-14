@@ -2044,26 +2044,6 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe 'gitlab_metrics_exporter' do
-    describe 'enabled' do
-      it 'is enabled by default' do
-        expect(config.gitlab_metrics_exporter.enabled).to be(true)
-      end
-    end
-
-    describe 'auto_update' do
-      it 'is enabled by default' do
-        expect(config.gitlab_metrics_exporter.auto_update).to be(true)
-      end
-    end
-
-    describe 'dir' do
-      it 'is /home/git/gdk/gitlab-metrics-exporter by default' do
-        expect(config.gitlab_metrics_exporter.dir.to_s).to eq('/home/git/gdk/gitlab-metrics-exporter')
-      end
-    end
-  end
-
   describe 'registry' do
     describe '#image' do
       context 'when no image is specified' do

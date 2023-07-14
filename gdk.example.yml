@@ -141,10 +141,6 @@ gitlab_k8s_agent:
   private_api_listen_address: 127.0.0.1:8155
   private_api_listen_network: tcp
   run_from_source: false
-gitlab_metrics_exporter:
-  auto_update: true
-  dir: "/home/git/gdk/gitlab-metrics-exporter"
-  enabled: true
 gitlab_operator:
   auto_update: true
   enabled: false
@@ -368,7 +364,6 @@ repositories:
   gitlab_docs: https://gitlab.com/gitlab-org/gitlab-docs.git
   gitlab_elasticsearch_indexer: https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git
   gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git
-  gitlab_metrics_exporter: https://gitlab.com/gitlab-org/gitlab-metrics-exporter.git
   gitlab_operator: https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
   gitlab_runner: https://gitlab.com/gitlab-org/gitlab-runner.git

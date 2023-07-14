@@ -50,7 +50,6 @@
 /gitlab-elasticsearch-indexer
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
-/gitlab-metrics-exporter
 /gitlab-operator
 /gitlab-pages
 /gitlab-pages-secret
