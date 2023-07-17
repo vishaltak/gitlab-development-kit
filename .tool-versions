@@ -46,11 +46,12 @@ nodejs 18.16.1
 
 # postgres:
 #   13.9:
+#     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
-#   12.13:
+#   14.8:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-postgres 13.9 12.13
+postgres 13.9 14.8
 
 # redis:
 #   6.2.7:
