@@ -194,7 +194,11 @@ RSpec.describe Runit do
         it 'returns true' do
           allow(described_class).to receive(:log_files).and_return([])
 
-          expect(GDK::Output).to receive(:warn).with('There are no services to tail.')
+          expect(GDK::Output).to receive(:warn).with(<<~MSG)
+            No matching services to tail.
+
+            To view a list of services and shortcuts, run `gdk tail --help`.
+          MSG
 
           expect(tail).to be_truthy
         end
