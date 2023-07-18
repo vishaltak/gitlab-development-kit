@@ -40,9 +40,9 @@ For example, an identity provider for the "zebra" group can be ran using the fol
 
 ```shell
 docker run --name=gitlab_saml_idp -p 8080:8080 -p 8443:8443 \
--e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/groups/<group-name> \
--e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/callback \
--d jamedjo/test-saml-idp
+  -e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/groups/<group-name> \
+  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/callback \
+  -d jamedjo/test-saml-idp
 ```
 
 In some cases, you might need to add the [`--platform` flag](https://docs.docker.com/build/building/multi-platform/). For
@@ -86,9 +86,9 @@ To start an identity provider that works with instance SAML, you need to configu
 
 ```shell
 docker run --name=instance_saml_idp -p 8080:8080 -p 8443:8443 \
--e SIMPLESAMLPHP_SP_ENTITY_ID=http://<gitlab-host>:<gitlab-port> \
--e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://<gitlab-host>:<gitlab-port>/users/auth/saml/callback \
--d jamedjo/test-saml-idp
+  -e SIMPLESAMLPHP_SP_ENTITY_ID=http://<gitlab-host>:<gitlab-port> \
+  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://<gitlab-host>:<gitlab-port>/users/auth/saml/callback \
+  -d jamedjo/test-saml-idp
 ```
 
 In addition, you need to configure the `idp_sso_target_url` and `idp_cert_fingerprint` to match the values provided by the Docker image:
