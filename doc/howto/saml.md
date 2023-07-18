@@ -9,14 +9,19 @@ Docker image, both to test instance-wide SAML and the multi-tenant Group SAML us
 
 Group SAML requires [HTTPS](nginx.md) to be set up for GitLab.
 
-You also need to enable Group SAML in [`gitlab/config/gitlab.yml`](https://gitlab.com/gitlab-org/gitlab/blob/d8ef45c25ef3f08e5fcda703185f36203bfecd6b/config/gitlab.yml.example#L693), within the `development` section:
+You also need to enable Group SAML in your `gdk.yml`:
 
 ```yaml
-development:
-  <<: *base
-  omniauth:
-    providers:
-      - { name: 'group_saml' }
+omniauth:
+  group_saml:
+    enabled: true
+```
+
+Run the following to apply these changes:
+
+```shell
+gdk reconfigure
+gdk restart
 ```
 
 ### Feature flags
