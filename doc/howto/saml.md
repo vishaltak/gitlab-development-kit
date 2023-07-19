@@ -9,14 +9,19 @@ Docker image, both to test instance-wide SAML and the multi-tenant Group SAML us
 
 Group SAML requires [HTTPS](nginx.md) to be set up for GitLab.
 
-You also need to enable Group SAML in [`gitlab/config/gitlab.yml`](https://gitlab.com/gitlab-org/gitlab/blob/d8ef45c25ef3f08e5fcda703185f36203bfecd6b/config/gitlab.yml.example#L693), within the `development` section:
+You also need to enable Group SAML in your `gdk.yml`:
 
 ```yaml
-development:
-  <<: *base
-  omniauth:
-    providers:
-      - { name: 'group_saml' }
+omniauth:
+  group_saml:
+    enabled: true
+```
+
+Run the following to apply these changes:
+
+```shell
+gdk reconfigure
+gdk restart
 ```
 
 ### Feature flags
@@ -35,9 +40,9 @@ For example, an identity provider for the "zebra" group can be ran using the fol
 
 ```shell
 docker run --name=gitlab_saml_idp -p 8080:8080 -p 8443:8443 \
--e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/groups/<group-name> \
--e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/callback \
--d jamedjo/test-saml-idp
+  -e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/groups/<group-name> \
+  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/callback \
+  -d jamedjo/test-saml-idp
 ```
 
 In some cases, you might need to add the [`--platform` flag](https://docs.docker.com/build/building/multi-platform/). For
@@ -81,9 +86,9 @@ To start an identity provider that works with instance SAML, you need to configu
 
 ```shell
 docker run --name=instance_saml_idp -p 8080:8080 -p 8443:8443 \
--e SIMPLESAMLPHP_SP_ENTITY_ID=http://<gitlab-host>:<gitlab-port> \
--e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://<gitlab-host>:<gitlab-port>/users/auth/saml/callback \
--d jamedjo/test-saml-idp
+  -e SIMPLESAMLPHP_SP_ENTITY_ID=http://<gitlab-host>:<gitlab-port> \
+  -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://<gitlab-host>:<gitlab-port>/users/auth/saml/callback \
+  -d jamedjo/test-saml-idp
 ```
 
 In addition, you need to configure the `idp_sso_target_url` and `idp_cert_fingerprint` to match the values provided by the Docker image:
