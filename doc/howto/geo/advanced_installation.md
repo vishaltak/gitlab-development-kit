@@ -10,8 +10,8 @@ Prerequisites:
 
 1. On your existing GDK, add a GitLab Premium or Ultimate license either:
 
-   - In the [GitLab UI](https://docs.gitlab.com/ee/user/admin_area/license_file.html).
-   - Using an [environment variable](https://docs.gitlab.com/ee/user/admin_area/license_file.html#add-your-license-file-during-installation).
+   - In the [GitLab UI](https://docs.gitlab.com/ee/administration/license_file.html).
+   - Using an [environment variable](https://docs.gitlab.com/ee/administration/license_file.html#add-your-license-file-during-installation).
 
 1. Clone GDK into a second directory adjacent to your existing GDK:
 
