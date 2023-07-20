@@ -208,7 +208,7 @@ To enable Elasticsearch:
 ### How to test features only available in higher GitLab tiers
 
 For information on enabling higher GitLab tiers in GDK to test out features, learn more about
-[how to activate GitLab EE with a license file or key](https://docs.gitlab.com/ee/user/admin_area/license_file.html#add-your-license-file-during-installation).
+[how to activate GitLab EE with a license file or key](https://docs.gitlab.com/ee/administration/license_file.html#add-your-license-file-during-installation).
 
 ### How to test features only available on SaaS (GitLab.com)
 

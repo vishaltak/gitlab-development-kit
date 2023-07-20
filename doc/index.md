@@ -234,7 +234,7 @@ The developer license is generated for you to get access to [Premium or Ultimate
 
 To configure your developer license in GDK:
 
-1. [Add your developer license](https://docs.gitlab.com/ee/user/admin_area/license_file.html) to GitLab running in GDK.
+1. [Add your developer license](https://docs.gitlab.com/ee/administration/license_file.html) to GitLab running in GDK.
 1. Add the following configuration to your `gdk.yml` depending on your license type:
 
    - If you're using a license generated from the production Customers Portal, run:
