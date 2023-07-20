@@ -40,9 +40,10 @@ minio 2022-07-15T03-44-22Z
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
+#   18.17.0:
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #
-nodejs 18.16.1
+nodejs 18.16.1 18.17.0
 
 # postgres:
 #   13.9:
@@ -54,10 +55,10 @@ nodejs 18.16.1
 postgres 13.9 14.8
 
 # redis:
-#   6.2.7:
+#   7.0.12:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-redis 6.2.7
+redis 7.0.12
 
 # ruby:
 #   3.1.4:
