@@ -75,6 +75,8 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   repository. The `gdk update` command should have done this for you, but you
   can do so manually as well.
 
+  ---
+
 - I see the following error when run `gdk tail` or `gdk tail webpack`:
 
   ```plaintext
@@ -93,3 +95,10 @@ If you still encounter some errors, see the troubleshooting FAQ below:
   using Vagrant the `lsof` command is not available. Instead you can use the
   command `ss -pntl 'sport = :3808'`. The left over process can be killed with
   the command `kill PID`.
+
+  ---
+
+- I see UI elements out of place when I access my local GitLab in a browser:
+
+  This means your GDK has some stale CSS files that need to be removed. You can run `bundle exec rake assets:clean gitlab:assets:purge`
+  to remove the contents of `public/assets/webpack`. Then run `gdk restart webpack` to trigger the regeneration of the files.
