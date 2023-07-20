@@ -276,6 +276,7 @@ postgresql:
     host: "/home/git/gdk/postgresql-geo"
     port: 5431
   host: "/home/git/gdk/postgresql"
+  max_connections: 100
   multiple_replicas:
     enabled: false
   port: 5432
