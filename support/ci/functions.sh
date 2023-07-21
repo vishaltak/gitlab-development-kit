@@ -194,7 +194,8 @@ setup_geo() {
     sha="${CI_COMMIT_SHA}"
   fi
 
-  GITLAB_LICENSE_MODE=test CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" curl --fail "${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}/-/raw/${sha}/support/geo-install" | bash -s - gdk gdk2 "${sha}"
+  cd ..
+  GITLAB_LICENSE_MODE=test CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" gdk/support/geo-install gdk gdk2 "${sha}"
   output=$(cd gdk2/gitlab && bin/rake gitlab:geo:check)
 
   matchers=(

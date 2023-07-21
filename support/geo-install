@@ -112,6 +112,9 @@ fi
 
 ensure_required_commands_exist
 ensure_required_env_vars_exist
+
+# Collapsible section for geo-install CI job. See https://docs.gitlab.com/ee/ci/jobs/index.html#custom-collapsible-sections
+echo -e "\e[0Ksection_start:$(date +%s):set_up_primary_gdk\r\e[0KSet up primary GDK"
 clone_gdk_if_needed
 ensure_gdk_clone_branch_checked_out
 cd "${GDK_PRIMARY_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_PRIMARY_INSTALL_DIR} directory."
@@ -127,7 +130,9 @@ echo
 echo "source \"${ASDF_SH_PATH}\""
 echo "cd ${GDK_PRIMARY_INSTALL_DIR}"
 echo
+echo -e "\e[0Ksection_end:$(date +%s):set_up_primary_gdk\r\e[0K"
 
+echo -e "\e[0Ksection_start:$(date +%s):set_up_secondary_gdk\r\e[0KSet up secondary GDK"
 cd ../..
 clone_gdk2_if_needed
 cd "${GDK_SECONDARY_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_SECONDARY_INSTALL_DIR} directory."
@@ -141,6 +146,7 @@ echo
 echo "source \"${ASDF_SH_PATH}\""
 echo "cd ${GDK_SECONDARY_INSTALL_DIR}"
 echo
+echo -e "\e[0Ksection_end:$(date +%s):set_up_secondary_gdk\r\e[0K"
 }
 
 # If we've reached here, the entire install script has been downloaded and
