@@ -590,6 +590,7 @@ module GDK
       string(:host) { config.postgresql.dir.to_s }
       string(:active_version) { GDK::Postgresql.target_version.to_s }
       string(:__active_host) { GDK::Postgresql.new.use_tcp? ? config.postgresql.host : '' }
+      integer(:max_connections) { 100 }
 
       # Kept for backward compatibility. Use replica:root_directory instead
       path(:replica_dir) { config.gdk_root.join('postgresql-replica') }
