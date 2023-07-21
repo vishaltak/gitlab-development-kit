@@ -8,6 +8,8 @@ parent_path=$(dirname "$0")
 source "${parent_path}"/functions.sh
 
 init
+update_webpack_config
+reconfigure
 stop_start
 test_url
 
