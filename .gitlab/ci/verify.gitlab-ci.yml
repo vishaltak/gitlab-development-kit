@@ -94,5 +94,14 @@ geo-install:
     - saas-linux-medium-amd64
   script:
     - support/ci/verify-geo
-  when: manual
+  after_script:
+    - mkdir -p $CI_PROJECT_DIR/gitlab2_log $CI_PROJECT_DIR/gdk2_log
+    - cp -rf /home/gdk/gdk2/gitlab/log/*.log $CI_PROJECT_DIR/gitlab2_log/
+    - cp -rf /home/gdk/gdk2/log/ $CI_PROJECT_DIR/gdk2_log/
+  artifacts:
+    paths:
+      - ./gitlab2_log
+      - ./gdk2_log
+    expire_in: 2 days
+    when: always
   allow_failure: true
