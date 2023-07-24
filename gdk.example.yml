@@ -94,6 +94,7 @@ gitlab:
   rails:
     address: ''
     allowed_hosts: []
+    application_settings_cache_seconds: 60
     bootsnap: true
     bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
     databases:

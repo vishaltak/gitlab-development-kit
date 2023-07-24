@@ -916,6 +916,8 @@ module GDK
         end
 
         array(:allowed_hosts) { [] }
+
+        integer(:application_settings_cache_seconds) { 60 }
       end
 
       settings :rails_background_jobs do
