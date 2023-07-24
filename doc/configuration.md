@@ -286,6 +286,7 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/ruby.md#truncate-
 | `gitlab.rails.puma.workers` | `2` | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
 | `gitlab.rails.bootsnap` | `true` | Set this to `false` to disable [Bootsnap](https://github.com/Shopify/bootsnap). |
 | `gitlab.rails.allowed_hosts` | `[]` | Allows Rails to serve requests from specified hosts, other than its GDK's host. Configure this setting to allow a Geo primary site to handle forwarded requests from a Geo secondary site using a different `hostname`. When this setting is configured, the hosts are also added to the `webpack.allowed_hosts` setting. Example value: `["gdk2.test"]`. |
+| `gitlab.rails.application_settings_cache_seconds` | `60` | Sets the [application settings cache interval](https://docs.gitlab.com/ee/administration/application_settings_cache.html). Set to `0` to have changes take immediate effect, at the cost of loading the `application_settings` table for every request causing extra load on Redis and/or PostgreSQL. |
 
 #### Rails background jobs (Sidekiq)
 

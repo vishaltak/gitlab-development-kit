@@ -1596,6 +1596,12 @@ RSpec.describe GDK::Config do
           expect(config.gitlab.rails.allowed_hosts).to eq([])
         end
       end
+
+      describe '#application_settings_cache_seconds' do
+        it 'defaults to 60' do
+          expect(config.gitlab.rails.application_settings_cache_seconds).to be(60)
+        end
+      end
     end
 
     describe 'rails_background_jobs' do
