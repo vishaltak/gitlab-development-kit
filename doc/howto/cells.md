@@ -36,3 +36,27 @@ Here are some minimal steps to make another GDK act as a Cell.
    ```
 
 The new GDK will be available at the URL `http://127.0.0.1:3001`
+
+### Cleanup
+
+To cleanup, and remove the 2nd cell:
+
+1. Go to the directory for the 2nd GDK. If we assume it's `gdk2` from the above
+   section:
+
+   ```shell
+   cd ../gdk2
+   ```
+
+1. Stop GDK for the 2nd cell:
+
+   ```shell
+   gdk stop
+   ```
+
+1. Optionally, remove the 2nd GDK directory:
+
+   ```shell
+   cd ..
+   rm -rf gdk2
+   ```
