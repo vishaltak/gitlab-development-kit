@@ -144,7 +144,8 @@ To use the Docker configuration for your runner:
 When you have GDK running on something like `http://gdk.test:3000`, you can set up a runner. GDK can manage a
 containerized runner for you.
 
-[Create a runner](#create-and-register-a-local-runner), which generates the authentication token you need before you can register the runner. After you register the runner, the authentication token is stored in `gitlab-runner-config.toml`.
+[Create a runner](#create-and-register-a-local-runner), which generates the runner token you need before you can
+register the runner.
 
 To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker) in your GDK, you can run the
 `gitlab/gitlab-runner` Docker image. You **must ensure** that the runner saves the configuration to a file that is
@@ -154,7 +155,7 @@ In these instructions, we use a location known to GDK so that GDK can manage the
 run the following command in the root for your GDK directory:
 
 ```shell
-docker run --rm -it -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --config /etc/gitlab-runner/gitlab-runner-config.toml
+docker run --rm -it -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --url <gdk-url> --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml
 ```
 
 <details>
@@ -166,7 +167,7 @@ automatically mount your certificate into the Docker container when the runner i
 manually when registering your runner:
 
 ```shell
-docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --config /etc/gitlab-runner/gitlab-runner-config.toml
+docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --url <gdk-url> --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml
 ```
 
 </details>
