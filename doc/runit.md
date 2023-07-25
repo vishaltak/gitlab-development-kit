@@ -68,14 +68,25 @@ reclaim some memory while not using `localhost:3000`.
 ## Logs
 
 Because runit is not attached to a terminal, the logs of the services
-you're running must go to files. If you want to see this logs in your
-terminal, like they show up with Foreman, then run `gdk tail`. Note that
-unlike with Foreman, if you press Ctrl-C into `gdk tail`, the logs stop,
-but the services keep running. Use `gdk stop` if you want to also stop
-the services.
+you're running must go to files. 
 
-You can also look at the logs for a subset of services:
-`gdk tail gitaly postgresql` or `gdk tail rails`.
+There are several ways to view realtime logs in your terminal
+
+- To watch every log at the same time (like the output from Foreman), run `gdk tail`. 
+  You can press Ctrl-C to exit and the services will keep running.
+- To watch a subset of services provide the name of the service as an extra parameter:
+  run `gdk tail gitaly postgresql` or `gdk tail rails`.
+
+`runit` relies on a logging service called [svlogd](http://smarden.org/runit/svlogd.8.html).
+This service handles log rotation and compaction in the following way:
+
+- Each service is configured to store logs in the `log/<servicename>` folder. 
+- Logs are written to a file called `current` (uncompressed).
+- Periodically, this log is compressed and renamed using the TAI64N format, for
+  example: `@400000005f8eaf6f1a80ef5c.s`.
+- The filesystem datestamp on the compressed logs will be consistent with the time
+  GitLab last wrote to that file.
+- `zmore` and `zgrep` allow viewing and searching through compressed or uncompressed logs.
 
 ## Modifying service configuration
 
