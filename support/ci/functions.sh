@@ -174,13 +174,6 @@ doctor() {
   gdk doctor || true
 }
 
-update_webpack_config() {
-  cd_into_checkout_path
-
-  echo "> Setting webpack config.."
-  gdk config set webpack.live_reload false && gdk config set webpack.sourcemaps false
-}
-
 test_url() {
   cd_into_checkout_path
 

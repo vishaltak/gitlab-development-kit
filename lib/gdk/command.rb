@@ -23,6 +23,7 @@ module GDK
     autoload :PsqlGeo, 'gdk/command/psql_geo'
     autoload :Rails, 'gdk/command/rails'
     autoload :Reconfigure, 'gdk/command/reconfigure'
+    autoload :ReconfigureProcfile, 'gdk/command/reconfigure_procfile'
     autoload :RedisCLI, 'gdk/command/redis_cli'
     autoload :Restart, 'gdk/command/restart'
     autoload :ResetData, 'gdk/command/reset_data'
@@ -58,6 +59,7 @@ module GDK
       'pristine' => -> { GDK::Command::Pristine },
       'rails' => -> { GDK::Command::Rails },
       'reconfigure' => -> { GDK::Command::Reconfigure },
+      'reconfigure_procfile' => -> { GDK::Command::ReconfigureProcfile },
       'redis-cli' => -> { GDK::Command::RedisCLI },
       'reset-data' => -> { GDK::Command::ResetData },
       'reset-praefect-data' => -> { GDK::Command::ResetPraefectData },

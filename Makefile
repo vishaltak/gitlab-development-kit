@@ -177,6 +177,9 @@ truncate-legacy-tables \
 postgresql-replica-setup \
 postgresql-replica-2-setup
 
+.PHONY: reconfigure_procfile
+reconfigure_procfile: Procfile
+
 .PHONY: start-task
 start-task:
 	@support/dev/makefile-timeit start
