@@ -15,7 +15,9 @@ module GDK
       def update
         stashed = stash_save
 
-        unless fetch
+        sh = execute_command(fetch_cmd)
+        unless sh.success?
+          GDK::Output.puts(sh.read_stderr, stderr: true)
           GDK::Output.error("Failed to fetch for '#{short_worktree_path}'")
           return false
         end
@@ -98,10 +100,6 @@ module GDK
         else
           'git fetch --all --tags --prune'
         end
-      end
-
-      def fetch
-        execute_command(fetch_cmd).success?
       end
 
       def rebase
