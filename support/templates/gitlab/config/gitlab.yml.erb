@@ -1039,6 +1039,10 @@ test:
     host: localhost
     port: 80
 
+    content_security_policy:
+      directives:
+        connect_src: "'self' http://localhost:* ws://localhost:* wss://localhost:* ws://<%= config.gitlab.rails.hostname %>:* wss://<%= config.gitlab.rails.hostname %>:*"
+
     # When you run tests we clone and set up gitlab-shell
     # In order to set it up correctly you need to specify
     # your system username you use to run GitLab
