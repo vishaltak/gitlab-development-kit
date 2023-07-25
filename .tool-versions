@@ -36,15 +36,13 @@ golang 1.20.6 1.20.5 1.20.4
 #
 minio 2022-07-15T03-44-22Z
 
-# nodejs:
-#   18.16.1:
-#     - .tool-versions-gdk
-#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+# nodejs:  
 #   18.17.0:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #
-nodejs 18.16.1 18.17.0
+nodejs 18.17.0
 
 # postgres:
 #   13.9:
