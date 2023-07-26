@@ -1,60 +1,58 @@
-# Cells
+# Cells (Experiment)
 
-Support for Cells in GDK is still experimental,
-as development to make Cells work is still ongoing in this
-[epic](https://gitlab.com/groups/gitlab-org/-/epics/7582).
+Support for cells in the GDK is still an Experiment.
+For more information, see [epic 7582](https://gitlab.com/groups/gitlab-org/-/epics/7582).
 
-## How to install a second GDK to act as a Cell
+## Install another GDK to act as a cell
 
-Here are some minimal steps to make another GDK act as a Cell.
+To install another GDK to act as a cell:
 
-1. Until this [issue](https://gitlab.com/gitlab-org/gitlab/-/issues/412280) is
-   fixed, set the following environment variable. For example you can set in
-   your `.bash_profile`, or `.zshrc`:
+1. Until [issue 412280](https://gitlab.com/gitlab-org/gitlab/-/issues/412280)
+   is resolved, in `.bash_profile` or `.zshrc`, set the
+   `GITLAB_VALIDATE_DATABASE_CONFIG` environment variable:
 
    ```shell
    export GITLAB_VALIDATE_DATABASE_CONFIG=0
    ```
 
-1. Clone GDK into a second directory adjacent to your existing GDK:
+1. Clone the GDK into a second directory adjacent to your existing GDK:
 
    ```shell
    cd ../
    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git gdk2
    ```
 
-1. Change directory to your existing GDK:
+1. Change the directory to your existing GDK:
 
    ```shell
    cd gdk
    ```
 
-1. Run the script:
+1. Run this script:
 
    ```shell
     ./support/cells-add-secondary --secondary_port 3001 --primary . ../gdk2
    ```
 
-The new GDK will be available at the URL `http://127.0.0.1:3001`
+The new GDK is available at `http://127.0.0.1:3001`.
 
-### Cleanup
+### Clean up the installation
 
-To cleanup, and remove the 2nd cell:
+To clean up the installation and remove the second cell:
 
-1. Go to the directory for the 2nd GDK. If we assume it's `gdk2` from the above
-   section:
+1. Go to the directory of the second GDK. In this example, the directory is named `gdk2`.
 
    ```shell
    cd ../gdk2
    ```
 
-1. Stop GDK for the 2nd cell:
+1. Stop the GDK for the second cell:
 
    ```shell
    gdk stop
    ```
 
-1. Optionally, remove the 2nd GDK directory:
+1. Optional. Remove the second GDK directory:
 
    ```shell
    cd ..
