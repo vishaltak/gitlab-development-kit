@@ -8,14 +8,15 @@ integration, which you can enable in your development environment.
 ### Enable Zoekt in the GDK
 
 The default version of Zoekt is automatically downloaded into your GDK root under `/zoekt`.
+The default version of GitLab Zoekt Indexer is automatically downloaded into your GDK root under `/gitlab-zoekt-indexer`.
 
 To enable the service and run it as part of `gdk start`:
 
 1. Run `gdk config set zoekt.enabled true`.
 1. Run `gdk reconfigure`.
 1. Run `gdk start` which now starts 4 Zoekt servers:
-   - `zoekt-dynamic-indexserver` for test.
-   - `zoekt-dynamic-indexserver` for development.
+   - `gitlab-zoekt-indexer` for test.
+   - `gitlab-zoekt-indexer` for development.
    - `zoekt-webserver` for test.
    - `zoekt-webserver` for development.
 
@@ -29,6 +30,7 @@ seed by default), run the following from the Rails console:
 ```ruby
 ::Feature.enable(:index_code_with_zoekt)
 ::Feature.enable(:search_code_with_zoekt)
+::Feature.enable(:use_new_zoekt_indexer)
 zoekt_shard = ::Zoekt::Shard.find_or_create_by!(index_base_url: 'http://127.0.0.1:6080/', search_base_url: 'http://127.0.0.1:6090/')
 namespace = Namespace.find_by_full_path("flightjs") # Some namespace you want to enable
 ::Zoekt::IndexedNamespace.find_or_create_by!(shard: zoekt_shard, namespace: namespace.root_ancestor)
@@ -48,15 +50,25 @@ The default Zoekt version is defined in [`lib/gdk/config.rb`](../../lib/gdk/conf
 
 You can change this by setting `repo` and/or `version`:
 
-```yaml
-zoekt:
-  enabled: true
-  repo: https://github.com/MyFork/zoekt.git
-  version: v1.2.3
+```shell
+   gdk config set zoekt.repo https://github.com/MyFork/zoekt.git
+   gdk config set zoekt.version v1.2.3
 ```
 
 Here, `repo` is any valid repository URL that can be cloned, and
 `version` is any valid ref that can be checked out.
+
+### Switch to a different version of GitLab Zoekt Indexer
+
+The default GitLab Zoekt Indexer version is defined in [`lib/gdk/config.rb`](../../lib/gdk/config.rb).
+
+To change this, set `indexer_version`:
+
+```shell
+   gdk config set zoekt.indexer_version v1.2.3
+```
+
+`indexer_version` is any valid ref that can be checked out.
 
 ## Troubleshooting
 

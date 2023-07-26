@@ -372,7 +372,9 @@ repositories:
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
   gitlab_spamcheck: https://gitlab.com/gitlab-org/spamcheck.git
   gitlab_ui: https://gitlab.com/gitlab-org/gitlab-ui.git
+  gitlab_zoekt_indexer: https://gitlab.com/gitlab-org/gitlab-zoekt-indexer.git
   omnibus_gitlab: https://gitlab.com/gitlab-org/omnibus-gitlab.git
+  zoekt: https://github.com/sourcegraph/zoekt.git
 repositories_root: "/home/git/gdk/repositories"
 repository_storages: "/home/git/gdk/repository_storages"
 restrict_cpu_count: -1
@@ -441,7 +443,7 @@ zoekt:
   enabled: false
   index_port_dev: 6080
   index_port_test: 6060
-  repo: https://github.com/sourcegraph/zoekt.git
+  indexer_version: 0334a96cac09c8088168027cd0d492107ab9e474
   version: b65e3e6bceef2587a8a9ecaa4515c886dfbc8837
   web_port_dev: 6090
   web_port_test: 6070

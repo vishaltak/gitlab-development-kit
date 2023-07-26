@@ -61,9 +61,9 @@ gitaly: exec /usr/bin/env GITALY_TESTING_ENABLE_ALL_FEATURE_FLAGS=<%= config.git
 <%= '#' unless config.nginx? %>nginx: exec <%= config.nginx.bin %> -e /dev/stderr -p <%= config.gdk_root.join('nginx') %> -c conf/nginx.conf
 <%= '#' unless config.elasticsearch? %>elasticsearch: exec elasticsearch/bin/elasticsearch
 
-<%= '#' unless config.zoekt? %>zoekt-dynamic-indexserver-test: exec /usr/bin/env PATH="$(pwd)/zoekt/bin:$PATH" zoekt/bin/zoekt-dynamic-indexserver -repo_dir zoekt-data/test/data/repos -index_dir zoekt-data/test/index -listen :<%= config.zoekt.index_port_test %>
+<%= '#' unless config.zoekt? %>gitlab-zoekt-indexer-development: exec gitlab-zoekt-indexer/bin/gitlab-zoekt-indexer -index_dir zoekt-data/development/index -listen :<%= config.zoekt.index_port_dev %>
+<%= '#' unless config.zoekt? %>gitlab-zoekt-indexer-test: exec gitlab-zoekt-indexer/bin/gitlab-zoekt-indexer -index_dir zoekt-data/test/index -listen :<%= config.zoekt.index_port_test %>
 <%= '#' unless config.zoekt? %>zoekt-webserver-test: exec /usr/bin/env PATH="$(pwd)/zoekt/bin:$PATH" zoekt/bin/zoekt-webserver -index zoekt-data/test/index -rpc -listen :<%= config.zoekt.web_port_test %>
-<%= '#' unless config.zoekt? %>zoekt-dynamic-indexserver-development: exec /usr/bin/env PATH="$(pwd)/zoekt/bin:$PATH" zoekt/bin/zoekt-dynamic-indexserver -repo_dir zoekt-data/development/data/repos -index_dir zoekt-data/development/index -listen :<%= config.zoekt.index_port_dev %>
 <%= '#' unless config.zoekt? %>zoekt-webserver-development: exec /usr/bin/env PATH="$(pwd)/zoekt/bin:$PATH" zoekt/bin/zoekt-webserver -index zoekt-data/development/index -rpc -listen :<%= config.zoekt.web_port_dev %>
 
 # Gitlab Docs

@@ -1,6 +1,6 @@
 .PHONY: zoekt-setup
 ifeq ($(zoekt_enabled),true)
-zoekt-setup: zoekt/bin/zoekt-git-clone zoekt/bin/zoekt-git-index zoekt/bin/zoekt-dynamic-indexserver zoekt/bin/zoekt-webserver
+zoekt-setup: zoekt/bin/zoekt-git-clone zoekt/bin/zoekt-git-index zoekt/bin/zoekt-webserver
 else
 zoekt-setup:
 	@true
@@ -15,7 +15,7 @@ zoekt-update:
 endif
 
 .PHONY: zoekt-update-run
-zoekt-update-run: zoekt/.git/pull zoekt-clean-bin zoekt/bin/zoekt-git-clone zoekt/bin/zoekt-git-index zoekt/bin/zoekt-dynamic-indexserver zoekt/bin/zoekt-webserver
+zoekt-update-run: zoekt/.git/pull zoekt-clean-bin zoekt/bin/zoekt-webserver
 
 zoekt/.git:
 	$(Q)GIT_REVISION="${zoekt_version}" CLONE_DIR=zoekt support/component-git-clone ${git_depth_param} ${zoekt_repo} zoekt
@@ -35,6 +35,6 @@ zoekt-clean-bin:
 zoekt/.git/pull: zoekt/.git
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Updating gitlab-org/zoekt"
+	@echo "Updating zoekt"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update zoekt zoekt "${zoekt_version}" main
