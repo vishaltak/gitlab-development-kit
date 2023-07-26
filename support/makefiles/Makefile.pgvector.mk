@@ -15,7 +15,9 @@ else ifneq ($(shell cat $(PG_CONFIG_FLAGS_FILE)), $(shell pg_config))
     $(eval $(call generate_pg_flags_file))
 endif
 
-pgvector-setup: pgvector-auto-clean pgvector/vector.so
+PGVECTOR_INSTALLED_LIB := $(shell pg_config --libdir)/vector.so
+
+pgvector-setup: pgvector-auto-clean pgvector-installed-lib
 else
 pgvector-setup:
 	@true
@@ -30,7 +32,7 @@ pgvector-update:
 endif
 
 .PHONY: pgvector-update-run
-pgvector-update-run: pgvector/.git/pull pgvector-clean pgvector/vector.so
+pgvector-update-run: pgvector/.git/pull pgvector-clean pgvector-installed-lib
 
 pgvector/.git:
 	$(Q)GIT_REVISION="${pgvector_version}" CLONE_DIR=pgvector support/component-git-clone ${git_depth_param} ${pgvector_repo} pgvector
@@ -39,7 +41,10 @@ pgvector/.git:
 pgvector-auto-clean: $(PG_CONFIG_FLAGS_FILE)
 	$(if ${FORCE_CLEAN}, @echo "Cleaning pgvector build since pg_config flags have changed" && support/asdf-exec pgvector $(MAKE) clean ${QQ})
 
-pgvector/vector.so: pgvector/.git
+.PHONY: pgvector-installed-lib
+pgvector-installed-lib: $(PGVECTOR_INSTALLED_LIB)
+
+$(PGVECTOR_INSTALLED_LIB): pgvector/vector.so pgvector/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building $@ version ${pgvector_version}"
