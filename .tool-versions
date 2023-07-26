@@ -6,8 +6,11 @@
 # gitleaks:
 #   8.16.4:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#   8.16.3:
+#     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/0334a96cac09c8088168027cd0d492107ab9e474/.tool-versions
 #
-gitleaks 8.16.4
+gitleaks 8.16.4 8.16.3
 
 # golang:
 #   1.20.6:
@@ -17,10 +20,12 @@ gitleaks 8.16.4
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
+#     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/main/.tool-versions
 #   1.20.5:
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/0334a96cac09c8088168027cd0d492107ab9e474/.tool-versions
 #   1.20.4:
 #     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
 #

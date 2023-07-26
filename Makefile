@@ -98,6 +98,7 @@ gitlab-pages-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
 gitlab-workhorse-setup \
+gitlab-zoekt-indexer-setup \
 grafana-setup \
 object-storage-setup \
 openldap-setup \
@@ -135,6 +136,7 @@ gitlab-spamcheck-update \
 gitlab-translations-unlock \
 gitlab-ui-update \
 gitlab-workhorse-update \
+gitlab-zoekt-indexer-update \
 grafana-update \
 jaeger-update \
 object-storage-update \
@@ -165,6 +167,7 @@ gitlab-k8s-agent-setup \
 gitlab-pages-setup \
 gitlab-spamcheck-setup \
 gitlab-ui-setup \
+gitlab-zoekt-indexer-setup \
 grafana-setup \
 object-storage-setup \
 openldap-setup \

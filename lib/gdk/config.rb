@@ -56,7 +56,9 @@ module GDK
       string(:gitlab_spamcheck) { 'https://gitlab.com/gitlab-org/spamcheck.git' }
       string(:gitlab_runner) { 'https://gitlab.com/gitlab-org/gitlab-runner.git' }
       string(:gitlab_ui) { 'https://gitlab.com/gitlab-org/gitlab-ui.git' }
+      string(:gitlab_zoekt_indexer) { 'https://gitlab.com/gitlab-org/gitlab-zoekt-indexer.git' }
       string(:omnibus_gitlab) { 'https://gitlab.com/gitlab-org/omnibus-gitlab.git' }
+      string(:zoekt) { 'https://github.com/sourcegraph/zoekt.git' }
     end
 
     settings :dev do
@@ -525,13 +527,13 @@ module GDK
 
     settings :zoekt do
       bool(:enabled) { false }
-      string(:repo) { 'https://github.com/sourcegraph/zoekt.git' }
+      bool(:auto_update) { true }
       string(:version) { 'b65e3e6bceef2587a8a9ecaa4515c886dfbc8837' }
-      port(:index_port_test, 'zoekt-dynamic-indexserver-test')
-      port(:index_port_dev, 'zoekt-dynamic-indexserver-development')
       port(:web_port_test, 'zoekt-webserver-test')
       port(:web_port_dev, 'zoekt-webserver-development')
-      bool(:auto_update) { true }
+      port(:index_port_test, 'gitlab-zoekt-indexer-test')
+      port(:index_port_dev, 'gitlab-zoekt-indexer-development')
+      string(:indexer_version) { '0334a96cac09c8088168027cd0d492107ab9e474' }
     end
 
     settings :tracer do
