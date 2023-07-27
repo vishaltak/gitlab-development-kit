@@ -43,11 +43,9 @@ default:
 .default-before_script:
   before_script:
     - sysctl -n -w fs.inotify.max_user_watches=524288 || true
-    - |
-      if [ -f support/ci/utils.sh ]; then
-        . support/ci/utils.sh;
-        display_debugging;
-      fi
+    - ls -la ./support
+    - ls -la ./support/ci
+    - if [ -f support/ci/utils.sh ]; then . support/ci/utils.sh; display_debugging; fi
 
 .cached_variables: &cached_variables
   BUNDLE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle
