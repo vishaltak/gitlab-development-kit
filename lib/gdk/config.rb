@@ -533,7 +533,7 @@ module GDK
       port(:web_port_dev, 'zoekt-webserver-development')
       port(:index_port_test, 'gitlab-zoekt-indexer-test')
       port(:index_port_dev, 'gitlab-zoekt-indexer-development')
-      string(:indexer_version) { '0334a96cac09c8088168027cd0d492107ab9e474' }
+      string(:indexer_version) { '511083ac335a80971a750ad1664bf4ffc95454ee' }
     end
 
     settings :tracer do
