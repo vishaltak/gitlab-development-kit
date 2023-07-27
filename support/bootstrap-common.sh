@@ -529,10 +529,6 @@ setup_platform_darwin() {
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   fi
 
-  if ! brew tap homebrew/cask; then
-    return 1
-  fi
-
   # Support running brew under Rosetta 2 on Apple M1 machines
   if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
     brew_opts="arch -x86_64"
