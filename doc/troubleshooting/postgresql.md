@@ -279,6 +279,29 @@ but are present in your database, you might want to remove them.
 You can now run `rake db:migrate:status` again to verify that the entries are
 deleted from the database.
 
+## Truncate legacy data from `main` and `ci` databases
+
+It is possible that you see errors on the `ci` or `main` database while performing migrations, like the one below:
+
+```ruby
+ci: == 20221107220420 ValidateNotNullConstraintOnMemberNamespaceId: migrating =====
+ci: -- current_schema()
+ci:    -> 0.0002s
+ci: -- execute("ALTER TABLE members VALIDATE CONSTRAINT check_508774aac0;")
+rails aborted!
+StandardError: An error has occurred, all later migrations canceled:
+
+PG::CheckViolation: ERROR:  check constraint "check_508774aac0" is violated by some row
+```
+
+This is because there is stale data on the `ci` database on tables belonging to the `main` database (or vice-versa).
+
+Such data should be truncated. To do this, you can run:
+
+```shell
+gdk reconfigure
+```
+
 ## Fix a build error with `pgvector` extension due to XCode SDK path changes on macOS
 
 If you encounter a build error with the `pgvector` extension while upgrading PostgreSQL, it could be due to XCode SDK path changes by macOS or XCode upgrades. This error occurs when the XCode SDK path is not configured correctly for the extension.

@@ -45,5 +45,4 @@ RUN curl --fail "${URL}/-/raw/${SHA}/support/install" | bash -s - gdk "${SHA}" &
 
 WORKDIR /home/gdk/gdk
 
-RUN gdk config set webpack.live_reload false && gdk config set webpack.sourcemaps false && \
-  gdk reconfigure
+RUN gdk config set webpack.live_reload false && gdk config set webpack.sourcemaps false
