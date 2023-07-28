@@ -100,11 +100,6 @@
     - <<: *if-merge-request
       changes: *gitpod-code-changes
 
-.rules:tested-deploy-gitpod-workspace-image:
-  rules:
-    - <<: *if-gitpod-image-release
-
 .rules:deploy-gitpod-workspace-image:
   rules:
     - <<: *if-gitpod-image-release
-      when: manual
