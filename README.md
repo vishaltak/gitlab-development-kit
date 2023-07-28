@@ -45,6 +45,8 @@ The following installation methods are supported, actively maintained, and teste
 
 (1) Requires [manual installation of OpenSSL 1.1.1](doc/troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
 
+The list of platforms includes operating systems that run in a Windows Subsystem for Linux (WSL) environment.
+
 ### Unsupported methods
 
 The following documentation is provided for those who can benefit from it, but aren't
