@@ -501,6 +501,10 @@ redis go node icu krb5 gmake re2 GraphicsMagick p5-Image-ExifTool git-lfs minio 
 
 You can set up GDK on Windows by using the Windows Subsystem for Linux (version 2 only).
 
+Once WSL is set up, you can follow the same instructions for your Linux system. See [supported platforms](../README.md#supported-platforms).
+
+The prerequisites for WSL, and the use of `asdf` to manage dependencies, are the same as for any other Linux installation.
+
 **Setting up the Windows Subsystem for Linux:**
 
 Open PowerShell as Administrator and run:
@@ -548,6 +552,8 @@ wsl -l
 wsl --set-version <your subsystem name here>
 ```
 
+You might need to increase your memory allocation. See [Performance](#performance).
+
 ### Known issues with Windows Subsystem for Linux
 
 #### Directories
@@ -559,6 +565,8 @@ Additionally, using a directory path in Windows file system mount points (such a
 #### Performance
 
 WSL allocates up to 50% of your RAM by default for the Linux OS.
+
+Increase the allocation to WSL to meet the minimum requirements. See [Supported methods](../README.md#supported-methods).
 
 ## Apply custom patches for Ruby
 
