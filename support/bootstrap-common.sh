@@ -208,11 +208,25 @@ gdk_install_gem() {
 }
 
 update_rubygems_gem() {
+  opt_out=$(gdk config get gdk.rubygems_update_opt_out 2> /dev/null)
+
+  if [[ "$opt_out" == "true" ]]; then
+    return 0
+  fi
+
+  if [[ ! -w "$(which gem)" ]]; then
+    echo "ERROR: It seems like RubyGems was not installed by your current user, we can't update it." >&2
+    echo "INFO: You can set \`gdk.rubygems_update_opt_out\` to true in gdk.yml to prevent GDK to try updating RubyGems." >&2
+    return 1
+  fi
+
   gem update --system --no-document
 }
 
 configure_ruby() {
-  update_rubygems_gem
+  if ! update_rubygems_gem; then
+    return 1
+  fi
 }
 
 configure_ruby_bundler_for_gitlab() {

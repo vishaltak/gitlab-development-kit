@@ -44,6 +44,7 @@ gdk:
   overwrite_changes: false
   protected_config_files: []
   quiet: true
+  rubygems_update_opt_out: false
   runit_wait_secs: 20
   start_hooks:
     after: []
