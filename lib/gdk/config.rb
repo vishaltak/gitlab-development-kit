@@ -100,6 +100,7 @@ module GDK
       end
       bool(:overwrite_changes) { false }
       bool(:system_packages_opt_out) { false }
+      bool(:rubygems_update_opt_out) { false }
       array(:protected_config_files) { [] }
       settings :start_hooks do
         array(:before) { [] }
