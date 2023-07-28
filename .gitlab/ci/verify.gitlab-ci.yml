@@ -19,8 +19,8 @@
   needs:
     - build-verify-image
   before_script:
-    - !reference [.verify-base-job, before_script]
     - cd /home/gdk/gdk
+    - !reference [.verify-base-job, before_script]
   after_script:
     - mkdir -p $CI_PROJECT_DIR/gitlab_log $CI_PROJECT_DIR/gdk_log
     - cp -rf /home/gdk/gdk/gitlab/log/*.log $CI_PROJECT_DIR/gitlab_log/
