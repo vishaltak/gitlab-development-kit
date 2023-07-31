@@ -4,6 +4,7 @@ gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 
 GDK_CACHE_DIR := $(gitlab_development_root)/.cache
 FLAG_FILE := $(GDK_CACHE_DIR)/.truncate_tables
+ci_database_enabled = $(shell gdk config get gitlab.rails.databases.ci.enabled 2>/dev/null)
 
 .PHONY: truncate-legacy-tables
 truncate-legacy-tables: ensure-databases-running start-truncate do-truncate
@@ -17,6 +18,7 @@ start-truncate:
 
 .PHONY: do-truncate
 do-truncate:
+ifeq ($(ci_database_enabled),true)
 ifeq ($(wildcard $(FLAG_FILE)),)
 	$(Q)$(gitlab_rake_cmd) gitlab:db:lock_writes
 	$(Q)$(gitlab_rake_cmd) gitlab:db:truncate_legacy_tables:main
@@ -29,4 +31,7 @@ ifeq ($(wildcard $(FLAG_FILE)),)
 	@touch $(FLAG_FILE)
 else
 	@echo "Databases are already truncated, nothing to do here"
+endif
+else
+	@echo "CI database not enabled, nothing to do here"
 endif
