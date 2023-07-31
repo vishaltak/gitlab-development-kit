@@ -45,8 +45,8 @@ After cloning the `gitlab-development-kit` project and running `make bootstrap`,
   gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
   ```
 
-Use `gdk install shallow_clone=true` for a faster clone that consumes less disk
-space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt). This cloning strategy could slow down some Git commands such as `git push`.
+Use `gdk install blobless_clone=true` for a faster clone that consumes less disk
+space. The clone process uses [`git clone --filter=blob:none`](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt). This cloning strategy could slow down some Git commands such as `git push`.
 
 ### Install using your own GitLab fork
 
@@ -67,5 +67,5 @@ After cloning the `gitlab-development-kit` project and running `make bootstrap`,
   gdk install gitlab_repo=https://gitlab.com/gitlab-org/gitlab-foss.git
   ```
 
-Use `gdk install shallow_clone=true` for a faster clone that consumes less disk
-space. The clone process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt). This cloning strategy could slow down some Git commands such as `git push`.
+Use `gdk install blobless_clone=true` for a faster clone that consumes less disk
+space. The clone process uses [`git clone --filter=blob:none`](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt). This cloning strategy could slow down some Git commands such as `git push`.
