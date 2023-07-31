@@ -48,7 +48,7 @@ gitlab/.git:
 	@echo "${DIVIDER}"
 	@echo "Cloning gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-clone ${git_depth_param} $(if $(realpath ${gitlab_repo}),--shared) ${gitlab_repo} ${gitlab_clone_dir}
+	$(Q)support/component-git-clone ${git_params} $(if $(realpath ${gitlab_repo}),--shared) ${gitlab_repo} ${gitlab_clone_dir}
 
 gitlab-config: \
 	touch-examples \
