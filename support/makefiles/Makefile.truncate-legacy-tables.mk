@@ -4,7 +4,6 @@ gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 
 GDK_CACHE_DIR := $(gitlab_development_root)/.cache
 FLAG_FILE := $(GDK_CACHE_DIR)/.truncate_tables
-ci_database_enabled = $(shell gdk config get gitlab.rails.databases.ci.enabled 2>/dev/null)
 
 .PHONY: truncate-legacy-tables
 truncate-legacy-tables: ensure-databases-running start-truncate do-truncate
