@@ -44,7 +44,9 @@ pgvector-auto-clean: $(PG_CONFIG_FLAGS_FILE)
 .PHONY: pgvector-installed-lib
 pgvector-installed-lib: $(PGVECTOR_INSTALLED_LIB)
 
-$(PGVECTOR_INSTALLED_LIB): pgvector/vector.so pgvector/.git
+$(PGVECTOR_INSTALLED_LIB): pgvector/vector.so
+
+pgvector/vector.so: pgvector/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building $@ version ${pgvector_version}"
