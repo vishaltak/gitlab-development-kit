@@ -17,6 +17,7 @@ start-truncate:
 
 .PHONY: do-truncate
 do-truncate:
+ifeq ($(ci_database_enabled),true)
 ifeq ($(wildcard $(FLAG_FILE)),)
 	$(Q)$(gitlab_rake_cmd) gitlab:db:lock_writes
 	$(Q)$(gitlab_rake_cmd) gitlab:db:truncate_legacy_tables:main
@@ -29,4 +30,7 @@ ifeq ($(wildcard $(FLAG_FILE)),)
 	@touch $(FLAG_FILE)
 else
 	@echo "Databases are already truncated, nothing to do here"
+endif
+else
+	@echo "CI database not enabled, nothing to do here"
 endif
