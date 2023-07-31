@@ -25,7 +25,8 @@ that is built for running tests. To resolve the issue:
 ## ChromeDriver problems
 
 ChromeDriver is the app on your machine that is used to run headless
-browser tests.
+browser tests. ChromeDriver is automatically installed when running `spec/features` or `qa/` E2E tests by SeleniumManager.
+SeleniumManager should install a version of ChromeDriver that is compatible with the installed version of Chrome. 
 
 If you see this error in your test output (you may need to scroll up): `Selenium::WebDriver::Error::SessionNotCreatedError`
 coupled with the error message: `This version of ChromeDriver only supports Chrome version [...]`,
