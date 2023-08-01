@@ -334,3 +334,7 @@ To fix this error, perform the following steps in your terminal:
 
 1. Once the reinstallation is complete, run `make install` again.
 1. After you've fixed the build error, run the `support/upgrade-postgresql` to upgrade your PostgreSQL version.
+
+## Additional Debugging
+
+Additional information can be found in [the docs](https://docs.gitlab.com/ee/development/database/database_debugging.html).
