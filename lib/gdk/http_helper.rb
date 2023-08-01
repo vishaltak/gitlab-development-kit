@@ -76,7 +76,7 @@ module GDK
       Net::HTTP.new(uri.host, uri.port).tap do |client|
         client.read_timeout = read_timeout
         client.open_timeout = open_timeout
-        client.use_ssl = uri.port == 443
+        client.use_ssl = uri.scheme == 'https'
       end
     end
   end
