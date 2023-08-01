@@ -33,6 +33,7 @@ RSpec.describe GDK::Project::GitWorktree do
 
       it 'fetch fails, but stash pops' do
         expect_update(stash_result: stash_saved_something, fetch_success: false, shallow_clone: shallow_clone)
+        expect(GDK::Output).to receive(:puts).with("fetch_success: false", stderr: true)
         expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'")
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
@@ -71,6 +72,7 @@ RSpec.describe GDK::Project::GitWorktree do
 
       it 'fetch fails, but stash pops' do
         expect_update(stash_result: stash_saved_something, fetch_success: false, shallow_clone: shallow_clone)
+        expect(GDK::Output).to receive(:puts).with("fetch_success: false", stderr: true)
         expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'")
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
@@ -127,9 +129,9 @@ RSpec.describe GDK::Project::GitWorktree do
       expect_shellout('git rev-parse --is-shallow-repository', stdout: shallow_clone.to_s)
 
       if shallow_clone
-        expect_shellout("git fetch --depth 1 origin #{revision}", success: fetch_success)
+        expect_shellout("git fetch --depth 1 origin #{revision}", success: fetch_success, stderr: "fetch_success: #{fetch_success}")
       else
-        expect_shellout('git fetch --all --tags --prune', success: fetch_success)
+        expect_shellout('git fetch --all --tags --prune', success: fetch_success, stderr: "fetch_success: #{fetch_success}")
       end
     end
 
