@@ -14,6 +14,8 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
     end
 
     context 'database is not in recovery' do
+      let(:timings) { '0.350000 0.400000  0.750000 (  0.80000)' }
+
       before do
         allow_any_instance_of(GDK::Postgresql).to receive(:in_recovery?).and_return(false)
       end
@@ -59,6 +61,22 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
         expect(Shellout).not_to receive(:new).with(array_including('db:migrate'), any_args)
 
         migrate
+      end
+
+      it 'finishes migration within the timeout' do
+        allow(Timeout).to receive(:timeout).with(GDK::TaskHelpers::RailsMigration::MIGRATION_TIMEOUT).and_yield
+        allow(Benchmark).to receive(:measure).and_return(timings)
+
+        expect(GDK::Output).to receive(:notice).with("Migration finished. Timings:\n#{Benchmark::CAPTION} #{timings}")
+
+        migrate
+      end
+
+      it 'exits when migration takes longer than the timeout' do
+        allow(Timeout).to receive(:timeout).and_raise(Timeout::Error)
+
+        expect(GDK::Output).to receive(:error).with('Migration took longer than 10 minutes and was terminated.')
+        expect { migrate }.to raise_error(SystemExit)
       end
     end
 

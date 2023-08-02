@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'forwardable'
+require 'benchmark'
 
 module GDK
   module TaskHelpers
@@ -10,6 +11,7 @@ module GDK
 
       MAIN_TASKS = %w[db:migrate db:test:prepare].freeze
       GEO_TASKS = %w[db:migrate:geo db:test:prepare:geo].freeze
+      MIGRATION_TIMEOUT = 600
 
       def_delegators :config, :geo?
       def_delegators :postgresql, :in_recovery?
@@ -20,7 +22,18 @@ module GDK
         return if migrate_tasks.empty?
 
         display_migrate_message(tasks.keys)
-        rake(tasks.values.flatten)
+
+        begin
+          Timeout.timeout(MIGRATION_TIMEOUT) do
+            timings = Benchmark.measure do
+              rake(tasks.values.flatten)
+            end
+            GDK::Output.notice("Migration finished. Timings:\n#{Benchmark::CAPTION} #{timings}")
+          end
+        rescue Timeout::Error
+          GDK::Output.error('Migration took longer than 10 minutes and was terminated.')
+          exit(1)
+        end
       end
 
       private
