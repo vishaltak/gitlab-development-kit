@@ -2,6 +2,8 @@
 
 <!-- Briefly describe what this merge request does and why. -->
 
+%{first_multiline_commit}
+
 ## How to set up and validate locally
 
 _Numbered steps to set up and validate the change are strongly suggested._
