@@ -36,6 +36,14 @@ To install another GDK to act as a cell:
 
 The new GDK is available at `http://127.0.0.1:3001`.
 
+The new GDK might serve errors due to
+[issue 1893](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1893).
+If this happens, you need to stop `webpack`:
+
+```shell
+gdk stop webpack
+```
+
 ### Clean up the installation
 
 To clean up the installation and remove the second cell:
