@@ -112,7 +112,7 @@ module GDK
       end
 
       def pg_config_valid?
-        return true unless embedding_db_enabled?
+        return true unless pgvector_enabled?
 
         unless pg_config_ldflags.include?('-isysroot')
           @pgconfig_error = 'The `-isysroot` value not present in `pg_config --ldflags`.'
@@ -133,8 +133,8 @@ module GDK
         true
       end
 
-      def embedding_db_enabled?
-        config.gitlab.rails.databases.embedding.enabled
+      def pgvector_enabled?
+        config.pgvector.enabled
       end
 
       def isysroot_path_matches_sdk?(isysroot_path, xcrun_sdk_path)
