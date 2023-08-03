@@ -97,7 +97,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
     context 'ldflags testing' do
       let(:valid_ldflags) { nil }
-      let(:embedding_enabled) { nil }
+      let(:pgvector_enabled) { nil }
       let(:isysroot_path) { '/Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk' }
       let(:isysroot_path_exists) { nil }
       let(:pg_config_ldflags) { "-isysroot #{isysroot_path}" }
@@ -110,7 +110,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
         allow(subject).to receive(:versions_ok?).and_return(true)
         allow(subject).to receive(:macos?).and_return(true)
 
-        allow_any_instance_of(GDK::Config).to receive_message_chain('gitlab.rails.databases.embedding.enabled').and_return(embedding_enabled)
+        allow_any_instance_of(GDK::Config).to receive_message_chain('pgvector.enabled').and_return(pgvector_enabled)
 
         stub_isysroot_path_exists?(isysroot_path, isysroot_path_exists)
         stub_pg_config_ldflags(pg_config_ldflags)
@@ -119,8 +119,8 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
         stub_realpath(xcrun_sdk_path, realpath)
       end
 
-      context 'when embedding db is enabled' do
-        let(:embedding_enabled) { true }
+      context 'when pgvector is enabled' do
+        let(:pgvector_enabled) { true }
         let(:isysroot_path_exists) { true }
 
         context 'when pg_config_ldflags includes -isysroot flag, and matches xcrun_sdk_path' do
@@ -174,7 +174,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
         end
       end
 
-      context 'when embedding db is not enabled' do
+      context 'when pgvector is not enabled' do
         it 'returns true' do
           expect(subject).to be_success
         end
