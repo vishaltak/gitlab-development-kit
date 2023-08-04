@@ -21,7 +21,7 @@ gitlab-zoekt-indexer-clean-bin:
 	$(Q)rm -rf gitlab-zoekt-indexer/bin/*
 
 gitlab-zoekt-indexer/.git:
-	$(Q)GIT_REVISION="${gitlab_zoekt_indexer_version}" support/component-git-clone ${git_depth_param} ${gitlab_zoekt_indexer_repo} gitlab-zoekt-indexer
+	$(Q)GIT_REVISION="${gitlab_zoekt_indexer_version}" support/component-git-clone ${git_params} ${gitlab_zoekt_indexer_repo} gitlab-zoekt-indexer
 
 .PHONY: gitlab-zoekt-indexer/bin/gitlab-zoekt-indexer
 gitlab-zoekt-indexer/bin/gitlab-zoekt-indexer: gitlab-zoekt-indexer/.git/pull

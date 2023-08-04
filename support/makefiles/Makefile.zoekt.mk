@@ -18,7 +18,7 @@ endif
 zoekt-update-run: zoekt/.git/pull zoekt-clean-bin zoekt/bin/zoekt-webserver
 
 zoekt/.git:
-	$(Q)GIT_REVISION="${zoekt_version}" CLONE_DIR=zoekt support/component-git-clone ${git_depth_param} ${zoekt_repo} zoekt
+	$(Q)GIT_REVISION="${zoekt_version}" CLONE_DIR=zoekt support/component-git-clone ${git_params} ${zoekt_repo} zoekt
 
 zoekt/bin/%: zoekt/.git
 	@echo

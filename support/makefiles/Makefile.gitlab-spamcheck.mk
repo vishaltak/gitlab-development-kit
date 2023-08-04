@@ -8,7 +8,7 @@ gitlab-spamcheck-setup:
 endif
 
 gitlab-spamcheck/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_spamcheck_repo} ${gitlab_spamcheck_clone_dir}
+	$(Q)support/component-git-clone ${git_params} ${gitlab_spamcheck_repo} ${gitlab_spamcheck_clone_dir}
 
 ifeq ($(gitlab_spamcheck_enabled),true)
 gitlab-spamcheck-update: gitlab-spamcheck-update-timed

@@ -35,7 +35,7 @@ endif
 pgvector-update-run: pgvector/.git/pull pgvector-clean pgvector-installed-lib
 
 pgvector/.git:
-	$(Q)GIT_REVISION="${pgvector_version}" CLONE_DIR=pgvector support/component-git-clone ${git_depth_param} ${pgvector_repo} pgvector
+	$(Q)GIT_REVISION="${pgvector_version}" CLONE_DIR=pgvector support/component-git-clone ${git_params} ${pgvector_repo} pgvector
 
 .PHONY: pgvector-auto-clean
 pgvector-auto-clean: $(PG_CONFIG_FLAGS_FILE)

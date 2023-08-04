@@ -57,7 +57,9 @@ endif
 QQerr = 2> /dev/null
 
 ifeq ($(shallow_clone),true)
-git_depth_param = --depth=1
+git_params = --depth=1
+else ifeq ($(blobless_clone),true)
+git_params = --filter=blob:none
 endif
 
 # List Makefile targets

@@ -20,7 +20,7 @@ endif
 gitlab-ui-update-run: gitlab-ui/.git gitlab-ui/.git/pull gitlab-ui-clean .gitlab-ui-yarn
 
 gitlab-ui/.git:
-	$(Q)support/component-git-clone ${git_depth_param} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
+	$(Q)support/component-git-clone ${git_params} ${gitlab_ui_repo} ${gitlab_ui_clone_dir} ${QQ}
 
 gitlab-ui/.git/pull:
 	@echo

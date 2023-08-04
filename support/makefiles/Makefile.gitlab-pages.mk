@@ -28,7 +28,7 @@ gitlab-pages/bin/gitlab-pages: gitlab-pages/.git/pull
 	$(Q)support/asdf-exec ${gitlab_pages_clone_dir} $(MAKE) ${QQ}
 
 gitlab-pages/.git:
-	$(Q)support/move-existing-gitlab-pages-directory || GIT_REVISION="${gitlab_pages_version}" support/component-git-clone ${git_depth_param} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
+	$(Q)support/move-existing-gitlab-pages-directory || GIT_REVISION="${gitlab_pages_version}" support/component-git-clone ${git_params} ${gitlab_pages_repo} ${gitlab_pages_clone_dir} ${QQ}
 
 gitlab-pages/.git/pull: gitlab-pages/.git
 	@echo
