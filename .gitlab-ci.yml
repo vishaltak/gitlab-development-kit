@@ -75,7 +75,7 @@ default:
           - 'gitaly/go.mod'
           - 'gitaly/go.sum'
       paths:
-        - "$GITLAB_CI_CACHE_DIR"
+        - ".gitlab-ci-cache/go/pkg/mod/"
       policy: pull-push
 
 include:
