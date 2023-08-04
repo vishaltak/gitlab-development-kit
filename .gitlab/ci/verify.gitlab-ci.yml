@@ -13,7 +13,7 @@
 .verify-job:
   extends:
     - .verify-base-job
-    - .cached-job
+    - .go-cache
     - .verify-job-cached_variables
   variables:
     GIT_STRATEGY: none

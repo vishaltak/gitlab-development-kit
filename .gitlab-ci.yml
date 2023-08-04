@@ -69,6 +69,19 @@ default:
   variables:
     <<: *default_variables
     <<: *cached_variables
+  # Temporarily disabling the cache. See https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1886 for more details.
+  # cache:
+  #   - key:
+  #       files:
+  #         - '.tool-versions'
+  #     paths:
+  #       - "$GITLAB_CI_CACHE_DIR"
+  #     policy: pull-push
+
+.go-cache:
+  variables:
+    <<: *default_variables
+    <<: *cached_variables
   cache:
     - key:
         files:
