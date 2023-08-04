@@ -1,5 +1,6 @@
 gitaly_clone_dir = gitaly
-gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
+# gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
+gitaly_version = "26f9b86f5d59e643b719b5ff15bb8e57d8ba599f"
 
 gitaly-setup: ${gitaly_build_bin_dir}/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
 

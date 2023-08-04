@@ -3,7 +3,8 @@ gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
 in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
-default_branch ?= $(if $(gitlab_default_branch),$(gitlab_default_branch),master)
+# default_branch ?= $(if $(gitlab_default_branch),$(gitlab_default_branch),master)
+default_branch ?= 54b04eb93b35b863d3fa07a2e508f33269b5c91c
 
 gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
 
