@@ -34,7 +34,7 @@ variables:
   <<: *default_variables
 
 default:
-  timeout: 3 hours
+  timeout: 3h
   interruptible: true
   image: ${DEFAULT_IMAGE}
   tags:
