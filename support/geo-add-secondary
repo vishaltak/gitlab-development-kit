@@ -170,6 +170,7 @@ class GeoSecondaryAdder
     gdk_set(secondary_gdk, 'geo.enabled', true)
     gdk_set(secondary_gdk, 'geo.secondary', true)
     gdk_set(secondary_gdk, 'sshd.enabled', true)
+    gdk_set(secondary_gdk, 'gdk.runit_wait_secs', 40)
   end
 
   def gdk_set(pathname, key, value)
