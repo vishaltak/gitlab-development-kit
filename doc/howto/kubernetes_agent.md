@@ -4,7 +4,9 @@ If you wish to clone and keep an updated [GitLab Agent for Kubernetes](https://g
 
 1. Install [Bazel](https://www.bazel.build/)
 
-    The recommended way to install Bazel is to use [Bazelisk](https://github.com/bazelbuild/bazelisk). Bazelisk is a version manager for Bazel, much like rbenv for Ruby. See the [installation instructions](https://docs.bazel.build/versions/master/install-bazelisk.html) for Bazelisk.
+    The recommended way to install Bazel is to use [Bazelisk](https://github.com/bazelbuild/bazelisk). Bazelisk is a version manager for Bazel, much like `rbenv` for Ruby. For
+    information on installing Bazelisk, see the [installation instructions](https://docs.bazel.build/versions/master/install-bazelisk.html). If you follow the installation
+    instructions for a Linux system, rename the Bazelisk binary executable to `bazel`.
 
 1. Add the following settings in your `gdk.yml`:
 
