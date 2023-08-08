@@ -18,6 +18,10 @@ apt install nginx
 yum install nginx
 ```
 
+Versions of NGINX packaged with some Linux distributions might not work.
+You should install the [homebrew version of NGINX](https://formulae.brew.sh/formula/nginx) using
+the [official NGINX installation](https://www.nginx.com/resources/wiki/start/topics/tutorials/install/).
+
 ## Add entry to /etc/hosts
 
 To be able to use a hostname instead of IP address, add a line to
