@@ -66,6 +66,8 @@ To set up `gdk.test` and `registry.test` as hostnames using `172.16.123.1`:
    172.16.123.1 gdk.test registry.test
    ```
 
+Make sure you remove previous entries for `gdk.test`, otherwise the hosts file will respect the first entry.
+
 1. Set `hostname` to `gdk.test`:
 
    ```shell
