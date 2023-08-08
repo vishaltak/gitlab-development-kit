@@ -13,7 +13,7 @@ BUNDLE := $(shell command -v bundle 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
 
 # Speed up Go module downloads
-export GOPROXY ?= https://proxy.golang.org
+export GOPROXY ?= https://proxy.golang.org|https://proxy.golang.org
 
 NO_RAKE_REQUIRED := bootstrap bootstrap-packages lint
 
