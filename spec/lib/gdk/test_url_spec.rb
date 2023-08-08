@@ -3,7 +3,9 @@
 require 'spec_helper'
 
 RSpec.describe GDK::TestURL do
+  let(:commit_sha) { 'abc123' }
   let(:default_url) { 'http://127.0.0.1:3000/users/sign_in' }
+  let(:tmp_gitlab_dir) { Dir.mktmpdir('gitlab-path') }
 
   before do
     stub_const('GDK::TestURL::MAX_ATTEMPTS', 2)
@@ -23,9 +25,11 @@ RSpec.describe GDK::TestURL do
 
   describe '#wait' do
     shared_examples "a URL that's down" do
-      it 'checks if the URL is up but returns false' do
+      before do
         allow(subject).to receive(:check_url).and_return(false)
+      end
 
+      it 'checks if the URL is up but returns false' do
         freeze_time do
           result = nil
 
@@ -34,12 +38,21 @@ RSpec.describe GDK::TestURL do
           expect(result).to be(false)
         end
       end
+
+      it 'does not call #store_gitlab_commit_sha' do
+        expect(subject).not_to receive(:store_gitlab_commit_sha)
+
+        subject.wait
+      end
     end
 
     shared_examples "a URL that's up" do
-      it 'checks if the URL is up and returns true' do
+      before do
         allow(subject).to receive(:check_url).and_return(true)
+        allow(GDK.config).to receive_message_chain(:gitlab, :dir).and_return(tmp_gitlab_dir)
+      end
 
+      it 'checks if the URL is up and returns true' do
         freeze_time do
           result = nil
 
@@ -47,6 +60,20 @@ RSpec.describe GDK::TestURL do
           expect { result = subject.wait }.to output(/#{expected_message}/).to_stdout
           expect(result).to be(true)
         end
+      end
+
+      it 'calls #store_gitlab_commit_sha which writes into a file' do
+        shellout_double = instance_double(Shellout)
+        expect(Shellout).to receive(:new).with('git rev-parse HEAD', chdir: tmp_gitlab_dir).and_return(shellout_double)
+        allow(shellout_double).to receive(:run).and_return(commit_sha)
+
+        allow(File).to receive(:write)
+
+        expect(GDK::Output).to receive(:notice).with("#{default_url} is up (200 OK). Took 0.0 second(s).")
+        expect(GDK::Output).to receive(:notice).with("  - GitLab Commit SHA: #{commit_sha}.")
+        expect(File).to receive(:write).with('gitlab-last-verified-sha.json', '{"gitlab_last_verified_sha":"abc123"}')
+
+        subject.wait
       end
     end
 
@@ -73,11 +100,11 @@ RSpec.describe GDK::TestURL do
         expect(subject).to receive(:sleep).with(3).twice
 
         if verbose
-          expected_message << "\n> Testing attempt #1.."
+          expected_message << "\n> Testing GDK attempt #1.."
           expected_message << last_response_reason
 
           if expect_second_attempt
-            expected_message << "\n> Testing attempt #2.."
+            expected_message << "\n> Testing GDK attempt #2.."
             expected_message << last_response_reason
           end
 
@@ -99,7 +126,7 @@ RSpec.describe GDK::TestURL do
         allow(http_helper_double).to receive(:head_up?).and_return(true)
 
         if verbose
-          expected_message << "\n> Testing attempt #1.."
+          expected_message << "\n> Testing GDK attempt #1.."
           expected_message << last_response_reason
         end
 

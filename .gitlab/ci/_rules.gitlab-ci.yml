@@ -103,3 +103,11 @@
 .rules:deploy-gitpod-workspace-image:
   rules:
     - <<: *if-gitpod-image-release
+
+.rules:deploy-pages:
+  rules:
+    - <<: *if-gitpod-image-release
+      when: never
+    - <<: *if-default-branch-schedule
+      when: never
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

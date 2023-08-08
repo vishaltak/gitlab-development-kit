@@ -33,6 +33,7 @@ module GDK
 
       if check_url(verbose: verbose)
         GDK::Output.notice("#{uri} is up (#{http_helper.last_response_reason}). Took #{duration} second(s).")
+        store_gitlab_commit_sha
         true
       else
         GDK::Output.notice("#{uri} does not appear to be up. Waited #{duration} second(s).")
@@ -45,7 +46,7 @@ module GDK
       display_output = verbose && !silent
 
       1.upto(max_attempts) do |i|
-        GDK::Output.puts("\n> Testing attempt ##{i}..") if display_output
+        GDK::Output.puts("\n> Testing GDK attempt ##{i}..") if display_output
 
         if check_url_oneshot(verbose: verbose, silent: silent)
           result = true
@@ -86,6 +87,13 @@ module GDK
 
     def http_helper
       @http_helper ||= GDK::HTTPHelper.new(uri, read_timeout: read_timeout, open_timeout: open_timeout, cache_response: false)
+    end
+
+    def store_gitlab_commit_sha
+      @sha ||= Shellout.new('git rev-parse HEAD', chdir: GDK.config.gitlab.dir).run
+      GDK::Output.notice("  - GitLab Commit SHA: #{@sha}.")
+
+      File.write('gitlab-last-verified-sha.json', JSON.dump(gitlab_last_verified_sha: @sha.to_s))
     end
   end
 end

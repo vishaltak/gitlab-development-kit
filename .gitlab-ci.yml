@@ -29,6 +29,7 @@ stages:
   PUMA_SINGLE_MODE: "true"
   GDK_DEBUG: "true"
   NOKOGIRI_LIBXML_MEMORY_MANAGEMENT: "default"
+  GITLAB_LAST_VERIFIED_SHA_PATH: gitlab-last-verified-sha.json
 
 variables:
   <<: *default_variables

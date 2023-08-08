@@ -22,13 +22,14 @@
     - cd /home/gdk/gdk
     - !reference [.verify-base-job, before_script]
   after_script:
-    - mkdir -p $CI_PROJECT_DIR/gitlab_log $CI_PROJECT_DIR/gdk_log
-    - cp -rf /home/gdk/gdk/gitlab/log/*.log $CI_PROJECT_DIR/gitlab_log/
-    - cp -rf /home/gdk/gdk/log/ $CI_PROJECT_DIR/gdk_log/
+    # In `after_script`, the working directory always starts at `CI_PROJECT_DIR`
+    - mkdir -p gitlab_log gdk_log
+    - mv /home/gdk/gdk/gitlab/log/*.log gitlab_log/
+    - mv /home/gdk/gdk/log/ gdk_log/
   artifacts:
     paths:
-      - ./gitlab_log
-      - ./gdk_log
+      - gitlab_log/
+      - gdk_log/
     expire_in: 2 days
     when: always
   timeout: 2h
@@ -72,6 +73,16 @@ update:
   extends: .verify-job
   script:
     - support/ci/verify-update
+  after_script:
+    - !reference ['.verify-job', after_script]
+    - mv /home/gdk/gdk/$GITLAB_LAST_VERIFIED_SHA_PATH $GITLAB_LAST_VERIFIED_SHA_PATH
+  artifacts:
+    paths:
+      - gitlab_log/
+      - gdk_log/
+      - $GITLAB_LAST_VERIFIED_SHA_PATH
+    expire_in: 2 days
+    when: always
 
 gitpod-docker-image:
   extends:

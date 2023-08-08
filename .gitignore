@@ -51,6 +51,7 @@
 /gitlab-zoekt-indexer
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
+/gitlab-last-verified-sha.json
 /gitlab-operator
 /gitlab-pages
 /gitlab-pages-secret
