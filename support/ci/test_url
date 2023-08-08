@@ -2,11 +2,21 @@
 
 MAX_ATTEMPTS=90
 SLEEP_BETWEEN_ATTEMPTS=5
+GDK_DIR="/home/gdk/gdk"
+GITLAB_DIR="${GDK_DIR}/gitlab"
+
+if [ -z "${GITLAB_LAST_VERIFIED_SHA_PATH}" ]; then
+    echo "GITLAB_LAST_VERIFIED_SHA_PATH variable must not be empty and must contain a valid path."
+    exit 1
+fi
 
 for i in $(seq 1 ${MAX_ATTEMPTS})
 do
   echo "> Testing GDK attempt #${i}.."
   if curl --head --show-error --silent --fail http://127.0.0.1:3000/users/sign_in; then
+    SHA=$(git -C "${GITLAB_DIR}" rev-parse HEAD)
+    echo "Writing GitLab commit SHA ${SHA} into ${GITLAB_LAST_VERIFIED_SHA_PATH}"
+    echo "{\"gitlab_last_verified_sha\": \"${SHA}\"}" > "${GITLAB_LAST_VERIFIED_SHA_PATH}"
     exit 0
   fi
 

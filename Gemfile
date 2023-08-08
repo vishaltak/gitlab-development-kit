@@ -8,6 +8,7 @@ group :development do
   gem 'rubocop', require: false
   gem "rubocop-rake", "~> 0.6.0", require: false
   gem 'yard', '~> 0.9.34', require: false
+  gem 'pry-byebug' # See doc/howto/pry.md
 end
 
 group :test do
