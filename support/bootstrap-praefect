@@ -19,7 +19,7 @@ end
 def main
   try_times = ENV['CI'] ? 60 : 10
 
-  abort 'postgres not ready' unless postgresql.ready?(try_times:)
+  abort 'postgres not ready' unless postgresql.ready?(try_times: try_times)
   exit if postgresql.db_exists?(db_name)
   abort 'createdb failed' unless postgresql.createdb(%W[--encoding=UTF8 --locale=C --echo #{db_name}])
   abort 'migrate failed' unless system('support/migrate-praefect')
