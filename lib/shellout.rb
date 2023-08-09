@@ -27,10 +27,10 @@ class Shellout
 
   def execute(display_output: true, display_error: true, retry_attempts: DEFAULT_EXECUTE_RETRY_ATTEMPTS, retry_delay_secs: DEFAULT_EXECUTE_RETRY_DELAY_SECS)
     retried ||= false
-    GDK::Output.debug("command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
+    GDK::Output.debug("[#{timestamp}] command=[#{command}], opts=[#{opts}], display_output=[#{display_output}], retry_attempts=[#{retry_attempts}]")
 
     display_output ? stream : try_run
-    GDK::Output.debug("result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
+    GDK::Output.debug("[#{timestamp}] result: success?=[#{success?}], stdout=[#{read_stdout}], stderr=[#{read_stderr}]")
 
     raise ExecuteCommandFailedError unless success?
 
@@ -159,6 +159,10 @@ class Shellout
         meth.call(io.read_nonblock(BLOCK_SIZE)) if ready
       end
     end
+  end
+
+  def timestamp
+    @timestamp ||= Time.now.strftime('%Y-%m-%d_%H.%M.%S')
   end
 
   def print_out(msg)
