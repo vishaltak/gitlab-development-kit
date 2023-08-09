@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-MAX_ATTEMPTS=90
+MAX_ATTEMPTS=120
 SLEEP_BETWEEN_ATTEMPTS=5
+TOTAL_DURATION=$((MAX_ATTEMPTS * SLEEP_BETWEEN_ATTEMPTS / 60)) 
 GDK_DIR="/home/gdk/gdk"
 GITLAB_DIR="${GDK_DIR}/gitlab"
 
@@ -12,15 +13,16 @@ fi
 
 for i in $(seq 1 ${MAX_ATTEMPTS})
 do
-  echo "> Testing GDK attempt #${i}.."
+  TIMESTAMP=$(date "+%Y-%m-%d_%H:%M:%S")
   if curl --head --show-error --silent --fail http://127.0.0.1:3000/users/sign_in; then
     SHA=$(git -C "${GITLAB_DIR}" rev-parse HEAD)
-    echo "Writing GitLab commit SHA ${SHA} into ${GITLAB_LAST_VERIFIED_SHA_PATH}"
+    echo "${TIMESTAMP} : Success on GDK attempt #${i}. Writing GitLab commit SHA ${SHA} into ${GITLAB_LAST_VERIFIED_SHA_PATH}."
     echo "{\"gitlab_last_verified_sha\": \"${SHA}\"}" > "${GITLAB_LAST_VERIFIED_SHA_PATH}"
     exit 0
+  else
+    echo "${TIMESTAMP} : Failed on GDK attempt #${i}. Trying for up to ${TOTAL_DURATION} minutes."
   fi
 
-  echo
   sleep ${SLEEP_BETWEEN_ATTEMPTS}
 done
 
