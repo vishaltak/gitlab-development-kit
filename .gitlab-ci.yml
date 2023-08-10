@@ -17,7 +17,9 @@ variables:
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
   GITLAB_CI_CACHE_DIR: .gitlab-ci-cache
   GITLAB_CI_CACHE_FULL_DIR: $CI_PROJECT_DIR/$GITLAB_CI_CACHE_DIR
+  GITLAB_CI_CACHE_RUBY_DIR: $GITLAB_CI_CACHE_DIR/ruby
   GITLAB_CI_CACHE_GO_DIR: $GITLAB_CI_CACHE_DIR/go
+  GITLAB_CI_CACHE_NODEJS_DIR: $GITLAB_CI_CACHE_DIR/nodejs
   BUNDLE_PATH: "vendor/bundle"
   BUNDLE_FROZEN: "true"
   BUNDLE_JOBS: "$(nproc)"
@@ -48,10 +50,10 @@ default:
 ## Cache definitions
 .cache-variables:
   variables:
-    BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/bundle"
-    GEM_HOME: "${GITLAB_CI_CACHE_DIR}/gem"
-    GEM_PATH: "${GITLAB_CI_CACHE_DIR}/gem"
-    GOMODCACHE: "${GITLAB_CI_CACHE_DIR}/go/mod"
+    BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby"
+    GEM_HOME: "${BUNDLE_PATH}"
+    GEM_PATH: "${BUNDLE_PATH}"
+    GOMODCACHE: "${GITLAB_CI_CACHE_GO_DIR}/mod"
     NODE_PATH: "${GITLAB_CI_CACHE_DIR}/nodejs"
 
 .build-verify-image-cache-definition: &build-verify-image-cache-definition
@@ -60,7 +62,6 @@ default:
       - ".tool-versions"
   paths:
     - "${BUNDLE_PATH}/"
-    - "${GEM_PATH}/"
     - "${GOMODCACHE}/"
     - "${NODE_PATH}/"
   policy: pull
