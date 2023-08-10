@@ -10,3 +10,11 @@ build-verify-image:
     - release-image
   script:
     - ./support/docker ci-build-verify-image
+  after_script:
+    - !reference [.verify-job, after_script]
+  artifacts:
+    paths:
+      - gitlab_log/
+      - gdk_log/
+    expire_in: 2 days
+    when: always
