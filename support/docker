@@ -50,7 +50,7 @@ case "$1" in
         ;;
 
     ci-build-verify-image)
-        mkdir -p "${GITLAB_CI_CACHE_FULL_DIR}"
+        mkdir -p "${GITLAB_CI_CACHE_DIR}"
 
         docker buildx build \
           --provenance=false \
