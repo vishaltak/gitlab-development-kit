@@ -55,12 +55,12 @@ default:
 ## Cache definitions
 .cache-variables:
   variables:
-    BUNDLE_PATH: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
-    GEM_HOME: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
-    GEM_PATH: "${GDK_INTERNAL_CACHE_RUBY_FULL_DIR}/gem"
-    GOCACHE: "${GDK_INTERNAL_CACHE_GO_FULL_DIR}/build"
-    GOMODCACHE: "${GDK_INTERNAL_CACHE_GO_FULL_DIR}/mod"
-    NODE_PATH: "${GDK_INTERNAL_CACHE_FULL_DIR}/nodejs"
+    BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
+    GEM_HOME: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
+    GEM_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
+    GOCACHE: "${GITLAB_CI_CACHE_DIR}/go/build"
+    GOMODCACHE: "${GITLAB_CI_CACHE_DIR}/go/mod"
+    NODE_PATH: "${GITLAB_CI_CACHE_DIR}/nodejs"
 
 .build-verify-image-cache-definition: &build-verify-image-cache-definition
   key:
