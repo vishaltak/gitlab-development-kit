@@ -38,6 +38,6 @@ RUN bash ./support/bootstrap \
   && sudo rm -rf /home/gdk/tmp \
   # Remove build caches
   # Unfortunately we cannot remove all of "$HOME/gdk/gitaly/_build/*" because we need to keep the compiled binaries in "$HOME/gdk/gitaly/_build/bin"
-  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* "$HOME/gdk/gitaly/_build/deps/git/source" "$HOME/gdk/gitaly/_build/deps/libgit2/source" "$HOME/gdk/gitaly/_build/cache" "$HOME/gdk/gitaly/_build/deps" "$HOME/gdk/gitaly/_build/intermediate" "$HOME/.cache/" /tmp/*
+  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* "$HOME/gdk/gitaly/_build/deps/git/source" "$HOME/gdk/gitaly/_build/deps/libgit2/source" "$HOME/gdk/gitaly/_build/deps" "$HOME/gdk/gitaly/_build/intermediate" "$HOME/.cache/" /tmp/*
 
 WORKDIR /home/gdk
