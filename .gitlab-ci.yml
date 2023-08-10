@@ -56,8 +56,8 @@ default:
   BUNDLE_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/bundle
   GEM_HOME: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
   GEM_PATH: $GDK_INTERNAL_CACHE_RUBY_FULL_DIR/gem
-  GOCACHE: "/home/gdk/.cache/go-build"
-  GOMODCACHE: "/home/gdk/.asdf/installs/golang/1.20.7/packages/pkg/mod"
+  GOCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/build
+  GOMODCACHE: $GDK_INTERNAL_CACHE_GO_FULL_DIR/mod
   NODE_PATH: $GDK_INTERNAL_CACHE_FULL_DIR/nodejs
 
 .verify-job-cached_variables:
