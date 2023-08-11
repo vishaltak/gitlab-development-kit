@@ -45,4 +45,4 @@ RUN curl --fail "${URL}/-/raw/${SHA}/support/install" | bash -s - gdk "${SHA}" &
 
 WORKDIR /home/gdk/gdk
 
-RUN gdk config set webpack.live_reload false && gdk config set webpack.sourcemaps false
+RUN gdk config set gitlab.cache_classes true && gdk config set webpack.live_reload false && gdk config set webpack.sourcemaps false && make Procfile
