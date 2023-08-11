@@ -60,6 +60,28 @@ To set up `gdk.test` and `registry.test` as hostnames using `172.16.123.1`:
    sudo ip link set dummy0 up
    ```
 
+   Note that, on some Linux distros like Ubuntu, netplan network manager won't persist the dummy interface. You may use the following bridge setup.
+
+   ```yaml
+   network:
+   version: 2
+   renderer: NetworkManager
+   bridges:
+      dummy0:
+         dhcp4: no
+         dhcp6: no
+         accept-ra: no
+         interfaces: []
+         addresses:
+         - 172.16.123.1/32
+   ```
+
+   Let netplan aply the interface:
+
+   ```shell
+   sudo netplan apply
+   ```
+
 1. Add the following to the end of `/etc/hosts` (you must use `sudo` to save the changes):
 
    ```plaintext
