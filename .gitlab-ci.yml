@@ -77,7 +77,7 @@ default:
           - "/home/gdk/gdk/gitaly/go.sum"
       paths:
         - "$GITLAB_CI_CACHE_DIR/go"
-      policy: pull-push
+      policy: push
 
 .go-cache:
   variables:
@@ -89,8 +89,8 @@ default:
           - "/home/gdk/gdk/gitaly/go.mod"
           - "/home/gdk/gdk/gitaly/go.sum"
       paths:
-        - ".gitlab-ci-cache/go/pkg/mod"
-      policy: pull-push
+        - "$GITLAB_CI_CACHE_DIR/go"
+      policy: pull
 
 include:
   - template: Workflows/MergeRequest-Pipelines.gitlab-ci.yml
