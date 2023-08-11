@@ -28,10 +28,22 @@ gitaly-git-pull-run: ${gitaly_clone_dir}/.git
 .PHONY: ${gitaly_build_bin_dir}/gitaly
 ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 	@echo
+ifeq ($(CI),true)
+	@echo "${DIVIDER}"
+	@echo "Restoring Go modules from cache"
+	@echo "${DIVIDER}"
+	$(Q)cp -R /home/gdk/.gitlab-ci-cache/go/build /home/gdk/gdk/gitaly/_build/cache
+endif
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"
 	@echo "${DIVIDER}"
 	$(Q)support/asdf-exec ${gitaly_clone_dir} $(MAKE) -j${restrict_cpu_count} WITH_BUNDLED_GIT=YesPlease BUNDLE_FLAGS=--no-deployment
+ifeq ($(CI),true)
+	@echo "${DIVIDER}"
+	@echo "Saving Go modules to cache"
+	@echo "${DIVIDER}"
+	$(Q)cp -R /home/gdk/gdk/gitaly/_build/cache/* /home/gdk/.gitlab-ci-cache/go/build
+endif
 
 .PHONY: praefect-migrate
 praefect-migrate: _postgresql-seed-praefect

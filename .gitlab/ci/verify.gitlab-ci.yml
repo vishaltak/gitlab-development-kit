@@ -21,8 +21,6 @@
     - build-verify-image
   before_script:
     - cd /home/gdk/gdk
-    - find / -type d -name "go" 2>/dev/null
-    - go env
     - !reference [.verify-base-job, before_script]
   after_script:
     # In `after_script`, the working directory always starts at `CI_PROJECT_DIR`
