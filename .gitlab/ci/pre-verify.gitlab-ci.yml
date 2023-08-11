@@ -9,5 +9,4 @@ build-verify-image:
   needs:
     - release-image
   script:
-    - echo "Skipping.."
-    # - ./support/docker ci-build-verify-image
+    - ./support/docker ci-build-verify-image
