@@ -82,7 +82,7 @@ install() {
   cd_into_checkout_path
 
   echo "> Installing GDK.."
-  gdk install blobless_clone=true
+  gdk install
   set_gitlab_upstream
 }
 

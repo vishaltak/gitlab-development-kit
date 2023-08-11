@@ -57,8 +57,12 @@ endif
 QQerr = 2> /dev/null
 
 ifeq ($(shallow_clone),true)
+# https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt
 git_params = --depth=1
-else ifeq ($(blobless_clone),true)
+else ifeq ($(blobless_clone),false)
+git_params =
+else
+# https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt
 git_params = --filter=blob:none
 endif
 
