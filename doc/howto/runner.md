@@ -151,11 +151,13 @@ To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker
 `gitlab/gitlab-runner` Docker image. You **must ensure** that the runner saves the configuration to a file that is
 accessible to the host after the registration is complete.
 
-In these instructions, we use a location known to GDK so that GDK can manage the configuration. To register a runner,
-run the following command in the root for your GDK directory:
+In these instructions, we use a location known to GDK so that GDK can manage the configuration. Docker doesn't know about the custom host name `gdk.test`, so you must use
+`--add-host` and `--docker-extra-hosts` to add the host to IP mapping for this address.
+
+To register a runner, run the following command in the root for your GDK directory:
 
 ```shell
-docker run --rm -it -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --url <gdk-url> --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml
+docker run --rm -it --add-host gdk.test:172.16.123.1 -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --url http://gdk.test:3000 --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml --docker-extra-hosts gdk.test:172.16.123.1
 ```
 
 <details>
