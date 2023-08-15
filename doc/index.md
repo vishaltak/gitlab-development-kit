@@ -195,9 +195,12 @@ To install GitLab by using GDK, use one of these methods:
 If `gdk install` doesn't work, see [Resolve installation errors](#resolve-installation-errors). A common
 installation problem is [incomplete `asdf` installation](troubleshooting/asdf.md#error-command-not-found-gdk).
 
-Use `gdk install blobless_clone=true` for a faster clone that consumes less disk-space. The clone
-process uses [`git clone --filter=blob:none`](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt).
-This cloning strategy could slow down some Git commands such as `git push`.
+Use `gdk install shallow_clone=true` for faster clones that consumes less disk-space. The clone
+process uses [`git clone --depth=1`](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---depthltdepthgt).
+
+Use `gdk install blobless_clone=false` for clones without any `git clone`
+arguments. `git clone` commands will consume more disk-space and be slower
+however.
 
 ### Use GDK to install GitLab FOSS
 

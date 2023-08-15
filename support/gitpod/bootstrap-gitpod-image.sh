@@ -52,7 +52,7 @@ configure_webpack() {
 
 install_gdk() {
   echo "# --- Install GDK ---"
-  gdk install blobless_clone=true
+  gdk install
   gdk stop || true
   GDK_KILL_CONFIRM=true gdk kill || true
   ps -ef || true
