@@ -40,13 +40,11 @@ For example, an identity provider for the "zebra" group can be ran using the fol
 
 ```shell
 docker run --name=gitlab_saml_idp -p 8080:8080 -p 8443:8443 \
+  --platform linux/amd64 \ 
   -e SIMPLESAMLPHP_SP_ENTITY_ID=https://<gitlab-host>:<gitlab-port>/groups/<group-name> \
   -e SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=https://<gitlab-host>:<gitlab-port>/groups/<group-name>/-/saml/callback \
   -d jamedjo/test-saml-idp
 ```
-
-In some cases, you might need to add the [`--platform` flag](https://docs.docker.com/build/building/multi-platform/). For
-example, if you are using a Mac M1, you must add a `--platform linux/amd64` flag.
 
 ### Configuring the group
 
