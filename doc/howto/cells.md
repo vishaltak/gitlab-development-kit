@@ -34,6 +34,13 @@ To install another GDK to act as a cell:
     ./support/cells-add-secondary --secondary_port 3001 --primary . ../gdk2
    ```
 
+1. To bump the IDs of cell-local tables, in the `gdk2/gitlab` directory, run the following `rake` task:
+
+   ```shell
+      cd ../gdk2/gitlab
+      rake gitlab:db:cells:bump_cell_sequences\[10000\]
+   ```
+
 The new GDK is available at `http://127.0.0.1:3001`.
 
 The new GDK might serve errors due to
