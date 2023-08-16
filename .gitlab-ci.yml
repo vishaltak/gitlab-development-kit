@@ -21,7 +21,7 @@ variables:
   GDK_INTERNAL_CACHE_FULL_DIR: /home/gdk/$GITLAB_CI_CACHE_DIR
   GDK_INTERNAL_CACHE_RUBY_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/ruby
   GDK_INTERNAL_CACHE_GO_FULL_DIR: $GDK_INTERNAL_CACHE_FULL_DIR/go
-  BUNDLE_PATH: "vendor/bundle"
+  BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
   BUNDLE_FROZEN: "true"
   BUNDLE_JOBS: "$(nproc)"
   ENABLE_BOOTSNAP: "false"
@@ -31,6 +31,10 @@ variables:
   GITLAB_LAST_VERIFIED_SHA_PATH: gitlab-last-verified-sha.json
   REGISTRY_HOST: "registry.gitlab.com"
   REGISTRY_GROUP: "gitlab-org"
+  GEM_HOME: "${BUNDLE_PATH}"
+  GEM_PATH: "${BUNDLE_PATH}"
+  GOMODCACHE: "${GITLAB_CI_CACHE_DIR}/go/mod"
+  NODE_PATH: "${GITLAB_CI_CACHE_DIR}/nodejs"
 
 default:
   timeout: 3h
@@ -51,14 +55,6 @@ default:
       fi
 
 ## Cache definitions
-.cache-variables:
-  variables:
-    BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
-    GEM_HOME: "${BUNDLE_PATH}"
-    GEM_PATH: "${BUNDLE_PATH}"
-    GOMODCACHE: "${GITLAB_CI_CACHE_DIR}/go/mod"
-    NODE_PATH: "${GITLAB_CI_CACHE_DIR}/nodejs"
-
 .build-verify-image-cache-definition: &build-verify-image-cache-definition
   key:
     files:
@@ -74,7 +70,6 @@ default:
   policy: push  # We want to rebuild the cache from scratch to ensure stale dependencies are cleaned up.
 
 .build-verify-image-cache:
-  extends: .cache-variables
   cache:
     - *build-verify-image-cache-definition
 

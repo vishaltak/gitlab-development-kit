@@ -11,9 +11,7 @@
     - gitlab-org-docker
 
 .verify-job:
-  extends:
-    - .verify-base-job
-    - .cache-variables
+  extends: .verify-base-job
   variables:
     GIT_STRATEGY: none
   needs:

@@ -31,6 +31,9 @@ install_shim() {
 }
 
 install_gem() {
+  echo "GEM_HOME: ${GEM_HOME}"
+  echo "GEM_PATH: ${GEM_PATH}"
+  echo "BUNDLE_PATH: ${BUNDLE_PATH}"
   cd_into_checkout_path "gem"
 
   gem build gitlab-development-kit.gemspec
