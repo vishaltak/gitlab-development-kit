@@ -29,8 +29,7 @@ error() {
 ensure_required_commands_exist() {
   for command in "${REQUIRED_COMMANDS[@]}"; do
     if ! command -v "${command}" > /dev/null 2>&1; then
-      echo "ERROR: Please ensure ${command} is installed."
-      exit 1
+      error "Please ensure ${command} is installed."
     fi
   done
 }
