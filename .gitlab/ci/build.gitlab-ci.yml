@@ -19,6 +19,13 @@ build-gitpod-workspace-image:
   script:
     - ./support/gitpod/docker-build
 
+build-gitlab-remote-workspace-image:
+  extends:
+    - .build-job
+    - .rules:gitlab-remote-code-changes
+  script:
+    - ./support/gitlab-remote-development/docker-build
+
 # Used to create a docker image with GDK installed to run QA e2e tests in gitlab-org/gitlab.
 # See https://gitlab.com/groups/gitlab-org/quality/quality-engineering/-/epics/4
 gitlab-e2e-test-image:

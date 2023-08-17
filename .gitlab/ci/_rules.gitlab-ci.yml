@@ -10,7 +10,7 @@
 .if-default-branch-schedule: &if-default-branch-schedule
   if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"'
 
-.if-gitpod-image-release: &if-gitpod-image-release
+.if-release-image: &if-release-image
   if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULE_TYPE == "gitpod-image-release"'
 
 ####################
@@ -75,6 +75,9 @@
   - "support/gitpod/**/*"
   - "support/ci/verify-gitpod-docker-image"
 
+.gitlab-remote-code-changes: &gitlab-remote-code-changes
+  - "support/gitlab-remote-development/**/*"
+
 #########
 # Rules #
 #########
@@ -88,7 +91,7 @@
 
 .rules:code-changes:
   rules:
-    - <<: *if-gitpod-image-release
+    - <<: *if-release-image
       when: never
     - <<: *if-default-branch-schedule
     - changes: *code-changes
@@ -99,17 +102,23 @@
 
 .rules:gitpod-code-changes:
   rules:
-    - <<: *if-gitpod-image-release
+    - <<: *if-release-image
     - <<: *if-merge-request
       changes: *gitpod-code-changes
 
+.rules:gitlab-remote-code-changes:
+  rules:
+    - <<: *if-release-image
+    - <<: *if-merge-request
+      changes: *gitlab-remote-code-changes
+
 .rules:deploy-gitpod-workspace-image:
   rules:
-    - <<: *if-gitpod-image-release
+    - <<: *if-release-image
 
 .rules:deploy-pages:
   rules:
-    - <<: *if-gitpod-image-release
+    - <<: *if-release-image
       when: never
     - <<: *if-default-branch-schedule
       when: never
