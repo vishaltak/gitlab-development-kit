@@ -71,7 +71,7 @@ To create and register a local runner for your instance:
 
      ```shell
      gitlab-runner register \
-       --url http://127.0.0.1:3000 \
+       --url "http://127.0.0.1:3000" \
        --token <TOKEN> \
        --config <path-to-gdk>/gitlab-runner-config.toml
      ```
@@ -157,7 +157,7 @@ In these instructions, we use a location known to GDK so that GDK can manage the
 To register a runner, run the following command in the root for your GDK directory:
 
 ```shell
-docker run --rm -it --add-host gdk.test:172.16.123.1 -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --url http://gdk.test:3000 --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml --docker-extra-hosts gdk.test:172.16.123.1
+docker run --rm -it --add-host gdk.test:172.16.123.1 -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --url "http://gdk.test:3000" --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml --docker-extra-hosts gdk.test:172.16.123.1
 ```
 
 <details>
