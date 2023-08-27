@@ -484,3 +484,17 @@ install OpenSSL 1.1.1:
    ```shell
    gdk update
    ```
+
+## Disabled System Integrity Protection (SIP) breaks Ruby builds on macOS
+
+If SIP is disabled, the build fails when installing the `rbs-2.7.0` gem.
+
+```plaintext
+....
+rbs 2.7.0
+Building native extensions. This could take a while...
+/private/var/folders/rd/h6s2crs17xv0btgdvxc020sr0000gr/T/ruby-build.20230823184744.71172.TjwoSj/ruby-3.1.4/lib/rubygems/ext/builder.rb:95:in `run': ERROR: Failed to build gem native extension. (Gem::Ext::BuildError)
+```
+
+The solution is to enable SIP using the
+[official instructions](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
