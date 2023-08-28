@@ -15,6 +15,7 @@ def start_cluster(ip, ports, dir)
         --cluster-enabled yes \
         --cluster-config-file #{dir}/nodes_#{port}.conf \
         --cluster-node-timeout 5000 \
+        --protected-mode no
         --dir #{dir} \
         --dbfilename dump_#{port}.rdb
     TEXT
