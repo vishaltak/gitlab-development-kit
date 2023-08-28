@@ -549,7 +549,7 @@ upgrade it by running:
 # Get the name of your subsystem
 wsl -l
 # Run the following command
-wsl --set-version <your subsystem name here>
+wsl --set-version <your subsystem name here> 2
 ```
 
 You might need to increase your memory allocation. See [Performance](#performance).
