@@ -27,6 +27,11 @@ token = "<%= config.gitaly.auth_token %>"
 # certificate_path = '/home/git/cert.cert'
 # key_path = '/home/git/key.pem'
 
+<%- if config.gitaly.backup? -%>
+[backup]
+go_cloud_url = "<%= config.gitaly.backup.go_cloud_url %>"
+<%- end -%>
+
 # # Git settings
 [git]
 use_bundled_binaries = true
