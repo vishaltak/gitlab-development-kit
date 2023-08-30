@@ -13,7 +13,6 @@
 /*.log
 /.backups/
 /.env
-/.gdk-install-root
 /.gettext
 /.gitaly-ruby-bundle
 /.gitlab-bundle
