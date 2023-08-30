@@ -31,7 +31,6 @@ rspec:
   variables:
     RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
   script:
-    - pwd > .gdk-install-root
     - make rspec
   cache:
     key: "ruby-${RUBY_VERSION}-bundle"

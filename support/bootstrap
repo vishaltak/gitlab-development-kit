@@ -64,13 +64,6 @@ asdf_install_tools() {
   return $?
 }
 
-gdk_prepare_directory() {
-  # TODO: Touching .gdk-install-root will be redundant shortly.
-  [[ ! -f ".gdk-install-root"  ]] && echo "${PWD}" > .gdk-install-root
-
-  return 0
-}
-
 gdk_mark_bootstrapped() {
   mkdir -p "${GDK_CACHE_DIR}"
   touch "${GDK_BOOTSTRAPPED_FILE}"
@@ -124,11 +117,6 @@ fi
 
 if ! gdk_install_gdk_clt; then
   error "Failed to run gdk_install_gdk_clt()." >&2
-fi
-
-echo "INFO: Preparing GDK directory.."
-if ! gdk_prepare_directory; then
-  error "Failed to prepare GDK directory." >&2
 fi
 
 echo "INFO: Configuring Ruby.."

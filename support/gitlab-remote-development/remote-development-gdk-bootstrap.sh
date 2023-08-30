@@ -54,7 +54,7 @@ clone_gitlab() {
 }
 
 copy_items_from_bootstrap() {
-  interesting_items=(".cache" "clickhouse" "consul" "gdk-config.mk" ".gdk-install-root" 
+  interesting_items=(".cache" "clickhouse" "consul" "gdk-config.mk"
     "gitaly" ".gitlab-bundle" ".gitlab-lefthook" "gitlab-pages" "gitlab-runner-config.toml"
     "gitlab-shell" ".gitlab-shell-bundle" ".gitlab-translations" ".gitlab-yarn" 
     "localhost.crt" "localhost.key" "log" "minio" "pgbouncers" "postgresql" "Procfile"

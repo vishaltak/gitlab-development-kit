@@ -14,8 +14,6 @@ require 'gitlab_development_kit'
 # installed outside the gitlab-development-kit repository with 'gem
 # install'. Edit lib/gdk.rb to define new commands.
 module GDK
-  # TODO: Touching .gdk-install-root will be redundant shortly.
-  ROOT_CHECK_FILE = '.gdk-install-root'
   DEFAULT_INIT_DIRECTORY = File.join(Dir.pwd, 'gitlab-development-kit')
 
   module CommandBasic
