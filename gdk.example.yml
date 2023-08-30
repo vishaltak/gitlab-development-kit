@@ -74,10 +74,16 @@ gitaly:
   assembly_dir: "/home/git/gdk/gitaly/assembly"
   auth_token: ''
   auto_update: true
+  backup:
+    enabled: false
+    go_cloud_url: s3://gitaly-backups?disableSSL=true&s3ForcePathStyle=true&region=gdk&endpoint=http%3A%2F%2F127.0.0.1%3A9000
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
   dir: "/home/git/gdk/gitaly"
   enable_all_feature_flags: false
   enabled: false
+  env:
+    AWS_ACCESS_KEY_ID: minio
+    AWS_SECRET_ACCESS_KEY: gdk-minio
   gitconfig: []
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
@@ -238,6 +244,8 @@ object_store:
       bucket: pages
     ci_secure_files:
       bucket: ci-secure-files
+    gitaly_backups:
+      bucket: gitaly-backups
   port: 9000
 omniauth:
   github:

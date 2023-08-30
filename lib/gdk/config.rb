@@ -362,7 +362,8 @@ module GDK
           'dependency_proxy' => { 'bucket' => 'dependency-proxy' },
           'terraform_state' => { 'bucket' => 'terraform' },
           'pages' => { 'bucket' => 'pages' },
-          'ci_secure_files' => { 'bucket' => 'ci-secure-files' }
+          'ci_secure_files' => { 'bucket' => 'ci-secure-files' },
+          'gitaly_backups' => { 'bucket' => 'gitaly-backups' }
         }
       end
     end
@@ -677,6 +678,18 @@ module GDK
             File.join(config.repository_storages, 'gitaly', name)
           end
         end
+      end
+      settings :backup do
+        bool(:enabled) { config.object_store? }
+        string(:go_cloud_url) do
+          "s3://#{config.object_store.objects['gitaly_backups']['bucket']}?disableSSL=true&s3ForcePathStyle=true&#{URI.encode_www_form(config.object_store.connection.slice('region', 'endpoint'))}"
+        end
+      end
+      hash_setting :env do
+        {
+          'AWS_ACCESS_KEY_ID' => 'minio',
+          'AWS_SECRET_ACCESS_KEY' => 'gdk-minio'
+        }
       end
     end
 
