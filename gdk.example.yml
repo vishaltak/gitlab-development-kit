@@ -120,6 +120,9 @@ gitlab:
       threads_max: 4
       threads_min: 1
       workers: 2
+    session_store:
+      cookie_key: _gitlab_session
+      unique_cookie_key_postfix: true
   rails_background_jobs:
     sidekiq_exporter_enabled: false
     sidekiq_exporter_port: 3807

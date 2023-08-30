@@ -21,10 +21,12 @@
 
 require 'optparse'
 require 'yaml'
+require 'json'
 require 'fileutils'
 require 'readline'
 require 'pathname'
 require 'English'
+require 'openssl'
 require_relative '../lib/gdk'
 
 module SecondaryHelpers
@@ -72,13 +74,13 @@ class AddSecondaryOptionParser
 
       if options.primary_gdk.nil?
         $stdout.puts parser.help
-        $stdout.puts "--primary is required"
+        $stdout.puts '--primary is required'
         raise SecondaryHelpers::Done
       end
 
       if options.secondary_port.nil?
         $stdout.puts parser.help
-        $stdout.puts "--secondary_port is required"
+        $stdout.puts '--secondary_port is required'
         raise SecondaryHelpers::Done
       end
 
@@ -114,23 +116,23 @@ class SecondaryAdder
   def check_primary_gdk_exists
     return if Pathname.new(options.primary_gdk).exist?
 
-    $stdout.puts "Primary site must exist"
+    $stdout.puts 'Primary site must exist'
     raise SecondaryHelpers::Done
   end
 
   def check_secondary_gdk_exists
     return if Pathname.new(options.secondary_gdk).exist?
 
-    $stdout.puts "Secondary site must exist"
+    $stdout.puts 'Secondary site must exist'
     $stdout.puts "Hint: Run `git clone #{Pathname.new(options.primary_gdk).realpath} #{options.secondary_gdk}`"
     raise SecondaryHelpers::Done
   end
 
-  # TODO https://gitlab.com/gitlab-org/gitlab/-/issues/412280
+  # TODO: https://gitlab.com/gitlab-org/gitlab/-/issues/412280
   def check_env_vars
     return unless ENV['GITLAB_VALIDATE_DATABASE_CONFIG'].nil?
 
-    $stdout.puts "GITLAB_VALIDATE_DATABASE_CONFIG env var missing. You need to set `export GITLAB_VALIDATE_DATABASE_CONFIG=0`"
+    $stdout.puts 'GITLAB_VALIDATE_DATABASE_CONFIG env var missing. You need to set `export GITLAB_VALIDATE_DATABASE_CONFIG=0`'
 
     raise SecondaryHelpers::Done
   end
@@ -167,21 +169,45 @@ class SecondaryAdder
     end
 
     run_command_arr(secondary_gdk, %W[gdk install gitlab_repo=#{primary_gitlab}]) unless secondary_gitlab.exist?
-    copy_db_key_base_to_secondary
+
+    # Copy app secrets to the secondary:
+    # secret_key_base: So that session_store cookies can be encrypted on all cells with the same key
+    # db_key_base: it can decrypt data in the PG DB which was encrypted by the primary.
+    copy_app_secrets_to_secondary('secret_key_base', 'db_key_base')
   end
 
   def configure_secondary_gdk_yml
     gdk_set(secondary_gdk, 'port', secondary_port)
-    gdk_set(secondary_gdk, 'sshd.enabled', false)
+    gdk_set(secondary_gdk, 'sshd.enabled', 'false')
 
     primary_postgresql_host = run_command_for_stdout(primary_gdk, 'gdk config get postgresql.host')
     primary_postgresql_port = run_command_for_stdout(primary_gdk, 'gdk config get postgresql.port')
     gdk_set(secondary_gdk, 'cells.enabled', 'true')
     gdk_set(secondary_gdk, 'cells.postgresql_clusterwide.host', primary_postgresql_host)
     gdk_set(secondary_gdk, 'cells.postgresql_clusterwide.port', primary_postgresql_port)
+
+    # Secondary GDK should share redis Sessions Store with Primary GDK
+    # This assumes that that the primary gdk doesn't have custom_config for redis.development.sessions
+    primary_redis_dir = gdk_get(primary_gdk, 'redis.dir')
+    primary_redis_session_db = gdk_get(primary_gdk, 'redis.databases.development.sessions')
+    primary_redis_sessions = "unix:#{primary_redis_dir}/redis.socket?db=#{primary_redis_session_db}"
+    gdk_set(secondary_gdk, 'redis.custom_config', { development: { sessions: primary_redis_sessions } }.to_json)
+
+    # Configuring the cookie_key for session_store
+    primary_cookie_key_postfix = OpenSSL::Digest::SHA256.hexdigest(File.join(primary_gdk, 'gitlab'))
+    gdk_set(secondary_gdk, 'gitlab.rails.session_store.unique_cookie_key_postfix', 'false')
+    gdk_set(secondary_gdk, 'gitlab.rails.session_store.cookie_key', "_gitlab_session_#{primary_cookie_key_postfix}")
+  end
+
+  def gdk_get(pathname, key)
+    key = "'#{key}'" if key.include?('"')
+    cmd = "gdk config get #{key}"
+    run_command_for_stdout(pathname.to_s, cmd)
   end
 
   def gdk_set(pathname, key, value)
+    key = "'#{key}'" if key.include?('"')
+    value = "'#{value}'" if value.include?('"')
     cmd = %w[gdk config set] << key.to_s << value.to_s
     run_command_arr(pathname.to_s, cmd)
   end
@@ -192,26 +218,27 @@ class SecondaryAdder
     retval
   end
 
-  # Copy the secret key to the secondary so it can decrypt data in the PG DB
-  # which was encrypted by the primary.
-  def copy_db_key_base_to_secondary
-    db_key_base = read_db_key_base(primary_gitlab)
-    write_db_key_base(secondary_gitlab, db_key_base)
+  def copy_app_secrets_to_secondary(*keys)
+    data = read_app_secrets(primary_gitlab, *keys)
+    write_app_secrets(secondary_gitlab, data)
   end
 
-  def read_db_key_base(rails_dir)
+  def read_app_secrets(rails_dir, *keys)
     secrets_file = rails_dir.join('config', 'secrets.yml')
 
     data = YAML.load_file secrets_file
-    data['development']['db_key_base']
+    data['development'].slice(*keys)
   end
 
-  def write_db_key_base(rails_dir, new_db_key_base)
+  def write_app_secrets(rails_dir, data)
     secrets_file = rails_dir.join('config', 'secrets.yml')
 
-    data = YAML.load_file secrets_file
-    data['development']['db_key_base'] = new_db_key_base
-    File.open(secrets_file, 'w') { |f| YAML.dump(data, f) }
+    modified_data = YAML.load_file secrets_file
+
+    data.each do |key, value|
+      modified_data['development'][key] = value
+    end
+    File.open(secrets_file, 'w') { |f| YAML.dump(modified_data, f) }
   end
 
   def run_command_arr(dir, cmd_arr)

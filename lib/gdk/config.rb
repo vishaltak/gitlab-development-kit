@@ -934,6 +934,11 @@ module GDK
           integer(:__threads_min) { config.gitlab.rails.puma.workers.zero? ? config.gitlab.rails.puma.threads_max : config.gitlab.rails.puma.threads_min }
         end
 
+        settings :session_store do
+          bool(:unique_cookie_key_postfix) { true } # a unique key postfix based on the root directory of GDK
+          string(:cookie_key) { "_gitlab_session" }
+        end
+
         array(:allowed_hosts) { [] }
 
         integer(:application_settings_cache_seconds) { 60 }

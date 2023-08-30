@@ -52,6 +52,10 @@ gitlab/config/redis.trace_chunks.yml:
 gitlab/config/resque.yml: 
 	$(Q)rake gitlab/config/resque.yml
 
+.PHONY: gitlab/config/session_store.yml
+gitlab/config/session_store.yml: 
+	$(Q)rake gitlab/config/session_store.yml
+
 .PHONY: gitlab/config/redis.rate_limiting.yml
 gitlab/config/redis.rate_limiting.yml: 
 	$(Q)rake gitlab/config/redis.rate_limiting.yml

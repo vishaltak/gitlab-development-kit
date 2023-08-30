@@ -2,6 +2,7 @@
 *.crt
 *.key
 *.pem
+*.swp
 .DS_Store
 .bundle/
 .cache/
