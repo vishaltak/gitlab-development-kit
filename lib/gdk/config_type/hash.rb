@@ -8,6 +8,14 @@ module GDK
       include Mergable
 
       def parse(value)
+        if value.is_a?(::String)
+          begin
+            return JSON.parse(value)
+          rescue JSON::ParserError => e
+            raise StandardErrorWithMessage, e.message
+          end
+        end
+
         value.to_h
       end
 

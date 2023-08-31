@@ -46,10 +46,16 @@ RSpec.describe GDK::ConfigSettings do
       expect { config.foo }.not_to raise_error
     end
 
-    it 'fails on non-array value' do
+    it 'accepts a JSON parseable string' do
+      described_class.hash_setting(:foo) { { a: '{}' } }
+
+      expect { config.foo }.not_to raise_error
+    end
+
+    it 'fails on non-JSON-parseable non-array value' do
       described_class.hash_setting(:foo) { %q(a b) }
 
-      expect { config.foo }.to raise_error(TypeError)
+      expect { config.foo }.to raise_error(GDK::StandardErrorWithMessage)
     end
 
     context 'when there is YAML defined' do
