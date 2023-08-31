@@ -157,19 +157,19 @@ In these instructions, we use a location known to GDK so that GDK can manage the
 To register a runner, run the following command in the root for your GDK directory:
 
 ```shell
-docker run --rm -it --add-host gdk.test:172.16.123.1 -v $(pwd):/etc/gitlab-runner gitlab/gitlab-runner register --url "http://gdk.test:3000" --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml --docker-extra-hosts gdk.test:172.16.123.1
+docker run --rm -it --add-host gdk.test:172.16.123.1 -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --url "http://gdk.test:3000" --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml --docker-extra-hosts gdk.test:172.16.123.1
 ```
 
 <details>
 <summary>Option for SSL users (expand)</summary>
 
-(optional) If you have [SSL enabled with NGINX](nginx.md), a Docker-based runner needs access to your self-signed
-certificate (for example, `gdk.test.crt`). Your certificate **must** have a `.crt` extension, _not_ `.pem`. GDK will
-automatically mount your certificate into the Docker container when the runner is started, but you need to include it
+If you have [SSL enabled with NGINX](nginx.md), a Docker-based runner must have access to your self-signed
+certificate (for example, `gdk.test.pem`). Your certificate is automatically converted from `pem` to `crt`. GDK
+automatically mounts your certificate into the Docker container when you start the runner, but you must include the certificate
 manually when registering your runner:
 
 ```shell
-docker run --rm -it -v "$(pwd)/gdk.test.crt:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --url <gdk-url> --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml
+docker run --rm -it -v "$(pwd)/gdk.test.pem:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --url <gdk-url> --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml
 ```
 
 </details>
@@ -186,7 +186,7 @@ The `register` subcommand requires the following information:
 
 ### Set up GDK to use the registered runner
 
-Now when the runner is registered we can find the token in `<path-to-gdk>/gitlab-runner-config.toml`.
+Now when the runner is registered we can find the token in `<path-to-gdk>/tmp/gitlab-runner/gitlab-runner-config.toml`.
 For example:
 
 ```shell
