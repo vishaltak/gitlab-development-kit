@@ -452,7 +452,7 @@ zoekt:
   enabled: false
   index_port_dev: 6080
   index_port_test: 6060
-  indexer_version: 511083ac335a80971a750ad1664bf4ffc95454ee
-  version: b65e3e6bceef2587a8a9ecaa4515c886dfbc8837
+  indexer_version: cd81e6bf00aabc13fc283c5b2349f94681b11aff
+  version: fcb279ae404c0aa102121b28257143ad16e77482
   web_port_dev: 6090
   web_port_test: 6070
