@@ -15,3 +15,6 @@ ruby 3.1.4
 postgres 13.9
 # For linting GDK documentation
 vale 2.27.0
+
+# For zoekt-webserver
+golang 1.20.3

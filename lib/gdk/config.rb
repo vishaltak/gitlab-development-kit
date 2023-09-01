@@ -530,12 +530,12 @@ module GDK
     settings :zoekt do
       bool(:enabled) { false }
       bool(:auto_update) { true }
-      string(:version) { 'b65e3e6bceef2587a8a9ecaa4515c886dfbc8837' }
+      string(:version) { 'fcb279ae404c0aa102121b28257143ad16e77482' }
       port(:web_port_test, 'zoekt-webserver-test')
       port(:web_port_dev, 'zoekt-webserver-development')
       port(:index_port_test, 'gitlab-zoekt-indexer-test')
       port(:index_port_dev, 'gitlab-zoekt-indexer-development')
-      string(:indexer_version) { '511083ac335a80971a750ad1664bf4ffc95454ee' }
+      string(:indexer_version) { 'cd81e6bf00aabc13fc283c5b2349f94681b11aff' }
     end
 
     settings :tracer do
