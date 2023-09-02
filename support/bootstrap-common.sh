@@ -308,6 +308,13 @@ ensure_supported_platform() {
 }
 
 common_preflight_checks() {
+  opt_out=$(gdk config get gdk.preflight_checks_opt_out 2>/dev/null)
+
+  if [[ "${opt_out}" == "true" ]]; then
+    echo "INFO: Skipping preflight checks because gdk.preflight_checks_opt_out is set to true. This is an unsupported setup."
+    return 0
+  fi
+
   echo "INFO: Performing common preflight checks.."
 
   if ! ensure_supported_platform; then
@@ -326,18 +333,20 @@ common_preflight_checks() {
   fi
 
   if ! ensure_not_root; then
-    error "Running as root is not supported."
+    echo "Running as root is not supported." >&2
+    return 1
   fi
 
   if ! ensure_sudo_available; then
-    error "sudo is required, please install." >&2
+    echo "sudo is required, please install." >&2
+    return 1
   fi
 
   if ! asdf_check_rvm_rbenv; then
     echo "ERROR: RVM or rbenv detected, which can cause issues with asdf." >&2
     echo "INFO: We recommend you uninstall RVM or rbenv, or remove RVM or rbenv from your PATH variable." >&2
     echo "INFO: For more information, see https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/migrate_to_asdf.md." >&2
-    exit 1
+    return 1
   fi
 }
 

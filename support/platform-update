@@ -35,7 +35,9 @@ asdf_update() {
 
 ###############################################################################
 
-common_preflight_checks
+if ! common_preflight_checks; then
+  error "Failed to perform preflight checks." >&2
+fi
 
 header_print "Ensuring platform software installed"
 if ! setup_platform; then
