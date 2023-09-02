@@ -9,7 +9,9 @@ source "${parent_path}"/bootstrap-common.sh
 
 
 ###############################################################################
-common_preflight_checks
+if ! common_preflight_checks; then
+  error "Failed to perform preflight checks." >&2
+fi
 
 if ! setup_platform; then
   error "Failed to install set up platform." >&2

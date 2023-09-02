@@ -42,6 +42,7 @@ gdk:
     quiet: true
     ruby_services: false
   overwrite_changes: false
+  preflight_checks_opt_out: false
   protected_config_files: []
   quiet: true
   rubygems_update_opt_out: false
