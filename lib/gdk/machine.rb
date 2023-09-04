@@ -19,6 +19,15 @@ module GDK
       platform == 'darwin'
     end
 
+    # Is the machine running on Windows Subsystem for Linux?
+    #
+    # @return [Boolean] whether we run Linux using Windows Subsystem for Linux
+    def self.wsl?
+      platform == 'linux' && File.read('/proc/version').include?('microsoft')
+    rescue StandardError
+      false
+    end
+
     # Is the machine running a supported OS?
     #
     # @return [Boolean] whether we are running a supported OS
