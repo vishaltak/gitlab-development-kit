@@ -80,7 +80,7 @@ dir = "<%= node.log_dir %>"
 # grpc_latency_buckets = [0.001, 0.005, 0.025, 0.1, 0.5, 1.0, 10.0, 30.0, 60.0, 300.0, 1500.0]
 
 [hooks]
-custom_hooks_dir = "<%= config.gitlab_shell.dir.join('hooks') %>"
+custom_hooks_dir = "<%= config.gdk_root.join('gitaly-custom-hooks') %>"
 
 [gitlab]
 url = "<%= config.__uri %>"

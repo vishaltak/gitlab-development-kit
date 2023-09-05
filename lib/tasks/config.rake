@@ -68,7 +68,7 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
 
   FileUtils.mkdir_p(GDK.config.gitaly.log_dir)
   FileUtils.mkdir_p(GDK.config.gitaly.runtime_dir)
-  FileUtils.mkdir_p(GDK.config.gitlab_shell.dir.join('hooks'))
+  FileUtils.mkdir_p(GDK.config.gdk_root.join('gitaly-custom-hooks'))
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
