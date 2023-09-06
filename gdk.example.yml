@@ -392,6 +392,7 @@ runner:
   bin: "/usr/local/bin/gitlab-runner"
   concurrent: 1
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
+  docker_pull: always
   enabled: false
   executor: docker
   extra_hosts: []
