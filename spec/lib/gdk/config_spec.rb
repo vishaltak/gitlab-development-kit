@@ -983,6 +983,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#docker_pull' do
+      it 'returns always' do
+        expect(config.runner.docker_pull).to eq('always')
+      end
+    end
+
     describe '#pull_policy' do
       it 'returns if-not-present' do
         expect(config.runner.pull_policy).to eq('if-not-present')
