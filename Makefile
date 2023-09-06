@@ -285,3 +285,9 @@ gdk-reconfigure-task: touch-examples
 	@echo "Ensuring GDK managed configuration files are up-to-date"
 	@echo "${DIVIDER}"
 	$(Q)rake reconfigure
+
+# Cleanup the recently no-longer used .gdk-install-root file
+.PHONY: clean-gdk-root
+clean-gdk-root:
+	@rm -f .gdk-install-root
+install update all reconfigure: clean-gdk-root
