@@ -129,6 +129,7 @@ update: start-task \
 platform-update \
 preflight-checks \
 preflight-update-checks \
+gitaly-update \
 ensure-databases-setup \
 gitlab/.git/pull \
 gitlab-shell-update \
@@ -249,7 +250,7 @@ rake:
 	$(Q)command -v $@ ${QQ} || gem install $@
 
 .PHONY: ensure-databases-setup
-ensure-databases-setup: Procfile postgresql/data redis/redis.conf gitaly-update ensure-databases-running
+ensure-databases-setup: Procfile postgresql/data redis/redis.conf ensure-databases-running
 
 .PHONY: ensure-databases-running
 ensure-databases-running:
