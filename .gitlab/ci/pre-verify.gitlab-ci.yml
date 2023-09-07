@@ -3,9 +3,9 @@
 build-verify-image:
   stage: pre-verify
   extends:
-    - .verify-base-job
     - .cached-job
     - .build-job
+    - .rules:code-changes
   needs:
     - release-image
   script:

@@ -1,23 +1,18 @@
-.docker:use-docker-in-docker:
+.docker:build-docker-in-docker:
   image: docker:${DOCKER_VERSION}
   services:
-    - name: docker:${DOCKER_VERSION}-dind
-      command: ["--experimental"]
+    - docker:${DOCKER_VERSION}-dind
   variables:
-    DOCKER_VERSION: "20.10.16"
+    DOCKER_VERSION: "23.0.1"
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
   tags:
     # See https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/7019 for tag descriptions
     - gitlab-org-docker
-
-.docker:build-docker-in-docker:
-  extends:
-    - .docker:use-docker-in-docker
-  image: docker:git
   before_script:
     - !reference [.default-before_script, before_script]
     - apk add --no-cache jq curl bash
+    - docker buildx create --use  # creates and set's to active buildkit builder
     - ./support/docker ci-login
   after_script:
     - ./support/docker ci-logout
