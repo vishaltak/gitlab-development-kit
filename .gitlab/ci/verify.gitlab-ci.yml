@@ -37,42 +37,42 @@
 start:
   extends: .verify-job
   script:
-    - support/ci/verify-start
+    - run_timed_command "support/ci/verify-start"
 
 start-experimental:
   extends: .verify-job
   script:
-    - support/ci/verify-start-experimental
+    - run_timed_command "support/ci/verify-start-experimental"
 
 doctor:
   extends: .verify-job
   script:
-    - support/ci/verify-doctor
+    - run_timed_command "support/ci/verify-doctor"
 
 debug-info:
   extends: .verify-job
   script:
-    - bin/gdk debug-info
+    - run_timed_command "bin/gdk debug-info"
 
 reconfigure:
   extends: .verify-job
   script:
-    - support/ci/verify-reconfigure
+    - run_timed_command "support/ci/verify-reconfigure"
 
 reset-data:
   extends: .verify-job
   script:
-    - support/ci/verify-reset-data
+    - run_timed_command "support/ci/verify-reset-data"
 
 pristine:
   extends: .verify-job
   script:
-    - support/ci/verify-pristine
+    - run_timed_command "support/ci/verify-pristine"
 
 update:
   extends: .verify-job
   script:
-    - support/ci/verify-update
+    - run_timed_command "support/ci/verify-update"
   after_script:
     - !reference ['.verify-job', after_script]
     - mv /home/gdk/gdk/$GITLAB_LAST_VERIFIED_SHA_PATH $GITLAB_LAST_VERIFIED_SHA_PATH
@@ -92,7 +92,7 @@ gitpod-docker-image:
   needs:
     - build-gitpod-workspace-image
   script:
-    - support/ci/verify-gitpod-docker-image
+    - run_timed_command "support/ci/verify-gitpod-docker-image"
   artifacts:
     paths:
       - ./artifacts/log/*
@@ -105,7 +105,7 @@ geo-install:
   tags:
     - saas-linux-medium-amd64
   script:
-    - support/ci/verify-geo
+    - run_timed_command "support/ci/verify-geo"
   after_script:
     - mkdir -p $CI_PROJECT_DIR/gitlab2_log $CI_PROJECT_DIR/gdk2_log
     - cp -rf /home/gdk/gdk2/gitlab/log/*.log $CI_PROJECT_DIR/gitlab2_log/

@@ -30,7 +30,7 @@ code_quality:
 container_scanning:
   stage: analyze
   variables:
-    CS_IMAGE: $DEFAULT_IMAGE
+    CS_IMAGE: $DEFAULT_BRANCH_IMAGE
   needs:
     - release-image
   rules: !reference ['.rules:code-changes', rules]

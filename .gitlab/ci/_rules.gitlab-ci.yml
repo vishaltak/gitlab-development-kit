@@ -74,6 +74,8 @@
 .gitpod-code-changes: &gitpod-code-changes
   - "support/gitpod/**/*"
   - "support/ci/verify-gitpod-docker-image"
+  - ".gitlab-ci.yml"
+  - ".gitlab/ci/**/*"
 
 .gitlab-remote-code-changes: &gitlab-remote-code-changes
   - "support/gitlab-remote-development/**/*"

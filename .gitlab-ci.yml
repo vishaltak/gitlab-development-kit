@@ -9,9 +9,11 @@ stages:
   - deploy
 
 .default_variables: &default_variables
-  DEFAULT_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-verify:$CI_COMMIT_REF_SLUG
+  DEFAULT_IMAGE_WITHOUT_TAG: "${CI_REGISTRY_IMAGE}/asdf-bootstrapped-verify"
+  DEFAULT_BRANCH_IMAGE: "${DEFAULT_IMAGE_WITHOUT_TAG}:${CI_COMMIT_REF_SLUG}"
+  DEFAULT_MAIN_IMAGE: "${DEFAULT_IMAGE_WITHOUT_TAG}:main"
   GITLAB_E2E_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed-gitlab-e2e:$CI_COMMIT_REF_SLUG
-  VERIFY_FULL_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed-full:$CI_COMMIT_REF_SLUG
+  VERIFY_IMAGE_MAIN: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed:main
   VERIFY_IMAGE: $CI_REGISTRY_IMAGE/asdf-bootstrapped-gdk-installed:$CI_COMMIT_REF_SLUG
   GITPOD_WORKSPACE_IMAGE_BASE: $CI_REGISTRY_IMAGE/gitpod-workspace
   GITPOD_WORKSPACE_IMAGE: $CI_REGISTRY_IMAGE/gitpod-workspace:$CI_COMMIT_REF_SLUG
@@ -32,6 +34,8 @@ stages:
   GDK_DEBUG: "true"
   NOKOGIRI_LIBXML_MEMORY_MANAGEMENT: "default"
   GITLAB_LAST_VERIFIED_SHA_PATH: gitlab-last-verified-sha.json
+  REGISTRY_HOST: "registry.gitlab.com"
+  REGISTRY_GROUP: "gitlab-org"
 
 variables:
   <<: *default_variables
@@ -39,7 +43,7 @@ variables:
 default:
   timeout: 3h
   interruptible: true
-  image: ${DEFAULT_IMAGE}
+  image: ${DEFAULT_BRANCH_IMAGE}
   tags:
     - gitlab-org
 
