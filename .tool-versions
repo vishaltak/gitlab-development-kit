@@ -16,15 +16,16 @@ gitleaks 8.16.4
 #     - .tool-versions-gdk
 #   1.20.7:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/cd81e6bf00aabc13fc283c5b2349f94681b11aff/.tool-versions
-#   1.21.0:
+#   1.21.1:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
+#   1.21.0:
+#     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
@@ -32,7 +33,7 @@ gitleaks 8.16.4
 #   1.20.5:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.20.3 1.20.7 1.21.0 1.20.5
+golang 1.20.3 1.20.7 1.21.1 1.21.0 1.20.5
 
 # minio:
 #   2022-07-15T03-44-22Z:
