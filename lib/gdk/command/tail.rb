@@ -29,7 +29,7 @@ module GDK
       MSG
 
       def run(args = [])
-        return print_help if args.delete('--help')
+        return print_help if (args & ['--help', '-h']).any?
 
         Runit.tail(args)
       end
