@@ -105,11 +105,9 @@ gdk_install
 
 echo
 
-if ! asdf_opt_out; then
-  echo "INFO: To make sure GDK commands are available in this shell, please run:"
-  echo
-  echo "source \"${ASDF_SH_PATH}\""
-fi
+echo "INFO: To make sure GDK commands are available in this shell, please run:"
+echo
+echo "source \"${ASDF_SH_PATH}\""
 
 echo
 echo "INFO: To ensure you're in the newly installed GDK directory, please run:"
