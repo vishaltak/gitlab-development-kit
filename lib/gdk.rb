@@ -51,6 +51,7 @@ module GDK
     gitlab/config/redis.shared_state.yml
     gitlab/config/redis.trace_chunks.yml
     gitlab/config/resque.yml
+    gitlab/config/session_store.yml
     gitlab/workhorse/config.toml
     nginx/conf/nginx.conf
     openssh/sshd_config

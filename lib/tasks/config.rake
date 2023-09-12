@@ -112,6 +112,7 @@ tasks.add_template(name: 'gitlab/config/redis.sessions.yml', erb_extra_args: { c
 tasks.add_template(name: 'gitlab/config/redis.shared_state.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
 tasks.add_template(name: 'gitlab/config/redis.trace_chunks.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :trace_chunks })
 tasks.add_template(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
+tasks.add_template(name: 'gitlab/config/session_store.yml', template: 'support/templates/gitlab/config/session_store.yml.erb')
 
 if GDK.config.redis_cluster.enabled?
   tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.cluster.yml.erb')
