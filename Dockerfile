@@ -1,9 +1,6 @@
 FROM ubuntu:20.04
 LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab-development-kit/-/graphs/main"
 
-## We are building this docker file with an experimental --squash in order
-## to reduce the resulting layer size: https://docs.docker.com/engine/reference/commandline/build/#squash-an-images-layers---squash-experimental
-##
 ## The CI script that build this file can be found under: support/docker
 
 ENV DEBIAN_FRONTEND=noninteractive
