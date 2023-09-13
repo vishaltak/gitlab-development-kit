@@ -1,2 +1,8 @@
+observability:
+  logging:
+    level: debug
+    grpc_level: warn
+
 remote_development:
-  enabled: false # We will enable the remote_development module once DNS zones are configured.
+  enabled: true
+  dns_zone: "workspaces.gitlab.dev"
