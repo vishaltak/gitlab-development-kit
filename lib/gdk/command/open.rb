@@ -49,7 +49,13 @@ module GDK
       end
 
       def open_command
-        @open_command ||= GDK::Machine.linux? ? 'xdg-open' : 'open'
+        @open_command ||= if GDK::Machine.wsl?
+                            'pwsh.exe -Command Start-Process'
+                          elsif GDK::Machine.linux?
+                            'xdg-open'
+                          else
+                            'open'
+                          end
       end
     end
   end
