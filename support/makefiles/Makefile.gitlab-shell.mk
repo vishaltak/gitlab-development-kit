@@ -1,11 +1,11 @@
 gitlab_shell_clone_dir = gitlab-shell
 gitlab_shell_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_SHELL_VERSION")
 
-ifeq ($(SKIP_GITLAB_SHELL_SETUP),true)
+ifeq ($(gitlab_shell_skip_setup),true)
 gitlab-shell-setup:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Skipping gitlab-shell setup due to environment variable SKIP_GITLAB_SHELL_SETUP set to true"
+	@echo "Skipping gitlab-shell setup due to option gitlab_shell.skip_setup set to true"
 	@echo "${DIVIDER}"
 else
 gitlab-shell-setup: gitlab-shell/.git gitlab-shell/config.yml .gitlab-shell-bundle gitlab-shell/.gitlab_shell_secret $(sshd_hostkeys)

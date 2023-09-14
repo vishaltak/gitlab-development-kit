@@ -15,6 +15,7 @@ geo_enabled = <%= config.geo? %>
 geo_secondary = <%= config.geo.secondary? %>
 gitaly_repo = <%= config.repositories.gitaly %>
 gitaly_build_bin_dir = <%= config.gitaly.__build_bin_path %>
+gitaly_skip_setup = <%= config.gitaly.skip_setup? %>
 gitlab_development_root = <%= config.gdk_root %>
 <%-# GitLab Docs -%>
 gitlab_docs_enabled = <%= config.gitlab_docs.enabled? %>
@@ -46,6 +47,7 @@ gitlab_pages_port = <%= config.gitlab_pages.port %>
 gitlab_pages_repo = <%= config.repositories.gitlab_pages %>
 gitlab_repo = <%= config.repositories.gitlab %>
 gitlab_shell_repo = <%= config.repositories.gitlab_shell %>
+gitlab_shell_skip_setup = <%= config.gitlab_shell.skip_setup? %>
 <%-# GitLab Spamcheck -%>
 gitlab_spamcheck_enabled = <%= config.gitlab_spamcheck.enabled? %>
 gitlab_spamcheck_repo = <%= config.repositories.gitlab_spamcheck %>
@@ -91,3 +93,4 @@ sshd_bin = <%= config.sshd.bin %>
 sshd_hostkeys = <%= config.sshd.host_keys.join(' ') %>
 username = <%= config.username %>
 ci_database_enabled = <%= config.gitlab.rails.databases.ci.enabled %>
+workhorse_skip_setup = <%= config.workhorse.skip_setup? %>

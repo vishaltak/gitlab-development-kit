@@ -193,6 +193,7 @@ module GDK
     end
 
     settings :workhorse do
+      bool(:skip_setup) { false }
       port(:configured_port, 'workhorse')
 
       settings :__listen_settings do
@@ -235,6 +236,7 @@ module GDK
     end
 
     settings :gitlab_shell do
+      bool(:skip_setup) { false }
       bool(:auto_update) { true }
       path(:dir) { config.gdk_root.join('gitlab-shell') }
     end
@@ -652,6 +654,7 @@ module GDK
     end
 
     settings :gitaly do
+      bool(:skip_setup) { false }
       path(:dir) { config.gdk_root.join('gitaly') }
       bool(:enabled) { !config.praefect? || storage_count > 1 }
       path(:address) { config.gdk_root.join('gitaly.socket') }

@@ -89,6 +89,7 @@ gitaly:
   log_dir: "/home/git/gdk/log/gitaly"
   repository_storages: "/home/git/gdk/repository_storages"
   runtime_dir: "/home/git/gdk/tmp"
+  skip_setup: false
   storage_count: 1
   storage_dir: "/home/git/gdk/repositories"
 gitlab:
@@ -175,6 +176,7 @@ gitlab_runner:
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
+  skip_setup: false
 gitlab_spamcheck:
   auto_update: true
   enabled: false
@@ -452,6 +454,7 @@ webpack:
   vendor_dll: false
 workhorse:
   configured_port: 3333
+  skip_setup: false
 zoekt:
   auto_update: true
   enabled: false

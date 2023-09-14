@@ -1,11 +1,11 @@
 gitaly_clone_dir = gitaly
 gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
 
-ifeq ($(SKIP_GITALY_SETUP),true)
+ifeq ($(gitaly_skip_setup),true)
 gitaly-setup:
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Skipping gitaly setup due to environment variable SKIP_GITALY_SETUP set to true"
+	@echo "Skipping gitaly setup due to option gitaly.skip_setup set to true"
 	@echo "${DIVIDER}"
 else
 gitaly-setup: ${gitaly_build_bin_dir}/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
