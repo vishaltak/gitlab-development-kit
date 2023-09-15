@@ -3,11 +3,13 @@
 if [ -z "${DEFAULT_BRANCH_IMAGE}" ]; then
     echo "DEFAULT_BRANCH_IMAGE variable must not be empty and must contain an image name"
     exit 1
+else
+    echo "DEFAULT_BRANCH_IMAGE: ${DEFAULT_BRANCH_IMAGE}"
 fi
 
 case "$1" in
     ci-login)
-        echo "Logging in"
+        echo "Logging into ${CI_REGISTRY}"
         docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
         ;;
 
@@ -30,7 +32,6 @@ case "$1" in
           --cache-from="${cache_image}" \
           --cache-from="${DEFAULT_BRANCH_IMAGE}" \
           --cache-from="${DEFAULT_MAIN_IMAGE}" \
-          --squash \
           --tag "${cache_image}" \
           --tag "${DEFAULT_BRANCH_IMAGE}" \
           --push \
@@ -43,7 +44,6 @@ case "$1" in
           --build-arg PROJECT_URL="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" \
           --build-arg SHA="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
           --file="support/qa/Dockerfile" \
-          --squash \
           --tag "${GITLAB_E2E_IMAGE}" \
           --push \
           .
@@ -70,7 +70,6 @@ case "$1" in
           --build-arg PUMA_SINGLE_MODE="${PUMA_SINGLE_MODE}" \
           --build-arg GDK_DEBUG="${GDK_DEBUG}" \
           --file="support/ci/Dockerfile.verify" \
-          --squash \
           --tag "${VERIFY_IMAGE}" \
           --push \
           .
