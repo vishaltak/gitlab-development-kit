@@ -32,10 +32,16 @@ Product analytics features are behind feature flags and must be enabled to use t
   echo "Feature.enable(:combined_analytics_dashboards)" | gdk rails c
   ```
 
-- To enable the dashboard and visualization editors and make the editors visible, run:
+- To enable the dashboard editor and make it visible, run:
 
   ```shell
   echo "Feature.enable(:combined_analytics_dashboards_editor)" | gdk rails c
+  ```
+
+- To enable the visualizaiton editor and make it visible, run:
+
+  ```shell
+  echo "Feature.enable(:combined_analytics_visualization_editor)" | gdk rails c
   ```
 
 ### Set up the Product Analytics DevKit
