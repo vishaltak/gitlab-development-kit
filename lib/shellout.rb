@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'concurrent'
 require 'open3'
 require 'io/wait'
 
@@ -64,11 +65,12 @@ class Shellout
   def stream(extra_options = {})
     @stdout_str = ''
     @stderr_str = ''
+    exit_flag = Concurrent::AtomicBoolean.new(false)
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
     Open3.popen3(*args, opts.merge(extra_options)) do |stdin, stdout, stderr, thread|
       # Create a thread to read from $stdin and write to stdin of the process
-      thread_stdin(stdin)
+      thread_stdin(exit_flag, stdin)
 
       @status = print_output_from_thread(thread, stdout, stderr)
     end
@@ -77,6 +79,8 @@ class Shellout
   rescue Errno::ENOENT => e
     print_err(e.message)
     raise StreamCommandFailedError, e
+  ensure
+    exit_flag.value = false
   end
 
   def readlines(limit = -1)
@@ -154,11 +158,9 @@ class Shellout
     @stdout_str, @stderr_str, @status = Open3.capture3(*args, opts.merge(extra_options))
   end
 
-  def thread_stdin(stdin)
-    exit_flag = false
-
+  def thread_stdin(exit_flag, stdin)
     Thread.new do
-      while !exit_flag
+      until exit_flag.value
         input = $stdin.gets
         if input.nil?
           exit_flag = true
