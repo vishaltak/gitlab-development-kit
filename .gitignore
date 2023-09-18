@@ -35,6 +35,7 @@
 /charts-gitlab
 /clickhouse
 /coverage
+/db_backup
 /dev/
 /elasticsearch*
 /env.runit
