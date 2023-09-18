@@ -255,7 +255,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
           let(:error_message) { 'The `-isysroot` value not present in `pg_config --ldflags`.' }
 
           before do
-            allow(subject).to receive(:psql_version).and_return(13.9)
+            allow(subject).to receive(:psql_version).and_return(14.9)
             allow(subject).to receive(:valid_ldflags?).and_return(false)
             subject.instance_variable_set(:@pgconfig_error, error_message)
           end
@@ -268,7 +268,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
               You can try running the following to reinstall PostgreSQL:
 
-              asdf uninstall postgres 13.9 && asdf install postgres 13.9
+              asdf uninstall postgres 14.9 && asdf install postgres 14.9
             MESSAGE
 
             expect(subject.detail).to eq(expected)
