@@ -145,7 +145,7 @@ If you have replication configured, after you have upgraded the primary database
 1. Remove the old secondary database data as we will be replacing it with primary database data:
 
     ```shell
-    rm -rf postgresql-replica/data
+    rm -rf postgresql-replica/data/*
     ```
 
 1. Copy data from primary to secondary with `pg_basebackup`:
