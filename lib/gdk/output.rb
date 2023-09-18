@@ -128,6 +128,7 @@ module GDK
 
       def prompt(message)
         Kernel.print("#{message}: ")
+        $stdout.flush
         $stdin.gets.to_s.chomp
       rescue Interrupt
         ''

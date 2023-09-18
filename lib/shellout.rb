@@ -66,7 +66,10 @@ class Shellout
     @stderr_str = ''
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
-    Open3.popen3(*args, opts.merge(extra_options)) do |_stdin, stdout, stderr, thread|
+    Open3.popen3(*args, opts.merge(extra_options)) do |stdin, stdout, stderr, thread|
+      # Create a thread to read from $stdin and write to stdin of the process
+      thread_stdin(stdin)
+
       @status = print_output_from_thread(thread, stdout, stderr)
     end
 
@@ -149,6 +152,21 @@ class Shellout
 
   def capture(extra_options = {})
     @stdout_str, @stderr_str, @status = Open3.capture3(*args, opts.merge(extra_options))
+  end
+
+  def thread_stdin(stdin)
+    exit_flag = false
+
+    Thread.new do
+      while !exit_flag
+        input = $stdin.gets
+        if input.nil?
+          exit_flag = true
+        else
+          stdin.puts input.chomp
+        end
+      end
+    end
   end
 
   def thread_read(io, meth)
