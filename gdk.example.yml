@@ -460,7 +460,7 @@ zoekt:
   enabled: false
   index_port_dev: 6080
   index_port_test: 6060
-  indexer_version: cd81e6bf00aabc13fc283c5b2349f94681b11aff
+  indexer_version: main
   version: fcb279ae404c0aa102121b28257143ad16e77482
   web_port_dev: 6090
   web_port_test: 6070
