@@ -379,11 +379,23 @@ make gitaly-update
 
 ### Error due to `ActionController::InvalidAuthenticityToken`
 
-If you encounter an `ActionController::InvalidAuthenticityToken` error when starting GDK, try the following steps: 
+If you encounter an `ActionController::InvalidAuthenticityToken` error when starting GDK, try the following steps:
 
 - Hard refresh your browser to clear the cache. For more information, see [How to hard refresh your browser](https://fabricdigital.co.nz/blog/how-to-hard-refresh-your-browser-and-clear-cache).
 - Stop all GDK processes using `gdk kill`, then restart GDK with `gdk start`.
 - Delete all browser cache, cookies, local storage, and other related data for the relevant hostname.
+
+### Error starting `timeout: down: /Users/foo/gdk/services/rails-background-jobs: 0s, want up`
+
+Check if a background job process is unexpectedly running:
+
+- Search for processes related to background jobs: `ps aux | grep rails-background-jobs`
+- If runit is currently trying to start `rails-background-jobs` then you may find: `runsvdir -P /Users/foo/gdk/services log: atal: unable to lock supervise/lock: temporary failure\012runsv rails-background-jobs: fatal: unable to lock supervise/lock: temporary failure\012runsv rails-background-jobs: fatal: unable to lock supervise/lock: temporary failure\012runsv rails-background-jobs: fatal: unable to lock supervise/lock: temporary failure\012runsv rails-background-jobs: fatal: unable to lock supervise/lock: temporary failure\012`
+- Stop GDK services: `gdk stop`
+- If `ps aux | grep rails-background-jobs` shows that `runsv rails-background-jobs` is still running, then it is preventing `rails-background-jobs` from starting
+- Kill the process by following [Stopping and restarting the GDK](#stopping-and-restarting-the-gdk)
+
+If the above is not the problem, then confirm you can run `rails-background-jobs` manually: `RAILS_ENV=development ./bin/background_jobs start_foreground`.
 
 ## Stopping and restarting the GDK
 
