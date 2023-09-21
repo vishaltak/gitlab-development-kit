@@ -161,8 +161,8 @@ module GDK
     Pathname.new(File.expand_path(File.join(__dir__, '..', 'support', 'templates')))
   end
 
-  def self.make(*targets)
-    sh = Shellout.new(MAKE, targets, chdir: GDK.root)
+  def self.make(*targets, env: {})
+    sh = Shellout.new(MAKE, targets, chdir: GDK.root, env: env)
     sh.stream
     sh.success?
   end

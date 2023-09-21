@@ -7,7 +7,6 @@
 #   8.16.4:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/main/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/cd81e6bf00aabc13fc283c5b2349f94681b11aff/.tool-versions
 #
 gitleaks 8.16.4
 
@@ -21,7 +20,6 @@ gitleaks 8.16.4
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/main/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/cd81e6bf00aabc13fc283c5b2349f94681b11aff/.tool-versions
 #   1.21.1:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #   1.21.0:
