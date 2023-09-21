@@ -5,7 +5,7 @@ require 'io/wait'
 
 # Controls execution of commands delegated to the running shell
 class Shellout
-  attr_reader :args, :opts
+  attr_reader :args, :env, :opts
 
   DEFAULT_EXECUTE_DISPLAY_OUTPUT = true
   DEFAULT_EXECUTE_RETRY_ATTEMPTS = 0
@@ -18,6 +18,7 @@ class Shellout
 
   def initialize(*args, **opts)
     @args = args.flatten
+    @env = opts.delete(:env) || {}
     @opts = opts
   end
 
@@ -66,7 +67,7 @@ class Shellout
     @stderr_str = ''
 
     # Inspiration: https://nickcharlton.net/posts/ruby-subprocesses-with-stdout-stderr-streams.html
-    Open3.popen3(*args, opts.merge(extra_options)) do |_stdin, stdout, stderr, thread|
+    Open3.popen3(env, *args, opts.merge(extra_options)) do |_stdin, stdout, stderr, thread|
       @status = print_output_from_thread(thread, stdout, stderr)
     end
 
@@ -81,7 +82,7 @@ class Shellout
     @stderr_str = ''
     lines = []
 
-    Open3.popen2(*args, opts) do |_stdin, stdout, thread|
+    Open3.popen2(env, *args, opts) do |_stdin, stdout, thread|
       stdout.each_line do |line|
         lines << line.chomp if limit == -1 || lines.count < limit
       end
@@ -148,7 +149,7 @@ class Shellout
   end
 
   def capture(extra_options = {})
-    @stdout_str, @stderr_str, @status = Open3.capture3(*args, opts.merge(extra_options))
+    @stdout_str, @stderr_str, @status = Open3.capture3(env, *args, opts.merge(extra_options))
   end
 
   def thread_read(io, meth)

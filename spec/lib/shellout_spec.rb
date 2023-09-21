@@ -91,6 +91,11 @@ RSpec.describe Shellout do
     context 'with display_error: false' do
       let(:command) { 'ls /doesntexist' }
 
+      before do
+        # Stubbing ENV crashes in Ruby 3.0: https://bugs.ruby-lang.org/issues/18164
+        skip if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.1.0')
+      end
+
       it 'does not display the command failed message' do
         stub_no_color_env('true')
 
@@ -166,7 +171,7 @@ RSpec.describe Shellout do
           allow(stdout).to receive(:wait_readable).and_return(true)
           allow(stderr).to receive(:wait_readable).and_return(true)
 
-          allow(Open3).to receive(:popen3).with(command, opts).and_yield(stdin, stdout, stderr, Thread.new { nil })
+          allow(Open3).to receive(:popen3).with({}, command, opts).and_yield(stdin, stdout, stderr, Thread.new { nil })
         end
 
         it_behaves_like 'a command that fails'

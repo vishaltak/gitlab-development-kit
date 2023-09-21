@@ -24,7 +24,7 @@ module GDK
       def update!
         GDK::Hooks.with_hooks(config.gdk.update_hooks, 'gdk update') do
           GDK.make('self-update')
-          GDK.make('self-update', 'update')
+          GDK.make('self-update', 'update', env: { 'PG_AUTO_UPDATE' => '1' })
         end
       end
 

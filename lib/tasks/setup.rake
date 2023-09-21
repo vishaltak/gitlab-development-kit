@@ -21,8 +21,13 @@ task 'preflight-update-checks' do
 
     GDK::Output.warn(message)
 
-    prompt_response = GDK::Output.prompt("This will run 'support/upgrade-postgresql' to back up and upgrade the PostgreSQL data directory. Are you sure? [y/N]").match?(/\Ay(?:es)*\z/i)
-    next unless prompt_response
+    if ENV['PG_AUTO_UPDATE']
+      GDK::Output.warn("PostgreSQL will be auto-updated in 10 seconds. Hit CTRL-C to abort.")
+      sleep 10
+    else
+      prompt_response = GDK::Output.prompt("This will run 'support/upgrade-postgresql' to back up and upgrade the PostgreSQL data directory. Are you sure? [y/N]").match?(/\Ay(?:es)*\z/i)
+      next unless prompt_response
+    end
 
     postgresql.upgrade
 
