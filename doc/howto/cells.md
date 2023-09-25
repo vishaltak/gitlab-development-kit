@@ -51,6 +51,10 @@ If this happens, you need to stop `webpack`:
 gdk stop webpack
 ```
 
+### `gdk.test` configuration
+
+If you use [`gdk.test:3000`](gdk.test:3000) to log into your GDK instance, you need to [configure the second cell to use `gdk.test`](local_network.md#local-interface) as well.
+
 ### Clean up the installation
 
 To clean up the installation and remove the second cell:
