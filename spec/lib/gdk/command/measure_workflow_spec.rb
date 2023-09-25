@@ -45,7 +45,10 @@ RSpec.describe GDK::Command::MeasureWorkflow do
           # rubocop:todo RSpec/VerifiedDoubles
           shellout_docker_run_double = double('Shellout', stream: '', success?: true)
           # rubocop:enable RSpec/VerifiedDoubles
-          expect(Shellout).to receive(:new).with(%(docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:1.2.3 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path} --multi --spa support/measure_scripts/repo_browser.js)).and_return(shellout_docker_run_double)
+          # For Linux, we need to add '--network=host' to the Docker command
+          # https://www.sitespeed.io/documentation/sitespeed.io/docker/#access-localhost
+          network_host = GDK::Machine.linux? ? '--network=host' : ''
+          expect(Shellout).to receive(:new).with(%(docker run #{network_host} --cap-add=NET_ADMIN --shm-size 2g --rm -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:1.2.3 -b chrome -n 4 -c cable --cookie perf_bar_enabled=false --cpu --outputFolder #{report_file_path} --multi --spa support/measure_scripts/repo_browser.js)).and_return(shellout_docker_run_double)
 
           shellout_open_double = double('Shellout', run: true, success?: true) # rubocop:todo RSpec/VerifiedDoubles
           expect(Shellout).to receive(:new).with("open ./#{report_file_path}/index.html").and_return(shellout_open_double)

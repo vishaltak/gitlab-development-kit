@@ -64,8 +64,11 @@ module GDK
       end
 
       def docker_command
+        # For Linux, we need to add '--network=host' to the Docker command
+        # https://www.sitespeed.io/documentation/sitespeed.io/docker/#access-localhost
+        network_host = GDK::Machine.linux? ? '--network=host' : ''
         # Start Sitespeed through docker
-        command = ["docker run --cap-add=NET_ADMIN --shm-size 2g --rm -v \"$(pwd):/sitespeed.io\" sitespeedio/sitespeed.io:#{SITESPEED_DOCKER_TAG} -b chrome"]
+        command = ["docker run #{network_host} --cap-add=NET_ADMIN --shm-size 2g --rm -v \"$(pwd):/sitespeed.io\" sitespeedio/sitespeed.io:#{SITESPEED_DOCKER_TAG} -b chrome"]
         # 4 repetitions
         command << '-n 4'
         # Limit Cable Connection
