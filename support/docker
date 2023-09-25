@@ -28,6 +28,7 @@ case "$1" in
         # If it doesn't exist, we use the cache from the branch image.
         # If it doesn't exist, we use the cache from the `main` image.
         docker buildx build \
+          --provenance=false \
           --cache-to=type=inline \
           --cache-from="${cache_image}" \
           --cache-from="${DEFAULT_BRANCH_IMAGE}" \
@@ -40,6 +41,7 @@ case "$1" in
 
     ci-build-gitlab-e2e-image-if-necessary)
         docker buildx build \
+          --provenance=false \
           --build-arg release_image="${DEFAULT_BRANCH_IMAGE}" \
           --build-arg PROJECT_URL="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" \
           --build-arg SHA="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
@@ -53,6 +55,7 @@ case "$1" in
         mkdir -p "${GITLAB_CI_CACHE_FULL_DIR}"
 
         docker buildx build \
+          --provenance=false \
           --cache-to=type=inline \
           --cache-from="${VERIFY_IMAGE_MAIN}" \
           --build-arg from_image="${DEFAULT_BRANCH_IMAGE}" \
@@ -78,6 +81,7 @@ case "$1" in
 
     build)
         docker buildx build \
+          --provenance=false \
           --tag "${DEFAULT_BRANCH_IMAGE}" \
           .
         ;;
