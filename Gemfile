@@ -21,4 +21,6 @@ end
 group :development, :test, :danger do
   gem 'gitlab-dangerfiles', '~> 3.10.0', require: false
   gem 'resolv', '~> 0.2.2', require: false
+  gem 'gitlab-sdk', '~> 0.2.2'
+  gem 'sentry-ruby', '~> 5.11'
 end
