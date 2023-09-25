@@ -6,7 +6,7 @@ module GDK
   module Diagnostic
     class RubyGems < Base
       TITLE = 'Ruby Gems'
-      GITLAB_GEMS_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
+      GITLAB_GEMS_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj gitlab-sdk sentry-ruby].freeze
 
       def initialize(allow_gem_not_installed: false)
         @allow_gem_not_installed = allow_gem_not_installed

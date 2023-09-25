@@ -9,7 +9,7 @@ module GDK
 
         unless update_result
           GDK::Output.error('Failed to update.')
-          display_help_message
+          display_help_message('Failed to update.')
 
           return false
         end

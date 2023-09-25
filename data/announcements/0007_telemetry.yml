@@ -1,0 +1,10 @@
+---
+header: GDK now supports error tracking and analytic data
+body: |
+  In order to improve GDK, we need to better understand how it is being
+  used and how it is performing.
+  To do so, we need to collect some data.
+  You can opt-in to send error and analytic data by running `gdk opt-in`.
+
+  For more details, see
+  https://gitlab.com/groups/gitlab-org/-/epics/9255

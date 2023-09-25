@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'gitlab-sdk'
+require 'sentry-ruby'
+
 module GDK
   module Hooks
     def self.with_hooks(hooks, name)

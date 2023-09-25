@@ -12,7 +12,7 @@ module GDK
 
         unless result
           GDK::Output.error('Failed to install.')
-          display_help_message
+          display_help_message('Failed to install.')
         end
 
         result

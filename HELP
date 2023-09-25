@@ -40,6 +40,9 @@ Manage GDK:
   gdk diff-config                                   # Print difference between current
                                                     #  and new configuration values
 
+  gdk opt-in                                        # Opt-in to error tracking and analytic data collection
+  gdk opt-out                                       # Opt-out of error tracking and analytic data collection
+
   gdk reset-data                                    # Back up and create fresh git repository, PostgreSQL
                                                     #  data and Rails upload directory
   gdk reset-praefect-data                           # Back up and create fresh Praefect PostgreSQL data

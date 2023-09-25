@@ -7,6 +7,7 @@
 
 $LOAD_PATH.unshift(__dir__)
 
+require 'gitlab-sdk'
 require 'pathname'
 require 'securerandom'
 require_relative 'runit'
@@ -103,21 +104,21 @@ module GDK
     subcommand = ARGV.shift
     validate_yaml! unless SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION.include?(subcommand)
 
-    exit(::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV)) if ::GDK::Command::COMMANDS.key?(subcommand)
+    exit(run(subcommand) { ::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV) }) if ::GDK::Command::COMMANDS.key?(subcommand)
 
     case subcommand
     when 'status'
-      exit(GDK::Command::Status.new.run(ARGV))
+      exit(run(subcommand) { GDK::Command::Status.new.run(ARGV) })
     when 'start'
-      exit(GDK::Command::Start.new.run(ARGV))
+      exit(run(subcommand) { GDK::Command::Start.new.run(ARGV) })
     when 'restart'
-      exit(GDK::Command::Restart.new.run(ARGV))
+      exit(run(subcommand) { GDK::Command::Restart.new.run(ARGV) })
     when 'stop'
-      exit(GDK::Command::Stop.new.run(ARGV))
+      exit(run(subcommand) { GDK::Command::Stop.new.run(ARGV) })
     when /-{0,2}version/
-      GDK::Command::Version.new.run(ARGV)
+      run(subcommand) { GDK::Command::Version.new.run(ARGV) }
     when /-{0,2}help/, '-h', nil
-      GDK::Command::Help.new.run(ARGV)
+      run(subcommand) { GDK::Command::Help.new.run(ARGV) }
     else
       all_commands = ::GDK::Command::COMMANDS.keys + %w[status start restart stop]
       suggestions = DidYouMean::SpellChecker.new(dictionary: all_commands).correct(subcommand)
@@ -175,5 +176,21 @@ module GDK
     GDK::Output.error("Your gdk.yml is invalid.\n\n")
     GDK::Output.puts(e.message, stderr: true)
     abort('')
+  end
+
+  def self.run(subcommand)
+    start = Time.now
+    client = GitlabSDK::Client.new(app_id: '35SLpKmD0ZB-K34dBAz9Tg', host: 'https://collector.prod-1.gl-product-analytics.com')
+    client.identify('leetickett-gitlab')
+    client.track("Start #{subcommand} #{ARGV}", {})
+    puts "/// Start #{subcommand} #{ARGV}"
+
+    result = yield
+
+    message = result ? 'Finish' : 'Failed'
+    client.track("#{message} #{subcommand} #{ARGV}", { duration: Time.now - start })
+    puts "/// #{message} #{subcommand} #{ARGV}"
+
+    result
   end
 end

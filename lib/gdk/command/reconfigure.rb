@@ -9,7 +9,7 @@ module GDK
 
         unless result
           GDK::Output.error('Failed to reconfigure.')
-          display_help_message
+          display_help_message('Failed to reconfigure.')
         end
 
         result

@@ -21,7 +21,7 @@ module GDK
         return true if backup_data
 
         GDK::Output.error('Failed to backup data.')
-        display_help_message
+        display_help_message('Failed to backup data.')
 
         false
       end
@@ -32,7 +32,7 @@ module GDK
           GDK::Command::Start.new.run
         else
           GDK::Output.error('Failed to reset data.')
-          display_help_message
+          display_help_message('Failed to reset data.')
 
           false
         end

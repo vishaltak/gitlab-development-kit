@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sentry-ruby'
+
 module GDK
   module Command
     # Base interface for GDK commands
@@ -21,7 +23,7 @@ module GDK
         @config ||= GDK.config
       end
 
-      def display_help_message
+      def display_help_message(message)
         GDK.puts_separator <<~HELP_MESSAGE
           You can try the following that may be of assistance:
 
@@ -35,6 +37,16 @@ module GDK
           - Run 'gdk reset-data' if appropriate.
           - Run 'gdk pristine' which will restore your GDK to a pristine state.
         HELP_MESSAGE
+
+        init_sentry
+        if message.is_a?(Exception)
+          exception = message
+        else
+          exception = StandardError.new(message)
+          exception.set_backtrace(caller)
+        end
+        Sentry.capture_exception(exception)
+        puts "/// Sentry.capture_exception(exception)"
       end
 
       def print_ready_message
@@ -62,6 +74,14 @@ module GDK
 
         GDK::Output.puts
         notices.each { |msg| GDK::Output.notice(msg) }
+      end
+
+      def init_sentry
+        Sentry.init do |config|
+          config.dsn = 'https://glet_1a56990d202783685f3708b129fde6c0@observe.gitlab.com:443/errortracking/api/v1/projects/48924931'
+          config.breadcrumbs_logger = [:sentry_logger]
+          config.traces_sample_rate = 1.0
+        end
       end
     end
   end
