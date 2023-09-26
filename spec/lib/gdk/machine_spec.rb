@@ -21,6 +21,14 @@ RSpec.describe GDK::Machine do
         expect(subject.linux?).to be(true)
       end
     end
+
+    context 'on a Linux system (WSL)' do
+      it 'returns true' do
+        stub_wsl
+
+        expect(subject.linux?).to be(true)
+      end
+    end
   end
 
   describe '.macos?' do
@@ -41,6 +49,32 @@ RSpec.describe GDK::Machine do
     end
   end
 
+  describe '.wsl?' do
+    it 'returns true on WSL' do
+      stub_wsl
+
+      expect(subject.wsl?).to be(true)
+    end
+
+    it 'returns false on native Linux' do
+      stub_linux
+
+      expect(subject.wsl?).to be(false)
+    end
+
+    it 'returns false on native MacOS' do
+      stub_macos
+
+      expect(subject.wsl?).to be(false)
+    end
+
+    it 'returns false on native Windows' do
+      stub_windows
+
+      expect(subject.wsl?).to be(false)
+    end
+  end
+
   describe '.platform' do
     context 'when macOS' do
       it 'returns darwin' do
@@ -53,6 +87,14 @@ RSpec.describe GDK::Machine do
     context 'when Linux' do
       it 'returns linux' do
         stub_linux
+
+        expect(subject.platform).to eq('linux')
+      end
+    end
+
+    context 'when Linux (WSL)' do
+      it 'returns linux' do
+        stub_wsl
 
         expect(subject.platform).to eq('linux')
       end
@@ -130,18 +172,27 @@ RSpec.describe GDK::Machine do
   end
 
   def stub_macos
+    allow(Etc).to receive(:uname).and_return({ release: "22.6.0" })
     allow(RbConfig::CONFIG).to receive(:[]).and_call_original
     allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return('darwin21')
   end
 
   def stub_linux
+    allow(Etc).to receive(:uname).and_return({ release: "6.4.10-200.fc38.x86_64" }) # fedora linux
     allow(RbConfig::CONFIG).to receive(:[]).and_call_original
     allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return('linux')
   end
 
   def stub_windows
+    allow(Etc).to receive(:uname).and_return({ release: '10.0.22621' }) # windows 11
     allow(RbConfig::CONFIG).to receive(:[]).and_call_original
     allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return('mswin32')
+  end
+
+  def stub_wsl
+    allow(Etc).to receive(:uname).and_return({ release: "5.15.90.1-microsoft-standard-WSL2" })
+    allow(RbConfig::CONFIG).to receive(:[]).and_call_original
+    allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return('linux')
   end
 
   def stub_x86_64
