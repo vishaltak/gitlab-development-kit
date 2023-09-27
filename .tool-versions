@@ -41,22 +41,20 @@ minio 2022-07-15T03-44-22Z
 
 # nodejs:
 #   18.18.0:
-#     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
-#   18.17.1:
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #   18.17.0:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-nodejs 18.18.0 18.17.1 18.17.0
+nodejs 18.18.0 18.17.0
 
 # postgres:
-#   13.9:
-#     - .tool-versions-gdk
+#   14.9:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
-#   14.8:
+#   13.12:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-postgres 13.9 14.8
+postgres 14.9 13.12
 
 # redis:
 #   7.0.12:

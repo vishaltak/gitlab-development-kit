@@ -9,12 +9,12 @@
 #
 # <default-version> <other-version(s)>
 #
-# ruby version must be set until 3.2.2 is ready to be the new default
+
+# Ruby version must be set until 3.2.2 is ready to be the new default
 ruby 3.1.4
-# postgres is not required by GDK, but must be set until 14.8 is ready to be the new default
-postgres 13.9
+
 # For linting GDK documentation
 vale 2.27.0
 
-# For zoekt-webserver
+# For zoekt-webserver to be used in Zoekt integration
 golang 1.20.3
