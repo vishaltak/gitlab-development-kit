@@ -597,7 +597,7 @@ RSpec.describe GDK::Config do
     end
 
     describe '#active_version' do
-      it { expect(default_config.postgresql.active_version).to eq('13.9') }
+      it { expect(default_config.postgresql.active_version).to eq('14.9') }
 
       it 'returns configured value' do
         expect(config.postgresql.active_version).to eq('11.9')
