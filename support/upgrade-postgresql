@@ -202,17 +202,9 @@ class PostgresUpgrader
     return {} if lines.empty?
 
     current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{Dir.home}/.asdf")
-
     versions = lines.split.map { |x| Gem::Version.new(x) }.sort.reverse
 
-    versions.each_with_object({}) do |version, paths|
-      major_version, minor_version = version.canonical_segments[0..1]
-
-      # We only care about the latest version
-      next if paths.key?(major_version)
-
-      paths[major_version] = "#{current_asdf_data_dir}/installs/postgres/#{major_version}.#{minor_version}/bin"
-    end
+    asdf_package_paths(current_asdf_data_dir, versions)
   end
 
   def rtx_available_versions
@@ -220,9 +212,12 @@ class PostgresUpgrader
     return {} if lines.empty?
 
     current_asdf_data_dir = ENV.fetch('RTX_CACHE_DIR', "#{Dir.home}/.local/share/rtx")
-
     versions = JSON.parse(lines).map { |x| Gem::Version.new(x['version']) }.sort.reverse
 
+    asdf_package_paths(current_asdf_data_dir, versions)
+  end
+
+  def asdf_package_paths(current_asdf_data_dir, versions)
     versions.each_with_object({}) do |version, paths|
       major_version, minor_version = version.canonical_segments[0..1]
 
