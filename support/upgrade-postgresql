@@ -3,6 +3,7 @@
 
 require 'fileutils'
 require 'forwardable'
+require 'json'
 require 'set'
 
 require_relative '../lib/gdk'
@@ -169,17 +170,23 @@ class PostgresUpgrader
     @available_versions ||=
       if asdf?
         asdf_available_versions
+      elsif rtx?
+        rtx_available_versions
       elsif brew?
         brew_cellar_available_versions.transform_keys(&:to_i)
       elsif apt?
         apt_available_versions
       else
-        abort 'Only Homebrew, asdf and apt based Linux systems supported.'
+        abort 'Only Homebrew, asdf, rtx, and apt based Linux systems supported.'
       end
   end
 
   def asdf?
     run(%w[asdf help]) != ''
+  end
+
+  def rtx?
+    run(%w[rtx help]) != ''
   end
 
   def brew?
@@ -197,6 +204,24 @@ class PostgresUpgrader
     current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{Dir.home}/.asdf")
 
     versions = lines.split.map { |x| Gem::Version.new(x) }.sort.reverse
+
+    versions.each_with_object({}) do |version, paths|
+      major_version, minor_version = version.canonical_segments[0..1]
+
+      # We only care about the latest version
+      next if paths.key?(major_version)
+
+      paths[major_version] = "#{current_asdf_data_dir}/installs/postgres/#{major_version}.#{minor_version}/bin"
+    end
+  end
+
+  def rtx_available_versions
+    lines = run(%w[rtx list -i -c --json postgres])
+    return {} if lines.empty?
+
+    current_asdf_data_dir = ENV.fetch('RTX_CACHE_DIR', "#{Dir.home}/.local/share/rtx")
+
+    versions = JSON.parse(lines).map { |x| Gem::Version.new(x['version']) }.sort.reverse
 
     versions.each_with_object({}) do |version, paths|
       major_version, minor_version = version.canonical_segments[0..1]
