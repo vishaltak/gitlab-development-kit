@@ -2,10 +2,23 @@
 #
 # frozen_string_literal: true
 
+require_relative '../lib/shellout'
 require_relative '../lib/gdk'
 
-upgrader = GDK::PostgresqlUpgrader.new
-dir = upgrader.bin_path
+def pg_config_discover
+  Shellout.new(%w[pg_config --bindir]).run
+rescue Errno::ENOENT
+  nil
+end
+
+# Attempt to find target PostgreSQL path
+begin
+  upgrader = GDK::PostgresqlUpgrader.new
+  dir = upgrader.bin_path
+rescue StandardError
+  # Fallback to whatever pg_config is in the PATH
+  dir = pg_config_discover
+end
 
 raise('ERROR: Unable to determine PostgreSQL bin directory') unless dir
 
