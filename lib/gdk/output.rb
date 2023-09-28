@@ -128,6 +128,10 @@ module GDK
 
       def prompt(message)
         Kernel.print("#{message}: ")
+        $stdout.flush
+
+        raise "Interactive terminal not available, aborting." unless interactive?
+
         $stdin.gets.to_s.chomp
       rescue Interrupt
         ''
