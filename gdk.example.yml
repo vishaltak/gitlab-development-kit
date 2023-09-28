@@ -282,7 +282,7 @@ pgvector:
   version: v0.4.1
 port: 3000
 postgresql:
-  active_version: '13.9'
+  active_version: '14.9'
   bin: "/usr/local/bin/postgres"
   bin_dir: "/usr/local/bin"
   data_dir: "/home/git/gdk/postgresql/data"
