@@ -17,18 +17,11 @@ module GDK
 
     def initialize(target_version = GDK::Postgresql.target_version_major)
       @target_version = target_version
-
-      check!
-    end
-
-    def check!
-      GDK::Output.info "Available PostgreSQL versions: #{available_versions}"
-
-      GDK::Output.abort "Unable to find target PostgreSQL version #{target_version}" unless available_versions.include?(target_version)
-      GDK::Output.abort "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
     end
 
     def upgrade!
+      check!
+
       success = true
 
       unless upgrade_needed?(target_version)
@@ -60,9 +53,22 @@ module GDK
       end
     end
 
+    def bin_path(version = target_version)
+      raise "Invalid PostgreSQL version #{version}" unless available_versions.key?(version)
+
+      available_versions[version]
+    end
+
     private
 
     attr_reader :target_version
+
+    def check!
+      GDK::Output.info "Available PostgreSQL versions: #{available_versions}"
+
+      GDK::Output.abort "Unable to find target PostgreSQL version #{target_version}" unless available_versions.include?(target_version)
+      GDK::Output.abort "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
+    end
 
     def postgresql
       @postgresql ||= GDK::Postgresql.new
@@ -158,12 +164,6 @@ module GDK
 
     def pg_upgrade_bin(version)
       File.join(bin_path(version), 'pg_upgrade')
-    end
-
-    def bin_path(version)
-      raise "Invalid PostgreSQL version #{version}" unless available_versions.key?(version)
-
-      available_versions[version]
     end
 
     def available_versions
