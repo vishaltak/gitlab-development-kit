@@ -60,9 +60,11 @@ module GDK
 
         def asdf_available_versions
           lines = run(%w[asdf list postgres])
+          GDK::Output.info("List installed PostgreSQL versions: #{lines}")
           return {} if lines.empty?
 
           current_asdf_data_dir = ENV.fetch('ASDF_DATA_DIR', "#{Dir.home}/.asdf")
+          GDK::Output.info("Current ASDF_DATA_DIR: #{current_asdf_data_dir}")
 
           versions = lines.split.map { |x| Gem::Version.new(x) }.sort.reverse
           versions.each_with_object({}) do |version, paths|
