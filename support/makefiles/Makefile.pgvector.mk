@@ -46,6 +46,11 @@ pgvector-auto-clean: $(PG_CONFIG_FLAGS_FILE)
 pgvector-installed-lib: $(PGVECTOR_INSTALLED_LIB)
 
 $(PGVECTOR_INSTALLED_LIB): pgvector/vector.so
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing pgvector ${pgvector_version} in $@"
+	@echo "${DIVIDER}"
+	$(Q)support/asdf-exec pgvector $(MAKE) install ${QQ}
 
 pgvector/vector.so: pgvector/.git
 	@echo
