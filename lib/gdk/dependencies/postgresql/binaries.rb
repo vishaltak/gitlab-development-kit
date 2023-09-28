@@ -9,7 +9,7 @@ module GDK
       # This is mostly used by the Upgrader, which requires access to multiple versions
       # to orchestrate an upgrade without user intervention
       class Binaries
-        POSTGRESQL_VERSIONS = %w[13 12 11 10 9.6].freeze
+        POSTGRESQL_VERSIONS = %w[14 13 12 11 10 9.6].freeze
 
         attr_reader :version
 
