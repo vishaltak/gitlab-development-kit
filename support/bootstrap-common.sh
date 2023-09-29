@@ -3,7 +3,8 @@
 CDPATH=''
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit ; pwd -P)"
 
-CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+CURRENT_ASDF_DIR="${ASDF_DIR}"
 CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
 DEFAULT_GEMS_PATH="${HOME}/.default-gems"
 
