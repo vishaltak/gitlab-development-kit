@@ -119,7 +119,7 @@ module GDK
       end
 
       def interactive?
-        STDOUT.isatty # rubocop:disable Style/GlobalStdStream
+        $stdin.isatty
       end
 
       def colorize?
