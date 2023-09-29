@@ -14,6 +14,7 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
     exit
   fi
 
+  HOMEBREW_BUNDLE_FILE=""
   OPENSSL_PREFIX="${BREW_PREFIX}/opt/openssl@1.1"
   READLINE_PREFIX="${BREW_PREFIX}/opt/readline"
   ICU4C_PREFIX="${BREW_PREFIX}/opt/icu4c"
