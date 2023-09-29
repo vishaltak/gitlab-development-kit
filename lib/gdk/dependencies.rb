@@ -34,6 +34,11 @@ module GDK
     #
     # @return boolean
     def self.asdf_available?
+      executable_exist = executable_exist?('asdf')
+      valid_env = ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
+      GDK::Output.info "Executable exists: #{executable_exist}"
+      GDK::Output.info "Valid env: #{valid_env}"
+
       executable_exist?('asdf') && ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
     end
 
