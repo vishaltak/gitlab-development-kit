@@ -3,14 +3,13 @@
 
 require 'fileutils'
 require 'forwardable'
+require 'json'
 require 'set'
 
 require_relative '../lib/gdk'
 
 class PostgresUpgrader
   extend Forwardable
-
-  POSTGRESQL_VERSIONS = %w[14 13 12 11 10 9.6].freeze
 
   def_delegators :postgresql, :current_data_dir, :current_version, :upgrade_needed?
 

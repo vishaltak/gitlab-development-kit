@@ -322,14 +322,34 @@ RSpec.describe GDK::Output do
   end
 
   describe '.prompt' do
-    it 'returns user input' do
-      response = 'n'
-      message = 'Are you sure? [y/N]'
+    let(:message) { 'Are you sure? [y/N]' }
 
-      expect(Kernel).to receive(:print).with("#{message}: ")
-      expect($stdin).to receive_message_chain(:gets, :to_s, :chomp).and_return(response)
+    context 'when we have a TTY' do
+      before do
+        stub_tty(true)
+      end
 
-      expect(described_class.prompt(message)).to eq(response)
+      it 'returns user input' do
+        response = 'n'
+
+        expect(Kernel).to receive(:print).with("#{message}: ")
+        expect($stdout).to receive(:flush).and_call_original
+        expect($stdin).to receive_message_chain(:gets, :to_s, :chomp).and_return(response)
+
+        expect(described_class.prompt(message)).to eq(response)
+      end
+    end
+
+    context "when we don't have a TTY" do
+      before do
+        stub_tty(false)
+      end
+
+      it 'raises an error' do
+        expect(Kernel).to receive(:print).with("#{message}: ")
+        expect($stdout).to receive(:flush).and_call_original
+        expect { described_class.prompt(message) }.to raise_error(RuntimeError, 'Interactive terminal not available, aborting.')
+      end
     end
   end
 end

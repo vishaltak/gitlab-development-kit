@@ -39,12 +39,18 @@ pgvector/.git:
 
 .PHONY: pgvector-auto-clean
 pgvector-auto-clean: $(PG_CONFIG_FLAGS_FILE)
-	$(if ${FORCE_CLEAN}, @echo "Cleaning pgvector build since pg_config flags have changed" && support/asdf-exec pgvector $(MAKE) clean ${QQ})
+	$(if $(and $(FORCE_CLEAN), $(wildcard pgvector)), \
+		@echo "Cleaning pgvector build since pg_config flags have changed" && support/asdf-exec pgvector $(MAKE) clean ${QQ})
 
 .PHONY: pgvector-installed-lib
 pgvector-installed-lib: $(PGVECTOR_INSTALLED_LIB)
 
 $(PGVECTOR_INSTALLED_LIB): pgvector/vector.so
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing pgvector ${pgvector_version} in $@"
+	@echo "${DIVIDER}"
+	$(Q)support/asdf-exec pgvector $(MAKE) install ${QQ}
 
 pgvector/vector.so: pgvector/.git
 	@echo
