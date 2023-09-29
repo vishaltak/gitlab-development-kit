@@ -25,13 +25,3 @@ build-gitlab-remote-workspace-image:
     - .rules:gitlab-remote-code-changes
   script:
     - ./support/gitlab-remote-development/docker-build
-
-# Used to create a docker image with GDK installed to run QA e2e tests in gitlab-org/gitlab.
-# See https://gitlab.com/groups/gitlab-org/quality/quality-engineering/-/epics/4
-gitlab-e2e-test-image:
-  extends:
-    - .rules:code-changes
-    - .build-job
-  script:
-    - ./support/docker ci-build-gitlab-e2e-image-if-necessary
-  when: manual
