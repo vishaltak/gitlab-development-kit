@@ -16,21 +16,19 @@ module GDK
 
         def initialize(version:)
           @version = version
-
-          validate!
         end
 
         def validate!
           if available_versions.empty?
             GDK::Output.error 'Only Homebrew, asdf, rtx, and apt based Linux systems supported.'
-          else
-            exit 1
+
+            return false
           end
 
           unless bin_path
             GDK::Output.error "Invalid PostgreSQL version #{version}"
 
-            exit 1
+            return false
           end
 
           true

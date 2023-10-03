@@ -27,10 +27,10 @@ module GDK
     end
 
     def check!
-      GDK::Output.info "Available PostgreSQL versions: #{available_versions}"
+      GDK::Output.info "Available PostgreSQL versions: #{new_pg.available_versions}"
 
-      GDK::Output.abort "Unable to find target PostgreSQL version #{target_version}" unless available_versions.include?(target_version)
-      GDK::Output.abort "Unable to find current PostgreSQL version #{current_version}" unless available_versions.include?(current_version)
+      GDK::Output.abort "Unable to find target PostgreSQL version #{target_version}" unless new_pg.validate!
+      GDK::Output.abort "Unable to find current PostgreSQL version #{current_version}" unless current_pg.validate!
     end
 
     def upgrade!
