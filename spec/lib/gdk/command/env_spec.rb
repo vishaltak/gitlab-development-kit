@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Env do
   let(:env) { subject.send(:env) }
 

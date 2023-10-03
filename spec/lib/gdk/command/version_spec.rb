@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Version do
   describe '#run' do
     it 'returns GitLab Development Kit 0.2.12 (abc123)' do

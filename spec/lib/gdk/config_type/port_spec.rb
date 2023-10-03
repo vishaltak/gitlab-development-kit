@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::ConfigType::Port do
   let(:config) { GDK.config }
   let(:parent) { config }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Hooks do
   context 'hooks behavior' do
     describe '#execute_hooks' do

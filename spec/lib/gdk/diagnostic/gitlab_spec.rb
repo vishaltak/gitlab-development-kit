@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Gitlab do
   let(:not_ok_log_dir_size) { described_class::GitlabLogDirDiagnostic::LOG_DIR_SIZE_NOT_OK_MB + 1 }
   let(:ok_log_dir_size) { described_class::GitlabLogDirDiagnostic::LOG_DIR_SIZE_NOT_OK_MB - 1 }

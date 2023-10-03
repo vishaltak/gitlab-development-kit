@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Golang do
   describe '#success?' do
     let(:go_get_success) { nil }

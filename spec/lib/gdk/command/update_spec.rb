@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Update do
   before do
     allow(GDK::Hooks).to receive(:execute_hooks)

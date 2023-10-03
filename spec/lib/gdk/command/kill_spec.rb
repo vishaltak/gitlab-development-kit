@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Kill, :hide_stdout do
   let!(:root) { GDK.root }
 

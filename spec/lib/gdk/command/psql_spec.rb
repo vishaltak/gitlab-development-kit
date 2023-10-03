@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Psql do
   context 'with no extra arguments' do
     it 'uses the development database by default' do

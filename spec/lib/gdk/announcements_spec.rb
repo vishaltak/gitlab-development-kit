@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Announcements, :gdk_root do
   let(:header) { 'the header' }
   let(:body) { 'the body' }

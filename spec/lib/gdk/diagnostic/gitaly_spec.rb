@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Gitaly do
   describe '#success?' do
     context 'when the Gitaly internal socket path length is >= the max' do

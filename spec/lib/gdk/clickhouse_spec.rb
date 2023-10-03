@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Clickhouse do
   describe '#client_cmd' do
     let(:config) do

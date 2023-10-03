@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic do
   describe '.all' do
     it 'creates instances of all GDK::Diagnostic classes' do

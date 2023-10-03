@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe Asdf::Tool do
   let(:name) { 'golang' }
   let(:versions) { %w[1.17.2 1.17.1] }

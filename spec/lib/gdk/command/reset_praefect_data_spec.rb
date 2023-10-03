@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::ResetPraefectData do
   let(:gdk_root) { Pathname.new('/home/git/gdk') }
   let(:prompt_response) { nil }

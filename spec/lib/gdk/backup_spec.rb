@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Backup do
   let(:gdk_root_dir) { '/home/git/gdk' }
   let(:gdk_root_path) { Pathname.new(gdk_root_dir) }

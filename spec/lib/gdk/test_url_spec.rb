@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::TestURL do
   let(:commit_sha) { 'abc123' }
   let(:default_url) { 'http://127.0.0.1:3000/users/sign_in' }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::RubyGems do
   let(:allow_gem_not_installed) { nil }
 

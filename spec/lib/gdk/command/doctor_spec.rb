@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'stringio'
 
 RSpec.describe GDK::Command::Doctor, :hide_output do

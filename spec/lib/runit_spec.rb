@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe Runit do
   let(:log_dir) { Pathname.new('/home/git/gdk/log') }
 

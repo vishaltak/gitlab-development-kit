@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Tail do
   context 'with no extra arguments' do
     it 'asks runit to tail logs for all enabled services' do

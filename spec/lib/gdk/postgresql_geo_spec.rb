@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::PostgresqlGeo do
   let(:yaml) { {} }
   let(:config) { GDK::Config.new(yaml: yaml) }

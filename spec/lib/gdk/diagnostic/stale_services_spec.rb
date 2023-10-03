@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::StaleServices do
   let(:stale_processes) do
     <<~STALE_PROCESSES

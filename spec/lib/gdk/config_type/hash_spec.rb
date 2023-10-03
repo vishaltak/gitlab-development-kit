@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::ConfigType::Hash do
   let(:value) { nil }
   let(:key) { 'test_key' }

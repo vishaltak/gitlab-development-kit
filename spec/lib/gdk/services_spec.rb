@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe GDK::Services do
   describe 'ALL' do
     it 'contains Service classes' do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::MacPorts do
   describe '#success?' do
     context 'when MacPorts is installed' do

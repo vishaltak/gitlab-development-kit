@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::ConfigType::Array do
   let(:key) { 'test_key' }
 

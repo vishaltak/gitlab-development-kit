@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Project::Base do
   let(:name) { nil }
   let(:worktree_path) { '/tmp/something' }

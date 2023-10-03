@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require_relative '../../../lib/support/bootstrap_rails'
 
 RSpec.describe Support::BootstrapRails do

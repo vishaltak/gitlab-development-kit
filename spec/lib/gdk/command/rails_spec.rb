@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Rails do
   context 'with no extra arguments' do
     it 'aborts execution and returns usage instructions' do

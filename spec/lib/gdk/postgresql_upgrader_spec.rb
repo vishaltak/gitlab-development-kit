@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'gdk/postgresql_upgrader'
 
 RSpec.describe GDK::PostgresqlUpgrader do

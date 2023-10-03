@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::OutputBuffered do
   describe '#stdout_handle' do
     it 'returns output' do

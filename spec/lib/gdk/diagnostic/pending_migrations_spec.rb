@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::PendingMigrations do
   describe '#success?' do
     context 'when there are pending DB migrations' do

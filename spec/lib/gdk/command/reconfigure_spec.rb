@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Reconfigure do
   context 'when reconfiguration fails' do
     it 'returns an error message' do

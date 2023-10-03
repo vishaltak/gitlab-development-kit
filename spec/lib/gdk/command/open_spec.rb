@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Open do
   let(:host_os) { nil }
   let(:wsl) { false }

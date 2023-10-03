@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
   let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) } # rubocop:todo RSpec/VerifiedDoubles

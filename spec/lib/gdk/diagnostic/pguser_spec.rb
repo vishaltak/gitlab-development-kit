@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::PGUser do # rubocop:disable RSpec/FilePath
   describe '#success?' do
     context 'when PGUSER env var is set' do
