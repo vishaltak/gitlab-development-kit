@@ -89,7 +89,7 @@ docker run --name=instance_saml_idp -p 8080:8080 -p 8443:8443 \
   -d jamedjo/test-saml-idp
 ```
 
-In addition, you need to configure the `idp_sso_target_url` and `idp_cert_fingerprint` to match the values provided by the Docker image (`config/gitlab.yml`):
+In addition, in `config/gitlab.yml` you need to configure the `idp_sso_target_url` and `idp_cert_fingerprint` to match the values provided by the Docker image:
 
 ```yaml
 omniauth:
