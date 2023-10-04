@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'helpers/measure_helper'
 
 RSpec.describe GDK::Command::MeasureWorkflow do

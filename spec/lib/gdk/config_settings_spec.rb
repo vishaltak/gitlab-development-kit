@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::ConfigSettings do
   subject(:config) { described_class.new }
 

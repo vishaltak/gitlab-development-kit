@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Config do
   let(:tmp_path) { Dir.mktmpdir('gdk-path') }
   let(:gdk_basepath) { Pathname.new('/home/git/gdk/') }

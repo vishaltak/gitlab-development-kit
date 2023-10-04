@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Asdf do
   describe '#success?' do
     let(:unnecessary_software_to_uninstall) { nil }

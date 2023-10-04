@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Services::Base do
   describe '#name' do
     it 'needs to be implemented' do

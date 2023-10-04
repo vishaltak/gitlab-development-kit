@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::RvmAndAsdf do
   describe '#success?' do
     context 'when RVM and asdf enabled' do

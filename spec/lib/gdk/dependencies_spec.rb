@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Dependencies do
   let(:tmp_path) { Dir.mktmpdir('gdk-path') }
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Praefect do
   describe '#success?' do
     context 'focusing on checking DB migrations' do

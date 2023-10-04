@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Dependencies::Checker do
   describe '.parse_version' do
     it 'returns the version in the string' do

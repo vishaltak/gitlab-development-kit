@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe GDK::Services::PostgreSQL do # rubocop:disable RSpec/FilePath
   describe '#name' do
     it 'return postgresql' do

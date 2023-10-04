@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Trust do
   it 'warns with a deprecation message' do
     stub_no_color_env('true')

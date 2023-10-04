@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::ResetData do
   let!(:root) { GDK.root }
   let!(:backup_base_dir) { root.join('.backups') }

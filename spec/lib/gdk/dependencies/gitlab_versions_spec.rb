@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Dependencies::GitlabVersions do
   describe '#ruby_version' do
     it 'returns version from local file when present', :gdk_root do

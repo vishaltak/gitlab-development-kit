@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
   describe '#migrate' do
     let(:shellout_mock) { instance_double(Shellout, success?: true) }

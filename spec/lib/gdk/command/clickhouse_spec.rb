@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Clickhouse do
   context 'with clickhouse enabled' do
     before do

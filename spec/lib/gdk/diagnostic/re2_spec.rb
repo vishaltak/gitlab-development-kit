@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Re2 do
   describe '#success?' do
     context 'when re2 is not installed or bad' do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe GDK::Services::GitLabWorkhorse do # rubocop:disable RSpec/FilePath
   describe '#name' do
     it 'return gitlab-workhorse' do

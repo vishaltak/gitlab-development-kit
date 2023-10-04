@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command::Status do
   context 'with no extra arguments' do
     context 'when rails_web.enabled is true' do

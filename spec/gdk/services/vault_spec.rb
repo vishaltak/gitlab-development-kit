@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Services::Vault do
   describe '#name' do
     it 'returns vault' do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Geo do
   let(:database_yml_file) { '/home/git/gdk/gitlab/config/database.yml' }
 

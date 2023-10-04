@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe GDK::ErbRenderer do
   let(:protected_config_files) { [] }
   let(:erb_file) { fixture_path.join('example.erb') }

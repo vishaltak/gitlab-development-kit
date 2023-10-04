@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Project::GitWorktree do
   let(:worktree_path) { Pathname.new('/tmp/something') }
   let(:short_worktree_path) { "#{worktree_path.basename}/" }

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe 'gdk' do
   describe 'version' do
     let!(:gdk_bin_full_path) { File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'gem', 'bin', 'gdk')) }

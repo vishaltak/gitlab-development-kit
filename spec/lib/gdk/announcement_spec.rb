@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Announcement do
   let(:filepath) { Pathname.new('/tmp/0001_announcement_double.yml') }
   let(:header) { 'the header' }

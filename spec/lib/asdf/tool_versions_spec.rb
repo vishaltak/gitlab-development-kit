@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe Asdf::ToolVersions do
   let(:software_name) { 'golang' }
   let(:wanted_software_version) { '1.17.2' }

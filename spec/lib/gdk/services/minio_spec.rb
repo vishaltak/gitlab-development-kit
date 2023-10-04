@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe GDK::Services::Minio do
   describe '#name' do
     it 'return minio' do

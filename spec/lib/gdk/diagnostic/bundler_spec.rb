@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Diagnostic::Bundler do
   let(:gitlab_dir) { Pathname.new('/home/git/gdk/gitlab') }
 

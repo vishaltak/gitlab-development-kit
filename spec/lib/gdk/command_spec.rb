@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe GDK::Command do
   context 'with declared available command classes' do
     GDK::Command::COMMANDS.each do |_, command_class_proc|
