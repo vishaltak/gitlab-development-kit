@@ -177,7 +177,7 @@ module GDK
         elsif apt?
           apt_available_versions
         else
-          abort 'Only Homebrew, asdf, rtx, and apt based Linux systems supported.'
+          raise 'Only Homebrew, asdf, rtx, and apt based Linux systems supported.'
         end
     end
 
