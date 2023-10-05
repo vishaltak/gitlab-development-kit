@@ -366,8 +366,12 @@ get_platform() {
 
     shopt -s nocasematch
 
+    os_id_regex="${os_id}|${os_id_like}"
+    # ID_LIKE is a space-separated list of ID.
+    os_id_regex=${os_id_regex// /\|}
+
     for key in ${!SUPPORTED_LINUX_PLATFORMS[*]}; do
-      if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id}|${os_id_like} ]]; then
+      if [[ ${SUPPORTED_LINUX_PLATFORMS[${key}]} =~ ${os_id_regex} ]]; then
         platform=$key
       fi
     done
