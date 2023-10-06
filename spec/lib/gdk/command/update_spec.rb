@@ -7,6 +7,30 @@ RSpec.describe GDK::Command::Update do
   end
 
   describe '#run' do
+    let(:env) { { 'PG_AUTO_UPDATE' => '1' } }
+
+    context 'when self-update is enabled' do
+      it 'runs self-update and update' do
+        expect(GDK).to receive(:make).with('self-update')
+        expect(GDK).to receive(:make).with('self-update', 'update', env: env)
+
+        subject.run
+      end
+    end
+
+    context 'when self-update is disabled' do
+      before do
+        stub_env('GDK_SELF_UPDATE', '0')
+      end
+
+      it 'only runs update' do
+        expect(GDK).not_to receive(:make).with('self-update')
+        expect(GDK).to receive(:make).with('update', env: env)
+
+        subject.run
+      end
+    end
+
     context 'when update fails' do
       it 'displays an error message' do
         stub_no_color_env('true')
