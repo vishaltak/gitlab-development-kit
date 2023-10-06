@@ -25,6 +25,8 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
   export CPPFLAGS="-I${OPENSSL_PREFIX}/include"
   export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig:${ICU4C_PREFIX}/lib/pkgconfig"
   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=${OPENSSL_PREFIX} --with-readline-dir=${READLINE_PREFIX}"
+  # Workaround for https://github.com/redis/redis/issues/12585
+  export REDIS_APPLY_PATCHES="https://patch-diff.githubusercontent.com/raw/redis/redis/pull/12611.diff"
 
   if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "true" ]]; then
     export LIBPCREDIR="${BREW_PREFIX}/opt/pcre2"
