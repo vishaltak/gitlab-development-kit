@@ -48,7 +48,7 @@ module GDK
         cmd = 'ruby --version'
         # .tool-versions may have changed during a `gdk update`, so we
         # should execute ruby using asdf to avoid a stale PATH.
-        cmd = "asdf exec #{cmd}" if GDK.config.asdf.__available?
+        cmd = "asdf exec #{cmd}" if GDK::Dependencies.asdf_available?
 
         raw_version_match = Shellout.new(cmd).try_run.match(/\Aruby (.+)p\d+ \(.+\z/)
         return unless raw_version_match

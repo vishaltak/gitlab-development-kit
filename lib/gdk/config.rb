@@ -1000,7 +1000,7 @@ module GDK
 
     settings :asdf do
       bool(:opt_out) { false }
-      bool(:__available?) { !config.asdf.opt_out? && ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any? }
+      bool(:__available?) { !config.asdf.opt_out? && GDK::Dependencies.asdf_available? }
     end
 
     settings :packages do

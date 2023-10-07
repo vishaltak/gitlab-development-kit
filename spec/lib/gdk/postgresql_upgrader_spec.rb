@@ -33,8 +33,11 @@ RSpec.describe GDK::PostgresqlUpgrader do
       let(:version_list_double) { instance_double(Shellout, try_run: result) }
 
       before do
+        allow(GDK::Dependencies).to receive(:asdf_available?).and_return(true)
+        allow(GDK::Dependencies).to receive(:asdf_available_versions).and_return([13, 14, 15])
+
         shellout_double = instance_double(Shellout, try_run: '', exit_code: 0)
-        allow(subject).to receive(:asdf?).and_return(true)
+
         allow(Shellout).to receive(:new).with(anything).and_return(shellout_double)
         allow(Shellout).to receive(:new).with(%w[asdf list postgres]).and_return(version_list_double)
       end

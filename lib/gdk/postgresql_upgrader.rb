@@ -168,33 +168,17 @@ module GDK
 
     def available_versions
       @available_versions ||=
-        if asdf?
+        if GDK::Dependencies.asdf_available?
           asdf_available_versions
-        elsif rtx?
+        elsif GDK::Dependencies.rtx_available?
           rtx_available_versions
-        elsif brew?
+        elsif GDK::Dependencies.homebrew_available?
           brew_cellar_available_versions.transform_keys(&:to_i)
-        elsif apt?
+        elsif GDK::Dependencies.linux_apt_available?
           apt_available_versions
         else
           raise 'Only Homebrew, asdf, rtx, and apt based Linux systems supported.'
         end
-    end
-
-    def asdf?
-      run(%w[asdf help]) != ''
-    end
-
-    def rtx?
-      run(%w[rtx help]) != ''
-    end
-
-    def brew?
-      run(%w[brew help]) != ''
-    end
-
-    def apt?
-      run(%w[apt-cache help]) != ''
     end
 
     def asdf_available_versions

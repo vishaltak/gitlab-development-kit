@@ -12,6 +12,6 @@ abort "Usage: #{$PROGRAM_NAME} DIRECTORY COMMAND [ARGUMENTS ...]" if ARGV.count 
 Dir.chdir(ARGV.shift)
 
 cmd = ARGV
-cmd = %w[asdf env ruby] + cmd if GDK.config.asdf.__available?
+cmd = %w[asdf env ruby] + cmd if GDK::Dependencies.asdf_available?
 
 exec(*cmd)

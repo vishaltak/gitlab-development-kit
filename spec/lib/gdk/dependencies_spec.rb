@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe GDK::Dependencies do
   let(:tmp_path) { Dir.mktmpdir('gdk-path') }
+  let(:asdf_path) { Pathname(tmp_path).join('.asdf') }
 
   before do
     stub_env('PATH', tmp_path)
@@ -42,6 +43,48 @@ RSpec.describe GDK::Dependencies do
 
     it 'returns false when APT is not available in PATH' do
       expect(described_class.linux_apt_available?).to be_falsey
+    end
+  end
+
+  describe '.asdf_available?' do
+    subject { described_class.asdf_available? }
+
+    it 'returns true when ASDF_DATA_DIR is present' do
+      stub_env('ASDF_DIR', nil)
+      stub_env('ASDF_DATA_DIR', asdf_path)
+
+      expect(subject).to be_truthy
+    end
+
+    it 'returns true when ASDF_DIR is present' do
+      stub_env('ASDF_DIR', asdf_path)
+      stub_env('ASDF_DATA_DIR', nil)
+
+      expect(subject).to be_truthy
+    end
+
+    it 'returns true when asdf binary is available in PATH' do
+      create_dummy_executable('asdf')
+
+      stub_env('ASDF_DIR', nil)
+      stub_env('ASDF_DATA_DIR', nil)
+
+      expect(subject).to be_truthy
+    end
+
+    it 'returns true when both asdf binary and ENV variables are present' do
+      create_dummy_executable('asdf')
+      stub_env('ASDF_DIR', asdf_path)
+      stub_env('ASDF_DATA_DIR', asdf_path)
+
+      expect(subject).to be_truthy
+    end
+
+    it 'returns false when neither asdf binary not ENV variables are present' do
+      stub_env('ASDF_DIR', nil)
+      stub_env('ASDF_DATA_DIR', nil)
+
+      expect(subject).to be_falsey
     end
   end
 
