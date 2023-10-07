@@ -18,7 +18,7 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
 
       context 'when asdf is available' do
         it "starts with 'asdf exec'" do
-          allow(GDK.config).to receive_message_chain(:asdf, :__available?).and_return(true)
+          allow(GDK::Dependencies).to receive(:asdf_available?).and_return(true)
 
           expect(Shellout).to receive(:new).with(start_with('asdf', 'exec'), any_args).and_return(shellout_mock)
 
@@ -28,7 +28,7 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
 
       context 'when asdf is not available' do
         it "does not start with 'asdf exec'" do
-          allow(GDK.config).to receive_message_chain(:asdf, :__available?).and_return(false)
+          allow(GDK::Dependencies).to receive(:asdf_available?).and_return(false)
 
           expect(Shellout).to receive(:new).with(array_including('bundle', 'exec'), any_args).and_return(shellout_mock)
 

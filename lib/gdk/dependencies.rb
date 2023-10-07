@@ -1,30 +1,52 @@
 # frozen_string_literal: true
 
 module GDK
+  # Utility functions related to GDK dependencies
   module Dependencies
     autoload :Checker, 'gdk/dependencies/checker'
     autoload :GitlabVersions, 'gdk/dependencies/gitlab_versions'
 
     MissingDependency = Class.new(StandardError)
 
-    # Homebrew
+    # Is Homebrew available?
+    #
+    # @return boolean
     def self.homebrew_available?
       executable_exist?('brew')
     end
 
-    # MacPorts
+    # Is MacPorts available?
+    #
+    # @return boolean
     def self.macports_available?
       executable_exist?('port')
     end
 
-    # Debian / Ubuntu APT
+    # Is Debian / Ubuntu APT available?
+    #
+    # @return boolean
     def self.linux_apt_available?
       executable_exist?('apt')
+    end
+
+    # Is Asdf is available and correctly setup?
+    #
+    # @return boolean
+    def self.asdf_available?
+      executable_exist?('asdf') || ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
+    end
+
+    # Is rtx available?
+    #
+    # @return [Boolean]
+    def self.rtx_available?
+      executable_exist?('rtx')
     end
 
     # Search on PATH or default locations for provided binary and return its fullpath
     #
     # @param [String] binary name
+    # @return [String] full path to the binary file
     def self.find_executable(binary)
       executable_file = proc { |name| next name if File.file?(name) && File.executable?(name) }
 

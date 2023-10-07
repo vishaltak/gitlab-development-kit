@@ -2646,7 +2646,7 @@ RSpec.describe GDK::Config do
 
         context 'but asdf is not installed / configured' do
           it 'returns false' do
-            stub_env('ASDF_DATA_DIR', nil)
+            allow(GDK::Dependencies).to receive(:asdf_available?).and_return(false)
 
             expect(config.asdf.__available?).to be(false)
           end
@@ -2654,7 +2654,7 @@ RSpec.describe GDK::Config do
 
         context 'and asdf is installed / configured' do
           it 'returns true' do
-            stub_env('ASDF_DATA_DIR', '/home/gdk/.asdf')
+            allow(GDK::Dependencies).to receive(:asdf_available?).and_return(true)
 
             expect(config.asdf.__available?).to be(true)
           end

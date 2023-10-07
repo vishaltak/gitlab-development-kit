@@ -11,7 +11,6 @@ module GDK
       MAIN_TASKS = %w[db:migrate db:test:prepare].freeze
       GEO_TASKS = %w[db:migrate:geo db:test:prepare:geo].freeze
 
-      def_delegators :config, :geo?
       def_delegators :postgresql, :in_recovery?
 
       def migrate
@@ -43,17 +42,17 @@ module GDK
 
       def rake(tasks)
         cmd = %w[bundle exec rake] + tasks
-        cmd = %w[asdf exec] + cmd if config.asdf.__available?
+        cmd = %w[asdf exec] + cmd if GDK::Dependencies.asdf_available?
 
-        Shellout.new(cmd, chdir: config.gitlab.dir).execute.success?
+        Shellout.new(cmd, chdir: GDK.config.gitlab.dir).execute.success?
       end
 
       def geo_secondary?
-        config.geo.secondary?
+        GDK.config.geo.secondary?
       end
 
-      def config
-        @config ||= GDK.config
+      def geo?
+        GDK.config.geo?
       end
 
       def postgresql
