@@ -12,7 +12,8 @@ module Runit
     'praefect' => 'praefect*',
     'gitaly' => '{gitaly,praefect*}',
     'db' => '{redis,redis-cluster,postgresql,postgresql-geo,clickhouse}',
-    'rails-migration-dependencies' => '{redis,redis-cluster,postgresql,postgresql-geo,gitaly,praefect*}'
+    'rails-migration-dependencies' => '{redis,redis-cluster,postgresql,postgresql-geo,gitaly,praefect*}',
+    'workhorse' => 'gitlab-workhorse'
   }.freeze
 
   SERVICES_DIR = Pathname.new(__dir__).join('../services').expand_path
