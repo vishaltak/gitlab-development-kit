@@ -16,6 +16,7 @@ set -eo pipefail
 
 DEFAULT_GDK_INSTALL_DIR="gitlab-development-kit"
 DEFAULT_GITLAB_REPO_URL="https://gitlab.com/gitlab-org/gitlab.git"
+DEFAULT_GDK_REPO_URL="https://gitlab.com/gitlab-org/gitlab-development-kit.git"
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
 
@@ -46,7 +47,7 @@ clone_gdk_if_needed() {
   if [[ -d ${GDK_INSTALL_DIR} ]]; then
     echo "INFO: A ${GDK_INSTALL_DIR} directory already exists in the current working directory, resuming.."
   else
-    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_INSTALL_DIR}"
+    git clone "${GDK_REPO_URL}" "${GDK_INSTALL_DIR}"
   fi
 }
 
@@ -91,6 +92,7 @@ fi
 GDK_INSTALL_DIR=${GDK_INSTALL_DIR:-${DEFAULT_GDK_INSTALL_DIR}}
 GDK_CLONE_BRANCH=${GDK_CLONE_BRANCH:-main}
 GITLAB_REPO_URL=${GITLAB_REPO_URL:-${DEFAULT_GITLAB_REPO_URL}}
+GDK_REPO_URL=${GDK_REPO_URL:-${DEFAULT_GDK_REPO_URL}}
 
 if ! ensure_not_root; then
   error "Running as root is not supported."
