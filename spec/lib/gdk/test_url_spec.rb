@@ -38,6 +38,8 @@ RSpec.describe GDK::TestURL do
       end
 
       it 'does not call #store_gitlab_commit_sha' do
+        expect(GDK::Output).to receive(:print).with("=> Waiting until #{default_url} is ready..")
+        expect(GDK::Output).to receive(:notice).with("#{default_url} does not appear to be up. Waited 0.0 second(s).")
         expect(subject).not_to receive(:store_gitlab_commit_sha)
 
         subject.wait
@@ -67,6 +69,7 @@ RSpec.describe GDK::TestURL do
 
         allow(File).to receive(:write)
 
+        expect(GDK::Output).to receive(:print).with("=> Waiting until #{default_url} is ready..")
         expect(GDK::Output).to receive(:notice).with("#{default_url} is up (200 OK). Took 0.0 second(s).")
         expect(GDK::Output).to receive(:notice).with("  - GitLab Commit SHA: #{commit_sha}.")
         expect(File).to receive(:write).with('gitlab-last-verified-sha.json', '{"gitlab_last_verified_sha":"abc123"}')
