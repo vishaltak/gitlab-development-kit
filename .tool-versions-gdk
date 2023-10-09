@@ -1,4 +1,13 @@
-# This file declares dependencies for GDK itself.
+# NOTE: This file declares dependencies for the GDK itself, which is typically
+#       just Ruby.
+#
+#       Each project the GDK manages should define it's own .tool-versions file
+#       which we process with support/asdf-combine which combines all necessary
+#       software.
+#
+#       This file _can_ be used to override specific versions when
+#       incompatibilies arise, but generally speaking, each project is
+#       responsible for declaring its dependencies and the GDK follows.
 #
 # For more information, see doc/asdf.md.
 #
