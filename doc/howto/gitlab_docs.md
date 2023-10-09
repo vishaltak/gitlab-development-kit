@@ -1,11 +1,14 @@
 # GitLab Docs in GDK
 
-You can use the GDK to develop GitLab documentation. The GDK can:
+You can use the GDK to contribute GitLab documentation. The GDK can:
 
 - Maintain a clone of the [`gitlab-docs`](https://gitlab.com/gitlab-org/gitlab-docs) repository
   for work on changes to that project.
 - Preview changes made in the GDK-managed `gitlab/doc` directory.
 - Run linting tasks that require `gitlab-docs`, including internal link and anchor checks.
+
+If you want to contribute to GitLab documentation without using GDK, see
+[Set up, preview, and update GitLab Docs site](https://gitlab.com/gitlab-org/gitlab-docs/-/blob/main/doc/setup.md).
 
 ## Enable GitLab Docs
 
