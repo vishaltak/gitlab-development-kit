@@ -24,6 +24,3 @@ ruby 3.1.4
 
 # For linting GDK documentation
 vale 2.27.0
-
-# For zoekt-webserver to be used in Zoekt integration
-golang 1.20.3
