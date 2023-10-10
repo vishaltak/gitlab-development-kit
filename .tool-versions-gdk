@@ -1,4 +1,14 @@
-# This file declares dependencies for GDK itself.
+# NOTE: This file declares dependencies for GDK itself, which is typically
+#       just Ruby.
+#
+#       Each project GDK manages should define its own .tool-versions file,
+#       which we process with support/asdf-combine that combines all necessary
+#       software.
+#
+#       This file _can_ be used to override specific versions when
+#       incompatibilies arise, but generally speaking, each project is
+#       responsible for declaring its dependencies and GDK follows these
+#       declarations.
 #
 # For more information, see doc/asdf.md.
 #
@@ -15,6 +25,3 @@ ruby 3.1.4
 
 # For linting GDK documentation
 vale 2.27.0
-
-# For zoekt-webserver to be used in Zoekt integration
-golang 1.20.3
