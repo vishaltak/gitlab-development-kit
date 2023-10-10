@@ -266,6 +266,12 @@ RSpec.describe Runit do
         expect(described_class::SERVICE_SHORTCUTS['db']).to eq('{redis,redis-cluster,postgresql,postgresql-geo,clickhouse}')
       end
     end
+
+    describe 'workhorse' do
+      it do
+        expect(described_class::SERVICE_SHORTCUTS['workhorse']).to eq('gitlab-workhorse')
+      end
+    end
   end
 
   def stub_services
