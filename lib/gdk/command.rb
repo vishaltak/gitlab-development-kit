@@ -50,6 +50,10 @@ module GDK
       'install' => -> { GDK::Command::Install },
       'kill' => -> { GDK::Command::Kill },
       'help' => -> { GDK::Command::Help },
+      '-help' => -> { GDK::Command::Help },
+      '--help' => -> { GDK::Command::Help },
+      '-h' => -> { GDK::Command::Help },
+      nil => -> { GDK::Command::Help },
       'measure' => -> { GDK::Command::MeasureUrl },
       'measure-workflow' => -> { GDK::Command::MeasureWorkflow },
       'open' => -> { GDK::Command::Open },
@@ -61,12 +65,18 @@ module GDK
       'redis-cli' => -> { GDK::Command::RedisCLI },
       'reset-data' => -> { GDK::Command::ResetData },
       'reset-praefect-data' => -> { GDK::Command::ResetPraefectData },
+      'restart' => -> { GDK::Command::Restart },
       'run' => -> { GDK::Command::Run },
+      'start' => -> { GDK::Command::Start },
+      'status' => -> { GDK::Command::Status },
+      'stop' => -> { GDK::Command::Stop },
       'tail' => -> { GDK::Command::Tail },
       'thin' => -> { GDK::Command::Thin },
       'trust' => -> { GDK::Command::Trust },
       'update' => -> { GDK::Command::Update },
-      'version' => -> { GDK::Command::Version }
+      'version' => -> { GDK::Command::Version },
+      '-version' => -> { GDK::Command::Version },
+      '--version' => -> { GDK::Command::Version }
     }.freeze
   end
 end
