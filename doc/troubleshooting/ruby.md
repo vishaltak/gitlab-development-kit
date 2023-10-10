@@ -498,3 +498,17 @@ Building native extensions. This could take a while...
 
 The solution is to enable SIP using the
 [official instructions](https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection).
+
+## `bundle install` returns `LoadError`
+
+When you run `bundle install`, you might encounter the following error:
+
+```shell
+/Users/<username>/.asdf/installs/ruby/3.1.4/bin/bundle:25:in `load': cannot load such file -- /Users/<username>/.asdf/installs/ruby/3.1.4/lib/ruby/gems/3.1.0/gems/bundler-2.4.20/exe/bundle (LoadError) from /Users/<username>/.asdf/installs/ruby/3.1.4/bin/bundle:25:in `<main>'
+```
+
+To resolve this issue, run the following command to update the bundler:
+
+```shell
+gem install bundler
+```
