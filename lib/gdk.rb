@@ -103,24 +103,10 @@ module GDK
     subcommand = ARGV.shift
     validate_yaml! unless SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION.include?(subcommand)
 
-    exit(::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV)) if ::GDK::Command::COMMANDS.key?(subcommand)
-
-    case subcommand
-    when 'status'
-      exit(GDK::Command::Status.new.run(ARGV))
-    when 'start'
-      exit(GDK::Command::Start.new.run(ARGV))
-    when 'restart'
-      exit(GDK::Command::Restart.new.run(ARGV))
-    when 'stop'
-      exit(GDK::Command::Stop.new.run(ARGV))
-    when /-{0,2}version/
-      GDK::Command::Version.new.run(ARGV)
-    when /-{0,2}help/, '-h', nil
-      GDK::Command::Help.new.run(ARGV)
+    if ::GDK::Command::COMMANDS.key?(subcommand)
+      exit(::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV))
     else
-      all_commands = ::GDK::Command::COMMANDS.keys + %w[status start restart stop]
-      suggestions = DidYouMean::SpellChecker.new(dictionary: all_commands).correct(subcommand)
+      suggestions = DidYouMean::SpellChecker.new(dictionary: ::GDK::Command::COMMANDS.keys).correct(subcommand)
       message = ["#{subcommand} is not a GDK command"]
 
       if suggestions.any?
