@@ -12,7 +12,7 @@ module Runit
     'praefect' => 'praefect*',
     'gitaly' => '{gitaly,praefect*}',
     'db' => '{redis,redis-cluster,postgresql,postgresql-geo,clickhouse}',
-    'rails-migration-dependencies' => '{redis,redis-cluster,postgresql,postgresql-geo,gitaly,praefect*}',
+    'rails-migration-dependencies' => '{redis,redis-cluster,postgresql,postgresql-geo,gitaly,praefect*,minio}',
     'workhorse' => 'gitlab-workhorse'
   }.freeze
 
