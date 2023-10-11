@@ -1,4 +1,13 @@
 schemaVersion: 2.2.0
+commands:
+  - id: bootstrap-gdk
+    exec:
+      component: tooling-container
+      commandLine: "support/gitlab-remote-development/remote-development-gdk-bootstrap.sh"
+      workingDir: $PROJECTS_ROOT/gitlab-development-kit
+events:
+  preStart:
+    - bootstrap-gdk
 components:
   - name: tooling-container
     attributes:
