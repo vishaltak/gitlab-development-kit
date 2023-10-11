@@ -33,6 +33,8 @@ module GDK
     #
     # @return boolean
     def self.asdf_available?
+      return false if config.asdf.opt_out?
+
       executable_exist?('asdf') || ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
     end
 
@@ -68,6 +70,10 @@ module GDK
     # @param [String] binary name
     def self.executable_exist?(name)
       !!find_executable(name)
+    end
+
+    def self.config
+      GDK.config
     end
   end
 end

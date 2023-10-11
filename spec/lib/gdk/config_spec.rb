@@ -2629,6 +2629,10 @@ RSpec.describe GDK::Config do
         { 'asdf' => { 'opt_out' => asdf_opt_out } }
       end
 
+      before do
+        allow(GDK::Dependencies).to receive(:config).and_return(config)
+      end
+
       context 'when asdf.opt_out? is true' do
         let(:asdf_opt_out) { true }
 
