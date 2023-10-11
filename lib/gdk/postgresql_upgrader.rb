@@ -107,8 +107,8 @@ module GDK
     def pgvector_setup
       return unless config.gitlab.rails.databases.embedding.enabled?
 
-      GDK::Output.info "Running 'make pgvector-setup'.."
-      run!('make pgvector-setup', config.gdk_root)
+      GDK::Output.info "Running 'make pgvector-clean pgvector-setup'.."
+      run!('make pgvector-clean pgvector-setup', config.gdk_root)
     end
 
     def pg_upgrade
