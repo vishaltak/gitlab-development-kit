@@ -80,7 +80,7 @@ RSpec.describe GDK::Command::ResetData do
           travel_to(now) do
             stub_data_moves
 
-            expect(GDK).to receive(:make).with('ensure-databases-running', 'reconfigure').and_return(false)
+            expect(GDK).to receive(:make).with('ensure-databases-setup', 'reconfigure').and_return(false)
 
             expect(GDK::Output).to receive(:error).with('Failed to reset data.')
             expect(GDK::Command::Start).not_to receive(:new)
@@ -96,7 +96,7 @@ RSpec.describe GDK::Command::ResetData do
           travel_to(now) do
             stub_data_moves
 
-            expect(GDK).to receive(:make).with('ensure-databases-running', 'reconfigure').and_return(true)
+            expect(GDK).to receive(:make).with('ensure-databases-setup', 'reconfigure').and_return(true)
 
             expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/'")
             expect(GDK::Output).to receive(:notice).with("Moving redis dump.rdb from '#{redis_dump_rdb_path}' to '#{backup_redis_dump_rdb_path}/'")
