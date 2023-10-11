@@ -26,3 +26,12 @@ components:
           targetPort: 5778
         - name: objects-9000
           targetPort: 9000
+commands:
+  - id: run-bootstrap-script
+    exec:
+      component: tooling-container
+      commandLine: "sh support/gitlab-remote-development/remote-development-gdk-bootstrap.sh"
+      workingDir: $PROJECTS_ROOT/gitlab-development-kit
+events:
+  preStart:
+    - run-bootstrap-script
