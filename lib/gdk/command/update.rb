@@ -23,13 +23,25 @@ module GDK
 
       def update!
         GDK::Hooks.with_hooks(config.gdk.update_hooks, 'gdk update') do
-          GDK.make('self-update')
-          GDK.make('self-update', 'update', env: { 'PG_AUTO_UPDATE' => '1' })
+          if self_update?
+            GDK.make('self-update')
+            GDK.make('self-update', 'update', env: update_env)
+          else
+            GDK.make('update', env: update_env)
+          end
         end
       end
 
       def reconfigure!
         GDK.make('reconfigure-tasks')
+      end
+
+      def self_update?
+        %w[1 yes true].include?(ENV.fetch('GDK_SELF_UPDATE', '1'))
+      end
+
+      def update_env
+        { 'PG_AUTO_UPDATE' => '1' }
       end
     end
   end
