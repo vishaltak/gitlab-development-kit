@@ -34,6 +34,9 @@ GDK_CLONE_BRANCH="${4-main}"
 
 CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
 ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
+ASDF_FISH_PATH="${CURRENT_ASDF_DIR}/asdf.fish"
+ASDF_ELVISH_PATH="${CURRENT_ASDF_DIR}/asdf.elv"
+ASDF_NUSHELL_PATH="${CURRENT_ASDF_DIR}/asdf.nu"
 
 REQUIRED_COMMANDS=(git make)
 REQUIRED_ENV_VARS=(GITLAB_LICENSE_KEY)
@@ -125,9 +128,21 @@ bin/rails runner 'License.create!(data: ENV["GITLAB_LICENSE_KEY"])'
 
 echo
 echo "INFO: To make sure GDK commands are available in this shell and ensure you're"
-echo "INFO: in the newly installed GDK directory, please run:"
+echo "INFO: in the newly installed GDK directory, please run the command corresponding to your shell."
 echo
+echo "sh / bash / zsh:"
 echo "source \"${ASDF_SH_PATH}\""
+echo
+echo "fish:"
+echo "source \"${ASDF_FISH_PATH}\""
+echo
+echo "elvish:"
+echo "source \"${ASDF_ELVISH_PATH}\""
+echo
+echo "nushell:"
+echo "source \"${ASDF_NUSHELL_PATH}\""
+echo
+echo "then:"
 echo "cd ${GDK_PRIMARY_INSTALL_DIR}"
 echo
 echo -e "\e[0Ksection_end:$(date +%s):set_up_primary_gdk\r\e[0K"
@@ -141,9 +156,21 @@ cd "../${GDK_PRIMARY_INSTALL_DIR}" || error "Sanity check for ${GDK_PRIMARY_INST
 
 echo
 echo "INFO: To make sure GDK commands are available in this shell and ensure you're"
-echo "INFO: in the newly installed GDK directory, please run:"
+echo "INFO: in the newly installed GDK directory, please run the command corresponding to your shell."
 echo
+echo "sh / bash / zsh:"
 echo "source \"${ASDF_SH_PATH}\""
+echo
+echo "fish:"
+echo "source \"${ASDF_FISH_PATH}\""
+echo
+echo "elvish:"
+echo "source \"${ASDF_ELVISH_PATH}\""
+echo
+echo "nushell:"
+echo "source \"${ASDF_NUSHELL_PATH}\""
+echo
+echo "then:"
 echo "cd ${GDK_SECONDARY_INSTALL_DIR}"
 echo
 echo -e "\e[0Ksection_end:$(date +%s):set_up_secondary_gdk\r\e[0K"
