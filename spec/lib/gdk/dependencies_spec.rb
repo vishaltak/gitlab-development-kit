@@ -84,6 +84,14 @@ RSpec.describe GDK::Dependencies do
 
       expect(subject).to be_falsey
     end
+
+    it 'returns false when the user opted out' do
+      stub_gdk_yaml('asdf' => { 'opt_out' => true })
+      create_dummy_executable('asdf')
+      stub_env('ASDF_DIR', asdf_path)
+
+      expect(subject).to be_falsey
+    end
   end
 
   describe '.find_executable' do

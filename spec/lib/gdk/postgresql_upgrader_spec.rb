@@ -43,7 +43,9 @@ RSpec.describe GDK::PostgresqlUpgrader do
 
       describe '#bin_path' do
         it 'returns latest version' do
-          expect(subject.bin_path).to include(%(.asdf/installs/postgres/14.9/bin))
+          stub_env('ASDF_DATA_DIR', '/home/on/the/range/.asdf')
+
+          expect(subject.bin_path).to eq('/home/on/the/range/.asdf/installs/postgres/14.9/bin')
         end
       end
 
