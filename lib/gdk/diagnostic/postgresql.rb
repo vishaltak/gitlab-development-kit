@@ -80,7 +80,10 @@ module GDK
       end
 
       def psql_command
-        @psql_command ||= Shellout.new(%w[psql --version]).execute(display_output: false, display_error: false)
+        @psql_command ||= begin
+          psql = config.postgresql.bin_dir.join('psql')
+          Shellout.new(%W[#{psql} --version]).execute(display_output: false, display_error: false)
+        end
       end
 
       def data_dir_version
@@ -151,6 +154,10 @@ module GDK
 
       def xcrun_sdk_path
         @xcrun_sdk_path ||= Shellout.new('xcrun --show-sdk-path').execute(display_output: false).read_stdout.to_s
+      end
+
+      def config
+        @config ||= GDK.config
       end
     end
   end

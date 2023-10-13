@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
+  let(:tmp_path) { Dir.mktmpdir('gdk-path') }
+  let(:pg_bin_dir) { tmp_path }
+  let(:psql) { File.join(pg_bin_dir, 'psql') }
+
   before do
     @tmp_file = stub_data_version(11)
+    stub_gdk_yaml("postgresql" => { "bin_dir" => tmp_path })
   end
 
   after do
@@ -30,7 +35,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
       context 'when psql --version differs' do
         before do
-          stub_psql_version('psql (PostgreSQL) 12.8', success: psql_success)
+          stub_psql_version("#{psql} (PostgreSQL) 12.8", success: psql_success)
         end
 
         it 'returns false' do
@@ -48,7 +53,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
       context 'when psql --version is 9.6' do
         before do
-          stub_psql_version('psql (PostgreSQL) 9.6.18', success: psql_success)
+          stub_psql_version("#{psql} (PostgreSQL) 9.6.18", success: psql_success)
         end
 
         it 'returns false' do
@@ -304,7 +309,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   end
 
   def stub_psql_version(result, success: true)
-    stub_shellout(%w[psql --version], result, success: success)
+    stub_shellout(%W[#{psql} --version], result, success: success)
   end
 
   def stub_pg_config_ldflags(result)
