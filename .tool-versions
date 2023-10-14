@@ -14,6 +14,7 @@ gitleaks 8.16.4
 #   1.21.3:
 #     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #   1.21.2:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
@@ -21,17 +22,16 @@ gitleaks 8.16.4
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #   1.21.0:
 #     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
+#   1.20.10:
+#     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #   1.20.9:
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
-#     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-zoekt-indexer/-/raw/main/.tool-versions
 #   1.20.7:
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
-#   1.20.5:
-#     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.21.3 1.21.2 1.21.0 1.20.9 1.20.7 1.20.5
+golang 1.21.3 1.21.2 1.21.0 1.20.10 1.20.9 1.20.7
 
 # minio:
 #   2022-07-15T03-44-22Z:
@@ -41,13 +41,12 @@ minio 2022-07-15T03-44-22Z
 
 # nodejs:
 #   18.18.1:
-#     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
-#   18.18.0:
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #   18.17.0:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-nodejs 18.18.1 18.18.0 18.17.0
+nodejs 18.18.1 18.17.0
 
 # postgres:
 #   14.9:
