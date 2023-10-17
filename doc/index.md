@@ -114,7 +114,8 @@ so that GDK can manage dependencies for you.
 #### Install dependencies using `asdf`
 
 Installing and managing dependencies automatically lets GDK manage dependencies for you using
-[`asdf`](https://asdf-vm.com/#/core-manage-asdf):
+[`asdf`](https://asdf-vm.com/#/core-manage-asdf). Note that on a new workstation, you should be
+sure to [install `asdf`](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf) before proceeding, as it is not installed by the `make` script below.
 
 1. Clone the `gitlab-development-kit` repository into your preferred location, if you haven't previously:
 
