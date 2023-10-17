@@ -93,7 +93,7 @@ curl -H 'Content-Type: application/json' -XPUT "http://localhost:9200/gitlab-dev
 After this you can see every query by tailing the logs from you GDK root:
 
 ```shell
-tail -f elasticsearch/logs/elasticsearch_index_search_slowlog.log
+tail -f elasticsearch/logs/elasticsearch_index_search_slowlog.json
 ```
 
 ### Rate limiting
