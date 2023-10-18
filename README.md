@@ -30,7 +30,7 @@ The following installation methods are supported, actively maintained, and teste
 - [One-line installation](doc/index.md#one-line-installation)
 - [Simple installation](doc/index.md#simple-installation) on your local system. Requires at least
   8 GB RAM and 12 GB disk space. Available for [supported platforms](#supported-platforms).
-- [GitLab remote development workspaces](doc/howto/gitLab-remote-development.md).
+- [GitLab remote development workspaces](doc/howto/gitlab-remote-development.md).
 - [Gitpod](doc/howto/gitpod.md).
 
 ### Supported platforms
