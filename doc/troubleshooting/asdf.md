@@ -31,6 +31,32 @@ To fix this, you can run the following command:
 rm -rf ~/.asdf/shims && asdf reshim
 ```
 
+## GDK update fails with `No preset version installed for command` error
+
+GDK update might fail if `asdf` cannot locate a software version that is already installed.
+
+```shell
+No preset version installed for command go
+Please install a version by running one of the following:
+
+asdf install golang 1.21.2
+
+or add one of the following versions in your config file at /Users/foo/gitlab-development-kit/gitlab/workhorse/.tool-versions
+golang 1.20.10
+golang 1.20.9
+golang 1.21.3
+make[2]: *** [gitlab-resize-image] Error 126
+make[1]: *** [gitlab/workhorse/gitlab-workhorse] Error 2
+make: *** [gitlab-workhorse-update-timed] Error 2
+❌️ ERROR: Failed to update.
+```
+
+To resolve this, you can run the following command to uninstall and reinstall the version:
+
+```shell
+asdf uninstall golang 1.21.2 && asdf install golang 1.21.2
+```
+
 ## Error: `command not found: gdk`
 
 Access to the `gdk` command requires a properly configured Ruby installation. If the Ruby installation isn't properly
