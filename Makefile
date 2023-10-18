@@ -35,7 +35,7 @@ export GDK_QUIET = $(gdk_quiet)
 include support/makefiles/*.mk
 
 ifeq ($(platform),darwin)
-OPENSSL_PREFIX := $(shell brew --prefix openssl@1.1)
+OPENSSL_PREFIX := $(shell brew --prefix openssl)
 OPENSSL := ${OPENSSL_PREFIX}/bin/openssl
 else
 OPENSSL := $(shell command -v openssl 2> /dev/null)

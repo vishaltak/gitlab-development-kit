@@ -102,11 +102,11 @@ RSpec.describe GDK::Config do
     context 'on a macOS system' do
       let(:fake_platform) { 'darwin' }
 
-      it 'returns the location of the openssl@1.1 bin as a string' do
+      it 'returns the location of the openssl bin as a string' do
         allow(File).to receive(:exist?).and_call_original
         allow(File).to receive(:exist?).with('/opt/homebrew/bin/brew').and_return(true)
 
-        expect(config.__openssl_bin_path.to_s).to eq('/opt/homebrew/opt/openssl@1.1/bin/openssl')
+        expect(config.__openssl_bin_path.to_s).to eq('/opt/homebrew/opt/openssl@3/bin/openssl')
       end
     end
   end

@@ -30,7 +30,7 @@ module GDK
       if config.__brew_prefix_path.to_s.empty?
         Pathname.new(GDK::Dependencies.find_executable('openssl'))
       else
-        config.__brew_prefix_path.join('opt', 'openssl@1.1', 'bin', 'openssl')
+        config.__brew_prefix_path.join('opt', 'openssl@3', 'bin', 'openssl')
       end
     end
 

@@ -12,7 +12,7 @@ brew "heimdal"
 brew "icu4c"
 brew "libiconv"
 brew "libssh2"
-brew "openssl@1.1", link: :force
+brew "openssl"
 brew "pkg-config"
 brew "re2"
 brew "runit"
