@@ -375,6 +375,42 @@ This means `/gitaly/_build/bin/praefect` is missing. To re-create this executabl
 make gitaly-update
 ```
 
+## Updating the GDK
+
+### Run `gdk doctor`
+
+As a general rule, if you encouter errors when you run `gdk update`, you should run `gdk doctor` and follow the suggestions it
+returns. They might resolve your issue.
+
+### Error due to `Net::OpenTimeout: Failed to open TCP connection to rubygems.org:443`
+
+When you run `gdk update` you might get an error like the following:
+
+```plaintext
+ERROR:  While executing gem ... (Gem::RemoteFetcher::FetchError)
+```
+
+This indicates that `bundle` failed to connect to the `rubygems.org` server.
+
+If you are connected to the network and other network activities are working (i.e. `ping gitlab.com`), then this normally indicates
+an outage of `rubygems.org`. You can try manually running `bundle update` in the GDK root folder, and if it fails with a similar
+network error, you know this is the cause.
+
+However, in some cases, even though `bundle update` is otherwise working successfully, you might get an error like the following:
+
+```plaintext
+INFO: Installing gitlab-development-kit Ruby gem..
+ERROR:  While executing gem ... (Gem::RemoteFetcher::FetchError)
+    Net::OpenTimeout: Failed to open TCP connection to rubygems.org:443 (execution expired) (https://rubygems.org/specs.4.8.gz)
+```
+
+This can happen if the IPv6 access to `rubygems.org` is having an outage, but IPv4 access is still working.
+
+Using [this comment](https://github.com/rubygems/rubygems/pull/2662#issuecomment-779730989) as an example, you can add `:ipv4_fallback_enabled: true` to your `~/.gemrc`` to work around this until [this rubygems pull request](https://github.com/ruby/ruby/pull/4038) gets merged.
+
+If that doens't work for some reason, you can alternately go into your operating system network settings and disable IPv6 for your network adapter. Refer to your
+operating system documentation for detailed instructions.
+
 ## Starting the GDK
 
 ### Error due to `ActionController::InvalidAuthenticityToken`
