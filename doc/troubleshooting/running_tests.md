@@ -25,24 +25,15 @@ that is built for running tests. To resolve the issue:
 ## ChromeDriver problems
 
 ChromeDriver is the app on your machine that is used to run headless
-browser tests. ChromeDriver is automatically installed when running `spec/features` or `qa/` E2E tests by SeleniumManager.
-SeleniumManager should install a version of ChromeDriver that is compatible with the installed version of Chrome. 
+browser tests.
+ChromeDriver is automatically installed when running `spec/features` or `qa/` E2E tests by SeleniumManager.
+SeleniumManager should install a version of ChromeDriver that is compatible with the installed version of Chrome.
 
-If you see this error in your test output (you may need to scroll up): `Selenium::WebDriver::Error::SessionNotCreatedError`
-coupled with the error message: `This version of ChromeDriver only supports Chrome version [...]`,
-you need to update your version of ChromeDriver:
+If you have ChromeDriver manually installed on your system, separate to the version installed by SeleniumManager, you should uninstall it. With homebrew, run:
 
-- If you installed ChromeDriver with Homebrew, then you can update by running:
-
-  ```shell
-  brew upgrade --cask chromedriver
-  ```
-
-- Otherwise you may need to [download and install](https://sites.google.com/chromium.org/driver)
-  the latest ChromeDriver directly.
-
-If ChromeDriver fails to open with an error message because the developer "cannot be verified",
-create an exception for it as documented in the [macOS documentation](https://support.apple.com/en-gb/guide/mac-help/mh40616/mac).
+```shell
+brew uninstall chromedriver
+```
 
 ## Database problems
 
@@ -105,7 +96,7 @@ JSConsoleError:
   webpack-internal:///AjYE 15 Refused to connect to 'ws://gdk.test:3001/_hmr/' because it violates the following Content Security Policy directive: "connect-src 'self' ws://localhost localhost".
 ```
 
-Another example error:  
+Another example error:
 
 ```javascript
 Uncaught runtime errors:
