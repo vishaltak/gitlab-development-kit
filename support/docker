@@ -53,6 +53,7 @@ case "$1" in
         docker logout "${CI_REGISTRY}"
         ;;
 
+    # Mike Kozono: I am making a random change to hopefully get a pipeline to run.
     # The problem: We want to rebuild the image, if the Dockerfile, .tool-versions or
     # packages_ubuntu.txt change. Unfortunately that isn't possible to do that in GitLab CI,
     # because we cannot set a variable based on the contents of files. That is why we
