@@ -25,7 +25,8 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Status,
         GDK::Diagnostic::Re2,
         GDK::Diagnostic::Golang,
-        GDK::Diagnostic::StaleServices
+        GDK::Diagnostic::StaleServices,
+        GDK::Diagnostic::Chromedriver
       ]
 
       expect(described_class.all.map(&:class)).to eq(diagnostic_classes)

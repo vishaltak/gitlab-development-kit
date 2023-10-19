@@ -5,6 +5,7 @@ module GDK
     autoload :Asdf, 'gdk/diagnostic/asdf'
     autoload :Base, 'gdk/diagnostic/base'
     autoload :Bundler, 'gdk/diagnostic/bundler'
+    autoload :Chromedriver, 'gdk/diagnostic/chromedriver'
     autoload :Configuration, 'gdk/diagnostic/configuration'
     autoload :Dependencies, 'gdk/diagnostic/dependencies'
     autoload :Geo, 'gdk/diagnostic/geo'
@@ -43,6 +44,7 @@ module GDK
         Re2
         Golang
         StaleServices
+        Chromedriver
       ]
 
       klasses.map do |const|
