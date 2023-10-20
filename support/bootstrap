@@ -17,6 +17,9 @@ asdf_install() {
 
     asdf_add_initializer "${HOME}/.bashrc" "asdf.sh"
     asdf_add_initializer "${HOME}/.zshrc" "asdf.sh"
+    asdf_add_initializer "${HOME}/.config/fish/config.fish" "asdf.fish"
+    asdf_add_initializer "${HOME}/.config/elvish/rc.elv" "asdf.elv"
+    asdf_add_initializer "${HOME}/.config/nushell/config.nu" "asdf.nu"
 
     return 0
   fi
@@ -26,6 +29,7 @@ asdf_install() {
 
 asdf_add_initializer() {
   [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/${2}" >> "${1}"
+  return 0;
 }
 
 asdf_install_tools() {
@@ -72,10 +76,19 @@ gdk_mark_bootstrapped() {
   echo "INFO: Bootstrap successful!"
 
   if ! asdf_opt_out; then
-    echo "INFO: To make sure GDK commands are available in this shell, run:"
+    echo "INFO: To make sure GDK commands are available in this shell, please run the command corresponding to your shell."
     echo
+    echo "sh / bash / zsh:"
     echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
     echo
+    echo "fish:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.fish\""
+    echo
+    echo "elvish:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.elv\""
+    echo
+    echo "nushell:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.nu\""
   fi
 }
 
