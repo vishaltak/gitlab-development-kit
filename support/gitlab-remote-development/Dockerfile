@@ -23,9 +23,15 @@ COPY --from=vale-source /bin/vale /usr/bin/vale
 COPY configure-image-base.sh /tmp
 RUN bash /tmp/configure-image-base.sh
 
+COPY install-additional-tools.sh /tmp
+RUN bash /tmp/install-additional-tools.sh
+
 WORKDIR $WORKSPACE_DIR_NAME
 
 USER ${WORKSPACE_USER}
 
 COPY --chown=${WORKSPACE_USER} bootstrap-remote-development-image.sh /tmp
 RUN bash /tmp/bootstrap-remote-development-image.sh
+
+COPY entrypoint.sh /tmp
+ENTRYPOINT ["/tmp/entrypoint.sh"]
