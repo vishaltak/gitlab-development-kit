@@ -30,7 +30,6 @@ seed by default), run the following from the Rails console:
 ```ruby
 ::Feature.enable(:index_code_with_zoekt)
 ::Feature.enable(:search_code_with_zoekt)
-::Feature.enable(:use_new_zoekt_indexer)
 zoekt_shard = ::Zoekt::Shard.find_or_create_by!(index_base_url: 'http://127.0.0.1:6080/', search_base_url: 'http://127.0.0.1:6090/')
 namespace = Namespace.find_by_full_path("flightjs") # Some namespace you want to enable
 ::Zoekt::IndexedNamespace.find_or_create_by!(shard: zoekt_shard, namespace: namespace.root_ancestor)
