@@ -53,9 +53,9 @@ default:
 ## Cache definitions
 .cache-variables:
   variables:
-    BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
-    GEM_HOME: "${BUNDLE_PATH}"
-    GEM_PATH: "${BUNDLE_PATH}"
+    BUNDLE_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/bundle"
+    GEM_HOME: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
+    GEM_PATH: "${GITLAB_CI_CACHE_DIR}/ruby/gem"
     GOMODCACHE: "${GITLAB_CI_CACHE_DIR}/go/mod"
     NODE_PATH: "${GITLAB_CI_CACHE_DIR}/nodejs"
 
