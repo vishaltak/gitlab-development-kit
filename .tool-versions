@@ -56,10 +56,10 @@ nodejs 18.18.2 18.17.0
 postgres 14.9 13.12
 
 # redis:
-#   7.0.12:
+#   7.0.14:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-redis 7.0.12
+redis 7.0.14
 
 # ruby:
 #   3.1.4:
