@@ -5,7 +5,7 @@ module GDK
     # Stop and restart all enabled services or specified ones only
     class Restart < BaseCommand
       def help
-        GDK::Command::Start.new.help
+        GDK::Command::Start.new.help.gsub('gdk start', 'gdk restart')
       end
 
       def run(args = [])
