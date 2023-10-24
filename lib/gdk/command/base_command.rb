@@ -25,7 +25,9 @@ module GDK
         @config ||= GDK.config
       end
 
-      def print_help
+      def print_help(args)
+        return false if not args.delete('--help')
+
         GDK::Output.puts(help)
 
         true

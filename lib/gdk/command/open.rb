@@ -5,7 +5,7 @@ module GDK
     # Handles `gdk reconfigure` command execution
     class Open < BaseCommand
       def run(args = [])
-        return print_help if args.delete('--help')
+        return true if print_help(args)
         return wait_until_ready if args.delete('--wait-until-ready')
 
         open_exec
