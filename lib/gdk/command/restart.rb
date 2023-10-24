@@ -4,11 +4,12 @@ module GDK
   module Command
     # Stop and restart all enabled services or specified ones only
     class Restart < BaseCommand
+      def help
+        GDK::Command::Start.new.help
+      end
+
       def run(args = [])
-        unless args.delete('--help').nil?
-          Start.print_help
-          return true
-        end
+        return true if print_help(args)
 
         # Stop does not support --<arg> being passed in, so we need to strip
         # them here.
