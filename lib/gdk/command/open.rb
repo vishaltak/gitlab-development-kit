@@ -15,7 +15,7 @@ module GDK
         <<~HELP
           Usage: gdk open [<args>]
 
-            --help              Display help
+            -h, --help          Display help
             --wait-until-ready  Wait until the GitLab web UI is ready before opening in your default web browser
         HELP
       end

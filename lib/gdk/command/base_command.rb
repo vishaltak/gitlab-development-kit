@@ -26,7 +26,7 @@ module GDK
       end
 
       def print_help(args)
-        return false if not args.delete('--help')
+        return false unless (args & ['-h', '--help']).any?
 
         GDK::Output.puts(help)
 
