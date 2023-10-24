@@ -15,10 +15,20 @@ module GDK
         raise NotImplementedError
       end
 
+      def help
+        raise NotImplementedError
+      end
+
       protected
 
       def config
         @config ||= GDK.config
+      end
+
+      def print_help
+        GDK::Output.puts(help)
+
+        true
       end
 
       def display_help_message
