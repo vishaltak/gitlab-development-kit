@@ -12,7 +12,7 @@ endif
 postgresql/geo/port: postgresql-geo/data
 ifeq ($(geo_enabled), true)
 ifeq ($(geo_secondary), true)
-	$(Q)support/postgres-port ${postgresql_geo_dir} ${postgresql_geo_port}
+	$(Q)support/postgres-port ${postgresql_geo_dir} ${postgresql_geo_port} 'postgresql-geo'
 else
 	@true
 endif
