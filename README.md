@@ -35,16 +35,14 @@ The following installation methods are supported, actively maintained, and teste
 
 ### Supported platforms
 
-| Operating system | Versions                       |
-|:-----------------|:-------------------------------|
-| macOS            | 13, 12, 11                     |
-| Ubuntu           | 22.04 (1), 21.10               |
-| Fedora           | 36 (1), 35                     |
-| Debian           | 13, 12                         |
-| Arch             | latest                         |
-| Manjaro          | latest                         |
-
-(1) Requires [manual installation of OpenSSL 1.1.1](doc/troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
+| Operating system | Versions     |
+| :--------------- | :----------- |
+| macOS            | 13, 12, 11   |
+| Ubuntu           | 22.04, 21.10 |
+| Fedora           | 38, 37       |
+| Debian           | 13, 12       |
+| Arch             | latest       |
+| Manjaro          | latest       |
 
 The list of platforms includes operating systems that run in a Windows Subsystem for Linux (WSL) environment.
 
