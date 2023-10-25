@@ -43,4 +43,8 @@ ${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
 
 .PHONY: praefect-migrate
 praefect-migrate: _postgresql-seed-praefect
+ifeq ($(praefect_enabled), true)
 	$(Q)support/migrate-praefect
+else
+	@true
+endif
