@@ -41,6 +41,7 @@ module GDK
       end
 
       def open_exec
+        GDK::Output.puts("Opening #{config.__uri}")
         exec("#{open_command} '#{config.__uri}'")
       end
 
