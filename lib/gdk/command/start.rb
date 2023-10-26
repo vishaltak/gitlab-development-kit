@@ -4,25 +4,20 @@ module GDK
   module Command
     # Start all enabled services or specified ones only
     class Start < BaseCommand
-      def self.print_help
-        help = <<~HELP
+      def help
+        <<~HELP
           Usage: gdk start [<args>]
 
-            --help             Display help
+            -h, --help         Display help
             --quiet            Don't display any output
             --show-progress    Indicate when GDK is ready to use
               or
             --open-when-ready  Open the GitLab web UI running in your local GDK installation, using your default web browser
         HELP
-
-        GDK::Output.puts(help)
       end
 
       def run(args = [])
-        unless args.delete('--help').nil?
-          self.class.print_help
-          return true
-        end
+        return true if print_help(args)
 
         quiet = !args.delete('--quiet').nil?
         show_progress = !args.delete('--show-progress').nil?

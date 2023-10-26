@@ -5,10 +5,19 @@ module GDK
     # Handles `gdk reconfigure` command execution
     class Open < BaseCommand
       def run(args = [])
-        return print_help if args.delete('--help')
+        return true if print_help(args)
         return wait_until_ready if args.delete('--wait-until-ready')
 
         open_exec
+      end
+
+      def help
+        <<~HELP
+          Usage: gdk open [<args>]
+
+            -h, --help          Display help
+            --wait-until-ready  Wait until the GitLab web UI is ready before opening in your default web browser
+        HELP
       end
 
       private
@@ -25,19 +34,6 @@ module GDK
       rescue Interrupt
         # CTRL-C was pressed
         false
-      end
-
-      def print_help
-        help = <<~HELP
-          Usage: gdk open [<args>]
-
-            --help              Display help
-            --wait-until-ready  Wait until the GitLab web UI is ready before opening in your default web browser
-        HELP
-
-        GDK::Output.puts(help)
-
-        true
       end
 
       def test_url
