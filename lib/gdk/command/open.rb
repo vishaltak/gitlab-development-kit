@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'mkmf'
 
 module GDK
   module Command
@@ -48,8 +49,10 @@ module GDK
       def open_command
         @open_command ||= if GDK::Machine.wsl?
                             'pwsh.exe -Command Start-Process'
-                          elsif GDK::Machine.linux?
+                          elsif find_executable('xdg-open')
                             'xdg-open'
+                          elsif find_executable('gp')
+                            'gp preview --external'
                           else
                             'open'
                           end
