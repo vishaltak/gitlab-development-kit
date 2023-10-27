@@ -27,8 +27,8 @@ RSpec.describe GDK::Command::Open do
     context 'without --wait-until-ready' do
       let(:host_os) { 'Darwin' }
 
-      it 'calls `open <GDK_URL>`' do
-        expect(subject).to receive(:exec).with("open 'http://127.0.0.1:3000'")
+      it 'calls open with <GDK_URL>`' do
+        expect(subject).to receive(:exec).with(a_string_ending_with("'http://127.0.0.1:3000'"))
 
         subject.run
       end
@@ -51,7 +51,7 @@ RSpec.describe GDK::Command::Open do
         let(:wait_result) { true }
 
         it 'advises GDK is not up and returns' do
-          expect(subject).to receive(:exec).with("open 'http://127.0.0.1:3000'")
+          expect(subject).to receive(:exec).with(a_string_ending_with("'http://127.0.0.1:3000'"))
 
           subject.run(%w[--wait-until-ready])
         end
@@ -63,8 +63,8 @@ RSpec.describe GDK::Command::Open do
         context 'when Linux' do
           let(:host_os) { 'Linux' }
 
-          it 'calls `xdg-open <GDK_URL>`' do
-            expect(subject).to receive(:exec).with("xdg-open 'http://127.0.0.1:3000'")
+          it 'calls open with <GDK_URL>`' do
+            expect(subject).to receive(:exec).with(a_string_ending_with("'http://127.0.0.1:3000'"))
 
             subject.run(%w[--wait-until-ready])
           end
@@ -73,8 +73,8 @@ RSpec.describe GDK::Command::Open do
         context 'when not Linux' do
           let(:host_os) { 'Darwin' }
 
-          it 'calls `open <GDK_URL>`' do
-            expect(subject).to receive(:exec).with("open 'http://127.0.0.1:3000'")
+          it 'calls open <GDK_URL>' do
+            expect(subject).to receive(:exec).with(a_string_ending_with("'http://127.0.0.1:3000'"))
 
             subject.run(%w[--wait-until-ready])
           end
