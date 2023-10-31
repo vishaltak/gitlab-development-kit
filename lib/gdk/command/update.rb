@@ -25,15 +25,15 @@ module GDK
         GDK::Hooks.with_hooks(config.gdk.update_hooks, 'gdk update') do
           if self_update?
             GDK.make('self-update')
-            GDK.make('self-update', 'update', env: update_env)
+            GDK.make('self-update', 'update', env: update_env).success?
           else
-            GDK.make('update', env: update_env)
+            GDK.make('update', env: update_env).success?
           end
         end
       end
 
       def reconfigure!
-        GDK.make('reconfigure-tasks')
+        GDK.make('reconfigure-tasks').success?
       end
 
       def self_update?

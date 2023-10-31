@@ -112,7 +112,7 @@ RSpec.describe Shellout do
 
         it 'displays output and errors' do
           expect(GDK::Output).to receive(:print).with(expected_command_stderr_puts, stderr: true)
-          expect(GDK::Output).to receive(:error).with(expected_command_error)
+          expect(GDK::Output).to receive(:error).with(expected_command_error, Shellout::ShelloutBaseError)
 
           subject.execute
         end
@@ -132,8 +132,8 @@ RSpec.describe Shellout do
           expect(subject).to receive(expected_execute_method).exactly(3).times # 1 for the first run + 2 retries
           expect(subject).to receive(:success?).exactly(6).times.and_return(false)
 
-          expect(GDK::Output).to receive(:error).with("'#{command}' failed. Retrying in 2 secs..").twice
-          expect(GDK::Output).to receive(:error).with("'#{command}' failed.")
+          expect(GDK::Output).to receive(:error).with("'#{command}' failed. Retrying in 2 secs..", Shellout::ExecuteCommandFailedError).twice
+          expect(GDK::Output).to receive(:error).with("'#{command}' failed.", Shellout::ExecuteCommandFailedError)
 
           subject.execute(display_output: display_output, retry_attempts: 2)
         end

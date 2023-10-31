@@ -6,7 +6,7 @@ module GDK
   module Diagnostic
     class RubyGems < Base
       TITLE = 'Ruby Gems'
-      GITLAB_GEMS_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
+      GITLAB_GEMS_WITH_C_CODE_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
 
       def initialize(allow_gem_not_installed: false)
         @allow_gem_not_installed = allow_gem_not_installed
@@ -31,7 +31,7 @@ module GDK
       end
 
       def failed_to_load_gitlab_gems
-        @failed_to_load_gitlab_gems ||= GITLAB_GEMS_TO_CHECK.reject { |name| gem_ok?(name) }
+        @failed_to_load_gitlab_gems ||= GITLAB_GEMS_WITH_C_CODE_TO_CHECK.reject { |name| gem_ok?(name) }
       end
 
       def gem_ok?(name)

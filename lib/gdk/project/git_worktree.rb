@@ -18,7 +18,7 @@ module GDK
         sh = execute_command(fetch_cmd)
         unless sh.success?
           GDK::Output.puts(sh.read_stderr, stderr: true)
-          GDK::Output.error("Failed to fetch for '#{short_worktree_path}'")
+          GDK::Output.error("Failed to fetch for '#{short_worktree_path}'", sh.read_stderr)
           return false
         end
 
@@ -58,7 +58,7 @@ module GDK
           true
         else
           GDK::Output.puts(sh.read_stderr, stderr: true)
-          GDK::Output.error("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'")
+          GDK::Output.error("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'", sh.read_stderr)
           false
         end
       end
@@ -72,7 +72,7 @@ module GDK
           true
         else
           GDK::Output.puts(sh.read_stderr, stderr: true)
-          GDK::Output.error("Failed to pull (--ff-only) for for '#{short_worktree_path}'")
+          GDK::Output.error("Failed to pull (--ff-only) for for '#{short_worktree_path}'", sh.read_stderr)
           false
         end
       end
@@ -109,7 +109,7 @@ module GDK
           true
         else
           GDK::Output.puts(sh.read_stderr, stderr: true)
-          GDK::Output.error("Failed to rebase '#{default_branch}' on '#{current_branch_name}' for '#{short_worktree_path}'")
+          GDK::Output.error("Failed to rebase '#{default_branch}' on '#{current_branch_name}' for '#{short_worktree_path}'", sh.read_stderr)
           execute_command('git rebase --abort', display_output: false)
           false # Always send false as the initial 'git rebase' failed.
         end

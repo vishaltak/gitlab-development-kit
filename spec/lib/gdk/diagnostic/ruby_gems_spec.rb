@@ -6,7 +6,7 @@ RSpec.describe GDK::Diagnostic::RubyGems do
   subject(:diagnostic) { described_class.new(allow_gem_not_installed: allow_gem_not_installed) }
 
   before do
-    stub_const('GDK::Diagnostic::RubyGems::GITLAB_GEMS_TO_CHECK', %w[bad_gem])
+    stub_const('GDK::Diagnostic::RubyGems::GITLAB_GEMS_WITH_C_CODE_TO_CHECK', %w[bad_gem])
   end
 
   describe '#success?' do

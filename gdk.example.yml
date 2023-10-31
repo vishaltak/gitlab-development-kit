@@ -428,6 +428,9 @@ sshd:
   use_gitlab_sshd: true
   user: git
   web_listen: 127.0.0.1:9122
+telemetry:
+  enabled: false
+  username: ''
 tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:

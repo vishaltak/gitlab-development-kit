@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe GDK::Command::Update do
+  let(:sh) { instance_double(Shellout, success?: true) }
+
   before do
     allow(GDK::Hooks).to receive(:execute_hooks)
-    allow(GDK).to receive(:make)
+    allow(GDK).to receive(:make).and_return(sh)
   end
 
   describe '#run' do

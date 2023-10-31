@@ -18,6 +18,7 @@ module GDK
     autoload :MeasureUrl, 'gdk/command/measure_url'
     autoload :MeasureWorkflow, 'gdk/command/measure_workflow'
     autoload :Open, 'gdk/command/open'
+    autoload :Telemetry, 'gdk/command/telemetry'
     autoload :Pristine, 'gdk/command/pristine'
     autoload :Psql, 'gdk/command/psql'
     autoload :PsqlGeo, 'gdk/command/psql_geo'
@@ -57,6 +58,7 @@ module GDK
       'measure' => -> { GDK::Command::MeasureUrl },
       'measure-workflow' => -> { GDK::Command::MeasureWorkflow },
       'open' => -> { GDK::Command::Open },
+      'telemetry' => -> { GDK::Command::Telemetry },
       'psql' => -> { GDK::Command::Psql },
       'psql-geo' => -> { GDK::Command::PsqlGeo },
       'pristine' => -> { GDK::Command::Pristine },

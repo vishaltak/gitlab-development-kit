@@ -9,7 +9,7 @@ verbose = ENV['QUIET'] == 'false'
 
 begin
   exit(GDK::TestURL.new(url).wait(verbose: verbose))
-rescue GDK::TestURL::UrlAppearsInvalid
-  GDK::Output.error("'#{url}' does not appear to be a valid URL?")
+rescue GDK::TestURL::UrlAppearsInvalid => e
+  GDK::Output.error("'#{url}' does not appear to be a valid URL?", e)
   exit(1)
 end

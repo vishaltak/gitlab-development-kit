@@ -5,7 +5,7 @@ require 'io/wait'
 
 # Controls execution of commands delegated to the running shell
 class Shellout
-  attr_reader :args, :env, :opts
+  attr_reader :args, :env, :opts, :stderr_str
 
   DEFAULT_EXECUTE_DISPLAY_OUTPUT = true
   DEFAULT_EXECUTE_RETRY_ATTEMPTS = 0
@@ -41,17 +41,17 @@ class Shellout
     end
 
     self
-  rescue StreamCommandFailedError, ExecuteCommandFailedError
+  rescue StreamCommandFailedError, ExecuteCommandFailedError => e
     error_message = "'#{command}' failed."
 
     if (retry_attempts -= 1).negative?
-      GDK::Output.error(error_message) if display_error
+      GDK::Output.error(error_message, e) if display_error
 
       self
     else
       retried = true
       error_message += " Retrying in #{retry_delay_secs} secs.."
-      GDK::Output.error(error_message) if display_error
+      GDK::Output.error(error_message, e) if display_error
 
       sleep(retry_delay_secs)
       retry

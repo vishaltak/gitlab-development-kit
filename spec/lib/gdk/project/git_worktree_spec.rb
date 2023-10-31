@@ -32,7 +32,7 @@ RSpec.describe GDK::Project::GitWorktree do
       it 'fetch fails, but stash pops' do
         expect_update(stash_result: stash_saved_something, fetch_success: false, shallow_clone: shallow_clone)
         expect(GDK::Output).to receive(:puts).with("fetch_success: false", stderr: true)
-        expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'")
+        expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'", 'fetch_success: false')
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
@@ -71,7 +71,7 @@ RSpec.describe GDK::Project::GitWorktree do
       it 'fetch fails, but stash pops' do
         expect_update(stash_result: stash_saved_something, fetch_success: false, shallow_clone: shallow_clone)
         expect(GDK::Output).to receive(:puts).with("fetch_success: false", stderr: true)
-        expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'")
+        expect(GDK::Output).to receive(:error).with("Failed to fetch for '#{short_worktree_path}'", "fetch_success: false")
         expect_shellout('git stash pop')
         expect(subject.update).to be_falsey
       end
@@ -144,7 +144,7 @@ RSpec.describe GDK::Project::GitWorktree do
         expect(GDK::Output).to receive(:success).with("Successfully fetched and rebased '#{default_branch}' on '#{current_branch_name}' for '#{short_worktree_path}'")
       else
         expect(GDK::Output).to receive(:puts).with(stderr, stderr: true)
-        expect(GDK::Output).to receive(:error).with("Failed to rebase '#{default_branch}' on '#{current_branch_name}' for '#{short_worktree_path}'")
+        expect(GDK::Output).to receive(:error).with("Failed to rebase '#{default_branch}' on '#{current_branch_name}' for '#{short_worktree_path}'", stderr)
       end
     end
 
@@ -163,12 +163,12 @@ RSpec.describe GDK::Project::GitWorktree do
             expect(GDK::Output).to receive(:success).with("Successfully pulled (--ff-only) for '#{short_worktree_path}'")
           else
             expect(GDK::Output).to receive(:puts).with(pull_stderr, stderr: true)
-            expect(GDK::Output).to receive(:error).with("Failed to pull (--ff-only) for for '#{short_worktree_path}'")
+            expect(GDK::Output).to receive(:error).with("Failed to pull (--ff-only) for for '#{short_worktree_path}'", pull_stderr)
           end
         end
       else
         expect(GDK::Output).to receive(:puts).with(checkout_stderr, stderr: true)
-        expect(GDK::Output).to receive(:error).with("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'")
+        expect(GDK::Output).to receive(:error).with("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'", checkout_stderr)
       end
     end
 
@@ -181,7 +181,7 @@ RSpec.describe GDK::Project::GitWorktree do
         expect(GDK::Output).to receive(:success).with("Successfully fetched and checked out '#{revision}' for '#{short_worktree_path}'")
       else
         expect(GDK::Output).to receive(:puts).with(checkout_stderr, stderr: true)
-        expect(GDK::Output).to receive(:error).with("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'")
+        expect(GDK::Output).to receive(:error).with("Failed to fetch and check out '#{revision}' for '#{short_worktree_path}'", checkout_stderr)
       end
     end
 

@@ -292,3 +292,15 @@ basic workflow in the repository.
 
 The reports are stored in `<gdk-root>/sitespeed-result` as `<branch>_YYYY-MM-DD-HH-MM-SS`. This
 requires Docker installed and running.
+
+## Toggle Telemetry
+
+```shell
+gdk telemetry
+```
+
+Use the `gdk telemetry` command to enable and disable GDK telemetry. GDK telemetry can be:
+
+- Enabled, and associated with a GitLab username.
+- Enabled anonymously.
+- Disabled.

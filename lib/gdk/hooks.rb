@@ -29,7 +29,7 @@ module GDK
 
       true
     rescue HookCommandError, Shellout::StreamCommandFailedError => e
-      GDK::Output.abort(e.message)
+      GDK::Output.abort(e.message, e)
     end
   end
 end

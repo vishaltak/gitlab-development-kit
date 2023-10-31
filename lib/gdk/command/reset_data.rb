@@ -27,11 +27,13 @@ module GDK
       end
 
       def reset_data!
-        if GDK.make('ensure-databases-setup', 'reconfigure')
+        result = GDK.make('ensure-databases-setup', 'reconfigure')
+
+        if result.success?
           GDK::Output.notice('Successfully reset data!')
           GDK::Command::Start.new.run
         else
-          GDK::Output.error('Failed to reset data.')
+          GDK::Output.error('Failed to reset data.', result.stderr_str)
           display_help_message
 
           false
@@ -61,7 +63,7 @@ module GDK
 
         true
       rescue Errno::ENOENT => e
-        GDK::Output.error("Failed to create directory '#{directory}' - #{e}")
+        GDK::Output.error("Failed to create directory '#{directory}' - #{e}", e)
         false
       end
 
@@ -78,7 +80,7 @@ module GDK
 
         true
       rescue SystemCallError => e
-        GDK::Output.error("Failed to rename path '#{path}' to '#{path_to_backup}/' - #{e}")
+        GDK::Output.error("Failed to rename path '#{path}' to '#{path_to_backup}/' - #{e}", e)
         false
       end
 
