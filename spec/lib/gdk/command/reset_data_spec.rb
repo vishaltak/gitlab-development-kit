@@ -57,7 +57,7 @@ RSpec.describe GDK::Command::ResetData do
           stub_postgres_data_move
           allow(FileUtils).to receive(:mv).with(postgresql_data_directory, backup_postgresql_data_directory).and_raise(Errno::ENOENT)
 
-          expect(GDK::Output).to receive(:error).with("Failed to rename path '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/' - No such file or directory")
+          expect(GDK::Output).to receive(:error).with("Failed to rename path '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/' - No such file or directory", Errno::ENOENT)
           expect(GDK::Output).to receive(:error).with('Failed to backup data.')
           expect(subject).to receive(:display_help_message)
           expect(GDK).not_to receive(:make)
@@ -80,9 +80,10 @@ RSpec.describe GDK::Command::ResetData do
           travel_to(now) do
             stub_data_moves
 
-            expect(GDK).to receive(:make).with('ensure-databases-setup', 'reconfigure').and_return(false)
+            sh = instance_double(Shellout, success?: false, stderr_str: 'Error')
+            expect(GDK).to receive(:make).with('ensure-databases-setup', 'reconfigure').and_return(sh)
 
-            expect(GDK::Output).to receive(:error).with('Failed to reset data.')
+            expect(GDK::Output).to receive(:error).with('Failed to reset data.', 'Error')
             expect(GDK::Command::Start).not_to receive(:new)
             expect(subject).to receive(:display_help_message)
 
@@ -96,7 +97,8 @@ RSpec.describe GDK::Command::ResetData do
           travel_to(now) do
             stub_data_moves
 
-            expect(GDK).to receive(:make).with('ensure-databases-setup', 'reconfigure').and_return(true)
+            sh = instance_double(Shellout, success?: true)
+            expect(GDK).to receive(:make).with('ensure-databases-setup', 'reconfigure').and_return(sh)
 
             expect(GDK::Output).to receive(:notice).with("Moving PostgreSQL data from '#{postgresql_data_directory}' to '#{backup_postgresql_data_directory}/'")
             expect(GDK::Output).to receive(:notice).with("Moving redis dump.rdb from '#{redis_dump_rdb_path}' to '#{backup_redis_dump_rdb_path}/'")

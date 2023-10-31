@@ -66,7 +66,7 @@ bootstrap() {
 gdk_install() {
   # shellcheck disable=SC1090
   source "${ASDF_SH_PATH}"
-  gdk install gitlab_repo="$GITLAB_REPO_URL"
+  gdk install gitlab_repo="$GITLAB_REPO_URL" telemetry_user="$GITLAB_USERNAME"
 }
 
 echo
@@ -80,13 +80,20 @@ echo
 if [ $# -eq 1 ]; then
   echo "Where would you like to install the GDK? [./${DEFAULT_GDK_INSTALL_DIR}]"
   read -r GDK_INSTALL_DIR </dev/tty
-
+  echo
   echo "Which GitLab repo URL would you like to clone? [${DEFAULT_GITLAB_REPO_URL}]"
   echo
   echo "ATTENTION: For members of the wider community, it is recommended to use the community fork (https://gitlab.com/gitlab-community/gitlab.git)."
   echo "See https://gitlab.com/gitlab-community/meta for instructions on how to join."
   echo "If you'd prefer to use your own repository, please ensure that its visibility is set to public."
   read -r GITLAB_REPO_URL </dev/tty
+  echo
+  echo "To improve GDK, GitLab would like to collect basic error and usage data. Please choose one of the following options:"
+  echo
+  echo "- To send data to GitLab, enter your GitLab username."
+  echo "- To send data to GitLab anonymously, leave blank."
+  echo "- To avoid sending data to GitLab, enter a period ('.')."
+  read -r GITLAB_USERNAME </dev/tty
 else
   GDK_INSTALL_DIR="${2-gitlab-development-kit}"
   GDK_CLONE_BRANCH="${3-main}"

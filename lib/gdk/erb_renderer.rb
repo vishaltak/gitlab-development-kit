@@ -34,7 +34,7 @@ module GDK
       FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
       FileUtils.mv(temp_file.path, target)
     rescue GDK::ConfigSettings::UnsupportedConfiguration => e
-      GDK::Output.abort("#{e.message}.")
+      GDK::Output.abort("#{e.message}.", e)
       false
     ensure
       temp_file&.close
@@ -49,7 +49,7 @@ module GDK
 
       File.write(target, result)
     rescue GDK::ConfigSettings::UnsupportedConfiguration => e
-      GDK::Output.abort("#{e.message}.")
+      GDK::Output.abort("#{e.message}.", e)
       false
     end
 

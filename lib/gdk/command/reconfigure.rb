@@ -7,12 +7,12 @@ module GDK
       def run(_args = [])
         result = GDK.make('reconfigure')
 
-        unless result
-          GDK::Output.error('Failed to reconfigure.')
+        unless result.success?
+          GDK::Output.error('Failed to reconfigure.', result.stderr_str)
           display_help_message
         end
 
-        result
+        result.success?
       end
     end
   end

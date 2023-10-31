@@ -14,7 +14,7 @@ RSpec.describe GDK::Command::Pristine do
       it 'displays an error and returns false', :hide_stdout do
         expect(Runit).to receive(:stop).with(quiet: true).and_return(false)
 
-        expect(GDK::Output).to receive(:error).with("Failed to run 'gdk pristine' - Had an issue with 'gdk_stop'.")
+        expect(GDK::Output).to receive(:error).with("Failed to run 'gdk pristine' - Had an issue with 'gdk_stop'.", RuntimeError)
 
         expect(subject.run).to be(false)
       end

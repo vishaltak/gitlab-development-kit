@@ -43,6 +43,11 @@ module GDK
       string(:ca_path) { '' }
     end
 
+    settings :telemetry do
+      string(:username) { '' }
+      bool(:enabled) { false }
+    end
+
     settings :repositories do
       string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
       string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }

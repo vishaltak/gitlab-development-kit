@@ -42,7 +42,7 @@ module GDK
       rescue GDK::ConfigSettings::SettingUndefined
         GDK::Output.abort("Cannot get config for #{name.join('.')}")
       rescue GDK::ConfigSettings::UnsupportedConfiguration => e
-        GDK::Output.abort("#{e.message}.")
+        GDK::Output.abort("#{e.message}.", e)
       end
 
       def config_set(slug, value)
@@ -65,12 +65,12 @@ module GDK
         GDK::Output.info("Don't forget to run 'gdk reconfigure'.")
 
         true
-      rescue GDK::ConfigSettings::SettingUndefined
-        GDK::Output.abort("Cannot get config for '#{slug}'.")
+      rescue GDK::ConfigSettings::SettingUndefined => e
+        GDK::Output.abort("Cannot get config for '#{slug}'.", e)
       rescue TypeError => e
-        GDK::Output.abort(e.message)
+        GDK::Output.abort(e.message, e)
       rescue StandardError => e
-        GDK::Output.error(e.message)
+        GDK::Output.error(e.message, e)
         abort
       end
     end

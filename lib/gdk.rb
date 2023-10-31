@@ -13,6 +13,7 @@ require_relative 'runit'
 
 autoload :Asdf, 'asdf'
 autoload :Shellout, 'shellout'
+autoload :Telemetry, 'telemetry'
 
 # GitLab Development Kit
 module GDK
@@ -104,7 +105,7 @@ module GDK
     validate_yaml! unless SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION.include?(subcommand)
 
     if ::GDK::Command::COMMANDS.key?(subcommand)
-      exit(::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV))
+      exit(run(subcommand))
     else
       suggestions = DidYouMean::SpellChecker.new(dictionary: ::GDK::Command::COMMANDS.keys).correct(subcommand)
       message = ["#{subcommand} is not a GDK command"]
@@ -151,15 +152,19 @@ module GDK
   def self.make(*targets, env: {})
     sh = Shellout.new(MAKE, targets, chdir: GDK.root, env: env)
     sh.stream
-    sh.success?
+    sh
   end
 
   def self.validate_yaml!
     config.validate!
     nil
   rescue StandardError => e
-    GDK::Output.error("Your gdk.yml is invalid.\n\n")
+    GDK::Output.error("Your gdk.yml is invalid.\n\n", e)
     GDK::Output.puts(e.message, stderr: true)
     abort('')
+  end
+
+  def self.run(subcommand)
+    Telemetry.with_telemetry(subcommand) { ::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV) }
   end
 end

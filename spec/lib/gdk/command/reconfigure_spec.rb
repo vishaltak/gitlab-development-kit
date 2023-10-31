@@ -18,6 +18,7 @@ RSpec.describe GDK::Command::Reconfigure do
   end
 
   def stub_make_reconfigure(success:)
-    expect(GDK).to receive(:make).with('reconfigure').and_return(success)
+    sh = instance_double(Shellout, success?: success, stderr_str: nil)
+    expect(GDK).to receive(:make).with('reconfigure').and_return(sh)
   end
 end

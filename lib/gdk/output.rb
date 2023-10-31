@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../telemetry'
+
 module GDK
   module Output
     COLOR_CODE_RED = '31'
@@ -100,11 +102,15 @@ module GDK
         icon(:error) + wrap_in_color('ERROR', COLOR_CODE_RED) + ": #{message}"
       end
 
-      def error(message)
+      def error(message, exception = nil)
+        Telemetry.capture_exception(exception || message)
+
         puts(format_error(message), stderr: true)
       end
 
-      def abort(message)
+      def abort(message, exception = nil)
+        Telemetry.capture_exception(exception || message)
+
         Kernel.abort(format_error(message))
       end
 

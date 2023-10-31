@@ -41,7 +41,7 @@ module GDK
         pg_replica_upgrade('replica_2')
       rescue StandardError => e
         success = false
-        GDK::Output.error "An error occurred: #{e}"
+        GDK::Output.error("An error occurred: #{e}", e)
         GDK::Output.warn 'Rolling back..'
         rename_current_data_dir_back
       end
