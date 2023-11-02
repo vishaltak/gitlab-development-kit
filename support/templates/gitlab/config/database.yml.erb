@@ -99,8 +99,13 @@ test: &test
     adapter: postgresql
     encoding: unicode
     database: gitlabhq_test
+  <%- if config.geo? && config.geo.secondary? -%>
+    host: <%= config.postgresql.geo.host %>
+    port: <%= config.postgresql.geo.port %>
+  <%- else -%>
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
+  <%- end -%>
     pool: 10
     prepared_statements: false
     variables:
@@ -115,8 +120,13 @@ test: &test
   <%- else -%>
     database: gitlabhq_test_ci
   <%- end -%>
+  <%- if config.geo? && config.geo.secondary? -%>
+    host: <%= config.postgresql.geo.host %>
+    port: <%= config.postgresql.geo.port %>
+  <%- else -%>
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
+  <%- end -%>
     pool: 10
     prepared_statements: false
     variables:

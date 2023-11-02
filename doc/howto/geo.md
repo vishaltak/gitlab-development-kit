@@ -89,43 +89,14 @@ To ensure the tracking database is started, restart GDK. You need to use
 
 ### On a secondary
 
-<!-- markdownlint-disable MD044 -->
-<!-- TODO: Add this to `support/geo-add-secondary`. Then the Running tests section can be moved into the Manual installation section. -->
-<!-- markdownlint-enable MD044 -->
+You should be able to run tests on GDKs that are configured as secondary sites,
+with no manual or special configuration.
 
-When you try to run tests on a GDK configured as a Geo secondary, tests
-might fail because the main database is read-only.
-
-You can work around this by using the PostgreSQL instance that is used
-for the tracking database (i.e. the one running in
-`<secondary-gdk-root>/postgresql-geo`) for both the tracking and the
-main database.
-
-In `<secondary-gdk-root>/gitlab/config/database.yml`, add or replace the `test:` block with the following:
-
-```yaml
-test: &test
-  main:
-    adapter: postgresql
-    encoding: unicode
-    database: gitlabhq_test
-    host: /home/<secondary-gdk-root>/postgresql-geo
-    port: 5432
-    pool: 10
-    prepared_statements: false
-    variables:
-      statement_timeout: 120s
-  ci:
-    adapter: postgresql
-    encoding: unicode
-    database: gitlabhq_test_ci
-    host: /home/<secondary-gdk-root>/postgresql-geo
-    port: 5432
-    pool: 10
-    prepared_statements: false
-    variables:
-      statement_timeout: 120s
-```
+For reference, when a GDK is configured as a Geo secondary site, the test
+environment database connections for the `main` and `ci` databases are
+automatically configured to use the tracking database in `database.yml`. This is
+done so that tests can run on the secondary site, because otherwise the tests would fail while inserting or updating data into the read-only `main` or
+`ci` databases.
 
 ## SSH cloning
 
