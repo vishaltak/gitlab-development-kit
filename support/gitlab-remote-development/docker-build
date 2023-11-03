@@ -4,7 +4,7 @@ GITLAB_REMOTE_WORKSPACE_IMAGE="${GITLAB_REMOTE_WORKSPACE_IMAGE:-gitlab-remote-de
 
 cd ./support/gitlab-remote-development || exit 1
 echo "Building ${GITLAB_REMOTE_WORKSPACE_IMAGE}"
-DOCKER_BUILDKIT=1 docker build \
+docker build \
   --progress=plain \
   --build-arg git_checkout_branch="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
   --build-arg git_remote_origin_url="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-}" \
