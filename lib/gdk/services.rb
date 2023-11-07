@@ -22,6 +22,7 @@ module GDK
     SERVICE_BASE_CLASSES = %i[
       Base
       Required
+      InvalidEnvironmentKeyError
     ].freeze
 
     # Return a list of class names that represent a Service
