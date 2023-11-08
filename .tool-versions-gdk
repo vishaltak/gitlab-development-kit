@@ -24,4 +24,4 @@
 ruby 3.1.4
 
 # For linting GDK documentation
-vale 2.27.0
+vale 2.29.6
