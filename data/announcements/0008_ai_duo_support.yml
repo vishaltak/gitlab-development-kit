@@ -1,0 +1,14 @@
+---
+header: GitLab Duo (AI / LLMs) support added
+body: |
+  pgvector can now be added to PostgreSQL. To enable it, simply add the following lines to your gdk.yml file:
+  ```
+  pgvector:
+    enabled: true
+  ```
+
+  or run `gdk config set pgvector.enabled true`
+
+  After adding these lines, please run `gdk reconfigure` to apply the changes.
+
+  See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/3092 for more details.
