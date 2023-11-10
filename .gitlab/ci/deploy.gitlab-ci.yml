@@ -38,13 +38,18 @@ pages:
     paths:
       - public
 
+# promote `main` Gitpod image to `stable` using `crane tag`
 gitpod-workspace-image:
   extends:
     - .deploy-job
-    - .docker:build-docker-in-docker
     - .rules:deploy-gitpod-workspace-image
   needs:
     - build-gitpod-workspace-image
     - gitpod-docker-image
+  image:
+    name: gcr.io/go-containerregistry/crane:debug
+    entrypoint: [""]
   script:
-    - ./support/gitpod/docker-tag-image-as-stable
+    - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - crane tag $GITPOD_WORKSPACE_IMAGE_BASE:stable old_stable
+    - crane tag $GITPOD_WORKSPACE_IMAGE_BASE:main stable
