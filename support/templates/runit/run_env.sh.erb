@@ -10,3 +10,14 @@ export GITLAB_LICENSE_MODE=<%= GDK.config.license.license_mode %>
 export GITLAB_TRACING='<%= GDK.config.tracer.jaeger.__tracer_url %>'
 export GITLAB_TRACING_URL='<%= GDK.config.tracer.jaeger.__search_url %>'
 <% end %>
+
+<% if GDK.config.gitlab_duo_chat? %>
+export ANTHROPIC_API_KEY='<%= GDK.config.gitlab_duo_chat.anthropic_api_key %>'
+export VERTEX_GOOGLE_APPLICATION_CREDENTIALS='<%= GDK.config.gitlab_duo_chat.google_application_credentials %>'
+
+# Simulate a SaaS instance https://docs.gitlab.com/ee/development/ee_features.html#simulate-a-saas-instance
+export GITLAB_SIMULATE_SAAS=1
+
+# Enable Debug log https://docs.gitlab.com/ee/development/ai_features/duo_chat.html#debugging
+export LLM_DEBUG=1
+<% end %>

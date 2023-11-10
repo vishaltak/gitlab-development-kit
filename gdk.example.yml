@@ -137,6 +137,10 @@ gitlab_docs:
   https: false
   port: 3005
   port_https: 3030
+gitlab_duo_chat:
+  anthropic_api_key: anthropic_api_key
+  enabled: false
+  google_application_credentials: google_application_credentials
 gitlab_elasticsearch_indexer:
   auto_update: true
 gitlab_k8s_agent:

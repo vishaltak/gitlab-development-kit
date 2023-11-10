@@ -277,6 +277,12 @@ module GDK
       string(:__nanoc_view_cmd) { "make compile && ../support/bundle-exec nanoc view #{config.gitlab_docs.__nanoc_cmd_common}" }
     end
 
+    settings :gitlab_duo_chat do
+      bool(:enabled) { false }
+      string(:anthropic_api_key) { "anthropic_api_key" }
+      string(:google_application_credentials) { "google_application_credentials" }
+    end
+
     settings :snowplow_micro do
       bool(:enabled) { false }
       port(:port, 'snowplow_micro')
