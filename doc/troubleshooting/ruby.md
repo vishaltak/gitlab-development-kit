@@ -63,6 +63,13 @@ In which case you would run:
 bundle pristine re2
 ```
 
+In Ubuntu 22.04, you might need to specify [ICU directory](https://github.com/brianmario/charlock_holmes#installing):
+
+```
+# Adjust the path to the installed ICU for your local environment.
+gem install charlock_holmes -- --with-icu-dir=/home/linuxbrew/.linuxbrew/Cellar/icu4c/73.2
+```
+
 ## An error occurred while installing thrift
 
 The installation of the `thrift v0.16.0` gem during `bundle install` can fail with the following error because `clang <= 13` [does not properly handle `__has_declspec()`](https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57):
