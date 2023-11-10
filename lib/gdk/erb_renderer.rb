@@ -14,7 +14,7 @@ module GDK
     def initialize(source, target, **args)
       @source = source
       @target = target
-      @args = args.merge(config: config)
+      @args = args.merge(config: GDK.config)
     end
 
     def safe_render!
@@ -75,7 +75,7 @@ module GDK
     def target_protected?(target_file)
       # We need to pass in target_file because #render! can potentially override
       # @target
-      config.config_file_protected?(target_file)
+      GDK.config.config_file_protected?(target_file)
     end
 
     def should_render?(target)
@@ -122,10 +122,6 @@ module GDK
       else
         '--no-color'
       end
-    end
-
-    def config
-      @config ||= GDK.config
     end
   end
 end
