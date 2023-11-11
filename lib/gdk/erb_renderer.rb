@@ -9,12 +9,17 @@ require_relative 'output'
 
 module GDK
   class ErbRenderer
-    attr_reader :source, :target
+    attr_reader :source, :target, :locals
 
-    def initialize(source, target, **args)
+    # Initialize the renderer providing source, target and local variables
+    #
+    # @param [String] source
+    # @param [String] target
+    # @param [Hash] locals variables available inside the template
+    def initialize(source, target, **locals)
       @source = source
       @target = target
-      @args = args.merge(config: GDK.config)
+      @locals = locals.merge(config: GDK.config)
     end
 
     def safe_render!
@@ -45,7 +50,7 @@ module GDK
 
       str = File.read(source)
       # A trim_mode of '-' allows omitting empty lines with <%- -%>
-      result = ERB.new(str, trim_mode: '-').result_with_hash(@args)
+      result = ERB.new(str, trim_mode: '-').result_with_hash(@locals)
 
       File.write(target, result)
     rescue GDK::ConfigSettings::UnsupportedConfiguration => e
