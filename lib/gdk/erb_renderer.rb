@@ -8,6 +8,8 @@ require_relative '../shellout'
 require_relative 'output'
 
 module GDK
+  # ErbRenderer is responsible for rendering templates and providing
+  # them access to configuration data
   class ErbRenderer
     attr_reader :source, :target, :locals
 
@@ -22,11 +24,17 @@ module GDK
       @locals = locals.merge(config: GDK.config)
     end
 
+    # The safe render take extra steps to avoid unrecoverable changes:
+    # - Render the new content to a temporary file
+    # - Display a diff of the changes
+    # - Make a timestamped backup of the target file
+    # - Provide instructions on how to restore previous changes
+    # - Move the temporary file to replace the old one
     def safe_render!
       return unless should_render?(target)
 
-      temp_file = Tempfile.open(target)
-      render!(temp_file.path)
+      temp_file = Tempfile.create(target)
+      File.write(temp_file.path, render_to_string)
 
       if File.exist?(target)
         return if FileUtils.identical?(target, temp_file.path)
@@ -38,24 +46,31 @@ module GDK
 
       FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
       FileUtils.mv(temp_file.path, target)
-    rescue GDK::ConfigSettings::UnsupportedConfiguration => e
-      GDK::Output.abort("#{e.message}.", e)
-      false
     ensure
       temp_file&.close
     end
 
-    def render!(target = @target)
+    # Render template into target file
+    def render!
       return unless should_render?(target)
 
-      str = File.read(source)
-      # A trim_mode of '-' allows omitting empty lines with <%- -%>
-      result = ERB.new(str, trim_mode: '-').result_with_hash(@locals)
+      FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
+      File.write(target, render_to_string)
+    end
 
-      File.write(target, result)
+    # Render template and return its content
+    #
+    # @return [String] Rendered content
+    def render_to_string
+      raise ArgumentError, "file not found in: #{source}" unless File.exist?(source)
+
+      template = File.read(source)
+
+      erb = ERB.new(template, trim_mode: '-') # A trim_mode of '-' allows omitting empty lines with <%- -%>
+      erb.location = source.to_s # define the file location so errors can point to the right file
+      erb.result_with_hash(locals)
     rescue GDK::ConfigSettings::UnsupportedConfiguration => e
       GDK::Output.abort("#{e.message}.", e)
-      false
     end
 
     private

@@ -81,4 +81,10 @@ describe GDK::ErbRenderer do
       end
     end
   end
+
+  describe 'render_to_string' do
+    it 'renders the template with correct assigned locals' do
+      expect(renderer.render_to_string).to match('Foo is foo, and Bar is bar')
+    end
+  end
 end
