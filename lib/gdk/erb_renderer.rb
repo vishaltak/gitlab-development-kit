@@ -31,7 +31,7 @@ module GDK
       if File.exist?(target)
         return if FileUtils.identical?(target, temp_file.path)
 
-        warn_changes!(temp_file.path)
+        display_changes!(temp_file.path)
         backup!
         warn_overwritten!
       end
@@ -60,8 +60,12 @@ module GDK
 
     private
 
-    def warn_changes!(temp_file)
-      diff = Shellout.new(%W[git --no-pager diff --no-index #{colors_arg} -u #{target} #{temp_file}]).readlines[4..]
+    # Compare and display changes between content on temporary file and existing target
+    #
+    # @param [File] temp_file
+    def display_changes!(temp_file)
+      cmd = %W[git --no-pager diff --no-index #{git_color_args} -u #{target} #{temp_file}]
+      diff = Shellout.new(cmd).readlines[4..]
       return unless diff
 
       GDK::Output.puts
@@ -121,7 +125,7 @@ module GDK
       @colors ||= Shellout.new('tput colors').try_run.chomp.to_i >= 8
     end
 
-    def colors_arg
+    def git_color_args
       if colors?
         '--color'
       else

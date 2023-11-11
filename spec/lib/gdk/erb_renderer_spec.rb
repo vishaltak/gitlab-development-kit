@@ -30,7 +30,7 @@ describe GDK::ErbRenderer do
   describe '#safe_render!' do
     context 'output file does not exist' do
       it 'renders without a warning' do
-        expect(renderer).not_to receive(:warn_changes!)
+        expect(renderer).not_to receive(:display_changes!)
 
         renderer.safe_render!
 
@@ -60,7 +60,7 @@ describe GDK::ErbRenderer do
 
         it 'warns about changes and overwrites content' do
           expect(GDK::Output).to receive(:warn).with(%r{'tmp/example.out' has been overwritten})
-          expect(renderer).to receive(:warn_changes!)
+          expect(renderer).to receive(:display_changes!)
 
           renderer.safe_render!
 
