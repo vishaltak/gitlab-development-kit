@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'mkmf'
+
 module GDK
   module Command
     # Base interface for GDK commands
@@ -9,6 +11,8 @@ module GDK
       def initialize(stdout: GDK::Output, stderr: GDK::Output)
         @stdout = stdout
         @stderr = stderr
+
+        MakeMakefile::Logging.quiet = true
       end
 
       def run(args = [])
