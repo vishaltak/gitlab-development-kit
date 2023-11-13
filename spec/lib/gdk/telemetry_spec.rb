@@ -6,7 +6,7 @@ require 'sentry-ruby'
 require 'snowplow-tracker'
 
 # rubocop:disable RSpec/ExpectInHook
-RSpec.describe Telemetry do
+RSpec.describe GDK::Telemetry do
   describe '.with_telemetry' do
     let(:command) { 'test_command' }
     let(:args) { %w[arg1 arg2] }

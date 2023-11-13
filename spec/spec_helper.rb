@@ -14,7 +14,7 @@ SimpleCov.start
 
 require_relative '../lib/gdk'
 require_relative '../lib/gdk/task_helpers'
-require_relative '../lib/telemetry'
+require_relative '../lib/gdk/telemetry'
 
 RSpec.configure do |config|
   config.before do |example|
@@ -48,10 +48,10 @@ RSpec.configure do |config|
     end
 
     unless example.metadata[:with_telemetry]
-      allow(Telemetry).to receive(:with_telemetry).and_wrap_original do |_method, *_args, &block|
+      allow(GDK::Telemetry).to receive(:with_telemetry).and_wrap_original do |_method, *_args, &block|
         block.call
       end
-      allow(Telemetry).to receive(:capture_exception)
+      allow(GDK::Telemetry).to receive(:capture_exception)
     end
   end
 

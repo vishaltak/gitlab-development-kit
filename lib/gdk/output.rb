@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../telemetry'
-
 module GDK
   module Output
     COLOR_CODE_RED = '31'
