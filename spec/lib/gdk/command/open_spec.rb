@@ -12,6 +12,9 @@ RSpec.describe GDK::Command::Open do
     allow(RbConfig::CONFIG).to receive(:[]).with('host_os').and_return(host_os)
     allow(Etc).to receive(:uname).and_return({ release: wsl ? "microsoft" : "not applicable" })
 
+    allow(GDK::Output).to receive(:puts).and_call_original
+    allow(GDK::Output).to receive(:puts).with('Opening http://127.0.0.1:3000')
+
     allow(GDK::TestURL).to receive(:new).and_return(test_url_double)
     allow(test_url_double).to receive(:check_url_oneshot).and_return(check_url_oneshot_result)
     allow(test_url_double).to receive(:wait).and_return(wait_result)
