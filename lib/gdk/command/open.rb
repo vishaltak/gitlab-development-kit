@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'mkmf'
-
 module GDK
   module Command
     # Handles `gdk reconfigure` command execution
