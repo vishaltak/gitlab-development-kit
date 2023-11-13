@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../telemetry'
-
 module GDK
   module Command
     class Telemetry < BaseCommand

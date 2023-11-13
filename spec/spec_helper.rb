@@ -14,7 +14,6 @@ SimpleCov.start
 
 require_relative '../lib/gdk'
 require_relative '../lib/gdk/task_helpers'
-require_relative '../lib/gdk/telemetry'
 
 RSpec.configure do |config|
   config.before do |example|
