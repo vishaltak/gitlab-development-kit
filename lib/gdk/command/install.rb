@@ -12,7 +12,7 @@ module GDK
           next unless arg.start_with?('telemetry_user=')
 
           username = arg.split('=').last
-          ::Telemetry.update_settings(username)
+          GDK::Telemetry.update_settings(username)
 
           break
         end

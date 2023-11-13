@@ -12,12 +12,14 @@ RSpec.describe GDK::Telemetry do
     let(:args) { %w[arg1 arg2] }
     let(:telemetry_enabled) { true }
 
+    let(:client) { double('Client') } # rubocop:todo RSpec/VerifiedDoubles
+
     before do
       expect(described_class).to receive(:telemetry_enabled?).and_return(telemetry_enabled)
       expect(described_class).to receive(:with_telemetry).and_call_original
 
       allow(GDK).to receive_message_chain(:config, :telemetry, :username).and_return('testuser')
-      allow(described_class).to receive(:client)
+      allow(described_class).to receive(:client).and_return(client)
 
       stub_const('ARGV', args)
     end
@@ -31,18 +33,18 @@ RSpec.describe GDK::Telemetry do
     end
 
     it 'tracks the start and finish of the command' do
-      expect(described_class).to receive_message_chain(:client, :identify).with('testuser')
-      expect(described_class).to receive_message_chain(:client, :track).with("Start #{command} #{args.inspect}", {})
-      expect(described_class).to receive_message_chain(:client, :track).with(a_string_starting_with('Finish'), hash_including(:duration))
+      expect(client).to receive(:identify).with('testuser')
+      expect(client).to receive(:track).with("Start #{command} #{args.inspect}", {})
+      expect(client).to receive(:track).with(a_string_starting_with('Finish'), hash_including(:duration))
 
       described_class.with_telemetry(command) { true }
     end
 
     context 'when the block returns false' do
       it 'tracks the start and failure of the command' do
-        expect(described_class).to receive_message_chain(:client, :identify).with('testuser')
-        expect(described_class).to receive_message_chain(:client, :track).with("Start #{command} #{args.inspect}", {})
-        expect(described_class).to receive_message_chain(:client, :track).with(a_string_starting_with('Failed'), hash_including(:duration))
+        expect(client).to receive(:identify).with('testuser')
+        expect(client).to receive(:track).with("Start #{command} #{args.inspect}", {})
+        expect(client).to receive(:track).with(a_string_starting_with('Failed'), hash_including(:duration))
 
         described_class.with_telemetry(command) { false }
       end

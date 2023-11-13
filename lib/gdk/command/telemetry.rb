@@ -13,7 +13,7 @@ module GDK
         TEXT
 
         username = $stdin.gets&.chomp
-        ::Telemetry.update_settings(username)
+        GDK::Telemetry.update_settings(username)
 
         puts \
           case username
