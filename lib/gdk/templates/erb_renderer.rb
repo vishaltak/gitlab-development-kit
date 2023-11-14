@@ -4,9 +4,6 @@ require 'erb'
 require 'fileutils'
 require 'tempfile'
 
-require_relative '../shellout'
-require_relative 'output'
-
 module GDK
   module Templates
     # ErbRenderer is responsible for rendering templates and providing
