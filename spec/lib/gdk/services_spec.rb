@@ -3,21 +3,33 @@
 RSpec.describe GDK::Services do
   subject(:services) { described_class }
 
-  describe 'ALL' do
-    it 'contains Service classes' do
-      service_classes = %i[
-        Clickhouse
-        GitLabWorkhorse
-        Minio
-        OpenLDAP
-        PostgreSQL
-        PostgreSQLReplica
-        Redis
-        RedisCluster
-        Vault
-      ]
+  let(:known_services) do
+    %i[
+      Clickhouse
+      GitLabWorkhorse
+      Minio
+      OpenLDAP
+      PostgreSQL
+      PostgreSQLReplica
+      Redis
+      RedisCluster
+      Vault
+    ]
+  end
 
-      expect(services::ALL).to eq(service_classes)
+  describe '.all' do
+    it 'return a list of all Service instances' do
+      class_name_without_module = ->(object) { object.class.name.split('::').last.to_sym }
+
+      services.all.each do |service|
+        expect(known_services).to include(class_name_without_module.call(service))
+      end
+    end
+  end
+
+  describe '.all_service_names' do
+    it 'contains names of Service classes' do
+      expect(services.all_service_names).to match_array(known_services)
     end
   end
 
@@ -35,7 +47,7 @@ RSpec.describe GDK::Services do
         GDK::Services::Redis
       ]
 
-      expect(services.enabled.map(&:class)).to eq(service_classes)
+      expect(services.enabled.map(&:class)).to match_array(service_classes)
     end
   end
 end
