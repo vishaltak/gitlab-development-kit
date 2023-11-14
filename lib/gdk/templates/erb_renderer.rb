@@ -9,7 +9,7 @@ module GDK
     # ErbRenderer is responsible for rendering templates and providing
     # them access to configuration data
     class ErbRenderer
-      attr_reader :source, :target, :locals
+      attr_reader :source, :target, :context
 
       # Initialize the renderer providing source, target and local variables
       #
@@ -19,7 +19,7 @@ module GDK
       def initialize(source, target, **locals)
         @source = source
         @target = target
-        @locals = locals.merge(config: GDK.config)
+        @context = ::GDK::Templates::Context.new(**locals)
       end
 
       # The safe render take extra steps to avoid unrecoverable changes:
@@ -66,7 +66,7 @@ module GDK
 
         erb = ERB.new(template, trim_mode: '-') # A trim_mode of '-' allows omitting empty lines with <%- -%>
         erb.location = source.to_s # define the file location so errors can point to the right file
-        erb.result_with_hash(locals)
+        erb.result(@context.context_bindings)
       rescue GDK::ConfigSettings::UnsupportedConfiguration => e
         GDK::Output.abort("#{e.message}.", e)
       end
