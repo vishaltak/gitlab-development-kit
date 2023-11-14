@@ -19,6 +19,13 @@ module GDK
         GDK.config
       end
 
+      # Returns an instance of the service that matches the given name
+      #
+      # @return [GDK::Services::Base|nil]
+      def service(name)
+        GDK::Services.fetch(name)
+      end
+
       def context_bindings
         binding
       end

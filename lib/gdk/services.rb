@@ -40,6 +40,18 @@ module GDK
       end
     end
 
+    # Return the service that matches the given name
+    #
+    # @param [Symbol|String] name
+    # @return [::GDK::Services::Base|nil] service instance
+    def self.fetch(name)
+      service = ALL.find { |srv| srv == name.to_sym }
+
+      return unless service
+
+      const_get(service).new
+    end
+
     # Returns an Array of enabled services only.
     #
     # @return [Array<Class>] enabled services

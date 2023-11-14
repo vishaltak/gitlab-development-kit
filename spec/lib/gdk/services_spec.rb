@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-describe GDK::Services do
+RSpec.describe GDK::Services do
+  subject(:services) { described_class }
+
   describe 'ALL' do
     it 'contains Service classes' do
       service_classes = %i[
@@ -15,7 +17,13 @@ describe GDK::Services do
         Vault
       ]
 
-      expect(described_class::ALL).to eq(service_classes)
+      expect(services::ALL).to eq(service_classes)
+    end
+  end
+
+  describe '.fetch' do
+    it 'returns an instance of the given service name' do
+      expect(services.fetch(:Redis)).to be_a(GDK::Services::Redis)
     end
   end
 
@@ -27,7 +35,7 @@ describe GDK::Services do
         GDK::Services::Redis
       ]
 
-      expect(described_class.enabled.map(&:class)).to eq(service_classes)
+      expect(services.enabled.map(&:class)).to eq(service_classes)
     end
   end
 end
