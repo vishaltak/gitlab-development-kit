@@ -44,19 +44,19 @@ task 'generate-file-at', [:file, :destination] do |_, args|
   destination = args[:destination]
   source = Rake::Task[file].source
 
-  GDK::ErbRenderer.new(source, destination).safe_render!
+  GDK::Templates::ErbRenderer.new(source, destination).safe_render!
 end
 
 # Define as a task instead of a file, so it's built unconditionally
 desc nil
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
-  GDK::ErbRenderer.new(t.source, t.name).render!
+  GDK::Templates::ErbRenderer.new(t.source, t.name).render!
   puts t.name # Print the filename, so make can include it
 end
 
 desc 'Generate gitaly config toml'
 file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(
+  GDK::Templates::ErbRenderer.new(
     t.source,
     t.name,
     node: GDK.config.gitaly
@@ -72,7 +72,7 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name).safe_render!
+  GDK::Templates::ErbRenderer.new(t.source, t.name).safe_render!
 
   GDK.config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
@@ -82,7 +82,7 @@ end
 GDK.config.praefect.__nodes.each do |node|
   desc "Generate gitaly config for #{node['storage']}"
   file node['config_file'] => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
-    GDK::ErbRenderer.new(
+    GDK::Templates::ErbRenderer.new(
       t.source,
       t.name,
       node: node
@@ -163,14 +163,14 @@ tasks.add_make_task(name: 'gitaly/praefect.config.toml')
 tasks.template_tasks.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, _args|
-    GDK::ErbRenderer.new(t.source, t.name, **task.erb_extra_args).safe_render!
+    GDK::Templates::ErbRenderer.new(t.source, t.name, **task.erb_extra_args).safe_render!
     task.post_render&.call(t)
   end
 end
 
 desc 'Dynamically generate Make targets for Rake tasks'
 file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
-  GDK::ErbRenderer.new(
+  GDK::Templates::ErbRenderer.new(
     'support/templates/makefiles/Makefile.config.mk.erb',
     t.name,
     tasks: tasks.all_tasks

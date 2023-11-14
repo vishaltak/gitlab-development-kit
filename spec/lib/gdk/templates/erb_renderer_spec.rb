@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe GDK::ErbRenderer do
+RSpec.describe GDK::Templates::ErbRenderer do
   let(:protected_config_files) { [] }
   let(:erb_file) { fixture_path.join('example.erb') }
   let(:out_file) { Pathname.new('tmp/example.out') }
