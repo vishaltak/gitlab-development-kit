@@ -120,7 +120,7 @@ gdk reconfigure
 The following examples are a quick guide for configuring object storage
 for external S3 providers, Google Cloud Storage, or Microsoft Azure.
 See the [object storage settings](https://docs.gitlab.com/ee/administration/object_storage.html).
-Note that we recommend enabling `consolidated_form` to `true`.
+You should set `consolidated_form` to `true`.
 
 In development, you may also use a single bucket for testing.
 
