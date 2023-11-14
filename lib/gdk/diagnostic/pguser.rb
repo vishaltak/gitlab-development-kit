@@ -10,7 +10,7 @@ module GDK
       end
 
       def detail
-        return pguser_set_message unless success?
+        pguser_set_message unless success?
       end
 
       private

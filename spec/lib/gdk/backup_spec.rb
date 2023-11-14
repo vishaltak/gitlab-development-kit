@@ -153,8 +153,7 @@ RSpec.describe GDK::Backup do
 
     allow(Pathname).to receive(:new).and_call_original
     allow(Pathname).to receive(:new).with(file).and_return(fake_source_file_pathname)
-    allow(fake_source_file_pathname).to receive(:expand_path).and_return(fake_source_file_pathname)
-    allow(fake_source_file_pathname).to receive(:exist?).and_return(true)
+    allow(fake_source_file_pathname).to receive_messages(expand_path: fake_source_file_pathname, exist?: true)
 
     fake_source_file_pathname
   end

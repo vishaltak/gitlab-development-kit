@@ -23,8 +23,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
     context 'versions testing' do
       before do
-        allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
-        allow(subject).to receive(:valid_ldflags?).and_return(true)
+        allow(subject).to receive_messages(can_create_postgres_socket?: true, valid_ldflags?: true)
       end
 
       context 'when psql --version matches PG_VERSION' do
@@ -76,8 +75,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
       let(:can_create_socket) { nil }
 
       before do
-        allow(subject).to receive(:versions_ok?).and_return(true)
-        allow(subject).to receive(:valid_ldflags?).and_return(true)
+        allow(subject).to receive_messages(versions_ok?: true, valid_ldflags?: true)
         stub_can_create_socket.and_return(can_create_socket)
       end
 
@@ -108,10 +106,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
       let(:realpath) { '/expected/isysroot_path' }
 
       before do
-        allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
-        allow(subject).to receive(:data_dir_version).and_return(12)
-        allow(subject).to receive(:versions_ok?).and_return(true)
-        allow(subject).to receive(:macos?).and_return(true)
+        allow(subject).to receive_messages(can_create_postgres_socket?: true, data_dir_version: 12, versions_ok?: true, macos?: true)
 
         allow_any_instance_of(GDK::Config).to receive_message_chain('pgvector.enabled').and_return(pgvector_enabled)
 
@@ -198,15 +193,12 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
     context 'versions testing' do
       before do
-        allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
-        allow(subject).to receive(:valid_ldflags?).and_return(true)
+        allow(subject).to receive_messages(can_create_postgres_socket?: true, valid_ldflags?: true)
       end
 
       context 'when unsuccessful' do
         before do
-          allow(subject).to receive(:success?).and_return(false)
-          allow(subject).to receive(:psql_version).and_return(11.8)
-          allow(subject).to receive(:data_dir_version).and_return(12)
+          allow(subject).to receive_messages(success?: false, psql_version: 11.8, data_dir_version: 12)
         end
 
         it 'returns help message' do
@@ -224,8 +216,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
     context 'socket creation testing' do
       before do
-        allow(subject).to receive(:versions_ok?).and_return(true)
-        allow(subject).to receive(:valid_ldflags?).and_return(true)
+        allow(subject).to receive_messages(versions_ok?: true, valid_ldflags?: true)
       end
 
       context 'when unsuccessful' do
@@ -249,17 +240,14 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
 
       context 'ldflags testing' do
         before do
-          allow(subject).to receive(:can_create_postgres_socket?).and_return(true)
-          allow(subject).to receive(:data_dir_version).and_return(12)
-          allow(subject).to receive(:versions_ok?).and_return(true)
+          allow(subject).to receive_messages(can_create_postgres_socket?: true, data_dir_version: 12, versions_ok?: true)
         end
 
         context 'when unsuccessful' do
           let(:error_message) { 'The `-isysroot` value not present in `pg_config --ldflags`.' }
 
           before do
-            allow(subject).to receive(:psql_version).and_return(14.9)
-            allow(subject).to receive(:valid_ldflags?).and_return(false)
+            allow(subject).to receive_messages(psql_version: 14.9, valid_ldflags?: false)
             subject.instance_variable_set(:@pgconfig_error, error_message)
           end
 

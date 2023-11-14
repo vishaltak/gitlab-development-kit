@@ -10,7 +10,7 @@ module GDK
       end
 
       def detail
-        return rvm_and_asdf_enabled_message if rvm_and_asdf_enabled?
+        rvm_and_asdf_enabled_message if rvm_and_asdf_enabled?
       end
 
       private

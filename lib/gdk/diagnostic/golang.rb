@@ -14,7 +14,7 @@ module GDK
       end
 
       def detail
-        return icu4c_issue_detail unless success?
+        icu4c_issue_detail unless success?
       end
 
       private

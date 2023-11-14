@@ -145,7 +145,7 @@ class Shellout
   end
 
   def clean_string(str)
-    str.sub(/\r\e/, '').chomp
+    str.sub("\r\e", '').chomp
   end
 
   def capture(extra_options = {})
