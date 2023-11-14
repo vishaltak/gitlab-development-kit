@@ -41,7 +41,7 @@ module GDK
 
         # Keep inline with `Tail command:`
         width = [Runit::SERVICE_SHORTCUTS.keys.max_by(&:length).length + 20, 57].max
-        shortcuts = Runit::SERVICE_SHORTCUTS.map { |sc| format("%-#{width}s # %s", *sc) }
+        shortcuts = Runit::SERVICE_SHORTCUTS.map { |sc| format("%-*s # %s", width, *sc) }
         aligned_shortcuts = shortcuts.sort.join("\n  ")
 
         output = format(OUTPUT, logs: aligned_logs, shortcuts: aligned_shortcuts)
