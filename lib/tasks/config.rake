@@ -44,13 +44,13 @@ task 'generate-file-at', [:file, :destination] do |_, args|
   destination = args[:destination]
   source = Rake::Task[file].source
 
-  GDK::Templates::ErbRenderer.new(source, destination).safe_render!
+  GDK::Templates::ErbRenderer.new(source).safe_render!(destination)
 end
 
 # Define as a task instead of a file, so it's built unconditionally
 desc nil
 task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
-  GDK::Templates::ErbRenderer.new(t.source, t.name).render!
+  GDK::Templates::ErbRenderer.new(t.source).render(t.name)
   puts t.name # Print the filename, so make can include it
 end
 
@@ -58,9 +58,8 @@ desc 'Generate gitaly config toml'
 file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
   GDK::Templates::ErbRenderer.new(
     t.source,
-    t.name,
     node: GDK.config.gitaly
-  ).safe_render!
+  ).safe_render!(t.name)
 
   GDK.config.gitaly.__storages.each do |storage|
     FileUtils.mkdir_p(storage.path)
@@ -72,7 +71,7 @@ file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.tom
 end
 
 file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
-  GDK::Templates::ErbRenderer.new(t.source, t.name).safe_render!
+  GDK::Templates::ErbRenderer.new(t.source).safe_render!(t.name)
 
   GDK.config.praefect.__nodes.each_with_index do |node, _|
     Rake::Task[node['config_file']].invoke
@@ -84,9 +83,8 @@ GDK.config.praefect.__nodes.each do |node|
   file node['config_file'] => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
     GDK::Templates::ErbRenderer.new(
       t.source,
-      t.name,
       node: node
-    ).safe_render!
+    ).safe_render!(t.name)
 
     node.__storages.each do |storage|
       FileUtils.mkdir_p(storage.path)
@@ -163,7 +161,7 @@ tasks.add_make_task(name: 'gitaly/praefect.config.toml')
 tasks.template_tasks.each do |task|
   desc "Generate #{task.name}"
   file task.name => [task.template, GDK::Config::FILE] do |t, _args|
-    GDK::Templates::ErbRenderer.new(t.source, t.name, **task.erb_extra_args).safe_render!
+    GDK::Templates::ErbRenderer.new(t.source, **task.erb_extra_args).safe_render!(t.name)
     task.post_render&.call(t)
   end
 end
@@ -172,9 +170,8 @@ desc 'Dynamically generate Make targets for Rake tasks'
 file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
   GDK::Templates::ErbRenderer.new(
     'support/templates/makefiles/Makefile.config.mk.erb',
-    t.name,
     tasks: tasks.all_tasks
-  ).safe_render!
+  ).safe_render!(t.name)
 end
 
 desc 'Show all the claimed ports'

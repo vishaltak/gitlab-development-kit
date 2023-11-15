@@ -9,16 +9,14 @@ module GDK
     # ErbRenderer is responsible for rendering templates and providing
     # them access to configuration data
     class ErbRenderer
-      attr_reader :source, :target, :context
+      attr_reader :source, :context
 
       # Initialize the renderer providing source, target and local variables
       #
-      # @param [String] source
-      # @param [String] target
-      # @param [Hash] locals variables available inside the template
-      def initialize(source, target, **locals)
-        @source = source
-        @target = target
+      # @param [Pathname] source
+      # @param [Hash] **locals variables available inside the template
+      def initialize(source, **locals)
+        @source = ensure_pathname(source)
         @context = ::GDK::Templates::Context.new(**locals)
       end
 
@@ -28,31 +26,39 @@ module GDK
       # - Make a timestamped backup of the target file
       # - Provide instructions on how to restore previous changes
       # - Move the temporary file to replace the old one
-      def safe_render!
+      #
+      # @param [Pathname] target
+      def safe_render!(target)
+        target = ensure_pathname(target)
+
         return unless should_render?(target)
 
-        temp_file = Tempfile.create(target)
+        temp_file = Tempfile.create(target.to_s)
         File.write(temp_file.path, render_to_string)
 
-        if File.exist?(target)
+        if target.exist?
           return if FileUtils.identical?(target, temp_file.path)
 
-          display_changes!(temp_file.path)
-          backup!
-          warn_overwritten!
+          display_changes!(temp_file.path, target)
+          backup = perform_backup!(target)
+          warn_overwritten!(backup)
         end
 
-        FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
+        FileUtils.mkdir_p(target.dirname) # Ensure target's directory exists
         FileUtils.mv(temp_file.path, target)
       ensure
         temp_file&.close
       end
 
       # Render template into target file
-      def render!
+      #
+      # @param [Pathname] target
+      def render(target)
+        target = ensure_pathname(target)
+
         return unless should_render?(target)
 
-        FileUtils.mkdir_p(File.dirname(target)) # Ensure target's directory exists
+        FileUtils.mkdir_p(target.dirname) # Ensure target's directory exists
         File.write(target, render_to_string)
       end
 
@@ -73,16 +79,17 @@ module GDK
 
       private
 
-      # Compare and display changes between content on temporary file and existing target
+      # Compare and display changes between existing and newly rendered content
       #
-      # @param [File] temp_file
-      def display_changes!(temp_file)
-        cmd = %W[git --no-pager diff --no-index #{git_color_args} -u #{target} #{temp_file}]
+      # @param [File] new_temporary_file
+      # @param [File] existing_file
+      def display_changes!(new_temporary_file, existing_file)
+        cmd = %W[git --no-pager diff --no-index #{git_color_args} -u #{existing_file} #{new_temporary_file}]
         diff = Shellout.new(cmd).readlines[4..]
         return unless diff
 
         GDK::Output.puts
-        GDK::Output.info("'#{target}' has incoming changes:")
+        GDK::Output.info("'#{relative_path(existing_file)}' has incoming changes:")
 
         diff_output = <<~DIFF_OUTPUT
           -------------------------------------------------------------------------------------------------------------
@@ -94,10 +101,8 @@ module GDK
         GDK::Output.puts(diff_output, stderr: true)
       end
 
-      def target_protected?(target_file)
-        # We need to pass in target_file because #render! can potentially override
-        # @target
-        GDK.config.config_file_protected?(target_file)
+      def target_protected?(target)
+        GDK.config.config_file_protected?(relative_path(target))
       end
 
       def should_render?(target)
@@ -105,18 +110,18 @@ module GDK
         return true unless target_protected?(target)
 
         if File.exist?(target)
-          GDK::Output.warn("Changes to '#{target}' not applied because it's protected in gdk.yml.")
+          GDK::Output.warn("Changes to '#{relative_path(target)}' not applied because it's protected in gdk.yml.")
 
           false
         else
-          GDK::Output.warn("Creating missing protected file '#{target}'.")
+          GDK::Output.warn("Creating missing protected file '#{relative_path(target)}'.")
 
           true
         end
       end
 
-      def warn_overwritten!
-        GDK::Output.warn "'#{target}' has been overwritten. To recover the previous version, run:"
+      def warn_overwritten!(backup)
+        GDK::Output.warn "'#{backup.relative_source_file}' has been overwritten. To recover the previous version, run:"
         GDK::Output.puts <<~OVERWRITTEN
 
           #{backup.recover_cmd_string}
@@ -126,12 +131,12 @@ module GDK
         OVERWRITTEN
       end
 
-      def backup
-        @backup ||= Backup.new(target)
-      end
-
-      def backup!
-        backup.backup!(advise: false)
+      # Perform a backup of given file target
+      #
+      # @param [String] target file that will be back up
+      # @return [GDK::Backup]
+      def perform_backup!(target)
+        Backup.new(target).tap { |backup| backup.backup!(advise: false) }
       end
 
       def colors?
@@ -144,6 +149,16 @@ module GDK
         else
           '--no-color'
         end
+      end
+
+      def relative_path(target)
+        return target unless target.absolute?
+
+        target.relative_path_from(GDK.root)
+      end
+
+      def ensure_pathname(path)
+        path.is_a?(Pathname) ? path : Pathname.new(path)
       end
     end
   end
