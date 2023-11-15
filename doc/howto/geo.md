@@ -64,8 +64,8 @@ Please visit [GitLab Geo - Advanced Installation](geo/advanced_installation.md).
 
 ### On a primary
 
-In order to be able to validate primary and secondary behavior, you need
-to run the tests on both primary and secondary GDK installations accordingly.
+To validate primary and secondary behavior, you must
+run the tests on both the primary and secondary GDK installations.
 
 Only the secondary site has a tracking database.
 
