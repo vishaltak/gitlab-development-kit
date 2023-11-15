@@ -1,5 +1,5 @@
-.PHONY: geo-setup geo-cursor
-geo-setup: geo-setup-check Procfile geo-cursor geo-config postgresql/geo
+.PHONY: geo-secondary-setup geo-cursor
+geo-secondary-setup: geo-setup-check Procfile geo-cursor geo-config postgresql/geo
 
 geo-setup-check:
 ifneq ($(geo_enabled),true)

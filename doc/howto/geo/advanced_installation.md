@@ -114,7 +114,7 @@ gdk start
 
 # Run this on your secondary instance folder: (../gdk-geo)
 gdk start postgresql postgresql-geo
-make geo-setup
+make geo-secondary-setup
 ```
 
 #### Praefect on a Geo secondary

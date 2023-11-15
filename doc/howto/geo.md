@@ -64,28 +64,10 @@ Please visit [GitLab Geo - Advanced Installation](geo/advanced_installation.md).
 
 ### On a primary
 
-If you used an [easy installation](#easy-installation) method to configure Geo, then this has already been done on the primary.
+In order to be able to validate primary and secondary behavior, you need
+to run the tests on both primary and secondary GDK installations accordingly.
 
-The secondary has a read-write tracking database, which is necessary for some
-Geo tests to run. However, its copy of the replicated database is read-only, so
-tests fail to run.
-
-You can add the tracking database to the primary node by running:
-
-```shell
-# From the gdk folder:
-gdk start
-
-# In another terminal window
-make geo-setup
-```
-
-This adds both development and test instances, but the primary continues
-to operate *as* a primary except in tests where the current Geo node has been
-stubbed.
-
-To ensure the tracking database is started, restart GDK. You need to use
-`gdk start` to be able to run the tests.
+Only the secondary site has a tracking database.
 
 ### On a secondary
 
@@ -124,15 +106,18 @@ Use the following commands to keep Geo-enabled GDK installations up to date.
 - `make geo-primary-update`, run on the primary GDK node.
 - `make geo-secondary-update`, run on any secondary GDK nodes.
 
-## Upgrading to Postgres 12
+## Upgrading PostgreSQL
 
-Upgrading to Postgres 12 is not automated in GDK with Geo. It should be possible to manually accomplish an upgrade, but if you are not generally familiar with the process, it is recommended to set up your GDKs from scratch. The default version is now Postgres 12.
+Upgrading to a newer Postgres version is not automated in GDK with Geo.
+
+It should be possible to manually accomplish an upgrade, but if you are not generally familiar with the process,
+it is recommended to set up your GDKs from scratch.
 
 ## Troubleshooting
 
 ### `postgresql-geo/data` exists but is not empty
 
-If you see this error during setup because you have already run `make geo-setup` once:
+If you see this error during setup because you have already run `make geo-secondary-setup` once:
 
 ```plaintext
 initdb: directory "postgresql-geo/data" exists but is not empty
@@ -142,7 +127,7 @@ with an argument other than "postgresql-geo/data".
 make: *** [postgresql/geo] Error 1
 ```
 
-Then you may delete or move that data in order to run `make geo-setup` again.
+Then you may delete or move that data in order to run `make geo-secondary-setup` again.
 
 ```shell
 mv postgresql-geo/data postgresql-geo/data.backup
