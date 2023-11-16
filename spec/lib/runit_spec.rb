@@ -5,7 +5,7 @@ RSpec.describe Runit do
 
   describe 'ALL_DATA_ORIENTED_SERVICE_NAMES' do
     it 'returns all data service names only' do
-      expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to contain_exactly(*%w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql])
+      expect(described_class::ALL_DATA_ORIENTED_SERVICE_NAMES).to match_array(%w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql])
     end
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Runit do
       subject(:data_oriented_service_names) { described_class.data_oriented_service_names }
 
       it 'returns data service names only' do
-        expect(data_oriented_service_names).to contain_exactly(*data_service_names)
+        expect(data_oriented_service_names).to match_array(data_service_names)
         expect(data_oriented_service_names).not_to include(*non_data_service_names)
       end
     end
@@ -30,7 +30,7 @@ RSpec.describe Runit do
       subject(:non_data_oriented_service_names) { described_class.non_data_oriented_service_names }
 
       it 'returns non-data service names only' do
-        expect(non_data_oriented_service_names).to contain_exactly(*non_data_service_names)
+        expect(non_data_oriented_service_names).to match_array(non_data_service_names)
         expect(non_data_oriented_service_names).not_to include(*data_service_names)
       end
     end
@@ -55,8 +55,7 @@ RSpec.describe Runit do
           let(:services) { [] }
 
           it 'starts data services first and then non-data services last' do
-            allow(described_class).to receive(:data_oriented_service_names).and_return(data_service_names)
-            allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
+            allow(described_class).to receive_messages(data_oriented_service_names: data_service_names, non_data_oriented_service_names: non_data_service_names)
 
             data_service_names.reverse_each do |service_name|
               expect(described_class).to receive(:sv).with('start', [service_name], quiet: quiet).and_return(true).ordered
@@ -107,8 +106,7 @@ RSpec.describe Runit do
 
       shared_examples 'stops all services' do |quiet|
         it 'stops all services', :hide_output do
-          allow(described_class).to receive(:data_oriented_service_names).and_return(data_service_names)
-          allow(described_class).to receive(:non_data_oriented_service_names).and_return(non_data_service_names)
+          allow(described_class).to receive_messages(data_oriented_service_names: data_service_names, non_data_oriented_service_names: non_data_service_names)
           allow(described_class).to receive(:unload_runsvdir!)
 
           expect(described_class).to receive(:sv).with('force-stop', non_data_service_names, quiet: quiet).and_return(true).ordered
@@ -283,8 +281,7 @@ RSpec.describe Runit do
 
     children_doubles = (data_service_names + non_data_service_names).map do |service_name|
       pathname_double = Pathname.new(described_class::SERVICES_DIR.join(service_name))
-      allow(pathname_double).to receive(:exist?).and_return(true)
-      allow(pathname_double).to receive(:directory?).and_return(true)
+      allow(pathname_double).to receive_messages(exist?: true, directory?: true)
       allow(described_class::SERVICES_DIR).to receive(:join).with(service_name).and_return(pathname_double)
 
       pathname_double

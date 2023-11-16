@@ -71,7 +71,9 @@ end
 
 def read_tool_versions_from(origin, content)
   content.lines.each_with_object({}) do |entry, object|
-    next unless (match = entry.match(/^(?<software>\w+) (?<versions>.+)$/))
+    match = entry.match(/^(?<software>\w+) (?<versions>.+)$/)
+
+    next unless match
 
     object[match[:software]] = match[:versions].split.each_with_object({}) { |e, all| all[e] = [origin] }
   end

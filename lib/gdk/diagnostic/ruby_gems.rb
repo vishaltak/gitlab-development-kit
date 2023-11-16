@@ -19,7 +19,7 @@ module GDK
       end
 
       def detail
-        return gitlab_error_message unless success?
+        gitlab_error_message unless success?
       end
 
       private

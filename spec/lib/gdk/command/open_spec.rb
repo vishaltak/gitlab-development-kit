@@ -16,8 +16,7 @@ RSpec.describe GDK::Command::Open do
     allow(GDK::Output).to receive(:puts).with('Opening http://127.0.0.1:3000')
 
     allow(GDK::TestURL).to receive(:new).and_return(test_url_double)
-    allow(test_url_double).to receive(:check_url_oneshot).and_return(check_url_oneshot_result)
-    allow(test_url_double).to receive(:wait).and_return(wait_result)
+    allow(test_url_double).to receive_messages(check_url_oneshot: check_url_oneshot_result, wait: wait_result)
   end
 
   describe '#run' do

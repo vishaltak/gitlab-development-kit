@@ -16,6 +16,6 @@ system({ 'force' => 'yes', 'BOOTSTRAP' => '1', 'RAILS_ENV' => 'test' }, *%w[../s
 # To recreate the Praefect DB
 success &&= system(*%w[gdk reconfigure], chdir: 'gitlab')
 
-exit true if success
+exit if success
 
 abort "#{$PROGRAM_NAME} failed"

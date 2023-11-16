@@ -151,6 +151,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       enable_shares(override, false)
     else
       cpus = Facter.value('processors')['count']
+      # rubocop:disable Lint/AssignmentInCondition
       if facter_mem = Facter.value('memory')['system']['total']
         mem = facter_mem.to_i * 1024
       elsif facter_mem = Facter.value('memorysize_mb')
@@ -158,6 +159,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       else
         raise "unable to determine total host RAM size"
       end
+      # rubocop:enable Lint/AssignmentInCondition
 
       # disables NFS on macOS to prevent UID / GID issues with mounted shares
       enable_nfs = !Vagrant::Util::Platform.platform.include?('darwin')

@@ -68,3 +68,6 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/PredicateMatcher:
   Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false

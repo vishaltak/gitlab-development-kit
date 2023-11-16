@@ -71,8 +71,7 @@ RSpec.describe GDK::Command::Kill, :hide_stdout do
     end
 
     it "runs 'pkill -9 runsv'" do
-      allow(subject).to receive(:gdk_stop_succeeded?).and_return(false)
-      allow(subject).to receive(:pkill_runsv_succeeded?).and_return(false)
+      allow(subject).to receive_messages(gdk_stop_succeeded?: false, pkill_runsv_succeeded?: false)
       stub_pkill('pkill -9 runsv')
 
       expect(subject.run).to be(true)

@@ -12,7 +12,7 @@ group :development do
 end
 
 group :test do
-  gem 'gitlab-styles', '~> 10.0.0', require: false
+  gem 'gitlab-styles', '~> 11.0.0', require: false
   gem 'irb', '~> 1.7.0', require: false
   gem 'rspec', '~> 3.12.0', require: false
   gem 'rspec_junit_formatter', '~> 0.6.0', require: false

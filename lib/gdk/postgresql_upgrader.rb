@@ -123,7 +123,7 @@ module GDK
     end
 
     def remove_secondary_data?(replica_name)
-      return unless config.postgresql.public_send(replica_name).enabled? # rubocop:disable GitlabSecurity/PublicSend
+      return false unless config.postgresql.public_send(replica_name).enabled? # rubocop:disable GitlabSecurity/PublicSend
 
       GDK::Output.warn("We're about to remove the old '#{replica_name}' database data because we will be replacing it with the primary database data.")
 

@@ -15,16 +15,18 @@ RSpec.describe GDK::PostgresqlUpgrader do
 
   describe '#upgrade!' do
     before do
-      allow(subject).to receive(:upgrade_needed?).and_return(true)
-      allow(subject).to receive(:current_version).and_return(13)
-      allow(subject).to receive(:gdk_stop).and_return(true)
-      allow(subject).to receive(:init_db_in_target_path).and_return(true)
-      allow(subject).to receive(:rename_current_data_dir).and_return(true)
-      allow(subject).to receive(:pg_upgrade).and_return(true)
-      allow(subject).to receive(:promote_new_db).and_return(true)
-      allow(subject).to receive(:gdk_reconfigure).and_return(true)
-      allow(subject).to receive(:pg_replica_upgrade).and_return(true)
-      allow(subject).to receive(:rename_current_data_dir_back).and_return(true)
+      allow(subject).to receive_messages(
+        upgrade_needed?: true,
+        current_version: 13,
+        gdk_stop: true,
+        init_db_in_target_path: true,
+        rename_current_data_dir: true,
+        pg_upgrade: true,
+        promote_new_db: true,
+        gdk_reconfigure: true,
+        pg_replica_upgrade: true,
+        rename_current_data_dir_back: true
+      )
     end
 
     context 'with asdf' do
@@ -32,8 +34,7 @@ RSpec.describe GDK::PostgresqlUpgrader do
       let(:version_list_double) { instance_double(Shellout, try_run: result) }
 
       before do
-        allow(GDK::Dependencies).to receive(:asdf_available?).and_return(true)
-        allow(GDK::Dependencies).to receive(:asdf_available_versions).and_return([13, 14, 15])
+        allow(GDK::Dependencies).to receive_messages(asdf_available?: true, asdf_available_versions: [13, 14, 15])
 
         shellout_double = instance_double(Shellout, try_run: '', exit_code: 0)
 

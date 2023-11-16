@@ -22,8 +22,7 @@ RSpec.describe Support::BootstrapRails do
         allow_any_instance_of(GDK::Config).to receive_message_chain('gitlab.rails.databases.embedding.enabled').and_return(embedding_enabled)
         allow_any_instance_of(GDK::Postgresql).to receive(:ready?).and_return(true)
         allow(instance).to receive(:try_connect!)
-        allow(instance).to receive(:bootstrap_main_db).and_return(true)
-        allow(instance).to receive(:bootstrap_ci_db).and_return(true)
+        allow(instance).to receive_messages(bootstrap_main_db: true, bootstrap_ci_db: true)
       end
 
       context 'is not enabled' do

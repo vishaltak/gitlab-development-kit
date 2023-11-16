@@ -21,14 +21,14 @@ module GDK
       end
 
       def execute
-        Runit.stop(quiet: true) && \
+        Runit.stop(quiet: true) &&
           # ensure runit has fully stopped
-          sleep(2) && \
-          start_necessary_services && \
+          sleep(2) &&
+          start_necessary_services &&
           # ensure runit has fully stopped
-          sleep(2) && \
-          drop_database && \
-          recreate_database && \
+          sleep(2) &&
+          drop_database &&
+          recreate_database &&
           migrate_database
       end
 
