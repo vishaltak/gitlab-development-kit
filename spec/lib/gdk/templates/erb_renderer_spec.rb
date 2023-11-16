@@ -5,6 +5,9 @@ RSpec.describe GDK::Templates::ErbRenderer do
   let(:erb_file) { fixture_path.join('example.erb') }
   let(:out_file) { temp_path.join('some/example.out') }
   let(:config) { config_klass.new(yaml: { 'gdk' => { 'protected_config_files' => protected_config_files } }) }
+  let(:locals) do
+    { foo: 'foobar', bar: 'barfoo' }
+  end
 
   let(:config_klass) do
     Class.new(GDK::ConfigSettings) do
@@ -18,7 +21,7 @@ RSpec.describe GDK::Templates::ErbRenderer do
     end
   end
 
-  subject(:renderer) { described_class.new(erb_file.to_s) }
+  subject(:renderer) { described_class.new(erb_file.to_s, **locals) }
 
   before do
     allow(GDK).to receive(:config) { config }
@@ -82,8 +85,12 @@ RSpec.describe GDK::Templates::ErbRenderer do
   end
 
   describe 'render_to_string' do
-    it 'renders the template with correct assigned locals' do
+    it 'renders the template with correct assigned config values' do
       expect(renderer.render_to_string).to match('Foo is foo, and Bar is bar')
+    end
+
+    it 'renders the template with correct assigned local values' do
+      expect(renderer.render_to_string).to match('Local var foo is foobar and bar is barfoo')
     end
   end
 end
