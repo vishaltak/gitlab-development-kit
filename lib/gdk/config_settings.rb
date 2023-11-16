@@ -2,6 +2,7 @@
 
 require 'yaml'
 require 'forwardable'
+require 'utils'
 
 module GDK
   class ConfigSettings
@@ -115,7 +116,7 @@ module GDK
     end
 
     def find_executable!(bin)
-      GDK::Dependencies.find_executable(bin)
+      Utils.find_executable(bin)
     end
 
     def read!(filename)

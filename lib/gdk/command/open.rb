@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'utils'
+
 module GDK
   module Command
     # Handles `gdk reconfigure` command execution
@@ -48,9 +50,10 @@ module GDK
       def open_command
         @open_command ||= if GDK::Machine.wsl?
                             'pwsh.exe -Command Start-Process'
-                          elsif find_executable('xdg-open')
+                          elsif Utils.find_executable('xdg-open')
                             'xdg-open'
-                          elsif find_executable('gp')
+                          # Gitpod
+                          elsif Utils.find_executable('gp')
                             'gp preview --external'
                           else
                             'open'
