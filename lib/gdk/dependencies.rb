@@ -12,21 +12,21 @@ module GDK
     #
     # @return boolean
     def self.homebrew_available?
-      executable_exist?('brew')
+      Utils.executable_exist?('brew')
     end
 
     # Is MacPorts available?
     #
     # @return boolean
     def self.macports_available?
-      executable_exist?('port')
+      Utils.executable_exist?('port')
     end
 
     # Is Debian / Ubuntu APT available?
     #
     # @return boolean
     def self.linux_apt_available?
-      executable_exist?('apt')
+      Utils.executable_exist?('apt')
     end
 
     # Is Asdf is available and correctly setup?
@@ -35,41 +35,14 @@ module GDK
     def self.asdf_available?
       return false if config.asdf.opt_out?
 
-      executable_exist?('asdf') || ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
+      Utils.executable_exist?('asdf') || ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
     end
 
     # Is rtx available?
     #
     # @return [Boolean]
     def self.rtx_available?
-      executable_exist?('rtx')
-    end
-
-    # Search on PATH or default locations for provided binary and return its fullpath
-    #
-    # @param [String] binary name
-    # @return [String] full path to the binary file
-    def self.find_executable(binary)
-      executable_file = proc { |name| next name if File.file?(name) && File.executable?(name) }
-
-      # Retrieve PATH from ENV or use a fallback
-      path = ENV['PATH']&.split(File::PATH_SEPARATOR) || %w[/usr/local/bin /usr/bin /bin]
-
-      # check binary against each PATH
-      path.each do |dir|
-        file = File.expand_path(binary, dir)
-
-        return file if executable_file.call(file)
-      end
-
-      nil
-    end
-
-    # Check whether provided binary name exists on PATH or default locations
-    #
-    # @param [String] binary name
-    def self.executable_exist?(name)
-      !!find_executable(name)
+      Utils.executable_exist?('rtx')
     end
 
     def self.config

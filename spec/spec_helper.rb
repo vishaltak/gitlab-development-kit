@@ -133,3 +133,11 @@ def stub_gdk_debug(state)
   gdk_settings = double('GDK::ConfigSettings', debug?: state, __debug?: state) # rubocop:todo RSpec/VerifiedDoubles
   allow_any_instance_of(GDK::Config).to receive(:gdk).and_return(gdk_settings)
 end
+
+def create_dummy_executable(name)
+  path = File.join(tmp_path, name)
+  FileUtils.touch(path)
+  File.chmod(0o755, path)
+
+  path
+end

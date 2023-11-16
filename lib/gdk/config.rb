@@ -28,7 +28,7 @@ module GDK
 
     path(:__openssl_bin_path) do
       if config.__brew_prefix_path.to_s.empty?
-        Pathname.new(GDK::Dependencies.find_executable('openssl'))
+        Pathname.new(find_executable!('openssl'))
       else
         config.__brew_prefix_path.join('opt', 'openssl@1.1', 'bin', 'openssl')
       end
@@ -69,7 +69,7 @@ module GDK
     settings :dev do
       path(:__go_path) { GDK.root.join('dev') }
       path(:__bins) { config.dev.__go_path.join('bin') }
-      path(:__go_binary) { GDK::Dependencies.find_executable('go') }
+      path(:__go_binary) { find_executable!('go') }
       bool(:__go_binary_available?) do
         !config.dev.__go_binary.nil?
       rescue TypeError

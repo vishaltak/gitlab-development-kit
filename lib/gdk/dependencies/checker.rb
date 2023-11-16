@@ -37,7 +37,7 @@ module GDK
       end
 
       def check_binary(binary, name: binary)
-        GDK::Dependencies.find_executable(binary).tap do |result|
+        Utils.find_executable(binary).tap do |result|
           @error_messages << missing_dependency(name) unless result
         end
       end

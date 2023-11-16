@@ -93,7 +93,7 @@ RSpec.describe GDK::Config do
       let(:fake_platform) { 'linux' }
 
       it 'returns the location of the pathed openssl as a string' do
-        allow(GDK::Dependencies).to receive(:find_executable).and_return('/usr/bin/openssl')
+        allow(Utils).to receive(:find_executable).and_return('/usr/bin/openssl')
 
         expect(config.__openssl_bin_path.to_s).to eq('/usr/bin/openssl')
       end
@@ -995,7 +995,7 @@ RSpec.describe GDK::Config do
 
     describe '#bin' do
       it 'returns gitlab-runner' do
-        found = GDK::Dependencies.find_executable('gitlab-runner')
+        found = Utils.find_executable('gitlab-runner')
         path = found || '/usr/local/bin/gitlab-runner'
         expect(config.runner.bin).to eq(Pathname.new(path))
       end

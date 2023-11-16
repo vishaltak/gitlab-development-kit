@@ -2,6 +2,7 @@
 
 require 'pathname'
 require_relative 'shellout'
+require_relative 'utils'
 
 module Runit
   autoload :Config, 'runit/config'
@@ -87,7 +88,7 @@ module Runit
   end
 
   def self.runit_installed!
-    return if GDK::Dependencies.executable_exist?('runsvdir')
+    return if Utils.executable_exist?('runsvdir')
 
     abort <<~MESSAGE
 
