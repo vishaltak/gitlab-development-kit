@@ -7,30 +7,19 @@ do so when GitLab is running under GDK.
 
 Before setting up a runner, you must have [set up the GDK](../index.md) for your workstation.
 
-You can set up:
-
-- A runner to run directly on your workstation
-- A runner in Docker.
-
 The GDK supports managing the runner configuration file and the process itself, either with a native binary
 or within a Docker container. Running jobs inside a Docker executor is supported in both cases; you can use a native
 binary to run jobs inside a Docker container.
 
-We outline the steps for setting up each of these separately.
+You can set up a runner to execute using either of the following approaches:
 
-- [Simple configuration](#simple-configuration) (if you only need trivial jobs to run)
-- [Docker configuration](#docker-configuration) (recommended)
+- [Directly on your workstation](#executing-a-runner-directly-on-your-workstation)
+- [From within Docker](#executing-a-runner-from-within-docker) (recommended)
 
 NOTE:
 In the configuration examples, `runner` should not be confused with [`gitlab_runner`](gitlab_docs.md).
 
-## Simple configuration
-
-If you intend to just use the `shell` executor (fine for simple jobs), you can use the GDK with its default settings.
-Builds run directly on the host computer. If you choose this configuration, don't use random `.gitlab-ci.yml`
-files from the internet unless you understand them fully as this could be a security risk. If you need a basic pipeline,
-see an [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configure-manual-deployments) that
-you can use.
+## Executing a runner directly on your workstation
 
 ### Download GitLab Runner
 
@@ -54,7 +43,7 @@ runner:
 
 To create and register a local runner for your instance:
 
-1. On the left sidebar, expand the top-most chevron (**{chevron-down}**).
+1. On the left sidebar, click on the `Search or go to...` button.
 1. Select **Admin Area**.
 1. On the left sidebar, select **CI/CD > Runners**.
 1. Select **New instance runner**.
@@ -67,19 +56,58 @@ To create and register a local runner for your instance:
 1. Optional. Enter additional runner configurations.
 1. Select **Create runner**.
 1. Follow the on-screen instructions to register the runner from the command-line:
-   - Add the GDK location of the configuration file to the register command:
 
      ```shell
      gitlab-runner register \
-       --url "http://127.0.0.1:3000" \
+       --url "<GDK URL>" \
+       --token <TOKEN>
+     ```
+
+    If your `gitlab-runner` configuration file is stored in a different location than `~/.gitlab-runner/config.toml`, then you must use the `--config` option to specify the location of the file:
+
+     ```shell
+     gitlab-runner register \
+       --url "<GDK URL>" \
        --token <TOKEN> \
        --config <path-to-gdk>/gitlab-runner-config.toml
      ```
 
-   - When prompted:
-     - For `executor`, because you are running directly on the host computer, enter `shell`.
-     - For `GitLab instance URL`, use`http://localhost:3000/`, or `http://<custom_IP_address>:3000/`
-       if you customized your IP address.
+   When prompted:
+   - For `executor`, use either `shell` or `docker`:
+
+      - `shell`. If you intend to run simple jobs, use the `shell` executor. Builds run directly on the host computer.
+         If you choose this configuration, don't use random `.gitlab-ci.yml` files from the internet unless you
+         understand them fully as this could be a security risk. If you need a basic pipeline, see an
+         [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configure-manual-deployments)
+         that you can use.
+
+      - `docker`
+
+        - **Enter the default Docker image**: Provide a Docker image to use to run the job if no image is provided in a job
+            definition.
+
+          You'll also need to install some additional supporting packages.
+
+          The following instructions are for Mac OS.
+
+          1. Install both `docker` and `colima`, and start the `colima` process:
+
+             ```shell
+             brew install docker colima
+             colima start
+             ```
+
+          1. [Link the Colima socket](https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#cannot-connect-to-the-docker-daemon-at-unixvarrundockersock-is-the-docker-daemon-running) to the default socket path:
+
+             ```shell
+             sudo ln -sf $HOME/.colima/default/docker.sock /var/run/docker.sock
+             ```
+
+             NOTE:
+             You'll need to run `colima start` and create the above symlink whenever you restart your computer.
+
+   - For `GitLab instance URL`, use`http://localhost:3000/`, or `http://<custom_IP_address>:3000/`
+     if you customized your IP address.
 1. Start your runner:
 
    ```shell
@@ -111,7 +139,7 @@ The **Runners** page (`/admin/runners`) now lists the runners. Create a project 
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
 watch as the runner processes the builds just as it would on a "real" install!
 
-## Docker configuration
+## Executing a runner from within Docker
 
 Instead of running GitLab Runner locally on your workstation, you can run it using Docker. This approach allows you to
 get an isolated environment for a job to run in.
@@ -362,3 +390,12 @@ runner:
 - Select `Edit` on the desired runner and make sure the `Run untagged jobs` is unchecked. Runners
   that have been registered with a tag may ignore jobs that have no tags.
 - Run `tail -f gitlab/log/api_json.log | grep jobs` to see if the runner is attempting to request CI jobs.
+- If you encounter the following error when running a pipeline:
+
+   ```plaintext
+   ERROR: Failed to remove network for build
+   ERROR: Preparation failed: Cannot connect to the Docker daemon at unix:///var/run/docker.sock.
+   Is the docker daemon running? (docker.go:803:0s)
+   ```
+
+   You'll need to make sure you've followed the directions to `Link the Colima socket` in the `executor` step of the [Create and register a local runner](#create-and-register-a-local-runner) section.
