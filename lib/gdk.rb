@@ -13,7 +13,6 @@ require_relative 'runit'
 
 autoload :Asdf, 'asdf'
 autoload :Shellout, 'shellout'
-autoload :Telemetry, 'telemetry'
 
 # GitLab Development Kit
 module GDK
@@ -96,6 +95,7 @@ module GDK
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
   autoload :Services, 'gdk/services'
   autoload :Shellout, 'shellout'
+  autoload :Telemetry, 'gdk/telemetry'
   autoload :TestURL, 'gdk/test_url'
 
   # This function is called from bin/gdk. It must return true/false or

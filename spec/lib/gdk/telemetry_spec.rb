@@ -6,18 +6,20 @@ require 'sentry-ruby'
 require 'snowplow-tracker'
 
 # rubocop:disable RSpec/ExpectInHook
-RSpec.describe Telemetry do
+RSpec.describe GDK::Telemetry do
   describe '.with_telemetry' do
     let(:command) { 'test_command' }
     let(:args) { %w[arg1 arg2] }
     let(:telemetry_enabled) { true }
 
+    let(:client) { double('Client') } # rubocop:todo RSpec/VerifiedDoubles
+
     before do
-      expect(described_class).to receive(:telemetry_enabled?).and_return(telemetry_enabled)
+      expect(described_class).to receive_messages(telemetry_enabled?: telemetry_enabled)
       expect(described_class).to receive(:with_telemetry).and_call_original
 
       allow(GDK).to receive_message_chain(:config, :telemetry, :username).and_return('testuser')
-      allow(described_class).to receive(:client)
+      allow(described_class).to receive_messages(client: client)
 
       stub_const('ARGV', args)
     end
@@ -31,18 +33,18 @@ RSpec.describe Telemetry do
     end
 
     it 'tracks the start and finish of the command' do
-      expect(described_class).to receive_message_chain(:client, :identify).with('testuser')
-      expect(described_class).to receive_message_chain(:client, :track).with("Start #{command} #{args.inspect}", {})
-      expect(described_class).to receive_message_chain(:client, :track).with(a_string_starting_with('Finish'), hash_including(:duration))
+      expect(client).to receive(:identify).with('testuser')
+      expect(client).to receive(:track).with("Start #{command} #{args.inspect}", {})
+      expect(client).to receive(:track).with(a_string_starting_with('Finish'), hash_including(:duration))
 
       described_class.with_telemetry(command) { true }
     end
 
     context 'when the block returns false' do
       it 'tracks the start and failure of the command' do
-        expect(described_class).to receive_message_chain(:client, :identify).with('testuser')
-        expect(described_class).to receive_message_chain(:client, :track).with("Start #{command} #{args.inspect}", {})
-        expect(described_class).to receive_message_chain(:client, :track).with(a_string_starting_with('Failed'), hash_including(:duration))
+        expect(client).to receive(:identify).with('testuser')
+        expect(client).to receive(:track).with("Start #{command} #{args.inspect}", {})
+        expect(client).to receive(:track).with(a_string_starting_with('Failed'), hash_including(:duration))
 
         described_class.with_telemetry(command) { false }
       end
@@ -56,7 +58,7 @@ RSpec.describe Telemetry do
       stub_env('GITLAB_SDK_APP_ID', 'app_id')
       stub_env('GITLAB_SDK_HOST', 'https://collector')
 
-      allow(GitlabSDK::Client).to receive(:new).and_return(mocked_client)
+      allow(GitlabSDK::Client).to receive_messages(new: mocked_client)
     end
 
     let(:mocked_client) { instance_double(GitlabSDK::Client) }
@@ -140,7 +142,7 @@ RSpec.describe Telemetry do
     let(:telemetry_enabled) { true }
 
     before do
-      expect(described_class).to receive(:telemetry_enabled?).and_return(telemetry_enabled)
+      expect(described_class).to receive_messages(telemetry_enabled?: telemetry_enabled)
 
       allow(described_class).to receive(:capture_exception).and_call_original
       allow(described_class).to receive(:init_sentry)
