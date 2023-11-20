@@ -31,7 +31,7 @@ else
 endif
 
 postgresql/port:
-	$(Q)support/postgres-port ${postgresql_dir} ${postgresql_port}
+	$(Q)support/postgres-port ${postgresql_dir} ${postgresql_port} 'postgresql'
 
 postgresql-sensible-defaults:
 	$(Q)support/postgresql-sensible-defaults ${postgresql_dir}
