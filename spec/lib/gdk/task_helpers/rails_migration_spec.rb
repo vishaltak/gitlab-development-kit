@@ -42,8 +42,17 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
         migrate
       end
 
-      it 'migrates the Geo database when Geo is enabled' do
-        stub_gdk_yaml('geo' => { 'enabled' => true })
+      it 'does not migrate the Geo database when Geo is a primary' do
+        stub_gdk_yaml('geo' => { 'enabled' => true, 'secondary' => false })
+
+        allow(Shellout).to receive(:new).and_return(shellout_mock)
+        expect(Shellout).not_to receive(:new).with(array_including('db:migrate:geo'), any_args)
+
+        migrate
+      end
+
+      it 'migrates the Geo database when Geo is a secondary' do
+        stub_gdk_yaml('geo' => { 'enabled' => true, 'secondary' => true })
 
         expect(Shellout).to receive(:new).with(array_including('db:migrate:geo'), any_args).and_return(shellout_mock)
 
@@ -71,8 +80,16 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
         migrate
       end
 
-      it 'migrates the Geo database when Geo is enabled' do
-        stub_gdk_yaml('geo' => { 'enabled' => true })
+      it 'does not migrate the Geo database when Geo is a primary' do
+        stub_gdk_yaml('geo' => { 'enabled' => true, 'secondary' => false })
+
+        expect(Shellout).not_to receive(:new).with(array_including('db:migrate:geo'), any_args)
+
+        migrate
+      end
+
+      it 'migrates the Geo database when Geo is a secondary' do
+        stub_gdk_yaml('geo' => { 'enabled' => true, 'secondary' => true })
 
         expect(Shellout).to receive(:new).with(array_including('db:migrate:geo'), any_args).and_return(shellout_mock)
 

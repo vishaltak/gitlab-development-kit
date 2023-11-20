@@ -27,7 +27,7 @@ module GDK
       def migrate_tasks
         tasks = {}
         tasks['rails'] = MAIN_TASKS unless geo_secondary? || in_recovery?
-        tasks['Geo'] = GEO_TASKS if geo?
+        tasks['Geo'] = GEO_TASKS if geo_secondary?
 
         tasks
       end
