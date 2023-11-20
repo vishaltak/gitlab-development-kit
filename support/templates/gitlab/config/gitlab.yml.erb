@@ -1039,12 +1039,12 @@ test:
         region: us-east-1
     <%- end -%>
   gitlab:
-    host: <%= config.gitlab.rails.hostname %>
+    host: localhost
     port: 80
 
     content_security_policy:
       directives:
-        connect_src: "'self' http://localhost:* http://<%= config.gitlab.rails.hostname %>:* ws://localhost:* wss://localhost:* ws://<%= config.gitlab.rails.hostname %>:* wss://<%= config.gitlab.rails.hostname %>:*"
+        connect_src: "'self' http://localhost:* ws://localhost:* wss://localhost:* ws://<%= config.gitlab.rails.hostname %>:* wss://<%= config.gitlab.rails.hostname %>:*"
 
     # When you run tests we clone and set up gitlab-shell
     # In order to set it up correctly you need to specify
