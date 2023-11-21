@@ -18,26 +18,39 @@ module GDK
     autoload :Required, 'gdk/services/required'
     autoload :Vault, 'gdk/services/vault'
 
-    ALL = %i[
-      Clickhouse
-      GitLabWorkhorse
-      Minio
-      OpenLDAP
-      PostgreSQL
-      PostgreSQLReplica
-      Redis
-      RedisCluster
-      Vault
+    # This are the classes in Services modules that are used as base classes for services
+    SERVICE_BASE_CLASSES = %i[
+      Base
+      Required
     ].freeze
+
+    # Return a list of class names that represent a Service
+    #
+    # @return [Array<Symbol>] array of class names exposing a service
+    def self.all_service_names
+      ::GDK::Services.constants.select { |c| ::GDK::Services.const_get(c).is_a? Class } - SERVICE_BASE_CLASSES
+    end
 
     # Returns an Array of all services, including enabled and not
     # enabled.
     #
     # @return [Array<Class>] all services
     def self.all
-      ALL.map do |const|
+      all_service_names.map do |const|
         const_get(const).new
       end
+    end
+
+    # Return the service that matches the given name
+    #
+    # @param [Symbol|String] name
+    # @return [::GDK::Services::Base|nil] service instance
+    def self.fetch(name)
+      service = all_service_names.find { |srv| srv == name.to_sym }
+
+      return unless service
+
+      const_get(service).new
     end
 
     # Returns an Array of enabled services only.
