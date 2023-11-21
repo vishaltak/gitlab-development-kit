@@ -9,14 +9,14 @@ The commands can be run from any empty directory in the MacOS home folder unless
 1. [Prerequisites](#prerequisites)
 1. [Create a CA cert](#create-a-ca-cert)
 1. [Create an end-entity cert](#create-an-end-entity-cert)
-1. [Import keys into gpgsm and add to trustlist](#import-keys-into-gpgsm-and-add-to-trustlist)
+1. [Import keys into `gpgsm` and add to trustlist](#import-keys-into-gpgsm-and-add-to-trustlist)
 1. [Set up GDK to use the CA cert we generated](#set-up-gdk-to-use-the-ca-certificate-we-generated)
 1. [Set up a project](#set-up-a-project)
-1. [Cleaning Up](#cleaning-up)
+1. [Cleaning up](#cleaning-up)
 
 ## Prerequisites
 
-1. This tutorial requires openssl version 1.1. If your version is 3, it can be set to 1.1 by brew:
+1. This tutorial requires `openssl` version 1.1. If your version is 3, it can be set to 1.1 by Homebrew:
 
    ```shell
    brew unlink openssl@3
@@ -26,7 +26,7 @@ The commands can be run from any empty directory in the MacOS home folder unless
    brew link openssl@1.1 --force
    ```
 
-## Create a CA cert
+## Create a CA certificate
 
 1.
 
@@ -46,7 +46,7 @@ The commands can be run from any empty directory in the MacOS home folder unless
      -out ca.crt
    ```
 
-## Create an end-entity cert
+## Create an end-entity certificate
 
 1.
 
@@ -76,7 +76,7 @@ The commands can be run from any empty directory in the MacOS home folder unless
    ) -set_serial 1 -out git.crt
    ```
 
-## Import keys into gpgsm and add to trustlist
+## Import keys into `gpgsm` and add to trustlist
 
 1.
 
@@ -102,13 +102,13 @@ The commands can be run from any empty directory in the MacOS home folder unless
    gpgsm --import git.p12
    ```
 
-1. Add the sha1 fpr for the last two keys in `gpgsm --list-keys` to `~/.gnupg/trustlist.txt`:
+1. Add the SHA1 fingerprint for the last two keys in `gpgsm --list-keys` to `~/.gnupg/trustlist.txt`:
 
    ```  shell
    gpgsm --list-keys | grep 'sha1 fpr' | awk -F 'sha1 fpr: ' '{ print $2 }' >> ~/.gnupg/trustlist.txt
    ```
 
-1. Suppress [DirMngr checking for revoked certificates](https://gnupg.org/documentation/manuals/gnupg-2.0/Certificate-Options.html) by running:
+1. Suppress [`DirMngr` checking for revoked certificates](https://gnupg.org/documentation/manuals/gnupg-2.0/Certificate-Options.html) by running:
 
    ```  shell
    echo "disable-crl-checks" >>  ~/.gnupg/gpgsm.conf
@@ -136,7 +136,7 @@ The commands can be run from any empty directory in the MacOS home folder unless
 
 ## Set up a project
 
-1. Create a user with email <test2@example.com>.
+1. Create a user with email `test2@example.com`.
 1. Create a project.
 1. Clone the project.
 1. Configure the Git client to sign commits:
@@ -157,7 +157,7 @@ The commands can be run from any empty directory in the MacOS home folder unless
    git config gpg.format x509
    ```
 
-1. Restart gpg-agent:
+1. Restart `gpg-agent`:
 
    ```  shell
    gpgconf --kill gpg-agent
@@ -170,13 +170,13 @@ The commands can be run from any empty directory in the MacOS home folder unless
    ```
 
 1. Push the changes.
-1. Look at the commits just pushed (e.g <http://gdk.test:3000/root/test-signatures/-/commits/branch_name>) and see that there is a Verified badge next to the signed commit.
+1. Look at the commits just pushed (for example, `http://gdk.test:3000/root/test-signatures/-/commits/<branch_name>`) and see that there is a **Verified** badge next to the signed commit.
 
-## Cleaning Up
+## Cleaning up
 
 Some of these configurations should be removed once testing is complete.
 
-1. Remove added keys from gpgsm by running `gpgsm --list-keys` and find the last two key ids. Delete each of them by running `gpgsm --delete-keys <key id>`.
-1. Remove the two sha1 fpr keys which were added to `~/.gnupg/trustlist.txt`.
-1. Remove ignore crl setting from gpgsm.conf by deleting `disable-crl-checks` from `~/.gnupg/gpgsm.conf`.
-1. Remove ssl cert file from GDK by deleting `export SSL_CERT_FILE=path to ca.crt` from `env.runit` and restarting the GDK: `gdk restart`.
+1. Remove added keys from `gpgsm` by running `gpgsm --list-keys` and find the last two key ids. Delete each of them by running `gpgsm --delete-keys <key id>`.
+1. Remove the two SHA1 fingerprint keys which were added to `~/.gnupg/trustlist.txt`.
+1. Remove ignore the certificate revocation list (CRL) setting from `gpgsm.conf` by deleting `disable-crl-checks` from `~/.gnupg/gpgsm.conf`.
+1. Remove SSL cert file from GDK by deleting `export SSL_CERT_FILE=path to ca.crt` from `env.runit` and restarting the GDK: `gdk restart`.
