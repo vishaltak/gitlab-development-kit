@@ -12,18 +12,18 @@ The commands can be run from any empty directory in the MacOS home folder unless
 1. [Create a CA certificate](#create-a-ca-certificate)
 1. [Create an end-entity certificate](#create-an-end-entity-certificate)
 1. [Import keys into `gpgsm` and add to trustlist](#import-keys-into-gpgsm-and-add-to-trustlist)
-1. [Set up GDK to use the CA certificate you generated](#set-up-gdk-to-use-the-ca-certificate-we-generated)
+1. [Set up GDK to use the CA certificate you generated](#set-up-gdk-to-use-the-ca-certificate-you-generated)
 1. [Set up a project](#set-up-a-project)
 1. [Cleaning up](#cleaning-up)
 
 ## Prerequisites
 
-1. This tutorial requires `openssl` version 1.1. If your version is 3, it can be set to 1.1 by Homebrew:
+This tutorial requires `openssl` version 1.1. If your version is 3, it can be set to 1.1 by Homebrew:
 
-   ```shell
-   brew unlink openssl@3
-   brew link openssl@1.1 --force
-   ```
+```shell
+brew unlink openssl@3
+brew link openssl@1.1 --force
+```
 
 ## Create a CA certificate
 
