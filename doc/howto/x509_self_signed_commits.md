@@ -104,7 +104,7 @@ brew link openssl@1.1 --force
 1. Add the SHA1 fingerprint for the last two keys in `gpgsm --list-keys` to `~/.gnupg/trustlist.txt`:
 
    ```shell
-   gpgsm --list-keys | grep 'sha1 fpr' | awk -F 'sha1 fpr: ' '{ print $2 }' >> ~/.gnupg/trustlist.txt
+   gpgsm --list-keys | grep 'sha1 fpr' | awk -F 'sha1 fpr: ' '{ print $2 " S relax" }' >> ~/.gnupg/trustlist.txt
    ```
 
 1. Suppress [`DirMngr` checking for revoked certificates](https://gnupg.org/documentation/manuals/gnupg-2.0/Certificate-Options.html):
