@@ -443,6 +443,9 @@ vault:
   enabled: false
   listen_address: 127.0.0.1
   port: 8200
+vite:
+  enabled: false
+  port: 3038
 webpack:
   allowed_hosts: []
   enabled: true

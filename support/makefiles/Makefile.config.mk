@@ -60,6 +60,10 @@ gitlab/config/session_store.yml:
 gitlab/config/redis.rate_limiting.yml: 
 	$(Q)rake gitlab/config/redis.rate_limiting.yml
 
+.PHONY: gitlab/config/vite.gdk.json
+gitlab/config/vite.gdk.json: 
+	$(Q)rake gitlab/config/vite.gdk.json
+
 .PHONY: gitlab/workhorse/config.toml
 gitlab/workhorse/config.toml: 
 	$(Q)rake gitlab/workhorse/config.toml

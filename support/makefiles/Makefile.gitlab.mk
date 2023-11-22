@@ -63,6 +63,7 @@ gitlab-config: \
 	gitlab/config/redis.trace_chunks.yml \
 	gitlab/config/redis.rate_limiting.yml \
 	gitlab/config/redis.sessions.yml \
+	gitlab/config/vite.gdk.json \
 	gitlab/public/uploads \
 	gitlab/config/puma.rb
 

@@ -162,6 +162,26 @@ module GDK
       end
     end
 
+    settings :vite do
+      bool(:enabled) { false }
+      port(:port, 'vite')
+
+      bool(:__safe_enabled) do
+        if config.vite?
+          if config.webpack?
+            raise UnsupportedConfiguration, <<~MSG.strip
+              Running vite and webpack at the same time is unsupported.
+              Consider running `gdk config set webpack.enabled false` to disable webpack
+            MSG
+          end
+
+          true
+        else
+          false
+        end
+      end
+    end
+
     settings :webpack do
       bool(:enabled) { true }
       string(:host) { read!('webpack_host') || config.gitlab.rails.hostname }

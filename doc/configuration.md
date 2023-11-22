@@ -523,7 +523,88 @@ Under the runner key you can define the following settings for the [GitLab Runne
 | `network_mode_host` | `false` | Set this to `true` to set `network_mode = "host"` for the `[runners.docker]` section (only on Linux). |
 | `token` | Empty | Runner token to add to the runner config. |
 
+## Vite settings
+
+[Vite](https://vitejs.dev/) offers an improved developer experience by default.
+
+Vite compiles JavaScript and Vue files quickly and only as requested.
+Vite also consumes less memory.
+
+These improvements are possible because Vite uses [esbuild](https://esbuild.github.io/) under the hood.
+For more details on the implementation of Vite at GitLab, see the RFC [frontend/rfcs#106](https://gitlab.com/gitlab-org/frontend/rfcs/-/issues/106).
+
+To enable Vite for your GDK:
+
+1. Ensure the `gdk` is running with webpack.
+1. If you ran `vite` manually before, make sure no process remains.
+1. Enable the Vite feature flag. This is needed for some older branches.
+
+   ```shell
+   echo "Feature.enable(:vite)" | gdk rails c
+   ```
+
+1. Stop the Rails app and webpack:
+
+   ```shell
+   gdk stop webpack rails-web
+   ```
+
+1. Disable webpack:
+
+   ```shell
+   gdk config set webpack.enabled false
+   ```
+
+1. Enable Vite:
+
+   ```shell
+   gdk config set vite.enabled true
+   ```
+
+1. Update the config files:
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Restart the Rails app and Vite as the developer server:
+
+   ```shell
+   gdk restart vite rails-web
+   ```
+
+If you are using Vite, please [leave feedback](https://gitlab.com/gitlab-org/gitlab/-/issues/423851) of your experience.
+
+To disable Vite, run the following commands:
+
+```shell
+echo "Feature.disable(:vite)" | gdk rails c
+gdk stop vite rails-web
+gdk config set vite.enabled false
+gdk config set webpack.enabled true
+gdk reconfigure
+gdk restart webpack rails-web
+```
+
+Vite support is new.
+If you encounter any errors, the branch you are on might be too old.
+Consider rebasing your local branch.
+You can quickly check whether your branch *should* work:
+
+```shell
+git merge-base --is-ancestor 0e35808bc7c HEAD
+```
+
+### Vite `gdk.yml` settings
+
+| Setting   | Default | Description                                                                                                  |
+|-----------|---------|--------------------------------------------------------------------------------------------------------------|
+| `enabled` | `false` | Set to `true` to enable Vite.                                                                                |
+| `port`    | `3038`  | The port your Vite development server is running on. You should change this if you are running multiple GDKs. |
+
 ## Webpack settings
+
+The GDK ships with [`vite` support](#vite-settings). Consider trying it for a better developer experience.
 
 ### Webpack `gdk.yml` settings
 
