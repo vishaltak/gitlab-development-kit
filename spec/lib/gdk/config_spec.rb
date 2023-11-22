@@ -1947,6 +1947,52 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'vite' do
+    describe '#enabled' do
+      it 'is false by default' do
+        expect(config.vite.enabled).to be false
+      end
+    end
+
+    describe '#port' do
+      it 'is 3038 by default' do
+        expect(config.vite.port).to be 3038
+      end
+    end
+
+    describe '#__safe_enabled?' do
+      it 'is false by default' do
+        expect(config.vite.__safe_enabled?).to be false
+      end
+
+      context 'when vite enabled' do
+        before do
+          yaml['vite'] = { 'enabled' => true }
+        end
+
+        context 'and webpack is enabled as well' do
+          before do
+            yaml['webpack'] = { 'enabled' => true }
+          end
+
+          it 'raises UnsupportedConfiguration error' do
+            expect { config.vite.__safe_enabled? }.to raise_error(described_class::UnsupportedConfiguration)
+          end
+        end
+
+        context 'and webpack is disabled' do
+          before do
+            yaml['webpack'] = { 'enabled' => false }
+          end
+
+          it 'is true' do
+            expect(config.vite.__safe_enabled?).to be true
+          end
+        end
+      end
+    end
+  end
+
   describe 'webpack' do
     describe '#enabled' do
       it 'is true by default' do

@@ -3,6 +3,7 @@
 require 'erb'
 require 'fileutils'
 require 'tempfile'
+require 'json'
 
 module GDK
   module Templates

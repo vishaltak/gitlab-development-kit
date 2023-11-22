@@ -1,5 +1,7 @@
 # Troubleshooting Webpack
 
+The GDK ships with [`vite` support](../configuration.md#vite-settings). Consider trying it for a better developer experience.
+
 Since webpack has been added as a new background process which GitLab depends on
 in development, the [GDK must be updated and reconfigured](../index.md#update-gdk) in
 order to work properly again.

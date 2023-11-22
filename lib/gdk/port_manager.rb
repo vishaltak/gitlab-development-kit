@@ -17,6 +17,7 @@ module GDK
       3005 => 'gitlab_docs',
       3010 => 'gitlab_pages',
       3030 => 'gitlab_docs_https',
+      3038 => 'vite',
       3333 => 'workhorse',
       3807 => 'sidekiq_exporter',
       3808 => 'webpack',
