@@ -226,7 +226,7 @@ must get the values from the secondary, and then manually add the node.
 
 Unified URL is the recommended Geo configuration since GitLab 14.6, so it's valuable for Geo engineers to dogfood it locally.
 
-#### Prerequisites
+#### Unified URL prerequisites
 
 You must have two functioning Geo sites:
 
