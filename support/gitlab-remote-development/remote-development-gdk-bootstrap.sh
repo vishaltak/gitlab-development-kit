@@ -7,6 +7,9 @@
 
 set -eo pipefail
 
+# See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html#index-SECONDS for the usage of seconds.
+SECONDS=0
+
 MY_IP=$(hostname -I | tr -d '[:space:]')
 GDK_PORT=$(env | grep SERVICE_PORT_GDK_ | awk -F= '{ print $2 }')
 GDK_URL=$(echo "${GL_WORKSPACE_DOMAIN_TEMPLATE}" | sed -r 's/\$\{PORT\}/'${GDK_PORT}'/')
@@ -92,5 +95,8 @@ copy_items_from_bootstrap
 reconfigure_and_migrate
 update_gdk
 restart_gdk
+
+DURATION=$SECONDS
+echo "Total Duration: $(($DURATION / 60)) minutes and $(($DURATION % 60)) seconds."
 
 echo "Success! You can access your GDK here: https://${GDK_URL}"
