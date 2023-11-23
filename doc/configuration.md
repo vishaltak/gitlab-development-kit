@@ -1,4 +1,4 @@
-# GDK configuration
+# Configuration
 
 This document describes how you can configure your GDK environment.
 

@@ -17,29 +17,34 @@ You must have at least the Developer role in the GDK repository.
 
 1. Go to the GDK repository and select __Edit__.
 1. Select __New workspace__.
-  
-   <img src="img/remote-development-new-workspace-button.png" width="800">
+
+   <img src="img/remote-development-new-workspace-button.png" width="800"
+   alt="New workspace button on the project page">
 
 1. Select __GitLab Development Kit__ as your project.
 1. Set the agent to __remote-development__.
 1. In the __Time Before Automatic Termination__ field, specify the number of hours the workspace should stay running.
 
-   <img src="img/remote-development-workspace-options.png" width="800">
+   <img src="img/remote-development-workspace-options.png" width="800"
+   alt="New workspace options page">
 
 1. Select __Create workspace__.
-   
+
 Your workspace is deployed to the cluster. The deployment might take a few minutes.
 After deployment, you should see a workspace under __Preview__.
 
-<img src="img/remote-development-workspace-link.png" width="800">
+<img src="img/remote-development-workspace-link.png" width="800"
+alt="Workspaces overview page">
 
 ## Run GDK in your workspace
 
 1. On the left sidebar, open the terminal.
 1. Select __Terminal > New Terminal__.
 
-   <img src="img/remote-development-select-terminal.png" width="800">
+   <img src="img/remote-development-select-terminal.png" width="800"
+   alt="Remote development New Terminal button in Terminal menu">
 
 1. Run the command `support/gitlab-remote-development/remote-development-gdk-bootstrap.sh`. The GDK link is displayed.
 
-   <img src="img/remote-development-bootstrapped-gdk.png" width="800">
+   <img src="img/remote-development-bootstrapped-gdk.png" width="800"
+   alt="Remote development Terminal window showing workspace URL">
