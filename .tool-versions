@@ -44,14 +44,14 @@ minify 2.20.6 2.12.8
 minio 2022-07-15T03-44-22Z
 
 # nodejs:
-#   20.9.0:
+#   20.10.0:
 #     - https://gitlab.com/gitlab-org/gitlab-ui/-/raw/main/.tool-versions
 #   18.18.2:
 #     - https://gitlab.com/gitlab-org/gitlab-docs/-/raw/main/.tool-versions
 #   18.17.0:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
 #
-nodejs 20.9.0 18.18.2 18.17.0
+nodejs 20.10.0 18.18.2 18.17.0
 
 # postgres:
 #   14.9:
