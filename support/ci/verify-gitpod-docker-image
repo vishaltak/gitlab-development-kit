@@ -4,7 +4,7 @@ set -ex
 
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/../.." || exit ; pwd -P)"
 DOCKER_IMAGE_TAG="${CI_COMMIT_REF_SLUG:-main}"
-DOCKER_IMAGE="registry.gitlab.com/gitlab-org/gitlab-development-kit/gitpod-workspace:${DOCKER_IMAGE_TAG}"
+DOCKER_IMAGE="${CI_REGISTRY_IMAGE}/gitpod-workspace:${DOCKER_IMAGE_TAG}"
 HOME="/home/gitpod"
 
 /sbin/sysctl fs.inotify.max_user_watches=1048576

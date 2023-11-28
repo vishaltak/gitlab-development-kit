@@ -17,11 +17,11 @@ build-gitpod-workspace-image:
     - .build-job
     - .rules:gitpod-code-changes
   script:
-    - ./support/gitpod/docker-build
+    - ./support/docker-build "$GITPOD_WORKSPACE_IMAGE" ./support/gitpod
 
 build-gitlab-remote-workspace-image:
   extends:
     - .build-job
     - .rules:gitlab-remote-code-changes
   script:
-    - ./support/gitlab-remote-development/docker-build
+    - ./support/docker-build "$GITLAB_REMOTE_WORKSPACE_IMAGE" ./support/gitlab-remote-development
