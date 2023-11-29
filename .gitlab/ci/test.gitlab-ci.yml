@@ -41,6 +41,7 @@ rspec:
   artifacts:
     paths:
       - rspec.xml
+      - coverage/coverage.xml
     reports:
       junit: rspec.xml
       coverage_report:
