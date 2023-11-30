@@ -44,7 +44,13 @@ module GDK
         cmd = %w[bundle exec rake] + tasks
         cmd = %w[asdf exec] + cmd if GDK::Dependencies.asdf_available?
 
-        Shellout.new(cmd, chdir: GDK.config.gitlab.dir).execute.success?
+        if bundler_available?
+          Bundler.with_unbundled_env do
+            Shellout.new(cmd, chdir: GDK.config.gitlab.dir).execute.success?
+          end
+        else
+          Shellout.new(cmd, chdir: GDK.config.gitlab.dir).execute.success?
+        end
       end
 
       def geo_secondary?
@@ -57,6 +63,10 @@ module GDK
 
       def postgresql
         @postgresql ||= GDK::Postgresql.new
+      end
+
+      def bundler_available?
+        defined? Bundler
       end
     end
   end

@@ -3,8 +3,9 @@
 RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
   describe '#migrate' do
     let(:shellout_mock) { instance_double(Shellout, success?: true) }
+    let(:rails_migration) { described_class.new }
 
-    subject(:migrate) { described_class.new.migrate }
+    subject(:migrate) { rails_migration.migrate }
 
     before do
       allow(shellout_mock).to receive(:execute).and_return(shellout_mock)
@@ -31,6 +32,26 @@ RSpec.describe GDK::TaskHelpers::RailsMigration, :hide_stdout do
           allow(GDK::Dependencies).to receive(:asdf_available?).and_return(false)
 
           expect(Shellout).to receive(:new).with(array_including('bundle', 'exec'), any_args).and_return(shellout_mock)
+
+          migrate
+        end
+      end
+
+      context 'when Bundler is loaded' do
+        it 'clears out bundler environment' do
+          expect(rails_migration).to receive(:bundler_available?).and_return(true)
+
+          expect(Bundler).to receive(:with_unbundled_env).and_yield
+
+          migrate
+        end
+      end
+
+      context 'when Bundler is not loaded' do
+        it 'does not clear out bundler environment' do
+          expect(rails_migration).to receive(:bundler_available?).and_return(false)
+
+          expect(Bundler).not_to receive(:with_unbundled_env)
 
           migrate
         end
