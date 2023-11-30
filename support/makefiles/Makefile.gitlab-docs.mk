@@ -123,7 +123,15 @@ gitlab-operator/.git/pull: gitlab-operator/.git
 	$(Q)support/component-git-update gitlab_operator "${gitlab_operator_clone_dir}" master master
 
 .PHONY: gitlab-docs-deps
-gitlab-docs-deps: gitlab-docs-bundle gitlab-docs-yarn
+gitlab-docs-deps: gitlab-docs-asdf-install gitlab-docs-bundle gitlab-docs-yarn
+
+gitlab-docs-asdf-install:
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing asdf tools"
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${PWD}/.tool-versions" asdf install
+	$(Q)cd ${gitlab_development_root}/gitlab-docs && asdf reshim
 
 gitlab-docs-bundle:
 	@echo
