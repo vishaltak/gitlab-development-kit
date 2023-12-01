@@ -42,6 +42,23 @@ module GDK
         {}
       end
 
+      # Entry to be used in Procfile.
+      #
+      # @return [String] in the format expected used in Procfiles.
+      def procfile_entry
+        cmd = []
+        cmd << '#' unless enabled?
+
+        cmd += %W[#{name}: exec]
+        if env.any?
+          cmd << '/usr/bin/env'
+          cmd += env.map { |k, v| "#{k}=\"#{v}\"" }
+        end
+
+        cmd << command
+        cmd.join(' ')
+      end
+
       private
 
       def validate_env_keys!

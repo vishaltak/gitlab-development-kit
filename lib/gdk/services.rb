@@ -13,6 +13,7 @@ module GDK
     autoload :OpenLDAP, 'gdk/services/openldap'
     autoload :PostgreSQL, 'gdk/services/postgresql'
     autoload :PostgreSQLReplica, 'gdk/services/postgresql_replica'
+    autoload :RailsWeb, 'gdk/services/rails_web'
     autoload :Redis, 'gdk/services/redis'
     autoload :RedisCluster, 'gdk/services/redis_cluster'
     autoload :Required, 'gdk/services/required'

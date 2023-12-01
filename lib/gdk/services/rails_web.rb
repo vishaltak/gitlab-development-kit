@@ -1,0 +1,38 @@
+# frozen_string_literal: true
+
+module GDK
+  module Services
+    # Rails web frontend server
+    class RailsWeb < Base
+      def name
+        'rails-web'
+      end
+
+      def command
+        %(support/exec-cd gitlab bin/web start_foreground)
+      end
+
+      def enabled?
+        config.rails_web?
+      end
+
+      def env
+        e = {
+          CACHE_CLASSES: '$cache_classes',
+          BUNDLE_GEMFILE: '$bundle_gemfile',
+          ENABLE_BOOTSNAP: config.gitlab.rails.bootsnap?,
+          RAILS_ENV: 'development',
+          RAILS_RELATIVE_URL_ROOT: '$relative_url_root',
+          ACTION_CABLE_IN_APP: 'true',
+          ACTION_CABLE_WORKER_POOL_SIZE: config.action_cable.worker_pool_size,
+          GITALY_DISABLE_REQUEST_LIMITS: config.gitlab.gitaly_disable_request_limits
+        }
+
+        e[:GDK_GEO_SECONDARY] = 1 if config.geo? && config.geo.secondary?
+        e[:GITLAB_VALIDATE_DATABASE_CONFIG] = 0 if config.cells?
+
+        e
+      end
+    end
+  end
+end

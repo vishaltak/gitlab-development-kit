@@ -11,6 +11,7 @@ RSpec.describe GDK::Services do
       OpenLDAP
       PostgreSQL
       PostgreSQLReplica
+      RailsWeb
       Redis
       RedisCluster
       Vault
@@ -44,6 +45,7 @@ RSpec.describe GDK::Services do
       service_classes = [
         GDK::Services::GitLabWorkhorse,
         GDK::Services::PostgreSQL,
+        GDK::Services::RailsWeb,
         GDK::Services::Redis
       ]
 
