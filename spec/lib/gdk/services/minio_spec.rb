@@ -11,7 +11,7 @@ describe GDK::Services::Minio do
 
   describe '#command' do
     it 'returns the necessary command to run redis' do
-      expect(minio_service.command).to eq('minio server -C minio/config --address "127.0.0.1:9000" --compat minio/data')
+      expect(minio_service.command).to eq('minio server -C minio/config --address "127.0.0.1:9000" --console-address "127.0.0.1:9002" --compat minio/data')
     end
   end
 

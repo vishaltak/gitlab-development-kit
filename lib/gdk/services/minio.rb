@@ -9,7 +9,7 @@ module GDK
       end
 
       def command
-        %(minio server -C minio/config --address "#{address}" --compat minio/data)
+        %(minio server -C minio/config --address "#{address}" --console-address "#{console_address}" --compat minio/data)
       end
 
       def enabled?
@@ -28,6 +28,10 @@ module GDK
 
       def address
         "#{config.object_store.host}:#{config.object_store.port}"
+      end
+
+      def console_address
+        "#{config.object_store.host}:#{config.object_store.console_port}"
       end
     end
   end

@@ -7,7 +7,7 @@
 #
 redis: exec redis-server <%= config.redis.dir.join('redis.conf') %>
 redis-cluster: exec support/redis-cluster-signal-wrapper <%= config.redis_cluster.dir %> <%= config.hostname %> <%= config.redis_cluster.dev_port_1%>:<%= config.redis_cluster.dev_port_2%>:<%= config.redis_cluster.dev_port_3%> <%= config.redis_cluster.test_port_1%>:<%= config.redis_cluster.test_port_2%>:<%= config.redis_cluster.test_port_3%>
-<%= '#' unless config.object_store? %>minio: exec /usr/bin/env MINIO_REGION=gdk MINIO_ACCESS_KEY=minio MINIO_SECRET_KEY=gdk-minio minio server -C minio/config --address "<%= config.object_store.host %>:<%= config.object_store.port %>" --console-address "<%= config.object_store.host %>:<%= config.object_store.console_port %>" --compat minio/data
+<%= service(:Minio).procfile_entry %>
 postgresql: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.data_dir %> -k <%= config.postgresql.dir %> -h '<%= config.postgresql.__active_host %>' -c max_connections=<%= config.postgresql.max_connections %>
 <%= '#' unless config.postgresql.replica? %>postgresql-replica: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.replica.data_directory %> -k <%= config.postgresql.replica.root_directory %> -h '' -c max_connections=<%= config.postgresql.max_connections %>
 <%= '#' unless config.postgresql.replica_2? %>postgresql-replica-2: exec support/postgresql-signal-wrapper <%= config.postgresql.bin %> -D <%= config.postgresql.replica_2.data_directory %> -k <%= config.postgresql.replica_2.root_directory %> -h '' -c max_connections=<%= config.postgresql.max_connections %>
