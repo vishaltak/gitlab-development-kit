@@ -82,6 +82,7 @@ module GDK
   autoload :Dependencies, 'gdk/dependencies'
   autoload :Diagnostic, 'gdk/diagnostic'
   autoload :Env, 'gdk/env'
+  autoload :Execute, 'gdk/execute'
   autoload :Templates, 'gdk/templates'
   autoload :Hooks, 'gdk/hooks'
   autoload :HTTPHelper, 'gdk/http_helper'
