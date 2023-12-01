@@ -18,11 +18,11 @@ module GDK
 
       def env
         e = {
-          CACHE_CLASSES: '$cache_classes',
-          BUNDLE_GEMFILE: '$bundle_gemfile',
+          CACHE_CLASSES: config.gitlab.cache_classes,
+          BUNDLE_GEMFILE: config.gitlab.rails.bundle_gemfile,
           ENABLE_BOOTSNAP: config.gitlab.rails.bootsnap?,
           RAILS_ENV: 'development',
-          RAILS_RELATIVE_URL_ROOT: '$relative_url_root',
+          RAILS_RELATIVE_URL_ROOT: config.relative_url_root,
           ACTION_CABLE_IN_APP: 'true',
           ACTION_CABLE_WORKER_POOL_SIZE: config.action_cable.worker_pool_size,
           GITALY_DISABLE_REQUEST_LIMITS: config.gitlab.gitaly_disable_request_limits
