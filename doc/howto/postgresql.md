@@ -42,7 +42,7 @@ bundle exec rails dbconsole -e test
 
 To access the database using a [GUI SQL client](https://wiki.postgresql.org/wiki/PostgreSQL_Clients), provide the following information:
 
-- Host name: path to data file (for example, `gitlab-development-kit/postgresql`) or `localhost` (see the [instructions](https://docs.gitlab.com/ee/development/database_debugging.html#access-the-database-with-a-gui) for switching to `localhost`)
+- Host name: path to data file (for example, `gitlab-development-kit/postgresql`) or `localhost` (see the [instructions](https://docs.gitlab.com/ee/development/database/database_debugging.html#access-the-database-with-a-gui) for switching to `localhost`)
 - Database port: for example, `5432`
 - Database name: for example, `gitlabhq_development` or `gitlabhq_test`
 - Username and Password should be left blank
