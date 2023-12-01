@@ -6,13 +6,10 @@ require 'fileutils'
 require_relative '../gdk'
 
 module Support
+  # Bootstrap GitLab rails environment
   class BootstrapRails
     # The log file should be in the "support" folder, not in "suppport/lib"
     LOG_FILE = '../bootstrap-rails.log'
-    RAKE_DEV_DB_RESET_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:reset].freeze
-    RAKE_DEV_DB_SEED_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:seed_fu].freeze
-    RAKE_COPY_DB_CI_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake dev:copy_db:ci].freeze
-    RAKE_EMBEDDING_DB_RESET_CMD = %w[support/exec-cd gitlab ../support/bundle-exec rake db:reset:embedding].freeze
 
     def execute
       if config.geo.secondary?
@@ -30,7 +27,9 @@ module Support
 
     def bootstrap_main_db
       if_db_not_found('gitlabhq_development') do
-        run_command(RAKE_DEV_DB_RESET_CMD) && set_feature_flags && seed_main_db
+        run_tasks('db:reset') &&
+          set_feature_flags &&
+          seed_main_db
       end
     end
 
@@ -48,14 +47,14 @@ module Support
     def seed_main_db
       return if cells_secondary?
 
-      run_command(RAKE_DEV_DB_SEED_CMD)
+      run_tasks('db:seed_fu')
     end
 
     def bootstrap_ci_db
       return if !config.gitlab.rails.databases.ci.__enabled || config.gitlab.rails.databases.ci.__use_main_database
 
       if_db_not_found('gitlabhq_development_ci') do
-        run_command(RAKE_COPY_DB_CI_CMD)
+        run_tasks('dev:copy_db:ci')
       end
     end
 
@@ -63,19 +62,17 @@ module Support
       return unless config.gitlab.rails.databases.embedding.enabled
 
       if_db_not_found('gitlabhq_development_embedding') do
-        run_command(RAKE_EMBEDDING_DB_RESET_CMD)
+        run_tasks('db:reset:embedding')
       end
     end
 
-    def run_command(cmd)
+    def run_tasks(*tasks)
       test_gitaly_up!
 
-      result = Shellout.new(cmd).execute(retry_attempts: 3)
-      unless result.success?
+      rake = GDK::Execute::Rake.new(*tasks)
+      unless rake.execute_in_gitlab(retry_attempts: 3).success?
         GDK::Output.abort <<~MESSAGE
-          The command '#{cmd.join(' ')}' failed. Try to run it again with:
-
-          #{cmd.join(' ')}
+          The rake task '#{tasks.join(' ')}' failed. Trying to run it again!
         MESSAGE
       end
 

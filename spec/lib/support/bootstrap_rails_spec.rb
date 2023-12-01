@@ -27,9 +27,9 @@ RSpec.describe Support::BootstrapRails do
 
       context 'is not enabled' do
         it 'skips bootstrapping' do
-          expect_any_instance_of(GDK::Postgresql).not_to receive(:db_exists?).with('gitlabhq_development_embedding')
-          stub_shellout(described_class::RAKE_EMBEDDING_DB_RESET_CMD, success: false)
+          stub_rake_tasks('db:reset:embedding', success: false, retry_attempts: 3)
 
+          expect_any_instance_of(GDK::Postgresql).not_to receive(:db_exists?).with('gitlabhq_development_embedding')
           expect { subject }.not_to raise_error
         end
       end
@@ -38,9 +38,9 @@ RSpec.describe Support::BootstrapRails do
         let(:embedding_enabled) { true }
 
         it 'tries to run bootstrapping' do
-          expect_any_instance_of(GDK::Postgresql).to receive(:db_exists?).with('gitlabhq_development_embedding')
-          stub_shellout(described_class::RAKE_EMBEDDING_DB_RESET_CMD, success: true)
+          stub_rake_tasks('db:reset:embedding', success: true, retry_attempts: 3)
 
+          expect_any_instance_of(GDK::Postgresql).to receive(:db_exists?).with('gitlabhq_development_embedding')
           expect { subject }.not_to raise_error
         end
       end
@@ -107,10 +107,10 @@ RSpec.describe Support::BootstrapRails do
           context 'attempts to setup the gitlabhq_development DB' do
             context 'but `rake `db:reset fails' do
               it 'exits with a status code of 1' do
-                stub_shellout(described_class::RAKE_DEV_DB_RESET_CMD, success: false)
+                stub_rake_tasks('db:reset', success: false, retry_attempts: 3)
 
                 expect { subject }
-                  .to output(/The command '#{described_class::RAKE_DEV_DB_RESET_CMD.join(' ')}' failed/).to_stderr
+                  .to output(/The rake task 'db:reset' failed/).to_stderr
                   .and raise_error(SystemExit) { |error| expect(error.status).to eq(1) }
               end
             end
@@ -118,21 +118,21 @@ RSpec.describe Support::BootstrapRails do
             context 'when `rake db:reset` succeeds' do
               context 'but `rake dev:copy_db:ci` fails' do
                 it 'exits with a status code of 1' do
-                  stub_shellout(described_class::RAKE_DEV_DB_RESET_CMD, success: true)
-                  stub_shellout(described_class::RAKE_DEV_DB_SEED_CMD, success: true)
-                  stub_shellout(described_class::RAKE_COPY_DB_CI_CMD, success: false)
+                  stub_rake_tasks('db:reset', success: true, retry_attempts: 3)
+                  stub_rake_tasks('db:seed_fu', success: true, retry_attempts: 3)
+                  stub_rake_tasks('dev:copy_db:ci', success: false, retry_attempts: 3)
 
                   expect { subject }
-                    .to output(/The command '#{described_class::RAKE_COPY_DB_CI_CMD.join(' ')}' failed/).to_stderr
+                    .to output(/The rake task 'dev:copy_db:ci' failed/).to_stderr
                     .and raise_error(SystemExit) { |error| expect(error.status).to eq(1) }
                 end
               end
 
               context 'and `rake dev:copy_db:ci` succeeds' do
                 it 'exits with a status code of 0' do
-                  stub_shellout(described_class::RAKE_DEV_DB_RESET_CMD, success: true)
-                  stub_shellout(described_class::RAKE_DEV_DB_SEED_CMD, success: true)
-                  stub_shellout(described_class::RAKE_COPY_DB_CI_CMD, success: true)
+                  stub_rake_tasks('db:reset', success: true, retry_attempts: 3)
+                  stub_rake_tasks('db:seed_fu', success: true, retry_attempts: 3)
+                  stub_rake_tasks('dev:copy_db:ci', success: true, retry_attempts: 3)
 
                   expect { subject }.not_to raise_error
                 end
@@ -144,9 +144,9 @@ RSpec.describe Support::BootstrapRails do
     end
   end
 
-  def stub_shellout(cmd, success:)
-    shellout_double = instance_double(Shellout, success?: success)
-    allow(Shellout).to receive(:new).with(cmd).and_return(shellout_double)
-    allow(shellout_double).to receive(:execute).with(retry_attempts: 3).and_return(shellout_double)
+  def stub_rake_tasks(*tasks, success:, **args)
+    rake_double = instance_double(GDK::Execute::Rake, success?: success)
+    allow(GDK::Execute::Rake).to receive(:new).with(*tasks).and_return(rake_double)
+    allow(rake_double).to receive(:execute_in_gitlab).with(**args).and_return(rake_double)
   end
 end
