@@ -9,6 +9,7 @@
 - Your GDK instance must have an active license for GitLab Premium or Ultimate.
 - You must have Docker (or equivalent) on your machine.
 - You will need access to the `Engineering` password vault
+- Your GDK [simulates a SaaS instance](https://docs.gitlab.com/ee/development/ee_features.html#simulate-a-saas-instance).
 
 ### Feature flags
 
@@ -30,18 +31,6 @@ Product analytics features are behind feature flags and must be enabled to use t
 
   ```shell
   echo "Feature.enable(:combined_analytics_dashboards)" | gdk rails c
-  ```
-
-- To enable the dashboard editor and make it visible, run:
-
-  ```shell
-  echo "Feature.enable(:combined_analytics_dashboards_editor)" | gdk rails c
-  ```
-
-- To enable the visualizaiton editor and make it visible, run:
-
-  ```shell
-  echo "Feature.enable(:combined_analytics_visualization_editor)" | gdk rails c
   ```
 
 ### Set up the Product Analytics DevKit
