@@ -1,4 +1,4 @@
-gitlab_docs_clone_dir = gitlab-docs
+gitlab_docs_dir = ${gitlab_development_root}/gitlab-docs
 gitlab_runner_clone_dir = gitlab-runner
 omnibus_gitlab_clone_dir = omnibus-gitlab
 charts_gitlab_clone_dir = charts-gitlab
@@ -7,7 +7,7 @@ gitlab_operator_clone_dir = gitlab-operator
 # Silence Rollup when building GitLab Docs with nanoc
 export ROLLUP_OPTIONS = --silent
 
-make_docs = $(Q)make -C ${gitlab_development_root}/gitlab-docs
+make_docs = $(Q)make -C ${gitlab_docs_dir}
 
 ifeq ($(gitlab_docs_enabled),true)
 gitlab-docs-setup: gitlab-docs/.git gitlab-runner omnibus-gitlab charts-gitlab gitlab-operator gitlab-docs-deps
@@ -126,25 +126,29 @@ gitlab-operator/.git/pull: gitlab-operator/.git
 gitlab-docs-deps: gitlab-docs-asdf-install gitlab-docs-bundle gitlab-docs-yarn
 
 gitlab-docs-asdf-install:
+ifeq ($(asdf_opt_out),false)
 	@echo
 	@echo "${DIVIDER}"
-	@echo "Installing asdf tools"
+	@echo "Installing asdf tools from ${gitlab_docs_dir}/.tool-versions"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${PWD}/.tool-versions" asdf install
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && asdf reshim
+	$(Q)cd ${gitlab_docs_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitlab_docs_dir}/.tool-versions" asdf install
+	$(Q)cd ${gitlab_docs_dir} && asdf reshim
+else
+	@true
+endif
 
 gitlab-docs-bundle:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab-docs Ruby gems"
 	@echo "${DIVIDER}"
-	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_docs_clone_dir)
+	${Q}$(support_bundle_install) $(gitlab_docs_dir)
 
 gitlab-docs-yarn:
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && ${YARN} install --frozen-lockfile
+	$(Q)cd ${gitlab_docs_dir} && ${YARN} install --frozen-lockfile
 
 gitlab-docs-clean:
-	$(Q)cd ${gitlab_development_root}/gitlab-docs && rm -rf tmp
+	$(Q)cd ${gitlab_docs_dir} && rm -rf tmp
 
 gitlab-docs-build:
 	$(make_docs) compile
@@ -205,3 +209,4 @@ else
 gitlab-operator-docs-check:
 	@true
 endif
+

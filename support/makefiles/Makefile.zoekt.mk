@@ -1,3 +1,5 @@
+zoekt_dir = ${gitlab_development_root}/zoekt
+
 .PHONY: zoekt-setup
 ifeq ($(zoekt_enabled),true)
 zoekt-setup: zoekt/bin/zoekt-git-clone zoekt/bin/zoekt-git-index zoekt/bin/zoekt-webserver
@@ -17,10 +19,22 @@ endif
 .PHONY: zoekt-update-run
 zoekt-update-run: zoekt/.git/pull zoekt-clean-bin zoekt/bin/zoekt-webserver
 
+zoekt-asdf-install:
+ifeq ($(asdf_opt_out),false)
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing asdf tools from ${zoekt_dir}/.tool-versions"
+	@echo "${DIVIDER}"
+	$(Q)cd ${zoekt_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${zoekt_dir}/.tool-versions" asdf install
+	$(Q)cd ${zoekt_dir} && asdf reshim
+else
+	@true
+endif
+
 zoekt/.git:
 	$(Q)GIT_REVISION="${zoekt_version}" CLONE_DIR=zoekt support/component-git-clone ${git_params} ${zoekt_repo} zoekt
 
-zoekt/bin/%: zoekt/.git
+zoekt/bin/%: zoekt/.git zoekt-asdf-install
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building $@ version ${zoekt_version}"
