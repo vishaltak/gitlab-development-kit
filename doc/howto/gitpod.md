@@ -141,6 +141,16 @@ You can create a runner with a Docker executor or a shell executor. You can also
      --executor "docker" \
      --docker-image alpine:latest \
      --description "docker-runner"
+   ```
+
+1. Start the runner container using the Docker volume as [documented](https://docs.gitlab.com/runner/install/docker.html#option-2-use-docker-volumes-to-start-the-runner-container).
+
+   ```shell
+   docker run -d --name gitlab-runner --restart always \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v gitlab-runner-config:/etc/gitlab-runner \
+     gitlab/gitlab-runner:latest
+   ```
 
 #### Option 2: Shell executor
 
