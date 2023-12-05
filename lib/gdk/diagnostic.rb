@@ -8,6 +8,7 @@ module GDK
     autoload :Chromedriver, 'gdk/diagnostic/chromedriver'
     autoload :Configuration, 'gdk/diagnostic/configuration'
     autoload :Dependencies, 'gdk/diagnostic/dependencies'
+    autoload :FileWatches, 'gdk/diagnostic/file_watches'
     autoload :Geo, 'gdk/diagnostic/geo'
     autoload :Gitaly, 'gdk/diagnostic/gitaly'
     autoload :Gitlab, 'gdk/diagnostic/gitlab'
@@ -45,6 +46,7 @@ module GDK
         Golang
         StaleServices
         Chromedriver
+        FileWatches
       ]
 
       klasses.map do |const|
