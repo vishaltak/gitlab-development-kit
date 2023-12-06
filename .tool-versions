@@ -12,8 +12,6 @@ gitleaks 8.16.4
 # golang:
 #   1.21.4:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
@@ -62,8 +60,7 @@ redis 7.0.14
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #   3.2.2:
-#     - https://gitlab.com/gitlab-org/gitlab-shell/-/raw/main/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitlab-shell -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_SHELL_VERSION
+#     - .tool-versions-gdk
 #
 ruby 3.1.4 3.2.2
 
