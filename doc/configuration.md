@@ -533,8 +533,16 @@ Vite also consumes less memory.
 These improvements are possible because Vite uses [esbuild](https://esbuild.github.io/) under the hood.
 For more details on the implementation of Vite at GitLab, see the RFC [frontend/rfcs#106](https://gitlab.com/gitlab-org/frontend/rfcs/-/issues/106).
 
+If you are using Vite, please [leave feedback](https://gitlab.com/gitlab-org/gitlab/-/issues/423851) of your experience.
+There are some known caveats, they are linked to the feedback issue. Please make sure to check those. There are two caveats worth calling out:
+
+1. `vite` serves files directly, so ad blockers might [block them based on their name](https://gitlab.com/gitlab-org/gitlab/-/issues/433361).
+   The workaround is to turn ad blockers off for the GDK.
+1. `vite` on Linux watches a lot of files, so you might need to raise the [max_watch_files](https://gitlab.com/gitlab-org/gitlab/-/issues/434329) limit.
+
 To enable Vite for your GDK:
 
+1. Ensure that your `gdk` is up to date (`gdk update`)
 1. Ensure the `gdk` is running with webpack.
 1. If you ran `vite` manually before, make sure no process remains.
 1. Enable the Vite feature flag. This is needed for some older branches.
@@ -572,8 +580,6 @@ To enable Vite for your GDK:
    ```shell
    gdk restart vite rails-web
    ```
-
-If you are using Vite, please [leave feedback](https://gitlab.com/gitlab-org/gitlab/-/issues/423851) of your experience.
 
 To disable Vite, run the following commands:
 
