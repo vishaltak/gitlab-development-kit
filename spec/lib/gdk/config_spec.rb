@@ -975,6 +975,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#docker_host' do
+      it 'returns the empty string' do
+        expect(config.runner.docker_host).to eq('')
+      end
+    end
+
     describe '#image' do
       it 'returns gitlab/gitlab-runner:latest' do
         expect(config.runner.image).to eq('gitlab/gitlab-runner:latest')
