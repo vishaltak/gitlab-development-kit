@@ -2003,6 +2003,7 @@ RSpec.describe GDK::Config do
         expect(config.vite.__settings).to eq({
           enabled: false,
           port: 3038,
+          clientPort: nil,
           watch: true
         })
       end
@@ -2017,6 +2018,7 @@ RSpec.describe GDK::Config do
           expect(config.vite.__settings).to eq({
             enabled: true,
             port: 3011,
+            clientPort: nil,
             watch: true
           })
         end
@@ -2030,6 +2032,7 @@ RSpec.describe GDK::Config do
             expect(config.vite.__settings).to eq({
               enabled: true,
               port: 3011,
+              clientPort: 3000,
               watch: true
             })
           end

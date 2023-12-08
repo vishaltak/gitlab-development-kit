@@ -90,12 +90,16 @@ http {
       proxy_request_buffering off;
     }
 
-<%- if config.webpack.live_reload? -%>
-
+<%- if config.webpack? && config.webpack.live_reload? -%>
     location /_hmr/ {
       proxy_pass http://<%= config.webpack.host %>:<%= config.webpack.port %>/ws;
     }
+<%- end -%>
 
+<%- if config.vite? && config.vite.hot_module_reloading? -%>
+    location /vite-dev/ {
+      proxy_pass http://localhost:<%= config.vite.port %>/vite-dev/;
+    }
 <%- end -%>
 
     location / {

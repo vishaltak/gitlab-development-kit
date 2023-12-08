@@ -186,6 +186,7 @@ module GDK
         {
           enabled: config.vite.__safe_enabled?,
           port: config.vite.port,
+          clientPort: (config.port if config.vite.hot_module_reloading? && config.nginx?),
           watch: config.vite.hot_module_reloading?
         }
       end
