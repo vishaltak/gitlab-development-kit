@@ -10,8 +10,9 @@
 gitleaks 8.16.4
 
 # golang:
-#   1.21.4:
+#   1.21.5:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
+#   1.21.4:
 #     - https://gitlab.com/gitlab-org/gitlab-pages/-/raw/master/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-pages -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_PAGES_VERSION
 #     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
@@ -23,7 +24,7 @@ gitleaks 8.16.4
 #     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.21.4 1.20.10
+golang 1.21.5 1.21.4 1.20.10
 
 # minio:
 #   2022-07-15T03-44-22Z:
