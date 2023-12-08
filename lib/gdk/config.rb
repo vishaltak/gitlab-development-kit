@@ -165,6 +165,7 @@ module GDK
     settings :vite do
       bool(:enabled) { false }
       port(:port, 'vite')
+      bool(:hot_module_reloading) { true }
 
       bool(:__safe_enabled) do
         if config.vite?
@@ -179,6 +180,14 @@ module GDK
         else
           false
         end
+      end
+
+      anything(:__settings) do
+        {
+          enabled: config.vite.__safe_enabled?,
+          port: config.vite.port,
+          watch: config.vite.hot_module_reloading?
+        }
       end
     end
 

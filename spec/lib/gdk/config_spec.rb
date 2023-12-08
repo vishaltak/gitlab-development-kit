@@ -1960,6 +1960,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#hot_module_reloading' do
+      it 'is enabled by default' do
+        expect(config.vite.hot_module_reloading?).to be true
+      end
+    end
+
     describe '#__safe_enabled?' do
       it 'is false by default' do
         expect(config.vite.__safe_enabled?).to be false
@@ -1987,6 +1993,45 @@ RSpec.describe GDK::Config do
 
           it 'is true' do
             expect(config.vite.__safe_enabled?).to be true
+          end
+        end
+      end
+    end
+
+    describe '#__settings' do
+      it 'returns hash with defaults' do
+        expect(config.vite.__settings).to eq({
+          enabled: false,
+          port: 3038,
+          watch: true
+        })
+      end
+
+      context 'when vite is enabled' do
+        before do
+          yaml['webpack'] = { 'enabled' => false }
+          yaml['vite'] = { 'enabled' => true, 'port' => 3011 }
+        end
+
+        it 'enables vite integration in hash' do
+          expect(config.vite.__settings).to eq({
+            enabled: true,
+            port: 3011,
+            watch: true
+          })
+        end
+
+        context 'and nginx is enabled' do
+          before do
+            yaml['nginx'] = { 'enabled' => true }
+          end
+
+          it 'sets the client port in hash' do
+            expect(config.vite.__settings).to eq({
+              enabled: true,
+              port: 3011,
+              watch: true
+            })
           end
         end
       end
