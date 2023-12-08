@@ -1999,27 +1999,52 @@ RSpec.describe GDK::Config do
     end
 
     describe '#__settings' do
+      before do
+        yaml['webpack'] = { 'enabled' => false }
+        yaml['hostname'] = 'gdk.test'
+      end
+
       it 'returns hash with defaults' do
         expect(config.vite.__settings).to eq({
           enabled: false,
+          host: '127.0.0.1',
           port: 3038,
-          clientPort: nil,
-          watch: true
+          hmr: {
+            clientPort: 3038,
+            hostname: 'gdk.test'
+          }
         })
+      end
+
+      context 'when hot module reloading is disabled' do
+        before do
+          yaml['vite'] = { 'enabled' => true, 'port' => 3011, "hot_module_reloading" => false }
+        end
+
+        it 'sets hmr to nil' do
+          expect(config.vite.__settings).to eq({
+            enabled: true,
+            host: '127.0.0.1',
+            port: 3011,
+            hmr: nil
+          })
+        end
       end
 
       context 'when vite is enabled' do
         before do
-          yaml['webpack'] = { 'enabled' => false }
           yaml['vite'] = { 'enabled' => true, 'port' => 3011 }
         end
 
         it 'enables vite integration in hash' do
           expect(config.vite.__settings).to eq({
             enabled: true,
+            host: '127.0.0.1',
             port: 3011,
-            clientPort: nil,
-            watch: true
+            hmr: {
+              clientPort: 3011,
+              hostname: 'gdk.test'
+            }
           })
         end
 
@@ -2028,12 +2053,15 @@ RSpec.describe GDK::Config do
             yaml['nginx'] = { 'enabled' => true }
           end
 
-          it 'sets the client port in hash' do
+          it 'sets the nginx port in hash' do
             expect(config.vite.__settings).to eq({
               enabled: true,
+              host: '127.0.0.1',
               port: 3011,
-              clientPort: 3000,
-              watch: true
+              hmr: {
+                clientPort: 3000,
+                hostname: 'gdk.test'
+              }
             })
           end
         end

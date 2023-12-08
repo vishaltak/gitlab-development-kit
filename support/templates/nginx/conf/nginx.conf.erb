@@ -98,7 +98,7 @@ http {
 
 <%- if config.vite? && config.vite.hot_module_reloading? -%>
     location /vite-dev/ {
-      proxy_pass http://localhost:<%= config.vite.port %>/vite-dev/;
+      proxy_pass http://<%= config.listen_address %>:<%= config.vite.port %>/vite-dev/;
     }
 <%- end -%>
 

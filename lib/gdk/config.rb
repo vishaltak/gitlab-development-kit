@@ -185,9 +185,15 @@ module GDK
       anything(:__settings) do
         {
           enabled: config.vite.__safe_enabled?,
+          host: config.listen_address,
           port: config.vite.port,
-          clientPort: (config.port if config.vite.hot_module_reloading? && config.nginx?),
-          watch: config.vite.hot_module_reloading?
+
+          hmr: if config.vite.hot_module_reloading?
+                 {
+                   clientPort: (config.nginx? ? config.port : config.vite.port),
+                   hostname: config.hostname
+                 }
+               end
         }
       end
     end
