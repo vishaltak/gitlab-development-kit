@@ -15,6 +15,12 @@
 
 Product analytics features are behind feature flags and must be enabled to use them in GDK.
 
+- To make the product analytics checkbox visible in the root group settings, run:
+
+  ```shell
+  echo "Feature.enable(:product_analytics_beta_optin)" | gdk rails c
+  ```
+
 - To enable product analytics and make the dashboards available, run:
 
   ```shell
