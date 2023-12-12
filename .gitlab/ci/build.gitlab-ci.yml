@@ -17,11 +17,11 @@ build-gitpod-workspace-image:
     - .build-job
     - .rules:gitpod-code-changes
   script:
-    - ./support/docker-build "$GITPOD_WORKSPACE_IMAGE" ./support/gitpod
+    - ./support/docker-build ./support/gitpod "$GITPOD_WORKSPACE_IMAGE:$CI_COMMIT_REF_SLUG"
 
 build-gitlab-remote-workspace-image:
   extends:
     - .build-job
     - .rules:gitlab-remote-code-changes
   script:
-    - ./support/docker-build "$GITLAB_REMOTE_WORKSPACE_IMAGE" ./support/gitlab-remote-development
+    - ./support/docker-build ./support/gitlab-remote-development "$GITLAB_REMOTE_WORKSPACE_IMAGE:$CI_COMMIT_REF_SLUG"
