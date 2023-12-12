@@ -13,7 +13,6 @@ FileNotFoundError = Class.new(StandardError)
 
 GITLAB_ORG_URL = 'https://gitlab.com/gitlab-org'
 GITLAB_URL = "#{GITLAB_ORG_URL}/gitlab".freeze
-GITLAB_PAGES_URL = "#{GITLAB_ORG_URL}/gitlab-pages".freeze
 GITALY_URL = "#{GITLAB_ORG_URL}/gitaly".freeze
 GITLAB_RUNNER_URL = "#{GITLAB_ORG_URL}/gitlab-runner".freeze
 GITLAB_UI_URL = "#{GITLAB_ORG_URL}/gitlab-ui".freeze
@@ -173,8 +172,6 @@ end
 tool_versions_files = [
   RemoteToolVersionFile.new(GITLAB_URL),
   RemoteToolVersionFile.new(GITLAB_URL, path: 'workhorse'),
-  RemoteToolVersionFile.new(GITLAB_PAGES_URL),
-  RemoteToolVersionFile.new(GITLAB_PAGES_URL, ref: ref_from_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION'), label_ref: url_for_remote_file_for_gitlab_project('GITLAB_PAGES_VERSION')),
   RemoteToolVersionFile.new(GITALY_URL),
   RemoteToolVersionFile.new(GITALY_URL, ref: ref_from_remote_file_for_gitlab_project('GITALY_SERVER_VERSION'), label_ref: url_for_remote_file_for_gitlab_project('GITALY_SERVER_VERSION')),
   RemoteToolVersionFile.new(GITLAB_RUNNER_URL, ref: 'main'),
