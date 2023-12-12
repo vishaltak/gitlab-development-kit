@@ -444,3 +444,30 @@ kill: run: ./services/rails-background-jobs: (pid 89668) 98s, normally down, wan
 ```
 
 To kill off the rogue processes, run `gdk kill`.
+
+## Unable to log in as root
+
+If all the services are running after you run `gdk install`, but you cannot log
+in as `root`, you can reset the password through the Rails console.
+
+For more information about the Ruby on Rails console in GitLab, see [Rails console](https://docs.gitlab.com/ee/administration/operations/rails_console.html).
+
+1. Open a new Rails console:
+    
+    ```shell
+    cd <gdk-dir>/gitlab
+    bundle exec rails console
+    ```
+
+1. In the Rails console, update the password for the `root` user:
+
+    ```ruby
+    user = User.find_by_username('root')
+    user.update!(password: 'newpassword')
+    ```
+
+To find the user IDs for all current users, run:
+
+```ruby
+User.all
+```
