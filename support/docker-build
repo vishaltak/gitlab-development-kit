@@ -4,14 +4,18 @@
 
 set -e
 
-IMAGE="$1"
-DIR="$2"
+DIR="$1"
+IMAGE="$2"
 
 if [[ -z $DIR ]]; then
   echo "Error: Directory must exist"
-  echo "Usage: $0 \"<image>\" <dir>"
+  echo "Usage: $0 <dir> [image]"
   echo
-  echo "build docker <image> from <dir> for current CI commit and repo"
+  echo "Build docker <image> from <dir> for current CI commit and repo"
+  echo
+  echo "Example:"
+  echo "  ./support/docker-build support/gitpod"
+  echo "  ./support/docker-build support/gitlab-remote-development workspace"
   exit 1
 fi
 
