@@ -51,5 +51,5 @@ gitpod-workspace-image:
     entrypoint: [""]
   script:
     - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - crane tag $GITPOD_WORKSPACE_IMAGE:stable old_stable
-    - crane tag $GITPOD_WORKSPACE_IMAGE:main stable
+    - crane tag $CI_REGISTRY_IMAGE/$GITPOD_WORKSPACE_IMAGE:stable old_stable
+    - crane tag $CI_REGISTRY_IMAGE/$GITPOD_WORKSPACE_IMAGE:main stable
