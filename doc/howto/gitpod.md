@@ -49,6 +49,28 @@ If you have questions about the UI or if you are curious have a look at:
 - [Gitpod documentation](https://www.gitpod.io/docs/).
 - [GDK commands documentation](../gdk_commands.md).
 
+## View the GitLab instance
+
+After you have [started](#how-to-get-started) a Gitpod session, to view your running GitLab instance:
+
+1. Select the **PORTS** tab.
+1. Select URL in the **Address** column for port **3000**.
+
+## Make the Rails web server publicly accessible
+
+By default, only your web browser can access your GitLab instance. Other services can't
+access your GitLab instance until you open port `3000`. You can open port `3000`, either:
+
+- By using the Gitpod UI:
+
+  1. Select the **PORTS** tab.
+  1. Select the lock icon next to port `3000` and it will appear as an unlocked lock.
+
+- By using the [Gitpod CLI](https://www.gitpod.io/docs/references/gitpod-cli):
+
+  1. Select the **TERMINAL** tab.
+  1. Run `gp ports visibility 3000:public`.
+
 ## How to use GDK with Gitpod
 
 The following are common tasks for using GDK in Gitpod.
@@ -92,6 +114,37 @@ workers) mean a restart is required to have the feature work:
 cd /workspace/gitlab-development-kit
 gdk restart
 ```
+
+### Start a Rails console
+
+To run the Rails console:
+
+1. Select the **TERMINAL** tab.
+1. Run the following command:
+
+   ```shell
+   cd /workspace/gitlab-development-kit/gitlab && ./bin/rails console
+   ```
+
+### View logs
+
+To switch to the directory with Rails logs:
+
+1. Select the **TERMINAL** tab.
+1. Change into the GitLab log directory:
+
+   ```shell
+   cd /workspace/gitlab-development-kit/gitlab/log
+   ```
+
+You can also tail logs from GDK services:
+
+1. Select the **TERMINAL** tab.
+1. Run the following command:
+
+   ```shell
+   cd /workspace/gitlab-development-kit && gdk tail
+   ```
 
 ### Commit and push changes
 
@@ -160,7 +213,7 @@ You can create a runner with a Docker executor or a shell executor. You can also
 1. Ensure that you're using the 3000 port and that it's set to public. You can change the port from private to public by going to the
    **Remote Explorer** tab in Gitpod UI and select the lock icon next to the port name.
 1. Select **New instance runner** and be sure to check **Run untagged jobs** if you don't specify a tag list. Optionally fill out the rest of the form.
-1. In the next screen, copy the command. 
+1. In the next screen, copy the command.
 1. In the terminal, switch to the GDK directory `cd /workspace/gitlab-development-kit`.
 1. Run the copied command with the following added to the end `--config /workspace/gitlab-development-kit/gitlab-runner-config.toml --non-interactive --executor shell`.
 1. Run `gitlab-runner run --config /workspace/gitlab-development-kit/gitlab-runner-config.toml`.
@@ -173,7 +226,7 @@ use to verify whether the runner is actually working.
 
 To enable feature flags:
 
-1. Run `cd /workspace/gitlab-development-kit/gitlab && ./bin/rails console`.
+1. [Start a Rails console in Gitpod](#start-a-rails-console).
 1. Wait about 1 minute until you see the message that the development environment
    has been loaded.
 1. Run `Feature.enable(:feature_flag)`, replacing `feature_flag` with the name of the
