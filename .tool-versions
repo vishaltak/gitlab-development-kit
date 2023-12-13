@@ -13,13 +13,9 @@ gitleaks 8.16.4
 #   1.21.5:
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
 #   1.21.4:
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
 #     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
 #   1.20.10:
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
 golang 1.21.5 1.21.4 1.20.10
@@ -54,8 +50,6 @@ redis 7.0.14
 #   3.1.4:
 #     - .tool-versions-gdk
 #     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
-#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
 #   3.2.2:
 #     - .tool-versions-gdk
 #
