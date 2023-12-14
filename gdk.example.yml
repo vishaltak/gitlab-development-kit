@@ -446,6 +446,7 @@ vault:
   port: 8200
 vite:
   enabled: false
+  hot_module_reloading: true
   port: 3038
 webpack:
   allowed_hosts: []

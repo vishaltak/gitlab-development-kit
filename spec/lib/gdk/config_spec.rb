@@ -1966,6 +1966,12 @@ RSpec.describe GDK::Config do
       end
     end
 
+    describe '#hot_module_reloading' do
+      it 'is enabled by default' do
+        expect(config.vite.hot_module_reloading?).to be true
+      end
+    end
+
     describe '#__safe_enabled?' do
       it 'is false by default' do
         expect(config.vite.__safe_enabled?).to be false
