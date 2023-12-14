@@ -80,6 +80,71 @@ automatically configured to use the tracking database in `database.yml`. This is
 done so that tests can run on the secondary site, because otherwise the tests would fail while inserting or updating data into the read-only `main` or
 `ci` databases.
 
+## Performing a Failover In Development
+
+The [instructions for conducting a failover from primary to secondary](https://docs.gitlab.com/ee/administration/geo/disaster_recovery/#step-4-optional-updating-the-primary-domain-dns-record) do not cleanly apply to this development environment setup.
+
+### Environment
+
+These directions assume the following:
+
+1. You have setup two instances of GitLab and GDK that are running with Geo replication as specified earlier in this document.
+
+1. You start in the root directory which contains directories `gdk` and `gdk2`. 
+   Each of these directories contains a full copy of the gitlab repo in a `gitlab` subdirectory, 
+   and its own database data in a `postgresql/data` subdirectory.
+
+1. `gdk` is running as primary, accessible at http://localhost:3000 
+   and `gdk2` is running as secondary, accessible at http://localhost:3001
+
+### Failover Steps
+
+1. Stop the Primary (GDK)
+
+   ```shell
+   # starting from your dev root that contains gdk and gdk2 directories
+   cd ./gdk/gitlab
+   gdk stop
+   cd ../..
+   ```
+
+1. Promote the Secondary (GDK2) Postgres Database to Primary
+
+   ```shell
+   # in dev root that contains gdk and gdk2 directories
+   cd ./gdk2
+   export PGDATA="$(pwd)/postgresql/data"
+   pg_ctl promote
+
+   cd ./gitlab
+   bundle exec rake geo:set_secondary_as_primary
+   cd ..
+   ```
+
+1. Reconfigure and Restart Former Secondary (GDK2)
+
+   ```shell
+   # inside gdk2 directory
+   gdk reconfigure
+   gdk restart
+   ```
+
+1. Verify Former Secondary (GDK2) Is Now Primary In App
+   
+   1. Visit http://localhost:3000 to confirm the former primary is no longer operating.
+      The site should be down at this URL.
+   
+   1. Visit http://localhost:3001 and verify it loads GitLab. It may take a few minutes to allow
+      the assets to recompile after the reconfiguration in the last step.
+
+      1. Log in as root
+
+      1. Go to the "Admin" section of the site
+
+      1. On the left-hand menu, click on "Geo > Sites"
+
+      1. View the statistics and confirm the running server is marked as the "Primary"
+
 ## SSH cloning
 
 If you used the [Easy installation](#easy-installation), then your primary site's SSH service is disabled, and your secondary site's SSH service is enabled. The listen port is unchanged. This simulates having a unified URL for SSH which happens to always route to the secondary site. With this setup, you can already observe Geo-specific behavior. For example, when you do a Git push, you will see `This request to a Geo secondary node will be forwarded to the Geo primary node`.
