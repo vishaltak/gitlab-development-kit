@@ -181,21 +181,6 @@ module GDK
           false
         end
       end
-
-      anything(:__settings) do
-        {
-          enabled: config.vite.__safe_enabled?,
-          host: config.listen_address,
-          port: config.vite.port,
-
-          hmr: if config.vite.hot_module_reloading?
-                 {
-                   clientPort: (config.nginx? ? config.port : config.vite.port),
-                   hostname: config.hostname
-                 }
-               end
-        }
-      end
     end
 
     settings :webpack do
