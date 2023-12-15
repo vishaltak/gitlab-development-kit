@@ -11,6 +11,33 @@
 - You will need access to the `Engineering` password vault
 - Your GDK [simulates a SaaS instance](https://docs.gitlab.com/ee/development/ee_features.html#simulate-a-saas-instance).
 
+### One-line setup
+
+To automatically set up Product Analytics, in your `gitlab` directory run the following command:
+
+```shell
+# You can replace gitlab-org with the group name you want to enable Product Analytics on.
+RAILS_ENV=development bundle exec rake gitlab:product_analytics:setup\['gitlab-org'\]
+```
+
+After running the command [set up the DevKit](#set-up-the-product-analytics-devkit) if you haven't already done so.
+
+### Manual setup
+
+1. Enable the required [feature flags](#feature-flags).
+1. Run GDK in [SaaS mode](https://docs.gitlab.com/ee/development/ee_features.html#simulate-a-saas-instance) with an Ultimate license.
+1. Set the **Ultimate** plan on your test group.
+1. Enable Experiment & Beta features on your test group.
+
+    1. Go to **Settings > General**.
+    1. Expand **Permissions and group features**.
+    1. Enable **Experiment & Beta features** and **Product analytics**.
+    1. Select **Save changes**.
+
+1. [Set up the DevKit](#set-up-the-product-analytics-devkit) and connect it to your GDK.
+
+Once set up you can follow the [instructions](#view-product-analytics-dashboards) below on how to view the product analytics dashboards.
+
 ### Feature flags
 
 Product analytics features are behind feature flags and must be enabled to use them in GDK.
