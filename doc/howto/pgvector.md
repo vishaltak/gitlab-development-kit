@@ -57,8 +57,8 @@ To fix this, you should uninstall and reinstall PostgreSQL using the
 following commands:
 
 ```shell
-asdf uninstall postgresql <version>
-asdf install postgresql <version>
+asdf uninstall postgres <version>
+asdf install postgres <version>
 ```
 
 See [the PostgreSQL troubleshooting guide](../troubleshooting/postgresql.md#fix-a-build-error-with-pgvector-extension-due-to-xcode-sdk-path-changes-on-macos) for more details.
