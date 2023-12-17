@@ -61,3 +61,4 @@ to learn how to contribute to GitLab.
 - [Use Container Registry with GDK](registry.md)
 - [Use GitLab Runner with GDK](runner.md)
 - [Use Prometheus with GDK](prometheus/index.md)
+- [Use Caddy to make GDK on a virtual machine publicly accessible](public_gdk.md)
