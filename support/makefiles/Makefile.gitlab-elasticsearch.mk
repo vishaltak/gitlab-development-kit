@@ -1,3 +1,4 @@
+gitlab_elasticsearch_indexer_dir =  ${gitlab_development_root}/gitlab-elasticsearch-indexer
 gitlab_elasticsearch_indexer_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITLAB_ELASTICSEARCH_INDEXER_VERSION")
 
 ifeq ($(gitlab_elasticsearch_indexer_enabled),true)
@@ -25,7 +26,7 @@ gitlab-elasticsearch-indexer/.git:
 	$(Q)GIT_REVISION="${gitlab_elasticsearch_indexer_version}" support/component-git-clone ${git_params} ${gitlab_elasticsearch_indexer_repo} gitlab-elasticsearch-indexer
 
 .PHONY: gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
-gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git/pull
+gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer: gitlab-elasticsearch-indexer/.git/pull gitlab-elasticsearch-indexer-asdf-install
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitlab-elasticsearch-indexer version ${gitlab_elasticsearch_indexer_version}"
@@ -39,3 +40,15 @@ gitlab-elasticsearch-indexer/.git/pull: gitlab-elasticsearch-indexer/.git
 	@echo "Updating gitlab-org/gitlab-elasticsearch-indexer"
 	@echo "${DIVIDER}"
 	$(Q)support/component-git-update gitlab_elasticsearch_indexer gitlab-elasticsearch-indexer "${gitlab_elasticsearch_indexer_version}" main
+
+gitlab-elasticsearch-indexer-asdf-install:
+ifeq ($(asdf_opt_out),false)
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing asdf tools from ${gitlab_elasticsearch_indexer_dir}/.tool-versions"
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitlab_elasticsearch_indexer_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitlab_elasticsearch_indexer_dir}/.tool-versions" asdf install
+	$(Q)cd ${gitlab_elasticsearch_indexer_dir} && asdf reshim
+else
+	@true
+endif
