@@ -103,9 +103,9 @@ These directions assume the following:
 
    ```shell
    # starting from your dev root that contains gdk and gdk2 directories
-   cd ./gdk/gitlab
+   cd ./gdk
    gdk stop
-   cd ../..
+   cd ..
    ```
 
 1. Promote the Secondary (GDK2) Postgres Database to Primary
@@ -139,9 +139,7 @@ These directions assume the following:
 
       1. Log in as root
 
-      1. Go to the "Admin" section of the site
-
-      1. On the left-hand menu, click on "Geo > Sites"
+      1. Go to the "Admin > Geo > Sites" section of the site (http://localhost:3001/admin/geo/sites)
 
       1. View the statistics and confirm the running server is marked as the "Primary"
 
