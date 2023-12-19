@@ -504,6 +504,12 @@ module GDK
     end
 
     settings :omniauth do
+      settings :gitlab do
+        bool(:enabled) { false }
+        string(:app_id) { '' }
+        string(:app_secret) { '' }
+        string(:scope) { 'read_user' }
+      end
       settings :google_oauth2 do
         string(:enabled) { client_secret }
         string(:client_id) { read!('google_oauth_client_id') || '' }
