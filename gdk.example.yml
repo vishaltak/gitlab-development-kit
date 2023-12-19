@@ -258,6 +258,11 @@ omniauth:
     client_id: ''
     client_secret: ''
     enabled: false
+  gitlab:
+    app_id: ''
+    app_secret: ''
+    enabled: false
+    scope: read_user
   google_oauth2:
     client_id: ''
     client_secret: ''

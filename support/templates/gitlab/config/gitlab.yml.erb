@@ -925,6 +925,12 @@ development:
   <<: *base
   omniauth:
     providers:
+    <%- if config.omniauth.gitlab.enabled -%>
+    - { name: 'gitlab',
+        app_id: '<%= config.omniauth.gitlab.app_id %>',
+        app_secret: '<%= config.omniauth.gitlab.app_secret %>',
+        args: { scope: '<%= config.omniauth.gitlab.scope %>' } }
+    <%- end -%>
     <%- if config.omniauth.google_oauth2.enabled -%>
     - { name: 'google_oauth2',
         app_id: '<%= config.omniauth.google_oauth2.client_id %>',
