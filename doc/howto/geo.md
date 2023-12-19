@@ -91,7 +91,7 @@ These directions assume the following:
 1. You have setup two instances of GitLab and GDK that are running with Geo replication as specified earlier in this document.
 
 1. You start in the root directory which contains directories `gdk` and `gdk2`. 
-   Each of these directories contains a full copy of the gitlab repo in a `gitlab` subdirectory, 
+   Each of these directories contains a full copy of the core GitLab repo in a `gitlab` subdirectory, 
    and its own database data in a `postgresql/data` subdirectory.
 
 1. `gdk` is running as primary, accessible at [http://localhost:3000](http://localhost:3000) 
