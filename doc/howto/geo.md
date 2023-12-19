@@ -94,8 +94,8 @@ These directions assume the following:
    Each of these directories contains a full copy of the gitlab repo in a `gitlab` subdirectory, 
    and its own database data in a `postgresql/data` subdirectory.
 
-1. `gdk` is running as primary, accessible at http://localhost:3000 
-   and `gdk2` is running as secondary, accessible at http://localhost:3001
+1. `gdk` is running as primary, accessible at [http://localhost:3000](http://localhost:3000) 
+   and `gdk2` is running as secondary, accessible at [http://localhost:3001](http://localhost:3001)
 
 ### Failover Steps
 
@@ -131,15 +131,15 @@ These directions assume the following:
 
 1. Verify Former Secondary (GDK2) Is Now Primary In App
    
-   1. Visit http://localhost:3000 to confirm the former primary is no longer operating.
+   1. Visit [http://localhost:3000](http://localhost:3000) to confirm the former primary is no longer operating.
       The site should be down at this URL.
    
-   1. Visit http://localhost:3001 and verify it loads GitLab. It may take a few minutes to allow
+   1. Visit [http://localhost:3001](http://localhost:3001) and verify it loads GitLab. It may take a few minutes to allow
       the assets to recompile after the reconfiguration in the last step.
 
       1. Log in as root
 
-      1. Go to the "Admin > Geo > Sites" section of the site (http://localhost:3001/admin/geo/sites)
+      1. Go to the "Admin > Geo > Sites" section of the site at [http://localhost:3001/admin/geo/sites](http://localhost:3001/admin/geo/sites)
 
       1. View the statistics and confirm the running server is marked as the "Primary"
 
