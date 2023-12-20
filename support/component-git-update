@@ -1,39 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative '../lib/gdk/config'
+require_relative '../lib/gdk'
 
-PROGNAME = File.basename(__FILE__)
+abort "usage: #{File.basename(__FILE__)} COMPONENT WORKTREE REVISION DEFAULT_BRANCH" if ARGV.count < 4
 
-def main(component, worktree, revision)
-  config = GDK::Config.new[component]
-  abort "unknown component: #{component.inspect}" unless config
+component_name, worktree, revision, default_branch = ARGV
 
-  unless config.auto_update
-    warn "#{PROGNAME}: auto update for #{component} is disabled via gdk.yml"
-    exit
-  end
-
-  Dir.chdir(worktree)
-
-  [
-    [%w[git stash], false],
-    [%w[git fetch --all --tags --prune], true],
-    [%W[git checkout #{revision}], true]
-  ].each do |cmd, print_stdout|
-    out = print_stdout ? $stdout : :close
-    next if system(*cmd, out: out)
-
-    abort "command failed: #{cmd.join(' ')}"
-  end
+begin
+  GDK::Project::Base.new(component_name, GDK.config.gdk_root.join(worktree), default_branch).update(revision)
+rescue StandardError => e
+  GDK::Output.abort(e)
 end
-
-def debug?
-  ENV.fetch('GDK_DEBUG', 'false') == 'true'
-end
-
-if ARGV.count!= 3
-  abort "usage: #{PROGNAME} COMPONENT WORKTREE REVISION"
-end
-
-main(*ARGV)

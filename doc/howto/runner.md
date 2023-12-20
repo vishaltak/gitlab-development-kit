@@ -1,236 +1,401 @@
 # Using GitLab Runner with GDK
 
-Most features of [GitLab CI](http://docs.gitlab.com/ce/ci/) need a
-[Runner](http://docs.gitlab.com/ce/ci/runners/README.html) to be registered with
-the GitLab installation. This HOWTO will take you through the necessary steps to
+Most features of [GitLab CI/CD](http://docs.gitlab.com/ee/ci/) need a
+[runner](http://docs.gitlab.com/ee/ci/runners/README.html) to be registered with
+the GitLab installation. This how-to takes you through the necessary steps to
 do so when GitLab is running under GDK.
 
-## Set up GitLab
+Before setting up a runner, you must have [set up the GDK](../index.md) for your workstation.
 
-Start by [preparing your computer](../prepare.md) and
-[setting up GDK](../set-up-gdk.md).
+The GDK supports managing the runner configuration file and the process itself, either with a native binary
+or within a Docker container. Running jobs inside a Docker executor is supported in both cases; you can use a native
+binary to run jobs inside a Docker container.
 
-In some configurations, GitLab Runner needs access to GitLab from inside a
-Docker container, or even another machine, which isn't supported in the default
-configuration.
+You can set up a runner to execute using either of the following approaches:
 
-### Simple configuration
+- [Directly on your workstation](#executing-a-runner-directly-on-your-workstation)
+- [From within Docker](#executing-a-runner-from-within-docker) (recommended)
 
-If you intend to just use the "shell" executor (fine for very
-simple jobs), you can use GDK with its default settings and skip the Advanced
-configuration below. If GDK is already running, you'll need to restart it after making
-these changes.
+NOTE:
+In the configuration examples, `runner` should not be confused with [`gitlab_runner`](gitlab_docs.md).
 
-With GDK running:
+## Executing a runner directly on your workstation
 
-1. Navigate to `http://localhost:3000/admin/runners` (log in as root)
-1. Make note of the `Registration token`.
+### Download GitLab Runner
 
-### Advanced configuration
+Before you register a runner in your GDK, you first must have a runner binary either:
 
-Ensure you have Docker installed, then set up GitLab to bind to all
-IPs on your machine by following [these instructions](local_network.md).
-Without this step, builds will fail with a 'connection refused' error.
+- Pre-built. To use a pre-built binary, follow [the runner installation instructions](https://docs.gitlab.com/runner/install/#binaries)
+  for your specific operating system. Avoid following the instructions in the **Containers** section, as it's simpler
+  to let the GDK manage the runner process.
+- Compiled from source. To build from source, follow [the runner development instructions](https://docs.gitlab.com/runner/development/).
+  See the official [GitLab Runner repository](https://gitlab.com/gitlab-org/gitlab-runner).
 
-The `gitlab/config/gitlab.yml` configuration file also needs tweaking in the following sections:
-
-- GitLab host:
+By default, GDK expects the runner binary to be at `/usr/local/bin/gitlab-runner`. To specify a custom `gitlab-runner`
+binary location, add the following to `gdk.yml`:
 
 ```yaml
-production: &base
-  #
-  # 1. GitLab app settings
-  # ==========================
-
-  ## GitLab settings
-  gitlab:
-    ## Web server settings (note: host is the FQDN, do not include http://)
-    host: localhost
+runner:
+  bin: <path_to_gitlab_runner_binary>/gitlab-runner-darwin-amd64
 ```
 
-- Webpack dev server host:
+### Create and register a local runner
+
+To create and register a local runner for your instance:
+
+1. On the left sidebar, click on the `Search or go to...` button.
+1. Select **Admin Area**.
+1. On the left sidebar, select **CI/CD > Runners**.
+1. Select **New instance runner**.
+1. Select an operating system.
+1. In the **Tags** section, select the **Run untagged** checkbox. Tags specify which jobs
+   the runner can run. Tags are optional, but if you don't specify tags then you must specify
+   that the runner can run untagged jobs.
+1. Optional. If you have specific jobs you want the runner to run, in the **Tags** field, enter
+   comma-separated tags.
+1. Optional. Enter additional runner configurations.
+1. Select **Create runner**.
+1. Follow the on-screen instructions to register the runner from the command-line:
+
+     ```shell
+     gitlab-runner register \
+       --url "<GDK URL>" \
+       --token <TOKEN>
+     ```
+
+    If your `gitlab-runner` configuration file is stored in a different location than `~/.gitlab-runner/config.toml`, then you must use the `--config` option to specify the location of the file:
+
+     ```shell
+     gitlab-runner register \
+       --url "<GDK URL>" \
+       --token <TOKEN> \
+       --config <path-to-gdk>/gitlab-runner-config.toml
+     ```
+
+   When prompted:
+   - For `executor`, use either `shell` or `docker`:
+
+      - `shell`. If you intend to run simple jobs, use the `shell` executor. Builds run directly on the host computer.
+         If you choose this configuration, don't use random `.gitlab-ci.yml` files from the internet unless you
+         understand them fully as this could be a security risk. If you need a basic pipeline, see an
+         [example configuration from our documentation](https://docs.gitlab.com/ee/ci/environments/#configure-manual-deployments)
+         that you can use.
+
+      - `docker`
+
+        - **Enter the default Docker image**: Provide a Docker image to use to run the job if no image is provided in a job
+            definition.
+
+          You'll also need to install some additional supporting packages.
+
+          The following instructions are for Mac OS.
+
+          1. Install both `docker` and `colima`, and start the `colima` process:
+
+             ```shell
+             brew install docker colima
+             colima start
+             ```
+
+          1. [Link the Colima socket](https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#cannot-connect-to-the-docker-daemon-at-unixvarrundockersock-is-the-docker-daemon-running) to the default socket path:
+
+             ```shell
+             sudo ln -sf $HOME/.colima/default/docker.sock /var/run/docker.sock
+             ```
+
+             NOTE:
+             You'll need to run `colima start` and create the above symlink whenever you restart your computer.
+
+   - For `GitLab instance URL`, use`http://localhost:3000/`, or `http://<custom_IP_address>:3000/`
+     if you customized your IP address.
+1. Start your runner:
+
+   ```shell
+   gitlab-runner run --config <path-to-gdk>/gitlab-runner-config.toml
+   ```
+
+After you register the runner, the configuration and the authentication token are stored in
+`gitlab-runner-config.toml`, which is in GDK's `.gitignore` file.
+
+To ensure the runner token persists between subsequent runs of `gdk reconfigure`, add the
+authentication token from `gitlab-runner-config.toml` to your `gdk.yml` file and set `executor` to `shell`:
 
 ```yaml
-  ## Webpack settings
-  webpack:
-    dev_server:
-      enabled: true
-      host: 127.0.0.1
-      port: 3808
+runner:
+  enabled: true
+  executor: shell
+  token: <runner-token>
 ```
 
-The `host` parameter needs to be changed from `localhost`/ `127.0.0.1` to an IP address that
-*actually exists on the computer*. `0.0.0.0` is not valid - run `ipconfig`
-(Windows), `ifconfig` (Mac, BSD) or `ip addr show` (Linux) to get a list of IPs.
-The right one to use depends on your network, and may change from time to time,
-but an address like `10.x.x.x`, `172.16.x.x` or `192.168.x.x` is normally the
-right one.
-
-NOTE: If you want to use a Docker executor, see [the section
-below](#docker-executor).
-
-Now run GDK: `gdk start`. Navigate to `http://<ip>:3000/gitlab-org/gitlab-test`.
-If the URL doesn't work, repeat the last step and pick a different IP.
-
-Once there, ensure that the HTTP clone URL is `http://<ip>:3000/gitlab-org/gitlab-test.git`.
-If it points to `localhost` instead, `gitlab/config/gitlab.yml` is incorrect.
-
-Finally, navigate to `http://<ip>:3000/admin/runners` (log in as root) and make
-a note of the `Registration token`.
-
-## Download GitLab Runner
-
-### Simple configuration
-
-Unless you want to make changes to the Runner, it's easiest to install a binary
-package. Follow the
-[installation instructions](https://docs.gitlab.com/runner/install/)
-for your operating system
-([Linux](https://docs.gitlab.com/runner/install/linux-repository.html),
-[OSX](https://docs.gitlab.com/runner/install/osx.html),
-[Windows](https://docs.gitlab.com/runner/install/windows.html)).
-
-To build from source, you'll need to set up a development environment manually -
-GDK doesn't manage it for you. The official GitLab Runner repository is
-[here](https://gitlab.com/gitlab-org/gitlab-runner); just follow
-[the development instructions](https://docs.gitlab.com/runner/development/).
-
-All the methods should (eventually) create a `gitlab-runner` binary.
-
-### Advanced configuration
-
-If you followed the advanced configuration and want to install the runner as a docker service, follow the steps described in <https://docs.gitlab.com/runner/install/docker.html#docker-image-installation>.
-
-## Setting up the Runner
-
-### Simple configuration
-
-Run `gitlab-runner register --run-untagged --config <path-to-gdk>/gitlab-runner-config.toml`
-(as your normal user), and follow the prompts. Use:
-
-- **coordinator URL**
-
-  Use either:
-
-  - `http://localhost:3000/`
-  - `http://<custom_IP_address>:3000/`, if you customized your IP address using
-    [Advanced Configuration](#advanced-configuration).
-
-- **token**
-
-  `Registration token` (copied from `admin/runners`)
-
-- **description** (optional)
-
-  A description of the Runner. Defaults to the hostname of the machine.
-
-- **tags** (optional)
-
-  Comma-separated tags. Jobs can be set up to use only Runners with specific tags.
-
-The Runner will write its configuration file to `gitlab-runner-config.toml`,
-which is in GDK's `.gitignore` file.
-
-If Docker is installed and you followed the special setup instructions above,
-choose `docker` as the executor. Otherwise, choose `shell` - but remember that
-builds will then be run directly on the host computer! Don't use random
-`.gitlab-ci.yml` files from the Internet unless you understand them fully, it
-could be a security risk.
-
-You can run the `register` command multiple times to set up additional Runners -
-fuller documentation on the different types of executor and their requirements
-can be found [here](https://docs.gitlab.com/runner/executors/).
-Each `register` invocation adds a section to the configuration file, so make
-sure you're referencing the same one each time.
-
-Finally, rebuild your `Procfile` with `rm Procfile; make Procfile` or un-comment
-the line that starts with `runner:`. This will allow you to manage it along with
-your other GDK processes.
+Finally, run `gdk update` to rebuild your `Procfile`. This allows you to manage the runner along with your other GDK processes.
 
 Alternately, run `gitlab-runner --log-level debug run --config <path-to-gdk>/gitlab-runner-config.toml`
-to get a long-lived Runner process, using the configuration you created in the
-last step. It will stay in the foreground, outputting logs as it executes
+to get a long-lived runner process, using the configuration you created in the
+last step. It stays in the foreground, outputting logs as it executes
 builds, so run it in its own terminal session.
 
-The Runners pane in the administration panel will now list the Runners. Create a
-project in the GitLab web interface and add a
-[`.gitlab-ci.yml`](https://docs.gitlab.com/ce/ci/examples/) file,
+The **Runners** page (`/admin/runners`) now lists the runners. Create a project in the GitLab UI and add a
+[`.gitlab-ci.yml`](https://docs.gitlab.com/ee/ci/examples/) file,
 or clone an [example project](https://gitlab.com/groups/gitlab-examples), and
-watch as the Runner processes the builds just as it would on a "real" install!
+watch as the runner processes the builds just as it would on a "real" install!
 
-### Advanced configuration
+## Executing a runner from within Docker
 
-Register your docker-based runner by following the steps described in <https://docs.gitlab.com/runner/register/index.html#docker>.
+Instead of running GitLab Runner locally on your workstation, you can run it using Docker. This approach allows you to
+get an isolated environment for a job to run in.
 
-### Docker executor
+That prevents the job from interfering with your local workstation environment, and vice versa. It is safer than running
+directly on your computer, as the runner does not have direct access to your computer.
 
-#### Docker for Mac
+To set up GitLab Runner to run in a Docker container:
 
-Docker for Mac [has some networking
-limitations](https://docs.docker.com/docker-for-mac/networking/), but
-you can still get CI runners working with a Docker executor by using a
-hostname trick. Within a container, Docker maps the
-`host.docker.internal` hostname to the host IP address
-(e.g. 192.168.65.2). On the host network, you can map this hostname to
-the local IP address (e.g. 127.0.0.1) and use this hostname in three
-different configuration files:
+1. [Set up a local network](#set-up-a-local-network) - preferably to run GDK on `http://gdk.test:3000`.
+1. [Set up a runner](#set-up-a-runner). You need to generate a runner configuration file.
+1. [Set up GDK to use the registered runner](#set-up-gdk-to-use-the-registered-runner). Configure GDK to manage a Docker
+   runner.
 
-1. In `config/gitlab.yml`, set the `host` parameter to `host.docker.internal`.
-1. In `/etc/hosts`, add an entry:
+### Set up a local network
+
+To use the Docker configuration for your runner:
+
+1. Make sure your GDK **DOES NOT** run on the default `localhost` or `127.0.0.1` address, because it clashes with the
+   routing inside a Docker container, so a runner or job isn't able to reach your GDK and fails with `connection refused`
+   error.
+
+   To avoid this problem, [Create a loopback interface](local_network.md#create-loopback-interface).
+
+1. Verify that you're able to run GDK on the `gdk.test` domain listening to an IP **OTHER THAN** `127.0.0.1`. If you
+   followed the instructions in the previous step, it is `172.16.123.1`.
+
+### Set up a runner
+
+When you have GDK running on something like `http://gdk.test:3000`, you can set up a runner. GDK can manage a
+containerized runner for you.
+
+[Create a runner](#create-and-register-a-local-runner), which generates the runner token you need before you can
+register the runner.
+
+To [register a runner](https://docs.gitlab.com/runner/register/index.html#docker) in your GDK, you can run the
+`gitlab/gitlab-runner` Docker image. You **must ensure** that the runner saves the configuration to a file that is
+accessible to the host after the registration is complete.
+
+In these instructions, we use a location known to GDK so that GDK can manage the configuration. Docker doesn't know about the custom host name `gdk.test`, so you must use
+`--add-host` and `--docker-extra-hosts` to add the host to IP mapping for this address.
+
+To register a runner, run the following command in the root for your GDK directory:
+
+```shell
+docker run --rm -it --add-host gdk.test:172.16.123.1 -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --url "http://gdk.test:3000" --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml --docker-extra-hosts gdk.test:172.16.123.1
+```
+
+<details>
+<summary>Option for SSL users (expand)</summary>
+
+If you have [SSL enabled with NGINX](nginx.md), a Docker-based runner must have access to your self-signed
+certificate (for example, `gdk.test.pem`). Your certificate is automatically converted from `pem` to `crt`. GDK
+automatically mounts your certificate into the Docker container when you start the runner, but you must include the certificate
+manually when registering your runner:
+
+```shell
+docker run --rm -it -v "$(pwd)/gdk.test.pem:/etc/gitlab-runner/certs/gdk.test.crt" -v $(pwd)/tmp/gitlab-runner:/etc/gitlab-runner gitlab/gitlab-runner register --url <gdk-url> --token <runner-token> --config /etc/gitlab-runner/gitlab-runner-config.toml
+```
+
+</details>
+<p>
+
+The `register` subcommand requires the following information:
+
+- **Enter the GitLab instance URL (for example, <https://gitlab.com/>)**: Use `http://gdk.test:3000/`, or `http://<custom_IP_address>:3000/` if you customized your IP
+  address.
+- **Enter a description for the runner** (optional): A description of the runner.
+- **Enter an executor**: Because we are running our runner in Docker, choose `docker`.
+- **Enter the default Docker image**: Provide a Docker image to use to run the job if no image is provided in a job
+  definition. By default, GDK sets `alpine:latest`.
+
+### Set up GDK to use the registered runner
+
+Now when the runner is registered we can find the token in `<path-to-gdk>/tmp/gitlab-runner/gitlab-runner-config.toml`.
+For example:
+
+```shell
+# grep token <path-to-gdk>/gitlab-runner-config.toml
+token = "<runner-token>"
+```
+
+The GDK manages a runner in a Docker container for you, but it needs this token in your `gdk.yml` file. Edit the
+`gdk.yml` to use this value and set `install_mode` and `executor` to `docker`. You should also set the `extra_hosts`
+value as a:
+
+- Hostname to the IP mapping you've used to register the runner (`gdk.test` from GDK instructions).
+- Hostname you've set up for the registry (`registry.test` from GDK instructions).
+
+For example:
+
+```yaml
+runner:
+  enabled: true
+  install_mode: docker
+  executor: docker
+  token: <runner-token>
+  extra_hosts: ["gdk.test:172.16.123.1", "registry.test:172.16.123.1"]
+```
+
+<details>
+<summary>Optional step for SSL users (expand)</summary>
+
+For SSL users, the GDK configures the Docker runner with
+[`tls_verify`](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section)
+set to `false`, so SSL verification is disabled by
+default.
+
+</details>
+
+To apply the settings:
+
+1. Run `gdk reconfigure` to update `<path-to-gdk>/gitlab-runner-config.toml` with GDK-specific settings.
+1. Run `gdk restart`.
+1. Verify the runner is connected at `<gitlab-instance-url>/admin/runners`.
+
+You should also be able to see the runner container up and running in `docker`:
+
+```shell
+docker ps
+CONTAINER ID   IMAGE                         COMMAND                  CREATED              STATUS              PORTS     NAMES
+c0ee80a6910e   gitlab/gitlab-runner:latest   "/usr/bin/dumb-init …"   About a minute ago   Up About a minute             festive_edison
+```
+
+From now on you can use `gdk start runner` and `gdk stop runner` CLI commands to start and stop your runner.
+
+To customize the runner, you must configure through your `gdk.yml` file. Any customizations you make directly to the
+`<path-to-gdk>/gitlab-runner-config.toml` file are overwritten when you run `gdk update`. To add support for more
+runner customizations through `gdk.yml`, raise a merge request to update
+[`lib/gdk/config.rb`](https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/lib/gdk/config.rb).
+
+You are good to go! Now you can assign the runner to a project and verify your jobs are running properly!
+
+<details>
+<summary>Here's how (expand):</summary>
+
+1. Create a new project and ensure the new runner is available:
+1. Add a `.gitlab-ci.yml` file like this one:
+
+   ```yaml
+   build-job:       # This job runs in the build stage, which runs first.
+    stage: build
+    script:
+      - echo "Compiling the code..."
+      - echo "Compile complete."
+   ```
+
+1. After you commit the `.gitlab-ci.yml` file, you can check if the CI job passed successfully in the `Jobs` section under the `CI/CD` folder in your project.
+
+</details>
+
+### Alternative method for Linux
+
+An alternative to creating the dummy interface described above is to:
+
+1. Add the following to your `gdk.yml`
+
+    ```yaml
+    runner:
+      network_mode_host: true
+    ```
+
+1. Run `gdk reconfigure`
+
+This will add `network_mode = host` to the `gitlab-runner-config.toml` file:
+
+```toml
+[[runners]]
+  [runners.docker]
+    ...
+    network_mode = "host"
+```
+
+Note that this method:
+
+- [Only works with Linux hosts](https://docs.docker.com/network/host/).
+- Exposes your local network stack to the Docker container, which may be a security issue. Use
+  it only to run jobs on projects that you trust.
+- Won't work with Docker containers running in Kubernetes because Kubernetes uses its own
+  internal network stack.
+
+### Put it all together
+
+At the end of all these steps, your config files should look something like this:
+
+<details>
+<summary>(expand)</summary>
+
+`~/gitlab-runner/config.toml`
+
+```toml
+   concurrent = 1
+   check_interval = 0
+
+   [session_server]
+     session_timeout = 1800
+
+   [[runners]]
+     name = "example description"
+     url = "http://gdk.test:3000/"
+     id = 1
+     token = "<runner-token>"
+     token_obtained_at = 2022-09-22T07:34:57Z
+     token_expires_at = 0001-01-01T00:00:00Z
+     executor = "docker"
+     [runners.custom_build_dir]
+     [runners.cache]
+       [runners.cache.s3]
+       [runners.cache.gcs]
+       [runners.cache.azure]
+     [runners.docker]
+       tls_verify = false
+       image = "ruby:2.7"
+       privileged = false
+       disable_entrypoint_overwrite = false
+       oom_kill_disable = false
+       disable_cache = false
+       volumes = ["/cache"]
+       extra_hosts = ["gdk.test:172.16.123.1"]
+       shm_size = 0
+```
+
+`gdk.yml`
+
+```yaml
+---
+hostname: gdk.test
+listen_address: 172.16.123.1
+runner:
+  enabled: true
+  install_mode: docker
+  executor: docker
+  token: <runner-token>
+  extra_hosts: ["gdk.test:172.16.123.1"]
+```
+
+</details>
+<p>
+
+### Troubleshooting tips
+
+- In the GitLab Web interface, check `/admin/runners` to ensure that
+  your runner has contacted the server. If the runner is there but
+  offline, this suggests the runner registered successfully but is now
+  unable to contact the server via a `POST /api/v4/jobs/request` request.
+- Run `gdk tail runner` to look for errors.
+- Check that the runner can access the hostname specified in `gitlab-runner-config.toml`.
+- Select `Edit` on the desired runner and make sure the `Run untagged jobs` is unchecked. Runners
+  that have been registered with a tag may ignore jobs that have no tags.
+- Run `tail -f gitlab/log/api_json.log | grep jobs` to see if the runner is attempting to request CI jobs.
+- If you encounter the following error when running a pipeline:
 
    ```plaintext
-   127.0.0.1   host.docker.internal
+   ERROR: Failed to remove network for build
+   ERROR: Preparation failed: Cannot connect to the Docker daemon at unix:///var/run/docker.sock.
+   Is the docker daemon running? (docker.go:803:0s)
    ```
 
-1. In the GitLab Runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
-   URL with this hostname:
-
-   ```toml
-    url = "http://host.docker.internal:3001/"
-   ```
-
-Note that all three settings must be set to ensure a number of items
-work with the runner:
-
-1. Registering the runner
-1. Polling for jobs on the host network
-1. Making API requests (e.g. sending artifacts) inside the container during a CI job.
-1. Cloning the repository ([`CI_REPOSITORY_URL`](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html))
-
-The `/etc/hosts` parameter is needed to make the first two items work,
-since this maps `host.docker.internal` to `localhost`. The `config.toml`
-changes allow the third item to work. The `gitlab.yml` changes are used
-for the fourth item.
-
-#### Using an internal, dummy interface
-
-The trick described above is a bit of a hack and only works for Docker
-for Mac, but the "proper" way to support a Docker executor is to use an
-internal, dummy interface that can be used by both the host and the
-container. Here's how:
-
-1. Create an internal interface. On macOS, this will add an alias IP
-   172.16.123.1 to the loopback adapter:
-
-   ```sh
-   sudo ifconfig lo0 alias 172.16.123.1
-   ```
-
-   On Linux, you can create a dummy interface:
-
-   ```sh
-   sudo ip link add dummy0 type dummy
-   ifconfig dummy0 172.16.123.1
-   ```
-
-1. In `config/gitlab.yml`, set the `host` parameter to `172.16.123.1`.
-
-1. In the GitLab Runner config (e.g. `~/.gitlab-runner/config.toml`), set the coordinator
-   URL with this hostname:
-
-   ```toml
-    url = "http://172.16.123.1:3001/"
-   ```
-
-Note that for this to work across reboots, the aliased IP in step 1 needs to be run
-at startup.
+   You'll need to make sure you've followed the directions to `Link the Colima socket` in the `executor` step of the [Create and register a local runner](#create-and-register-a-local-runner) section.

@@ -1,5 +1,8 @@
-# Maintainers
-* @ashmckenzie @grzesiek @jacobvosmaer-gitlab @mikegreiling @toon @tigerwnz
+# Code Owners - https://docs.gitlab.com/ee/user/project/code_owners.html
 
-# Technical writing team are the default reviewers for everything in `doc/`
-/doc/ @axil @eread @marcel.amirault
+[Maintainers]
+* @gitlab-org/maintainers/gitlab-development-kit
+.ruby-version @gitlab-org/maintainers/gitlab-development-kit @eread
+.tool-versions* @gitlab-org/maintainers/gitlab-development-kit @eread
+/doc/ @gitlab-org/maintainers/gitlab-development-kit @ashrafkhamis @axil @eread @fneill @jglassman1 @lciutacu @marcel.amirault @phillipwells @rdickenson
+README.md @gitlab-org/maintainers/gitlab-development-kit @ashrafkhamis @axil @eread @fneill @jglassman1 @lciutacu @marcel.amirault @phillipwells @rdickenson

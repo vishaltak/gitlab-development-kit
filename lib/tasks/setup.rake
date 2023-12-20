@@ -1,10 +1,36 @@
+# frozen_string_literal: true
+
 desc 'Preflight checks for dependencies'
 task 'preflight-checks' do
   checker = GDK::Dependencies::Checker.new
   checker.check_all
 
-  if !checker.error_messages.empty?
+  unless checker.error_messages.empty?
     warn checker.error_messages
     exit 1
+  end
+end
+
+desc 'Preflight Update checks'
+task 'preflight-update-checks' do
+  postgresql = GDK::Postgresql.new
+  if postgresql.installed? && postgresql.upgrade_needed?
+    message = <<~MESSAGE
+      PostgreSQL data directory is version #{postgresql.current_version} and must be upgraded to version #{postgresql.class.target_version} before GDK can be updated.
+    MESSAGE
+
+    GDK::Output.warn(message)
+
+    if ENV['PG_AUTO_UPDATE']
+      GDK::Output.warn("PostgreSQL will be auto-updated in 10 seconds. Hit CTRL-C to abort.")
+      sleep 10
+    else
+      prompt_response = GDK::Output.prompt("This will run 'support/upgrade-postgresql' to back up and upgrade the PostgreSQL data directory. Are you sure? [y/N]").match?(/\Ay(?:es)*\z/i)
+      next unless prompt_response
+    end
+
+    postgresql.upgrade
+
+    GDK::Output.success("Successfully ran 'support/upgrade-postgresql' script!")
   end
 end

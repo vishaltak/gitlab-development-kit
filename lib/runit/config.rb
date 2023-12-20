@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 require 'erb'
 require 'fileutils'
-require_relative '../gdk/config'
 
 module Runit
   class Config
@@ -8,50 +9,78 @@ module Runit
 
     Service = Struct.new(:name, :command)
 
-    COLORS = {
-      red: '31',
-      green: '32',
-      yellow: '33',
-      blue: '34',
-      magenta: '35',
-      cyan: '36',
-      bright_red: '31;1',
-      bright_green: '32;1',
-      bright_yellow: '33;1',
-      bright_blue: '34;1',
-      bright_magenta: '35;1',
-      bright_cyan: '36;1'
-    }.freeze
-
+    # @deprecated we should move this to `GDK::Service` when cleaning up Procfile based services
     TERM_SIGNAL = {
       'webpack' => 'KILL'
     }.freeze
 
+    # User read-write, group and global read-only
+    PERMISSION_READONLY = 0o644
+    # User read write and execute, group and global read and execute
+    PERMISSION_EXECUTION = 0o755
+
+    # @param [Pathname] gdk_root
     def initialize(gdk_root)
       @gdk_root = gdk_root
     end
 
     def log_dir
-      File.join(gdk_root, 'log')
+      gdk_root.join('log')
     end
 
     def services_dir
-      File.join(gdk_root, 'services')
+      gdk_root.join('services')
     end
 
-    def sv_dir
-      File.join(gdk_root, 'sv')
+    def sv_dir(service)
+      gdk_root.join('sv', service.name)
     end
 
     def run_env
-      @run_env ||= GDK::Config.new.dump_run_env!
+      @run_env ||= generate_run_env
     end
 
-    def render
+    def render(services: services_from_procfile)
       FileUtils.mkdir_p(services_dir)
       FileUtils.mkdir_p(log_dir)
 
-      services = File.read('Procfile').lines.map do |line|
+      max_service_length = services.map { |svc| svc.name.size }.max
+
+      services.each_with_index do |service, i|
+        create_runit_service(service)
+        create_runit_down(service)
+        create_runit_control_t(service)
+        create_runit_log_service(service)
+        create_runit_log_config(service, max_service_length, i)
+        enable_runit_service(service)
+      end
+
+      FileUtils.rm(stale_service_links(services))
+    end
+
+    def stale_service_links(services)
+      service_names = services.map(&:name)
+      dir_matcher = %w[. ..]
+
+      stale_entries = Dir.entries(services_dir).reject do |svc|
+        service_names.include?(svc) || dir_matcher.include?(svc)
+      end
+
+      stale_entries.filter_map do |entry|
+        path = services_dir.join(entry)
+        next unless File.symlink?(path)
+
+        path
+      end
+    end
+
+    # Load a list of services from Procfile
+    #
+    # @deprecated This will be removed when all services have been converted to GDK::Services
+    def services_from_procfile
+      GDK::Output.abort 'GDK services appear missing, have you run `gdk install` ?' unless procfile_path.exist?
+
+      procfile_path.readlines.filter_map do |line|
         line.chomp!
         next if line.start_with?('#')
 
@@ -61,140 +90,157 @@ module Runit
         delete_exec_prefix!(name, command)
 
         Service.new(name, command)
-      end.compact
-
-      max_service_length = services.map { |svc| svc.name.size }.max
-
-      services.each_with_index do |service, i|
-        create_runit_service(service)
-        create_runit_control_t(service)
-        create_runit_log_service(service, max_service_length, i)
-        enable_runit_service(service)
       end
-
-      FileUtils.rm(stale_service_links(services))
-    end
-
-    def stale_service_links(services)
-      service_names = services.map(&:name)
-
-      stale_entries = Dir.entries(services_dir).reject do |svc|
-        service_names.include?(svc) || %w[. ..].include?(svc)
-      end
-
-      stale_entries.map do |entry|
-        path = File.join(services_dir, entry)
-        next unless File.symlink?(path)
-        path
-      end.compact
     end
 
     private
 
+    # @deprecated should be removed when Procfile based services is not supported anymore
+    def procfile_path
+      @procfile_path ||= gdk_root.join('Procfile')
+    end
+
+    def generate_run_env
+      render_template('runit/run_env.sh.erb')
+    end
+
+    # @deprecated should be removed when Procfile based services is not supported anymore
     def delete_exec_prefix!(service, command)
       exec_prefix = 'exec '
-      unless command.start_with?(exec_prefix)
-        abort "fatal: Procfile command for service #{service} does not start with 'exec'"
-      end
+      abort "fatal: Procfile command for service #{service} does not start with 'exec'" unless command.start_with?(exec_prefix)
 
       command.delete_prefix!(exec_prefix)
     end
 
+    # Create runit `run` executable
     def create_runit_service(service)
-      run_template = <<~TEMPLATE
-        #!/bin/sh
-        set -e
+      run = render_template('runit/run.sh.erb',
+        gdk_root: gdk_root,
+        run_env: run_env,
+        service: service)
 
-        exec 2>&1
-        cd <%=  gdk_root %>
-
-        <%= run_env %>
-
-        test -f env.runit && . ./env.runit
-
-        # Use chpst -P to run the command in its own process group
-        exec chpst -P <%= service.command %>
-      TEMPLATE
-
-      run_path = File.join(dir(service), 'run')
-      write_file(run_path, ERB.new(run_template).result(binding), 0o755)
-
-      # Create a 'down' file so that runsvdir won't boot this service until
-      # you request it with `sv start`.
-      write_file(File.join(dir(service), 'down'), '', 0o644)
+      run_path = sv_dir(service).join('run')
+      write_executable_file(run_path, run)
     end
 
+    # Create runit `down` file so that `runsvdir` won't boot this service
+    # until you request it with `gdk start`
+    #
+    # @param [GDK::Service::Base] service
+    def create_runit_down(service)
+      write_readonly_file(sv_dir(service).join('down'), '')
+    end
+
+    # Create runit `control/t` executable
+    #
+    # @param [GDK::Service::Base] service
     def create_runit_control_t(service)
       term_signal = TERM_SIGNAL.fetch(service.name, 'TERM')
-      control_t_template = <<~'TEMPLATE'
-        #!/usr/bin/env ruby
+      pid_path = sv_dir(service).join('supervise/pid')
 
-        signal = '<%= term_signal %>'
-        pid = Integer(File.read('<%= File.join(dir(service), 'supervise/pid') %>'))
+      control_t = render_template('runit/control/t.rb.erb',
+        pid_path: pid_path,
+        term_signal: term_signal)
 
-        # Use - to signal the process group, not just a single PID.
-        pid_destination = -pid
-        puts "runit control/t: sending #{signal} to #{pid_destination}"
-        Process.kill(signal, pid_destination)
-      TEMPLATE
-      control_t_path = File.join(dir(service), 'control/t')
-      write_file(control_t_path, ERB.new(control_t_template).result(binding), 0o755)
+      control_t_path = sv_dir(service).join('control/t')
+      write_executable_file(control_t_path, control_t)
     end
 
-    def create_runit_log_service(service, max_service_length, index)
-      service_log_dir = File.join(log_dir, service.name)
+    # Create runit `log/run` executable
+    #
+    # @param [GDK::Service::Base] service
+    def create_runit_log_service(service)
+      service_log_dir = log_dir.join(service.name)
       FileUtils.mkdir_p(service_log_dir)
 
-      log_run_template = <<~TEMPLATE
-        #!/bin/sh
-        set -e
+      log_run = render_template('runit/log/run.sh.erb', service_log_dir: service_log_dir)
 
-        # svlogd is a long-running daemon so it should run from /
-        cd /
+      log_run_path = sv_dir(service).join('log/run')
+      write_executable_file(log_run_path, log_run)
+    end
 
-        exec svlogd -tt <%= service_log_dir %>
-      TEMPLATE
+    # Create runit `log/:service:/config` file
+    #
+    # @param [GDK::Service::Base] service
+    # @param [Integer] max_service_length
+    # @param [Integer] index
+    def create_runit_log_config(service, max_service_length, index)
+      log_prefix = GDK::Output.ansi(GDK::Output.color(index))
+      log_label = format("%-#{max_service_length}s : ", service.name)
+      reset_color = GDK::Output.reset_color
 
-      log_run_path = File.join(dir(service), 'log/run')
-      write_file(log_run_path, ERB.new(log_run_template).result(binding), 0o755)
+      log_config = render_template('runit/log/config.erb',
+        log_prefix: log_prefix,
+        log_label: log_label,
+        reset_color: reset_color,
+        service: service)
 
-      log_label = sprintf("%-#{max_service_length}s : ", service.name)
-
-      # See http://smarden.org/runit/svlogd.8.html#sect6 for documentation of the svlogd config file
-      log_config_template = <<~TEMPLATE
-        # zip old log files
-        !gzip
-        # custom log prefix for <%= service.name %>
-        p<%= ansi(color(index)) + log_label + ansi(0) %>
-        # keep at most 1 old log file
-        n1
-      TEMPLATE
-
-      log_config_path = File.join(service_log_dir, 'config')
-      write_file(log_config_path, ERB.new(log_config_template).result(binding), 0o644)
+      log_config_path = log_dir.join(service.name, 'config')
+      write_readonly_file(log_config_path, log_config)
     end
 
     def enable_runit_service(service)
       # If the user removes this symlink, runit will stop managing this service.
-      FileUtils.ln_sf(dir(service), File.join(services_dir, service.name))
+      FileUtils.ln_sf(sv_dir(service), services_dir.join(service.name))
     end
 
-    def dir(service)
-      File.join(sv_dir, service.name)
+    # Return UNIX termination signal for given service
+    #
+    # @param [GDK::Service::Base] service
+    # @return [String] UNIX termination signal
+    def term_signal(service)
+      TERM_SIGNAL.fetch(service.name, 'TERM')
     end
 
-    def write_file(path, content, perm)
+    # Write content to a given file with execution permission
+    #
+    # @param [String] path of the file
+    # @param [String] content that will be written to the file
+    def write_executable_file(path, content)
+      write_file(path, content)
+
+      File.chmod(PERMISSION_EXECUTION, path)
+    end
+
+    def write_readonly_file(path, content)
+      write_file(path, content)
+
+      File.chmod(PERMISSION_READONLY, path)
+    end
+
+    # Write content to a given file with specified permissions
+    #
+    # @param [String] path of the file
+    # @param [String] content that will be written to the file
+    def write_file(path, content)
       FileUtils.mkdir_p(File.dirname(path))
-      File.open(path, 'w') { |f| f.write(content) }
-      File.chmod(perm, path)
+      return if file_contains_content?(path, content)
+
+      File.write(path, content)
+    rescue Errno::ETXTBSY
+      nil
     end
 
-    def color(index)
-      COLORS.values[index % COLORS.size]
+    def file_contains_content?(path, content)
+      return false unless File.exist?(path)
+
+      File.read(path) == content
     end
 
-    def ansi(code)
-      "\e[#{code}m"
+    # Render a template to string with optional injected local variables
+    #
+    # @param [String] template_path partial path starting from the template root folder
+    # @param [Hash] locals any local variable that needs to be exposed in the template
+    # @return [String] rendered content
+    def render_template(template_path, **locals)
+      template_fullpath = GDK.template_root.join(template_path)
+      raise ArgumentError, "file not found in: #{template_path}" unless File.exist?(template_fullpath)
+
+      template = File.read(template_fullpath)
+
+      erb = ERB.new(template)
+      erb.location = template_fullpath.to_s # define the file location so errors can point to the right file
+      erb.result_with_hash(locals)
     end
   end
 end

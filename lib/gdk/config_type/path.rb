@@ -1,19 +1,22 @@
 # frozen_string_literal: true
 
-require_relative 'base'
 require 'pathname'
 
 module GDK
   module ConfigType
     class Path < Base
-      def dump!
+      def dump!(*)
         value.to_s
       end
 
-      def parse
-        return if value.nil?
+      def parse(value)
+        Pathname.new(value)
+      end
 
-        self.value = Pathname.new(value)
+      private
+
+      def string_like?
+        %w[String Pathname].include?(value.class.to_s)
       end
     end
   end

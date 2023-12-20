@@ -4,7 +4,7 @@
 
 On every push of new Docker image, GitLab creates a special Geo event that is
 propagated to secondary nodes. On the secondary node, there is a specialized
-worker called `Geo::ContainerRepositoryServiceWorker` that will fetch the
+worker called `Geo::ContainerRepositoryServiceWorker` that fetches the
 image from primary node.
 
 ## How to set up
@@ -21,7 +21,7 @@ To enable Docker Registry on both nodes:
 
 1. Follow the instructions for [Docker Registry](registry.md) on both nodes.
 1. Ensure the registry service port used on the secondary is different to the port used
-   on the primary by [changing one of the port numbers](registry.md#changing-the-port-number-of-the-gitlab-local-container-registry).
+   on the primary by [changing one of the port numbers](registry.md).
 
 ### Enable notification on primary's Registry
 
@@ -31,9 +31,9 @@ Add the following lines to `registry/config.yml` of your primary node:
 notifications:
   endpoints:
     - name: geo_event
-      url: http://docker.for.mac.localhost:3001/api/v4/container_registry_event/events
+      url: http://host.docker.internal:3001/api/v4/container_registry_event/events
       headers:
-        Authorization: [Bearer <secret>]
+        Authorization: [<secret>]
       timeout: 500ms
       threshold: 5
       backoff: 1s
@@ -41,11 +41,8 @@ notifications:
 
 In this example:
 
-- `secret` is a secret word that will be used for communication between Registry and the primary
-  node.
+- `secret` is a secret word used for communication between Registry and the primary node.
 - The primary node is running on port `3001` of your localhost.
-- The host name is for macOS. If you use Linux, use `host.docker.internal` instead of
-  `docker.for.mac.localhost`,
 
 ### Configure the primary node
 

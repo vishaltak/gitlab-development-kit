@@ -1,21 +1,27 @@
 #!/usr/bin/env ruby
+#
+# frozen_string_literal: true
 
-require_relative '../lib/gdk/postgresql'
-require_relative '../lib/gdk/config'
+require_relative '../lib/gdk'
+
+def postgresql
+  @postgresql ||= config.geo.secondary? ? GDK::PostgresqlGeo.new : GDK::Postgresql.new
+end
+
+def config
+  @config ||= GDK::Config.new
+end
+
+def db_name
+  @db_name ||= config.praefect.database.dbname
+end
 
 def main
-  postgresql = GDK::PostgreSQL.new
-  abort 'postgres not ready' unless postgresql.ready?
+  try_times = ENV['CI'] ? 600 : 10 # 10 mins on CI, 10 seconds otherwise.
 
-  config = GDK::Config.new
-  dbname = config.praefect.database.dbname
-
-  exit if postgresql.db_exists?(dbname)
-
-  unless postgresql.createdb(%W[--encoding=UTF8 --locale=C --echo #{dbname}])
-    abort 'createdb failed'
-  end
-
+  abort 'postgres not ready' unless postgresql.ready?(try_times: try_times)
+  exit if postgresql.db_exists?(db_name)
+  abort 'createdb failed' unless postgresql.createdb(%W[--encoding=UTF8 --locale=C --echo #{db_name}])
   abort 'migrate failed' unless system('support/migrate-praefect')
 end
 

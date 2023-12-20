@@ -9,7 +9,7 @@ to show sent messages in a web interface under
 
 In order to enable SMTP delivery:
 
-1. You will need an SMTP-capable account. An option is to create a dummy account
+1. You need an SMTP-capable account. An option is to create a dummy account
    on Gmail for this purpose.
 1. Copy `gitlab/config/initializers/smtp_settings.rb.sample` to `smtp_settings.rb`
    and configure the SMTP connection details (see the
@@ -36,10 +36,10 @@ In order to enable SMTP delivery:
 
    - Commenting out the `Rails.env.production?` conditional allows us to use
      the configuration with the `development` Rails environment.
-   - In the sample Gmail is used as SMTP provider (you need to enable 2FA, then
-     create an application password).
-1. In `gitlab/config/environments/development.rb` make sure that ActionMailer
-   logs delivery errors, this will help you troubleshoot SMTP delivery:
+   - In the sample Gmail is used as SMTP provider (you need to [enable 2FA](https://support.google.com/accounts/answer/185839), then
+     [create an application password](https://support.google.com/accounts/answer/185833)).
+1. In `gitlab/config/environments/development.rb`, make sure that ActionMailer
+   logs delivery errors. This helps you troubleshoot SMTP delivery:
 
    ```ruby
    config.action_mailer.raise_delivery_errors = true
@@ -87,8 +87,8 @@ a workaround is to:
    ```
 
 1. Make sure to include the actual `ca_path` and `ca_file` configurations in the
-   `smtp_settings.rb` file above, or when sending the emails you will be
-   getting `SSLError` issues in the GitLab logs:
+   `smtp_settings.rb` file above, otherwise when sending the emails, you get `SSLError` issues in
+   the GitLab logs:
 
    ```ruby
    ActionMailer::Base.smtp_settings = {
@@ -100,7 +100,7 @@ a workaround is to:
 
 ## Enabling S/MIME delivery
 
-You can follow the [official S/MIME emails documentation](https://docs.gitlab.com/ce/administration/smime_signing_email.html)
+You can follow the [official S/MIME emails documentation](https://docs.gitlab.com/ee/administration/smime_signing_email.html)
 and combine it with the SMTP configuration above to test actual delivery of
 signed messages.
 

@@ -1,0 +1,30 @@
+# Lefthook configuration. For more information, see:
+# https://github.com/Arkweid/lefthook/blob/master/docs/full_guide.md
+
+pre-push:
+  parallel: true
+  commands:
+    checkmake:
+      files: git diff --name-only --diff-filter=d $(git merge-base origin/main HEAD)..HEAD
+      glob: '*.mk'
+      run: make checkmake
+    markdownlint:
+      files: git diff --name-only --diff-filter=d $(git merge-base origin/main HEAD)..HEAD
+      glob: '*.md'
+      run: make markdownlint
+    rubocop:
+      files: git diff --name-only --diff-filter=d $(git merge-base origin/main HEAD)..HEAD
+      glob: '*.{rb,rake}'
+      run: bundle exec rubocop --config .rubocop-gdk.yml {files}
+    vale:
+      run: make vale
+    check-links:
+      run: make check-links
+    shellcheck:
+      run: make shellcheck
+    rspec:
+      run: make rspec
+    verify-gdk-example-yml:
+      run: make verify-gdk-example-yml
+    verify-makefile-config:
+      run: make verify-makefile-config

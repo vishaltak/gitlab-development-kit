@@ -1,70 +1,40 @@
-FROM ubuntu:18.04 AS base
-LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab-development-kit/graphs/master"
+FROM ubuntu:20.04
+LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab-development-kit/-/graphs/main"
 
-# Directions when writing this dockerfile:
-# Keep least changed directives first. This improves layers caching when rebuilding.
+## The CI script that build this file can be found under: support/docker
 
-RUN useradd --user-group --create-home gdk
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 
-# Install packages
-COPY packages.txt /
-RUN apt-get update && apt-get install -y software-properties-common \
-    && add-apt-repository ppa:git-core/ppa -y \
-    && apt-get install -y $(sed -e 's/#.*//' /packages.txt)
+RUN apt-get update && apt-get install -y sudo locales locales-all software-properties-common \
+    && add-apt-repository ppa:git-core/ppa -y
 
-# Install minio
-RUN curl https://dl.min.io/server/minio/release/linux-amd64/minio > /usr/local/bin/minio \
-  && chmod +x /usr/local/bin/minio
+RUN useradd --user-group --create-home --groups sudo gdk
+RUN echo "gdk ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/gdk_no_password
 
-# stages for fetching remote content
-# highly cacheable
-FROM alpine AS fetch
-RUN apk add --no-cache coreutils curl tar git
-
-FROM fetch AS source-rbenv
-ARG RBENV_REVISION=v1.1.1
-RUN git clone --branch $RBENV_REVISION --depth 1 https://github.com/rbenv/rbenv
-
-FROM fetch AS source-ruby-build
-ARG RUBY_BUILD_REVISION=v20191225
-RUN git clone --branch $RUBY_BUILD_REVISION --depth 1 https://github.com/rbenv/ruby-build
-
-FROM fetch AS go
-ARG GO_SHA256=aea86e3c73495f205929cfebba0d63f1382c8ac59be081b6351681415f4063cf
-ARG GO_VERSION=1.12.5
-RUN curl --silent --location --output go.tar.gz https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz
-RUN echo "$GO_SHA256  go.tar.gz" | sha256sum -c -
-RUN tar -C /usr/local -xzf go.tar.gz
-
-FROM node:12-stretch AS nodejs
-# contains nodejs and yarn in /usr/local
-# https://github.com/nodejs/docker-node/blob/77f1baaa55acc71c9eda1866f0c162b434a63be5/10/jessie/Dockerfile
-WORKDIR /stage
-RUN install -d usr opt
-RUN cp -al /usr/local usr
-RUN cp -al /opt/yarn* opt
-
-FROM base AS rbenv
-WORKDIR /home/gdk
-RUN echo 'export PATH="/home/gdk/.rbenv/bin:$PATH"' >> .bash_profile
-RUN echo 'eval "$(rbenv init -)"' >> .bash_profile
-COPY --from=source-rbenv --chown=gdk /rbenv .rbenv
-COPY --from=source-ruby-build --chown=gdk /ruby-build .rbenv/plugins/ruby-build
-USER gdk
-RUN bash -l -c "rbenv install 2.6.5 && rbenv global 2.6.5"
-
-# build final image
-FROM base AS release
-
-WORKDIR /home/gdk
-ENV PATH $PATH:/usr/local/go/bin
-
-COPY --from=go /usr/local/ /usr/local/
-COPY --from=nodejs /stage/ /
-COPY --from=rbenv --chown=gdk /home/gdk/ .
+WORKDIR /home/gdk/tmp
+RUN chown -R gdk:gdk /home/gdk
 
 USER gdk
+COPY --chown=gdk . .
 
-# simple tests that tools work
-RUN ["bash", "-lec", "yarn --version; node --version; rbenv --version" ]
+ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
+
+RUN bash ./support/bootstrap \
+  # simple tests that tools work
+  && bash -lec "asdf version; go version; yarn --version; node --version; ruby --version" \
+  # Remove unneeded packages
+  && sudo apt-get purge software-properties-common -y \
+  && sudo apt-get clean -y \
+  && sudo apt-get autoremove -y \
+  # clear tmp caches e.g. from postgres compilation
+  && sudo rm -rf /tmp/* ~/.asdf/tmp/* \
+  # Remove files we copied in
+  && sudo rm -rf /home/gdk/tmp \
+  # Remove build caches
+  # Unfortunately we cannot remove all of "$HOME/gdk/gitaly/_build/*" because we need to keep the compiled binaries in "$HOME/gdk/gitaly/_build/bin"
+  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* "$HOME/gdk/gitaly/_build/deps/git/source" "$HOME/gdk/gitaly/_build/deps/libgit2/source" "$HOME/gdk/gitaly/_build/cache" "$HOME/gdk/gitaly/_build/deps" "$HOME/gdk/gitaly/_build/intermediate" "$HOME/.cache/" /tmp/*
+
+WORKDIR /home/gdk

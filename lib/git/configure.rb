@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require_relative '../gdk/output'
+
 module Git
   class Configure
     def initialize(global: false)
@@ -6,19 +10,17 @@ module Git
 
     def run!
       recommendations.each do |rec|
-        puts rec.description
-        puts "Possible input: #{rec.possible_values.join(',')} (default: #{rec.default})"
+        GDK::Output.puts(rec.description)
+        GDK::Output.puts("Possible input: #{rec.possible_values.join(',')} (default: #{rec.default})")
 
-        input = STDIN.gets.chomp
+        input = $stdin.gets.chomp
         input = rec.default if input.empty?
 
-        unless rec.valid_input_value?(input)
-          abort("Invalid input: #{input}, possible values: #{rec.possible_values}")
-        end
+        GDK::Output.abort("Invalid input: #{input}, possible values: #{rec.possible_values}") unless rec.valid_input_value?(input)
 
         set_config(rec.key, input)
 
-        puts # New line to separate each recommendation
+        GDK::Output.puts # New line to separate each recommendation
       end
     end
 
@@ -33,9 +35,9 @@ module Git
         ),
         Recommendation.new(
           'help.autocorrect',
-          -1,
-          'Let git auto correct commands after some deciseconds, e.g. git branhc <something> will be executed as if you typed git branch',
-          (-1..100)
+          0,
+          'Let git auto correct commands after some deciseconds, e.g. git branhc <something> will be executed as if you typed git branch (0 = disabled, -1 = execute immediately, 50 = wait 5 secs)',
+          [0, -1, 5]
         ),
         Recommendation.new(
           'fetch.prune',
@@ -46,14 +48,18 @@ module Git
           'tag.sort',
           '-v:refname',
           'Reverse sort the tags by name, meaning that v1.1 is listed before v1.0',
-          %w{-v:refname v:refname}
+          %w[-v:refname v:refname]
         )
       ]
     end
 
+    def gdk_repositories
+      @gdk_repositories ||= GDK::Config.new.git_repositories
+    end
+
     def set_config(key, value)
       if @global
-        run_git(%W[config --global key value])
+        run_git(%W[config --global #{key} #{value}])
       else
         gdk_repositories.each do |repo|
           run_git(%W[config #{key} #{value}], repo_path: repo)
@@ -66,11 +72,12 @@ module Git
       # https://gitlab.com/gitlab-org/gitlab/blob/master/doc/development/shell_commands.md#bypass-the-shell-by-splitting-commands-into-separate-tokens
       raise 'command must be an array' unless args.is_a?(Array)
 
-      args = args.unshift('git')
+      args.unshift('git')
+
       if repo_path
         system(*args, chdir: repo_path)
       else
-        system(*cmd)
+        system(*args)
       end
     end
   end

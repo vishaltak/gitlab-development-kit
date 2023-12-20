@@ -1,32 +1,31 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+#
+# frozen_string_literal: true
 
 # Please see the Vagrant section in the docs for caveats and tips
-# https://gitlab.com/gitlab-org/gitlab-development-kit/blob/master/doc/vagrant.md
+# https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/vagrant.md
 
 Vagrant.require_version ">= 1.6.0"
-VAGRANTFILE_API_VERSION = "2".freeze
+VAGRANTFILE_API_VERSION = "2"
 
 def enable_shares(config, nfs)
   # paths must be listed as shortest to longest per bug: https://github.com/GM-Alex/vagrant-winnfsd/issues/12#issuecomment-78195957
   config.vm.synced_folder ".", "/vagrant", type: "rsync",
-                                          rsync__exclude: ['gitlab', 'postgresql', 'gitlab-shell', 'gitlab-runner', 'gitlab-workhorse'],
-                                          rsync__auto: false
+    rsync__exclude: %w[gitlab postgresql gitlab-shell gitlab-runner gitlab-workhorse],
+    rsync__auto: false
   config.vm.synced_folder "gitlab/", "/vagrant/gitlab", create: true, nfs: nfs
   config.vm.synced_folder "go-gitlab-shell/", "/vagrant/go-gitlab-shell", create: true, nfs: nfs
   config.vm.synced_folder "gitlab-runner/", "/vagrant/gitlab-runner", create: true, nfs: nfs
-  config.vm.synced_folder "gitlab-workhorse/", "/vagrant/gitlab-workhorse", create: true, nfs: nfs
 end
 
 def running_in_admin_mode?
   return false unless Vagrant::Util::Platform.windows?
 
-  (`reg query HKU\\S-1-5-19 2>&1` =~ /ERROR/).nil?
+  !`reg query HKU\\S-1-5-19 2>&1`.include?('ERROR')
 end
 
-if Vagrant::Util::Platform.windows? && !running_in_admin_mode?
-  raise Vagrant::Errors::VagrantError.new, "You must run the GitLab Vagrant from an elevated command prompt"
-end
+raise Vagrant::Errors::VagrantError.new, "You must run the GitLab Vagrant from an elevated command prompt" if Vagrant::Util::Platform.windows? && !running_in_admin_mode?
 
 required_plugins = %w[vagrant-share vagrant-disksize]
 required_plugins_non_windows = %w[facter]
@@ -42,32 +41,37 @@ end
 required_plugins.each do |plugin|
   need_restart = false
   unless Vagrant.has_plugin? plugin
-    system "vagrant plugin install #{plugin}"
+    system('vagrant', 'plugin', 'install', plugin)
     need_restart = true
   end
+
   exec "vagrant #{ARGV.join(' ')}" if need_restart
 end
 
-$apt_reqs = <<EOT
+$apt_reqs = <<COMMANDS # rubocop:disable Style/GlobalVars
   apt-add-repository -y ppa:rael-gc/rvm
   apt-add-repository -y ppa:ubuntu-lxc/lxd-stable
   add-apt-repository -y ppa:longsleep/golang-backports
   add-apt-repository -y ppa:git-core/ppa
-  wget -qO- https://deb.nodesource.com/setup_12.x | bash -
+  wget -qO- https://deb.nodesource.com/setup_14.x | bash -
   wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+  wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+  wget -qO-  https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
   echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+  echo "deb https://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google.list
+  echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
   export DEBIAN_FRONTEND=noninteractive
   export RUNLEVEL=1
   apt-get update
-  apt-get -y install golang-1.13-go
-  ln -s /usr/lib/go-1.13/bin/* /usr/local/bin
-  apt-get -y install git graphicsmagick postgresql postgresql-contrib libpq-dev libimage-exiftool-perl redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed nginx libgmp-dev rvm yarn libre2-dev docker.io runit
-  curl https://dl.min.io/server/minio/release/linux-amd64/minio --output /usr/local/bin/minio && chmod +x /usr/local/bin/minio
+  apt-get -y install golang-1.14-go
+  ln -s /usr/lib/go-1.14/bin/* /usr/local/bin
+  apt-get -y install git graphicsmagick postgresql postgresql-contrib libpq-dev libimage-exiftool-perl redis-server libicu-dev cmake g++ nodejs libkrb5-dev curl ruby ed nginx libgmp-dev rvm yarn libre2-dev docker.io runit google-chrome-stable
+  wget -qO /usr/local/bin/minio https://dl.min.io/server/minio/release/linux-amd64/minio && chmod +x /usr/local/bin/minio
   apt-get -y upgrade
-EOT
+COMMANDS
 
 # Set up swap when using a full VM
-$swap_setup = <<EOT
+$swap_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
   # create a swapfile
   sudo fallocate -l 4G /swapfile
   sudo chmod 600 /swapfile
@@ -76,34 +80,42 @@ $swap_setup = <<EOT
   sudo swapon /swapfile
   # and on reboot
   echo '/swapfile   none    swap    sw    0   0' | sudo tee --append /etc/fstab
-EOT
+COMMANDS
 
-$user_setup = <<EOT
+$user_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
   DEV_USER=$(stat -c %U /vagrant)
   echo "$DEV_USER ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/$DEV_USER
   sudo addgroup $DEV_USER rvm
   sudo addgroup $DEV_USER docker
-  sudo -u $DEV_USER -i bash -l -c "rvm install 2.6.5 && rvm use 2.6.5 --default && gem install bundler -v 1.17.3"
+  sudo -u $DEV_USER -i bash -l -c "rvm install 2.7.2 && rvm use 2.7.2 --default"
   sudo chown -R $DEV_USER:$DEV_USER /home/$DEV_USER
   sudo ln -s /vagrant /home/$DEV_USER/gitlab-development-kit
 
   # automatically move into the gitlab-development-kit folder, but only add the command
   # if it's not already there
   if [ -f /home/$DEV_USER/.bash_profile ]; then
-    sudo -u $DEV_USER -i bash -c "grep -q \"cd /home/$DEV_USER/gitlab-development-kit/\" /home/$DEV_USER/.bash_profile || echo \"cd /home/$DEV_USER/gitlab-development-kit/\" >> /home/$DEV_USER/.bash_profile"
+    sudo -u $DEV_USER -i bash -c "grep -q "cd /home/$DEV_USER/gitlab-development-kit/" /home/$DEV_USER/.bash_profile || echo "cd /home/$DEV_USER/gitlab-development-kit/" >> /home/$DEV_USER/.bash_profile"
   else
-    sudo -u $DEV_USER -i bash -c "touch /home/$DEV_USER/.bash_profile && echo \"cd /home/$DEV_USER/gitlab-development-kit/\" >> /home/$DEV_USER/.bash_profile"
+    sudo -u $DEV_USER -i bash -c "touch /home/$DEV_USER/.bash_profile && echo "cd /home/$DEV_USER/gitlab-development-kit/" >> /home/$DEV_USER/.bash_profile"
   fi
 
   # set up gdk
-  echo '/vagrant' > /vagrant/.gdk-install-root
   sudo -u $DEV_USER -i bash -c "gem install gitlab-development-kit"
-  sudo -u $DEV_USER -i bash -c "gdk trust /vagrant"
-EOT
+COMMANDS
+
+$chromedriver_setup = <<COMMANDS # rubocop:disable Style/GlobalVars
+  export CHROME_DRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  wget -qO- https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip | gunzip > /tmp/chromedriver
+  install -m 0755 -o root -g root /tmp/chromedriver /usr/local/bin
+  rm -f /tmp/chromedriver
+COMMANDS
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # rubocop:disable Style/GlobalVars
   config.vm.provision "shell", inline: $apt_reqs
   config.vm.provision "shell", inline: $user_setup
+  config.vm.provision "shell", inline: $chromedriver_setup
+  # rubocop:enable Style/GlobalVars
   unless Vagrant::Util::Platform.windows?
     # NFS setup
     config.vm.network "private_network", type: "dhcp"
@@ -122,13 +134,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     enable_shares(override, false)
   end
 
-  config.vm.provider "lxc" do |v, override|
+  config.vm.provider "lxc" do |_v, override|
     override.vm.box = "fgrehm/trusty64-lxc"
     enable_shares(override, true)
   end
 
   config.vm.provider "virtualbox" do |vb, override|
-    override.vm.box = "ubuntu/xenial64"
+    override.vm.box = "ubuntu/bionic64"
     override.disksize.size = "15GB"
     if Vagrant::Util::Platform.windows?
       # thanks to https://github.com/rdsubhas/vagrant-faster/blob/master/lib/vagrant/faster/action.rb
@@ -139,16 +151,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       enable_shares(override, false)
     else
       cpus = Facter.value('processors')['count']
-      if facter_mem = Facter.value('memory')
-        mem = facter_mem.slice! " GiB".to_i * 1024
+      # rubocop:disable Lint/AssignmentInCondition
+      if facter_mem = Facter.value('memory')['system']['total']
+        mem = facter_mem.to_i * 1024
       elsif facter_mem = Facter.value('memorysize_mb')
         mem = facter_mem.to_i
       else
         raise "unable to determine total host RAM size"
       end
+      # rubocop:enable Lint/AssignmentInCondition
 
       # disables NFS on macOS to prevent UID / GID issues with mounted shares
-      enable_nfs = Vagrant::Util::Platform.platform =~ /darwin/ ? false : true
+      enable_nfs = !Vagrant::Util::Platform.platform.include?('darwin')
       enable_shares(override, enable_nfs)
     end
 
@@ -156,7 +170,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     mem = [mem / 4, 6144].max
 
     # Set up swap
-    override.vm.provision "shell", inline: $swap_setup
+    override.vm.provision "shell", inline: $swap_setup # rubocop:disable Style/GlobalVars
 
     # performance tweaks
     # per https://www.virtualbox.org/manual/ch03.html#settings-processor set cpus to real cores, not hyperthreads

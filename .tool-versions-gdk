@@ -1,0 +1,30 @@
+# NOTE: This file declares dependencies for GDK itself, which is typically
+#       just Ruby.
+#
+#       Each project GDK manages should define its own .tool-versions file,
+#       which we process with support/asdf-combine that combines all necessary
+#       software.
+#
+#       This file _can_ be used to override specific versions when
+#       incompatibilies arise, but generally speaking, each project is
+#       responsible for declaring its dependencies and GDK follows these
+#       declarations.
+#
+# For more information, see doc/asdf.md.
+#
+# When combined, the order of preference for conflicting versions of dependencies is:
+#
+# 1. Dependencies declared in this file.
+# 2. Dependencies declared in other files.
+#
+# <default-version> <other-version(s)>
+#
+
+# Ruby version must be set until 3.2.2 is ready to be the new default
+ruby 3.1.4 3.2.2
+
+# For linting shell scripts
+shellcheck 0.9.0
+
+# For linting GDK documentation
+vale 2.29.6

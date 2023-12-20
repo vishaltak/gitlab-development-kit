@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+
+# This is the GDK + Geo one line installation. For more information, please visit:
+# https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/index.md#one-line-installation
+#
+# Wrap everything in a function to ensure a partially downloaded install script
+# is not executed. Inspired by https://install.sandstorm.io/
+#
+# Requires GITLAB_LICENSE_KEY to be set, like:
+#
+#   export GITLAB_LICENSE_KEY=$(cat ~/Documents/GitLab/Test.gitlab-license)
+#
+# Or:
+#
+#   export GITLAB_LICENSE_KEY="pasted text"
+#
+# Valid arguments are:
+#
+# 1 = directory in which to clone into, default is gdk (GDK_PRIMARY_INSTALL_DIR)
+# 2 = directory in which to clone into, default is gdk2 (GDK_SECONDARY_INSTALL_DIR)
+# 3 = git SHA/branch to checkout once cloned, default is main (GDK_CLONE_BRANCH)
+#
+# Example usage with arguments:
+#
+#   curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/geo-install" | bash -s gdk-a gdk-b my-gdk-branch-name
+#
+_() {
+
+set -eo pipefail
+
+GDK_PRIMARY_INSTALL_DIR="${2-gdk}"
+GDK_SECONDARY_INSTALL_DIR="${3-gdk2}"
+GDK_CLONE_BRANCH="${4-main}"
+
+CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+ASDF_SH_PATH="${CURRENT_ASDF_DIR}/asdf.sh"
+ASDF_FISH_PATH="${CURRENT_ASDF_DIR}/asdf.fish"
+ASDF_ELVISH_PATH="${CURRENT_ASDF_DIR}/asdf.elv"
+ASDF_NUSHELL_PATH="${CURRENT_ASDF_DIR}/asdf.nu"
+
+REQUIRED_COMMANDS=(git make)
+REQUIRED_ENV_VARS=(GITLAB_LICENSE_KEY)
+
+error() {
+  echo "ERROR: ${1}" >&2
+  exit 1
+}
+
+ensure_required_commands_exist() {
+  for command in "${REQUIRED_COMMANDS[@]}"; do
+    if ! command -v "${command}" > /dev/null 2>&1; then
+     error "Please ensure ${command} is installed."
+    fi
+  done
+}
+
+ensure_required_env_vars_exist() {
+  for env_var in "${REQUIRED_ENV_VARS[@]}"; do
+    if [ -z "${!env_var}" ]; then
+     error "Please ensure environment variable ${env_var} is set."
+    fi
+  done
+}
+
+ensure_not_root() {
+  if [[ ${EUID} -eq 0 ]]; then
+    return 1
+  fi
+
+  return 0
+}
+
+clone_gdk_if_needed() {
+  if [[ -d ${GDK_PRIMARY_INSTALL_DIR} ]]; then
+    echo "INFO: A ${GDK_PRIMARY_INSTALL_DIR} directory already exists in the current working directory, resuming.."
+  else
+    git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git "${GDK_PRIMARY_INSTALL_DIR}"
+  fi
+}
+
+clone_gdk2_if_needed() {
+  if [[ -d ${GDK_SECONDARY_INSTALL_DIR} ]]; then
+    echo "INFO: A ${GDK_SECONDARY_INSTALL_DIR} directory already exists in the current working directory, resuming.."
+  else
+    git clone "${GDK_PRIMARY_INSTALL_DIR}" "${GDK_SECONDARY_INSTALL_DIR}"
+  fi
+}
+
+ensure_gdk_clone_branch_checked_out() {
+  git -C "${PWD}/${GDK_PRIMARY_INSTALL_DIR}" fetch origin "${GDK_CLONE_BRANCH}"
+  git -C "${PWD}/${GDK_PRIMARY_INSTALL_DIR}" checkout "${GDK_CLONE_BRANCH}"
+}
+
+bootstrap() {
+  make bootstrap
+}
+
+gdk_install() {
+  # shellcheck disable=SC1090
+  source "${ASDF_SH_PATH}"
+  gdk install
+}
+
+echo
+echo "INFO: This is the GDK + Geo one line installation. For more information, please visit:"
+echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/doc/howto/geo.md#easy-installation"
+echo "INFO:"
+echo "INFO: The source for the installation script can be viewed at:"
+echo "INFO: https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/support/geo-install"
+echo
+
+if ! ensure_not_root; then
+  error "Running as root is not supported."
+fi
+
+ensure_required_commands_exist
+ensure_required_env_vars_exist
+
+# Collapsible section for geo-install CI job. See https://docs.gitlab.com/ee/ci/jobs/index.html#custom-collapsible-sections
+echo -e "\e[0Ksection_start:$(date +%s):set_up_primary_gdk\r\e[0KSet up primary GDK"
+clone_gdk_if_needed
+ensure_gdk_clone_branch_checked_out
+cd "${GDK_PRIMARY_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_PRIMARY_INSTALL_DIR} directory."
+bootstrap
+gdk_install
+cd gitlab || error "gdk install should have created gitlab directory."
+bin/rails runner 'License.create!(data: ENV["GITLAB_LICENSE_KEY"])'
+
+echo
+echo "INFO: To make sure GDK commands are available in this shell and ensure you're"
+echo "INFO: in the newly installed GDK directory, please run the command corresponding to your shell."
+echo
+echo "sh / bash / zsh:"
+echo "source \"${ASDF_SH_PATH}\""
+echo
+echo "fish:"
+echo "source \"${ASDF_FISH_PATH}\""
+echo
+echo "elvish:"
+echo "source \"${ASDF_ELVISH_PATH}\""
+echo
+echo "nushell:"
+echo "source \"${ASDF_NUSHELL_PATH}\""
+echo
+echo "then:"
+echo "cd ${GDK_PRIMARY_INSTALL_DIR}"
+echo
+echo -e "\e[0Ksection_end:$(date +%s):set_up_primary_gdk\r\e[0K"
+
+echo -e "\e[0Ksection_start:$(date +%s):set_up_secondary_gdk\r\e[0KSet up secondary GDK"
+cd ../..
+clone_gdk2_if_needed
+cd "${GDK_SECONDARY_INSTALL_DIR}" || error "Clone of GDK should have created ${GDK_SECONDARY_INSTALL_DIR} directory."
+cd "../${GDK_PRIMARY_INSTALL_DIR}" || error "Sanity check for ${GDK_PRIMARY_INSTALL_DIR} directory failed."
+./support/geo-add-secondary --secondary_port 3001 --primary . "../${GDK_SECONDARY_INSTALL_DIR}"
+
+echo
+echo "INFO: To make sure GDK commands are available in this shell and ensure you're"
+echo "INFO: in the newly installed GDK directory, please run the command corresponding to your shell."
+echo
+echo "sh / bash / zsh:"
+echo "source \"${ASDF_SH_PATH}\""
+echo
+echo "fish:"
+echo "source \"${ASDF_FISH_PATH}\""
+echo
+echo "elvish:"
+echo "source \"${ASDF_ELVISH_PATH}\""
+echo
+echo "nushell:"
+echo "source \"${ASDF_NUSHELL_PATH}\""
+echo
+echo "then:"
+echo "cd ${GDK_SECONDARY_INSTALL_DIR}"
+echo
+echo -e "\e[0Ksection_end:$(date +%s):set_up_secondary_gdk\r\e[0K"
+}
+
+# If we've reached here, the entire install script has been downloaded and
+# "should" be safe to execute.
+_ "$0" "$@"

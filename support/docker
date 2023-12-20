@@ -1,0 +1,91 @@
+#!/bin/bash -e
+
+if [ -z "${DEFAULT_BRANCH_IMAGE}" ]; then
+    echo "DEFAULT_BRANCH_IMAGE variable must not be empty and must contain an image name"
+    exit 1
+else
+    echo "DEFAULT_BRANCH_IMAGE: ${DEFAULT_BRANCH_IMAGE}"
+fi
+
+case "$1" in
+    ci-login)
+        echo "Logging into ${CI_REGISTRY}"
+        docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
+        ;;
+
+    ci-logout)
+        echo "Logging out"
+        docker logout "${CI_REGISTRY}"
+        ;;
+
+    # We want to rebuild the image, if the Dockerfile, .tool-versions or packages_ubuntu.txt change.
+    # We create a shasum of all these files and use it the image tag, so that other MRs that don't touch these files can benefit from this cache image.
+    ci-build-if-necessary)
+        dependency_sha=$(cat support/bootstrap support/bootstrap-common.sh Dockerfile packages_ubuntu.txt .tool-versions | sha256sum | cut -d ' ' -f 1)
+        cache_image="${DEFAULT_IMAGE_WITHOUT_TAG}:${dependency_sha}"
+        destinations="--tag ${cache_image} --tag ${DEFAULT_BRANCH_IMAGE}"
+        bootstrapped_image="${CI_REGISTRY_IMAGE}/asdf-bootstrapped-verify"
+
+        if [ "$DEFAULT_BRANCH_IMAGE" == "${bootstrapped_image}:main" ]; then
+          # We push verify image from main branch to separate path and tag with commit sha so we are able to properly
+          #   pin image versions in 'gitlab' canonical project
+          # Separate path allows to create specific cleanup policy as well as allow dependency updaters to not be confused
+          #   by branch specific tags
+          destinations="${destinations} --tag ${bootstrapped_image}/main:${CI_COMMIT_SHA} --tag ${bootstrapped_image}/main:latest"
+        fi
+
+        # We use the cache from the image with the same shasum first.
+        # If it doesn't exist, we use the cache from the branch image.
+        # If it doesn't exist, we use the cache from the `main` image.
+        # shellcheck disable=SC2086
+        docker buildx build \
+          --provenance=false \
+          --cache-to=type=inline \
+          --cache-from="${cache_image}" \
+          --cache-from="${DEFAULT_BRANCH_IMAGE}" \
+          --cache-from="${DEFAULT_MAIN_IMAGE}" \
+          ${destinations} \
+          --push \
+          .
+        ;;
+
+    ci-build-verify-image)
+        mkdir -p "${GITLAB_CI_CACHE_FULL_DIR}"
+
+        docker buildx build \
+          --provenance=false \
+          --cache-to=type=inline \
+          --cache-from="${VERIFY_IMAGE_MAIN}" \
+          --build-arg from_image="${DEFAULT_BRANCH_IMAGE}" \
+          --build-arg PROJECT_URL="${CI_MERGE_REQUEST_SOURCE_PROJECT_URL:-${CI_PROJECT_URL}}" \
+          --build-arg SHA="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA}}" \
+          --build-arg GITLAB_CI_CACHE_DIR="${GITLAB_CI_CACHE_DIR}" \
+          --build-arg GITLAB_CI_CACHE_GO_DIR="${GITLAB_CI_CACHE_GO_DIR}" \
+          --build-arg GDK_INTERNAL_CACHE_FULL_DIR="${GDK_INTERNAL_CACHE_FULL_DIR}" \
+          --build-arg BUNDLE_PATH="${BUNDLE_PATH}" \
+          --build-arg GEM_HOME="${GEM_HOME}" \
+          --build-arg GEM_PATH="${GEM_PATH}" \
+          --build-arg GOCACHE="${GOCACHE}" \
+          --build-arg GOMODCACHE="${GOMODCACHE}" \
+          --build-arg NODE_PATH="${NODE_PATH}" \
+          --build-arg PUMA_SINGLE_MODE="${PUMA_SINGLE_MODE}" \
+          --build-arg GDK_DEBUG="${GDK_DEBUG}" \
+          --file="support/ci/Dockerfile.verify" \
+          --tag "${VERIFY_IMAGE}" \
+          --push \
+          .
+
+        ;;
+
+    build)
+        docker buildx build \
+          --provenance=false \
+          --tag "${DEFAULT_BRANCH_IMAGE}" \
+          .
+        ;;
+
+    *)
+        echo "Usage: $0 [ci-login|ci-logout|ci-build-if-necessary|ci-build-verify-image|build]"
+        exit 1
+        ;;
+esac

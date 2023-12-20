@@ -2,39 +2,67 @@
 
 module GDK
   module ConfigType
-    TypeError = Class.new(StandardError)
-
     class Base
-      attr_accessor :value
-      attr_reader :slug
+      extend ::Forwardable
 
-      def initialize(value, slug:)
-        @value = value
-        @slug = slug
+      attr_reader :builder, :parent, :value, :user_value
 
-        validate!
+      def_delegators :builder, :key, :blk
+
+      def initialize(parent:, builder:)
+        @parent = parent
+        @builder = builder
+
+        self.value = read_value
+      end
+
+      def default_value
+        parent.instance_eval(&blk) if blk
+      rescue ::GDK::ConfigSettings::LooseFile => e
+        GDK::Output.warn(e)
+        GDK::Output.info("Instead, set '#{slug}' in your gdk.yml.")
+        exit(5)
+      end
+
+      def value=(val)
+        @value = parse(val)
+      rescue StandardErrorWithMessage => e
+        raise e, "Value '#{val}' for setting '#{slug}' is not a valid #{type} - #{e.message}."
+      rescue ::TypeError, ::NoMethodError
+        raise ::TypeError, "Value '#{val}' for setting '#{slug}' is not a valid #{type}."
+      end
+
+      def user_defined?
+        !!defined?(@user_value)
       end
 
       def validate!
-        orig_value = value
-
-        return if parse
-
-        raise TypeError, "Value '#{orig_value}' for #{slug} is not a valid #{type}"
+        true # Validated in #value=
       end
 
-      def dump!
+      def dump!(*)
         value
       end
 
+      def slug
+        [parent.slug, key].compact.join('.')
+      end
+
+      def root
+        parent&.root || self
+      end
+      alias_method :config, :root
+
       private
+
+      def read_value
+        @user_value = parent.yaml.fetch(key)
+      rescue KeyError
+        default_value
+      end
 
       def type
         self.class.name.split('::').last.downcase
-      end
-
-      def value_respond_to?(method_name)
-        value.respond_to?(method_name)
       end
     end
   end

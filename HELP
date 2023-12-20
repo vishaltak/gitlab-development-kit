@@ -4,37 +4,57 @@ Usage: gdk <command> [<args>]
 
 Manage services:
 
-  gdk start                                 # Start everything
-  gdk start redis postgresql                # Start specific services
-  gdk stop                                  # Stop all services and unload Runit
-  gdk stop redis postgresql                 # Stop specific service
-  gdk status                                # See status of all services
-  gdk restart                               # Restart everything
-  gdk restart redis postgresql              # Restart specific services
+  gdk start                                         # Start everything
+  gdk start redis postgresql                        # Start specific services
+  gdk stop                                          # Stop all services and unload Runit
+  gdk stop redis postgresql                         # Stop specific service
+  gdk status                                        # See status of all services
+  gdk restart                                       # Restart everything
+  gdk restart redis postgresql                      # Restart specific services
+  gdk kill                                          # Forcibly kills services
 
-  gdk tail                                  # Tail all logs
-  gdk tail redis postgresql                 # Tail specific logs
+  gdk tail                                          # Tail logs for all services (stdout and stderr only)
+  gdk tail redis postgresql                         # Tail specific logs
 
-  gdk thin                                  # Run Rails web server with thin in foreground
-  gdk psql [-d gitlabhq_development]        # Run Postgres console
-  gdk redis-cli                             # Run Redis console
+  gdk psql [-d gitlabhq_development]                # Run Postgres console
+  gdk psql-geo                                      # Run Postgres console connected to the Geo tracking database
+  gdk rails <command> [<args>]                      # Execute provided command on Rails bundled with GitLab
+  gdk redis-cli                                     # Run Redis console
+  gdk clickhouse                                    # Run ClickHouse console
+
+  gdk measure                                       # Generate a sitespeed.io report for given URL(s)
+  gdk measure-workflow                              # Generate a sitespeed.io report for given workflow(s)
 
 Manage GDK:
 
-  gdk init                                  # Initialize GDK
-  gdk install gitlab_repo=https://my-fork   # Install everything
-  gdk update                                # Pull application changes from Git
-  gdk reconfigure                           # Delete and regenerate all config files created by GDK
+  gdk open                                          # Visit your GitLab installation in your default web browser
 
-  gdk config get postgresql.port            # Get configuration values
-  gdk diff-config                           # Print difference between current and new configuration values
-  gdk trust /path/to/gdk                    # Mark an existing GDK as trusted
+  gdk install gitlab_repo=https://my-fork           # Install everything
+  gdk update                                        # Pull application changes from Git
+  gdk reconfigure                                   # Delete and regenerate all config files created by GDK
 
-  gdk doctor                                # Run diagnostics on GDK
-  gdk version                               # Print current GDK version
-  gdk help                                  # Print this help text
+  gdk config list                                   # List all config keys and values
+  gdk config get postgresql.port                    # Get configuration value
+  gdk config set postgresql.port <port>             # Set configuration value
+  gdk config set sshd.hostkeyalgorithms rsa,ed25519 # Set array configuration with comma-separated values
+  gdk diff-config                                   # Print difference between current
+                                                    #  and new configuration values
+
+  gdk telemetry                                     # Opt in or out of error tracking and analytic data collection
+
+  gdk reset-data                                    # Back up and create fresh git repository, PostgreSQL
+                                                    #  data and Rails upload directory
+  gdk reset-praefect-data                           # Back up and create fresh Praefect PostgreSQL data
+  gdk cleanup                                       # Truncate log files and remove any unnecessarily
+                                                    #  installed dependencies
+  gdk pristine                                      # Reset GDK state. Deletes caches, temporary files
+                                                    #  reinstalls dependencies. Does not delete data
+
+  gdk doctor                                        # Run diagnostics on GDK
+  gdk version                                       # Print current GDK version
+  gdk help                                          # Print this help text
 
 # Development admin account: root / 5iveL!fe
 
 For more information about GitLab development see
-https://docs.gitlab.com/ce/development/README.html.
+https://docs.gitlab.com/ee/development/index.html.

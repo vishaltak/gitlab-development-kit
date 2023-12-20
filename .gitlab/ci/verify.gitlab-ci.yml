@@ -1,0 +1,119 @@
+# Jobs that are generally only executable by CI and not locally.
+#
+.verify-base-job:
+  stage: verify
+  extends:
+    - .rules:code-changes
+  image: ${VERIFY_IMAGE}
+  before_script:
+    - !reference [.default-before_script, before_script]
+  tags:
+    - gitlab-org-docker
+
+.verify-job:
+  extends:
+    - .verify-base-job
+    - .verify-job-cached_variables
+  variables:
+    GIT_STRATEGY: none
+  needs:
+    - build-verify-image
+  before_script:
+    - cd /home/gdk/gdk
+    - !reference [.verify-base-job, before_script]
+  after_script:
+    # In `after_script`, the working directory always starts at `CI_PROJECT_DIR`
+    - mkdir -p gitlab_log gdk_log
+    - mv /home/gdk/gdk/gitlab/log/*.log gitlab_log/
+    - mv /home/gdk/gdk/log/ gdk_log/
+  artifacts:
+    paths:
+      - gitlab_log/
+      - gdk_log/
+    expire_in: 2 days
+    when: always
+  timeout: 2h
+
+start:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-start"
+
+start-experimental:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-start-experimental"
+
+doctor:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-doctor"
+
+debug-info:
+  extends: .verify-job
+  script:
+    - run_timed_command "bin/gdk debug-info"
+
+reconfigure:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-reconfigure"
+
+reset-data:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-reset-data"
+
+pristine:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-pristine"
+
+update:
+  extends: .verify-job
+  script:
+    - run_timed_command "support/ci/verify-update"
+  after_script:
+    - !reference ['.verify-job', after_script]
+    - mv /home/gdk/gdk/$GITLAB_LAST_VERIFIED_SHA_PATH $GITLAB_LAST_VERIFIED_SHA_PATH
+  artifacts:
+    paths:
+      - gitlab_log/
+      - gdk_log/
+      - $GITLAB_LAST_VERIFIED_SHA_PATH
+    expire_in: 2 days
+    when: always
+
+gitpod-docker-image:
+  extends:
+    - .docker:build-docker-in-docker
+    - .rules:gitpod-code-changes
+  stage: !reference ['.verify-job', stage]
+  needs:
+    - build-gitpod-workspace-image
+  script:
+    - run_timed_command "support/ci/verify-gitpod-docker-image"
+  artifacts:
+    paths:
+      - ./artifacts/log/*
+    expire_in: 2 days
+    when: on_failure
+  timeout: 1h
+
+geo-install:
+  extends: .verify-job
+  tags:
+    - saas-linux-medium-amd64
+  script:
+    - run_timed_command "support/ci/verify-geo"
+  after_script:
+    - mkdir -p $CI_PROJECT_DIR/gitlab2_log $CI_PROJECT_DIR/gdk2_log
+    - cp -rf /home/gdk/gdk2/gitlab/log/*.log $CI_PROJECT_DIR/gitlab2_log/
+    - cp -rf /home/gdk/gdk2/log/ $CI_PROJECT_DIR/gdk2_log/
+  artifacts:
+    paths:
+      - ./gitlab2_log
+      - ./gdk2_log
+    expire_in: 2 days
+    when: always
+  allow_failure: true

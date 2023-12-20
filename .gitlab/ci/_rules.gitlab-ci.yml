@@ -1,0 +1,128 @@
+##############
+# Conditions #
+##############
+.if-merge-request: &if-merge-request
+  if: '$CI_MERGE_REQUEST_IID'
+
+.if-default-branch-refs: &if-default-branch-refs
+  if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH && $CI_MERGE_REQUEST_IID == null'
+
+.if-default-branch-schedule: &if-default-branch-schedule
+  if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule"'
+
+.if-release-image: &if-release-image
+  if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "schedule" && $SCHEDULE_TYPE == "gitpod-image-release"'
+
+####################
+# Changes patterns #
+####################
+.docs-changes: &docs-changes
+  - "**/*.{md}"
+  - "{doc}/**/*"
+  - ".markdownlint.yml"
+  - "package.json"
+  - "yarn.lock"
+
+.ruby-version-changes: &ruby-version-changes
+  - ".ruby-version"
+  - ".tool-versions"
+
+.code-changes: &code-changes
+  - "**/*.{rb,erb,sh,yml,example,types}"
+  - "{lib,gem,bin}/**/*"
+  - "{spec,support}/**/*"
+  - ".ruby-version"
+  - ".tool-versions"
+  - ".gdkrc"
+  - "bin/gdk-shell"
+  - ".gitlab-ci.yml"
+  - ".gitlab/ci/**/*"
+  - "Gemfile{,.lock}"
+  - "Brewfile"
+  - "Makefile"
+  - "Rakefile"
+  - "Dockerfile"
+  - "**/*/Dockerfile"
+  - "packages*.txt"
+  - "**/*/Makefile"
+  - "Vagrantfile"
+  - "gitlab-openldap/**/*"
+  - "vagrant/assets/**/*"
+
+.docs-code-changes: &docs-code-changes
+  - "**/*.{md}"
+  - "{doc}/**/*"
+  - "**/*.{rb,erb,sh,yml,example,types}"
+  - "{lib,gem,bin}/**/*"
+  - "{spec,support}/**/*"
+  - ".ruby-version"
+  - ".tool-versions"
+  - ".gdkrc"
+  - "bin/gdk-shell"
+  - ".gitlab-ci.yml"
+  - ".gitlab/ci/**/*"
+  - "Gemfile{,.lock}"
+  - "Rakefile"
+  - "Dockerfile"
+  - "**/*/Dockerfile"
+  - "packages*.txt"
+  - "**/*/Makefile"
+  - "Vagrantfile"
+  - "gitlab-openldap/**/*"
+  - "vagrant/assets/**/*"
+
+.gitpod-code-changes: &gitpod-code-changes
+  - "support/gitpod/**/*"
+  - "support/ci/verify-gitpod-docker-image"
+  - ".gitlab-ci.yml"
+  - ".gitlab/ci/**/*"
+
+.gitlab-remote-code-changes: &gitlab-remote-code-changes
+  - "support/gitlab-remote-development/**/*"
+
+#########
+# Rules #
+#########
+.rules:docs-changes:
+  rules:
+    - changes: *docs-changes
+
+.rules:ruby-version-changes:
+  rules:
+    - changes: *ruby-version-changes
+
+.rules:code-changes:
+  rules:
+    - <<: *if-release-image
+      when: never
+    - <<: *if-default-branch-schedule
+    - changes: *code-changes
+
+.rules:docs-code-changes:
+  rules:
+    - changes: *docs-code-changes
+
+.rules:gitpod-code-changes:
+  rules:
+    - <<: *if-release-image
+    - <<: *if-merge-request
+      changes: *gitpod-code-changes
+
+.rules:gitlab-remote-code-changes:
+  rules:
+    - <<: *if-release-image
+    - <<: *if-merge-request
+      changes: *gitlab-remote-code-changes
+
+.rules:deploy-gitpod-workspace-image:
+  rules:
+    - <<: *if-release-image
+
+.rules:deploy-pages:
+  rules:
+    - <<: *if-release-image
+      when: never
+    - <<: *if-default-branch-schedule
+      when: never
+    - <<: *if-default-branch-refs
+      changes: *code-changes

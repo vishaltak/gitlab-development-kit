@@ -1,41 +1,46 @@
-export GOPATH := $(shell pwd)
-GRAFANA_PARENT := src/github.com/grafana
-GRAFANA_SOURCE := ${GRAFANA_PARENT}/grafana
-GRAFANA_VERSION := 4.1.1
-GRAFANA_TAR_SHA256 = 34ecd6c7d3e30b7b0eecf78f57383ad3b4754f5da9da77f031ca4b5866fe9893
+# Details from https://grafana.com/grafana/download
+GRAFANA_INSTALL = true
+GRAFANA_VERSION = 7.5.11
+GRAFANA_MACOS_SHA256 = efd1f27e1f66508ea7bef228786fae3629a32b50e565d0fc5dac616c4e0d9c20
+GRAFANA_LINUX_SHA256 = 3244d0ced48d2de9726c9a3bd6d5f08c1b6a081d42665401e033fc4a31c57d5d
 
-all: public vendor conf bin/grafana-server grafana-dashboards
+# Determine host operating system
+ifeq ($(shell uname -s), Darwin)
+	OS = darwin
+	GRAFANA_SHA256 = ${GRAFANA_MACOS_SHA256}
+else ifeq ($(shell uname -s), Linux)
+	OS = linux
+	GRAFANA_SHA256 = ${GRAFANA_LINUX_SHA256}
+else
+	GRAFANA_INSTALL = false
+endif
 
-grafana.tar.gz:
-	curl -L https://github.com/grafana/grafana/archive/v${GRAFANA_VERSION}.tar.gz > $@
+.PHONY: all
+all: grafana grafana-dashboards
 
-${GRAFANA_SOURCE}/build.go:	grafana.tar.gz
-	echo "{GRAFANA_TAR_SHA256}  grafana.tar.gz" | shasum -a256
-	tar zxf $<
-	mkdir -p ${GRAFANA_PARENT}
-	mv grafana-${GRAFANA_VERSION} ${GRAFANA_SOURCE}
-	touch $@
+ifeq ($(GRAFANA_INSTALL),true)
+grafana:
+	@curl -L --fail https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.${OS}-amd64.tar.gz -o grafana-${GRAFANA_VERSION}.${OS}-amd64.tar.gz
+	@echo "${GRAFANA_SHA256}  grafana-${GRAFANA_VERSION}.${OS}-amd64.tar.gz" | shasum -a 256 -c -
+	@tar -zxf grafana-${GRAFANA_VERSION}.${OS}-amd64.tar.gz
+	@mv grafana-${GRAFANA_VERSION} grafana
+else
+grafana:
+	@echo "ERROR: Unsupported platform."
+endif
 
-bin/grafana-server:	${GRAFANA_SOURCE}/build.go
-	cd ${GRAFANA_SOURCE} && go run build.go setup
-	cd ${GRAFANA_SOURCE} && go run build.go build
-	cd ${GRAFANA_SOURCE} && install bin/grafana-cli bin/grafana-server ${GOPATH}/bin
-
-public:	bin/grafana-server
-	cd ${GRAFANA_SOURCE} && npm install
-	cd ${GRAFANA_SOURCE} && npm install grunt-cli
-	cd ${GRAFANA_SOURCE} && node_modules/grunt-cli/bin/grunt build --force
-	mv ${GRAFANA_SOURCE}/public_gen $@
-
-vendor: public
-	cp -r ${GRAFANA_SOURCE}/vendor vendor
-
-conf:	public
-	cp -r ${GRAFANA_SOURCE}/conf conf
-
+ifeq ($(GRAFANA_INSTALL),true)
 grafana-dashboards:
-	git clone https://gitlab.com/gitlab-org/grafana-dashboards.git
+	@git clone https://gitlab.com/gitlab-org/grafana-dashboards.git
+else
+grafana-dashboards:
+	@echo "ERROR: Unsupported platform."
+endif
 
-.PHONY:	clean
+.PHONY: test
+test:
+	@true
+
+.PHONY: clean
 clean:
-	rm -rf pkg bin src grafana.tar.gz public vendor conf grafana-dashboards
+	@rm -rf grafana grafana-dashboards grafana-${GRAFANA_VERSION}.${OS}-amd64.tar.gz

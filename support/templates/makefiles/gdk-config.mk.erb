@@ -1,0 +1,98 @@
+asdf_opt_out = <%= config.asdf.opt_out? %>
+elasticsearch_enabled = <%= config.elasticsearch.enabled? %>
+elasticsearch_version = <%= config.elasticsearch.version %>
+elasticsearch_architecture = <%= config.elasticsearch.__architecture %>
+<%-# dev -%>
+dev_checkmake_binary = <%= config.dev.checkmake.__versioned_binary %>
+<%-# -%>
+gdk_ask_to_restart_after_update = <%= config.gdk.ask_to_restart_after_update %>
+gdk_debug = <%= config.gdk.__debug? %>
+gdk_quiet = <%= config.gdk.quiet? %>
+gdk_root = <%= config.gdk_root %>
+pgvector_enabled = <%= config.pgvector.enabled? %>
+pgvector_repo = <%= config.pgvector.repo %>
+pgvector_version = <%= config.pgvector.version %>
+geo_enabled = <%= config.geo? %>
+geo_secondary = <%= config.geo.secondary? %>
+gitaly_repo = <%= config.repositories.gitaly %>
+gitaly_build_bin_dir = <%= config.gitaly.__build_bin_path %>
+gitaly_skip_setup = <%= config.gitaly.skip_setup? %>
+gitlab_development_root = <%= config.gdk_root %>
+<%-# GitLab Docs -%>
+gitlab_docs_enabled = <%= config.gitlab_docs.enabled? %>
+gitlab_docs_repo = <%= config.repositories.gitlab_docs %>
+<%-# See also runner_enabled -%>
+gitlab_runner_enabled = <%= config.gitlab_runner.enabled? %>
+gitlab_runner_repo = <%= config.repositories.gitlab_runner %>
+<%-# -%>
+omnibus_gitlab_enabled = <%= config.omnibus_gitlab.enabled? %>
+omnibus_gitlab_repo = <%= config.repositories.omnibus_gitlab %>
+<%-# -%>
+charts_gitlab_enabled = <%= config.charts_gitlab.enabled? %>
+charts_gitlab_repo = <%= config.repositories.charts_gitlab %>
+<%-# -%>
+gitlab_operator_enabled = <%= config.gitlab_operator.enabled? %>
+gitlab_operator_repo = <%= config.repositories.gitlab_operator %>
+<%-# -%>
+gitlab_elasticsearch_indexer_enabled = <%= config.elasticsearch.enabled %>
+gitlab_elasticsearch_indexer_repo = <%= config.repositories.gitlab_elasticsearch_indexer %>
+gitlab_zoekt_indexer_repo = <%= config.repositories.gitlab_zoekt_indexer %>
+gitlab_zoekt_indexer_version = <%= config.zoekt.indexer_version %>
+zoekt_enabled = <%= config.zoekt.enabled? %>
+zoekt_repo = <%= config.repositories.zoekt %>
+zoekt_version = <%= config.zoekt.version %>
+gitlab_k8s_agent_enabled = <%= config.gitlab_k8s_agent? %>
+gitlab_k8s_agent_repo = <%= config.repositories.gitlab_k8s_agent %>
+gitlab_pages_enabled = <%= config.gitlab_pages.enabled? %>
+gitlab_pages_port = <%= config.gitlab_pages.port %>
+gitlab_pages_repo = <%= config.repositories.gitlab_pages %>
+gitlab_repo = <%= config.repositories.gitlab %>
+gitlab_shell_repo = <%= config.repositories.gitlab_shell %>
+gitlab_shell_skip_setup = <%= config.gitlab_shell.skip_setup? %>
+<%-# GitLab Spamcheck -%>
+gitlab_spamcheck_enabled = <%= config.gitlab_spamcheck.enabled? %>
+gitlab_spamcheck_repo = <%= config.repositories.gitlab_spamcheck %>
+<%-# -%>
+gitlab_ui_enabled = <%= config.gitlab_ui? %>
+gitlab_ui_repo = <%= config.repositories.gitlab_ui %>
+gitlab_default_branch = <%= config.gitlab.default_branch %>
+gitlab_lefthook_enabled = <%= config.gitlab.lefthook_enabled? %>
+grafana_enabled = <%= config.grafana.enabled? %>
+hostname = <%= config.hostname %>
+https = <%= config.https? %>
+jaeger_server_enabled = <%= config.tracer.jaeger? %>
+jaeger_version = <%= config.tracer.jaeger.version %>
+openldap_enabled = <%= config.openldap.enabled? %>
+platform = <%= config.__platform %>
+port = <%= config.port %>
+postgresql_bin_dir = <%= config.postgresql.bin_dir %>
+postgresql_data_dir = <%= config.postgresql.data_dir %>
+postgresql_dir = <%= config.postgresql.dir %>
+postgresql_geo_dir = <%= config.postgresql.geo.dir %>
+postgresql_geo_host = <%= config.postgresql.geo.host %>
+postgresql_geo_port = <%= config.postgresql.geo.port %>
+postgresql_host = <%= config.postgresql.host %>
+postgresql_port = <%= config.postgresql.port %>
+postgresql_max_connections = <%= config.postgresql.max_connections %>
+postgresql_replica_enabled = <%= config.postgresql.replica.enabled %>
+postgresql_replica_dir = <%= config.postgresql.replica.root_directory %>
+postgresql_replica_data_dir = <%= config.postgresql.replica.data_directory %>
+postgresql_replica_enabled2 = <%= config.postgresql.replica_2.enabled %>
+postgresql_replica_dir2 = <%= config.postgresql.replica_2.root_directory %>
+postgresql_replica_data_dir2 = <%= config.postgresql.replica_2.data_directory %>
+postgresql_replication_user = <%= config.postgresql.replication_user %>
+praefect_enabled = <%= config.praefect.enabled? %>
+registry_enabled = <%= config.registry? %>
+registry_host = <%= config.registry.host %>
+registry_port = <%= config.registry.port %>
+relative_url_root = <%= config.relative_url_root %>
+restrict_cpu_count = <%= config.restrict_cpu_count %>
+<%-# See also gitlab_runner_enabled -%>
+runner_enabled = <%= config.runner.enabled %>
+<%-# -%>
+snowplow_micro_enabled = <%= config.snowplow_micro.enabled %>
+sshd_bin = <%= config.sshd.bin %>
+sshd_hostkeys = <%= config.sshd.host_keys.join(' ') %>
+username = <%= config.username %>
+ci_database_enabled = <%= config.gitlab.rails.databases.ci.enabled %>
+workhorse_skip_setup = <%= config.workhorse.skip_setup? %>

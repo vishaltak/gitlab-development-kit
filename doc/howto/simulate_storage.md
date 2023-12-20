@@ -23,10 +23,10 @@ SSHFS and slow down network traffic as a way of replicating a slow NFS. Usage of
 this script is as following:
 
 ```shell
-bin/mount-slow-fs path/to/actual/repositories /path/to/mountpoint
+support/mount-slow-fs path/to/actual/repositories /path/to/mountpoint
 ```
 
-As an example, we'll use the following directories:
+As an example, we use the following directories:
 
 - Source directory: `~/Projects/repositories`
 - Mountpoint: `/mnt/repositories`
@@ -41,10 +41,10 @@ sudo chown $USER /mnt/repositories
 Now we can run the script:
 
 ```shell
-bin/mount-slow-fs ~/Projects/repositories /mnt/repositories
+support/mount-slow-fs ~/Projects/repositories /mnt/repositories
 ```
 
-Terminating the script (using ^C) will automatically unmount the repositories
+Terminating the script (using ^C) automatically unmounts the repositories
 and remove the created traffic shaping rules.
 
 ## Device Mapper (Linux only)

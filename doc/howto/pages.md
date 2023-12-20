@@ -1,9 +1,96 @@
 # Pages
 
+This page contains information about developing GitLab Pages inside the GDK. This method allows you test GitLab Pages from deployment to visiting your static site.
+
+For further details check the [Contribute to GitLab Pages development](https://docs.gitlab.com/ee/development/pages/).
+
+## Port
+
 GDK features an HTTP-only GitLab Pages daemon on port `3010`.
+Port number can be customized by editing `gdk.yml` as explained in
+[GDK configuration](../configuration.md#gdkyml).
+
+## Hostname
 
 In order to handle wildcard hostnames, pages integration relies on
-[xip.io](https://xip.io) and will not work on a disconnected system.
+[nip.io](https://nip.io) and does not work on a disconnected system.
+This is the preferred configuration and the default value for the
+GitLab Pages hostname is `127.0.0.1.nip.io`.
 
-Port number can be customized editing `gdk.yml` as explained in
-[GDK configuration](configuration.md#gdkyml).
+You can configure a custom host name. For example, to set up `pages.gdk.test`:
+
+1. Set up the [`gdk.test` hostname](local_network.md).
+1. Add the following to `gdk.yml`:
+
+   ```yaml
+   gitlab_pages:
+     enabled: true
+     host: pages.gdk.test
+   ```
+
+1. Also add `pages.gdk.test` as a hostname. For example, add the following to `/etc/hosts`:
+
+   ```plaintext
+   127.0.0.1 pages.gdk.test
+   ```
+
+However, to load your Pages domains, you must add an entry to the `/etc/hosts` file for
+each domain you want to access. For example, to access `root.pages.gdk.test`, add the
+following to `/etc/hosts`:
+
+```plaintext
+127.0.0.1 root.pages.gdk.test
+```
+
+That is because `/etc/hosts` does not support wildcard hostnames.
+An alternative is to use [`dnsmasq`](https://wiki.debian.org/dnsmasq)
+to handle wildcard hostnames.
+
+## Enable access control
+
+1. Follow steps 3-6 in [Enabling access control](https://docs.gitlab.com/ee/development/pages/#enabling-access-control)
+to create an OAuth application for GitLab Pages.
+
+1. Add the following to `gdk.yml`
+
+   ```yaml
+   gitlab_pages:
+     enabled: true
+     access_control: true
+     auth_client_id: 'YOUR_CLIENT_ID' # replace with OAuth Client ID generated above
+     auth_client_secret: 'YOUR_CLIENT_SECRET' # replace with OAuth Client Secret generated above
+   ```
+
+1. Reconfigure GDK
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Restart GDK
+
+   ```shell
+   gdk restart
+   ```
+
+## Enable custom domains
+
+1. Add the following to `gdk.yml`
+
+   ```yaml
+   gitlab_pages:
+     enabled: true
+     enable_custom_domains: true
+   ```
+
+1. Reconfigure GDK
+
+   ```shell
+   gdk reconfigure
+   ```
+
+1. Restart GDK
+
+   ```shell
+   gdk restart
+   ```

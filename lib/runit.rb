@@ -1,25 +1,44 @@
 # frozen_string_literal: true
 
+require 'pathname'
 require_relative 'shellout'
-require_relative 'runit/config'
-require_relative 'gdk/output'
+require_relative 'utils'
 
 module Runit
+  autoload :Config, 'runit/config'
+
   SERVICE_SHORTCUTS = {
     'rails' => 'rails-*',
     'tunnel' => 'tunnel_*',
     'praefect' => 'praefect*',
     'gitaly' => '{gitaly,praefect*}',
-    'db' => '{redis,postgresql,postgresql-geo}',
-    'rails-migration-dependencies' => '{redis,postgresql,postgresql-geo,gitaly,praefect*}'
+    'db' => '{redis,redis-cluster,postgresql,postgresql-geo,clickhouse}',
+    'rails-migration-dependencies' => '{redis,redis-cluster,postgresql,postgresql-geo,gitaly,praefect*,minio}',
+    'workhorse' => 'gitlab-workhorse'
   }.freeze
 
-  def self.start_runsvdir
-    Dir.chdir($gdk_root)
+  SERVICES_DIR = Pathname.new(__dir__).join('../services').expand_path
+  LOG_DIR = Pathname.new(__dir__).join('../log').expand_path
 
+  ALL_DATA_ORIENTED_SERVICE_NAMES = %w[minio openldap gitaly praefect redis redis-cluster postgresql-geo postgresql].freeze
+  STOP_RETRY_COUNT = 3
+
+  def self.start_runsvdir
     runit_installed!
 
-    Runit::Config.new($gdk_root).render
+    runit_config = Runit::Config.new(GDK.root)
+
+    if GDK.config.gdk.experimental.ruby_services?
+      # To make transition easier, we merge legacy services that haven't been migrated yet
+      # so that using experimental ruby services will always working even when partially migrated
+      services = GDK::Services.enabled
+      new_services = services.map(&:name)
+      legacy_services = runit_config.services_from_procfile.reject { |legacy| new_services.include?(legacy.name) }
+
+      runit_config.render(services: services + legacy_services)
+    else
+      runit_config.render
+    end
 
     # It is important that we use an absolute path with `runsvdir`: this
     # allows us to distinguish processes belonging to different GDK
@@ -27,13 +46,15 @@ module Runit
     args = runsvdir_base_args
     return if runsvdir_pid(args)
 
+    dots = '.' * 395
+
     Process.fork do
       Dir.chdir('/')
       Process.setsid
 
       # Cargo-culting the use of 395 periods from omnibus-gitlab.
       # https://gitlab.com/gitlab-org/omnibus-gitlab/blob/5dfdcafa30ad6e203a04a917f180b630d5121cf6/config/templates/runit/runsvdir-start.erb#L42
-      args << ('log: ' + '.' * 395)
+      args << "log: #{dots}"
 
       spawn(cleaned_path_env, *args, in: '/dev/null', out: '/dev/null', err: '/dev/null')
     end
@@ -51,7 +72,7 @@ module Runit
   end
 
   def self.runsvdir_base_args
-    ['runsvdir', '-P', File.join($gdk_root, 'services')]
+    ['runsvdir', '-P', GDK.root.join('services').to_s]
   end
 
   def self.runsvdir_pid(args)
@@ -59,13 +80,15 @@ module Runit
     return if pgrep.empty?
 
     pids = pgrep.split("\n").map { |str| Integer(str) }
+    runsvdir_ps = "#{args.join(' ')} "
+
     pids.find do |pid|
-      Shellout.new(%W[ps -o args= -p #{pid}]).run.start_with?(args.join(' ') + ' ')
+      Shellout.new(%W[ps -o args= -p #{pid}]).run.start_with?(runsvdir_ps)
     end
   end
 
   def self.runit_installed!
-    return unless Shellout.new(%w[which runsvdir]).run.empty?
+    return if Utils.executable_exist?('runsvdir')
 
     abort <<~MESSAGE
 
@@ -78,59 +101,105 @@ module Runit
   end
 
   def self.runit_instructions
-    if File.executable?('/usr/local/bin/brew') # Homebrew
+    if GDK::Dependencies.homebrew_available?
       'brew install runit'
-    elsif File.executable?('/opt/local/bin/port') # MacPorts
+    elsif GDK::Dependencies.macports_available?
       'sudo port install runit'
-    elsif File.executable?('/usr/bin/apt') # Debian / Ubuntu
+    elsif GDK::Dependencies.linux_apt_available?
       'sudo apt install runit'
     else
       '(no copy-paste Runit installation snippet available for your OS)'
     end
   end
 
-  def self.stop
-    GDK::Output.notice "Shutting all services: "
+  def self.start(services, quiet: false)
+    services = Array(services)
 
+    if services.empty?
+      # Redis, PostgresSQL, etc should be started first.
+      data_oriented_service_names.reverse_each.all? { |service_name| sv('start', [service_name], quiet: quiet) }
+      services = non_data_oriented_service_names
+    end
+
+    sv('start', services, quiet: quiet)
+  end
+
+  def self.stop(quiet: false)
+    # Redis, PostgresSQL, etc should be stopped last.
+    stop_services(non_data_oriented_service_names, quiet: quiet)
+    data_oriented_service_names.all? { |service_name| stop_services([service_name], quiet: quiet) }
+
+    unload_runsvdir!
+  end
+
+  def self.stop_services(services, quiet: false)
     # The first stop attempt may fail; ignore its return value.
     stopped = false
 
-    2.times do
-      stopped = sv('force-stop', [])
-
+    STOP_RETRY_COUNT.times do |i|
+      # From http://smarden.org/runit/sv.8.html:
+      #
+      # down: If the service is running, send it the TERM signal, and the CONT signal. If ./run exits, start ./finish if it exists. After it stops, do not restart service.
+      # force-stop: Same as down, but wait up to (default) 7 seconds for the service to become down. Then report the status, and on timeout send the service the kill command.
+      #
+      stopped = sv('force-stop', services, quiet: quiet)
       break if stopped
 
-      GDK::Output.notice 'retrying stop'
+      GDK::Output.notice("Retrying stop (#{i + 1}/#{STOP_RETRY_COUNT})")
     end
 
-    unless stopped
-      GDK::Output.error 'stop failed'
+    true
+  end
 
-      abort
-    end
-
+  def self.unload_runsvdir!
     # Unload runsvdir: this is safe because we have just stopped all services.
     pid = runsvdir_pid(runsvdir_base_args)
-
-    GDK::Output.notice "Shutting down runsvdir (pid #{pid})"
-    Process.kill('HUP', pid)
-
-    GDK::Output.success "All services are shutdown!"
+    !Process.kill('HUP', pid).nil?
   end
 
-  def self.sv(cmd, services)
-    Dir.chdir($gdk_root)
+  def self.sv(cmd, services, quiet: false)
     start_runsvdir
-    services = service_args(services)
-    services.each { |svc| wait_runsv!(svc) }
-    system('sv', cmd, *services)
+    expanded_services = expand_services(services)
+    ensure_services_are_supervised(expanded_services)
+
+    expanded_services = expanded_services.filter { |es| !es.to_s.include?('redis-cluster') } unless GDK.config.redis_cluster.enabled?
+    return true if expanded_services.empty? # silent skip assuming successful
+
+    command = ['sv', '-w', config.gdk.runit_wait_secs.to_s, cmd, *expanded_services.map(&:to_s)]
+
+    sh = Shellout.new(command, chdir: GDK.root)
+    quiet ? sh.run : sh.stream
+    sh.success?
   end
 
-  def self.service_args(services)
-    return Dir['./services/*'].sort if services.empty?
+  def self.ensure_services_are_supervised(services)
+    services.each { |svc| wait_runsv_supervise_ok!(svc) }
+  end
+
+  def self.data_oriented_service_names
+    ALL_DATA_ORIENTED_SERVICE_NAMES.select do |service_name|
+      SERVICES_DIR.join(service_name).exist?
+    end
+  end
+
+  def self.non_data_oriented_service_names
+    all_service_names - data_oriented_service_names
+  end
+
+  def self.all_service_names
+    return [] unless SERVICES_DIR.exist?
+
+    # praefect-gitaly-* services are stopped/started automatically.
+    Pathname.new(SERVICES_DIR).children.filter_map do |path|
+      path.basename.to_s if path.directory? && !path.basename.to_s.start_with?('praefect-gitaly-')
+    end.sort
+  end
+
+  def self.expand_services(services)
+    return SERVICES_DIR.glob('*').sort if services.empty?
 
     services.flat_map do |svc|
-      service_shortcut(svc) || File.join('./services', svc)
+      service_shortcut(svc) || SERVICES_DIR.join(svc)
     end.uniq.sort
   end
 
@@ -139,73 +208,61 @@ module Runit
     return unless glob
 
     if glob.include?('/')
-      GDK::Output.error  "invalid service shortcut: #{svc} -> #{glob}"
+      GDK::Output.error "invalid service shortcut: #{svc} -> #{glob}"
 
       abort
     end
 
-    Dir[File.join('./services', glob)]
+    shortcut_services = SERVICES_DIR.glob(glob)
+    shortcut_services.empty? ? nil : shortcut_services
   end
 
-  def self.wait_runsv!(dir)
-    unless File.directory?(dir)
-      GDK::Output.error "unknown runit service: #{dir}"
+  def self.wait_runsv_supervise_ok!(service_dir)
+    unless service_dir.directory?
+      GDK::Output.error "unknown runit service: #{service_dir}"
 
       abort
     end
 
     50.times do
       begin
-        open(File.join(dir, 'supervise/ok'), File::WRONLY|File::NONBLOCK).close
-      rescue
+        service_dir.join('supervise', 'ok').open(File::WRONLY | File::NONBLOCK).close
+      rescue StandardError
         sleep 0.1
         next
       end
       return
     end
 
-    GDK::Output.error "timeout waiting for runsv in #{dir}"
+    GDK::Output.error "timeout waiting for runsv in #{service_dir}"
 
     abort
   end
 
   def self.tail(services)
-    Dir.chdir($gdk_root)
+    log_files_for_services = log_files(services)
+    if log_files_for_services.empty?
+      GDK::Output.warn(<<~MSG)
+        No matching services to tail.
 
-    tails = log_files(services).map do |log|
-      # It looks like 'tail -F' is a non-standard flag that exists in GNU tail
-      # and on macOS/FreeBSD. We use it because we want to detect the log file
-      # disappearing, and reopen the log file when that happens. If we ever
-      # want to revisit this decision, we could make our own "file replacement
-      # detector" as in
-      # https://gitlab.com/gitlab-org/gitlab-development-kit/merge_requests/881/diffs
-      # .
-      spawn('tail', '-F', log)
+        To view a list of services and shortcuts, run `gdk tail --help`.
+      MSG
+      return true
     end
 
-    %w[INT TERM].each do |sig|
-      trap(sig) { kill_processes(tails) }
-    end
-
-    wait = Thread.new { sleep }
-    tails.each do |tail|
-      Thread.new do
-        Process.wait(tail)
-        wait.kill
-      end
-    end
-
-    wait.join
-    kill_processes(tails)
-    exit
+    exec('tail', '-qF', *log_files_for_services.map(&:to_s))
   end
 
   def self.log_files(services)
-    return Dir['log/*/current'] if services.empty?
+    return LOG_DIR.glob(File.join('*', 'current')) if services.empty?
 
     services.flat_map do |svc|
-      log_shortcut(svc) || File.join('log', svc, 'current')
-    end.uniq
+      shortcut = log_shortcut(svc)
+      next shortcut if shortcut
+
+      current_log = LOG_DIR.join(svc, 'current')
+      current_log if current_log.exist?
+    end.compact.uniq
   end
 
   def self.log_shortcut(svc)
@@ -218,15 +275,18 @@ module Runit
       abort
     end
 
-    Dir[File.join('./log', glob, 'current')]
+    shortcut_logs = LOG_DIR.glob(File.join(glob, 'current'))
+    shortcut_logs unless shortcut_logs.empty?
   end
 
   def self.kill_processes(pids)
     pids.each do |pid|
-      begin
-        Process.kill('TERM', pid)
-      rescue Errno::ESRCH
-      end
+      Process.kill('TERM', pid)
+    rescue SystemCallError
     end
+  end
+
+  def self.config
+    @config ||= GDK::Config.new
   end
 end

@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+parent_path=$(dirname "$0")
+
+# shellcheck source=support/bootstrap-common.sh
+source "${parent_path}"/bootstrap-common.sh
+
+ASDF_VERSION_TO_INSTALL="v0.11.1"
+
+GDK_BOOTSTRAPPED_FILE="${GDK_CACHE_DIR}/.gdk_bootstrapped"
+
+asdf_install() {
+  if [[ ! -d "${CURRENT_ASDF_DIR}" ]]; then
+    git clone https://github.com/asdf-vm/asdf.git "${CURRENT_ASDF_DIR}" --branch ${ASDF_VERSION_TO_INSTALL}
+
+    asdf_add_initializer "${HOME}/.bashrc" "asdf.sh"
+    asdf_add_initializer "${HOME}/.zshrc" "asdf.sh"
+    asdf_add_initializer "${HOME}/.config/fish/config.fish" "asdf.fish"
+    asdf_add_initializer "${HOME}/.config/elvish/rc.elv" "asdf.elv"
+    asdf_add_initializer "${HOME}/.config/nushell/config.nu" "asdf.nu"
+
+    return 0
+  fi
+
+  return 0
+}
+
+asdf_add_initializer() {
+  [[ -f "${1}" ]] && echo -e "\n# Added by GDK bootstrap\nsource ${CURRENT_ASDF_DIR}/${2}" >> "${1}"
+  return 0;
+}
+
+asdf_install_tools() {
+  # Install all tools specified in .tool-versions
+  local asdf_arch_opts
+
+  asdf_arch_opts=""
+
+  if [[ "${OSTYPE}" == "darwin"* ]]; then
+    if [[ "${CPU_TYPE}" == "arm64" && "${GDK_MACOS_ARM64_NATIVE}" == "false" ]]; then
+      # Support running brew under Rosetta 2 on Apple Silicon machines
+      asdf_arch_opts="arch -x86_64"
+    fi
+  fi
+
+  # We need to manually install Ruby patches for now as it's not supported to
+  # set version specific patches e.g. https://github.com/asdf-vm/asdf-ruby/pull/202
+  #
+  # shellcheck disable=SC2034
+  ASDF_RUBY_PATCHES_3_1_4=$'https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.1/fix-ruby-xfree-for-libxml2.patch\nhttps://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.1/thread-memory-allocations.patch'
+  # shellcheck disable=SC2034
+  ASDF_RUBY_PATCHES_3_2_2=$'https://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.2/fix-ruby-xfree-for-libxml2.patch\nhttps://gitlab.com/gitlab-org/gitlab-build-images/-/raw/d95e4efae87d5e3696f22d12a6c4e377a22f3c95/patches/ruby/3.2/thread-memory-allocations.patch'
+
+  grep -E "^ruby " ".tool-versions" | while IFS= read -r line
+  do
+    echo "$line" | cut -d ' ' -f2- | xargs -n1 | while IFS= read -r version
+    do
+      version_patches=$(echo "ASDF_RUBY_PATCHES_${version}" | tr '.' '_')
+
+      bash -c "RUBY_APPLY_PATCHES='${!version_patches}' asdf install ruby ${version}"
+    done
+  done
+
+  bash -c "MAKELEVEL=0 ${asdf_arch_opts} asdf install"
+
+  return $?
+}
+
+gdk_mark_bootstrapped() {
+  mkdir -p "${GDK_CACHE_DIR}"
+  touch "${GDK_BOOTSTRAPPED_FILE}"
+
+  echo
+  echo "INFO: Bootstrap successful!"
+
+  if ! asdf_opt_out; then
+    echo "INFO: To make sure GDK commands are available in this shell, please run the command corresponding to your shell."
+    echo
+    echo "sh / bash / zsh:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.sh\""
+    echo
+    echo "fish:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.fish\""
+    echo
+    echo "elvish:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.elv\""
+    echo
+    echo "nushell:"
+    echo "source \"${CURRENT_ASDF_DIR}/asdf.nu\""
+  fi
+}
+
+###############################################################################
+
+if [[ -f "${GDK_BOOTSTRAPPED_FILE}" ]]; then
+  echo "INFO: This GDK has already been bootstrapped."
+  echo "INFO: Remove '${GDK_BOOTSTRAPPED_FILE}' to re-bootstrap."
+  exit 0
+fi
+
+if ! common_preflight_checks; then
+  error "Failed to perform preflight checks." >&2
+fi
+
+if ! setup_platform; then
+  error "Failed to install set up platform." >&2
+fi
+
+if ! asdf_opt_out; then
+  echo "INFO: Installing asdf.."
+  if ! asdf_install; then
+    error "Failed to install asdf." >&2
+  fi
+
+  echo "INFO: Installing/updating asdf plugins.."
+  if ! asdf_install_update_plugins; then
+    error "Failed to install some asdf plugins." >&2
+  fi
+
+  echo "INFO: Installing asdf tools.."
+  if ! asdf_install_tools; then
+    error "Failed to install some asdf tools." >&2
+  fi
+
+  echo "INFO: Reshimming asdf.."
+  if ! asdf_reshim; then
+    error "Failed to reshim asdf." >&2
+  fi
+fi
+
+if ! gdk_install_gdk_clt; then
+  error "Failed to run gdk_install_gdk_clt()." >&2
+fi
+
+echo "INFO: Configuring Ruby.."
+if ! configure_ruby; then
+  error "Failed to configure Ruby." >&2
+fi
+
+gdk_mark_bootstrapped

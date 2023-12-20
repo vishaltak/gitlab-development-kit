@@ -1,0 +1,112 @@
+# Jobs that are generally executable locally (as well as within CI)
+#
+.test-job:
+  stage: test
+  needs: []
+
+.ruby-job:
+  image: "ruby:${RUBY_VERSION}"
+  before_script:
+    - gem install gitlab-sdk
+    - gem install sentry-ruby
+  parallel:
+    matrix:
+      - RUBY_VERSION: ["3.0", "3.1", "3.2"]
+
+docs-lint:
+  extends:
+    - .test-job
+    - .rules:docs-changes
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.18-vale-2.29.6-markdownlint-0.37.0-markdownlint2-0.10.0
+  script:
+    - make lint
+
+rubocop:
+  extends:
+    - .test-job
+    - .rules:code-changes
+    - .ruby-job
+  script:
+    - make rubocop
+
+rspec:
+  extends:
+    - .test-job
+    - .rules:code-changes
+    - .ruby-job
+  variables:
+    RSPEC_ARGS: "--format doc --format RspecJunitFormatter --out rspec.xml"
+  script:
+    - make rspec
+  artifacts:
+    paths:
+      - rspec.xml
+      - coverage/coverage.xml
+    reports:
+      junit: rspec.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/coverage.xml
+
+shellcheck:
+  extends:
+    - .test-job
+    - .rules:code-changes
+    - .ruby-job
+  script:
+    - apt-get update
+    - make shellcheck
+
+checkmake:
+  extends:
+    - .test-job
+    - .rules:code-changes
+  image: registry.gitlab.com/gitlab-org/gitlab-development-kit/asdf-bootstrapped-verify:main
+  before_script:
+    - gem install gitlab-sdk
+    - gem install sentry-ruby
+  script:
+    - make checkmake
+
+gdk-example-yml:
+  extends:
+    - .test-job
+    - .rules:code-changes
+    - .ruby-job
+  script:
+    - make verify-gdk-example-yml
+
+asdf-combine:
+  extends:
+    - .test-job
+    - .rules:code-changes
+    - .ruby-job
+  artifacts:
+    when: on_failure
+    paths:
+      - .tool-versions
+  script:
+    - make verify-asdf-combine
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: "$CI_MERGE_REQUEST_IID"
+      changes:
+        - ".tool-versions*"
+        - "support/asdf-combine"
+        - "support/ci/verify-asdf-combine"
+
+makefile-config:
+  extends:
+    - .test-job
+    - .rules:code-changes
+    - .ruby-job
+  script:
+    - support/ci/verify-makefile-config
+
+ruby-version:
+  extends:
+    - .test-job
+    - .rules:ruby-version-changes
+    - .ruby-job
+  script:
+    - support/ruby-check-versions

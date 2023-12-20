@@ -1,0 +1,55 @@
+ARG from_image
+FROM ${from_image} as verify_full
+
+LABEL authors.maintainer "GDK contributors: https://gitlab.com/gitlab-org/gitlab-development-kit/-/graphs/main"
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+
+ARG PROJECT_URL
+ARG SHA
+
+ARG GITLAB_CI_CACHE_DIR
+ARG GDK_INTERNAL_CACHE_FULL_DIR
+ARG BUNDLE_PATH
+ARG GEM_HOME
+ARG GEM_PATH
+ARG GOCACHE
+ARG GOMODCACHE
+ARG NODE_PATH
+ARG PUMA_SINGLE_MODE
+ARG GDK_DEBUG
+
+RUN sudo mkdir -p ${BUNDLE_PATH} ${GEM_HOME} ${GEM_PATH} ${GOCACHE} ${GOMODCACHE} ${NODE_PATH}
+RUN sudo chown -R gdk:gdk ${GDK_INTERNAL_CACHE_FULL_DIR} || true
+
+WORKDIR /home/gdk
+
+COPY --chown=gdk ${GITLAB_CI_CACHE_DIR}/ ${GITLAB_CI_CACHE_DIR}/
+
+RUN du -smx ${GITLAB_CI_CACHE_DIR}/* || true
+
+RUN echo "yarn-offline-mirror ${NODE_PATH}/.yarn-cache/" >> ${HOME}/.yarnrc
+RUN echo "yarn-offline-mirror-pruning true" >> ${HOME}/.yarnrc
+
+RUN curl --fail "${PROJECT_URL}/-/raw/${SHA}/support/install" | bash -s - gdk "${SHA}" && \
+  (cd gdk && GDK_KILL_CONFIRM=true gdk kill)
+
+WORKDIR /home/gdk/gdk
+
+RUN gdk config set gitlab.cache_classes true && gdk config set webpack.live_reload false && gdk config set webpack.sourcemaps false && make Procfile
+
+FROM verify_full as verify
+
+ARG GITLAB_CI_CACHE_DIR
+ARG GITLAB_CI_CACHE_GO_DIR
+
+WORKDIR /home/gdk
+
+RUN du -smx ${GITLAB_CI_CACHE_DIR}/* || true
+
+RUN sudo rm -rf ${GITLAB_CI_CACHE_GO_DIR} || true
+
+RUN du -smx ${GITLAB_CI_CACHE_DIR}/* || true

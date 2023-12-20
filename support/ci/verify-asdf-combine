@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+
+support/asdf-combine --quiet
+diff_output=$(git diff --color --exit-code -G'^[^#]' .tool-versions || true)
+
+if [[ -n "${diff_output}" ]] ; then
+  echo "ERROR: There are .tool-versions changes that need to be checked in.  Run 'support/asdf-combine' to generate." >&2
+  echo >&2
+  echo "${diff_output}"
+  echo >&2
+
+  exit 1
+fi

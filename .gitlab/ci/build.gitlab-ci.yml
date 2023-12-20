@@ -1,0 +1,27 @@
+.build-job:
+  stage: build
+  extends:
+    - .docker:build-docker-in-docker
+  tags:
+    - gitlab-org-docker
+
+release-image:
+  extends:
+    - .rules:code-changes
+    - .build-job
+  script:
+    - ./support/docker ci-build-if-necessary
+
+build-gitpod-workspace-image:
+  extends:
+    - .build-job
+    - .rules:gitpod-code-changes
+  script:
+    - ./support/docker-build ./support/gitpod "$GITPOD_WORKSPACE_IMAGE:$CI_COMMIT_REF_SLUG"
+
+build-gitlab-remote-workspace-image:
+  extends:
+    - .build-job
+    - .rules:gitlab-remote-code-changes
+  script:
+    - ./support/docker-build ./support/gitlab-remote-development "$GITLAB_REMOTE_WORKSPACE_IMAGE:$CI_COMMIT_REF_SLUG"

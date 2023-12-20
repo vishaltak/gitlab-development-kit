@@ -1,88 +1,321 @@
 ---
-auto_devops:
+action_cable:
+  worker_pool_size: 4
+asdf:
+  opt_out: false
+cells:
   enabled: false
-  gitlab:
-    port: 21838
-  registry:
-    port: 26838
+  postgresql_clusterwide:
+    host: "/home/git/gdk/postgresql"
+    port: 5432
+charts_gitlab:
+  auto_update: true
+  enabled: false
+clickhouse:
+  bin: "/usr/bin/clickhouse"
+  data_dir: "/home/git/gdk/clickhouse/data"
+  dir: "/home/git/gdk/clickhouse"
+  enabled: false
+  http_port: 8123
+  interserver_http_port: 9009
+  log_dir: "/home/git/gdk/log/clickhouse"
+  log_level: trace
+  max_memory_usage: 1000000000
+  max_server_memory_usage: 2000000000
+  max_thread_pool_size: 1000
+  tcp_port: 9001
+common:
+  ca_path: ''
+dev:
+  checkmake:
+    version: 8915bd4
 elasticsearch:
-  checksum: 5903e1913a7c96aad96a8227517c40490825f672
   enabled: false
-  version: 6.5.1
+  version: 8.6.2
 gdk:
   ask_to_restart_after_update: true
+  auto_rebase_projects: false
+  auto_reconfigure: true
   debug: false
+  experimental:
+    auto_reconfigure: true
+    quiet: true
+    ruby_services: false
   overwrite_changes: false
+  preflight_checks_opt_out: false
   protected_config_files: []
+  quiet: true
+  rubygems_update_opt_out: false
+  runit_wait_secs: 20
+  start_hooks:
+    after: []
+    before: []
+  stop_hooks:
+    after: []
+    before: []
+  system_packages_opt_out: false
+  update_hooks:
+    after: []
+    before:
+    - support/exec-cd gitlab bin/spring stop || true
+  use_bash_shim: false
 gdk_root: "/home/git/gdk"
 geo:
   enabled: false
-  node_name: gitlab-development-kit
+  node_name: gdk
   registry_replication:
     enabled: false
     primary_api_url: http://localhost:5000
+  secondary: false
 git:
-  bin: "/home/toon/bin/git"
-git_repositories:
-  - "/home/git/gdk/"
+  bin: "/usr/local/bin/git"
+git_repositories: []
 gitaly:
   address: "/home/git/gdk/gitaly.socket"
   assembly_dir: "/home/git/gdk/gitaly/assembly"
+  auth_token: ''
   auto_update: true
+  backup:
+    enabled: false
+    go_cloud_url: s3://gitaly-backups?disableSSL=true&s3ForcePathStyle=true&region=gdk&endpoint=http%3A%2F%2F127.0.0.1%3A9000
   config_file: "/home/git/gdk/gitaly/gitaly.config.toml"
-  internal_socket_dir: "/home/git/gdk/tmp/gitaly"
+  dir: "/home/git/gdk/gitaly"
+  enable_all_feature_flags: false
+  enabled: false
+  env:
+    AWS_ACCESS_KEY_ID: minio
+    AWS_SECRET_ACCESS_KEY: gdk-minio
+  gitconfig: []
   log_dir: "/home/git/gdk/log/gitaly"
+  repository_storages: "/home/git/gdk/repository_storages"
+  runtime_dir: "/home/git/gdk/tmp"
+  skip_setup: false
+  storage_count: 1
+  storage_dir: "/home/git/gdk/repositories"
+gitlab:
+  auto_update: true
+  cache_classes: false
+  default_branch: master
+  dir: "/home/git/gdk/gitlab"
+  gitaly_disable_request_limits: false
+  lefthook_enabled: true
+  log_dir: "/home/git/gdk/gitlab/log"
+  rails:
+    address: ''
+    allowed_hosts: []
+    application_settings_cache_seconds: 60
+    bootsnap: true
+    bundle_gemfile: "/home/git/gdk/gitlab/Gemfile"
+    databases:
+      ci:
+        enabled: true
+        use_main_database: false
+      embedding:
+        enabled: false
+    hostname: 127.0.0.1
+    https:
+      enabled: false
+    multiple_databases: false
+    port: 3000
+    puma:
+      threads_max: 4
+      threads_min: 1
+      workers: 2
+    session_store:
+      cookie_key: _gitlab_session
+      unique_cookie_key_postfix: true
+  rails_background_jobs:
+    sidekiq_exporter_enabled: false
+    sidekiq_exporter_port: 3807
+    sidekiq_health_check_enabled: false
+    sidekiq_health_check_port: 3907
+    timeout: 10
+    verbose: false
+gitlab_docs:
+  auto_update: true
+  enabled: false
+  https: false
+  port: 3005
+  port_https: 3030
 gitlab_elasticsearch_indexer:
   auto_update: true
-gitlab_pages:
+gitlab_k8s_agent:
+  agent_listen_address: 127.0.0.1:8150
+  agent_listen_network: tcp
   auto_update: true
-  enabled: true
+  enabled: false
+  internal_api_listen_address: 127.0.0.1:8153
+  internal_api_listen_network: tcp
+  k8s_api_listen_address: 127.0.0.1:8154
+  k8s_api_listen_network: tcp
+  otlp_ca_certificate_file: ''
+  otlp_endpoint: ''
+  otlp_token_secret_file: ''
+  private_api_listen_address: 127.0.0.1:8155
+  private_api_listen_network: tcp
+  run_from_source: false
+gitlab_operator:
+  auto_update: true
+  enabled: false
+gitlab_pages:
+  access_control: false
+  auth_client_id: ''
+  auth_client_secret: ''
+  auth_scope: api
+  auto_update: true
+  enable_custom_domains: false
+  enabled: false
+  host: 127.0.0.1.nip.io
   port: 3010
+  propagate_correlation_id: false
+  secret_file: "/home/git/gdk/gitlab-pages-secret"
+  verbose: false
+gitlab_runner:
+  auto_update: true
+  enabled: false
 gitlab_shell:
   auto_update: true
+  dir: "/home/git/gdk/gitlab-shell"
+  skip_setup: false
+gitlab_spamcheck:
+  auto_update: true
+  enabled: false
+  external_port: 8081
+  inspector_url: http://127.0.0.1:8888/api/v1/isspam/issue
+  monitor_mode: false
+  output: stdout
+  port: 8001
+gitlab_ui:
+  auto_update: true
+  enabled: false
 grafana:
   enabled: false
+  port: 4000
 hostname: 127.0.0.1
 https:
   enabled: false
-influxdb:
+license:
+  customer_portal_url: https://customers.staging.gitlab.com
+  license_mode: test
+listen_address: 127.0.0.1
+load_balancing:
+  discover:
+    enabled: false
   enabled: false
 mattermost:
   enabled: false
   image: mattermost/mattermost-preview
-  local_port: 8065
+  port: 8065
 nginx:
-  bin: "/usr/sbin/nginx"
+  bin: "/usr/local/bin/nginx"
   enabled: false
   http:
     enabled: false
-    port: 80
+    port: 8080
+  http2:
+    enabled: false
   listen: 127.0.0.1
   ssl:
     certificate: localhost.crt
     key: localhost.key
 object_store:
+  backup_remote_directory: ''
+  connection:
+    provider: AWS
+    aws_access_key_id: minio
+    aws_secret_access_key: gdk-minio
+    region: gdk
+    endpoint: http://127.0.0.1:9000
+    path_style: true
+  console_port: 9002
+  consolidated_form: false
   enabled: false
+  host: 127.0.0.1
+  objects:
+    artifacts:
+      bucket: artifacts
+    external_diffs:
+      bucket: external-diffs
+    lfs:
+      bucket: lfs-objects
+    uploads:
+      bucket: uploads
+    packages:
+      bucket: packages
+    dependency_proxy:
+      bucket: dependency-proxy
+    terraform_state:
+      bucket: terraform
+    pages:
+      bucket: pages
+    ci_secure_files:
+      bucket: ci-secure-files
+    gitaly_backups:
+      bucket: gitaly-backups
   port: 9000
 omniauth:
+  github:
+    client_id: ''
+    client_secret: ''
+    enabled: false
+  gitlab:
+    app_id: ''
+    app_secret: ''
+    enabled: false
+    scope: read_user
   google_oauth2:
     client_id: ''
     client_secret: ''
     enabled: ''
+  group_saml:
+    enabled: false
+  openid_connect:
+    args: {}
+    enabled: false
+omnibus_gitlab:
+  auto_update: true
+  enabled: false
 openldap:
   enabled: false
+packages: {}
+pgbouncer_replicas:
+  enabled: false
+pgvector:
+  auto_update: false
+  enabled: false
+  repo: https://github.com/pgvector/pgvector.git
+  version: v0.4.1
 port: 3000
 postgresql:
-  bin: "/usr/lib/postgresql/11/bin/postgres"
-  bin_dir: "/usr/lib/postgresql/11/bin"
+  active_version: '14.9'
+  bin: "/usr/local/bin/postgres"
+  bin_dir: "/usr/local/bin"
   data_dir: "/home/git/gdk/postgresql/data"
   dir: "/home/git/gdk/postgresql"
   geo:
     dir: "/home/git/gdk/postgresql-geo"
-    port: 5432
+    host: "/home/git/gdk/postgresql-geo"
+    port: 5431
+  host: "/home/git/gdk/postgresql"
+  max_connections: 100
+  multiple_replicas:
+    enabled: false
   port: 5432
   replica:
+    data_directory: "/home/git/gdk/postgresql-replica/data"
     enabled: false
+    host: "/home/git/gdk/postgresql-replica"
+    port1: 6432
+    port2: 6433
+    root_directory: "/home/git/gdk/postgresql-replica"
+  replica_2:
+    data_directory: "/home/git/gdk/postgresql-replica-2/data"
+    enabled: false
+    host: "/home/git/gdk/postgresql-replica-2"
+    port1: 6434
+    port2: 6435
+    root_directory: "/home/git/gdk/postgresql-replica-2"
+  replica_data_dir: "/home/git/gdk/postgresql-replica/data"
   replica_dir: "/home/git/gdk/postgresql-replica"
   replication_user: gitlab_replication
 praefect:
@@ -91,58 +324,156 @@ praefect:
   database:
     dbname: praefect_development
     host: "/home/git/gdk/postgresql"
+    port: 5432
     sslmode: disable
   enabled: true
-  internal_socket_dir: "/home/git/gdk/tmp/praefect"
   node_count: 1
-  nodes:
-    - address: "/home/git/gdk/gitaly-praefect-0.socket"
-      config_file: gitaly/gitaly-0.praefect.toml
-      internal_socket_dir: "/home/git/gdk/tmp/praefect/gitaly-0"
-      log_dir: "/home/git/gdk/log/praefect-gitaly-0"
-      primary: true
-      service_name: praefect-gitaly-0
-      storage: praefect-internal-0
-      storage_dir: "/home/git/gdk/repositories"
 prometheus:
   enabled: false
-registry:
+  gitaly_exporter_port: 9236
+  gitlab_shell_exporter_port: 9122
+  port: 9090
+  praefect_exporter_port: 10101
+  workhorse_exporter_port: 9229
+rails_web:
+  enabled: true
+redis:
+  custom_config: {}
+  databases:
+    development:
+      cache: 2
+      queues: 1
+      rate_limiting: 4
+      repository_cache: 2
+      sessions: 5
+      shared_state: 0
+      trace_chunks: 3
+    test:
+      cache: 12
+      queues: 11
+      rate_limiting: 14
+      repository_cache: 12
+      sessions: 15
+      shared_state: 10
+      trace_chunks: 13
+  dir: "/home/git/gdk/redis"
+redis_cluster:
+  dev_port_1: 6000
+  dev_port_2: 6001
+  dev_port_3: 6002
+  dir: "/home/git/gdk/redis-cluster"
   enabled: false
-  external_port: 5000
+  test_port_1: 6003
+  test_port_2: 6004
+  test_port_3: 6005
+registry:
+  api_host: 127.0.0.1
+  auth_enabled: true
+  compatibility_schema1_enabled: false
+  enabled: false
+  gid: ''
   host: 127.0.0.1
-  image: registry:2
+  image: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry:v3.86.1-gitlab
+  listen_address: 127.0.0.1
   port: 5000
-relative_url_root: "/"
+  self_signed: false
+  uid: ''
+relative_url_root: ''
 repositories:
+  charts_gitlab: https://gitlab.com/gitlab-org/charts/gitlab.git
   gitaly: https://gitlab.com/gitlab-org/gitaly.git
   gitlab: https://gitlab.com/gitlab-org/gitlab.git
-  gitlab_docs: https://gitlab.com/gitlab-com/gitlab-docs.git
+  gitlab_docs: https://gitlab.com/gitlab-org/gitlab-docs.git
   gitlab_elasticsearch_indexer: https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git
+  gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git
+  gitlab_operator: https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git
   gitlab_pages: https://gitlab.com/gitlab-org/gitlab-pages.git
+  gitlab_runner: https://gitlab.com/gitlab-org/gitlab-runner.git
   gitlab_shell: https://gitlab.com/gitlab-org/gitlab-shell.git
-  gitlab_workhorse: https://gitlab.com/gitlab-org/gitlab-workhorse.git
+  gitlab_spamcheck: https://gitlab.com/gitlab-org/spamcheck.git
+  gitlab_ui: https://gitlab.com/gitlab-org/gitlab-ui.git
+  gitlab_zoekt_indexer: https://gitlab.com/gitlab-org/gitlab-zoekt-indexer.git
+  omnibus_gitlab: https://gitlab.com/gitlab-org/omnibus-gitlab.git
+  zoekt: https://github.com/sourcegraph/zoekt.git
 repositories_root: "/home/git/gdk/repositories"
+repository_storages: "/home/git/gdk/repository_storages"
+restrict_cpu_count: -1
 runner:
+  bin: "/usr/local/bin/gitlab-runner"
+  concurrent: 1
   config_file: "/home/git/gdk/gitlab-runner-config.toml"
+  docker_host: ''
+  docker_pull: always
   enabled: false
+  executor: docker
+  extra_hosts: []
+  image: gitlab/gitlab-runner:latest
+  install_mode: binary
+  network_mode_host: false
+  pull_policy: if-not-present
+  token: 'DEFAULT TOKEN: Register your runner to get a valid token'
+snowplow_micro:
+  enabled: false
+  image: snowplow/snowplow-micro:latest
+  port: 9091
 sshd:
   additional_config: ''
   authorized_keys_file: "/home/git/gdk/.ssh/authorized_keys"
-  bin: "/usr/sbin/sshd"
-  enabled: false
-  host_key: "/home/git/gdk/openssh/ssh_host_rsa_key"
+  bin: "/usr/local/sbin/sshd"
+  enabled: true
+  host_key: ''
+  host_key_algorithms:
+  - rsa
+  - ed25519
+  host_keys:
+  - "/home/git/gdk/openssh/ssh_host_rsa_key"
+  - "/home/git/gdk/openssh/ssh_host_ed25519_key"
   listen_address: 127.0.0.1
   listen_port: 2222
+  proxy_protocol: false
+  use_gitlab_sshd: true
   user: git
+  web_listen: 127.0.0.1:9122
+telemetry:
+  enabled: false
+  username: ''
 tracer:
   build_tags: tracer_static tracer_static_jaeger
   jaeger:
-    enabled: true
-    version: 1.10.1
+    enabled: false
+    listen_address: 127.0.0.1
+    version: 1.21.0
 username: git
+vault:
+  bin: "/usr/local/bin/vault"
+  enabled: false
+  listen_address: 127.0.0.1
+  port: 8200
+vite:
+  enabled: false
+  hot_module_reloading: true
+  port: 3038
 webpack:
+  allowed_hosts: []
+  enabled: true
   host: 127.0.0.1
+  incremental: true
+  incremental_ttl: 30
+  live_reload: true
   port: 3808
+  public_address: ''
+  sourcemaps: true
+  static: false
+  vendor_dll: false
 workhorse:
-  auto_update: true
   configured_port: 3333
+  skip_setup: false
+zoekt:
+  auto_update: true
+  enabled: false
+  index_port_dev: 6080
+  index_port_test: 6060
+  indexer_version: main
+  version: fcb279ae404c0aa102121b28257143ad16e77482
+  web_port_dev: 6090
+  web_port_test: 6070

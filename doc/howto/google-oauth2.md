@@ -23,10 +23,17 @@ own OAuth credentials:
 
 ## GDK Setup
 
-From the GDK root directory, run:
+From the GDK root directory, add the credentials to `gdk.yml`:
 
-```bash
-echo "<google-client-id>" > google_oauth_client_id
-echo "<google-client-secret>" > google_oauth_client_secret
+```yaml
+omniauth:
+  google_oauth2:
+    client_id: <google-client-id>
+    client_secret: <google-client-secret>
+```
+
+Then, in the GDK root directory run:
+
+```shell
 gdk reconfigure
 ```

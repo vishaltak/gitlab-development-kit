@@ -1,16 +1,24 @@
 # frozen_string_literal: true
 
-require_relative 'base'
-
 module GDK
   module ConfigType
     class Array < Base
-      def dump!
-        value.map(&:dump!)
+      include Mergable
+
+      def parse(value)
+        if value.is_a?(::String)
+          value.split(',').map(&:strip)
+        else
+          value.to_a
+        end
       end
 
-      def parse
-        value.is_a?(::Array)
+      private
+
+      def mergable_merge(fetched, default)
+        a = Array(fetched)
+
+        a + (default - a)
       end
     end
   end

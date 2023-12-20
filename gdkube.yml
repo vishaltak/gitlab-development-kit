@@ -40,7 +40,7 @@ spec:
               source /home/gdk/.bash_profile;
               gem install gitlab-development-kit;
               cd /home/gdk;
-              gdk init;
+              git clone https://gitlab.com/gitlab-org/gitlab-development-kit.git;
               cd gitlab-development-kit;
               echo 'hostname: 0.0.0.0' > gdk.yml;
               gdk install;

@@ -1,17 +1,48 @@
-require 'open3'
-require_relative 'config'
-require_relative '../shellout'
-require_relative 'output'
+# frozen_string_literal: true
 
 module GDK
-  class PostgreSQL
-    def ready?
-      last_error = nil
+  class Postgresql
+    def self.target_version
+      Gem::Version.new(Asdf::ToolVersions.new.default_version_for('postgres'))
+    end
 
-      cmd = psql_cmd + %W[-d template1 -c #{''}]
-      10.times do
-        shellout = Shellout.new(cmd)
-        shellout.run
+    def self.target_version_major
+      target_version.canonical_segments[0]
+    end
+
+    def initialize(config = GDK.config)
+      @config = config
+    end
+
+    def psql_cmd(args)
+      pg_cmd(args, database: default_database).flatten
+    end
+
+    def current_data_dir
+      @current_data_dir ||= postgresql_config.data_dir
+    end
+
+    def current_version
+      @current_version ||= begin
+        raise "PG_VERSION not found in #{pg_version_file}. Is PostgreSQL initialized?" unless installed?
+
+        version = pg_version_file.read.to_f
+
+        # After PostgreSQL 9.6, PG_VERSION uses a single integer (10, 11, 12, etc.)
+        version >= 10 ? version.to_i : version
+      end
+    end
+
+    def installed?
+      pg_version_file.exist?
+    end
+
+    def ready?(try_times: 10)
+      last_error = nil
+      cmd = pg_cmd(database: 'template1')
+
+      try_times.times do
+        shellout = Shellout.new(cmd).tap(&:try_run)
         last_error = shellout.read_stderr
 
         return true if shellout.success?
@@ -19,35 +50,70 @@ module GDK
         sleep 1
       end
 
-      GDK::Output.error last_error
+      GDK::Output.error(last_error)
       false
     end
 
-    def db_exists?(dbname)
-      system(*(psql_cmd + ['-d', dbname, '-c', '']), err: '/dev/null')
+    def use_tcp?
+      !postgresql_config.host.start_with?('/')
     end
 
-    def createdb(args)
-      cmd = [File.join(config.bin_dir, 'createdb'), '-h', host, '-p', port] + args
-      system(*cmd)
+    def upgrade_needed?(target_version = self.class.target_version_major)
+      current_version < target_version.to_f
+    end
+
+    def upgrade
+      cmd = 'support/upgrade-postgresql'
+
+      Shellout.new(cmd).stream
+    end
+
+    def db_exists?(dbname)
+      Shellout.new(pg_cmd(database: dbname)).tap(&:try_run).success?
+    end
+
+    def createdb(*args)
+      cmd = pg_cmd(*args, program: 'createdb')
+
+      Shellout.new(cmd).run
+    end
+
+    def in_recovery?
+      cmd = pg_cmd('--no-psqlrc', '--tuples-only',
+        database: 'postgres',
+        command: 'SELECT pg_is_in_recovery();')
+
+      Shellout.new(cmd).try_run.downcase.strip.chomp == 't'
     end
 
     private
 
-    def config
-      @config ||= GDK::Config.new.postgresql
+    attr_reader :config
+
+    def base_postgresql_config
+      @base_postgresql_config ||= config.postgresql
     end
 
-    def host
-      config.dir.to_s
+    def postgresql_config
+      @postgresql_config ||= base_postgresql_config
     end
 
-    def port
-      config.port.to_s
+    def pg_version_file
+      @pg_version_file ||= current_data_dir.join('PG_VERSION')
     end
 
-    def psql_cmd
-      [File.join(config.bin_dir, 'psql'), '-h', host, '-p', port]
+    def pg_cmd(*args, program: 'psql', database: nil, command: nil)
+      cmd = [base_postgresql_config.bin_dir.join(program).to_s]
+      cmd << "--host=#{postgresql_config.dir}"
+      cmd << "--port=#{postgresql_config.port}"
+      cmd << "--dbname=#{database}" if database
+      cmd << "--command=#{command}" if command
+
+      cmd + args
+    end
+
+    def default_database
+      'gitlabhq_development'
     end
   end
 end

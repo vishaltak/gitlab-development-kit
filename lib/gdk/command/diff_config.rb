@@ -4,44 +4,40 @@ require 'fileutils'
 
 module GDK
   module Command
-    class DiffConfig
-      def run(stdout: $stdout, stderr: $stderr)
-        files = %w[
-          gitlab/config/gitlab.yml
-          gitlab/config/database.yml
-          gitlab/config/unicorn.rb
-          gitlab/config/puma.rb
-          gitlab/config/cable.yml
-          gitlab/config/resque.yml
-          gitlab-shell/config.yml
-          gitlab-shell/.gitlab_shell_secret
-          redis/redis.conf
-          .ruby-version
-          Procfile
-          gitlab-workhorse/config.toml
-          gitaly/gitaly.config.toml
-          gitaly/praefect.config.toml
-          nginx/conf/nginx.conf
-        ]
+    class DiffConfig < BaseCommand
+      def run(_ = [])
+        Shellout.new(GDK::MAKE, 'touch-examples').run
 
-        file_diffs = files.map do |file|
-          ConfigDiff.new(file)
+        # Iterate over each file from files Array and print any output to
+        # stderr that may have come from running `make <file>`.
+        #
+        results = jobs.filter_map { |x| x.join[:results] }
+
+        results.each do |diff|
+          output = diff.output.to_s.chomp
+          next if output.empty?
+
+          stdout.puts(diff.file)
+          stdout.puts('-' * 80)
+          stdout.puts(output)
+          stdout.puts("\n")
         end
 
-        file_diffs.each do |diff|
-          output = diff.make_output.chomp
-          stderr.puts(output) unless output.empty?
-        end
-
-        file_diffs.each do |diff|
-          stdout.puts diff.output unless diff.output == ""
-        end
+        true
       end
 
       private
 
+      def jobs
+        DIFFABLE_FILES.map do |file|
+          Thread.new do
+            Thread.current[:results] = ConfigDiff.new(file)
+          end
+        end
+      end
+
       class ConfigDiff
-        attr_reader :file, :output, :make_output
+        attr_reader :file, :output
 
         def initialize(file)
           @file = file
@@ -50,31 +46,38 @@ module GDK
         end
 
         def file_path
-          @file_path ||= File.join($gdk_root, file)
+          @file_path ||= GDK.root.join(file)
         end
 
         private
 
         def execute
-          FileUtils.mv(file_path, "#{file_path}.unchanged")
+          # It's entirely possible file_path doesn't exist because it may be
+          # a config file that user does not need and therefore has not been
+          # generated.
+          return nil unless file_path.exist?
 
-          @make_output = update_config_file
+          update_config_file
 
           @output = diff_with_unchanged
         ensure
-          File.rename("#{file_path}.unchanged", file_path)
+          temporary_diff_file.delete if temporary_diff_file.exist?
+        end
+
+        def temporary_diff_file
+          @temporary_diff_file ||= GDK.config.gdk_root.join('tmp', "diff_#{file.gsub(%r{/+}, '_')}")
         end
 
         def update_config_file
-          run(GDK::MAKE, file)
+          run('rake', "generate-file-at[#{file},#{temporary_diff_file}]")
         end
 
         def diff_with_unchanged
-          run('git', 'diff', '--no-index', '--color', "#{file}.unchanged", file)
+          run('git', 'diff', '--no-index', '--color', file, temporary_diff_file.to_s)
         end
 
         def run(*commands)
-          IO.popen(commands.join(' '), chdir: $gdk_root, &:read).chomp
+          Shellout.new(commands, chdir: GDK.root).run
         end
       end
     end

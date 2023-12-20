@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+require 'forwardable'
+require 'json'
+require 'set'
+
+require_relative '../lib/gdk'
+
+upgrader = GDK::PostgresqlUpgrader.new
+upgrader.upgrade!

@@ -1,0 +1,12 @@
+# Jobs that are generally only executable by CI and not locally.
+#
+build-verify-image:
+  stage: pre-verify
+  extends:
+    - .cached-job
+    - .build-job
+    - .rules:code-changes
+  needs:
+    - release-image
+  script:
+    - ./support/docker ci-build-verify-image

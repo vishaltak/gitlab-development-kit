@@ -1,0 +1,89 @@
+# support/asdf-combine generates this file from .tool-versions-gdk and the .tool-versions
+# files from GDK sub-projects.
+#
+# Do not modify this file directly.
+#
+# gitleaks:
+#   8.16.4:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+gitleaks 8.16.4
+
+# golang:
+#   1.21.5:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
+#   1.21.4:
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
+#     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer/-/raw/main/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITLAB_ELASTICSEARCH_INDEXER_VERSION
+#   1.20.10:
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
+#     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
+#
+golang 1.21.5 1.21.4 1.20.10
+
+# minio:
+#   2022-07-15T03-44-22Z:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+minio 2022-07-15T03-44-22Z
+
+# nodejs:
+#   18.17.0:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+nodejs 18.17.0
+
+# postgres:
+#   14.9:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#   13.12:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+postgres 14.9 13.12
+
+# redis:
+#   7.0.14:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+redis 7.0.14
+
+# ruby:
+#   3.1.4:
+#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitaly -> https://gitlab.com/gitlab-org/gitlab/-/raw/master/GITALY_SERVER_VERSION
+#   3.2.2:
+#     - .tool-versions-gdk
+#
+ruby 3.1.4 3.2.2
+
+# rust:
+#   1.73.0:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+rust 1.73.0
+
+# shellcheck:
+#   0.9.0:
+#     - .tool-versions-gdk
+#
+shellcheck 0.9.0
+
+# vale:
+#   2.29.6:
+#     - .tool-versions-gdk
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
+#
+vale 2.29.6
+
+# yarn:
+#   1.22.19:
+#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/.tool-versions
+#
+yarn 1.22.19
+

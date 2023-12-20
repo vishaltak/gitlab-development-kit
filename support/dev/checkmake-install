@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require_relative '../../lib/gdk'
+
+dev = GDK.config.dev
+
+checkmake = dev.checkmake
+checkmake_version = checkmake.version
+checkmake_binary = checkmake.__binary
+checkmake_versioned_binary = checkmake.__versioned_binary
+
+unless dev.__go_binary_available?
+  GDK::Output.warn("Need checkmake #{checkmake_version} to be installed at #{checkmake_versioned_binary}")
+  GDK::Output.abort("Golang is not installed, please ensure you've bootstrapped your machine. See https://gitlab.com/gitlab-org/gitlab-development-kit/blob/main/doc/index.md for more details")
+end
+
+go_binary = dev.__go_binary
+
+unless checkmake_versioned_binary.exist?
+  GDK::Output.info("Installing checkmake #{checkmake_version}..")
+  Shellout.new("GOPATH=#{dev.__go_path} GO111MODULE=off #{go_binary} get github.com/mrtazz/checkmake").stream
+  Shellout.new("mv #{checkmake_binary} #{checkmake_versioned_binary}").stream
+  Shellout.new("ln -nfs #{checkmake_versioned_binary} #{checkmake_binary}").stream
+end

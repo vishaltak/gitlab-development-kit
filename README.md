@@ -1,79 +1,118 @@
-# GitLab Development Kit
+# GitLab Development Kit (GDK)
 
-Configure and manage a [GitLab](https://about.gitlab.com) development
-environment.
+[![build status](https://gitlab.com/gitlab-org/gitlab-development-kit/badges/main/pipeline.svg)](https://gitlab.com/gitlab-org/gitlab-development-kit/pipelines)
 
-Read on for installation instructions or skip to
-[doc/howto](doc/howto/README.md) for usage documentation.
+The GitLab Development Kit (GDK) installs GitLab on your workstation. GDK
+manages GitLab requirements, development tools and databases.
 
-## Overview
+The GDK is used by GitLab team members and contributors to test changes
+locally to speed up the time to make successful contributions.
 
-GitLab Development Kit (GDK) provides a collection of scripts and
-other resources to install and manage a GitLab installation for
-development purposes. The source code of GitLab is spread over
-multiple repositories and it requires Ruby, Go, Postgres, Redis
-and more to run. GDK helps you install and configure all these
-different components, and start/stop them when you work on GitLab.
+## Goals
+
+- Provide tools to install, update, and develop against a local GitLab instance.
+- Automate installing [required software](https://docs.gitlab.com/ee/install/requirements.html#software-requirements).
+- Only manage projects, software, and services that may be needed to run a GitLab instance.
+- Out of the box, only enable the services GitLab strictly requires to operate.
+- Support native operating systems as listed below.
+
+## Installation
+
+You can install GDK using the following methods. Some are:
+
+- Supported and frequently tested.
+- Not supported, but we welcome merge requests to improve them.
+
+### Supported methods
+
+The following installation methods are supported, actively maintained, and tested:
+
+- [One-line installation](doc/index.md#one-line-installation)
+- [Simple installation](doc/index.md#simple-installation) on your local system. Requires at least
+  8 GB RAM and 12 GB disk space. Available for [supported platforms](#supported-platforms).
+- [GitLab remote development workspaces](doc/howto/gitlab-remote-development.md).
+- [Gitpod](doc/howto/gitpod.md).
+
+### Supported platforms
+
+| Operating system | Versions                       |
+|:-----------------|:-------------------------------|
+| macOS            | 13, 12, 11                     |
+| Ubuntu           | 22.04 (1), 21.10               |
+| Fedora           | 36 (1), 35                     |
+| Debian           | 13, 12                         |
+| Arch             | latest                         |
+| Manjaro          | latest                         |
+
+(1) Requires [manual installation of OpenSSL 1.1.1](doc/troubleshooting/ruby.md#openssl-3-breaks-ruby-builds).
+
+The list of platforms includes operating systems that run in a Windows Subsystem for Linux (WSL) environment.
+
+### Unsupported methods
+
+The following documentation is provided for those who can benefit from it, but aren't
+supported installation methods:
+
+- [Advanced installation](doc/advanced.md) on your local system. Requires at least
+  8 GB RAM and 12 GB disk space.
+- [Vagrant](doc/howto/vagrant.md).
+- [minikube](doc/howto/kubernetes/minikube.md).
+
+## Post-installation
+
+- [Use GDK](doc/howto/index.md).
+- [Update an existing installation](doc/index.md#update-gdk).
+- [Login credentials (root login and password)](doc/gdk_commands.md#get-the-login-credentials).
+
+### Using SSH remotes
+
+GDK defaults to HTTPS instead of SSH when cloning the repositories. With HTTPS, you can still use GDK without a GitLab.com
+account or an SSH key. However, if you have a GitLab.com account and already
+[added your SSH key](https://docs.gitlab.com/ee/user/ssh.html#add-an-ssh-key-to-your-gitlab-account) to your account,
+you can configure `git` to rewrite the URLs to use SSH via the following configuration change:
+
+```shell
+git config --global url.'git@gitlab.com:'.insteadOf 'https://gitlab.com/'
+```
+
+NOTE:
+This command configures `git` to use `SSH` for all GitLab.com URLs.
+
+## FAQ
+
+### Why don't we Dockerize or containerize GDK, or switch to GCK as the preferred tool?
+
+- The majority of GDK users have macOS as their primary operating system, which is
+  supported by Docker and other containerization tools but usually requires a virtual machine (VM).
+  Running and managing a VM adds to the overall complexity.
+- The performance of Docker or containerization on macOS is still unpredictable.
+  It's getting better all the time, but for some users (both GitLab team members and our community)
+  it may prove to be a blocker.
+- The ability to debug problems is another issue as getting to the root cause of
+  a problem could prove more challenging due to the different execution and operating contexts
+  of Docker or other containerization tools.
+- For users that run non-Linux operating systems, running Docker or other containerization tools
+  have their own set of hardware requirements which could be another blocker.
+
+## Getting help
+
+- We encourage you to [create a new issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/new).
+- GitLab team members can use the `#gdk` channel on the GitLab Slack workspace.
+- Review the [troubleshooting information](doc/troubleshooting).
+- Wider community members can use the following:
+  - [GitLab community Discord](https://discord.gg/gitlab).
+  - [GitLab Forum](https://forum.gitlab.com/c/community/39).
 
 ## Contributing to GitLab Development Kit
 
-Contributions are welcome, see [`CONTRIBUTING.md`](CONTRIBUTING.md)
+Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md)
 for more details.
 
-## Getting started
+### Install Lefthook locally
 
-The preferred way to use GitLab Development Kit is to install Ruby and its
-dependencies on your 'native' OS. We strongly recommend the native install,
-since it is much faster than a virtualized one. Due to heavy IO operations a
-virtualized installation will be much slower running the app and the tests.
-
-To do a native install:
-
-1. [Prepare your computer](doc/prepare.md)
-2. [Set-up GDK](doc/set-up-gdk.md)
-
-Or if you want to use a slower virtualized installation with [Vagrant](https://www.vagrantup.com/),
-please see the [instructions for using Vagrant with VirtualBox or Docker](doc/vagrant.md).
-
-You can also install GDK on [Minikube](https://github.com/kubernetes/minikube),
-see [kubernetes docs](doc/kubernetes.md).
-
-After installation, [learn how to use GDK](doc/howto/README.md).
-
-If you have an old installation, [update your existing GDK installation](doc/update-gdk.md).
-
-## Design goals
-
-- Get the user started, do not try to take care of everything
-- Run everything as your 'desktop' user on your development machine
-- GitLab Development Kit itself does not run `sudo` commands
-- It is OK to leave some things to the user (e.g. installing Ruby)
-
-## Components included
-
-A list of which components are included in the GDK, and configuration instructions if needed,
-is available on the [architecture components list](https://docs.gitlab.com/ee/development/architecture.html#component-list).
-
-## Differences with production
-
-- gitlab-workhorse does not serve static files
-- C compiler needed to run `bundle install` (not needed with Omnibus)
-- GitLab can rewrite its program code and configuration data (read-only with
-  Omnibus)
-- 'Assets' (Javascript/CSS files) are generated on the fly (pre-compiled at
-  build time with Omnibus)
-- Gems (libraries) for development and functional testing get installed and
-  loaded
-- No unified configuration management for GitLab and gitlab-shell
-  (handled by Omnibus)
-- No privilege separation between Ruby, Postgres, and Redis
-- No easy upgrades
-- Need to download and compile new gems (`bundle install`) on each upgrade
-
-Note that for some changes to some configuration and routes, run
-`gdk restart rails-web` so the running configuration reflects the change.
+Please refer to the [Lefthook page](doc/howto/lefthook.md).
 
 ## License
 
-The GitLab Development Kit is distributed under the MIT license,
-see the [LICENSE](./LICENSE) file.
+The GitLab Development Kit is distributed under the MIT license; see the
+[LICENSE](LICENSE) file.

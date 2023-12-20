@@ -1,126 +1,172 @@
 # frozen_string_literal: true
-#
+
 # GitLab Development Kit CLI parser / executor
 #
 # This file is loaded by the 'gdk' command in the gem. This file is NOT
 # part of the gitlab-development-kit gem so that we can iterate faster.
 
-require_relative 'gdk/output'
-require_relative 'gdk/env'
-require_relative 'gdk/config'
-require_relative 'gdk/command'
-require_relative 'gdk/dependencies'
-require_relative 'gdk/diagnostic'
-require_relative 'gdk/erb_renderer'
-require_relative 'gdk/logo'
+$LOAD_PATH.unshift(__dir__)
+
+require 'pathname'
+require 'securerandom'
 require_relative 'runit'
 
+autoload :Asdf, 'asdf'
+autoload :Shellout, 'shellout'
+
+# GitLab Development Kit
 module GDK
-  PROGNAME = 'gdk'.freeze
-  MAKE = RUBY_PLATFORM =~ /bsd/ ? 'gmake' : 'make'
+  StandardErrorWithMessage = Class.new(StandardError)
+  HookCommandError = Class.new(StandardError)
+
+  PROGNAME = 'gdk'
+  MAKE = RUBY_PLATFORM.include?('bsd') ? 'gmake' : 'make'
+  SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION = %w[version].freeze
+
+  DIFFABLE_FILES = %w[
+    clickhouse/config.d/data-paths.xml
+    clickhouse/config.d/gdk.xml
+    clickhouse/config.d/logger.xml
+    clickhouse/config.d/openssl.xml
+    clickhouse/config.d/user-directories.xml
+    clickhouse/config.xml
+    clickhouse/users.d/gdk.xml
+    clickhouse/users.xml
+    consul/config.json
+    gdk.example.yml
+    gitaly/gitaly.config.toml
+    gitaly/praefect.config.toml
+    gitlab-pages/gitlab-pages.conf
+    gitlab-runner-config.toml
+    gitlab-shell/config.yml
+    gitlab/config/cable.yml
+    gitlab/config/database.yml
+    gitlab/config/gitlab.yml
+    gitlab/config/puma.rb
+    gitlab/config/redis.cache.yml
+    gitlab/config/redis.queues.yml
+    gitlab/config/redis.rate_limiting.yml
+    gitlab/config/redis.repository_cache.yml
+    gitlab/config/redis.sessions.yml
+    gitlab/config/redis.shared_state.yml
+    gitlab/config/redis.trace_chunks.yml
+    gitlab/config/resque.yml
+    gitlab/config/session_store.yml
+    gitlab/config/vite.gdk.json
+    gitlab/workhorse/config.toml
+    nginx/conf/nginx.conf
+    openssh/sshd_config
+    pgbouncers/pgbouncer-replica-1.ini
+    pgbouncers/pgbouncer-replica-2-1.ini
+    pgbouncers/pgbouncer-replica-2-2.ini
+    pgbouncers/pgbouncer-replica-2.ini
+    pgbouncers/userlist.txt
+    Procfile
+    prometheus/prometheus.yml
+    redis/redis.conf
+    registry/config.yml
+    support/makefiles/Makefile.config.mk
+  ].freeze
+
+  # dependencies are always declared via autoload
+  # this allows for any dependent project require only `lib/gdk`
+  # and load only what it really needs
+  autoload :Announcement, 'gdk/announcement'
+  autoload :Announcements, 'gdk/announcements'
+  autoload :Backup, 'gdk/backup'
+  autoload :Clickhouse, 'gdk/clickhouse'
+  autoload :Command, 'gdk/command'
+  autoload :Config, 'gdk/config'
+  autoload :ConfigType, 'gdk/config_type'
+  autoload :ConfigSettings, 'gdk/config_settings'
+  autoload :Dependencies, 'gdk/dependencies'
+  autoload :Diagnostic, 'gdk/diagnostic'
+  autoload :Env, 'gdk/env'
+  autoload :Execute, 'gdk/execute'
+  autoload :Templates, 'gdk/templates'
+  autoload :Hooks, 'gdk/hooks'
+  autoload :HTTPHelper, 'gdk/http_helper'
+  autoload :Logo, 'gdk/logo'
+  autoload :Machine, 'gdk/machine'
+  autoload :Output, 'gdk/output'
+  autoload :OutputBuffered, 'gdk/output_buffered'
+  autoload :PortManager, 'gdk/port_manager'
+  autoload :Postgresql, 'gdk/postgresql'
+  autoload :PostgresqlUpgrader, 'gdk/postgresql_upgrader'
+  autoload :Project, 'gdk/project'
+  autoload :PostgresqlGeo, 'gdk/postgresql_geo'
+  autoload :Services, 'gdk/services'
+  autoload :Shellout, 'shellout'
+  autoload :Telemetry, 'gdk/telemetry'
+  autoload :TestURL, 'gdk/test_url'
 
   # This function is called from bin/gdk. It must return true/false or
   # an exit code.
   def self.main
-    if !install_root_ok? && ARGV.first != 'reconfigure'
-      puts <<-EOS.gsub(/^\s+\|/, '')
-        |According to #{ROOT_CHECK_FILE} this gitlab-development-kit
-        |installation was moved. Run 'gdk reconfigure' to update hard-coded
-        |paths.
-      EOS
-      return false
-    end
+    subcommand = ARGV.shift
+    validate_yaml! unless SUBCOMMANDS_NOT_REQUIRING_YAML_VALIDATION.include?(subcommand)
 
-    case subcommand = ARGV.shift
-    when 'run'
-      abort <<~MSG
-        'gdk run' is no longer available; see doc/runit.md.
-
-        Use 'gdk start', 'gdk stop', and 'gdk tail' instead.
-      MSG
-    when 'install'
-      exec(MAKE, *ARGV, chdir: $gdk_root)
-    when 'update'
-      # Otherwise we would miss it and end up in a weird state.
-      puts "-------------------------------------------------------"
-      puts "Running `make self-update`.."
-      puts "-------------------------------------------------------"
-      puts "Running separately in case the Makefile is updated.\n"
-      system(MAKE, 'self-update', chdir: $gdk_root)
-
-      puts "\n-------------------------------------------------------"
-      puts "Running `make self-update update`.."
-      puts "-------------------------------------------------------"
-      exec(MAKE, 'self-update', 'update', chdir: $gdk_root)
-    when 'diff-config'
-      GDK::Command::DiffConfig.new.run
-
-      true
-    when 'config'
-      config_command = ARGV.shift
-      abort 'Usage: gdk config get slug.of.the.conf.value' if config_command != 'get' || ARGV.empty?
-
-      begin
-        puts Config.new.dig(*ARGV)
-        true
-      rescue GDK::ConfigSettings::SettingUndefined
-        abort "Cannot get config for #{ARGV.join('.')}"
-      end
-    when 'reconfigure'
-      remember!($gdk_root)
-      exec(MAKE, 'touch-examples', 'unlock-dependency-installers', 'postgresql-sensible-defaults', 'all', chdir: $gdk_root)
-    when 'psql'
-      pg_port = Config.new.postgresql.port
-      args = ARGV.empty? ? ['-d', 'gitlabhq_development'] : ARGV
-
-      exec('psql', '-h', File.join($gdk_root, 'postgresql'), '-p', pg_port.to_s, *args, chdir: $gdk_root)
-    when 'redis-cli'
-      exec('redis-cli', '-s', GDK::Config.new.redis_socket.to_s, *ARGV, chdir: $gdk_root)
-    when 'env'
-      GDK::Env.exec(ARGV)
-    when 'start', 'status'
-      exit(Runit.sv(subcommand, ARGV))
-    when 'restart'
-      exit(Runit.sv('force-restart', ARGV))
-    when 'stop'
-      if ARGV.empty?
-        # Runit.stop will stop all services and stop Runit (runsvdir) itself.
-        # This is only safe if all services are shut down; this is why we have
-        # an integrated method for this.
-        Runit.stop
-        exit
-      else
-        # Stop the requested services, but leave Runit itself running.
-        exit(Runit.sv('force-stop', ARGV))
-      end
-    when 'tail'
-      Runit.tail(ARGV)
-    when 'thin'
-      # We cannot use Runit.sv because that calls Kernel#exec. Use system instead.
-      system('gdk', 'stop', 'rails-web')
-      exec(
-        { 'RAILS_ENV' => 'development' },
-        *%W[bundle exec thin --socket=#{$gdk_root}/gitlab.socket start],
-        chdir: File.join($gdk_root, 'gitlab')
-      )
-    when 'doctor'
-      GDK::Command::Doctor.new.run
-      true
-    when /-{0,2}help/, '-h'
-      GDK::Command::Help.new.run
-      true
+    if ::GDK::Command::COMMANDS.key?(subcommand)
+      exit(run(subcommand))
     else
-      GDK::Output.notice "gdk: #{subcommand} is not a gdk command."
-      GDK::Output.notice "See 'gdk help' for more detail."
+      suggestions = DidYouMean::SpellChecker.new(dictionary: ::GDK::Command::COMMANDS.keys).correct(subcommand)
+      message = ["#{subcommand} is not a GDK command"]
+
+      if suggestions.any?
+        message << ', did you mean - '
+        message << suggestions.map { |suggestion| "'gdk #{suggestion}'" }.join(' or ')
+        message << '?'
+      else
+        message << '.'
+      end
+
+      GDK::Output.warn message.join
+      GDK::Output.puts
+
+      GDK::Output.info "See 'gdk help' for more detail."
       false
     end
   end
 
-  def self.install_root_ok?
-    expected_root = File.read(File.join($gdk_root, ROOT_CHECK_FILE)).chomp
-    File.realpath(expected_root) == File.realpath($gdk_root)
-  rescue => ex
-    warn ex
-    false
+  def self.config
+    @config ||= GDK::Config.new
+  end
+
+  def self.puts_separator(msg = nil)
+    GDK::Output.puts('-------------------------------------------------------')
+    return unless msg
+
+    GDK::Output.puts(msg)
+    puts_separator
+  end
+
+  # Return the path to the GDK base path
+  #
+  # @return [Pathname] path to GDK base directory
+  def self.root
+    Pathname.new($gdk_root || Pathname.new(__dir__).parent) # rubocop:disable Style/GlobalVars
+  end
+
+  def self.template_root
+    Pathname.new(File.expand_path(File.join(__dir__, '..', 'support', 'templates')))
+  end
+
+  def self.make(*targets, env: {})
+    sh = Shellout.new(MAKE, targets, chdir: GDK.root, env: env)
+    sh.stream
+    sh
+  end
+
+  def self.validate_yaml!
+    config.validate!
+    nil
+  rescue StandardError => e
+    GDK::Output.error("Your gdk.yml is invalid.\n\n", e)
+    GDK::Output.puts(e.message, stderr: true)
+    abort('')
+  end
+
+  def self.run(subcommand)
+    Telemetry.with_telemetry(subcommand) { ::GDK::Command::COMMANDS[subcommand].call.new.run(ARGV) }
   end
 end

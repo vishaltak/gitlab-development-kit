@@ -1,0 +1,7 @@
+---
+header: Announcements support added
+body: |
+  Announcements can now be added under data/announcements as YAML files that
+  will be rendered to the user after a GDK install or update.
+
+  See https://gitlab.com/gitlab-org/gitlab-development-kit/-/merge_requests/2879 for more details.

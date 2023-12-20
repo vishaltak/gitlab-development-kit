@@ -1,13 +1,12 @@
 ---
-# Check for the following in common content scenarios:
+# Error: gitlab.SentenceSpacing
 #
-# - No spaces.
-# - More than one space.
+# Checks for incorrect spacing (no spaces, or more than one space) around punctuation.
 #
-# For a list of all options, see https://errata-ai.github.io/vale/styles/
+# For a list of all options, see https://vale.sh/docs/topics/styles/
 extends: existence
-message: '"%s" must contain one and only one space.'
-link: https://docs.gitlab.com/ee/development/documentation/styleguide.html#punctuation
+message: "Remove the extra space: '%s'"
+link: https://docs.gitlab.com/ee/development/documentation/styleguide/index.html#punctuation
 level: error
 nonword: true
 tokens:

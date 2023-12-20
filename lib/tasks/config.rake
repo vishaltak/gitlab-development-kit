@@ -1,33 +1,35 @@
-CONFIGS = FileList['Procfile', 'nginx/conf/nginx.conf', 'gitlab/config/gitlab.yml']
-CLOBBER.include *CONFIGS, 'gdk.example.yml'
+# frozen_string_literal: true
 
-def config
-  @config ||= GDK::Config.new
-end
+require_relative '../gdk'
+require_relative '../gdk/task_helpers'
+
+CONFIGS = GDK::DIFFABLE_FILES
+CLOBBER.include(*CONFIGS)
 
 desc 'Dump the configured settings'
 task 'dump_config' do
-  GDK::Config.new.dump!(STDOUT)
+  puts GDK.config.dump_as_yaml
 end
 
 desc 'Generate an example config file with all the defaults'
 file 'gdk.example.yml' => 'clobber:gdk.example.yml' do |t|
-  File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY) do |file|
-    config = Class.new(GDK::Config)
-    config.define_method(:gdk_root) { Pathname.new('/home/git/gdk') }
-    config.define_method(:username) { 'git' }
-    config.define_method(:read!) { |_| nil }
+  require 'gdk/config_example'
 
-    config.new(yaml: {}).dump!(file)
+  begin
+    yaml = GDK::ConfigExample.new.dump_as_yaml
+    File.open(t.name, File::CREAT | File::TRUNC | File::WRONLY).write(yaml)
+  rescue TypeError => e
+    GDK::Output.abort(e)
   end
 end
 
 desc 'Regenerate all config files from scratch'
-task reconfigure: [:clobber, :all]
+task reconfigure: [:all]
 
 desc 'Generate all config files'
 task all: CONFIGS
 
+desc nil
 task 'clobber:gdk.example.yml' do |t|
   Rake::Cleaner.cleanup_files([t.name])
 end
@@ -36,103 +38,151 @@ file GDK::Config::FILE do |t|
   FileUtils.touch(t.name)
 end
 
-desc 'Generate Procfile that defines the list of services to start'
-file 'Procfile' => ['Procfile.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
+desc nil
+task 'generate-file-at', [:file, :destination] do |_, args|
+  file = args[:file]
+  destination = args[:destination]
+  source = Rake::Task[file].source
+
+  GDK::Templates::ErbRenderer.new(source).safe_render!(destination)
 end
 
 # Define as a task instead of a file, so it's built unconditionally
-task 'gdk-config.mk' => 'gdk-config.mk.erb' do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
+desc nil
+task 'gdk-config.mk' => 'support/templates/makefiles/gdk-config.mk.erb' do |t|
+  GDK::Templates::ErbRenderer.new(t.source).render(t.name)
   puts t.name # Print the filename, so make can include it
 end
 
-desc 'Generate nginx configuration'
-file 'nginx/conf/nginx.conf' => ['nginx/conf/nginx.conf.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate sshd configuration'
-file 'openssh/sshd_config' => ['openssh/sshd_config.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate redis configuration'
-file 'redis/redis.conf' => ['support/templates/redis.conf.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the database.yml config file'
-file 'gitlab/config/database.yml' => ['support/templates/database.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the cable.yml config file'
-file 'gitlab/config/cable.yml' => ['support/templates/cable.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the resque.yml config file'
-file 'gitlab/config/resque.yml' => ['support/templates/resque.yml.erb', GDK::Config::FILE] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab.yml config file'
-file 'gitlab/config/gitlab.yml' => ['support/templates/gitlab.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab-shell config.yml file'
-file 'gitlab-shell/config.yml' => ['support/templates/gitlab-shell.config.yml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc 'Generate the gitlab-workhorse config file'
-file 'gitlab-workhorse/config.toml' => ['support/templates/gitlab-workhorse.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).safe_render!
-end
-
-desc "Generate gitaly config toml"
-file "gitaly/gitaly.config.toml" => ['support/templates/gitaly.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(
+desc 'Generate gitaly config toml'
+file 'gitaly/gitaly.config.toml' => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
+  GDK::Templates::ErbRenderer.new(
     t.source,
-    t.name,
-    config: config,
-    path: config.repositories_root,
-    storage: 'default',
-    socket_path: config.gitaly.address,
-    log_dir: config.gitaly.log_dir,
-    internal_socket_dir: config.gitaly.internal_socket_dir
-  ).render!
-  FileUtils.mkdir_p(config.repositories_root)
-  FileUtils.mkdir_p(config.gitaly.log_dir)
-end
+    node: GDK.config.gitaly
+  ).safe_render!(t.name)
 
-file 'gitaly/praefect.config.toml' => ['support/templates/praefect.config.toml.erb'] do |t|
-  GDK::ErbRenderer.new(t.source, t.name, config: config).render!
-
-  config.praefect.nodes.each_with_index do |node, index|
-    Rake::Task[node['config_file']].invoke
+  GDK.config.gitaly.__storages.each do |storage|
+    FileUtils.mkdir_p(storage.path)
   end
 
-  FileUtils.mkdir_p(config.praefect.internal_socket_dir)
+  FileUtils.mkdir_p(GDK.config.gitaly.log_dir)
+  FileUtils.mkdir_p(GDK.config.gitaly.runtime_dir)
+  FileUtils.mkdir_p(GDK.config.gdk_root.join('gitaly-custom-hooks'))
 end
 
-config.praefect.nodes.each do |node|
+file 'gitaly/praefect.config.toml' => ['support/templates/gitaly/praefect.config.toml.erb'] do |t|
+  GDK::Templates::ErbRenderer.new(t.source).safe_render!(t.name)
+
+  GDK.config.praefect.__nodes.each_with_index do |node, _|
+    Rake::Task[node['config_file']].invoke
+  end
+end
+
+GDK.config.praefect.__nodes.each do |node|
   desc "Generate gitaly config for #{node['storage']}"
-  file node['config_file'] => ['support/templates/gitaly.config.toml.erb'] do |t|
-    GDK::ErbRenderer.new(
+  file node['config_file'] => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
+    GDK::Templates::ErbRenderer.new(
       t.source,
-      t.name,
-      config: config,
-      path: node['storage_dir'],
-      storage: node['storage'],
-      log_dir: node['log_dir'],
-      socket_path: node['address'],
-      internal_socket_dir: node['internal_socket_dir']
-    ).render!
-    FileUtils.mkdir_p(node['storage_dir'])
+      node: node
+    ).safe_render!(t.name)
+
+    node.__storages.each do |storage|
+      FileUtils.mkdir_p(storage.path)
+    end
+
     FileUtils.mkdir_p(node['log_dir'])
-    FileUtils.mkdir_p(node['internal_socket_dir'])
+    FileUtils.mkdir_p(node['runtime_dir'])
+  end
+end
+
+tasks = GDK::TaskHelpers::ConfigTasks.instance
+
+# Template tasks
+tasks.add_template(name: 'Procfile')
+tasks.add_template(name: 'gitlab/config/cable.yml')
+tasks.add_template(name: 'gitlab/config/database.yml')
+tasks.add_template(name: 'gitlab/config/gitlab.yml')
+tasks.add_template(name: 'gitlab/config/puma.rb')
+tasks.add_template(name: 'gitlab/config/redis.cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :cache })
+tasks.add_template(name: 'gitlab/config/redis.repository_cache.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :repository_cache })
+tasks.add_template(name: 'gitlab/config/redis.queues.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :queues })
+tasks.add_template(name: 'gitlab/config/redis.sessions.yml', erb_extra_args: { cluster: :sessions })
+tasks.add_template(name: 'gitlab/config/redis.shared_state.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
+tasks.add_template(name: 'gitlab/config/redis.trace_chunks.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :trace_chunks })
+tasks.add_template(name: 'gitlab/config/resque.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :shared_state })
+tasks.add_template(name: 'gitlab/config/session_store.yml', template: 'support/templates/gitlab/config/session_store.yml.erb')
+
+if GDK.config.redis_cluster.enabled?
+  tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.cluster.yml.erb')
+else
+  tasks.add_template(name: 'gitlab/config/redis.rate_limiting.yml', template: 'support/templates/gitlab/config/redis.sessions.yml.erb', erb_extra_args: { cluster: :rate_limiting })
+end
+
+tasks.add_template(name: 'gitlab/config/vite.gdk.json')
+tasks.add_template(name: 'gitlab/workhorse/config.toml')
+tasks.add_template(name: 'gitlab-k8s-agent-config.yml')
+tasks.add_template(name: 'gitlab-pages/gitlab-pages.conf', make_dependencies: ['gitlab-pages/.git/pull'])
+tasks.add_template(name: 'gitlab-pages-secret')
+tasks.add_template(name: 'gitlab-runner-config.toml', no_op_condition: 'runner_enabled')
+tasks.add_template(name: 'gitlab-shell/config.yml', make_dependencies: ['gitlab-shell/.git'])
+tasks.add_template(name: 'gitlab-spamcheck/config/config.toml')
+tasks.add_template(name: 'grafana/grafana.ini')
+tasks.add_template(name: 'nginx/conf/nginx.conf')
+tasks.add_template(name: 'openssh/sshd_config')
+tasks.add_template(name: 'prometheus/prometheus.yml', post_render: ->(task) { chmod('+r', task.name, verbose: false) })
+tasks.add_template(name: 'redis/redis.conf')
+tasks.add_template(name: 'registry/config.yml', make_dependencies: ['registry_host.crt'])
+tasks.add_template(name: 'snowplow/snowplow_micro.conf', post_render: ->(task) { chmod('+r', task.name, verbose: false) })
+tasks.add_template(name: 'snowplow/iglu.json', post_render: ->(task) { chmod('+r', task.name, verbose: false) })
+tasks.add_template(name: 'clickhouse/config.xml', template: 'support/templates/clickhouse/config.xml')
+tasks.add_template(name: 'clickhouse/users.xml', template: 'support/templates/clickhouse/users.xml')
+tasks.add_template(name: 'clickhouse/config.d/data-paths.xml')
+tasks.add_template(name: 'clickhouse/config.d/gdk.xml')
+tasks.add_template(name: 'clickhouse/config.d/logger.xml')
+tasks.add_template(name: 'clickhouse/config.d/openssl.xml')
+tasks.add_template(name: 'clickhouse/config.d/user-directories.xml')
+tasks.add_template(name: 'clickhouse/users.d/gdk.xml')
+tasks.add_template(name: 'elasticsearch/config/elasticsearch.yml', template: 'support/templates/elasticsearch/config/elasticsearch.yml', no_op_condition: 'elasticsearch_enabled')
+tasks.add_template(name: 'elasticsearch/config/jvm.options.d/custom.options', template: 'support/templates/elasticsearch/config/jvm.options.d/custom.options', no_op_condition: 'elasticsearch_enabled')
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-1.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica.host, port: GDK.config.postgresql.replica.port1 })
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-2.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica.host, port: GDK.config.postgresql.replica.port2 })
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-2-1.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica_2.host, port: GDK.config.postgresql.replica_2.port1 })
+tasks.add_template(name: 'pgbouncers/pgbouncer-replica-2-2.ini', template: 'support/templates/pgbouncer/pgbouncer-replica.ini.erb', erb_extra_args: { host: GDK.config.postgresql.replica_2.host, port: GDK.config.postgresql.replica_2.port2 })
+tasks.add_template(name: 'pgbouncers/userlist.txt', template: 'support/templates/pgbouncer/pgbouncer-userlist.txt.erb')
+tasks.add_template(name: 'consul/config.json', template: 'support/templates/consul/config.json.erb', erb_extra_args: { min_port: 6432, max_port: 6435 })
+
+# Make targets
+tasks.add_make_task(name: 'gitlab-db-migrate', make_dependencies: ['ensure-databases-running'])
+tasks.add_make_task(name: 'preflight-checks', timed: true)
+tasks.add_make_task(name: 'preflight-update-checks', timed: true)
+tasks.add_make_task(name: 'gitaly/gitaly.config.toml')
+tasks.add_make_task(name: 'gitaly/praefect.config.toml')
+
+# Generate a file task for each template we manage
+tasks.template_tasks.each do |task|
+  desc "Generate #{task.name}"
+  file task.name => [task.template, GDK::Config::FILE] do |t, _args|
+    GDK::Templates::ErbRenderer.new(t.source, **task.erb_extra_args).safe_render!(t.name)
+    task.post_render&.call(t)
+  end
+end
+
+desc 'Dynamically generate Make targets for Rake tasks'
+file 'support/makefiles/Makefile.config.mk' => Dir['lib/**/*'] do |t, _|
+  GDK::Templates::ErbRenderer.new(
+    'support/templates/makefiles/Makefile.config.mk.erb',
+    tasks: tasks.all_tasks
+  ).safe_render!(t.name)
+end
+
+desc 'Show all the claimed ports'
+task :claimed_ports do
+  config = GDK::Config.new.tap(&:validate!)
+
+  printf("\n| %5s | %-20s |\n", 'Port', 'Service')
+  printf("| %5s | %20s |\n", '-' * 5, '-' * 20)
+
+  config.port_manager.claimed_ports_and_services.keys.sort.each do |p|
+    printf("| %5d | %-20s |\n", p, config.port_manager.claimed_service_for_port(p))
   end
 end

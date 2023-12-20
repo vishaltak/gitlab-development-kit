@@ -4,10 +4,12 @@ require 'fileutils'
 
 module GDK
   module Command
-    class Help
-      def run(stdout: $stdout, stderr: $stderr)
+    class Help < BaseCommand
+      def run(_ = [])
         GDK::Logo.print
-        stdout.puts File.read(File.join($gdk_root, 'HELP'))
+        GDK::Output.puts(File.read(GDK.root.join('HELP')))
+
+        true
       end
     end
   end

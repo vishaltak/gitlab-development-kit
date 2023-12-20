@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+CDPATH=''
+ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit ; pwd -P)"
+
+GDK_QUIET="${GDK_QUIET:-false}"
+ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+ASDF_AVAILABLE="$("${ROOT_PATH}"/bin/gdk config get asdf.__available\?)"
+
+asdf_exec() {
+  local dir="${1}"
+  local command="${*:2}"
+
+  cd "${dir}"
+
+  if [[ "${ASDF_AVAILABLE}" == "true" ]]; then
+		# shellcheck disable=SC1091 disable=SC1090
+    source "${ASDF_DIR}/asdf.sh"
+  fi
+
+  eval "${command}"
+}
+
+asdf_exec "${1}" "${*:2}"
