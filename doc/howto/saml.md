@@ -17,6 +17,12 @@ omniauth:
     enabled: true
 ```
 
+Alternatively, if you are running Docker, you can also enable Group SAML in `/etc/gitlab/gitlab.rb` by adding this line
+
+```ruby
+gitlab_rails['omniauth_providers'] = [{"name"=>"group_saml"}]
+```
+
 Run the following to apply these changes:
 
 ```shell
