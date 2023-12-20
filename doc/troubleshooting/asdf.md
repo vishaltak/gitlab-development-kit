@@ -73,12 +73,23 @@ A common cause of this error is an incomplete `asdf` setup. To determine if `asd
 which asdf
 ```
 
-If this command produces the error `asdf not found`, `asdf` set up isn't complete. This commonly occurs on GDK installations
-on new workstations that have no custom shell configuration. A common solution to an `asdf` installation problem is to
-follow the [Install `asdf`](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf) instructions.
+### If `which asdf` returns  `asdf not found`
 
-The required instructions depend on your operating system and method of installing `asdf`. For macOS, the most common
-combination is:
+Then the `asdf` setup isn't complete. This often happens when installing GDK on new workstations without a custom shell configuration. 
 
-- ZSH shell.
-- Installation using Git.
+A common solution is to follow the [`asdf` install instructions](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf) for your operating system and preferred method of installing `asdf`. 
+
+- For macOS, it's common to use `Zsh shell & Git` or `Zsh shell & Homebrew` if you prefer to use [homebrew](https://brew.sh/) for managing your packages.
+- You can use `echo $SHELL` to check which shell your workstation's using.
+
+### If you know `asdf` is installed
+
+Then it's likely `asdf` isn't sourced properly. Try these troubleshooting ideas:
+
+- Close and open a new shell.
+- If you're on a new workstation, confirm you have a shell configuration file. 
+  - On MacOS it's a hidden file located in your home directory. Navigate to your home folder with `cd ~` (or `⇧⌘H` in the finder) and then reveal hidden files with `ls -a` (or `⇧⌘.` in the finder). 
+  - If you don't see a shell config file (e.g. `.zshrc`) you can create one (e.g `touch .zshrc`) and then redo the above `asdf` install instructions.
+- Confirm your shell config file matches the [`asdf` instructions](https://asdf-vm.com/guide/getting-started.html#_3-install-asdf) for your chosen shell and install method.
+  - For example, if you're using MacOS with Zsh and Homebrew then you could source `asdf` by adding `. /opt/homebrew/opt/asdf/libexec/asdf.sh` in the `.zshrc` file.
+  - Double check your shell config file has the correct sourcing command. Some `asdf` instructions give you commands to copy and paste into the config file, while others are added indirectly after you run the command in your terminal. For example, in the `Zsh & Homebrew` instructions `echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc` should be run by you in your terminal and not copy and pasted into `.zshrc`.
