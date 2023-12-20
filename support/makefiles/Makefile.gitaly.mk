@@ -1,4 +1,4 @@
-gitaly_clone_dir = gitaly
+gitaly_dir = ${gitlab_development_root}/gitaly
 gitaly_version = $(shell support/resolve-dependency-commitish "${gitlab_development_root}/gitlab/GITALY_SERVER_VERSION")
 
 ifeq ($(gitaly_skip_setup),true)
@@ -11,10 +11,10 @@ else
 gitaly-setup: ${gitaly_build_bin_dir}/gitaly gitaly/gitaly.config.toml gitaly/praefect.config.toml
 endif
 
-${gitaly_clone_dir}/.git:
+${gitaly_dir}/.git:
 	$(Q)if [ -e gitaly ]; then mv gitaly .backups/$(shell date +gitaly.old.%Y-%m-%d_%H.%M.%S); fi
-	$(Q)support/component-git-clone ${gitaly_repo} ${gitaly_clone_dir}
-	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
+	$(Q)support/component-git-clone ${gitaly_repo} ${gitaly_dir}
+	$(Q)support/component-git-update gitaly "${gitaly_dir}" "${gitaly_version}" master
 
 .PHONY: gitaly-update
 gitaly-update: gitaly-update-timed
@@ -26,20 +26,33 @@ gitaly-update-run: gitaly-git-pull gitaly-setup praefect-migrate
 gitaly-git-pull: gitaly-git-pull-timed
 
 .PHONY: gitaly-git-pull-run
-gitaly-git-pull-run: ${gitaly_clone_dir}/.git
+gitaly-git-pull-run: ${gitaly_dir}/.git
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitaly to ${gitaly_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitaly "${gitaly_clone_dir}" "${gitaly_version}" master
+	$(Q)support/component-git-update gitaly "${gitaly_dir}" "${gitaly_version}" master
+
+.PHONY: gitaly-asdf-install
+gitaly-asdf-install:
+ifeq ($(asdf_opt_out),false)
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing asdf tools from ${gitaly_dir}/.tool-versions"
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitaly_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitaly_dir}/.tool-versions" asdf install
+	$(Q)cd ${gitaly_dir} && asdf reshim
+else
+	@true
+endif
 
 .PHONY: ${gitaly_build_bin_dir}/gitaly
-${gitaly_build_bin_dir}/gitaly: ${gitaly_clone_dir}/.git
+${gitaly_build_bin_dir}/gitaly: ${gitaly_dir}/.git gitaly-asdf-install
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Building gitlab-org/gitaly ${gitaly_version}"
 	@echo "${DIVIDER}"
-	$(Q)support/asdf-exec ${gitaly_clone_dir} $(MAKE) -j${restrict_cpu_count} WITH_BUNDLED_GIT=YesPlease BUNDLE_FLAGS=--no-deployment
+	$(Q)support/asdf-exec ${gitaly_dir} $(MAKE) -j${restrict_cpu_count} WITH_BUNDLED_GIT=YesPlease BUNDLE_FLAGS=--no-deployment
 
 .PHONY: praefect-migrate
 praefect-migrate: _postgresql-seed-praefect
