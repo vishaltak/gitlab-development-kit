@@ -799,8 +799,9 @@ production: &base
     path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
     gitaly_backup_path: <%= config.gitaly.__build_bin_backup_path %> # Path of the gitaly-backup binary (default: searches $PATH)
     <%- if config.object_store.enabled? && !config.object_store.backup_remote_directory.empty? -%>
-    connection: <%= config.object_store.connection.to_json %>
-    remote_directory: <%= config.object_store.backup_remote_directory %>
+    upload:
+      connection: <%= config.object_store.connection.to_json %>
+      remote_directory: <%= config.object_store.backup_remote_directory %>
     <%- end -%>
     # archive_permissions: 0640 # Permissions for the resulting backup.tar file (default: 0600)
     # keep_time: 604800   # default: 0 (forever) (in seconds)
