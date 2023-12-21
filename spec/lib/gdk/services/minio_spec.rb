@@ -11,7 +11,9 @@ describe GDK::Services::Minio do
 
   describe '#command' do
     it 'returns the necessary command to run redis' do
-      expect(minio_service.command).to eq('minio server -C minio/config --address "127.0.0.1:9000" --console-address "127.0.0.1:9002" --compat minio/data')
+      expect(minio_service.command).to match(
+        %r{minio server -C minio/config --address "127.0.0.1:9000" --console-address "127.0.0.1:9002" --compat \S+/minio/data}
+      )
     end
   end
 
@@ -24,6 +26,13 @@ describe GDK::Services::Minio do
   describe '#initialize' do
     it 'has a valid env' do
       expect { minio_service }.not_to raise_error
+    end
+  end
+
+  describe '#data_dir' do
+    it 'returns a Pathname for minio data directory' do
+      expect(minio_service.data_dir).to be_a Pathname
+      expect(minio_service.data_dir.to_s).to end_with('/minio/data')
     end
   end
 end
