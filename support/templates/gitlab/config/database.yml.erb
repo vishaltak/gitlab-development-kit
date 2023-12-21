@@ -6,6 +6,7 @@ development:
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
+    gssencmode: disable
     prepared_statements: false
     variables:
       statement_timeout: 120s
@@ -45,6 +46,7 @@ development:
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
+    gssencmode: disable
     prepared_statements: false
     variables:
       statement_timeout: 120s
@@ -69,6 +71,7 @@ development:
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
+    gssencmode: disable
     prepared_statements: false
     variables:
       statement_timeout: 120s
@@ -82,6 +85,7 @@ development:
     host: <%= config.postgresql.geo.host %>
     port: <%= config.postgresql.geo.port %>
     pool: 5
+    gssencmode: disable
 <%- end -%>
 <%- if config.cells? -%>
   main_clusterwide: &main_clusterwide
@@ -92,6 +96,7 @@ development:
     host: <%= config.cells.postgresql_clusterwide.host %>
     port: <%= config.cells.postgresql_clusterwide.port %>
     pool: 5
+    gssencmode: disable
 <%- end -%>
 
 test: &test
@@ -107,6 +112,7 @@ test: &test
     port: <%= config.postgresql.port %>
   <%- end -%>
     pool: 10
+    gssencmode: disable
     prepared_statements: false
     variables:
       statement_timeout: 120s
@@ -128,6 +134,7 @@ test: &test
     port: <%= config.postgresql.port %>
   <%- end -%>
     pool: 10
+    gssencmode: disable
     prepared_statements: false
     variables:
       statement_timeout: 120s
@@ -141,6 +148,7 @@ test: &test
     host: <%= config.postgresql.host %>
     port: <%= config.postgresql.port %>
     pool: 10
+    gssencmode: disable
     prepared_statements: false
     variables:
       statement_timeout: 120s
@@ -154,6 +162,7 @@ test: &test
     host: <%= config.postgresql.geo.host %>
     port: <%= config.postgresql.geo.port %>
     pool: 5
+    gssencmode: disable
 <%- end -%>
 <%- if config.cells? -%>
   main_clusterwide:
