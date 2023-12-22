@@ -137,6 +137,8 @@ object_store:
   objects:
     artifacts:
       bucket: artifacts
+    backups:
+      bucket: backups
     external_diffs:
       bucket: external-diffs
     lfs:
@@ -168,6 +170,8 @@ object_store:
   objects:
     artifacts:
       bucket: artifacts
+    backups:
+      bucket: backups
     external_diffs:
       bucket: external-diffs
     lfs:
@@ -202,6 +206,8 @@ object_store:
   objects:
     artifacts:
       bucket: artifacts
+    backups:
+      bucket: backups
     external_diffs:
       bucket: external-diffs
     lfs:

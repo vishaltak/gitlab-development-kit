@@ -9,7 +9,7 @@ module GDK
       end
 
       def command
-        %(minio server -C minio/config --address "#{address}" --console-address "#{console_address}" --compat minio/data)
+        %(minio server -C minio/config --address "#{address}" --console-address "#{console_address}" --compat "#{data_dir}")
       end
 
       def enabled?
@@ -22,6 +22,10 @@ module GDK
           MINIO_ACCESS_KEY: 'minio',
           MINIO_SECRET_KEY: 'gdk-minio'
         }
+      end
+
+      def data_dir
+        GDK.root.join('minio/data')
       end
 
       private

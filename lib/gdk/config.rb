@@ -384,6 +384,7 @@ module GDK
       hash_setting(:objects) do
         {
           'artifacts' => { 'bucket' => 'artifacts' },
+          'backups' => { 'bucket' => 'backups' },
           'external_diffs' => { 'bucket' => 'external-diffs' },
           'lfs' => { 'bucket' => 'lfs-objects' },
           'uploads' => { 'bucket' => 'uploads' },

@@ -2,6 +2,7 @@
 
 require_relative '../gdk'
 require_relative '../gdk/task_helpers'
+require 'rake/clean'
 
 CONFIGS = GDK::DIFFABLE_FILES
 CLOBBER.include(*CONFIGS)
