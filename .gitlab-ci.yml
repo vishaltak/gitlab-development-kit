@@ -49,7 +49,7 @@ default:
     - sysctl -n -w fs.inotify.max_user_watches=524288 || true
     - |
       if [ -f support/ci/utils.sh ]; then
-        . support/ci/utils.sh;
+        source support/ci/utils.sh;
         display_debugging || true;
       else
         true;

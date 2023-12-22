@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-function section_start () {
+function section_start() {
   local section_title="${1}"
   local section_description="${2:-$section_title}"
 
   echo -e "section_start:$(date +%s):${section_title}[collapsed=true]\r\e[0K${section_description}"
 }
 
-function section_end () {
+function section_end (){
   local section_title="${1}"
 
   echo -e "section_end:$(date +%s):${section_title}\r\e[0K"
@@ -107,3 +107,25 @@ function echosuccess() {
     printf "\033[0;32m%s\n\033[0m" "${1}" >&2;
   fi
 }
+
+function retry_times_sleep() {
+  number_of_retries="$1"
+  shift
+  sleep_seconds="$1"
+  shift
+
+  if "$@"; then
+    return 0
+  fi
+
+  for i in $(seq "${number_of_retries}" -1 1); do
+    sleep "$sleep_seconds"s
+    echo "[$(date '+%H:%M:%S')] Retry attempts left: $i..."
+    if "$@"; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
