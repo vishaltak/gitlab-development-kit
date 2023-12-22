@@ -15,6 +15,12 @@ SimpleCov.start
 require_relative '../lib/gdk'
 require_relative '../lib/gdk/task_helpers'
 
+require 'rake'
+require "active_support/concern"
+
+# Load spec support code
+Dir['spec/spec_support/**/*.rb'].each { |f| load f }
+
 RSpec.configure do |config|
   config.before do |example|
     if example.metadata[:hide_stdout]
