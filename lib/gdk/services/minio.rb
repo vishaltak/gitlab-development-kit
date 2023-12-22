@@ -9,17 +9,29 @@ module GDK
       end
 
       def command
-        %(env MINIO_REGION=gdk MINIO_ACCESS_KEY=minio MINIO_SECRET_KEY=gdk-minio minio server -C minio/config --address "#{address}" --compat minio/data)
+        %(minio server -C minio/config --address "#{address}" --console-address "#{console_address}" --compat minio/data)
       end
 
       def enabled?
         config.object_store?
       end
 
+      def env
+        {
+          MINIO_REGION: 'gdk',
+          MINIO_ACCESS_KEY: 'minio',
+          MINIO_SECRET_KEY: 'gdk-minio'
+        }
+      end
+
       private
 
       def address
         "#{config.object_store.host}:#{config.object_store.port}"
+      end
+
+      def console_address
+        "#{config.object_store.host}:#{config.object_store.console_port}"
       end
     end
   end
