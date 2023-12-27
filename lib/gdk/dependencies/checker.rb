@@ -124,7 +124,7 @@ module GDK
 
         missing_dependencies = result.scan(/(Cask|Formula) (.*?) needs to be installed./).map(&:last) unless result.include?("The Brewfile's dependencies are satisfied.")
 
-        return if missing_dependencies.nil? || missing_dependencies.empty?
+        return if missing_dependencies.nil? || missing_dependencies.empty? || ENV['OSTYPE'] != 'darwin'
 
         msg = <<~MESSAGE
         The following Brewfile's dependencies are missing or outdated:
