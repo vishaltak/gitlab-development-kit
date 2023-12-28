@@ -25,6 +25,7 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Status,
         GDK::Diagnostic::Re2,
         GDK::Diagnostic::Golang,
+        GDK::Diagnostic::StaleData,
         GDK::Diagnostic::StaleServices,
         GDK::Diagnostic::Chromedriver,
         GDK::Diagnostic::FileWatches

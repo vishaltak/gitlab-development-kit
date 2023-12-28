@@ -304,3 +304,11 @@ Use the `gdk telemetry` command to enable and disable GDK telemetry. GDK telemet
 - Enabled, and associated with a GitLab username.
 - Enabled anonymously.
 - Disabled.
+
+## Truncate Legacy Tables
+
+To detect and truncate unnecessary data in the `ci` and `main` databases, run:
+
+```shell
+gdk truncate-legacy-tables
+```

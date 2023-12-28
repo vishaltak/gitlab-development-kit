@@ -10,11 +10,19 @@ set -eo pipefail
 # See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html#index-SECONDS for the usage of seconds.
 SECONDS=0
 
+LOG_FILE="execution_times.log"
 MY_IP=$(hostname -I | tr -d '[:space:]')
 GDK_PORT=$(env | grep SERVICE_PORT_GDK_ | awk -F= '{ print $2 }')
 GDK_URL=$(echo "${GL_WORKSPACE_DOMAIN_TEMPLATE}" | sed -r 's/\$\{PORT\}/'${GDK_PORT}'/')
 PROJECT_PATH=${PWD}
 WORKSPACE_DIR_NAME=/workspace
+
+measure_time() {
+  local start=$SECONDS
+  "$@"
+  local duration=$((SECONDS - start))
+  echo "$1: $duration seconds" >> "$LOG_FILE"
+}
 
 configure_gdk() {
   echo "# --- Setting up GDK Config ---"
@@ -88,15 +96,17 @@ restart_gdk() {
   gdk start
 }
 
-configure_gdk
-check_inotify
-clone_gitlab
-copy_items_from_bootstrap
-reconfigure_and_migrate
-update_gdk
-restart_gdk
+measure_time configure_gdk
+measure_time check_inotify
+measure_time clone_gitlab
+measure_time copy_items_from_bootstrap
+measure_time reconfigure_and_migrate
+measure_time update_gdk
+measure_time restart_gdk
 
 DURATION=$SECONDS
-echo "Total Duration: $(($DURATION / 60)) minutes and $(($DURATION % 60)) seconds."
+echo "Total Duration: $((DURATION / 60)) minutes and $((DURATION % 60)) seconds."
+echo "Execution times for each function:"
+cat "$LOG_FILE"
 
 echo "Success! You can access your GDK here: https://${GDK_URL}"
