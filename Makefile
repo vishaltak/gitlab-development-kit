@@ -204,12 +204,12 @@ post-install-task: display-announcement_doubles-for-user
 	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
 .PHONY: post-update-task
-post-update-task:
+post-update-task: display-announcement_doubles-for-user
 	$(Q)$(eval SUCCESS_MESSAGE := "Updated")
 	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
 .PHONY: post-reconfigure-task
-post-reconfigure-task: display-announcement_doubles-for-user
+post-reconfigure-task:
 	$(Q)$(eval SUCCESS_MESSAGE := "Reconfigured")
 	$(Q)$(MAKE) post-task SUCCESS_MESSAGE="$(SUCCESS_MESSAGE)"
 
