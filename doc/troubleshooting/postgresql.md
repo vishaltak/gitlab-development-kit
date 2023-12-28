@@ -299,7 +299,7 @@ This is because there is stale data on the `ci` database on tables belonging to 
 Such data should be truncated. To do this, you can run:
 
 ```shell
-gdk reconfigure
+gdk truncate-legacy-tables
 ```
 
 ## Fix a build error with `pgvector` extension due to XCode SDK path changes on macOS

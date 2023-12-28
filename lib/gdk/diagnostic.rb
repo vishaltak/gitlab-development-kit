@@ -21,6 +21,7 @@ module GDK
     autoload :Re2, 'gdk/diagnostic/re2'
     autoload :RubyGems, 'gdk/diagnostic/ruby_gems'
     autoload :RvmAndAsdf, 'gdk/diagnostic/rvm_and_asdf'
+    autoload :StaleData, 'gdk/diagnostic/stale_data'
     autoload :StaleServices, 'gdk/diagnostic/stale_services'
     autoload :Status, 'gdk/diagnostic/status'
     autoload :Version, 'gdk/diagnostic/version'
@@ -44,6 +45,7 @@ module GDK
         Status
         Re2
         Golang
+        StaleData
         StaleServices
         Chromedriver
         FileWatches

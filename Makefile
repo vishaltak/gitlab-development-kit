@@ -183,7 +183,6 @@ postgresql-sensible-defaults \
 prom-setup \
 snowplow-micro-setup \
 zoekt-setup \
-truncate-legacy-tables \
 postgresql-replica-setup \
 postgresql-replica-2-setup
 
