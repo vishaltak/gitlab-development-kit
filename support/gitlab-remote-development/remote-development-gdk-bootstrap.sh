@@ -60,13 +60,13 @@ copy_items_from_bootstrap() {
   interesting_items=(".cache" "clickhouse" "consul" "gdk-config.mk"
     "gitaly" ".gitlab-bundle" ".gitlab-lefthook" "gitlab-pages" "gitlab-runner-config.toml"
     "gitlab-shell" ".gitlab-shell-bundle" ".gitlab-translations" ".gitlab-yarn" 
-    "localhost.crt" "localhost.key" "log" "minio" "pgbouncers" "postgresql" "Procfile"
+    "localhost.crt" "localhost.key" "log" "pgbouncers" "postgresql" "Procfile"
     "registry" "registry_host.crt" "registry_host.key" "secrets.yml" "services" "sv"
   )
   
   for item in "${interesting_items[@]}"; do
     echo "Moving bootstrapped GDK item: ${item}"
-    mv "${WORKSPACE_DIR_NAME}/gitlab-development-kit/${item}" .
+    [ -e "${item}" ] && mv "${WORKSPACE_DIR_NAME}/gitlab-development-kit/${item}" .
   done
 }
 
