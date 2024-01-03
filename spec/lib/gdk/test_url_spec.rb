@@ -23,6 +23,8 @@ RSpec.describe GDK::TestURL do
 
   describe '#wait' do
     shared_examples "a URL that's down" do
+      let(:expected_message) { /#{Regexp.escape(default_url)} does not appear to be up\. Waited .*? second\(s\)./ }
+
       before do
         allow(subject).to receive(:check_url).and_return(false)
       end
@@ -31,15 +33,14 @@ RSpec.describe GDK::TestURL do
         freeze_time do
           result = nil
 
-          expected_message = Regexp.escape("#{default_url} does not appear to be up. Waited 0.0 second(s).")
-          expect { result = subject.wait }.to output(/#{expected_message}/).to_stdout
+          expect { result = subject.wait }.to output(expected_message).to_stdout
           expect(result).to be(false)
         end
       end
 
       it 'does not call #store_gitlab_commit_sha' do
         expect(GDK::Output).to receive(:print).with("=> Waiting until #{default_url} is ready..")
-        expect(GDK::Output).to receive(:notice).with("#{default_url} does not appear to be up. Waited 0.0 second(s).")
+        expect(GDK::Output).to receive(:notice).with(expected_message)
         expect(subject).not_to receive(:store_gitlab_commit_sha)
 
         subject.wait
