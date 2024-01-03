@@ -4,12 +4,10 @@
 # Do not modify this file directly.
 #
 # golang:
-#   1.21.5:
-#     - https://gitlab.com/gitlab-org/gitlab/-/raw/master/workhorse/.tool-versions
 #   1.20.10:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.21.5 1.20.10
+golang 1.20.10
 
 # nodejs:
 #   18.17.0:

@@ -167,8 +167,6 @@ end
 # ------------------------------------------------------------------------------
 
 tool_versions_files = [
-  RemoteToolVersionFile.new(GITLAB_URL),
-  RemoteToolVersionFile.new(GITLAB_URL, path: 'workhorse'),
   RemoteToolVersionFile.new(GITLAB_RUNNER_URL, ref: 'main')
 ].freeze
 
