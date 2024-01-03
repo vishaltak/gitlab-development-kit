@@ -460,6 +460,7 @@ install_apt_packages() {
   local platform_file="${1}"
 
   if ! echo_if_unsuccessful sudo apt-get update; then
+    echo "ERROR: 'apt-get update' command fails" >&2
     return 1
   fi
 
