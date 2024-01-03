@@ -20,6 +20,13 @@
 # <default-version> <other-version(s)>
 #
 
+nodejs 18.17.0
+yarn 1.22.19
+redis 7.0.14
+
+# Postgres version must be set as it's necessary for the PostgreSQL upgrade script
+postgres 14.9 13.12
+
 # Ruby version must be set until 3.2.2 is ready to be the new default
 ruby 3.1.4 3.2.2
 

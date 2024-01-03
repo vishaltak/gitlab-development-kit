@@ -1,11 +1,11 @@
-gitlab_clone_dir = gitlab
+gitlab_dir = ${gitlab_development_root}/gitlab
 gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
-gitlab_git_cmd = git -C $(gitlab_development_root)/$(gitlab_clone_dir)
-in_gitlab = cd $(gitlab_development_root)/$(gitlab_clone_dir) &&
+gitlab_git_cmd = git -C $(gitlab_dir)
+in_gitlab = cd $(gitlab_dir) &&
 bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
 default_branch ?= $(if $(gitlab_default_branch),$(gitlab_default_branch),master)
 
-gitlab-setup: gitlab/.git gitlab-config .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
+gitlab-setup: gitlab/.git gitlab-config gitlab-asdf-install .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
 
 .PHONY: gitlab-update
 gitlab-update: gitlab-update-timed
@@ -13,9 +13,8 @@ gitlab-update: gitlab-update-timed
 .PHONY: gitlab-update-run
 gitlab-update-run: \
 	gitlab-git-pull \
-	gitlab-config \
-	postgresql \
 	gitlab-setup \
+	postgresql \
 	gitlab-db-migrate \
 	gitlab/doc/api/graphql/reference/gitlab_schema.json
 
@@ -41,14 +40,26 @@ gitlab/.git/pull: gitlab/git-checkout-auto-generated-files
 	@echo "${DIVIDER}"
 	@echo "Updating gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-update gitlab "${gitlab_clone_dir}" $(default_branch) master
+	$(Q)support/component-git-update gitlab "${gitlab_dir}" $(default_branch) master
 
 gitlab/.git:
 	@echo
 	@echo "${DIVIDER}"
 	@echo "Cloning gitlab-org/gitlab"
 	@echo "${DIVIDER}"
-	$(Q)support/component-git-clone ${git_params} $(if $(realpath ${gitlab_repo}),--shared) ${gitlab_repo} ${gitlab_clone_dir}
+	$(Q)support/component-git-clone ${git_params} $(if $(realpath ${gitlab_repo}),--shared) ${gitlab_repo} ${gitlab_dir}
+
+gitlab-asdf-install:
+ifeq ($(asdf_opt_out),false)
+	@echo
+	@echo "${DIVIDER}"
+	@echo "Installing asdf tools from ${gitlab_dir}/.tool-versions"
+	@echo "${DIVIDER}"
+	$(Q)cd ${gitlab_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitlab_dir}/.tool-versions" asdf install
+	$(Q)cd ${gitlab_dir} && asdf reshim
+else
+	@true
+endif
 
 gitlab-config: \
 	touch-examples \
@@ -84,7 +95,7 @@ gitlab-bundle-prepare:
 	@echo "${DIVIDER}"
 	@echo "Installing gitlab-org/gitlab Ruby gems"
 	@echo "${DIVIDER}"
-	${Q}$(support_bundle_install) $(gitlab_development_root)/$(gitlab_clone_dir)
+	${Q}$(support_bundle_install) $(gitlab_dir)
 	$(Q)touch $@
 
 .gitlab-gdk-gem:
@@ -130,6 +141,6 @@ gitlab-translations-run: .gitlab-translations
 	@echo "${DIVIDER}"
 	@echo "Generating gitlab-org/gitlab Rails translations"
 	@echo "${DIVIDER}"
-	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_development_root}/gitlab/log/gettext.log
+	$(Q)$(gitlab_rake_cmd) gettext:compile > ${gitlab_dir}/log/gettext.log
 	$(Q)$(gitlab_git_cmd) checkout locale/*/gitlab.po
 	$(Q)touch $@
