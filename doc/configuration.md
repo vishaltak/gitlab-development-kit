@@ -551,41 +551,16 @@ To enable Vite for your GDK:
 1. Ensure that your `gdk` is up to date (`gdk update`)
 1. Ensure the `gdk` is running with webpack.
 1. If you ran `vite` manually before, make sure no process remains.
-1. Enable the Vite feature flag. This is needed for some older branches.
+1. Run the following commands to setup Vite:
 
-   ```shell
-   echo "Feature.enable(:vite)" | gdk rails c
-   ```
-
-1. Stop the Rails app and webpack:
-
-   ```shell
-   gdk stop webpack rails-web
-   ```
-
-1. Disable webpack:
-
-   ```shell
-   gdk config set webpack.enabled false
-   ```
-
-1. Enable Vite:
-
-   ```shell
-   gdk config set vite.enabled true
-   ```
-
-1. Update the config files:
-
-   ```shell
-   gdk reconfigure
-   ```
-
-1. Restart the Rails app and Vite as the developer server:
-
-   ```shell
-   gdk restart vite rails-web
-   ```
+      ```shell
+      echo "Feature.enable(:vite)" | gdk rails c # Enable the Vite feature flag. This is needed for some older branches.
+      gdk stop webpack rails-web # Stop the Rails app and webpack.
+      gdk config set webpack.enabled false # Disable webpack.
+      gdk config set vite.enabled true # Enable Vite.
+      gdk reconfigure # Update the config files.
+      gdk restart vite rails-web # Restart the Rails app and Vite as the developer server.
+      ```
 
 To disable Vite, run the following commands:
 
