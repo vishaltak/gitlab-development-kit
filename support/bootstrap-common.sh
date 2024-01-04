@@ -146,6 +146,14 @@ asdf_command_enabled() {
   asdf which "$1" > /dev/null 2>&1
 }
 
+mise_command_enabled() {
+  if ! mise_enabled; then
+    return 1
+  fi
+
+  mise which "$1" >/dev/null 2>&1
+}
+
 prefix_with_asdf_if_available() {
   local command
 

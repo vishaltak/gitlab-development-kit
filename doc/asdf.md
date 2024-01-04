@@ -22,7 +22,7 @@ The [GDK `.tool-versions` file](../.tool-versions) contains the specifics plugin
 - Some `asdf` plugins are not well maintained.
 - Some software does not have `asdf` plugins, such as `jaeger` and `OpenLDAP`.
 - The performance of `asdf` commands is decreased by the use of shims.
-  See [Improve dependency management performance using `rtx`](howto/rtx.md) for an alternative drop-in replacement tool
+  See [Improve dependency management performance using `mise`](howto/mise.md) for an alternative drop-in replacement tool
   that does not require shims and provides a faster experience.
 
 ## Reason for `asdf` as the standard for installing software in the GDK
