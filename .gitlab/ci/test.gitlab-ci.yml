@@ -61,7 +61,7 @@ checkmake:
   extends:
     - .test-job
     - .rules:code-changes
-  image: registry.gitlab.com/gitlab-org/gitlab-development-kit/asdf-bootstrapped-verify:main
+  image: $DEFAULT_BRANCH_IMAGE
   before_script:
     - gem install gitlab-sdk
     - gem install sentry-ruby

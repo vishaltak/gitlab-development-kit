@@ -24,6 +24,9 @@ nodejs 18.17.0
 yarn 1.22.19
 redis 7.0.14
 
+# Minio version must be set as it's necessary for the MinIO Object Storage service
+minio 2022-07-15T03-44-22Z
+
 # Postgres version must be set as it's necessary for the PostgreSQL upgrade script
 postgres 14.9 13.12
 

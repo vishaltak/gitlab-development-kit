@@ -4,10 +4,16 @@
 # Do not modify this file directly.
 #
 # golang:
-#   1.20.10:
+#   1.21.5:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.20.10
+golang 1.21.5
+
+# minio:
+#   2022-07-15T03-44-22Z:
+#     - .tool-versions-gdk
+#
+minio 2022-07-15T03-44-22Z
 
 # nodejs:
 #   18.17.0:
