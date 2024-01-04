@@ -38,11 +38,11 @@ module GDK
       Utils.executable_exist?('asdf') || ENV.values_at('ASDF_DATA_DIR', 'ASDF_DIR').compact.any?
     end
 
-    # Is rtx available?
+    # Is mise available?
     #
     # @return [Boolean]
-    def self.rtx_available?
-      Utils.executable_exist?('rtx')
+    def self.mise_available?
+      Utils.executable_exist?('mise')
     end
 
     def self.config

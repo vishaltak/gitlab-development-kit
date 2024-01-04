@@ -39,7 +39,7 @@ to learn how to contribute to GitLab.
 - [Gitaly and Praefect](gitaly.md)
 - [Google OAuth2](google-oauth2.md)
 - [HTTPS](nginx.md)
-- [Improving dependency management performance with `rtx`](rtx.md)
+- [Improving dependency management performance with `mise`](mise.md)
 - [Kerberos](kerberos.md)
 - [Kubernetes](kubernetes/index.md)
 - [LDAP](ldap.md)

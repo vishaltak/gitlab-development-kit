@@ -170,14 +170,14 @@ module GDK
       @available_versions ||=
         if GDK::Dependencies.asdf_available?
           asdf_available_versions
-        elsif GDK::Dependencies.rtx_available?
-          rtx_available_versions
+        elsif GDK::Dependencies.mise_available?
+          mise_available_versions
         elsif GDK::Dependencies.homebrew_available?
           brew_cellar_available_versions.transform_keys(&:to_i)
         elsif GDK::Dependencies.linux_apt_available?
           apt_available_versions
         else
-          raise 'Only Homebrew, asdf, rtx, and apt based Linux systems supported.'
+          raise 'Only Homebrew, asdf, mise, and apt based Linux systems supported.'
         end
     end
 
@@ -191,11 +191,11 @@ module GDK
       asdf_package_paths(current_asdf_data_dir, versions)
     end
 
-    def rtx_available_versions
-      lines = run(%w[rtx list -i -c --json postgres])
+    def mise_available_versions
+      lines = run(%w[mise list -i -c --json postgres])
       return {} if lines.empty?
 
-      current_asdf_data_dir = ENV.fetch('RTX_CACHE_DIR', "#{Dir.home}/.local/share/rtx")
+      current_asdf_data_dir = ENV.fetch('MISE_CACHE_DIR', "#{Dir.home}/.local/share/mise")
       versions = JSON.parse(lines).map { |x| Gem::Version.new(x['version']) }.sort.reverse
 
       asdf_package_paths(current_asdf_data_dir, versions)
