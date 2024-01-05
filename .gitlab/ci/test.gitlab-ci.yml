@@ -61,6 +61,8 @@ checkmake:
   extends:
     - .test-job
     - .rules:code-changes
+  needs:
+    - release-image
   image: $DEFAULT_BRANCH_IMAGE
   before_script:
     - gem install gitlab-sdk
