@@ -10,7 +10,7 @@ RSpec.describe GDK::Diagnostic::StaleServices do
 
   describe '#success?' do
     before do
-      stub_ps(output, exit_code: exit_code)
+      stub_ps(output, exit_code:)
     end
 
     context 'but ps fails' do
@@ -46,7 +46,7 @@ RSpec.describe GDK::Diagnostic::StaleServices do
 
   describe '#detail' do
     before do
-      stub_ps(output, exit_code: exit_code)
+      stub_ps(output, exit_code:)
     end
 
     context 'but ps fails' do
@@ -82,7 +82,7 @@ RSpec.describe GDK::Diagnostic::StaleServices do
   end
 
   def stub_ps(result, exit_code: true)
-    shellout = instance_double(Shellout, read_stdout: result, exit_code: exit_code)
+    shellout = instance_double(Shellout, read_stdout: result, exit_code:)
     full_command = %(pgrep -l -P 1 -f "runsv (elasticsearch|geo-cursor|gitaly|gitlab-docs|gitlab-k8s-agent|gitlab-pages|gitlab-ui|gitlab-workhorse|grafana|jaeger|mattermost|minio|nginx|openldap|postgresql|postgresql-geo|postgresql-replica|praefect|prometheus|rails-background-jobs|rails-web|redis|registry|runner|snowplow-micro|spamcheck|sshd|tunnel_|webpack|sleep)")
     allow(Shellout).to receive(:new).with(full_command).and_return(shellout)
     allow(shellout).to receive(:execute).and_return(shellout)

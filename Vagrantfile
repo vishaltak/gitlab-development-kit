@@ -9,6 +9,7 @@
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 
+# rubocop:disable Style/HashSyntax
 def enable_shares(config, nfs)
   # paths must be listed as shortest to longest per bug: https://github.com/GM-Alex/vagrant-winnfsd/issues/12#issuecomment-78195957
   config.vm.synced_folder ".", "/vagrant", type: "rsync",
@@ -187,3 +188,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # vb.gui = true
   end
 end
+# rubocop:enable Style/HashSyntax

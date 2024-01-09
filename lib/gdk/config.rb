@@ -290,7 +290,7 @@ module GDK
       anything :__uri do
         klass = config.gitlab_docs.https? ? URI::HTTPS : URI::HTTP
         port = config.gitlab_docs.https? ? config.gitlab_docs.port_https : config.gitlab_docs.port
-        klass.build(host: config.hostname, port: port)
+        klass.build(host: config.hostname, port:)
       end
 
       string(:__listen_address) { "#{config.nginx.listen}:#{config.gitlab_docs.port}" }
@@ -848,13 +848,13 @@ module GDK
     settings :grafana do
       bool(:enabled) { false }
       port(:port, 'grafana')
-      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port:) }
     end
 
     settings :prometheus do
       bool(:enabled) { false }
       port(:port, 'prometheus')
-      anything(:__uri) { URI::HTTP.build(host: config.hostname, port: port) }
+      anything(:__uri) { URI::HTTP.build(host: config.hostname, port:) }
       port(:gitaly_exporter_port, 'gitaly_exporter')
       port(:praefect_exporter_port, 'praefect_exporter')
       port(:workhorse_exporter_port, 'workhorse_exporter')

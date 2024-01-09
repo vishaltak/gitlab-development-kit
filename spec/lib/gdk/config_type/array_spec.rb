@@ -5,9 +5,9 @@ RSpec.describe GDK::ConfigType::Array do
 
   describe '#parse' do
     let(:yaml) { { key => value } }
-    let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &proc { value }) }
+    let(:builder) { GDK::ConfigType::Builder.new(key:, klass: described_class, **{}, &proc { value }) }
 
-    subject { described_class.new(parent: GDK.config, builder: builder) }
+    subject { described_class.new(parent: GDK.config, builder:) }
 
     before do
       stub_pg_bindir
@@ -55,7 +55,7 @@ RSpec.describe GDK::ConfigType::Array do
       defval = default_value # to make variable available in block
 
       c = Class.new(GDK::ConfigSettings)
-      c.array(key, merge: merge, &->(_) { defval })
+      c.array(key, merge:, &->(_) { defval })
 
       c.new(yaml: { key => yaml_value })
     end

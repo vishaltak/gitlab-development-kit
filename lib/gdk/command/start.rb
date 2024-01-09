@@ -24,7 +24,7 @@ module GDK
         open_when_ready = !args.delete('--open-when-ready').nil?
 
         result = GDK::Hooks.with_hooks(config.gdk.start_hooks, 'gdk start') do
-          Runit.start(args, quiet: quiet)
+          Runit.start(args, quiet:)
         end
 
         if args.empty?

@@ -39,7 +39,7 @@ module MeasureHelper
     let(:is_linux) { platform == 'linux' }
 
     before do
-      stub_git_rev_parse(branch_name: branch_name)
+      stub_git_rev_parse(branch_name:)
     end
 
     it "runs sitespeed via Docker on a #{platform} system", :hide_stdout do

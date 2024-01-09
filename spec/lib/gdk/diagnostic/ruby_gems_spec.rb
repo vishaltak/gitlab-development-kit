@@ -3,7 +3,7 @@
 RSpec.describe GDK::Diagnostic::RubyGems do
   let(:allow_gem_not_installed) { nil }
 
-  subject(:diagnostic) { described_class.new(allow_gem_not_installed: allow_gem_not_installed) }
+  subject(:diagnostic) { described_class.new(allow_gem_not_installed:) }
 
   before do
     stub_const('GDK::Diagnostic::RubyGems::GITLAB_GEMS_WITH_C_CODE_TO_CHECK', %w[bad_gem])

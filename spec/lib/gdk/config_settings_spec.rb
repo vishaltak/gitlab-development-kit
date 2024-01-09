@@ -260,7 +260,7 @@ RSpec.describe GDK::ConfigSettings do
 
     context 'when includes user_only configs' do
       let(:yaml) { { 'bar' => 'whassup dude' } }
-      let(:config) { described_class.new(yaml: yaml) }
+      let(:config) { described_class.new(yaml:) }
 
       it 'generates only user_only configs' do
         described_class.integer(:foo) { '333' }

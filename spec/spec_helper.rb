@@ -102,7 +102,7 @@ def stub_env(var, return_value)
 end
 
 def stub_gdk_yaml(yaml)
-  allow(GDK).to receive(:config) { GDK::Config.new(yaml: yaml) }
+  allow(GDK).to receive(:config) { GDK::Config.new(yaml:) }
 end
 
 def stub_raw_gdk_yaml(raw_yaml)

@@ -35,7 +35,7 @@ class SetupWorkspace
   def send_telemetry(success, duration)
     GDK.config.bury!('telemetry.username', 'remote')
     GDK.config.save_yaml!
-    GDK::Telemetry.send_telemetry(success, 'setup-workspace', { duration: duration })
+    GDK::Telemetry.send_telemetry(success, 'setup-workspace', { duration: })
   end
 end
 

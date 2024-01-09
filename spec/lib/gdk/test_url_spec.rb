@@ -116,7 +116,7 @@ RSpec.describe GDK::TestURL do
         end
 
         result = nil
-        expect { result = subject.check_url(verbose: verbose) }.to output(expected_message.join("\n")).to_stdout
+        expect { result = subject.check_url(verbose:) }.to output(expected_message.join("\n")).to_stdout
         expect(result).to be(false)
       end
     end
@@ -135,7 +135,7 @@ RSpec.describe GDK::TestURL do
         expected_message << "\n"
 
         result = nil
-        expect { result = subject.check_url(verbose: verbose) }.to output(expected_message.join("\n")).to_stdout
+        expect { result = subject.check_url(verbose:) }.to output(expected_message.join("\n")).to_stdout
         expect(result).to be(true)
       end
     end
@@ -202,7 +202,7 @@ RSpec.describe GDK::TestURL do
 
   def stub_test_url_http_helper(last_response_reason = '')
     uri = URI.parse(default_url)
-    http_helper_double = instance_double(GDK::HTTPHelper, last_response_reason: last_response_reason)
+    http_helper_double = instance_double(GDK::HTTPHelper, last_response_reason:)
     allow(GDK::HTTPHelper).to receive(:new).with(uri, read_timeout: 60, open_timeout: 60, cache_response: false).and_return(http_helper_double)
 
     http_helper_double

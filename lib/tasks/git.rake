@@ -5,6 +5,6 @@ namespace :git do
   task :configure, :global do |_t, args|
     global = args[:global] == "true"
 
-    Git::Configure.new(global: global).run!
+    Git::Configure.new(global:).run!
   end
 end

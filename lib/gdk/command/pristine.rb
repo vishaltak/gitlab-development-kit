@@ -107,7 +107,7 @@ module GDK
       end
 
       def shellout(cmd, chdir: config.gdk_root)
-        sh = Shellout.new(cmd, chdir: chdir)
+        sh = Shellout.new(cmd, chdir:)
         sh.stream
         sh.success?
       rescue StandardError => e

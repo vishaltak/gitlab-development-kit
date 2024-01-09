@@ -71,7 +71,7 @@ module GDK
       end
 
       def divider(symbol: '-', length: 80, stderr: false)
-        puts(symbol * length, stderr: stderr)
+        puts(symbol * length, stderr:)
       end
 
       def notice(message)

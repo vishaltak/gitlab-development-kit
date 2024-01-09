@@ -22,7 +22,7 @@ module GDK
 
       duration = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
 
-      send_telemetry(result, command, { duration: duration })
+      send_telemetry(result, command, { duration: })
 
       result
     end
@@ -42,7 +42,7 @@ module GDK
       host = ENV.fetch('GITLAB_SDK_HOST', ANALYTICS_BASE_URL)
 
       SnowplowTracker::LOGGER.level = Logger::WARN
-      @client = GitlabSDK::Client.new(app_id: app_id, host: host)
+      @client = GitlabSDK::Client.new(app_id:, host:)
     end
 
     def self.init_sentry

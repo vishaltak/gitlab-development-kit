@@ -6,7 +6,7 @@ module GDK
       def initialize(parent:, builder:, service_name:)
         @service_name = service_name
 
-        super(parent: parent, builder: builder)
+        super(parent:, builder:)
       end
 
       def parse(value)

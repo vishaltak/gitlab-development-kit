@@ -8,9 +8,9 @@ RSpec.describe GDK::ConfigType::Port do
   let(:value) { nil }
   let(:yaml) { { key => value } }
   let(:blk) { nil }
-  let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &blk) }
+  let(:builder) { GDK::ConfigType::Builder.new(key:, klass: described_class, **{}, &blk) }
 
-  subject { described_class.new(parent: parent, builder: builder, service_name: service_name) }
+  subject { described_class.new(parent:, builder:, service_name:) }
 
   before do
     stub_pg_bindir

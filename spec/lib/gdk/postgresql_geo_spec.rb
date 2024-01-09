@@ -2,7 +2,7 @@
 
 RSpec.describe GDK::PostgresqlGeo do
   let(:yaml) { {} }
-  let(:config) { GDK::Config.new(yaml: yaml) }
+  let(:config) { GDK::Config.new(yaml:) }
 
   subject { described_class.new(config) }
 

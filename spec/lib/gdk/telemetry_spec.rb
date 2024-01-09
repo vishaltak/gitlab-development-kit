@@ -19,7 +19,7 @@ RSpec.describe GDK::Telemetry do
       expect(described_class).to receive(:with_telemetry).and_call_original
 
       allow(GDK).to receive_message_chain(:config, :telemetry, :username).and_return('testuser')
-      allow(described_class).to receive_messages(client: client)
+      allow(described_class).to receive_messages(client:)
 
       stub_const('ARGV', args)
     end

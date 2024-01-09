@@ -199,11 +199,11 @@ RSpec.describe GDK::Diagnostic::Gitlab do
   end
 
   def stub_existence(key, project_dir, exist)
-    stub_gitlab_shell_secret_file_with([key, :dir], project_dir, exist: exist)
+    stub_gitlab_shell_secret_file_with([key, :dir], project_dir, exist:)
   end
 
   def stub_content(key, project_dir, content)
-    stub_gitlab_shell_secret_file_with([key, :dir], project_dir, content: content)
+    stub_gitlab_shell_secret_file_with([key, :dir], project_dir, content:)
   end
 
   def stub_file(config_key, file, exist: true, content: '')
@@ -214,7 +214,7 @@ RSpec.describe GDK::Diagnostic::Gitlab do
 
   def stub_gitlab_shell_secret_file_with(config_key, project_dir, content: 'abc', exist: true)
     file = '.gitlab_shell_secret'
-    double = stub_file(config_key, "/home/git/gdk/#{project_dir}/#{file}", exist: exist, content: content)
+    double = stub_file(config_key, "/home/git/gdk/#{project_dir}/#{file}", exist:, content:)
     allow(double).to receive(:join).with(file).and_return(double)
   end
 

@@ -115,9 +115,9 @@ module Runit
     # Create runit `run` executable
     def create_runit_service(service)
       run = render_template('runit/run.sh.erb',
-        gdk_root: gdk_root,
-        run_env: run_env,
-        service: service)
+        gdk_root:,
+        run_env:,
+        service:)
 
       run_path = sv_dir(service).join('run')
       write_executable_file(run_path, run)
@@ -139,8 +139,8 @@ module Runit
       pid_path = sv_dir(service).join('supervise/pid')
 
       control_t = render_template('runit/control/t.rb.erb',
-        pid_path: pid_path,
-        term_signal: term_signal)
+        pid_path:,
+        term_signal:)
 
       control_t_path = sv_dir(service).join('control/t')
       write_executable_file(control_t_path, control_t)
@@ -153,7 +153,7 @@ module Runit
       service_log_dir = log_dir.join(service.name)
       FileUtils.mkdir_p(service_log_dir)
 
-      log_run = render_template('runit/log/run.sh.erb', service_log_dir: service_log_dir)
+      log_run = render_template('runit/log/run.sh.erb', service_log_dir:)
 
       log_run_path = sv_dir(service).join('log/run')
       write_executable_file(log_run_path, log_run)
@@ -170,10 +170,10 @@ module Runit
       reset_color = GDK::Output.reset_color
 
       log_config = render_template('runit/log/config.erb',
-        log_prefix: log_prefix,
-        log_label: log_label,
-        reset_color: reset_color,
-        service: service)
+        log_prefix:,
+        log_label:,
+        reset_color:,
+        service:)
 
       log_config_path = log_dir.join(service.name, 'config')
       write_readonly_file(log_config_path, log_config)

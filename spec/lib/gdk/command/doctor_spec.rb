@@ -19,7 +19,7 @@ RSpec.describe GDK::Command::Doctor, :hide_output do
     WARNING
   end
 
-  subject { described_class.new(diagnostics: diagnostics) }
+  subject { described_class.new(diagnostics:) }
 
   before do
     allow(Runit).to receive(:start).with('postgresql', quiet: true).and_return(true)

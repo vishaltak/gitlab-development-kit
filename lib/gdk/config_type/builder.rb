@@ -17,7 +17,7 @@ module GDK
       end
 
       def build(parent:)
-        klass.new(parent: parent, builder: self, **kwargs)
+        klass.new(parent:, builder: self, **kwargs)
       end
     end
   end

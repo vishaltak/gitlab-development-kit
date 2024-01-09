@@ -17,7 +17,7 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
   let(:source) { |example| example.example_group.top_level_description }
 
   before do
-    config = GDK::Config.new(yaml: yaml)
+    config = GDK::Config.new(yaml:)
     allow(GDK).to receive(:config).and_return(config)
   end
 

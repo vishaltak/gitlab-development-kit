@@ -4,9 +4,9 @@ RSpec.describe GDK::ConfigType::Path do
   let(:value) { nil }
   let(:key) { 'test_key' }
   let(:yaml) { { key => value } }
-  let(:builder) { GDK::ConfigType::Builder.new(key: key, klass: described_class, **{}, &proc { value }) }
+  let(:builder) { GDK::ConfigType::Builder.new(key:, klass: described_class, **{}, &proc { value }) }
 
-  subject { described_class.new(parent: GDK.config, builder: builder) }
+  subject { described_class.new(parent: GDK.config, builder:) }
 
   before do
     stub_pg_bindir

@@ -10,7 +10,7 @@ module GDK
 
         Class.new(parent.settings_klass).tap do |k|
           k.class_eval(&builder.blk)
-        end.new(key: builder.key, parent: parent, yaml: yaml)
+        end.new(key: builder.key, parent:, yaml:)
       end
     end
   end

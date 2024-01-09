@@ -3,7 +3,7 @@
 RSpec.describe GDK::Postgresql do
   let(:yaml) { {} }
   let(:shellout_mock) { double('Shellout', run: nil, try_run: '', success?: true) } # rubocop:todo RSpec/VerifiedDoubles
-  let(:config) { GDK::Config.new(yaml: yaml) }
+  let(:config) { GDK::Config.new(yaml:) }
   let(:pg_data_dir) { Pathname.new('/home/git/gdk/postgresql/data') }
   let(:pg_version_file) { pg_data_dir.join('PG_VERSION') }
   let(:postgresql_config) { double('GDK::Config', data_dir: pg_data_dir) } # rubocop:todo RSpec/VerifiedDoubles

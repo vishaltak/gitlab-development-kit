@@ -22,7 +22,7 @@ RSpec.describe GDK::Config do
 
   let(:default_config) { described_class.new(yaml: {}) }
 
-  subject(:config) { described_class.new(yaml: yaml) }
+  subject(:config) { described_class.new(yaml:) }
 
   before do
     # Ensure a developer's local gdk.yml does not affect tests

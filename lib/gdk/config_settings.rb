@@ -24,11 +24,11 @@ module GDK
       end
 
       def array(key, merge: false, &blk)
-        def_attribute(key, ConfigType::Array, merge: merge, &blk)
+        def_attribute(key, ConfigType::Array, merge:, &blk)
       end
 
       def hash_setting(key, merge: false, &blk)
-        def_attribute(key, ConfigType::Hash, merge: merge, &blk)
+        def_attribute(key, ConfigType::Hash, merge:, &blk)
       end
 
       def bool(key, &blk)
@@ -41,7 +41,7 @@ module GDK
       end
 
       def port(key, service_name, &blk)
-        def_attribute(key, ConfigType::Port, service_name: service_name, &blk)
+        def_attribute(key, ConfigType::Port, service_name:, &blk)
       end
 
       def path(key, &blk)
@@ -57,7 +57,7 @@ module GDK
       end
 
       def settings_array(key, size:, &blk)
-        def_attribute(key, ConfigType::SettingsArray, size: size, &blk)
+        def_attribute(key, ConfigType::SettingsArray, size:, &blk)
       end
 
       private
@@ -65,7 +65,7 @@ module GDK
       def def_attribute(key, klass, **kwargs, &blk)
         key = key.to_s
         self.attributes ||= {} # Using a hash to ensure uniqueness on key
-        self.attributes[key] = ConfigType::Builder.new(key: key, klass: klass, **kwargs, &blk)
+        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **kwargs, &blk)
 
         define_method(key) do
           build(key).value
@@ -99,7 +99,7 @@ module GDK
         attr_value = attribute.build(parent: self)
         next if user_only && !attr_value.user_defined?
 
-        result[attribute.key] = attr_value.dump!(user_only: user_only)
+        result[attribute.key] = attr_value.dump!(user_only:)
       end
     end
 

@@ -135,12 +135,12 @@ RSpec.describe Shellout do
           expect(GDK::Output).to receive(:error).with("'#{command}' failed. Retrying in 2 secs..", Shellout::ExecuteCommandFailedError).twice
           expect(GDK::Output).to receive(:error).with("'#{command}' failed.", Shellout::ExecuteCommandFailedError)
 
-          subject.execute(display_output: display_output, retry_attempts: 2)
+          subject.execute(display_output:, retry_attempts: 2)
         end
 
         it 'is unsuccessful', :hide_output do
           allow(subject).to receive(:sleep).with(2).twice.and_return(true)
-          subject.execute(display_output: display_output, retry_attempts: 2)
+          subject.execute(display_output:, retry_attempts: 2)
 
           expect(subject.success?).to be_falsey
         end

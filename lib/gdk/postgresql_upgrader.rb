@@ -255,7 +255,7 @@ module GDK
     end
 
     def run!(cmd, chdir)
-      sh = Shellout.new(cmd, chdir: chdir)
+      sh = Shellout.new(cmd, chdir:)
       sh.try_run
 
       return true if sh.success?

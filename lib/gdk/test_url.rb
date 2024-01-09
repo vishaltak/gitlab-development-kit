@@ -31,7 +31,7 @@ module GDK
       message = GDK::Output.notice_format("Waiting until #{uri} is ready..")
       verbose ? GDK::Output.puts(message) : GDK::Output.print(message)
 
-      if check_url(verbose: verbose)
+      if check_url(verbose:)
         GDK::Output.notice("#{uri} is up (#{http_helper.last_response_reason}). Took #{duration} second(s).")
         store_gitlab_commit_sha
         true
@@ -48,7 +48,7 @@ module GDK
       1.upto(max_attempts) do |i|
         GDK::Output.puts("\n> Testing GDK attempt ##{i}..") if display_output
 
-        if check_url_oneshot(verbose: verbose, silent: silent)
+        if check_url_oneshot(verbose:, silent:)
           result = true
           break
         end
@@ -86,7 +86,7 @@ module GDK
     end
 
     def http_helper
-      @http_helper ||= GDK::HTTPHelper.new(uri, read_timeout: read_timeout, open_timeout: open_timeout, cache_response: false)
+      @http_helper ||= GDK::HTTPHelper.new(uri, read_timeout:, open_timeout:, cache_response: false)
     end
 
     def store_gitlab_commit_sha

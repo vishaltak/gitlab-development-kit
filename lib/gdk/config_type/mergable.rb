@@ -8,7 +8,7 @@ module GDK
       def initialize(parent:, builder:, merge: false)
         @merge = merge
 
-        super(parent: parent, builder: builder)
+        super(parent:, builder:)
       end
 
       def read_value

@@ -12,7 +12,7 @@ module GDK
 
       def initialize(parent:, builder:, size:)
         @size = size
-        super(parent: parent, builder: builder)
+        super(parent:, builder:)
       end
 
       def length
@@ -37,12 +37,12 @@ module GDK
             # k.class_exec do
             #   instance_exec(i, &blk)
             # end
-          end.new(key: i, parent: self, yaml: yaml)
+          end.new(key: i, parent: self, yaml:)
         end
       end
 
       def dump!(user_only: false)
-        elems.map { |e| e.dump!(user_only: user_only) }
+        elems.map { |e| e.dump!(user_only:) }
       end
 
       def parse(value)

@@ -58,10 +58,10 @@ RSpec.describe Runit do
             allow(described_class).to receive_messages(data_oriented_service_names: data_service_names, non_data_oriented_service_names: non_data_service_names)
 
             data_service_names.reverse_each do |service_name|
-              expect(described_class).to receive(:sv).with('start', [service_name], quiet: quiet).and_return(true).ordered
+              expect(described_class).to receive(:sv).with('start', [service_name], quiet:).and_return(true).ordered
             end
 
-            expect(described_class).to receive(:sv).with('start', non_data_service_names, quiet: quiet).and_return(true).ordered
+            expect(described_class).to receive(:sv).with('start', non_data_service_names, quiet:).and_return(true).ordered
 
             start
           end
@@ -71,7 +71,7 @@ RSpec.describe Runit do
           let(:services) { data_service_names }
 
           it 'starts the requested services' do
-            expect(described_class).to receive(:sv).with('start', data_service_names, quiet: quiet)
+            expect(described_class).to receive(:sv).with('start', data_service_names, quiet:)
 
             start
           end
@@ -81,7 +81,7 @@ RSpec.describe Runit do
           let(:services) { 'postgresql' }
 
           it 'starts the requested service' do
-            expect(described_class).to receive(:sv).with('start', [services], quiet: quiet)
+            expect(described_class).to receive(:sv).with('start', [services], quiet:)
 
             start
           end
@@ -109,10 +109,10 @@ RSpec.describe Runit do
           allow(described_class).to receive_messages(data_oriented_service_names: data_service_names, non_data_oriented_service_names: non_data_service_names)
           allow(described_class).to receive(:unload_runsvdir!)
 
-          expect(described_class).to receive(:sv).with('force-stop', non_data_service_names, quiet: quiet).and_return(true).ordered
+          expect(described_class).to receive(:sv).with('force-stop', non_data_service_names, quiet:).and_return(true).ordered
 
           data_service_names.each do |service_name|
-            expect(described_class).to receive(:sv).with('force-stop', [service_name], quiet: quiet).and_return(true).ordered
+            expect(described_class).to receive(:sv).with('force-stop', [service_name], quiet:).and_return(true).ordered
           end
 
           stop

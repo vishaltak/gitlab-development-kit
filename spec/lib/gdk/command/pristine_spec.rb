@@ -57,7 +57,7 @@ RSpec.describe GDK::Command::Pristine do
     end
 
     def expect_shellout_command(cmd, chdir)
-      expect(Shellout).to receive(:new).with(cmd, chdir: chdir)
+      expect(Shellout).to receive(:new).with(cmd, chdir:)
     end
   end
 

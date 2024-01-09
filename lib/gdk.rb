@@ -152,7 +152,7 @@ module GDK
   end
 
   def self.make(*targets, env: {})
-    sh = Shellout.new(MAKE, targets, chdir: GDK.root, env: env)
+    sh = Shellout.new(MAKE, targets, chdir: GDK.root, env:)
     sh.stream
     sh
   end

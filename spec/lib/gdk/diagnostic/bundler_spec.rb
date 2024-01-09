@@ -35,7 +35,7 @@ RSpec.describe GDK::Diagnostic::Bundler do
     # rubocop:todo RSpec/VerifiedDoubles
     shellout = double('Shellout', try_run: nil, read_stdout: stdout, read_stderr: stderr, success?: success)
     # rubocop:enable RSpec/VerifiedDoubles
-    expect(Shellout).to receive(:new).with('bundle config get PATH', chdir: chdir).and_return(shellout)
+    expect(Shellout).to receive(:new).with('bundle config get PATH', chdir:).and_return(shellout)
     expect(shellout).to receive(:execute).with(display_output: false).and_return(shellout)
   end
 end

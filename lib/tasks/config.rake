@@ -84,7 +84,7 @@ GDK.config.praefect.__nodes.each do |node|
   file node['config_file'] => ['support/templates/gitaly/gitaly.config.toml.erb'] do |t|
     GDK::Templates::ErbRenderer.new(
       t.source,
-      node: node
+      node:
     ).safe_render!(t.name)
 
     node.__storages.each do |storage|

@@ -117,17 +117,17 @@ module Runit
 
     if services.empty?
       # Redis, PostgresSQL, etc should be started first.
-      data_oriented_service_names.reverse_each.all? { |service_name| sv('start', [service_name], quiet: quiet) }
+      data_oriented_service_names.reverse_each.all? { |service_name| sv('start', [service_name], quiet:) }
       services = non_data_oriented_service_names
     end
 
-    sv('start', services, quiet: quiet)
+    sv('start', services, quiet:)
   end
 
   def self.stop(quiet: false)
     # Redis, PostgresSQL, etc should be stopped last.
-    stop_services(non_data_oriented_service_names, quiet: quiet)
-    data_oriented_service_names.all? { |service_name| stop_services([service_name], quiet: quiet) }
+    stop_services(non_data_oriented_service_names, quiet:)
+    data_oriented_service_names.all? { |service_name| stop_services([service_name], quiet:) }
 
     unload_runsvdir!
   end
@@ -142,7 +142,7 @@ module Runit
       # down: If the service is running, send it the TERM signal, and the CONT signal. If ./run exits, start ./finish if it exists. After it stops, do not restart service.
       # force-stop: Same as down, but wait up to (default) 7 seconds for the service to become down. Then report the status, and on timeout send the service the kill command.
       #
-      stopped = sv('force-stop', services, quiet: quiet)
+      stopped = sv('force-stop', services, quiet:)
       break if stopped
 
       GDK::Output.notice("Retrying stop (#{i + 1}/#{STOP_RETRY_COUNT})")

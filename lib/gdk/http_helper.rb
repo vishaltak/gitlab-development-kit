@@ -18,7 +18,7 @@ module GDK
     end
 
     def up?(codes_to_consider_up: HTTP_SUCCESS_CODES)
-      get_up?(codes_to_consider_up: codes_to_consider_up)
+      get_up?(codes_to_consider_up:)
     end
 
     def head_up?(codes_to_consider_up: HTTP_SUCCESS_CODES)

@@ -122,7 +122,7 @@ RSpec.describe GDK::Backup do
             expect(GDK::Output).not_to receive(:info).with(advise_message)
           end
 
-          expect(described_class.new(fake_source_file_full).backup!(advise: advise)).to be(true)
+          expect(described_class.new(fake_source_file_full).backup!(advise:)).to be(true)
         end
       end
     end

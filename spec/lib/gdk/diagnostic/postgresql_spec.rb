@@ -297,7 +297,7 @@ RSpec.describe GDK::Diagnostic::PostgreSQL do # rubocop:disable RSpec/FilePath
   end
 
   def stub_psql_version(result, success: true)
-    stub_shellout(%W[#{psql} --version], result, success: success)
+    stub_shellout(%W[#{psql} --version], result, success:)
   end
 
   def stub_pg_config_ldflags(result)
