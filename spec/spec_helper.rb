@@ -67,8 +67,8 @@ def utc_now
   TZInfo::Timezone.get('UTC').now
 end
 
-def freeze_time(&blk)
-  travel_to(&blk)
+def freeze_time(&)
+  travel_to(&)
 end
 
 def travel_to(now = utc_now)

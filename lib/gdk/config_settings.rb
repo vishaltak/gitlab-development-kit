@@ -19,8 +19,8 @@ module GDK
     class << self
       attr_accessor :attributes
 
-      def anything(key, &blk)
-        def_attribute(key, ConfigType::Anything, &blk)
+      def anything(key, &)
+        def_attribute(key, ConfigType::Anything, &)
       end
 
       def array(key, merge: false, &blk)
@@ -31,29 +31,29 @@ module GDK
         def_attribute(key, ConfigType::Hash, merge:, &blk)
       end
 
-      def bool(key, &blk)
-        def_attribute(key, ConfigType::Bool, &blk)
+      def bool(key, &)
+        def_attribute(key, ConfigType::Bool, &)
         alias_method "#{key}?", key
       end
 
-      def integer(key, &blk)
-        def_attribute(key, ConfigType::Integer, &blk)
+      def integer(key, &)
+        def_attribute(key, ConfigType::Integer, &)
       end
 
-      def port(key, service_name, &blk)
-        def_attribute(key, ConfigType::Port, service_name:, &blk)
+      def port(key, service_name, &)
+        def_attribute(key, ConfigType::Port, service_name:, &)
       end
 
-      def path(key, &blk)
-        def_attribute(key, ConfigType::Path, &blk)
+      def path(key, &)
+        def_attribute(key, ConfigType::Path, &)
       end
 
-      def string(key, &blk)
-        def_attribute(key, ConfigType::String, &blk)
+      def string(key, &)
+        def_attribute(key, ConfigType::String, &)
       end
 
-      def settings(key, &blk)
-        def_attribute(key, ConfigType::Settings, &blk)
+      def settings(key, &)
+        def_attribute(key, ConfigType::Settings, &)
       end
 
       def settings_array(key, size:, &blk)
@@ -62,10 +62,10 @@ module GDK
 
       private
 
-      def def_attribute(key, klass, **, &blk)
+      def def_attribute(key, klass, **, &)
         key = key.to_s
         self.attributes ||= {} # Using a hash to ensure uniqueness on key
-        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **, &blk)
+        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **, &)
 
         define_method(key) do
           build(key).value
@@ -212,7 +212,7 @@ module GDK
     alias_method :value, :itself
 
     # Provide a shorter form for `config.setting.enabled` as `config.setting?`
-    def method_missing(method_name, *args, &blk)
+    def method_missing(method_name, *args, &)
       enabled = enabled_value(method_name)
 
       return super if enabled.nil?

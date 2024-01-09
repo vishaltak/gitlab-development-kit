@@ -59,8 +59,8 @@ module GDK
       @path ||= uri.path.empty? ? '/' : uri.path
     end
 
-    def response(&blk)
-      resp = http_client.start(&blk)
+    def response(&)
+      resp = http_client.start(&)
 
       @last_response_reason = "#{resp.code} #{resp.message}"
       resp

@@ -62,8 +62,8 @@ class PostgresPortConfig
     end
   end
 
-  def each_config_line(&block)
-    File.open(@config_file) { |file| file.each_line(&block) }
+  def each_config_line(&)
+    File.open(@config_file) { |file| file.each_line(&) }
   end
 
   def refresh!
