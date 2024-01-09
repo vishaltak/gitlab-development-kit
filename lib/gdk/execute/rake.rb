@@ -14,8 +14,8 @@ module GDK
       # Execute rake tasks in the GDK root folder and environment
       #
       # @param [Array] *args any arg that Shellout#execute accepts
-      def execute_in_gdk(**args)
-        @shellout = Shellout.new(rake_command, chdir: GDK.root).execute(**args)
+      def execute_in_gdk(**)
+        @shellout = Shellout.new(rake_command, chdir: GDK.root).execute(**)
 
         self
       end
@@ -23,13 +23,13 @@ module GDK
       # Execute rake tasks in the `gitlab` rails environment
       #
       # @param [Array] *args any arg that Shellout#execute accepts
-      def execute_in_gitlab(**args)
+      def execute_in_gitlab(**)
         if bundler_available?
           Bundler.with_unbundled_env do
-            @shellout = Shellout.new(rake_command, chdir: GDK.config.gitlab.dir).execute(**args)
+            @shellout = Shellout.new(rake_command, chdir: GDK.config.gitlab.dir).execute(**)
           end
         else
-          @shellout = Shellout.new(rake_command, chdir: GDK.config.gitlab.dir).execute(**args)
+          @shellout = Shellout.new(rake_command, chdir: GDK.config.gitlab.dir).execute(**)
         end
 
         self

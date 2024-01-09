@@ -95,10 +95,10 @@ RSpec.describe GDK::Command::Kill, :hide_stdout do
     expect(GDK::Output).to receive(:success).with("All 'runsv' processes have been killed.")
   end
 
-  def stub_runsv_processes_to_kill(*result)
+  def stub_runsv_processes_to_kill(*)
     shellout_double = instance_double(Shellout)
     allow(Shellout).to receive(:new).with('ps -ef | grep "[r]unsv"').and_return(shellout_double)
-    allow(shellout_double).to receive(:try_run).and_return(*result)
+    allow(shellout_double).to receive(:try_run).and_return(*)
   end
 
   def stub_wait

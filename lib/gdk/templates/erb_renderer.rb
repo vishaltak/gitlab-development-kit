@@ -16,9 +16,9 @@ module GDK
       #
       # @param [Pathname] source
       # @param [Hash] **locals variables available inside the template
-      def initialize(source, **locals)
+      def initialize(source, **)
         @source = ensure_pathname(source)
-        @context = ::GDK::Templates::Context.new(**locals)
+        @context = ::GDK::Templates::Context.new(**)
       end
 
       # The safe render take extra steps to avoid unrecoverable changes:

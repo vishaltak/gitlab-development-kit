@@ -62,10 +62,10 @@ module GDK
 
       private
 
-      def def_attribute(key, klass, **kwargs, &blk)
+      def def_attribute(key, klass, **, &blk)
         key = key.to_s
         self.attributes ||= {} # Using a hash to ensure uniqueness on key
-        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **kwargs, &blk)
+        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **, &blk)
 
         define_method(key) do
           build(key).value

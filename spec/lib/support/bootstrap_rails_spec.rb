@@ -144,9 +144,9 @@ RSpec.describe Support::BootstrapRails do
     end
   end
 
-  def stub_rake_tasks(*tasks, success:, **args)
+  def stub_rake_tasks(*, success:, **)
     rake_double = instance_double(GDK::Execute::Rake, success?: success)
-    allow(GDK::Execute::Rake).to receive(:new).with(*tasks).and_return(rake_double)
-    allow(rake_double).to receive(:execute_in_gitlab).with(**args).and_return(rake_double)
+    allow(GDK::Execute::Rake).to receive(:new).with(*).and_return(rake_double)
+    allow(rake_double).to receive(:execute_in_gitlab).with(**).and_return(rake_double)
   end
 end

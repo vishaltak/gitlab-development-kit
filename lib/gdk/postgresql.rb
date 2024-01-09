@@ -72,8 +72,8 @@ module GDK
       Shellout.new(pg_cmd(database: dbname)).tap(&:try_run).success?
     end
 
-    def createdb(*args)
-      cmd = pg_cmd(*args, program: 'createdb')
+    def createdb(*)
+      cmd = pg_cmd(*, program: 'createdb')
 
       Shellout.new(cmd).run
     end

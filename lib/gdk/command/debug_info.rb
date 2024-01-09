@@ -66,8 +66,8 @@ module GDK
         shellout('git rev-parse --short HEAD', chdir: GDK.root)
       end
 
-      def shellout(cmd, **args)
-        Shellout.new(cmd, **args).run
+      def shellout(cmd, **)
+        Shellout.new(cmd, **).run
       rescue StandardError => e
         "Unknown (#{e.message})"
       end

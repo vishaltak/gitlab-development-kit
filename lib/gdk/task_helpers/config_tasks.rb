@@ -24,12 +24,12 @@ module GDK
         @make_tasks = []
       end
 
-      def add_template(**args)
-        @template_tasks << Task.new(**args)
+      def add_template(**)
+        @template_tasks << Task.new(**)
       end
 
-      def add_make_task(**args)
-        @make_tasks << Task.new(**args)
+      def add_make_task(**)
+        @make_tasks << Task.new(**)
       end
 
       def template_tasks

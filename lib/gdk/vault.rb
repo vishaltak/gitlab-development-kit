@@ -63,8 +63,8 @@ module GDK
 
     private
 
-    def shellout(*args)
-      Shellout.new({ 'VAULT_ADDR' => vault_address }, *args).execute
+    def shellout(*)
+      Shellout.new({ 'VAULT_ADDR' => vault_address }, *).execute
     end
 
     def vault_address

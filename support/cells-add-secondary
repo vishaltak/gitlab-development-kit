@@ -218,16 +218,16 @@ class SecondaryAdder
     retval
   end
 
-  def copy_app_secrets_to_secondary(*keys)
-    data = read_app_secrets(primary_gitlab, *keys)
+  def copy_app_secrets_to_secondary(*)
+    data = read_app_secrets(primary_gitlab, *)
     write_app_secrets(secondary_gitlab, data)
   end
 
-  def read_app_secrets(rails_dir, *keys)
+  def read_app_secrets(rails_dir, *)
     secrets_file = rails_dir.join('config', 'secrets.yml')
 
     data = YAML.load_file secrets_file
-    data['development'].slice(*keys)
+    data['development'].slice(*)
   end
 
   def write_app_secrets(rails_dir, data)
