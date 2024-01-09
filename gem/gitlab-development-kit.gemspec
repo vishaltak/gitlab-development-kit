@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.files         = ['lib/gitlab_development_kit.rb']
   spec.executables   = ['gdk']
 
-  spec.required_ruby_version = '>= 3.0.5'
+  spec.required_ruby_version = '>= 3.2.2'
   spec.add_dependency 'gitlab-sdk', '~> 0.2.2'
   spec.add_dependency 'rake', '~> 13.0'
   spec.add_dependency 'sentry-ruby', '~> 5.11'
