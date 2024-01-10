@@ -29,7 +29,7 @@ module GDK
       MSG
 
       def run(args = [])
-        return print_help if (args & ['--help', '-h']).any?
+        return print_help if args.intersect?(['--help', '-h'])
 
         Runit.tail(args)
       end
