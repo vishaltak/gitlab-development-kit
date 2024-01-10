@@ -3,7 +3,6 @@
 require 'fileutils'
 require 'forwardable'
 require 'json'
-require 'set'
 
 require_relative 'postgresql'
 
