@@ -16,17 +16,22 @@ module GDK
       return yield unless telemetry_enabled?
 
       start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      client.identify(GDK.config.telemetry.username)
-      client.track("Start #{command} #{ARGV}", {})
 
       result = yield
 
-      # This is tightly coupled to GDK commands which return false to indicate failure?
-      message = result ? 'Finish' : 'Failed'
       duration = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
-      client.track("#{message} #{command} #{ARGV}", { duration: duration })
+
+      send_telemetry(result, command, { duration: duration })
 
       result
+    end
+
+    def self.send_telemetry(success, command, payload = {})
+      # This is tightly coupled to GDK commands and returns false when the system call exits with a non-zero status.
+      status = success ? 'Finish' : 'Failed'
+
+      client.identify(GDK.config.telemetry.username)
+      client.track("#{status} #{command} #{ARGV}", payload)
     end
 
     def self.client

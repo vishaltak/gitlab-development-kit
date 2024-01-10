@@ -14,7 +14,7 @@ LOG_FILE="execution_times.log"
 MY_IP=$(hostname -I | tr -d '[:space:]')
 GDK_PORT=$(env | grep SERVICE_PORT_GDK_ | awk -F= '{ print $2 }')
 GDK_URL=$(echo "${GL_WORKSPACE_DOMAIN_TEMPLATE}" | sed -r 's/\$\{PORT\}/'${GDK_PORT}'/')
-PROJECT_PATH=${PWD}
+PROJECT_PATH=/projects/gitlab-development-kit
 WORKSPACE_DIR_NAME=/workspace
 
 measure_time() {
@@ -74,7 +74,7 @@ copy_items_from_bootstrap() {
   
   for item in "${interesting_items[@]}"; do
     echo "Moving bootstrapped GDK item: ${item}"
-    [ -e "${item}" ] && mv "${WORKSPACE_DIR_NAME}/gitlab-development-kit/${item}" .
+    [ -e "${WORKSPACE_DIR_NAME}/gitlab-development-kit/${item}" ] && mv "${WORKSPACE_DIR_NAME}/gitlab-development-kit/${item}" .
   done
 }
 

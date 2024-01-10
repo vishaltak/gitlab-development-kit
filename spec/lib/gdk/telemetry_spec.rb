@@ -32,18 +32,16 @@ RSpec.describe GDK::Telemetry do
       end
     end
 
-    it 'tracks the start and finish of the command' do
+    it 'tracks the finish of the command' do
       expect(client).to receive(:identify).with('testuser')
-      expect(client).to receive(:track).with("Start #{command} #{args.inspect}", {})
       expect(client).to receive(:track).with(a_string_starting_with('Finish'), hash_including(:duration))
 
       described_class.with_telemetry(command) { true }
     end
 
     context 'when the block returns false' do
-      it 'tracks the start and failure of the command' do
+      it 'tracks the failure of the command' do
         expect(client).to receive(:identify).with('testuser')
-        expect(client).to receive(:track).with("Start #{command} #{args.inspect}", {})
         expect(client).to receive(:track).with(a_string_starting_with('Failed'), hash_including(:duration))
 
         described_class.with_telemetry(command) { false }

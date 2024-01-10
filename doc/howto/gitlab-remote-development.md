@@ -44,7 +44,7 @@ alt="Workspaces overview page">
    <img src="img/remote-development-select-terminal.png" width="800"
    alt="Remote development New Terminal button in Terminal menu">
 
-1. Run the command `support/gitlab-remote-development/remote-development-gdk-bootstrap.sh`. The GDK link is displayed.
+1. Run the command `support/gitlab-remote-development/setup_workspace.rb`. The GDK link is displayed.
 
    <img src="img/remote-development-bootstrapped-gdk.png" width="800"
    alt="Remote development Terminal window showing workspace URL">
