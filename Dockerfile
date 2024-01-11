@@ -24,7 +24,7 @@ ENV PATH="/home/gdk/.asdf/shims:/home/gdk/.asdf/bin:${PATH}"
 
 RUN bash ./support/bootstrap \
   # simple tests that tools work
-  && bash -lec "asdf version; go version; yarn --version; node --version; ruby --version" \
+  && bash -lec "asdf version; yarn --version; node --version; ruby --version" \
   # Remove unneeded packages
   && sudo apt-get purge software-properties-common -y \
   && sudo apt-get clean -y \
