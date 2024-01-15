@@ -230,7 +230,7 @@ errors. If these errors occur:
 
 ## Use GitLab Enterprise features
 
-For instructions on how to generate a developer license, see [Developer onboarding](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses).
+For instructions on how to generate a developer license, see [Developer onboarding](https://handbook.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses).
 
 The developer license is generated for you to get access to [Premium or Ultimate](https://about.gitlab.com/handbook/marketing/brand-and-product-marketing/product-and-solution-marketing/tiers/) features in your GDK. You must add this license to your GDK instance, not your GitLab.com account.
 
