@@ -6,27 +6,50 @@ module GDK
       TITLE = 'Geo'
 
       def success?
-        @success ||= (geo_database_exists? && geo_enabled?) || (!geo_database_exists? && !geo_enabled?)
+        @success ||= if geo_primary?
+                       geo_enabled?
+                     elsif geo_secondary?
+                       geo_enabled? && geo_database_exists?
+                     else
+                       (!geo_enabled? && !geo_database_exists?)
+                     end
       end
 
       def detail
         return if success?
 
-        <<~MESSAGE
-          #{database_yml_file} contains the geo database settings but
-          geo.enabled is not set to true in your gdk.yml.
+        if geo_primary?
+          <<~MESSAGE
+            GDK could be a Geo primary node. However, geo.enabled is not set to true in your gdk.yml.
+            Update your gdk.yml to set geo.enabled to true.
 
-          Either update your gdk.yml to set geo.enabled to true or remove
-          the geo database settings from #{database_yml_file}
+            #{geo_howto_url}
+          MESSAGE
+        elsif geo_secondary?
+          <<~MESSAGE
+            GDK is a Geo secondary node. #{database_yml_file} contains the geo database settings but
+            geo.enabled is not set to true in your gdk.yml.
 
-          #{geo_howto_url}
-        MESSAGE
+            Either update your gdk.yml to set geo.enabled to true or remove
+            the geo database settings from #{database_yml_file}
+
+            #{geo_howto_url}
+          MESSAGE
+        end
       end
 
       private
 
       def geo_enabled?
         config.geo.enabled
+      end
+
+      def geo_secondary?
+        config.geo.secondary
+      end
+
+      def geo_primary?
+        !geo_secondary?
       end
 
       def database_yml_file
