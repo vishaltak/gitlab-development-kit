@@ -13,6 +13,7 @@ module GDK
     autoload :Gitaly, 'gdk/diagnostic/gitaly'
     autoload :Gitlab, 'gdk/diagnostic/gitlab'
     autoload :Golang, 'gdk/diagnostic/golang'
+    autoload :Hostname, 'gdk/diagnostic/hostname'
     autoload :MacPorts, 'gdk/diagnostic/mac_ports'
     autoload :PGUser, 'gdk/diagnostic/pguser'
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
@@ -49,6 +50,7 @@ module GDK
         StaleServices
         Chromedriver
         FileWatches
+        Hostname
       ]
 
       klasses.map do |const|
