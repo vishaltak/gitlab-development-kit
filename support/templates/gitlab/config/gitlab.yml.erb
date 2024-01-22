@@ -705,6 +705,9 @@ production: &base
     # arguments, followed by optional 'args' which can be either a hash or an array.
     # Documentation for this is available at http://doc.gitlab.com/ce/integration/omniauth.html
     providers:
+      # - { name: 'alicloud',
+      #     app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET' }
       # - { name: 'github',
       #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET',
@@ -712,6 +715,9 @@ production: &base
       #     verify_ssl: true,
       #     args: { scope: 'user:email' } }
       # - { name: 'bitbucket',
+      #     app_id: 'YOUR_APP_ID',
+      #     app_secret: 'YOUR_APP_SECRET' }
+      # - { name: 'dingtalk',
       #     app_id: 'YOUR_APP_ID',
       #     app_secret: 'YOUR_APP_SECRET' }
       # - { name: 'gitlab',
@@ -751,6 +757,8 @@ production: &base
       #             name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
       #           } }
       #
+      # - { name: 'group_saml' }
+      #
       # - { name: 'crowd',
       #     args: {
       #       crowd_server_url: 'CROWD SERVER URL',
@@ -761,7 +769,8 @@ production: &base
       #     args: {
       #       client_id: 'YOUR_AUTH0_CLIENT_ID',
       #       client_secret: 'YOUR_AUTH0_CLIENT_SECRET',
-      #       namespace: 'YOUR_AUTH0_DOMAIN' } }
+      #       domain: 'YOUR_AUTH0_DOMAIN',
+      #       scope: 'openid profile email' } }
 
   # Shared file storage settings
   shared:
@@ -1107,6 +1116,9 @@ test:
     external_providers: []
 
     providers:
+      - { name: 'alicloud',
+          app_id: 'YOUR_APP_ID',
+          app_secret: 'YOUR_APP_SECRET' }
       - { name: 'github',
           app_id: 'YOUR_APP_ID',
           app_secret: 'YOUR_APP_SECRET',
@@ -1114,6 +1126,9 @@ test:
           verify_ssl: false,
           args: { scope: 'user:email' } }
       - { name: 'bitbucket',
+          app_id: 'YOUR_APP_ID',
+          app_secret: 'YOUR_APP_SECRET' }
+      - { name: 'dingtalk',
           app_id: 'YOUR_APP_ID',
           app_secret: 'YOUR_APP_SECRET' }
       - { name: 'gitlab',
@@ -1145,7 +1160,17 @@ test:
           args: {
             client_id: 'YOUR_AUTH0_CLIENT_ID',
             client_secret: 'YOUR_AUTH0_CLIENT_SECRET',
-            namespace: 'YOUR_AUTH0_DOMAIN' } }
+            domain: 'YOUR_AUTH0_DOMAIN',
+            scope: 'openid profile email' } }
+      - { name: 'salesforce',
+          app_id: 'YOUR_CLIENT_ID',
+          app_secret: 'YOUR_CLIENT_SECRET'
+        }
+      - { name: 'atlassian_oauth2',
+          app_id: 'YOUR_CLIENT_ID',
+          app_secret: 'YOUR_CLIENT_SECRET',
+          args: { scope: 'offline_access read:jira-user read:jira-work', prompt: 'consent' }
+      }
   ldap:
     enabled: false
     servers:
