@@ -22,7 +22,7 @@ describe SetupWorkspace do
     allow(GDK::Telemetry).to receive(:send_telemetry)
   end
 
-  describe '#run' do
+  describe '#run', :hide_output do
     context 'when telemetry is allowed' do
       it 'executes the bootstrap script and sends telemetry' do
         expect(workspace).to receive(:execute_bootstrap)

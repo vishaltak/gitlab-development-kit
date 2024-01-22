@@ -139,7 +139,7 @@ RSpec.describe GDK::Execute::Rake do
       end
     end
 
-    context 'with a failed rake execution' do
+    context 'with a failed rake execution', :hide_output do
       subject(:rake) { described_class.new('--invalid') } # valid command that has no side-effect
 
       it 'returns false when a previous execution failed' do
