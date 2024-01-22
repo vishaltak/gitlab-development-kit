@@ -74,3 +74,7 @@ sshd:
   # SSH host key files.
   host_key_files:<%- config.sshd.host_keys.each do |host_key| %>
     - "<%= host_key %>"<%- end %>
+
+lfs:
+  # See https://gitlab.com/groups/gitlab-org/-/epics/11872 for context
+  pure_ssh_protocol: <%= config.gitlab_shell.lfs.pure_ssh_protocol_enabled %>
