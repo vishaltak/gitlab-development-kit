@@ -28,7 +28,7 @@ class SetupWorkspace
   end
 
   def allow_sending_telemetry?
-    print 'Would you like to send the duration data? (yes/no): '
+    GDK::Output.print('Would you like to send the duration data? (yes/no): ')
     $stdin.gets&.chomp == 'yes'
   end
 
