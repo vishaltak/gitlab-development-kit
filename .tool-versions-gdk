@@ -31,7 +31,7 @@ minio 2022-07-15T03-44-22Z
 postgres 14.9 13.12
 
 # Ruby version must be set
-ruby 3.2.2
+ruby 3.2.3
 
 # For linting shell scripts
 shellcheck 0.9.0
