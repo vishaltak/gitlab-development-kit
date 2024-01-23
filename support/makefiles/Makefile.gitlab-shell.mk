@@ -52,6 +52,11 @@ gitlab-shell/.gitlab_shell_secret:
 .PHONY: gitlab-shell-deps
 gitlab-shell-deps: gitlab-shell-asdf-install .gitlab-shell-bundle
 
+# The temporary .tool-versions-gitlab-shell file is used only to avoid installing tools which are
+# defined in ancestor directory .tool-versions files. If we don't mind if this command installs
+# those other tools, then for simplicity, we should remove the usage of this temporary file and
+# remove usage of ASDF_DEFAULT_TOOL_VERSIONS_FILENAME. In that case, asdf will properly install the
+# versions needed by gitlab-shell.
 .PHONY: gitlab-shell-asdf-install
 gitlab-shell-asdf-install:
 ifeq ($(asdf_opt_out),false)
@@ -59,7 +64,9 @@ ifeq ($(asdf_opt_out),false)
 	@echo "${DIVIDER}"
 	@echo "Installing asdf tools from ${gitlab_shell_dir}/.tool-versions"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_shell_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitlab_shell_dir}/.tool-versions" asdf install
+	$(Q)cd ${gitlab_shell_dir} && cp .tool-versions .tool-versions-gitlab-shell
+	$(Q)cd ${gitlab_shell_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME=".tool-versions-gitlab-shell" asdf install
+	$(Q)cd ${gitlab_shell_dir} && rm .tool-versions-gitlab-shell
 	$(Q)cd ${gitlab_shell_dir} && asdf reshim
 else
 	@true
