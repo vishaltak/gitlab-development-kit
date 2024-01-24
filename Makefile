@@ -12,6 +12,9 @@ RAKE := $(shell command -v rake 2> /dev/null)
 BUNDLE := $(shell command -v bundle 2> /dev/null)
 YARN := $(shell command -v yarn 2> /dev/null)
 
+# Disable version detection from go.mod and go.work to define Golang version in .tool-versions
+export ASDF_GOLANG_MOD_VERSION_ENABLED = false
+
 # Speed up Go module downloads
 export GOPROXY ?= https://proxy.golang.org|https://proxy.golang.org
 
