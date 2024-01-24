@@ -96,11 +96,11 @@ module Asdf
     end
 
     def work_to_do?(output: true)
-      if !asdf_data_installs_dir.exist?
-        GDK::Output.info("Skipping because '#{asdf_data_installs_dir}' does not exist.") if output
-        return false
-      elsif asdf_opt_out?
+      if asdf_opt_out?
         GDK::Output.info('Skipping because asdf.opt_out is set to true.') if output
+        return false
+      elsif !asdf_data_installs_dir.exist?
+        GDK::Output.info("Skipping because '#{asdf_data_installs_dir}' does not exist.") if output
         return false
       elsif unnecessary_installed_versions_of_software.empty?
         GDK::Output.info('No unnecessary asdf software to uninstall.') if output
