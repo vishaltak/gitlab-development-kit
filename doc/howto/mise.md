@@ -56,7 +56,7 @@ installed in):
 1. Install the current dependencies in the `mise` cache:
 
    ```shell
-   (cd $GDK_ROOT/gitlab && mise install --install-missing)
+   (cd $GDK_ROOT/gitlab && mise install)
    ```
 
 1. Reconfigure and update the GDK. This time, `mise` is used to install the dependencies and `asdf` is not required
