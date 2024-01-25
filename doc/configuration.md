@@ -97,7 +97,7 @@ Here are a few settings worth mentioning:
 | `relative_url_root`              | `/`                   | When you want to test GitLab being available on a different path than `/`. For example, `/gitlab`. |
 | `object_store.enabled`           | `false`               | Set this to `true` to enable Object Storage with MinIO.                                    |
 | `object_store.consolidated_form` | `false`               | Set this to `true` to use the [consolidated object storage configuration](https://docs.gitlab.com/ee/administration/object_storage.html#consolidated-object-storage-configuration). Required for Microsoft Azure. |
-| `object_store.connection`        | See `gdk.example.yml` | Specify the [object storage connection settings](https://docs.gitlab.com/ee/administration/object_storage.html#connection-settings).
+| `object_store.connection`        | See `gdk.example.yml` | Specify the [object storage connection settings](https://docs.gitlab.com/ee/administration/object_storage.html#connection-settings). |
 | `registry.enabled`               | `false`               | Set this to `true` to enable container registry.                                           |
 | `geo.enabled`                    | `false`               | Set this to `true` to enable Geo (for now it just enables `postgresql-geo` and `geo-cursor` services). |
 | `gitlab.rails.puma.workers`      | `2`                   | Set this to `0` to prevent Puma (webserver) running in a [Clustered mode](https://github.com/puma/puma/blob/master/docs/architecture.md). Running in Single mode provides significant memory savings if you work within a [memory-constrained environment](https://gitlab.com/groups/gitlab-org/-/epics/5303). |
@@ -298,7 +298,7 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/ruby.md#truncate-
 #### Rails background jobs (Sidekiq)
 
 | Setting | Default | Description l|
-|---------|---------|-------------
+|---------|---------|------------- |
 | `gitlab.rails_background_jobs.verbose` | `false`  | Set this to `true` to increase the level of logging Sidekiq produces. |
 | `gitlab.rails_background_jobs.timeout` | `10`  | Set this to the number of seconds to ask Sidekiq to wait before forcibly terminating. |
 
