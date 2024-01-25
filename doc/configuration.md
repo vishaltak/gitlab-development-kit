@@ -297,8 +297,8 @@ or [truncating the Rails logs in `gitlab/log`](troubleshooting/ruby.md#truncate-
 
 #### Rails background jobs (Sidekiq)
 
-| Setting | Default | Description l|
-|---------|---------|------------- |
+| Setting | Default | Description |
+|---------|---------|-------------|
 | `gitlab.rails_background_jobs.verbose` | `false`  | Set this to `true` to increase the level of logging Sidekiq produces. |
 | `gitlab.rails_background_jobs.timeout` | `10`  | Set this to the number of seconds to ask Sidekiq to wait before forcibly terminating. |
 
