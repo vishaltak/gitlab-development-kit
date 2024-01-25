@@ -265,6 +265,10 @@ module GDK
       bool(:skip_setup) { false }
       bool(:auto_update) { true }
       path(:dir) { config.gdk_root.join('gitlab-shell') }
+      settings :lfs do
+        # https://gitlab.com/groups/gitlab-org/-/epics/11872
+        bool(:pure_ssh_protocol_enabled) { false }
+      end
     end
 
     settings :gitlab_ui do

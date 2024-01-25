@@ -177,6 +177,8 @@ gitlab_runner:
 gitlab_shell:
   auto_update: true
   dir: "/home/git/gdk/gitlab-shell"
+  lfs:
+    pure_ssh_protocol_enabled: false
   skip_setup: false
 gitlab_spamcheck:
   auto_update: true

@@ -3198,6 +3198,16 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'gitlab_shell' do
+    context 'lfs' do
+      describe '#pure_ssh_protocol_enabled' do
+        it 'defaults to false' do
+          expect(config.gitlab_shell.lfs.pure_ssh_protocol_enabled).to be(false)
+        end
+      end
+    end
+  end
+
   def create_dummy_executable(name)
     path = File.join(tmp_path, name)
     FileUtils.touch(path)

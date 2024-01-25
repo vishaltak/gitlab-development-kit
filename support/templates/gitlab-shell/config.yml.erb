@@ -28,7 +28,6 @@ http_settings:
 #  ca_file: /etc/ssl/cert.pem
   <%- end -%>
 
-
 # File used as authorized_keys for gitlab user
 auth_file: "<%= config.sshd.authorized_keys_file %>"
 
@@ -73,6 +72,9 @@ sshd:
   # Maximum number of concurrent sessions allowed on a single SSH connection. Defaults to 10.
   concurrent_sessions_limit: 10
   # SSH host key files.
-  host_key_files: <% config.sshd.host_keys.each do |host_key| %>
-    - "<%= host_key %>"
-  <% end %>
+  host_key_files:<%- config.sshd.host_keys.each do |host_key| %>
+    - "<%= host_key %>"<%- end %>
+
+lfs:
+  # See https://gitlab.com/groups/gitlab-org/-/epics/11872 for context
+  pure_ssh_protocol: <%= config.gitlab_shell.lfs.pure_ssh_protocol_enabled %>
