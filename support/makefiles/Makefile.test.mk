@@ -1,4 +1,4 @@
-MARKDOWNLINT := $(shell command -v markdownlint 2> /dev/null)
+MARKDOWNLINT := $(shell command -v markdownlint-cli2 2> /dev/null)
 
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
 
@@ -50,8 +50,8 @@ endif
 
 .PHONY: markdownlint
 markdownlint: yarn-install
-	@echo -n "MarkdownLint: "
-	@${YARN} run --silent markdownlint-cli2 --config .markdownlint.yml 'doc/**/*.md' 'README.md' && echo "OK"
+	@echo -n "Markdownlint: "
+	@${YARN} run --silent markdownlint && echo "OK"
 
 # Checks:
 #   - Internal links.
