@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+require 'gitlab-sdk'
+
 autoload :FileUtils, 'fileutils'
-autoload :GitlabSDK, 'gitlab-sdk'
 autoload :Logger, 'logger'
 autoload :Sentry, 'sentry-ruby'
 autoload :SnowplowTracker, 'snowplow-tracker'
