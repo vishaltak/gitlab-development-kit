@@ -1,0 +1,5 @@
+curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/gdk.local_rsa" -o ~/.ssh/gdk.local_rsa
+chmod 600 ~/.ssh/gdk.local_rsa
+echo >> ~/.ssh/config
+echo "Host gdk.local" >> ~/.ssh/config
+echo "IdentityFile ~/.ssh/gdk.local_rsa" >> ~/.ssh/config
