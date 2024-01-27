@@ -27,9 +27,17 @@ You can install GDK using the following methods. Some are:
 
 The following installation methods are supported, actively maintained, and tested:
 
-- [One-line installation](doc/index.md#one-line-installation)
-- [Simple installation](doc/index.md#simple-installation) on your local system. Requires at least
-  8 GB RAM and 12 GB disk space. Available for [supported platforms](#supported-platforms).
+#### Local
+
+Requires at least 16 GB RAM and 15 GB disk space.
+Available for [supported platforms](#supported-platforms).
+
+- [One-line installation](doc/index.md#one-line-installation).
+- [Simple installation](doc/index.md#simple-installation).
+- [GDK-in-a-box](doc/gdk_in_a_box.md). Requires at least 30 GB disk space.
+
+#### Remote
+
 - [GitLab remote development workspaces](doc/howto/gitlab-remote-development.md).
 - [Gitpod](doc/howto/gitpod.md).
 
