@@ -8,6 +8,7 @@ module GDK
     autoload :Chromedriver, 'gdk/diagnostic/chromedriver'
     autoload :Configuration, 'gdk/diagnostic/configuration'
     autoload :Dependencies, 'gdk/diagnostic/dependencies'
+    autoload :Environment, 'gdk/diagnostic/environment'
     autoload :FileWatches, 'gdk/diagnostic/file_watches'
     autoload :Geo, 'gdk/diagnostic/geo'
     autoload :Gitaly, 'gdk/diagnostic/gitaly'
@@ -29,6 +30,7 @@ module GDK
 
     def self.all
       klasses = %i[
+        Environment
         RvmAndAsdf
         MacPorts
         RubyGems
