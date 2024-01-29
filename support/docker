@@ -23,15 +23,20 @@ case "$1" in
     ci-build-if-necessary)
         dependency_sha=$(cat support/bootstrap support/bootstrap-common.sh Dockerfile packages_ubuntu.txt .tool-versions | sha256sum | cut -d ' ' -f 1)
         cache_image="${DEFAULT_IMAGE_WITHOUT_TAG}:${dependency_sha}"
-        destinations="--tag ${cache_image} --tag ${DEFAULT_BRANCH_IMAGE}"
+        default_destinations="--tag ${cache_image} --tag ${DEFAULT_BRANCH_IMAGE}"
+        main_branch_destinations="--tag ${bootstrapped_image}/main:${CI_COMMIT_SHA} --tag ${bootstrapped_image}/main:latest"
         bootstrapped_image="${CI_REGISTRY_IMAGE}/asdf-bootstrapped-verify"
 
+        # We push verify image from main branch to separate path and tag with commit sha so we are able to properly
+        #   pin image versions in 'gitlab' canonical project
+        # Separate path allows dependency updaters to not be confused by branch specific tags
         if [ "$DEFAULT_BRANCH_IMAGE" == "${bootstrapped_image}:main" ]; then
-          # We push verify image from main branch to separate path and tag with commit sha so we are able to properly
-          #   pin image versions in 'gitlab' canonical project
-          # Separate path allows to create specific cleanup policy as well as allow dependency updaters to not be confused
-          #   by branch specific tags
-          destinations="${destinations} --tag ${bootstrapped_image}/main:${CI_COMMIT_SHA} --tag ${bootstrapped_image}/main:latest"
+          # Re-tag image with git sha on no-op changes so that each commit sha in default branch has corresponding tag
+          if [ "$RETAG_LATEST_RELEASE" == "true" ]; then
+            destinations="${main_branch_destinations}"
+          else
+            destinations="${default_destinations} ${main_branch_destinations}"
+          fi
         fi
 
         # We use the cache from the image with the same shasum first.
@@ -44,7 +49,7 @@ case "$1" in
           --cache-from="${cache_image}" \
           --cache-from="${DEFAULT_BRANCH_IMAGE}" \
           --cache-from="${DEFAULT_MAIN_IMAGE}" \
-          ${destinations} \
+          ${destinations:-$default_destinations} \
           --push \
           .
         ;;
