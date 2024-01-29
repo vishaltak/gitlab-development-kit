@@ -50,13 +50,25 @@ module GDK
       end
 
       def gem_loads_ok?(name)
-        exec_cmd("#{bundle_exec_cmd} ruby -r #{name} -e 'nil'")
+        command = -> { exec_cmd("#{bundle_exec_cmd} ruby -r #{name} -e 'nil'") }
+
+        if bundler_available?
+          ::Bundler.with_unbundled_env do
+            command.call
+          end
+        else
+          command.call
+        end
       end
 
       def exec_cmd(cmd)
         GDK::Output.debug("cmd=[#{cmd}]")
 
         Shellout.new(cmd, chdir: config.gitlab.dir.to_s).execute(display_output: false, display_error: false).success?
+      end
+
+      def bundler_available?
+        defined? ::Bundler
       end
 
       def gitlab_error_message
