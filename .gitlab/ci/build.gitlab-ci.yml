@@ -7,7 +7,7 @@
 
 release-image:
   extends:
-    - .rules:code-changes
+    - .rules:docs-code-changes
     - .build-job
   script:
     - ./support/docker ci-build-if-necessary
