@@ -49,9 +49,15 @@
   - "gitlab-openldap/**/*"
   - "vagrant/assets/**/*"
 
+# .docs-changes
 .docs-code-changes: &docs-code-changes
+  # .docs-changes
   - "**/*.{md}"
   - "{doc}/**/*"
+  - ".markdownlint.yml"
+  - "package.json"
+  - "yarn.lock"
+  # .code-changes
   - "**/*.{rb,erb,sh,yml,example,types}"
   - "{lib,gem,bin}/**/*"
   - "{spec,support}/**/*"
@@ -62,6 +68,8 @@
   - ".gitlab-ci.yml"
   - ".gitlab/ci/**/*"
   - "Gemfile{,.lock}"
+  - "Brewfile"
+  - "Makefile"
   - "Rakefile"
   - "Dockerfile"
   - "**/*/Dockerfile"
