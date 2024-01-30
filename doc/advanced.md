@@ -76,15 +76,15 @@ LTS release (16.04, 18.04, 20.04, 22.04) or higher, and Debian:
 
 1. Install NodeJS and Yarn.
    1. Check the required versions of NodeJS in the [`.tool-versions`](../.tool-versions) file.
-   1. Install any of the required versions of NodeJS [using one of the installation methods](https://nodejs.org/en/download/package-manager/), for example via the `nodesource` repo or `nvm`. The following example uses `nvm`:
+   1. Install any of the required versions of NodeJS [using one of the installation methods](https://nodejs.org/en/download/package-manager/), for example by using the `nodesource` repository or `nvm`. The following example uses `nvm`:
       1. Install [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating). This should automatically configure it for your shell as well.
-      1. Install the required version via `nvm`:
+      1. Install the required version by using `nvm`:
 
          ```shell
          nvm install <NODEJS_VERSION>
          ```
 
-   1. Install Yarn via `npm`:
+   1. Install Yarn by using `npm`:
 
       ```shell
       npm install --global yarn
