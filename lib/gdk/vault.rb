@@ -63,9 +63,12 @@ module GDK
 
     private
 
+    # rubocop: disable Style/ArgumentsForwarding
+    # See https://gitlab.com/gitlab-org/gitlab/-/issues/433045
     def shellout(*)
-      Shellout.new({ 'VAULT_ADDR' => vault_address }, *).execute
+      Shellout.new({ 'VAULT_ADDR' => vault_address }, *args).execute
     end
+    # rubocop: enable Style/ArgumentsForwarding
 
     def vault_address
       "http://#{GDK.config.vault.listen_address}:8200"

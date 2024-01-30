@@ -62,16 +62,19 @@ module GDK
 
       private
 
-      def def_attribute(key, klass, **, &)
+      # rubocop: disable Style/ArgumentsForwarding
+      # See https://gitlab.com/gitlab-org/gitlab/-/issues/433045
+      def def_attribute(key, klass, **kwargs, &blk)
         key = key.to_s
         self.attributes ||= {} # Using a hash to ensure uniqueness on key
-        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **, &)
+        self.attributes[key] = ConfigType::Builder.new(key:, klass:, **kwargs, &blk)
 
         define_method(key) do
           build(key).value
         end
       end
     end
+    # rubocop: enable Style/ArgumentsForwarding
 
     def initialize(key: nil, parent: nil, yaml: nil)
       @key = key

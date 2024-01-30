@@ -24,13 +24,16 @@ module GDK
         @make_tasks = []
       end
 
-      def add_template(**)
-        @template_tasks << Task.new(**)
+      # rubocop: disable Style/ArgumentsForwarding
+      # See https://gitlab.com/gitlab-org/gitlab/-/issues/433045
+      def add_template(**args)
+        @template_tasks << Task.new(**args)
       end
 
-      def add_make_task(**)
-        @make_tasks << Task.new(**)
+      def add_make_task(**args)
+        @make_tasks << Task.new(**args)
       end
+      # rubocop: enable Style/ArgumentsForwarding
 
       def template_tasks
         @template_tasks.clone
