@@ -90,7 +90,7 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     language_server-protocol (3.17.0.3)
-    lefthook (1.5.7)
+    lefthook (1.6.1)
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.21.1)
@@ -207,7 +207,7 @@ DEPENDENCIES
   gitlab-sdk (~> 0.3.0)
   gitlab-styles (~> 11.0.0)
   irb (~> 1.11.1)
-  lefthook (~> 1.5.7)
+  lefthook (~> 1.6.1)
   pry-byebug
   rake (~> 13.1.0)
   resolv (~> 0.3.0)
@@ -220,4 +220,4 @@ DEPENDENCIES
   yard (~> 0.9.34)
 
 BUNDLED WITH
-   2.5.4
+   2.5.5
