@@ -3,12 +3,9 @@
 CDPATH=''
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")/.." || exit ; pwd -P)"
 
-CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
-CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
-DEFAULT_GEMS_PATH="${HOME}/.default-gems"
-
+# Other version managers, that rely on asdf, like `mise` also use
+# this environment variable: https://github.com/code-lever/asdf-rust
 export ASDF_RUST_PROFILE=minimal
-export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
 
 CPU_TYPE=$(arch -arm64 uname -m 2> /dev/null || uname -m)
 
@@ -85,12 +82,13 @@ asdf_configure() {
   if ! asdf_enabled; then
     return 0
   fi
+  local default_gems_path="${HOME}/.default-gems"
 
   gems=(gitlab-development-kit bundler)
 
   for gem in "${gems[@]}"
   do
-    if ! echo_if_unsuccessful ensure_line_in_file "$gem" "${DEFAULT_GEMS_PATH}"; then
+    if ! echo_if_unsuccessful ensure_line_in_file "$gem" "${default_gems_path}"; then
       return 1
     fi
   done
@@ -106,7 +104,8 @@ asdf_install_update_plugins() {
 
   # Install Node.js' OpenPGP key
   if [[ ! -f "${HOME}/.gnupg/asdf-nodejs.gpg" ]]; then
-    bash -c "${CURRENT_ASDF_DATA_DIR}/plugins/nodejs/bin/import-release-team-keyring" > /dev/null 2>&1
+    local current_asdf_data_dir="${ASDF_DATA_DIR:-${HOME}/.asdf}"
+    bash -c "${current_asdf_data_dir}/plugins/nodejs/bin/import-release-team-keyring" > /dev/null 2>&1
   fi
 
   return 0
@@ -588,3 +587,11 @@ setup_platform_darwin() {
     fi
   fi
 }
+
+# Set some asdf environment variables
+# TODO: We should double-check if this change to $PATH is still needed
+if ! asdf_opt_out ; then
+  CURRENT_ASDF_DIR="${ASDF_DIR:-${HOME}/.asdf}"
+  CURRENT_ASDF_DATA_DIR="${ASDF_DATA_DIR:-${HOME}/.asdf}"
+  export PATH="${CURRENT_ASDF_DIR}/bin:${CURRENT_ASDF_DATA_DIR}/shims:${PATH}"
+fi
