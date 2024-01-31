@@ -7,10 +7,9 @@ using alternative methods.
 
 Instead of installing GDK locally, you can install GDK to other platforms.
 
-### Vagrant install
+### GDK in a box
 
-You can install GDK under a
-[virtualized environment using Vagrant with Virtualbox or Docker](howto/vagrant.md).
+You can install GDK [in a Virtual Machine](./gdk_in_a_box.md).
 
 ### minikube install
 

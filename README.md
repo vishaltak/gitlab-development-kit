@@ -63,7 +63,6 @@ supported installation methods:
 
 - [Advanced installation](doc/advanced.md) on your local system. Requires at least
   8 GB RAM and 12 GB disk space.
-- [Vagrant](doc/howto/vagrant.md).
 - [minikube](doc/howto/kubernetes/minikube.md).
 
 ## Post-installation
