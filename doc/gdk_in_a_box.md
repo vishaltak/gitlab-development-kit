@@ -19,18 +19,29 @@ to instantly start developing.
 
 ## Standard setup
 
+Take a look at the [YouTube demo of launching GDK-in-a-box](https://go.gitlab.com/b54mHb).
+
 NOTE:
 
 - You might need to modify the system configuration (CPU cores and RAM).
 - You must have the VSCode **Remote - SSH** extension installed.
+- GitLab team members: GDK-in-a-box is configured to use the [community forks](https://gitlab.com/gitlab-community/meta).
+  Please consider reading about them and using them moving forward.
+  The docs detail [how to checkout branches from different remotes](https://gitlab.com/gitlab-community/meta#checkout-a-branch-from-a-different-remote),
+  but as a last resort you may reconfigure your remote to the canonical project.
 
 1. Start the VM (minimise the console because you won't need it).
-1. Import the SSH key: `curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/setup-ssh-key" | bash`.
-1. Connect VSCode (Remote-SSH: Connect to host): `debian@gdk.local`.
-1. Open `/home/gitlab-development-kit/gitlab`.
+1. Connect VSCode to the VM:
+   - Select **Remote-SSH: Connect to host** from the command palette
+   - Enter the SSH host: `debian@gdk.local`.
+1. A new VSCode window will open.
+   Close the old window to avoid confusion.
+1. In VSCode, select **Terminal > New terminal** and configure Git by running: `curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/setup-git" | bash`.
+   - Enter your name and e-mail address when prompted.
+   - Add the displayed [SSH key to your profile](https://gitlab.com/-/profile/keys).
+1. In VSCode, select **File > Open folder**, and navigate to: `/home/gitlab-development-kit/gitlab`.
 1. Open GitLab in your browser: [http://gdk.local:3000](http://gdk.local:3000).
 1. Login to GitLab with `root/5iveL!fe`.
-1. Configure Git with your name, e-mail and OAuth token/SSH key.
 
 ## Building GDK-in-a-box
 
