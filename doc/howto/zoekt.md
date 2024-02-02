@@ -32,7 +32,8 @@ seed by default), run the following from the Rails console:
 ::Feature.enable(:search_code_with_zoekt)
 zoekt_node = ::Search::Zoekt::Node.find_or_create_by!(index_base_url: 'http://127.0.0.1:6080/', search_base_url: 'http://127.0.0.1:6090/', uuid: '00000000-0000-0000-0000-000000000000')
 namespace = Namespace.find_by_full_path("flightjs") # Some namespace you want to enable
-::Zoekt::IndexedNamespace.find_or_create_by!(node: zoekt_node, namespace: namespace.root_ancestor)
+enabled_namespace = Search::Zoekt::EnabledNamespace.find_or_create_by(namespace: namespace)
+zoekt_node.indices.create!(zoekt_enabled_namespace_id: enabled_namespace.id, namespace_id: namespace.id, state: :ready)
 ```
 
 Now, if you create a new public project in the `flightjs` namespace or update
