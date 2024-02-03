@@ -26,8 +26,12 @@ install_runner() {
 }
 
 configure_user() {
-  useradd "${WORKSPACE_USER}" -u 5001 -m -s /bin/bash
+  useradd -l -u 5001 -G sudo -m -d "/home/${WORKSPACE_USER}" -s /bin/bash "${WORKSPACE_USER}"
+  passwd -d "${WORKSPACE_USER}"
   echo "${WORKSPACE_USER} ALL=(ALL:ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${WORKSPACE_USER}_sudoers"
+  mkdir -p "/home/${WORKSPACE_USER}"
+  chgrp -R 0 /home
+  chmod -R g=u /etc/passwd /etc/group /home
 }
 
 cleanup() {
