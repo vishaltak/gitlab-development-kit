@@ -2,8 +2,16 @@ gitlab_dir = ${gitlab_development_root}/gitlab
 gitlab_rake_cmd = $(in_gitlab) ${support_bundle_exec} rake
 gitlab_git_cmd = git -C $(gitlab_dir)
 in_gitlab = cd $(gitlab_dir) &&
-bundle_without_production_cmd = ${BUNDLE} config --local set without 'production'
 default_branch ?= $(if $(gitlab_default_branch),$(gitlab_default_branch),master)
+
+ASDF_RUBY_VERSION := $(shell grep -E '^ruby ' "${gitlab_dir}/.tool-versions" | awk '{ print $$2 }')
+RUBY_BIN_PATH := ${HOME}/.asdf/installs/ruby/${ASDF_RUBY_VERSION}/bin
+
+ifeq ($(asdf_opt_out),false)
+	ifeq (,$(findstring ${RUBY_BIN_PATH},${PATH}))
+		export PATH := ${RUBY_BIN_PATH}:${PATH}
+	endif
+endif
 
 gitlab-setup: gitlab/.git gitlab-config gitlab-asdf-install .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
 
@@ -87,7 +95,6 @@ gitlab-bundle-prepare:
 	@echo "${DIVIDER}"
 	@echo "Setting up Ruby bundler"
 	@echo "${DIVIDER}"
-	$(Q)$(in_gitlab) $(bundle_without_production_cmd) ${QQ}
 	${Q}. ./support/bootstrap-common.sh ; configure_ruby_bundler_for_gitlab
 
 .gitlab-bundle: gitlab-bundle-prepare

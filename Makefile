@@ -126,15 +126,15 @@ install: start-task all post-install-task start
 # Pull `gitlab` directory first, since its dependencies are linked from there.
 .PHONY: update
 update: start-task \
+gitlab/.git/pull \
+gitlab-update \
 platform-update \
 preflight-checks \
 preflight-update-checks \
 gitaly-update \
 ensure-databases-setup \
-gitlab/.git/pull \
 gitlab-shell-update \
 unlock-dependency-installers \
-gitlab-update \
 gitlab-docs-update \
 gitlab-elasticsearch-indexer-update \
 gitlab-k8s-agent-update \
