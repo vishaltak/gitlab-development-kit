@@ -240,6 +240,8 @@ configure_ruby_bundler_for_gitlab() {
   (
     cd "${ROOT_PATH}/gitlab" || return 0
 
+    bundle config --local set without 'production'
+
     if asdf_command_enabled "pg_config"; then
       current_pg_config_location=$(asdf which pg_config)
     else
