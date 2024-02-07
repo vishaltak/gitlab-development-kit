@@ -48,11 +48,12 @@ ruby 3.2.3
 shellcheck 0.9.0
 
 # vale:
-#   2.29.6:
+#   3.0.7:
 #     - .tool-versions-gdk
+#   2.29.6:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-vale 2.29.6
+vale 3.0.7 2.29.6
 
 # yarn:
 #   1.22.19:
