@@ -13,6 +13,7 @@ brew "heimdal"
 brew "icu4c"
 brew "libiconv"
 brew "libssh2"
+brew "lychee"
 brew "openssl@1.1", link: :force
 brew "pkg-config"
 brew "re2"

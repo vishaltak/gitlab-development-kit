@@ -1,3 +1,4 @@
+LYCHEE := $(shell command -v lychee 2> /dev/null)
 MARKDOWNLINT := $(shell command -v markdownlint-cli2 2> /dev/null)
 
 dev_checkmake_binary := $(or $(dev_checkmake_binary),$(shell command -v checkmake 2> /dev/null))
@@ -53,17 +54,16 @@ markdownlint: yarn-install
 	@echo -n "Markdownlint: "
 	@${YARN} run --silent markdownlint && echo "OK"
 
-# Checks:
-#   - Internal links.
-#   - Anchors within the same page.
-#
-# Doesn't check:
-#    - External links.
-#    - Anchors on other pages.
+# Doesn't check external links
 .PHONY: check-links
-check-links: yarn-install
+check-links:
+ifeq (${LYCHEE},)
+	@echo "ERROR: Lychee not installed. For installation information, see: https://lychee.cli.rs/installation/"
+else
 	@echo -n "Check internal links: "
-	@${YARN} run --silent check-links 2>&1 && echo "OK"
+	@lychee --version
+	@lychee --offline --include-fragments README.md doc/* && echo "OK"
+endif
 
 # Usage: make check-duplicates command="gdk update"
 .PHONY: check-duplicates

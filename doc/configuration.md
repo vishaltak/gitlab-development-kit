@@ -273,7 +273,7 @@ NOTE:
 When running `gdk restart`, `gdk.stop_hooks` (both before & after) are executed before restarting and `gdk.start_hooks` (both before & after) are executed after restarting.
 
 A common use for GDK hooks is
-[removing uncommitted changes to `gitlab/db/structure.sql`](troubleshooting/postgresql.md#gdk-update-leaves-gitlabdbstructuresql-with-uncommitted-changes),
+[removing uncommitted changes to `gitlab/db/structure.sql`](troubleshooting/postgresql.md#gdk-update-leaves-gitlabdb-with-uncommitted-changes),
 or [truncating the Rails logs in `gitlab/log`](troubleshooting/ruby.md#truncate-rails-logs).
 
 ### GitLab settings
