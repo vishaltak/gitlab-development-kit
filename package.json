@@ -13,12 +13,10 @@
   },
   "homepage": "https://gitlab.com/gitlab-org/gitlab-development-kit#readme",
   "scripts": {
-    "check-links": "support/check-links",
     "markdownlint": "markdownlint-cli2 'doc/**/*.md'",
     "markdownlint-no-trailing-spaces": "markdownlint-cli2 --config 'doc/.markdownlint/.markdownlint-cli2.yaml' 'doc/**/*.md'"
   },
   "dependencies": {
-    "markdown-link-check": "^3.11.2",
     "markdownlint-cli2": "^0.12.1"
   }
 }

@@ -36,7 +36,7 @@ To set up `gdk.test` and `registry.test` as hostnames using `127.0.0.1`:
 ## Create loopback interface
 
 Some functionality may not work if GDK processes listen on `localhost` or `127.0.0.1` (for example,
-services [running under Docker](runner.md#docker-configuration)). Therefore, an IP address on a different private network should be
+services [running under Docker](runner.md#executing-a-runner-from-within-docker)). Therefore, an IP address on a different private network should be
 used.
 
 `172.16.123.1` is a useful [private network address](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses)
