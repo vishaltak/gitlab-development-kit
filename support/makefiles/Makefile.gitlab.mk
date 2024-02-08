@@ -4,13 +4,8 @@ gitlab_git_cmd = git -C $(gitlab_dir)
 in_gitlab = cd $(gitlab_dir) &&
 default_branch ?= $(if $(gitlab_default_branch),$(gitlab_default_branch),master)
 
-ASDF_RUBY_VERSION := $(shell grep -E '^ruby ' "${gitlab_dir}/.tool-versions" | awk '{ print $$2 }')
-RUBY_BIN_PATH := ${HOME}/.asdf/installs/ruby/${ASDF_RUBY_VERSION}/bin
-
 ifeq ($(asdf_opt_out),false)
-	ifeq (,$(findstring ${RUBY_BIN_PATH},${PATH}))
-		export PATH := ${RUBY_BIN_PATH}:${PATH}
-	endif
+	export PATH := $(shell support/update-path $(gitlab_dir))
 endif
 
 gitlab-setup: gitlab/.git gitlab-config gitlab-asdf-install .gitlab-bundle .gitlab-gdk-gem .gitlab-lefthook .gitlab-yarn .gitlab-translations
