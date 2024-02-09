@@ -5,7 +5,7 @@ to instantly start developing.
 
 ## Run on macOS
 
-1. Download and [install UTM](https://docs.getutm.app/installation/macos/).
+1. Download and [install UTM](https://mac.getutm.app/).
 1. Download and unzip [GDK-in-a-box](https://go.gitlab.com/cCHpCP).
 1. Double-click `gdk.utm`.
 1. Follow the [standard setup steps](#standard-setup).
@@ -30,6 +30,7 @@ NOTE:
   The docs detail [how to checkout branches from different remotes](https://gitlab.com/gitlab-community/meta#checkout-a-branch-from-a-different-remote),
   but as a last resort you may reconfigure your remote to the canonical project.
 
+1. In a local terminal, import the SSH key by running: `curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/setup-ssh-key" | bash`.
 1. Start the VM (minimise the console because you won't need it).
 1. Connect VSCode to the VM:
    - Select **Remote-SSH: Connect to host** from the command palette
@@ -42,6 +43,27 @@ NOTE:
 1. In VSCode, select **File > Open folder**, and navigate to: `/home/gitlab-development-kit/gitlab`.
 1. Open GitLab in your browser: [http://gdk.local:3000](http://gdk.local:3000).
 1. Login to GitLab with `root/5iveL!fe`.
+
+## Update
+
+You can update GDK-in-a-box at any time.
+While connected via Remote-SSH:
+
+- In VSCode, select **Terminal > New terminal**.
+- Run: `gdk update`.
+
+## Troubleshoot
+
+If you have any issues, the simplest and fastest solution is to:
+
+- Delete the virtual machine.
+- Download the latest build.
+- Follow the [standard setup instructions](#standard-setup).
+
+NOTE:
+
+Your GitLab instance will be restored to defaults.
+Be sure to commit and push all changes beforehand, or they will be lost.
 
 ## Building GDK-in-a-box
 

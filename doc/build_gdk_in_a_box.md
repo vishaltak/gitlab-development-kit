@@ -71,6 +71,7 @@ Upload the zipped `gdk.vbox` and `gdk.vdi` files to Google Drive.
 
 1. Login with SSH to `debian@gdk.local`. You do not need a password to log in.
    1. Install GDK using the one-line installation method: ```curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash```.
+   1. When prompted, configure GDK to use the GitLab community fork, and telemetry with anonymous user: `gdk-in-a-box`.
    1. Load asdf into your shell: ```source "/home/debian/.asdf/asdf.sh"```.
    1. Enable Vite: 
   

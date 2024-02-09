@@ -1,5 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ -f ~/.ssh/gdk.local_rsa ]; then
+    echo "SSH key previously imported."
+    exit 0
+fi
+
 curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/gdk.local_rsa" -o ~/.ssh/gdk.local_rsa
 chmod 600 ~/.ssh/gdk.local_rsa
 echo >> ~/.ssh/config
 echo "Host gdk.local" >> ~/.ssh/config
 echo "IdentityFile ~/.ssh/gdk.local_rsa" >> ~/.ssh/config
+echo "SSH key imported."
