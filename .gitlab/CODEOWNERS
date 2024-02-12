@@ -4,5 +4,6 @@
 * @gitlab-org/maintainers/gitlab-development-kit
 .ruby-version @gitlab-org/maintainers/gitlab-development-kit @eread
 .tool-versions* @gitlab-org/maintainers/gitlab-development-kit @eread
-/doc/ @gitlab-org/maintainers/gitlab-development-kit @ashrafkhamis @axil @eread @fneill @jglassman1 @lciutacu @marcel.amirault @phillipwells @rdickenson
+/doc/ @gitlab-org/maintainers/gitlab-development-kit @ashrafkhamis @axil @eread @fneill @jglassman1 @lciutacu @marcel.amirault @phillipwells @rdickenson @leetickett-gitlab
 README.md @gitlab-org/maintainers/gitlab-development-kit @ashrafkhamis @axil @eread @fneill @jglassman1 @lciutacu @marcel.amirault @phillipwells @rdickenson
+/support/gdk-in-a-box/ @leetickett-gitlab @gitlab-org/maintainers/gitlab-development-kit
