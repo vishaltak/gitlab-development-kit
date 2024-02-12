@@ -13,7 +13,7 @@ end
 
 group :test do
   gem 'gitlab-styles', '~> 11.0.0', require: false
-  gem 'irb', '~> 1.11.1', require: false
+  gem 'irb', '~> 1.11.2', require: false
   gem 'rspec', '~> 3.13.0', require: false
   gem 'rspec_junit_formatter', '~> 0.6.0', require: false
   gem 'simplecov-cobertura', '~> 2.1.0', require: false
