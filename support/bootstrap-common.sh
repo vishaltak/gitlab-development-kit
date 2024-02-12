@@ -580,14 +580,6 @@ setup_platform_darwin() {
   if ! echo_if_unsuccessful brew link pkg-config; then
     return 1
   fi
-
-  if [[ ! -d "/Applications/Google Chrome.app" ]]; then
-    if ! brew list --cask google-chrome > /dev/null 2>&1; then
-      if ! ${brew_opts} brew install google-chrome; then
-        return 1
-      fi
-    fi
-  fi
 }
 
 # Set some asdf environment variables
