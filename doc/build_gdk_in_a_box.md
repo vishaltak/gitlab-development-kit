@@ -11,7 +11,7 @@ This is the manual process to create the GDK-in-a-box virtual machines:
    - **System > RAM**: `16384` MB.
 1. Follow the [standard VM build steps](#standard-build).
 1. Zip `gdk.utm`.
-1. Upload the zipped `gdk.utm` file to Google Drive.
+1. [Publish](#publish) the new image.
 
 ## Build on Linux and Windows
 
@@ -28,7 +28,7 @@ This is the manual process to create the GDK-in-a-box virtual machines:
 1. Mount the installation ISO and start the virtual machine.
 1. Follow the [standard VM build steps](#standard-build).
 1. Zip `gdk.vbox` and `gdk.vdi`.
-Upload the zipped `gdk.vbox` and `gdk.vdi` files to Google Drive.
+1. [Publish](#publish) the new image.
 
 ## Standard build
 
@@ -93,6 +93,11 @@ Upload the zipped `gdk.vbox` and `gdk.vdi` files to Google Drive.
 1. Sign in to GDK in your web browser: [http://gdk.local:3000](http://gdk.local:3000).
    When prompted to set a new password, enter `5iveL!fe` to keep the existing credentials.
 1. Shutdown the VM.
+
+## Publish
+
+1. Upload the zip file to [GCP](https://console.cloud.google.com/storage/browser/contributor-success-public).
+1. Update the short links in [campaign manager](https://campaign-manager.gitlab.com/campaigns/view/94).
 
 ## Potential future housekeeping
 
