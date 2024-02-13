@@ -4,10 +4,10 @@
 # Do not modify this file directly.
 #
 # golang:
-#   1.21.5:
+#   1.21.7:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-golang 1.21.5
+golang 1.21.7
 
 # minio:
 #   2022-07-15T03-44-22Z:
@@ -50,10 +50,9 @@ shellcheck 0.9.0
 # vale:
 #   3.0.7:
 #     - .tool-versions-gdk
-#   2.29.6:
 #     - https://gitlab.com/gitlab-org/gitlab-runner/-/raw/main/.tool-versions
 #
-vale 3.0.7 2.29.6
+vale 3.0.7
 
 # yarn:
 #   1.22.19:
