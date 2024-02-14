@@ -1,5 +1,8 @@
 # Cells (Experiment)
 
+**NOTE:** This document doesn't reflect the newest Cells 1.X and 2.X architecture that
+are depicted [here](https://docs.gitlab.com/ee/architecture/blueprints/cells/index.html#cells-iterations).
+
 Support for cells in the GDK is still an Experiment.
 For more information, see [epic 7582](https://gitlab.com/groups/gitlab-org/-/epics/7582).
 
