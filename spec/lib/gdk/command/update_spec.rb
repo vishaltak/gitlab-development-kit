@@ -14,7 +14,7 @@ RSpec.describe GDK::Command::Update do
     context 'when self-update is enabled' do
       it 'runs self-update and update' do
         expect(GDK).to receive(:make).with('self-update')
-        expect(GDK).to receive(:make).with('self-update', 'update', env: env)
+        expect(GDK).to receive(:make).with('update', env: env)
 
         subject.run
       end

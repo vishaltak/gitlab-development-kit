@@ -23,12 +23,11 @@ module GDK
 
       def update!
         GDK::Hooks.with_hooks(config.gdk.update_hooks, 'gdk update') do
-          if self_update?
-            GDK.make('self-update')
-            GDK.make('self-update', 'update', env: update_env).success?
-          else
-            GDK.make('update', env: update_env).success?
-          end
+          # Run `self-update` first to make sure Makefiles are up-to-date.
+          # This ensures the next `make update` call works with the latest updates and instructions.
+          GDK.make('self-update') if self_update?
+
+          GDK.make('update', env: update_env).success?
         end
       end
 

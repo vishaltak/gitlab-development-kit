@@ -82,6 +82,7 @@ list:
 #
 .PHONY: all
 all: preflight-checks \
+gdk_bundle_install \
 gitlab/.git \
 gitlab-shell-setup \
 gitlab-setup \
@@ -126,6 +127,7 @@ install: start-task all post-install-task start
 # Pull `gitlab` directory first, since its dependencies are linked from there.
 .PHONY: update
 update: start-task \
+gdk_bundle_install \
 gitlab/.git/pull \
 gitlab-update \
 platform-update \
