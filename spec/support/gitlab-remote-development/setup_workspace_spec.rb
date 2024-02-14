@@ -23,23 +23,42 @@ describe SetupWorkspace do
   end
 
   describe '#run', :hide_output do
-    context 'when telemetry is allowed' do
-      it 'executes the bootstrap script and sends telemetry' do
-        expect(workspace).to receive(:execute_bootstrap)
-        expect(workspace).to receive(:send_telemetry).with(success, duration)
+    context 'when bootstrap is needed' do
+      before do
+        allow(workspace).to receive(:bootstrap_needed?).and_return(true)
+      end
 
-        workspace.run
+      context 'when telemetry is allowed' do
+        it 'executes the bootstrap script and sends telemetry' do
+          expect(workspace).to receive(:execute_bootstrap)
+          expect(workspace).to receive(:send_telemetry).with(success, duration)
+
+          workspace.run
+        end
+      end
+
+      context 'when telemetry is not allowed' do
+        before do
+          allow($stdin).to receive(:gets).and_return('no')
+        end
+
+        it 'executes the bootstrap script but does not send telemetry' do
+          expect(workspace).to receive(:execute_bootstrap)
+          expect(workspace).not_to receive(:send_telemetry)
+
+          workspace.run
+        end
       end
     end
 
-    context 'when telemetry is not allowed' do
+    context 'when bootstrap is not needed' do
       before do
-        allow($stdin).to receive(:gets).and_return('no')
+        allow(workspace).to receive(:bootstrap_needed?).and_return(false)
       end
 
-      it 'executes the bootstrap script but does not send telemetry' do
-        expect(workspace).to receive(:execute_bootstrap)
-        expect(workspace).not_to receive(:send_telemetry)
+      it 'does not execute the bootstrap script and outputs information about GDK is already being bootstrapped' do
+        expect(workspace).not_to receive(:execute_bootstrap)
+        expect(GDK::Output).to receive(:info).with("#{SetupWorkspace::GDK_BOOTSTRAPPED_FILE} exists, GDK has already been bootstrapped.\n\nRemove the #{SetupWorkspace::GDK_BOOTSTRAPPED_FILE} to re-bootstrap.")
 
         workspace.run
       end
