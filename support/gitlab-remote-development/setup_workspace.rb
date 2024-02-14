@@ -6,16 +6,25 @@ require_relative '../../lib/gdk'
 
 class SetupWorkspace
   ROOT_DIR = '/projects/gitlab-development-kit'
+  GDK_BOOTSTRAPPED_FILE = "#{ROOT_DIR}/.cache/.gdk_bootstrapped".freeze
 
   def run
-    success, duration = execute_bootstrap
+    if bootstrap_needed?
+      success, duration = execute_bootstrap
 
-    return unless allow_sending_telemetry?
+      return unless allow_sending_telemetry?
 
-    send_telemetry(success, duration)
+      send_telemetry(success, duration)
+    else
+      GDK::Output.info("#{GDK_BOOTSTRAPPED_FILE} exists, GDK has already been bootstrapped.\n\nRemove the #{GDK_BOOTSTRAPPED_FILE} to re-bootstrap.")
+    end
   end
 
   private
+
+  def bootstrap_needed?
+    !File.exist?(GDK_BOOTSTRAPPED_FILE)
+  end
 
   def execute_bootstrap
     start = Process.clock_gettime(Process::CLOCK_MONOTONIC)

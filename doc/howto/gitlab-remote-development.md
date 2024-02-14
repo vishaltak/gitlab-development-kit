@@ -38,13 +38,10 @@ alt="Workspaces overview page">
 
 ## Run GDK in your workspace
 
-1. On the left sidebar, open the terminal.
-1. Select __Terminal > New Terminal__.
+1. The _Bootstrap GDK_ task starts automatically when a workspace is opened, executing the [bootstrap script](../../support/gitlab-remote-development/setup_workspace.rb).
+1. After the bootstrap script finishes, you'll see a prompt asking if you want to send duration data.
+1. After responding, enter any command to close the task terminal.
 
-   <img src="img/remote-development-select-terminal.png" width="800"
-   alt="Remote development New Terminal button in Terminal menu">
+Your GDK should now be ready to use.
 
-1. Run the command `support/gitlab-remote-development/setup_workspace.rb`. The GDK link is displayed.
-
-   <img src="img/remote-development-bootstrapped-gdk.png" width="800"
-   alt="Remote development Terminal window showing workspace URL">
+<img src="img/remote-development-bootstrapped-gdk.png" width="800" alt="Remote development Terminal window showing workspace URL">
