@@ -6,24 +6,25 @@ require_relative '../../lib/gdk'
 
 class SetupWorkspace
   ROOT_DIR = '/projects/gitlab-development-kit'
-  GDK_BOOTSTRAPPED_FILE = "#{ROOT_DIR}/.cache/.gdk_bootstrapped".freeze
+  GDK_SETUP_FLAG_FILE = "#{ROOT_DIR}/.cache/.gdk_setup_complete".freeze
 
   def run
     if bootstrap_needed?
       success, duration = execute_bootstrap
+      create_flag_file
 
       return unless allow_sending_telemetry?
 
       send_telemetry(success, duration)
     else
-      GDK::Output.info("#{GDK_BOOTSTRAPPED_FILE} exists, GDK has already been bootstrapped.\n\nRemove the #{GDK_BOOTSTRAPPED_FILE} to re-bootstrap.")
+      GDK::Output.info("#{GDK_SETUP_FLAG_FILE} exists, GDK has already been bootstrapped.\n\nRemove the #{GDK_SETUP_FLAG_FILE} to re-bootstrap.")
     end
   end
 
   private
 
   def bootstrap_needed?
-    !File.exist?(GDK_BOOTSTRAPPED_FILE)
+    !File.exist?(GDK_SETUP_FLAG_FILE)
   end
 
   def execute_bootstrap
@@ -45,6 +46,11 @@ class SetupWorkspace
     GDK.config.bury!('telemetry.username', 'remote')
     GDK.config.save_yaml!
     GDK::Telemetry.send_telemetry(success, 'setup-workspace', { duration: duration })
+  end
+
+  def create_flag_file
+    FileUtils.mkdir_p(File.dirname(GDK_SETUP_FLAG_FILE))
+    FileUtils.touch(GDK_SETUP_FLAG_FILE)
   end
 end
 
