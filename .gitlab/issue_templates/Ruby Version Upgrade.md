@@ -32,6 +32,6 @@ Once the upgrade is ready to take place, an announcement should be made in the `
 Hey team! Please be advised that an upgrade of the Ruby version to ________ is scheduled to take place on ________. If you experience any issues or have any concerns, please contact to us in this issue: ________. Thank you for your understanding.
 ```
 
-/label ~"Category:GDK" ~"gdk-reliability" ~Quality ~"Engineering Productivity" ~"type::maintenance" ~"maintenance::dependency"
+/label ~"Category:GDK" ~"gdk-reliability" ~"Engineering Productivity" ~"type::maintenance" ~"maintenance::dependency"
 
 <!-- template sourced from https://gitlab.com/gitlab-org/gitlab-development-kit/-/blob/main/.gitlab/issue_templates/Ruby Version Upgrade.md -->
