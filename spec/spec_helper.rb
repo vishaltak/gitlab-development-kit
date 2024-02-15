@@ -139,6 +139,11 @@ def stub_gdk_debug(state)
   allow_any_instance_of(GDK::Config).to receive(:gdk).and_return(gdk_settings)
 end
 
+def stub_prompt(response, message = 'Are you sure? [y/N]')
+  allow(GDK::Output).to receive(:interactive?).and_return(true)
+  allow(GDK::Output).to receive(:prompt).with(message).and_return(response)
+end
+
 def create_dummy_executable(name)
   path = File.join(tmp_path, name)
   FileUtils.touch(path)

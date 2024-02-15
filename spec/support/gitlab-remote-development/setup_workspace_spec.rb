@@ -6,16 +6,18 @@ describe SetupWorkspace do
   let(:duration) { 10 }
   let(:success) { true }
   let(:username) { 'remote' }
+  let(:prompt_message) { 'Would you like to send the duration data? [y/N]' }
 
   let(:workspace) { described_class.new }
+  let(:shellout_double) { instance_double(Shellout, success?: success) }
 
   before do
     allow(Process).to receive(:clock_gettime).and_return(0, duration)
-    allow(Dir).to receive(:chdir).with(SetupWorkspace::ROOT_DIR).and_yield
-    allow(workspace).to receive(:system).with('support/gitlab-remote-development/remote-development-gdk-bootstrap.sh').and_return(success)
+    allow(Shellout).to receive(:new).with('support/gitlab-remote-development/remote-development-gdk-bootstrap.sh').and_return(success)
+    allow(shellout_double).to receive(:execute).and_return(shellout_double)
 
     allow(workspace).to receive(:execute_bootstrap).and_return([success, duration])
-    allow($stdin).to receive(:gets).and_return('yes')
+    stub_prompt('y', prompt_message)
 
     allow(GDK.config).to receive(:bury!).with('telemetry.username', username)
     allow(GDK.config).to receive(:save_yaml!)
@@ -48,7 +50,7 @@ describe SetupWorkspace do
 
       context 'when telemetry is not allowed' do
         before do
-          allow($stdin).to receive(:gets).and_return('no')
+          stub_prompt('n', prompt_message)
         end
 
         it 'does not send telemetry' do

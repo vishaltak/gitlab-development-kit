@@ -29,17 +29,14 @@ class SetupWorkspace
 
   def execute_bootstrap
     start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-    success = Dir.chdir(ROOT_DIR) do
-      system('support/gitlab-remote-development/remote-development-gdk-bootstrap.sh')
-    end
+    success = Shellout.new('support/gitlab-remote-development/remote-development-gdk-bootstrap.sh', chdir: ROOT_DIR).execute
     duration = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
 
     [success, duration]
   end
 
   def allow_sending_telemetry?
-    GDK::Output.print('Would you like to send the duration data? (yes/no): ')
-    $stdin.gets&.chomp == 'yes'
+    GDK::Output.prompt('Would you like to send the duration data? [y/N]').match?(/\Ay(?:es)*\z/i)
   end
 
   def send_telemetry(success, duration)

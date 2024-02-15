@@ -105,9 +105,4 @@ RSpec.describe GDK::Command::Kill, :hide_stdout do
     allow(GDK::Output).to receive(:info).with('Giving runsv processes 5 seconds to die..')
     allow(subject).to receive(:sleep).with(5).and_return(true)
   end
-
-  def stub_prompt(response)
-    allow(GDK::Output).to receive(:interactive?).and_return(true)
-    allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(response)
-  end
 end
