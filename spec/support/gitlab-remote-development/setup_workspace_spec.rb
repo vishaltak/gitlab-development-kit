@@ -40,6 +40,17 @@ describe SetupWorkspace do
         workspace.run
       end
 
+      context 'when the bootstrap script fails' do
+        let(:success) { false }
+
+        it 'does not create GDK setup flag file' do
+          expect(workspace).to receive(:execute_bootstrap)
+          expect(FileUtils).not_to receive(:touch).with(SetupWorkspace::GDK_SETUP_FLAG_FILE)
+
+          workspace.run
+        end
+      end
+
       context 'when telemetry is allowed' do
         it 'sends telemetry' do
           expect(workspace).to receive(:send_telemetry).with(success, duration)

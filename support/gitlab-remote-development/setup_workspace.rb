@@ -11,7 +11,8 @@ class SetupWorkspace
   def run
     if bootstrap_needed?
       success, duration = execute_bootstrap
-      create_flag_file
+
+      create_flag_file if success
 
       return unless allow_sending_telemetry?
 
