@@ -116,7 +116,7 @@ gitlab:
     https:
       enabled: false
     multiple_databases: false
-    new_css_pipeline: false
+    new_css_pipeline: true
     port: 3000
     puma:
       threads_max: 4

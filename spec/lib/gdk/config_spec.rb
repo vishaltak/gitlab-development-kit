@@ -1614,8 +1614,8 @@ RSpec.describe GDK::Config do
       end
 
       describe 'new_css_pipeline' do
-        it 'is disabled by default' do
-          expect(config.gitlab.rails.new_css_pipeline).to be(false)
+        it 'is enabled by default' do
+          expect(config.gitlab.rails.new_css_pipeline).to be(true)
         end
       end
     end
