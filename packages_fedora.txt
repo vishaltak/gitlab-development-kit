@@ -14,6 +14,7 @@ krb5-devel
 libcurl-devel
 libicu-devel
 libuuid-devel
+libyaml-devel
 openssl
 openssl-devel
 openssl-libs
