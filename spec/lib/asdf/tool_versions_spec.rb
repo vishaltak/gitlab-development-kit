@@ -192,11 +192,6 @@ RSpec.describe Asdf::ToolVersions do
       end
     end
 
-    def stub_prompt(response)
-      allow(GDK::Output).to receive(:interactive?).and_return(true)
-      allow(GDK::Output).to receive(:prompt).with('Are you sure? [y/N]').and_return(response)
-    end
-
     def expect_warn_and_puts
       expect(GDK::Output).to receive(:warn).with('About to uninstall the following asdf software:').ordered
       expect(GDK::Output).to receive(:puts).with(stderr: true).ordered
