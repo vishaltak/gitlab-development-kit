@@ -417,6 +417,15 @@ runner:
   network_mode_host: false
   pull_policy: if-not-present
   token: 'DEFAULT TOKEN: Register your runner to get a valid token'
+smartcard:
+  enabled: false
+  hostname: smartcard.gdk.test
+  port: 3444
+  san_extensions: true
+  ssl:
+    certificate: smartcard.gdk.test.pem
+    client_cert_ca: "/mkcert/rootCA.pem"
+    key: smartcard.gdk.test-key.pem
 snowplow_micro:
   enabled: false
   image: snowplow/snowplow-micro:latest

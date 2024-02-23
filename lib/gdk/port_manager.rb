@@ -19,6 +19,7 @@ module GDK
       3030 => 'gitlab_docs_https',
       3038 => 'vite',
       3333 => 'workhorse',
+      3444 => 'smartcard_nginx',
       3807 => 'sidekiq_exporter',
       3808 => 'webpack',
       3907 => 'sidekiq_health_check',

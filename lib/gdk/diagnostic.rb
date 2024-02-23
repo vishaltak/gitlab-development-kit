@@ -16,6 +16,7 @@ module GDK
     autoload :Golang, 'gdk/diagnostic/golang'
     autoload :Hostname, 'gdk/diagnostic/hostname'
     autoload :MacPorts, 'gdk/diagnostic/mac_ports'
+    autoload :Nginx, 'gdk/diagnostic/nginx'
     autoload :PGUser, 'gdk/diagnostic/pguser'
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
@@ -53,6 +54,7 @@ module GDK
         Chromedriver
         FileWatches
         Hostname
+        Nginx
       ]
 
       klasses.map do |const|
