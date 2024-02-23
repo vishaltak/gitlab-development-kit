@@ -44,6 +44,7 @@ class SetupWorkspace
     GDK.config.bury!('telemetry.username', 'remote')
     GDK.config.save_yaml!
     GDK::Telemetry.send_telemetry(success, 'setup-workspace', { duration: duration })
+    GDK::Telemetry.flush_events
   end
 
   def create_flag_file
