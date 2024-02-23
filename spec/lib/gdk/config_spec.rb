@@ -1923,6 +1923,39 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'smartcard' do
+    it 'is disabled by default' do
+      expect(config.smartcard.enabled).to be(false)
+    end
+
+    it 'has a hostname by default' do
+      expect(config.smartcard.hostname).to eq('smartcard.gdk.test')
+    end
+
+    it 'uses managed port by default' do
+      default_port = GDK::PortManager.new(config).default_port_for_service('smartcard_nginx')
+      expect(config.smartcard.port).to eq(default_port)
+    end
+
+    it 'uses san_extensions by default' do
+      expect(config.smartcard.san_extensions).to be(true)
+    end
+
+    describe 'ssl' do
+      it 'provides default cert' do
+        expect(config.smartcard.ssl.certificate).to eq('smartcard.gdk.test.pem')
+      end
+
+      it 'provides default key' do
+        expect(config.smartcard.ssl.key).to eq('smartcard.gdk.test-key.pem')
+      end
+
+      it 'provides example client cert CA' do
+        expect(config.smartcard.ssl.client_cert_ca).to eq('/mkcert/rootCA.pem')
+      end
+    end
+  end
+
   describe 'gitlab_elasticsearch_indexer' do
     describe '#__dir' do
       it 'returns the GitLab directory' do

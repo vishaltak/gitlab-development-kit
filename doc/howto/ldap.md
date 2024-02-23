@@ -164,6 +164,29 @@ If you want to disable anonymous binding and require authentication:
          #...
    ```
 
+### Optional: Allow authentication with smart cards
+
+If you have [set up smart card authentication on GDK](smartcard.md), you can enable smart card authentication against the LDAP server.
+
+1. In `<gdk-directory>/gitlab/config/gitlab.yml` under `production:` and `ldap:`, change the `smartcard:` key to either `optional` or `required`:
+
+   ```yaml
+   ldap:
+     enabled: true
+     servers:
+       main:
+         # ...
+         smartcard: optional
+   ```
+
+1. Restart the `rails-web` process in GDK to load the new configuration:
+
+   ```shell
+   gdk restart rails-web
+   ```
+
+On the tab for the relevant LDAP server on the sign-in page, you should now see a **Sign in with smart card** button. Use this to search the LDAP server for the certificate presented by the user and allow signing in with it.
+
 ## Debugging tips
 
 The following commands should help validate GitLab and OpenLDAP are

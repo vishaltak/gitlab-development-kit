@@ -962,6 +962,23 @@ development:
         args: <%= config.omniauth.openid_connect.args.to_json %> }
     <%- end -%>
 
+  <%- if config.https? && config.smartcard? -%>
+  smartcard:
+    # Allow smartcard authentication
+    enabled: true
+
+    # Path to a file containing a CA certificate
+    ca_file: <%= config.gdk_root.join(config.smartcard.ssl.client_cert_ca) %>
+
+    # Host and port where the client side certificate is requested by the
+    # webserver (NGINX/Apache)
+    client_certificate_required_host: <%= config.smartcard.hostname %>
+    client_certificate_required_port: <%= config.smartcard.port %>
+
+    # enable checking usernames / emails in cert SAN extensions
+    san_extensions: <%= config.smartcard.san_extensions %>
+  <%- end -%>
+
   elasticsearch:
     indexer_path: <%= config.gdk_root %>/gitlab-elasticsearch-indexer/bin/gitlab-elasticsearch-indexer
 

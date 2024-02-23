@@ -865,6 +865,18 @@ module GDK
       bool(:enabled) { false }
     end
 
+    settings :smartcard do
+      bool(:enabled) { false }
+      string(:hostname) { 'smartcard.gdk.test' }
+      port(:port, 'smartcard_nginx')
+      bool(:san_extensions) { true }
+      settings :ssl do
+        string(:certificate) { 'smartcard.gdk.test.pem' }
+        string(:key) { 'smartcard.gdk.test-key.pem' }
+        string(:client_cert_ca) { '/mkcert/rootCA.pem' }
+      end
+    end
+
     settings :mattermost do
       bool(:enabled) { false }
       port(:port, 'mattermost')

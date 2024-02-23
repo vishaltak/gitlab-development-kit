@@ -127,6 +127,39 @@ http {
 <%- end -%>
   }
 
+<%- if config.https? && config.smartcard? -%>
+  server {
+      listen <%= config.smartcard.hostname %>:<%= config.smartcard.port %> ssl;
+
+      # certificate for configuring SSL
+      ssl_certificate "<%= config.gdk_root.join(config.smartcard.ssl.certificate) %>";
+      ssl_certificate_key "<%= config.gdk_root.join(config.smartcard.ssl.key) %>";
+
+      ssl_verify_depth 2;
+      # CA certificate for client side certificate verification
+      # quoted: default on macOS includes "Application Support" dir in pathname
+      ssl_client_certificate "<%= config.gdk_root.join(config.smartcard.ssl.client_cert_ca) %>";
+      ssl_verify_client on;
+
+      location / {
+          proxy_set_header    Host                        $http_host;
+          proxy_set_header    X-Real-IP                   $remote_addr;
+          proxy_set_header    X-Forwarded-For             $proxy_add_x_forwarded_for;
+          proxy_set_header    X-Forwarded-Proto           $scheme;
+          proxy_set_header    Upgrade                     $http_upgrade;
+          proxy_set_header    Connection                  $connection_upgrade;
+
+          proxy_set_header    X-SSL-Client-Certificate    $ssl_client_escaped_cert;
+
+          proxy_read_timeout 300;
+
+          proxy_pass https://gitlab-workhorse;
+          proxy_ssl_certificate <%= config.gdk_root.join(config.nginx.ssl.certificate) %>;
+          proxy_ssl_certificate_key <%= config.gdk_root.join(config.nginx.ssl.key) %>;
+      }
+  }
+<%- end -%>
+
 <%- if config.gitlab_docs.https? -%>
 
   server {
