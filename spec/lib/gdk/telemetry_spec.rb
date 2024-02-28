@@ -59,6 +59,10 @@ RSpec.describe GDK::Telemetry do
       allow(GitlabSDK::Client).to receive_messages(new: mocked_client)
     end
 
+    after do
+      described_class.instance_variable_set(:@client, nil)
+    end
+
     let(:mocked_client) { instance_double(GitlabSDK::Client) }
 
     it 'initializes the gitlab sdk client with the correct configuration' do
