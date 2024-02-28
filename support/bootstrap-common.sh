@@ -510,10 +510,6 @@ setup_platform_linux_arch_like() {
 setup_platform_linux_fedora_like() {
   local platform_file="${1}"
 
-  if ! echo_if_unsuccessful sudo dnf module enable postgresql:12 -y; then
-    return 1
-  fi
-
   # shellcheck disable=SC2046
   if ! sudo dnf install -y $(sed -e 's/#.*//' "${platform_file}" | tr '\n' ' '); then
     return 1
