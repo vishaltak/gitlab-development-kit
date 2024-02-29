@@ -4,6 +4,7 @@
       {
         clientPort: (config.nginx? ? config.port : config.vite.port),
         host: config.hostname,
+        protocol: (config.nginx? && config.https? ? "wss" : "ws")
       }
     else
       nil

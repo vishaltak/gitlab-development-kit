@@ -36,7 +36,8 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
         'port' => 3038,
         'hmr' => {
           'clientPort' => 3038,
-          'host' => 'gdk.test'
+          'host' => 'gdk.test',
+          'protocol' => 'ws'
         }
       })
     end
@@ -65,9 +66,29 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
         'port' => 3011,
         'hmr' => {
           'clientPort' => 3011,
-          'host' => 'gdk.test'
+          'host' => 'gdk.test',
+          'protocol' => 'ws'
         }
       })
+    end
+
+    context 'when HTTPS is enabled' do
+      before do
+        yaml['https'] = { 'enabled' => true }
+      end
+
+      it 'sets the protocol to ws' do
+        expect(output).to eq({
+          'enabled' => true,
+          'host' => '127.0.0.1',
+          'port' => 3011,
+          'hmr' => {
+            'clientPort' => 3011,
+            'host' => 'gdk.test',
+            'protocol' => 'ws'
+          }
+        })
+      end
     end
 
     context 'and nginx is enabled' do
@@ -80,9 +101,29 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
           'port' => 3011,
           'hmr' => {
             'clientPort' => 3000,
-            'host' => 'gdk.test'
+            'host' => 'gdk.test',
+            'protocol' => 'ws'
           }
         })
+      end
+
+      context 'when HTTPS is enabled' do
+        before do
+          yaml['https'] = { 'enabled' => true }
+        end
+
+        it 'sets the protocol to wss' do
+          expect(output).to eq({
+            'enabled' => true,
+            'host' => '127.0.0.1',
+            'port' => 3011,
+            'hmr' => {
+              'clientPort' => 3000,
+              'host' => 'gdk.test',
+              'protocol' => 'wss'
+            }
+          })
+        end
       end
     end
   end
