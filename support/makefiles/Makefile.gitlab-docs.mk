@@ -131,8 +131,7 @@ ifeq ($(asdf_opt_out),false)
 	@echo "${DIVIDER}"
 	@echo "Installing asdf tools from ${gitlab_docs_dir}/.tool-versions"
 	@echo "${DIVIDER}"
-	$(Q)cd ${gitlab_docs_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitlab_docs_dir}/.tool-versions" asdf install
-	$(Q)cd ${gitlab_docs_dir} && asdf reshim
+	$(Q)cd ${gitlab_docs_dir} && ASDF_DEFAULT_TOOL_VERSIONS_FILENAME="${gitlab_docs_dir}/.tool-versions" make install-asdf-dependencies
 else
 	@true
 endif
