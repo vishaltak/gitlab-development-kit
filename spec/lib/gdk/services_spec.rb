@@ -6,7 +6,6 @@ RSpec.describe GDK::Services do
   let(:known_services) do
     %i[
       Clickhouse
-      Gitaly
       GitLabWorkhorse
       Minio
       OpenLDAP
@@ -51,12 +50,6 @@ RSpec.describe GDK::Services do
       ]
 
       expect(services.enabled.map(&:class)).to match_array(service_classes)
-    end
-
-    it 'contains gitaly when enabled' do
-      stub_gdk_yaml({ 'gitaly' => { 'enabled' => true } })
-
-      expect(services.enabled.map(&:class)).to include(GDK::Services::Gitaly)
     end
   end
 end

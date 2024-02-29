@@ -42,21 +42,18 @@ module GDK
         {}
       end
 
-      # Directory where to execute the command from
-      #
-      # @return [String] path to run the command from
-      def exec_dir; end
-
       # Entry to be used in Procfile.
       #
       # @return [String] in the format expected used in Procfiles.
       def procfile_entry
         cmd = []
+        cmd << '#' unless enabled?
 
-        cmd += %w[#] unless enabled?
-        cmd += %W[#{name}: exec /usr/bin/env]
-        cmd += %W[--chdir="#{exec_dir}"] if exec_dir
-        cmd += env.map { |k, v| %(#{k}="#{v}") }
+        cmd += %W[#{name}: exec]
+        if env.any?
+          cmd << '/usr/bin/env'
+          cmd += env.map { |k, v| "#{k}=\"#{v}\"" }
+        end
 
         cmd << command
         cmd.join(' ')

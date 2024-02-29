@@ -35,7 +35,7 @@ praefect: exec <%= config.praefect.__praefect_build_bin_path %> --config <%= con
 <% end -%>
 <% end -%>
 <% if config.gitaly? -%>
-<%= service(:Gitaly).procfile_entry %>
+gitaly: exec /usr/bin/env <% config.gitaly.env.each do |k, v| %><%= k %>=<%= v %> <% end %> GITALY_TESTING_ENABLE_ALL_FEATURE_FLAGS=<%= config.gitaly.enable_all_feature_flags? %> support/exec-cd gitaly <%= config.gitaly.__gitaly_build_bin_path %> serve <%= config.gitaly.config_file %>
 <% end -%>
 
 # Frontend services
