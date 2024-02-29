@@ -7,7 +7,7 @@ module Runit
   class Config
     attr_reader :gdk_root
 
-    Service = Struct.new(:name, :command, :env)
+    Service = Struct.new(:name, :command, :env, :exec_dir)
 
     # @deprecated we should move this to `GDK::Service` when cleaning up Procfile based services
     TERM_SIGNAL = {

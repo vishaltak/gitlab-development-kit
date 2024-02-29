@@ -2,7 +2,7 @@
 set -e
 
 exec 2>&1
-cd <%= gdk_root %>
+cd <%= service.exec_dir || gdk_root %>
 
 <%= run_env %>
 
@@ -10,7 +10,9 @@ cd <%= gdk_root %>
 export <%= key %>="<%= value %>"
 <% end %>
 
-test -f env.runit && . ./env.runit
+# See docs/runit.md#modifying-environment-configuration-for-services
+<% env_runit = gdk_root.join('env.runit') %>
+test -f <%= env_runit %> && . <%= env_runit %>
 
 # Use chpst -P to run the command in its own process group
 exec chpst -P <%= service.command %>
