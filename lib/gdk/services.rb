@@ -8,7 +8,6 @@ module GDK
   module Services
     autoload :Base, 'gdk/services/base'
     autoload :Clickhouse, 'gdk/services/clickhouse'
-    autoload :Gitaly, 'gdk/services/gitaly'
     autoload :GitLabWorkhorse, 'gdk/services/gitlab_workhorse'
     autoload :Minio, 'gdk/services/minio'
     autoload :OpenLDAP, 'gdk/services/openldap'
