@@ -3,7 +3,7 @@
     if config.vite.hot_module_reloading?
       {
         clientPort: (config.nginx? ? config.port : config.vite.port),
-        hostname: config.hostname,
+        host: config.hostname,
       }
     else
       nil

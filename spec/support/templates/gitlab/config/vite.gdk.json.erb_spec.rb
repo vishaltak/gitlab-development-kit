@@ -36,7 +36,7 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
         'port' => 3038,
         'hmr' => {
           'clientPort' => 3038,
-          'hostname' => 'gdk.test'
+          'host' => 'gdk.test'
         }
       })
     end
@@ -65,7 +65,7 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
         'port' => 3011,
         'hmr' => {
           'clientPort' => 3011,
-          'hostname' => 'gdk.test'
+          'host' => 'gdk.test'
         }
       })
     end
@@ -80,7 +80,7 @@ RSpec.describe 'support/templates/gitlab/config/vite.gdk.json.erb' do
           'port' => 3011,
           'hmr' => {
             'clientPort' => 3000,
-            'hostname' => 'gdk.test'
+            'host' => 'gdk.test'
           }
         })
       end
