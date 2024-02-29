@@ -144,7 +144,7 @@ gitlab-docs-bundle:
 	${Q}$(support_bundle_install) $(gitlab_docs_dir)
 
 gitlab-docs-yarn:
-	$(Q)cd ${gitlab_docs_dir} && ${YARN} install --frozen-lockfile
+	$(Q)cd ${gitlab_docs_dir} && make install-nodejs-dependencies
 
 gitlab-docs-clean:
 	$(Q)cd ${gitlab_docs_dir} && rm -rf tmp
