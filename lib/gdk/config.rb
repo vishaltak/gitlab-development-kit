@@ -723,7 +723,20 @@ module GDK
       settings :backup do
         bool(:enabled) { config.object_store? }
         string(:go_cloud_url) do
-          "s3://#{config.object_store.objects['gitaly_backups']['bucket']}?disableSSL=true&s3ForcePathStyle=true&#{URI.encode_www_form(config.object_store.connection.slice('region', 'endpoint'))}"
+          bucket = config.object_store.objects['gitaly_backups']['bucket']
+          connection = config.object_store.connection
+          case connection['provider']
+          when 'AWS'
+            disable_ssl = connection['endpoint'].to_s.start_with?('http://')
+            path_style = !!connection['path_style']
+            region_endpoint = connection.slice('region', 'endpoint')
+            other_params = "&#{URI.encode_www_form(region_endpoint)}" unless region_endpoint.empty?
+            "s3://#{bucket}?disableSSL=#{disable_ssl}&s3ForcePathStyle=#{path_style}#{other_params}"
+          when 'AzureRM'
+            "azblob://#{bucket}"
+          when 'Google'
+            "gs://#{bucket}"
+          end
         end
       end
       hash_setting :env do
