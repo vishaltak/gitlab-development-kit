@@ -17,7 +17,7 @@ RSpec.describe 'gdk' do
 
   describe 'version' do
     let(:git_sha) { `git rev-parse --short HEAD`.chomp }
-    let(:expected_output) { "GitLab Development Kit 0.2.16 (#{git_sha})\n" }
+    let(:expected_output) { "GitLab Development Kit 0.2.17 (#{git_sha})\n" }
 
     %w[version -version --version].each do |variant|
       context variant do
