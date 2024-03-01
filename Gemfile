@@ -24,5 +24,5 @@ group :development, :test, :danger do
   gem 'resolv', '~> 0.3.0', require: false
 end
 
-gem 'gitlab-sdk', '~> 0.3.0'
+gem 'gitlab-sdk', '~> 0.3.1'
 gem 'sentry-ruby', '~> 5.16', '>= 5.16.1'

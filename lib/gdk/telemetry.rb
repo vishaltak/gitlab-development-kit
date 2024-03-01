@@ -36,8 +36,7 @@ module GDK
     end
 
     def self.flush_events(async: false)
-      # TODO: Temporarily workaround until https://gitlab.com/gitlab-org/analytics-section/product-analytics/gl-application-sdk-rb/-/merge_requests/29 is merged.
-      client.send(:tracker).flush(async: async) # rubocop:disable GitlabSecurity/PublicSend
+      client.flush_events(async: async)
     end
 
     def self.client
