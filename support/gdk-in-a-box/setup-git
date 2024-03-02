@@ -11,5 +11,6 @@ read -r email </dev/tty
 git remote set-url --push origin git@gitlab.com:gitlab-community/gitlab.git
 git config --global user.email "$email"
 git config --global user.name "$name"
+git config --global core.editor "code --wait"
 echo "Please add this key to your profile https://gitlab.com/-/profile/keys"
 cat ~/.ssh/id_ed25519.pub
