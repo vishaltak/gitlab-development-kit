@@ -3,11 +3,11 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'lefthook', '~> 1.6.1', require: false
+  gem 'lefthook', '~> 1.6.4', require: false
   gem 'rake', '~> 13.1.0'
   gem 'rubocop', require: false
   gem "rubocop-rake", "~> 0.6.0", require: false
-  gem 'yard', '~> 0.9.34', require: false
+  gem 'yard', '~> 0.9.36', require: false
   gem 'pry-byebug' # See doc/howto/pry.md
 end
 
@@ -24,5 +24,5 @@ group :development, :test, :danger do
   gem 'resolv', '~> 0.3.0', require: false
 end
 
-gem 'gitlab-sdk', '~> 0.3.0'
+gem 'gitlab-sdk', '~> 0.3.1'
 gem 'sentry-ruby', '~> 5.16', '>= 5.16.1'
