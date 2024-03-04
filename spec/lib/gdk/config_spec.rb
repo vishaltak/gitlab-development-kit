@@ -2220,6 +2220,10 @@ RSpec.describe GDK::Config do
         it 'returns the default Minio connection parameters' do
           expect(config.object_store.connection).to eq(default_connection)
         end
+
+        it 'configures Gitaly backup URL' do
+          expect(config.gitaly.backup.go_cloud_url).to eq("s3://gitaly-backups?disableSSL=true&s3ForcePathStyle=true&region=gdk&endpoint=http%3A%2F%2F127.0.0.1%3A9000")
+        end
       end
 
       context 'with external S3 provider' do
@@ -2245,6 +2249,69 @@ RSpec.describe GDK::Config do
         it 'configures the S3 provider' do
           expect(config.object_store.enabled?).to be true
           expect(config.object_store.connection).to eq(s3_connection)
+        end
+
+        it 'configures Gitaly backup URL' do
+          expect(config.gitaly.backup.go_cloud_url).to eq("s3://gitaly-backups?disableSSL=false&s3ForcePathStyle=false")
+        end
+      end
+
+      context 'with AzureRM provider' do
+        let(:azure_connection) do
+          {
+            'provider' => 'AzureRM',
+            'azure_storage_account_name' => 'azure-account',
+            'azure_storage_access_key' => '12345'
+          }
+        end
+
+        before do
+          yaml.merge!(
+            {
+              'object_store' => {
+                'enabled' => true,
+                'connection' => azure_connection
+              }
+            }
+          )
+        end
+
+        it 'configures the Azure provider' do
+          expect(config.object_store.enabled?).to be true
+          expect(config.object_store.connection).to eq(azure_connection)
+        end
+
+        it 'configures Gitaly backup URL' do
+          expect(config.gitaly.backup.go_cloud_url).to eq("azblob://gitaly-backups")
+        end
+      end
+
+      context 'with Google provider' do
+        let(:google_connection) do
+          {
+            'provider' => 'Google',
+            'google_application_default' => true
+          }
+        end
+
+        before do
+          yaml.merge!(
+            {
+              'object_store' => {
+                'enabled' => true,
+                'connection' => google_connection
+              }
+            }
+          )
+        end
+
+        it 'configures the Google provider' do
+          expect(config.object_store.enabled?).to be true
+          expect(config.object_store.connection).to eq(google_connection)
+        end
+
+        it 'configures Gitaly backup URL' do
+          expect(config.gitaly.backup.go_cloud_url).to eq("gs://gitaly-backups")
         end
       end
     end
