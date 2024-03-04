@@ -15,7 +15,6 @@ To enable the License Scanning feature:
 
 1. Populate the licenses dropdown in [the Admin panel](https://docs.gitlab.com/ee/administration/settings/security_and_compliance.html#choose-package-registry-metadata-to-sync). 
 1. Add `export PM_SYNC_IN_DEV=true` to your [`env.runit` file](../runit.md#modifying-environment-configuration-for-services).
-1. Optional. To enable faster sync, enable the feature flag `Feature.enable(:compressed_package_metadata_synchronization)`.
 1. Licenses come from the external license database and are stored in the GitLab database. They are updated through a CRON job. Run the following to populate your local GitLab database immediately: 
 
    ```shell
