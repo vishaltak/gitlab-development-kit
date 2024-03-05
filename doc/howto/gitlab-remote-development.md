@@ -2,7 +2,7 @@
 
 ## Setting up Remote Development locally
 
-Follow the steps [here](https://gitlab.com/gitlab-org/remote-development/gitlab-remote-development-docs/-/blob/main/doc/local-development-environment-setup.md) to setup Remote Development locally.
+Follow [these steps](https://gitlab.com/gitlab-org/remote-development/gitlab-remote-development-docs/-/blob/main/doc/local-development-environment-setup.md) to set up remote development locally.
 
 ## Develop GitLab with GitLab remote development workspaces
 
