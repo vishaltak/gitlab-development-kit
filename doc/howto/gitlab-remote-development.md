@@ -1,8 +1,10 @@
-# Setting up Remote Development locally
+# GitLab Remote Development
 
-Follow the steps [here](https://gitlab.com/gitlab-org/remote-development/gitlab-remote-development-docs/-/blob/main/doc/local-development-environment-setup.md).
+## Setting up Remote Development locally
 
-# Develop GitLab with GitLab remote development workspaces
+Follow the steps [here](https://gitlab.com/gitlab-org/remote-development/gitlab-remote-development-docs/-/blob/main/doc/local-development-environment-setup.md) to setup Remote Development locally.
+
+## Develop GitLab with GitLab remote development workspaces
 
 GDK supports [GitLab remote development workspaces (beta)](https://about.gitlab.com/releases/2023/05/22/gitlab-16-0-released/#remote-development-workspaces-available-in-beta-for-public-projects). You can use the integration to code directly in a cloud environment, which can reduce the time you spend troubleshooting issues in your local development setups.
 
@@ -13,11 +15,11 @@ To learn more about remote development in GitLab, see the [remote development do
 This integration is available only to GitLab team members to encourage [dogfooding](https://about.gitlab.com/handbook/engineering/development/principles/#dogfooding).
 [Issue #1982](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/1982) proposes to enable the integration for open source contributors.
 
-## Prerequisites
+### Prerequisites
 
 You must have at least the Developer role in the GDK repository.
 
-## Create and connect a workspace
+### Create and connect a workspace
 
 1. Go to the GDK repository and select __Edit__.
 1. Select __New workspace__.
@@ -40,7 +42,7 @@ After deployment, you should see a workspace under __Preview__.
 <img src="img/remote-development-workspace-link.png" width="800"
 alt="Workspaces overview page">
 
-## Run GDK in your workspace
+### Run GDK in your workspace
 
 1. The _Bootstrap GDK_ task starts automatically when a workspace is opened, executing the [bootstrap script](../../support/gitlab-remote-development/setup_workspace.rb).
 1. After the bootstrap script finishes, you'll see a prompt asking if you want to send duration data.
