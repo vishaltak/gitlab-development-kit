@@ -33,6 +33,9 @@ Use the GDK to run a previous version of GitLab.
     gdk restart
     ```
 
+   Always restart the GDK after performing database migrations to prevent deadlocks in components such as Sidekiq. The existing Rails process caches the
+   database schema at boot, and may run on false assumptions until it reloads the database.
+
 ## Creating an alias
 
 If this is an action you'll perform regularly consider creating the following alias:
