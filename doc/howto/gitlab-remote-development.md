@@ -1,3 +1,7 @@
+# Setting up Remote Development locally
+
+Follow the steps [here](https://gitlab.com/gitlab-org/remote-development/gitlab-remote-development-docs/-/blob/main/doc/local-development-environment-setup.md).
+
 # Develop GitLab with GitLab remote development workspaces
 
 GDK supports [GitLab remote development workspaces (beta)](https://about.gitlab.com/releases/2023/05/22/gitlab-16-0-released/#remote-development-workspaces-available-in-beta-for-public-projects). You can use the integration to code directly in a cloud environment, which can reduce the time you spend troubleshooting issues in your local development setups.
