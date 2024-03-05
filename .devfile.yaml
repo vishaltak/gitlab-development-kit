@@ -1,6 +1,6 @@
 schemaVersion: 2.2.0
 components:
-  - name: tooling-container
+  - name: gitlab-development-kit
     attributes:
       gl/inject-editor: true
     container:
