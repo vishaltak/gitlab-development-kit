@@ -24,6 +24,7 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Gitaly,
         GDK::Diagnostic::Gitlab,
         GDK::Diagnostic::Status,
+        GDK::Diagnostic::Redis,
         GDK::Diagnostic::Re2,
         GDK::Diagnostic::Golang,
         GDK::Diagnostic::StaleData,

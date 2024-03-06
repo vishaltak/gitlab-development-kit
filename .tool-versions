@@ -33,7 +33,7 @@ postgres 14.9 13.12
 #   7.0.14:
 #     - .tool-versions-gdk
 #
-redis 7.0.14
+redis 6.2.13 7.0.14
 
 # ruby:
 #   3.2.3:

@@ -21,6 +21,7 @@ module GDK
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
     autoload :Praefect, 'gdk/diagnostic/praefect'
+    autoload :Redis, 'gdk/diagnostic/redis'
     autoload :Re2, 'gdk/diagnostic/re2'
     autoload :RubyGems, 'gdk/diagnostic/ruby_gems'
     autoload :RvmAndAsdf, 'gdk/diagnostic/rvm_and_asdf'
@@ -47,6 +48,7 @@ module GDK
         Gitaly
         Gitlab
         Status
+        Redis
         Re2
         Golang
         StaleData
