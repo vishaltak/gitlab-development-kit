@@ -1003,6 +1003,7 @@ module GDK
         settings :session_store do
           bool(:unique_cookie_key_postfix) { true } # a unique key postfix based on the root directory of GDK
           string(:cookie_key) { "_gitlab_session" }
+          string(:session_cookie_token_prefix) { "" }
         end
 
         array(:allowed_hosts) { [] }
