@@ -2282,7 +2282,7 @@ RSpec.describe GDK::Config do
         end
 
         it 'configures Gitaly backup URL' do
-          expect(config.gitaly.backup.go_cloud_url).to eq("azblob://gitaly-backups")
+          expect(config.gitaly.backup.go_cloud_url).to eq("azblob://gitaly-backups?storage_account=azure-account")
         end
       end
 
