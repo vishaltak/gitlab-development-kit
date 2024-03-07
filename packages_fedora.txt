@@ -12,6 +12,7 @@ gpgme-devel
 icu
 krb5-devel
 libcurl-devel
+libffi-devel
 libicu-devel
 libuuid-devel
 libyaml-devel
