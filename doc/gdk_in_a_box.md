@@ -40,7 +40,7 @@ NOTE:
 1. In VSCode, select **Terminal > New terminal** and configure Git by running: `curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/setup-git" | bash`.
    - Enter your name and e-mail address when prompted.
    - Add the displayed [SSH key to your profile](https://gitlab.com/-/profile/keys).
-1. In VSCode, select **File > Open folder**, and navigate to: `/home/gitlab-development-kit/gitlab`.
+1. In VSCode, select **File > Open folder**, and navigate to: `/home/debian/gitlab-development-kit/gitlab`.
 1. Open GitLab in your browser: [http://gdk.local:3000](http://gdk.local:3000).
 1. Login to GitLab with `root/5iveL!fe`.
 
