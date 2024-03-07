@@ -733,7 +733,8 @@ module GDK
             other_params = "&#{URI.encode_www_form(region_endpoint)}" unless region_endpoint.empty?
             "s3://#{bucket}?disableSSL=#{disable_ssl}&s3ForcePathStyle=#{path_style}#{other_params}"
           when 'AzureRM'
-            "azblob://#{bucket}"
+            storage_account = connection['azure_storage_account_name']
+            "azblob://#{bucket}?storage_account=#{storage_account}"
           when 'Google'
             "gs://#{bucket}"
           end
