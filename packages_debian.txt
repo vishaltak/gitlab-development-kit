@@ -9,6 +9,7 @@ git-lfs
 gpg
 graphicsmagick
 libcurl4-openssl-dev
+libffi-dev
 libgpgme-dev
 libicu-dev
 libimage-exiftool-perl
