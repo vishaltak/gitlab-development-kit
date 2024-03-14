@@ -6,13 +6,11 @@ module GDK
       TITLE = 'Geo'
 
       def success?
-        @success ||= if geo_primary?
-                       geo_enabled?
-                     elsif geo_secondary?
-                       geo_enabled? && geo_database_exists?
-                     else
-                       (!geo_enabled? && !geo_database_exists?)
-                     end
+        @success ||= begin
+          return true unless geo_enabled?
+
+          geo_primary? || geo_secondary? || geo_database_exists?
+        end
       end
 
       def detail

@@ -31,30 +31,7 @@ module GDK
 
     def self.all
       klasses = %i[
-        Environment
-        RvmAndAsdf
-        MacPorts
-        RubyGems
-        Bundler
-        Version
-        Configuration
-        Dependencies
-        PendingMigrations
-        PostgreSQL
-        PGUser
         Geo
-        Praefect
-        Gitaly
-        Gitlab
-        Status
-        Re2
-        Golang
-        StaleData
-        StaleServices
-        Chromedriver
-        FileWatches
-        Hostname
-        Nginx
       ]
 
       klasses.map do |const|
