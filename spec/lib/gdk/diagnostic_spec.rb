@@ -31,7 +31,8 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Chromedriver,
         GDK::Diagnostic::FileWatches,
         GDK::Diagnostic::Hostname,
-        GDK::Diagnostic::Nginx
+        GDK::Diagnostic::Nginx,
+        GDK::Diagnostic::Redis
       ]
 
       expect(described_class.all.map(&:class)).to eq(diagnostic_classes)

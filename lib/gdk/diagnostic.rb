@@ -22,6 +22,7 @@ module GDK
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
     autoload :Praefect, 'gdk/diagnostic/praefect'
     autoload :Re2, 'gdk/diagnostic/re2'
+    autoload :Redis, 'gdk/diagnostic/redis'
     autoload :RubyGems, 'gdk/diagnostic/ruby_gems'
     autoload :RvmAndAsdf, 'gdk/diagnostic/rvm_and_asdf'
     autoload :StaleData, 'gdk/diagnostic/stale_data'
@@ -55,6 +56,7 @@ module GDK
         FileWatches
         Hostname
         Nginx
+        Redis
       ]
 
       klasses.map do |const|
