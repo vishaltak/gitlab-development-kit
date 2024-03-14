@@ -95,6 +95,7 @@ module GDK
   autoload :PostgresqlUpgrader, 'gdk/postgresql_upgrader'
   autoload :Project, 'gdk/project'
   autoload :PostgresqlGeo, 'gdk/postgresql_geo'
+  autoload :Redis, 'gdk/redis'
   autoload :Services, 'gdk/services'
   autoload :Shellout, 'shellout'
   autoload :Telemetry, 'gdk/telemetry'

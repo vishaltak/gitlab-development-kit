@@ -76,24 +76,26 @@ RSpec.describe GDK::Dependencies::Checker do
   end
 
   describe '#check_postgresql_version' do
-    let(:tmp_path) { Dir.mktmpdir('gdk-path') }
-    let(:pg_bin_bir) { tmp_path }
+    let(:psql_path) { GDK.config.postgresql.bin_dir.join('psql') }
     let(:pg_version) { "psql (PostgreSQL) #{GDK::Postgresql.target_version}" }
 
-    before do
-      path = File.join(tmp_path, 'psql')
-      File.open(path, File::WRONLY | File::CREAT, 0o755) do |f|
-        f.write <<~SCRIPT
-          #!/bin/sh
-          echo '#{pg_version}'
-        SCRIPT
-      end
+    it 'detects the correct version' do
+      expect(subject).to receive(:check_binary).with(psql_path).and_return('psql')
+      expect(subject).to receive(:`).with("#{psql_path} --version").and_return(pg_version)
 
-      stub_gdk_yaml("postgresql" => { "bin_dir" => tmp_path })
+      expect(subject.check_postgresql_version).to be_nil
+      expect(subject.error_messages).to be_empty
     end
+  end
+
+  describe '#check_redis_version' do
+    let(:redis_version) { "Redis server v=#{GDK::Redis.target_version} sha=00000000:0 malloc=libc bits=64 build=2d86b7859915655e" }
 
     it 'detects the correct version' do
-      expect(subject.check_postgresql_version).to be_nil
+      expect(subject).to receive(:check_binary).with('redis-server').and_return('redis-server')
+      expect(subject).to receive(:`).with('redis-server --version').and_return(redis_version)
+
+      expect(subject.check_redis_version).to be_nil
       expect(subject.error_messages).to be_empty
     end
   end
