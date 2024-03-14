@@ -21,6 +21,7 @@ module GDK
     autoload :PendingMigrations, 'gdk/diagnostic/pending_migrations'
     autoload :PostgreSQL, 'gdk/diagnostic/postgresql'
     autoload :Praefect, 'gdk/diagnostic/praefect'
+    autoload :Redis, 'gdk/diagnostic/redis'
     autoload :Re2, 'gdk/diagnostic/re2'
     autoload :RubyGems, 'gdk/diagnostic/ruby_gems'
     autoload :RvmAndAsdf, 'gdk/diagnostic/rvm_and_asdf'
@@ -31,30 +32,7 @@ module GDK
 
     def self.all
       klasses = %i[
-        Environment
-        RvmAndAsdf
-        MacPorts
-        RubyGems
-        Bundler
-        Version
-        Configuration
-        Dependencies
-        PendingMigrations
-        PostgreSQL
-        PGUser
-        Geo
-        Praefect
-        Gitaly
-        Gitlab
-        Status
-        Re2
-        Golang
-        StaleData
-        StaleServices
-        Chromedriver
-        FileWatches
-        Hostname
-        Nginx
+        Redis
       ]
 
       klasses.map do |const|
