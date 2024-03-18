@@ -101,7 +101,7 @@ This command configures `git` to use `SSH` for all GitLab.com URLs.
   of Docker or other containerization tools.
 - For users that run non-Linux operating systems, running Docker or other containerization tools
   have their own set of hardware requirements which could be another blocker.
-- However, we do have [GDK In A Box](doc/gdk_in_a_box), a preconfigured virtual machine you can download and boot
+- However, we do have [GDK In A Box](doc/gdk_in_a_box.md), a preconfigured virtual machine you can download and boot
   to instantly start developing.
 
 ## Getting help
