@@ -7,6 +7,7 @@ module GDK
       EXPECTED_YARN_VERSION = '1.22.5'
       EXPECTED_NODEJS_VERSION = '12.18.3'
       EXPECTED_POSTGRESQL_VERSION = GDK::Postgresql.target_version.to_s
+      EXPECTED_REDIS_VERSION = GDK::Redis.target_version.to_s
 
       attr_reader :error_messages
 
@@ -24,6 +25,7 @@ module GDK
         check_nodejs_version
         check_yarn_version
         check_postgresql_version
+        check_redis_version
 
         check_brew_dependencies_installed
         check_exiftool_installed
@@ -33,6 +35,7 @@ module GDK
         check_runit_installed
         check_nginx_installed
 
+        # FIXME: This duplicates the RubyGems diagnostic check
         check_ruby_gems_ok
       end
 
@@ -116,6 +119,20 @@ module GDK
         @error_messages << require_minimum_version('PostgreSQL', actual, expected) if actual < expected
       rescue Errno::ENOENT, MissingDependency
         @error_messages << missing_dependency('PostgreSQL', minimum_version: expected)
+      end
+
+      def check_redis_version
+        return unless check_binary('redis-server')
+
+        current_version = Checker.parse_version(`redis-server --version`, prefix: 'Redis server v=')
+        expected = Gem::Version.new(EXPECTED_REDIS_VERSION)
+
+        raise MissingDependency unless current_version
+
+        actual = Gem::Version.new(current_version)
+        @error_messages << require_minimum_version('redis', actual, expected) if actual < expected
+      rescue Errno::ENOENT, MissingDependency
+        @error_messages << missing_dependency('redis', minimum_version: expected)
       end
 
       def check_brew_dependencies_installed
