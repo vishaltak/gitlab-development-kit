@@ -87,14 +87,14 @@ development:
     pool: 5
     gssencmode: disable
 <%- end -%>
-<%- if config.cells? -%>
+<%- if config.cells_old? -%>
   main_clusterwide: &main_clusterwide
     adapter: postgresql
     encoding: unicode
     database: gitlabhq_development
     database_tasks: false
-    host: <%= config.cells.postgresql_clusterwide.host %>
-    port: <%= config.cells.postgresql_clusterwide.port %>
+    host: <%= config.cells_old.postgresql_clusterwide.host %>
+    port: <%= config.cells_old.postgresql_clusterwide.port %>
     pool: 5
     gssencmode: disable
 <%- end -%>
@@ -164,7 +164,7 @@ test: &test
     pool: 5
     gssencmode: disable
 <%- end -%>
-<%- if config.cells? -%>
+<%- if config.cells_old? -%>
   main_clusterwide:
     <<: *main_clusterwide
     database: gitlabhq_test

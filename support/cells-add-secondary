@@ -182,9 +182,9 @@ class SecondaryAdder
 
     primary_postgresql_host = run_command_for_stdout(primary_gdk, 'gdk config get postgresql.host')
     primary_postgresql_port = run_command_for_stdout(primary_gdk, 'gdk config get postgresql.port')
-    gdk_set(secondary_gdk, 'cells.enabled', 'true')
-    gdk_set(secondary_gdk, 'cells.postgresql_clusterwide.host', primary_postgresql_host)
-    gdk_set(secondary_gdk, 'cells.postgresql_clusterwide.port', primary_postgresql_port)
+    gdk_set(secondary_gdk, 'cells_old.enabled', 'true')
+    gdk_set(secondary_gdk, 'cells_old.postgresql_clusterwide.host', primary_postgresql_host)
+    gdk_set(secondary_gdk, 'cells_old.postgresql_clusterwide.port', primary_postgresql_port)
 
     # Secondary GDK should share redis Sessions Store with Primary GDK
     # This assumes that that the primary gdk doesn't have custom_config for redis.development.sessions

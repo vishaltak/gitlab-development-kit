@@ -621,33 +621,33 @@ RSpec.describe GDK::Config do
     end
   end
 
-  describe "#cells" do
+  describe "#cells_old" do
     describe "#enabled" do
       let(:yaml) do
         {
-          'cells' => {
+          'cells_old' => {
             'enabled' => true
           }
         }
       end
 
-      it { expect(default_config.cells.enabled).to be(false) }
-      it { expect(default_config.cells?).to be(false) }
+      it { expect(default_config.cells_old.enabled).to be(false) }
+      it { expect(default_config.cells_old?).to be(false) }
 
-      it { expect(config.cells.enabled).to be(true) }
-      it { expect(config.cells?).to be(true) }
+      it { expect(config.cells_old.enabled).to be(true) }
+      it { expect(config.cells_old?).to be(true) }
     end
 
     describe "#postgresql" do
       context 'with default settings' do
-        it { expect(default_config.cells.postgresql_clusterwide.host).to eq(default_config.postgresql.host) }
-        it { expect(default_config.cells.postgresql_clusterwide.port).to eq(default_config.postgresql.port) }
+        it { expect(default_config.cells_old.postgresql_clusterwide.host).to eq(default_config.postgresql.host) }
+        it { expect(default_config.cells_old.postgresql_clusterwide.port).to eq(default_config.postgresql.port) }
       end
 
       context 'with custom settings' do
         let(:yaml) do
           {
-            'cells' => {
+            'cells_old' => {
               'postgresql_clusterwide' => {
                 'host' => '/tmp/another_gdk/postgres',
                 'port' => 5432
@@ -656,8 +656,8 @@ RSpec.describe GDK::Config do
           }
         end
 
-        it { expect(config.cells.postgresql_clusterwide.host).to eq('/tmp/another_gdk/postgres') }
-        it { expect(config.cells.postgresql_clusterwide.port).to eq(5432) }
+        it { expect(config.cells_old.postgresql_clusterwide.host).to eq('/tmp/another_gdk/postgres') }
+        it { expect(config.cells_old.postgresql_clusterwide.port).to eq(5432) }
       end
     end
   end

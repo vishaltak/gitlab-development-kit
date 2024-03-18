@@ -39,8 +39,8 @@ module Support
     end
 
     def cells_secondary?
-      config.cells.postgresql_clusterwide.host != config.postgresql.host ||
-        config.cells.postgresql_clusterwide.port != config.postgresql.port
+      config.cells_old.postgresql_clusterwide.host != config.postgresql.host ||
+        config.cells_old.postgresql_clusterwide.port != config.postgresql.port
     end
 
     # TODO: Skip seeding due to https://gitlab.com/gitlab-org/gitlab/-/issues/412075

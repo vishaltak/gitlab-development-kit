@@ -552,7 +552,7 @@ module GDK
       end
     end
 
-    settings :cells do
+    settings :cells_old do
       bool(:enabled) { false }
       settings :postgresql_clusterwide do
         string(:host) { config.postgresql.host }

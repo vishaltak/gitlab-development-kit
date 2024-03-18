@@ -30,7 +30,7 @@ module GDK
         }
 
         e[:GDK_GEO_SECONDARY] = 1 if config.geo? && config.geo.secondary?
-        e[:GITLAB_VALIDATE_DATABASE_CONFIG] = 0 if config.cells?
+        e[:GITLAB_VALIDATE_DATABASE_CONFIG] = 0 if config.cells_old?
 
         e
       end
