@@ -106,3 +106,22 @@ We should try and reduce this.
 
 - Use a smaller Linux distribution or remove unneccessary packages.
 - Clear apt cache.
+
+## Terminal customization
+
+To jazz up the terminal prompt with colors and the branch name: 
+
+1. `code ~/.bashrc`
+1. At the end of the file paste: 
+
+   ```shell
+   # Function to return the current git branch name
+   git_branch() {
+     git branch 2>/dev/null | grep '^*' | colrm 1 2
+   }
+
+   # Prompt customization 
+   export PS1="\[\033[01;36m\]➜  \[\033[01;32m\]\u@\h \[\033[01;36m\]\W \[\033[01;34m\]git:\[\033[01;34m\](\[\033[01;31m\]\$(git_branch)\[\033[01;34m\]) \[\033[00m\]"
+   ```
+
+1. Save and run `source ~/.bashrc`.
