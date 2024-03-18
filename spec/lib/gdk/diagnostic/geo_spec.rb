@@ -45,55 +45,40 @@ RSpec.describe GDK::Diagnostic::Geo do
     CONTENT
   end
 
-  shared_examples 'with Geo diagnostic success' do |geo_enabled, expected_result, database_settings = nil|
-    it "returns #{expected_result}" do
-      stub_geo_enabled(geo_enabled)
-      stub_database_yml_content(database_settings) if database_settings
-
-      expect(geo_diagnostic.success?).to eq(expected_result)
-    end
-  end
-
   describe '#success?' do
-    context 'with GDK primary' do
+    context 'when Geo database does not exist' do
       before do
-        stub_geo_primary
+        stub_database_yml_content(default_content)
       end
 
-      context 'when geo.enabled is set to true' do
-        include_examples 'with Geo diagnostic success', true, true
-      end
-
-      context 'when geo.enabled is set to false' do
-        include_examples 'with Geo diagnostic success', false, false
+      it 'returns true' do
+        expect(geo_diagnostic.success?).to be(true)
       end
     end
 
-    context 'with GDK secondary' do
+    context 'when Geo database exists' do
       before do
-        stub_geo_secondary
+        stub_database_yml_content(geo_content)
       end
 
-      context 'when geo.enabled is set to true' do
-        context 'with Geo database settings' do
-          it_behaves_like 'with Geo diagnostic success' do
-            let(:geo_enabled) { true }
-            let(:expected_result) { true }
-            let(:database_settings) { geo_content }
-          end
+      context 'and geo.enabled is set to true' do
+        before do
+          stub_geo_enabled(true)
         end
 
-        context 'without Geo database settings' do
-          it_behaves_like 'with Geo diagnostic success' do
-            let(:geo_enabled) { true }
-            let(:expected_result) { false }
-            let(:database_settings) { default_content }
-          end
+        it 'returns true' do
+          expect(geo_diagnostic.success?).to be(true)
         end
       end
 
-      context 'when geo.enabled is set to false' do
-        include_examples 'with Geo diagnostic success', false, false
+      context 'and geo.enabled is set to false' do
+        before do
+          stub_geo_enabled(false)
+        end
+
+        it 'returns false' do
+          expect(geo_diagnostic.success?).to be(false)
+        end
       end
     end
   end
