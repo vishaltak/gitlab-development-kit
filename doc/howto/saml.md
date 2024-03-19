@@ -30,15 +30,6 @@ gdk reconfigure
 gdk restart
 ```
 
-### Feature flags
-
-Some SAML-related features are behind [feature flags](https://docs.gitlab.com/ee/development/feature_flags/index.html). These are:
-
-- For SAML on [group-managed accounts](https://docs.gitlab.com/ee/user/group/saml_sso/index.html#group-managed-accounts):
-  - `group_managed_accounts`
-  - `sign_up_on_sso`
-  - `convert_user_to_group_managed_accounts`
-
 ### Docker
 
 The Docker identity provider needs to be configured using your group's callback URL and entity ID.
