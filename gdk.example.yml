@@ -450,6 +450,7 @@ sshd:
   web_listen: 127.0.0.1:9122
 telemetry:
   enabled: false
+  platform: native
   username: ''
 tracer:
   build_tags: tracer_static tracer_static_jaeger

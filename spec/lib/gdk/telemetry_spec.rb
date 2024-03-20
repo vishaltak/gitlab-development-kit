@@ -19,6 +19,7 @@ RSpec.describe GDK::Telemetry do
       expect(described_class).to receive(:with_telemetry).and_call_original
 
       allow(GDK).to receive_message_chain(:config, :telemetry, :username).and_return('testuser')
+      allow(GDK).to receive_message_chain(:config, :telemetry, :platform).and_return('native')
       allow(described_class).to receive_messages(client: client)
 
       stub_const('ARGV', args)
@@ -34,7 +35,7 @@ RSpec.describe GDK::Telemetry do
 
     it 'tracks the finish of the command' do
       expect(client).to receive(:identify).with('testuser')
-      expect(client).to receive(:track).with(a_string_starting_with('Finish'), hash_including(:duration))
+      expect(client).to receive(:track).with(a_string_starting_with('Finish'), hash_including(:duration, :platform))
 
       described_class.with_telemetry(command) { true }
     end
@@ -42,7 +43,7 @@ RSpec.describe GDK::Telemetry do
     context 'when the block returns false' do
       it 'tracks the failure of the command' do
         expect(client).to receive(:identify).with('testuser')
-        expect(client).to receive(:track).with(a_string_starting_with('Failed'), hash_including(:duration))
+        expect(client).to receive(:track).with(a_string_starting_with('Failed'), hash_including(:duration, :platform))
 
         described_class.with_telemetry(command) { false }
       end

@@ -20,6 +20,7 @@ describe SetupWorkspace do
     stub_prompt('y', prompt_message)
 
     allow(GDK.config).to receive(:bury!).with('telemetry.username', username)
+    allow(GDK.config).to receive(:bury!).with('telemetry.platform', 'remote-development')
     allow(GDK.config).to receive(:save_yaml!)
     allow(GDK::Telemetry).to receive(:send_telemetry)
   end

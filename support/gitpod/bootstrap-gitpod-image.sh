@@ -31,6 +31,7 @@ configure_gdk() {
 
   configure_rails
   configure_webpack
+  configure_telemetry
   cat gdk.yml
 }
 
@@ -48,6 +49,11 @@ configure_webpack() {
   gdk config set webpack.host 127.0.0.1
   gdk config set webpack.live_reload false
   gdk config set webpack.sourcemaps false
+}
+
+configure_telemetry() {
+  echo "# --- Configure Telemetry settings ---"
+  gdk config set telemetry.platform 'gitpod'
 }
 
 install_gdk() {
