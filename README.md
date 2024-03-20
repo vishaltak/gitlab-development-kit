@@ -90,6 +90,12 @@ This command configures `git` to use `SSH` for all GitLab.com URLs.
 
 ### Why don't we Dockerize or containerize GDK, or switch to GCK as the preferred tool?
 
+We have [GDK In A Box](doc/gdk_in_a_box.md),
+a preconfigured virtual machine you can download and boot to instantly start developing.
+
+Gitpod and Remote Development use a single container solution,
+but we are not yet ready to recommend a Docker solution for your primary development environment.
+
 - The majority of GDK users have macOS as their primary operating system, which is
   supported by Docker and other containerization tools but usually requires a virtual machine (VM).
   Running and managing a VM adds to the overall complexity.
@@ -101,8 +107,6 @@ This command configures `git` to use `SSH` for all GitLab.com URLs.
   of Docker or other containerization tools.
 - For users that run non-Linux operating systems, running Docker or other containerization tools
   have their own set of hardware requirements which could be another blocker.
-- However, we do have [GDK In A Box](doc/gdk_in_a_box.md), a preconfigured virtual machine you can download and boot
-  to instantly start developing.
 
 ## Getting help
 
