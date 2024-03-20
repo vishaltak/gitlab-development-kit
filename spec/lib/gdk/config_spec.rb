@@ -1612,12 +1612,6 @@ RSpec.describe GDK::Config do
           expect(config.gitlab.rails.application_settings_cache_seconds).to be(60)
         end
       end
-
-      describe 'new_css_pipeline' do
-        it 'is enabled by default' do
-          expect(config.gitlab.rails.new_css_pipeline).to be(true)
-        end
-      end
     end
 
     describe 'rails_background_jobs' do

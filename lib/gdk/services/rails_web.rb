@@ -25,8 +25,7 @@ module GDK
           RAILS_RELATIVE_URL_ROOT: config.relative_url_root,
           ACTION_CABLE_IN_APP: 'true',
           ACTION_CABLE_WORKER_POOL_SIZE: config.action_cable.worker_pool_size,
-          GITALY_DISABLE_REQUEST_LIMITS: config.gitlab.gitaly_disable_request_limits,
-          USE_NEW_CSS_PIPELINE: config.gitlab.rails.new_css_pipeline?
+          GITALY_DISABLE_REQUEST_LIMITS: config.gitlab.gitaly_disable_request_limits
         }
 
         e[:GDK_GEO_SECONDARY] = 1 if config.geo? && config.geo.secondary?
