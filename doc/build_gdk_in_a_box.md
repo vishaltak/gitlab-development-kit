@@ -88,6 +88,13 @@ This is the manual process to create the GDK-in-a-box virtual machines:
    gdk config set listen_address 0.0.0.0
    ```
 
+   1. Enable telemetry:
+
+   ```shell
+   gdk config set telemetry.enabled true
+   gdk config set telemetry.platform 'gdk-in-a-box'
+   ```
+
    1. Apply configuration changes: ```gdk reconfigure```.
    1. Start GDK: ```gdk start```.
 1. Sign in to GDK in your web browser: [http://gdk.local:3000](http://gdk.local:3000).

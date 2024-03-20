@@ -46,6 +46,7 @@ module GDK
     settings :telemetry do
       string(:username) { '' }
       bool(:enabled) { false }
+      string(:platform) { 'native' }
     end
 
     settings :repositories do

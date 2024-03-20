@@ -22,7 +22,7 @@ module GDK
 
       duration = Process.clock_gettime(Process::CLOCK_MONOTONIC) - start
 
-      send_telemetry(result, command, { duration: duration })
+      send_telemetry(result, command, { duration: duration, platform: platform })
 
       result
     end
@@ -37,6 +37,10 @@ module GDK
 
     def self.flush_events(async: false)
       client.flush_events(async: async)
+    end
+
+    def self.platform
+      GDK.config.telemetry.platform
     end
 
     def self.client
