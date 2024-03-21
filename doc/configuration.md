@@ -4,7 +4,10 @@ This document describes how you can configure your GDK environment.
 
 - [Git configuration](#git-configuration).
 - [GDK configuration](#gdk-configuration).
+- [Runner settings](#runner-settings).
+- [Vite settings](#vite-settings).
 - [Webpack settings](#webpack-settings).
+- [ActionCable settings](#actioncable-settings).
 - [Grafana settings](#grafana-settings).
 - [`asdf` settings](#asdf-settings).
 
