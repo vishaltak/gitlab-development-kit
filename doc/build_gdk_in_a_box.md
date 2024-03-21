@@ -1,11 +1,11 @@
 # Build GDK-in-a-box
 
-This is the manual process to create the GDK-in-a-box virtual machines:
+This documentation is the manual process for creating the GDK-in-a-box virtual machines.
 
 ## Build on macOS
 
 1. Download the preconfigured [Debian 12 VM](https://mac.getutm.app/gallery/debian-12).
-1. In UTM, edit the VM config:
+1. In UTM, edit the VM configuration:
    - **Information > Name**: `GDK`.
    - **System > CPU Cores**: `8`.
    - **System > RAM**: `16384` MB.
@@ -43,21 +43,21 @@ This is the manual process to create the GDK-in-a-box virtual machines:
    ```
 
 1. Sign in with SSH to `debian@gdk.local` with password: `debian`.
-   1. Configure the grub bootloader so that it does not wait:
-      - ```sudo nano /etc/default/grub```.
+   1. Configure the grub boot loader so that it does not wait:
+      - `sudo nano /etc/default/grub`.
       - Set **GRUB_TIMEOUT** to `0`.
       - Save and exit.
       - Update grub: ```sudo update-grub```.
    1. Remove Gnome/desktop/UI: ```sudo tasksel```.
    1. Install pre-requisites:
 
-   ```shell
-   sudo apt update
-   sudo apt install git make curl
-   ```
+      ```shell
+      sudo apt update
+      sudo apt install git make curl
+      ```
 
    1. Download the SSH key and allow it to connect:
-    
+
       ```shell
       curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/gdk-in-a-box/gdk.local_rsa.pub" -o ~/.ssh/id_rsa.pub
       cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
@@ -73,27 +73,27 @@ This is the manual process to create the GDK-in-a-box virtual machines:
    1. Install GDK using the one-line installation method: ```curl "https://gitlab.com/gitlab-org/gitlab-development-kit/-/raw/main/support/install" | bash```.
    1. When prompted, configure GDK to use the GitLab community fork, and telemetry with anonymous user: `gdk-in-a-box`.
    1. Load asdf into your shell: ```source "/home/debian/.asdf/asdf.sh"```.
-   1. Enable Vite: 
-  
-   ```shell
-   echo "Feature.enable(:vite)" | gdk rails c
-   gdk config set webpack.enabled false
-   gdk config set vite.enabled true
-   ```
+   1. Enable Vite:
+
+      ```shell
+      echo "Feature.enable(:vite)" | gdk rails c
+      gdk config set webpack.enabled false
+      gdk config set vite.enabled true
+      ```
 
    1. Configure GDK to listen outside on the local network:
 
-   ```shell
-   gdk config set hostname gdk.local
-   gdk config set listen_address 0.0.0.0
-   ```
+      ```shell
+      gdk config set hostname gdk.local
+      gdk config set listen_address 0.0.0.0
+      ```
 
    1. Enable telemetry:
 
-   ```shell
-   gdk config set telemetry.enabled true
-   gdk config set telemetry.platform 'gdk-in-a-box'
-   ```
+      ```shell
+      gdk config set telemetry.enabled true
+      gdk config set telemetry.platform 'gdk-in-a-box'
+      ```
 
    1. Apply configuration changes: ```gdk reconfigure```.
    1. Start GDK: ```gdk start```.
@@ -111,15 +111,15 @@ This is the manual process to create the GDK-in-a-box virtual machines:
 The zipped virtual machines are roughly 7 GB.
 We should try and reduce this.
 
-- Use a smaller Linux distribution or remove unneccessary packages.
+- Use a smaller Linux distribution or remove unnecessary packages.
 - Clear apt cache.
 
 ## Terminal customization
 
-To jazz up the terminal prompt with colors and the branch name: 
+To jazz up the terminal prompt with colors and the branch name:
 
 1. `code ~/.bashrc`
-1. At the end of the file paste: 
+1. At the end of the file, paste:
 
    ```shell
    # Function to return the current git branch name
@@ -127,7 +127,7 @@ To jazz up the terminal prompt with colors and the branch name:
      git branch 2>/dev/null | grep '^*' | colrm 1 2
    }
 
-   # Prompt customization 
+   # Prompt customization
    export PS1="\[\033[01;36m\]➜  \[\033[01;32m\]\u@\h \[\033[01;36m\]\W \[\033[01;34m\]git:\[\033[01;34m\](\[\033[01;31m\]\$(git_branch)\[\033[01;34m\]) \[\033[00m\]"
    ```
 
