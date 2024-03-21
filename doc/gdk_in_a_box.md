@@ -3,14 +3,18 @@
 GDK-in-a-box provides a preconfigured virtual machine you can download and boot
 to instantly start developing.
 
-## Run on macOS
+## Run on macOS (ARM processor)
+
+These instructions only work on Macs with ARM processors.
+Instructions for Macs with Intel processors are below.
+If you aren't sure which processor your Mac has, select the Apple icon in the top left of the screen and select "About this Mac".
 
 1. Download and [install UTM](https://mac.getutm.app/).
 1. Download and unzip [GDK-in-a-box](https://go.gitlab.com/cCHpCP).
 1. Double-click `gdk.utm`.
 1. Follow the [standard setup steps](#standard-setup).
 
-## Run on Linux / Windows
+## Run on Linux / Windows / macOS (Intel processor)
 
 1. Download and [install VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 1. Download and unzip [GDK-in-a-box](https://go.gitlab.com/5iydBP).
@@ -59,6 +63,8 @@ If you have any issues, the simplest and fastest solution is to:
 - Delete the virtual machine.
 - Download the latest build.
 - Follow the [standard setup instructions](#standard-setup).
+
+Some troubleshooting solutions are detailed in the [feedback issue](https://gitlab.com/gitlab-org/gitlab-development-kit/-/issues/2035).
 
 NOTE:
 
