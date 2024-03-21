@@ -564,7 +564,7 @@ module GDK
 
     settings :elasticsearch do
       bool(:enabled) { false }
-      string(:version) { '8.6.2' }
+      string(:version) { '8.11.4' }
       string(:__architecture) { GDK::Machine.architecture == 'arm64' ? 'aarch64' : GDK::Machine.architecture }
     end
 
