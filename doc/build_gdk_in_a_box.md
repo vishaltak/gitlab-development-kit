@@ -76,7 +76,6 @@ This documentation is the manual process for creating the GDK-in-a-box virtual m
    1. Enable Vite:
 
       ```shell
-      echo "Feature.enable(:vite)" | gdk rails c
       gdk config set webpack.enabled false
       gdk config set vite.enabled true
       ```

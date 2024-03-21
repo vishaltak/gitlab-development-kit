@@ -557,7 +557,6 @@ To enable Vite for your GDK:
 1. Run the following commands to setup Vite:
 
       ```shell
-      echo "Feature.enable(:vite)" | gdk rails c
       gdk stop webpack rails-web
       gdk config set webpack.enabled false
       gdk config set vite.enabled true
@@ -568,7 +567,6 @@ To enable Vite for your GDK:
 To disable Vite, run the following commands:
 
 ```shell
-echo "Feature.disable(:vite)" | gdk rails c
 gdk stop vite rails-web
 gdk config set vite.enabled false
 gdk config set webpack.enabled true
