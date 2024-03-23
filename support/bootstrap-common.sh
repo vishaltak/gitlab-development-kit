@@ -263,6 +263,10 @@ configure_ruby_bundler_for_gitlab() {
       fi
 
       bundle config unset build.ffi-yajl
+      # We forked charlock_holmes at
+      # https://gitlab.com/gitlab-org/ruby/gems/charlock_holmes, but
+      # changed it's name to 'static_holmes' in the gemspec file.
+      bundle config build.static_holmes "--enable-static"
     fi
   )
 }
