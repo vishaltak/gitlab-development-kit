@@ -26,10 +26,6 @@ http {
   fastcgi_temp_path fastcgi_temp;
   scgi_temp_path scgi_temp;
 
-  proxy_buffer_size         128k;
-  proxy_buffers           4 256k;
-  proxy_busy_buffers_size   256k;
-
   client_max_body_size 0;
 
   upstream gitlab-workhorse {
