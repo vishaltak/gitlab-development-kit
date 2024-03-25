@@ -338,6 +338,51 @@ gdk config set gitlab_k8s_agent.auto_update false
 gdk reconfigure
 ```
 
+## (Optional) Deploying a FluxCD Project to the cluster / installing the Agent with Flux
+
+[Flux CD](https://fluxcd.io/) is a GitOps-based solution for CD workflows. It is
+necessary to fully test our [GitOps integration](https://docs.gitlab.com/ee/user/clusters/agent/gitops.html).
+
+Prerequisites:
+
+- You have a GDK with `nginx` and `ssl` enabled.
+- `kubectl get pods -A` successfully returns pods running in your cluster.
+
+1. Ensure your cluster can successfully resolve `gdk.test`.
+   - For colima, this is done by adding an entry to `network.dnsHosts` in the
+     configuration file. You can either
+     - Edit the file at `~/.colima/default/colima.yaml`
+     - Start colima with `colima start --edit` to edit the config file before
+       colima starts the VM.
+1. Follow the [flux set up tutorial](https://docs.gitlab.com/ee/user/clusters/agent/gitops/flux_tutorial.html).
+   Add the following arguments and modifications when you call `flux bootstrap`:
+   - `--ca-cert <ssl certificate>`: the SSL certificate the GDK is configured
+     to use is required to ensure the flux resource can reach `gdk.test` over
+     SSL.
+   - `--hostname https://gdk.test:3443`: this is the path you access the GDK,
+     the listed hostname is the default as explained in [Local network binding](local_network.md)
+   - When installing the `agentk` with flux, the SSL certificate must be added
+     to the agent manifest:
+
+     ```yaml
+     values:
+       config:
+         kasAddress: "wss://gdk.test:3443/-/kubernetes-agent"
+         secretName: gitlab-agent-token
+         kasCaCert: |
+         <certificate test>
+       kas:
+         sslCertFile: |
+         <certificate text>
+     ```
+
+NOTE:
+You might need to modify the `gitlab-agent` `ConfigMap` by adding newlines
+back into the `ca.crt` value. To do this, run `kubectl edit
+--namespace gitlab configmap gitlab-agent`, and editing the value such that
+the `BEGIN` and `END` headers are on separate lines from the certificate
+value.
+
 ## Troubleshooting
 
 See [Bad CPU type in executable Target](../troubleshooting/apple_mx_machines.md#bad-cpu-type-in-executable-target).
