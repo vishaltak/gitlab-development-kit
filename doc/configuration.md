@@ -750,7 +750,7 @@ So what options do you have to make this work? You can either:
 The GitLab application exposes various configuration options for webpack via
 environment variables. These can be modified to improve performance or enable debugging.
 
-These settings can be configured using [`env.runit`](runit.md#modifying-environment-configuration-for-services).
+These settings can be configured using [`env.runit`](runit.md#modify-service-configuration).
 
 <!-- markdownlint-disable MD044 -->
 
@@ -807,3 +807,18 @@ asdf:
 | Setting   | Default | Description |
 |-----------|---------|-------------|
 | `opt_out` | `false` | Set this to `true` to tell GDK to _not_ use `asdf`, even if it's installed. |
+
+## Environment variables
+
+Temporary environment variables last only for the duration of your current shell and GDK session.
+This is useful for testing or short-term changes:
+
+1. Export environment variables in your shell:
+
+   ```shell
+   export <VARIABLE_NAME_1>=<VALUES_1>; export <VARIABLE_NAME_2>=<VALUES_2>; ...
+   ```
+
+1. Run `gdk restart`.
+
+For environment variables to persist across sessions, you can use [`env.runit`](runit.md#using-environment-variables).
