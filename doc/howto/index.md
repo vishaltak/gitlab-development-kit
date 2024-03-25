@@ -27,6 +27,7 @@ to learn how to contribute to GitLab.
 - [Database load balancing](database_load_balancing.md)
 - [Debugging with Pry](pry.md)
 - [Dependency Proxy](dependency_proxy.md)
+- [Environment variables](../configuration.md#environment-variables)
 - [Elasticsearch](elasticsearch.md)
 - [Email](email.md)
 - [Enable Shell completion](shell_completion.md)

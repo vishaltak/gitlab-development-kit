@@ -88,28 +88,28 @@ This service handles log rotation and compaction in the following way:
   GitLab last wrote to that file.
 - `zmore` and `zgrep` allow viewing and searching through compressed or uncompressed logs.
 
-## Modifying service configuration
+## Modify service configuration
 
-To modify the actual commands used to start services, use the `Procfile`
-just like with Foreman. Every time you run `gdk start`, `gdk stop`, and so on,
+To modify the used to start services, use the `Procfile`. Every time you run `gdk start`, `gdk stop`, and so on,
 GDK updates the runit service configuration from the `Procfile`.
 
-If you want to remove a service `foo`:
+To remove service `foo`:
 
-- Comment out or delete `foo: exec bar` from `Procfile`
-- Run `gdk stop foo`
-- `rm services/foo`
+1. Comment out or delete `foo: exec bar` from `Procfile`.
+1. Run `gdk stop foo`.
+1. Run `rm services/foo`.
 
-## Modifying environment configuration for services
+### Using environment variables
 
-If you want to set environment variables for services, either:
+For environment variables to persist across sessions, you use a `env.runit` file:
 
-- Edit the `Procfile` and restart the service.
-- Create a file `env.runit` in the root directory with contents such as `export myvar=myvalue`.
+1. Add variables to the `env.runit`, line by lines:
 
-Example:
+   ```shell
 
-```shell
-export CUSTOMER_PORTAL_URL=http://localhost:5000
-export IS_EE=true
-```
+   export <VARIABLE_NAME_1>=<VALUES_1>
+   export <VARIABLE_NAME_2>=<VALUES_2>
+   ... and so on
+   ```
+
+1. Run `gdk restart`. These variables are available every time you start GDK.
