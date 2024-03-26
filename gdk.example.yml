@@ -468,6 +468,7 @@ vite:
   enabled: false
   hot_module_reloading: true
   port: 3038
+  vue_version: 2
 webpack:
   allowed_hosts: []
   enabled: true
@@ -480,6 +481,7 @@ webpack:
   sourcemaps: true
   static: false
   vendor_dll: false
+  vue_version: 2
 workhorse:
   configured_port: 3333
   skip_setup: false

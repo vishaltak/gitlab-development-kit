@@ -167,6 +167,7 @@ module GDK
       bool(:enabled) { false }
       port(:port, 'vite')
       bool(:hot_module_reloading) { true }
+      integer(:vue_version) { 2 }
 
       bool(:__safe_enabled) do
         if config.vite?
@@ -196,6 +197,7 @@ module GDK
       bool(:sourcemaps) { true }
       bool(:live_reload) { true }
       array(:allowed_hosts) { config.gitlab.rails.allowed_hosts }
+      integer(:vue_version) { 2 }
 
       string(:__dev_server_public) do
         if !config.webpack.live_reload
