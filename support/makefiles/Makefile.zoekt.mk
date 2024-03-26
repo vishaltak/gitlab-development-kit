@@ -2,7 +2,7 @@ zoekt_dir = ${gitlab_development_root}/zoekt
 
 .PHONY: zoekt-setup
 ifeq ($(zoekt_enabled),true)
-zoekt-setup: zoekt/bin/zoekt-git-clone zoekt/bin/zoekt-git-index zoekt/bin/zoekt-webserver
+zoekt-setup: zoekt/bin/zoekt-webserver
 else
 zoekt-setup:
 	@true
