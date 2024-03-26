@@ -169,6 +169,9 @@ module GDK
       bool(:hot_module_reloading) { true }
       integer(:vue_version) { 2 }
 
+      bool(:__set_vue_version) do
+        config.vite.vue_version == 3
+      end
       bool(:__safe_enabled) do
         if config.vite?
           if config.webpack?
@@ -199,6 +202,9 @@ module GDK
       array(:allowed_hosts) { config.gitlab.rails.allowed_hosts }
       integer(:vue_version) { 2 }
 
+      bool(:__set_vue_version) do
+        config.webpack.vue_version == 3
+      end
       string(:__dev_server_public) do
         if !config.webpack.live_reload
           ""
