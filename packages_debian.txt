@@ -1,5 +1,6 @@
 # Keep the file list alphabetically sorted, makes diffs and merges easier
 #
+bzip2
 cmake
 curl
 ed
@@ -34,5 +35,6 @@ sudo
 tzdata
 uuid-dev
 wget
+xz-utils
 yamllint
 zlib1g-dev
