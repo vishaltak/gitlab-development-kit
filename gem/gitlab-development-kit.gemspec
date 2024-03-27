@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gitlab-sdk', '~> 0.3.1'
   spec.add_dependency 'rake', '~> 13.1'
   spec.add_dependency 'sentry-ruby', '~> 5.17'
+  spec.add_dependency 'parallel', '~> 1.24'
 end

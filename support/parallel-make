@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require "parallel"
+require_relative "../lib/gdk"
+
+tasks = ARGV
+
+Parallel.each(tasks, in_threads: 4) do |task|
+  GDK.make(task, env: ENV, command_prefix: "[#{task}] ")
+end

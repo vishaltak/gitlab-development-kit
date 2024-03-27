@@ -3,6 +3,7 @@
 START_TIME := $(shell date "+%s")
 
 MAKEFLAGS += --no-print-directory
+PARALLEL_MAKE := support/parallel-make
 
 DIVIDER = "--------------------------------------------------------------------------------"
 
@@ -126,32 +127,36 @@ install: start-task all post-install-task start
 #
 # Pull `gitlab` directory first, since its dependencies are linked from there.
 .PHONY: update
-update: start-task \
-gdk_bundle_install \
-gitlab/.git/pull \
-gitlab-update \
-platform-update \
-preflight-checks \
-preflight-update-checks \
-gitaly-update \
-ensure-databases-setup \
-gitlab-shell-update \
-unlock-dependency-installers \
-gitlab-docs-update \
-gitlab-elasticsearch-indexer-update \
-gitlab-k8s-agent-update \
-gitlab-pages-update \
-gitlab-spamcheck-update \
-gitlab-translations-unlock \
-gitlab-ui-update \
-gitlab-workhorse-update \
-gitlab-zoekt-indexer-update \
-grafana-update \
-jaeger-update \
-object-storage-update \
-pgvector-update \
-zoekt-update \
-post-update-task
+update:
+	$(Q)$(MAKE) \
+		start-task \
+		gdk_bundle_install
+	$(Q)$(PARALLEL_MAKE) \
+		gitlab-update \
+		platform-update \
+		preflight-checks \
+		preflight-update-checks \
+		gitaly-update
+	$(Q)$(MAKE) \
+		ensure-databases-setup \
+		unlock-dependency-installers
+	$(Q)$(PARALLEL_MAKE) \
+		gitlab-shell-update \
+		gitlab-docs-update \
+		gitlab-elasticsearch-indexer-update \
+		gitlab-k8s-agent-update \
+		gitlab-pages-update \
+		gitlab-spamcheck-update \
+		gitlab-translations-unlock \
+		gitlab-ui-update \
+		gitlab-workhorse-update \
+		gitlab-zoekt-indexer-update \
+		grafana-update \
+		jaeger-update \
+		object-storage-update \
+		pgvector-update \
+		zoekt-update
+	$(Q)$(MAKE)post-update-task
 
 # This is used by `gdk reconfigure`
 #

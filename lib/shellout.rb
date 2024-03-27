@@ -19,6 +19,7 @@ class Shellout
   def initialize(*args, **opts)
     @args = args.flatten
     @env = opts.delete(:env) || {}
+    @command_prefix = opts.delete(:command_prefix)
     @opts = opts
   end
 
@@ -164,7 +165,8 @@ class Shellout
 
   def print_out(msg)
     @stdout_str += msg
-    GDK::Output.print(msg)
+    out_msg = @command_prefix ? msg.split("\n").map { |line| "#{@command_prefix}#{line}" }.join("\n") << "\n" : msg
+    GDK::Output.print(out_msg)
   end
 
   def print_err(msg)
