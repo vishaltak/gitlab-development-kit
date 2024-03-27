@@ -1,6 +1,7 @@
 # Keep the file list alphabetically sorted, makes diffs and merges easier
 #
 GraphicsMagick
+bzip2
 cmake
 ed
 gcc
@@ -32,5 +33,6 @@ rsync
 sqlite-devel
 uuid-devel
 wget
+xz-utils
 yamllint
 zlib-devel
