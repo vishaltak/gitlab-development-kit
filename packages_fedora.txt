@@ -33,6 +33,6 @@ rsync
 sqlite-devel
 uuid-devel
 wget
-xz-utils
+xz
 yamllint
 zlib-devel
