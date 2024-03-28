@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require "parallel"
-require_relative "../lib/gdk"
+require 'parallel'
+require_relative '../lib/gdk'
 
 tasks = ARGV
 
