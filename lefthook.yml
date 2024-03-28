@@ -14,8 +14,8 @@ pre-push:
       run: make markdownlint
     rubocop:
       files: git diff --name-only --diff-filter=d $(git merge-base origin/main HEAD)..HEAD
-      glob: '*.{rb,rake}'
-      run: bundle exec rubocop --config .rubocop-gdk.yml {files}
+      glob: '{support/*,*.{rb,rake}}'
+      run: bundle exec rubocop --config .rubocop-gdk.yml --force-exclusion {files}
     vale:
       run: make vale
     check-links:
