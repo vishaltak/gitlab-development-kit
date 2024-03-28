@@ -10,6 +10,8 @@ This document describes how you can configure your GDK environment.
 - [ActionCable settings](#actioncable-settings).
 - [Grafana settings](#grafana-settings).
 - [`asdf` settings](#asdf-settings).
+- [IDE settings](#ide-settings).
+- [Environment variables](#environment-variables).
 
 ## Git configuration
 
@@ -807,6 +809,11 @@ asdf:
 | Setting   | Default | Description |
 |-----------|---------|-------------|
 | `opt_out` | `false` | Set this to `true` to tell GDK to _not_ use `asdf`, even if it's installed. |
+
+## IDE settings
+
+To get alias completion and type hinting in the `gitlab` project, you need to create a `jsconfig.json` file.
+See [Type hinting aliases](https://docs.gitlab.com/ee/development/fe_guide/type_hinting.html#aliases).
 
 ## Environment variables
 
