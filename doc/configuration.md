@@ -623,7 +623,7 @@ webpack:
 | `incremental_ttl` | `30` | Sets the number of days after which a visited page's assets will be evicted from the list of bundles to eagerly compile. Set to `0` to eagerly compile every page's assets ever visited. |
 | `sourcemaps` | `true` | Setting this to `false` disables source maps. This reduces memory consumption for those who do not need to debug frontend code. |
 | `live_reload` | `true` | Setting this to `false` disables hot module replacement when changes are detected. |
-| `public_address` | `` | Allows to set a public address for webpack's live reloading feature. This setting is mainly utilized in GitPod, otherwise the address should be set correctly by default. |
+| `public_address` | | Allows to set a public address for webpack's live reloading feature. This setting is mainly utilized in GitPod, otherwise the address should be set correctly by default. |
 | `allowed_hosts` | `[]` | Webpack can serve requests from hosts other than its GDK's host. Use this setting on a Geo primary site that serves requests forwarded by Geo secondary sites. Defaults to `gitlab.rails.allowed_hosts`. You don't usually need to set this for Webpack. Example value: `["gdk2.test"]`. |
 
 #### Incremental webpack compilation
