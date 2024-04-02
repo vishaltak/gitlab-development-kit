@@ -39,5 +39,5 @@ gitlab-workhorse-clean-bin: gitlab-workhorse-compile
 	$(Q)support/asdf-exec gitlab/workhorse $(MAKE) clean
 
 .PHONY: gitlab/workhorse/gitlab-workhorse
-gitlab/workhorse/gitlab-workhorse: gitlab-workhorse-compile
+gitlab/workhorse/gitlab-workhorse: gitlab-workhorse-compile gitlab-workhorse-asdf-install
 	$(Q)support/asdf-exec gitlab/workhorse $(MAKE) ${QQ}
