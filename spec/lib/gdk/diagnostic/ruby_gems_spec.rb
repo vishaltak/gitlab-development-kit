@@ -6,6 +6,7 @@ RSpec.describe GDK::Diagnostic::RubyGems do
   subject(:diagnostic) { described_class.new(allow_gem_not_installed: allow_gem_not_installed) }
 
   before do
+    stub_const('GDK::Diagnostic::RubyGems::GEM_REQUIRE_MAPPING', { 'bad_gem' => 'actual_gem_name' })
     stub_const('GDK::Diagnostic::RubyGems::GITLAB_GEMS_WITH_C_CODE_TO_CHECK', %w[bad_gem])
   end
 
@@ -95,11 +96,12 @@ RSpec.describe GDK::Diagnostic::RubyGems do
     end
   end
 
-  def stub_gem_installed(gem_name, success)
-    stub_shellout("/home/git/gdk/support/bundle-exec gem list -i #{gem_name}", success)
+  def stub_gem_installed(name, success)
+    stub_shellout("/home/git/gdk/support/bundle-exec gem list -i #{name}", success)
   end
 
-  def stub_gem_loads_ok(gem_name, success)
+  def stub_gem_loads_ok(name, success)
+    gem_name = GDK::Diagnostic::RubyGems::GEM_REQUIRE_MAPPING[name]
     stub_shellout("/home/git/gdk/support/bundle-exec ruby -r #{gem_name} -e 'nil'", success)
   end
 
