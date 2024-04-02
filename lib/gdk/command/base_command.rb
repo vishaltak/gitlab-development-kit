@@ -50,6 +50,14 @@ module GDK
       end
 
       def print_ready_message
+        notices = ready_messages
+        return if notices.empty?
+
+        GDK::Output.puts
+        notices.each { |msg| GDK::Output.notice(msg) }
+      end
+
+      def ready_messages
         notices = []
 
         if config.rails_web?
@@ -72,10 +80,7 @@ module GDK
         notices << "Grafana available at #{config.grafana.__uri}." if config.grafana?
         notices << "A container registry is available at #{config.registry.__listen}." if config.registry?
 
-        return if notices.empty?
-
-        GDK::Output.puts
-        notices.each { |msg| GDK::Output.notice(msg) }
+        notices
       end
     end
   end
