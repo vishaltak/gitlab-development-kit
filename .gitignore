@@ -1,3 +1,5 @@
+# Please keep this file alphabetically sorted, thanks!
+#
 !/repositories/.gitkeep
 *.crt
 *.key
@@ -9,8 +11,8 @@
 .gdkrc.custom
 .idea
 .nova
-.yardoc
 .runner_system_id
+.yardoc
 /*.log
 /.backups/
 /.env
@@ -30,10 +32,12 @@
 /.vagrant/
 /.vscode/
 /Procfile
+/artifacts/
 /bootstrap-rails.log
 /builds
 /charts-gitlab
 /clickhouse
+/consul/
 /coverage
 /db_backup
 /dev/
@@ -49,7 +53,6 @@
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer
-/gitlab-zoekt-indexer
 /gitlab-k8s-agent-config.yml
 /gitlab-k8s-agent/
 /gitlab-last-verified-sha.json
@@ -63,6 +66,7 @@
 /gitlab-spamcheck
 /gitlab-ui
 /gitlab-workhorse
+/gitlab-zoekt-indexer
 /gitlab/
 /gitlab_pages_port
 /google_oauth_client_id
@@ -93,22 +97,23 @@
 /openssh/*.pub
 /openssh/*_key
 /openssh/sshd_config
+/pgbouncers/
 /pgvector/
 /port
 /postgresql-geo/
 /postgresql-primary
-/postgresql-replica/.s.*
-/postgresql-replica/data
 /postgresql-replica-2/.s.*
 /postgresql-replica-2/data
+/postgresql-replica/.s.*
+/postgresql-replica/data
 /postgresql/.s.*
 /postgresql/data*
 /postgresql_geo_port
 /postgresql_port
 /prometheus/prometheus.yml
+/redis-cluster/*.conf
 /redis/*.conf
 /redis/dump.rdb
-/redis-cluster/*.conf
 /registry/config.yml
 /registry/storage/
 /registry_enabled
@@ -124,11 +129,8 @@
 /snowplow
 /sv/
 /webpack_port
+/zoekt-data/
+/zoekt/
 Brewfile.lock.json
 haproxy/haproxy.cfg
 node_modules/
-/pgbouncers/
-/consul/
-/artifacts/
-/zoekt/
-/zoekt-data/
