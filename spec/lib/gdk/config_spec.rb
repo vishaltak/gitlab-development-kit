@@ -3302,6 +3302,26 @@ RSpec.describe GDK::Config do
     end
   end
 
+  describe 'gitlab_ai_gateway' do
+    describe '#enabled' do
+      it 'defaults to false' do
+        expect(config.gitlab_ai_gateway.enabled).to be(false)
+      end
+    end
+
+    describe '#__listen' do
+      it "is 'http://localhost:5052'" do
+        expect(config.gitlab_ai_gateway.__listen).to be('http://localhost:5052')
+      end
+    end
+
+    describe '#__service_command' do
+      it "is 'support/exec-cd gitlab-ai-gateway poetry run ai_gateway'" do
+        expect(config.gitlab_ai_gateway.__service_command).to be('support/exec-cd gitlab-ai-gateway poetry run ai_gateway')
+      end
+    end
+  end
+
   def create_dummy_executable(name)
     path = File.join(tmp_path, name)
     FileUtils.touch(path)

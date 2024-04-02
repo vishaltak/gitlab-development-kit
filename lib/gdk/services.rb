@@ -8,6 +8,7 @@ module GDK
   module Services
     autoload :Base, 'gdk/services/base'
     autoload :Clickhouse, 'gdk/services/clickhouse'
+    autoload :GitLabAiGateway, 'gdk/services/gitlab_ai_gateway'
     autoload :GitLabWorkhorse, 'gdk/services/gitlab_workhorse'
     autoload :Minio, 'gdk/services/minio'
     autoload :OpenLDAP, 'gdk/services/openldap'

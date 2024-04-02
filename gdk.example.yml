@@ -132,6 +132,9 @@ gitlab:
     sidekiq_health_check_port: 3907
     timeout: 10
     verbose: false
+gitlab_ai_gateway:
+  auto_update: true
+  enabled: false
 gitlab_docs:
   auto_update: true
   enabled: false
@@ -388,6 +391,7 @@ repositories:
   charts_gitlab: https://gitlab.com/gitlab-org/charts/gitlab.git
   gitaly: https://gitlab.com/gitlab-org/gitaly.git
   gitlab: https://gitlab.com/gitlab-org/gitlab.git
+  gitlab_ai_gateway: https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist.git
   gitlab_docs: https://gitlab.com/gitlab-org/gitlab-docs.git
   gitlab_elasticsearch_indexer: https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git
   gitlab_k8s_agent: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git

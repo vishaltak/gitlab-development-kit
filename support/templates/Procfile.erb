@@ -87,6 +87,10 @@ gitaly: exec /usr/bin/env <% config.gitaly.env.each do |k, v| %><%= k %>=<%= v %
 #
 <%= '#' unless config.gitlab_spamcheck? %>spamcheck: exec support/exec-cd gitlab-spamcheck ./spamcheck
 
+# Gitlab AI Gateway
+#
+<%= '#' unless config.gitlab_ai_gateway? %>gitlab-ai-gateway: exec <%= config.gitlab_ai_gateway.__service_command %>
+
 # Mattermost
 #
 <%= '#' unless config.mattermost? %>mattermost: exec docker run --rm --sig-proxy=true -v <%= config.gdk_root.join('mattermost', 'data') %>:/mm/mattermost-data/  -v <%= config.gdk_root.join('mattermost', 'mysql') %>:/var/lib/mysql --publish <%= config.mattermost.port %>:8065 <%= config.mattermost.image %>

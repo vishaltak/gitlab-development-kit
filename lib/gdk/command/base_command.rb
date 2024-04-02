@@ -66,6 +66,8 @@ module GDK
           notices << "Kubernetes proxy (via KAS) available at #{config.gitlab_k8s_agent.__k8s_api_url}."
         end
 
+        notices << "GitLab AI Gateway is available at #{config.gitlab_ai_gateway.__listen}." if config.gitlab_ai_gateway?
+
         notices << "Prometheus available at #{config.prometheus.__uri}." if config.prometheus?
         notices << "Grafana available at #{config.grafana.__uri}." if config.grafana?
         notices << "A container registry is available at #{config.registry.__listen}." if config.registry?

@@ -22,6 +22,7 @@ AllCops:
     - 'dev/**/*'
     - 'elasticsearch/**/*'
     - 'gitaly/**/*'
+    - 'gitlab-ai-gateway/**/*'
     - 'gitlab-docs/**/*'
     - 'gitlab-elasticsearch-indexer/**/*'
     - 'gitlab-k8s-agent/**/*'

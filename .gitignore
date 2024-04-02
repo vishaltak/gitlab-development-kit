@@ -50,6 +50,7 @@
 /gem/*.gem
 /gettext.log
 /gitaly/
+/gitlab-ai-gateway/
 /gitlab-development-kit/**
 /gitlab-docs
 /gitlab-elasticsearch-indexer

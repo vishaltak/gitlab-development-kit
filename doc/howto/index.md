@@ -35,6 +35,7 @@ to learn how to contribute to GitLab.
 - [.gdkrc.custom](gdkrc.custom.md)
 - [GDK in Gitpod](gitpod.md)
 - [Git push options](git_push_options.md)
+- [GitLab AI Gateway](gitlab_ai_gateway.md)
 - [GitLab Geo](geo.md)
 - [GitLab.com OAuth2](gitlab-oauth2.md)
 - [Gitaly and Praefect](gitaly.md)

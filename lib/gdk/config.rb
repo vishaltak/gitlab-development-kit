@@ -43,6 +43,13 @@ module GDK
       string(:ca_path) { '' }
     end
 
+    settings :gitlab_ai_gateway do
+      bool(:enabled) { false }
+      bool(:auto_update) { true }
+      string(:__listen) { 'http://localhost:5052' } # FIXME: Wire this up with gitlab-ai-gateway/.env
+      string(:__service_command) { 'support/exec-cd gitlab-ai-gateway poetry run ai_gateway' }
+    end
+
     settings :telemetry do
       string(:username) { '' }
       bool(:enabled) { false }
@@ -53,6 +60,7 @@ module GDK
       string(:charts_gitlab) { 'https://gitlab.com/gitlab-org/charts/gitlab.git' }
       string(:gitaly) { 'https://gitlab.com/gitlab-org/gitaly.git' }
       string(:gitlab) { 'https://gitlab.com/gitlab-org/gitlab.git' }
+      string(:gitlab_ai_gateway) { 'https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist.git' }
       string(:gitlab_docs) { 'https://gitlab.com/gitlab-org/gitlab-docs.git' }
       string(:gitlab_elasticsearch_indexer) { 'https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer.git' }
       string(:gitlab_k8s_agent) { 'https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git' }

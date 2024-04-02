@@ -106,6 +106,7 @@ gitlab-spamcheck-setup \
 gitlab-ui-setup \
 gitlab-workhorse-setup \
 gitlab-zoekt-indexer-setup \
+gitlab-ai-gateway-setup \
 grafana-setup \
 object-storage-setup \
 openldap-setup \
@@ -146,6 +147,7 @@ gitlab-translations-unlock \
 gitlab-ui-update \
 gitlab-workhorse-update \
 gitlab-zoekt-indexer-update \
+gitlab-ai-gateway-update \
 grafana-update \
 jaeger-update \
 object-storage-update \

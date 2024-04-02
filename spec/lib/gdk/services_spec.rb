@@ -6,6 +6,7 @@ RSpec.describe GDK::Services do
   let(:known_services) do
     %i[
       Clickhouse
+      GitLabAiGateway
       GitLabWorkhorse
       Minio
       OpenLDAP
