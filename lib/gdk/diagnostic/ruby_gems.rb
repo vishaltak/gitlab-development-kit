@@ -6,7 +6,14 @@ module GDK
   module Diagnostic
     class RubyGems < Base
       TITLE = 'Ruby Gems'
-      GITLAB_GEMS_WITH_C_CODE_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
+      GEM_REQUIRE_MAPPING = {
+        'static_holmes' => 'charlock_holmes',
+        'ffi' => 'ffi',
+        'gpgme' => 'gpgme',
+        'pg' => 'pg',
+        'oj' => 'oj'
+      }.freeze
+      GITLAB_GEMS_WITH_C_CODE_TO_CHECK = GEM_REQUIRE_MAPPING.keys
 
       def initialize(allow_gem_not_installed: false)
         @allow_gem_not_installed = allow_gem_not_installed
@@ -50,7 +57,8 @@ module GDK
       end
 
       def gem_loads_ok?(name)
-        command = -> { exec_cmd("#{bundle_exec_cmd} ruby -r #{name} -e 'nil'") }
+        gem_name = GEM_REQUIRE_MAPPING[name]
+        command = -> { exec_cmd("#{bundle_exec_cmd} ruby -r #{gem_name} -e 'nil'") }
 
         if bundler_available?
           ::Bundler.with_unbundled_env do
