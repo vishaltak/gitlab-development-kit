@@ -78,6 +78,7 @@
   - ".gitlab/ci/**/*"
 
 .gitlab-remote-code-changes: &gitlab-remote-code-changes
+  - "packages_debian.txt"
   - "support/gitlab-remote-development/**/*"
 
 #########
