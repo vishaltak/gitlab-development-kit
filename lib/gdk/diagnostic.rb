@@ -34,7 +34,6 @@ module GDK
         Environment
         RvmAndAsdf
         MacPorts
-        RubyGems
         Bundler
         Version
         Configuration
