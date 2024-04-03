@@ -11,7 +11,6 @@ RSpec.describe GDK::Diagnostic do
         GDK::Diagnostic::Environment,
         GDK::Diagnostic::RvmAndAsdf,
         GDK::Diagnostic::MacPorts,
-        GDK::Diagnostic::RubyGems,
         GDK::Diagnostic::Bundler,
         GDK::Diagnostic::Version,
         GDK::Diagnostic::Configuration,

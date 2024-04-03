@@ -6,7 +6,14 @@ module GDK
   module Diagnostic
     class RubyGems < Base
       TITLE = 'Ruby Gems'
-      GITLAB_GEMS_WITH_C_CODE_TO_CHECK = %w[charlock_holmes ffi gpgme pg oj].freeze
+      GEM_REQUIRE_MAPPING = {
+        'static_holmes' => 'charlock_holmes',
+        'ffi' => 'ffi',
+        'gpgme' => 'gpgme',
+        'pg' => 'pg',
+        'oj' => 'oj'
+      }.freeze
+      GITLAB_GEMS_WITH_C_CODE_TO_CHECK = GEM_REQUIRE_MAPPING.keys
 
       def initialize(allow_gem_not_installed: false)
         @allow_gem_not_installed = allow_gem_not_installed
@@ -15,16 +22,24 @@ module GDK
       end
 
       def success?
+        return false unless bundle_check_ok?
+
         failed_to_load_gitlab_gems.empty?
       end
 
       def detail
-        gitlab_error_message unless success?
+        return if success?
+
+        return bundle_check_error_message unless bundle_check_ok?
+
+        gitlab_error_message
       end
 
       private
 
-      attr_reader :allow_gem_not_installed
+      def bundle_check_ok?
+        exec_cmd("#{bundle_exec_cmd} bundle check") || allow_gem_not_installed?
+      end
 
       def allow_gem_not_installed?
         @allow_gem_not_installed == true
@@ -50,7 +65,8 @@ module GDK
       end
 
       def gem_loads_ok?(name)
-        command = -> { exec_cmd("#{bundle_exec_cmd} ruby -r #{name} -e 'nil'") }
+        gem_name = GEM_REQUIRE_MAPPING[name]
+        command = -> { exec_cmd("#{bundle_exec_cmd} ruby -r #{gem_name} -e 'nil'") }
 
         if bundler_available?
           ::Bundler.with_unbundled_env do
@@ -71,6 +87,14 @@ module GDK
         defined? ::Bundler
       end
 
+      def bundle_check_error_message
+        <<~MESSAGE
+          There are Ruby gems missing that need to be installed. Try running the following to fix:
+
+            (cd #{config.gitlab.dir} && bundle install)
+        MESSAGE
+      end
+
       def gitlab_error_message
         <<~MESSAGE
           The following Ruby Gems appear to have issues:
@@ -79,7 +103,7 @@ module GDK
 
           Try running the following to fix:
 
-          cd #{config.gitlab.dir} && bundle pristine #{@failed_to_load_gitlab_gems.join(' ')}
+            (cd #{config.gitlab.dir} && bundle pristine #{@failed_to_load_gitlab_gems.join(' ')})
         MESSAGE
       end
     end

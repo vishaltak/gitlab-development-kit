@@ -2,51 +2,64 @@
 
 RSpec.describe GDK::Diagnostic::RubyGems do
   let(:allow_gem_not_installed) { nil }
+  let(:bundle_check_ok) { nil }
 
   subject(:diagnostic) { described_class.new(allow_gem_not_installed: allow_gem_not_installed) }
 
   before do
+    stub_bundle_check(bundle_check_ok)
+    stub_const('GDK::Diagnostic::RubyGems::GEM_REQUIRE_MAPPING', { 'bad_gem' => 'actual_gem_name' })
     stub_const('GDK::Diagnostic::RubyGems::GITLAB_GEMS_WITH_C_CODE_TO_CHECK', %w[bad_gem])
   end
 
   describe '#success?' do
-    before do
-      stub_gem_installed('bad_gem', gem_installed)
+    context 'when bundle check fails' do
+      let(:bundle_check_ok) { false }
+
+      it { is_expected.not_to be_success }
     end
 
-    context 'when bad_gem is not installed' do
-      let(:gem_installed) { false }
-
-      context 'and allow_gem_not_installed is false' do
-        let(:allow_gem_not_installed) { false }
-
-        it { is_expected.not_to be_success }
-      end
-
-      context 'and allow_gem_not_installed is true' do
-        let(:allow_gem_not_installed) { true }
-
-        it { is_expected.to be_success }
-      end
-    end
-
-    context 'when bad_gem is installed' do
-      let(:gem_installed) { true }
+    context 'when bundle check succeeds' do
+      let(:bundle_check_ok) { true }
 
       before do
-        stub_gem_loads_ok('bad_gem', gem_loads_ok)
+        stub_gem_installed('bad_gem', gem_installed)
       end
 
-      context 'and bad_gem cannot be loaded' do
-        let(:gem_loads_ok) { false }
+      context 'when bad_gem is not installed' do
+        let(:gem_installed) { false }
 
-        it { is_expected.not_to be_success }
+        context 'and allow_gem_not_installed is false' do
+          let(:allow_gem_not_installed) { false }
+
+          it { is_expected.not_to be_success }
+        end
+
+        context 'and allow_gem_not_installed is true' do
+          let(:allow_gem_not_installed) { true }
+
+          it { is_expected.to be_success }
+        end
       end
 
-      context 'and bad_gem is loaded correctly' do
-        let(:gem_loads_ok) { true }
+      context 'when bad_gem is installed' do
+        let(:gem_installed) { true }
 
-        it { is_expected.to be_success }
+        before do
+          stub_gem_loads_ok('bad_gem', gem_loads_ok)
+        end
+
+        context 'and bad_gem cannot be loaded' do
+          let(:gem_loads_ok) { false }
+
+          it { is_expected.not_to be_success }
+        end
+
+        context 'and bad_gem is loaded correctly' do
+          let(:gem_loads_ok) { true }
+
+          it { is_expected.to be_success }
+        end
       end
     end
   end
@@ -54,52 +67,67 @@ RSpec.describe GDK::Diagnostic::RubyGems do
   describe '#detail' do
     subject(:detail) { diagnostic.detail }
 
-    before do
-      stub_gem_installed('bad_gem', gem_installed)
+    context 'when bundle check fails' do
+      let(:bundle_check_ok) { false }
+
+      it { is_expected.to match(/There are Ruby gems missing that need to be installed./) }
     end
 
-    context 'when bad_gem is not installed' do
-      let(:gem_installed) { false }
-
-      context 'and allow_gem_not_installed is false' do
-        let(:allow_gem_not_installed) { false }
-
-        it { is_expected.to match(/bundle pristine bad_gem/) }
-      end
-
-      context 'and allow_gem_not_installed is true' do
-        let(:allow_gem_not_installed) { true }
-
-        it { is_expected.to be_nil }
-      end
-    end
-
-    context 'when bad_gem is installed' do
-      let(:gem_installed) { true }
+    context 'when bundle check succeeds' do
+      let(:bundle_check_ok) { true }
 
       before do
-        stub_gem_loads_ok('bad_gem', gem_loads_ok)
+        stub_gem_installed('bad_gem', gem_installed)
       end
 
-      context 'and bad_gem cannot be loaded' do
-        let(:gem_loads_ok) { false }
+      context 'when bad_gem is not installed' do
+        let(:gem_installed) { false }
 
-        it { is_expected.to match(/bundle pristine bad_gem/) }
+        context 'and allow_gem_not_installed is false' do
+          let(:allow_gem_not_installed) { false }
+
+          it { is_expected.to match(/bundle pristine bad_gem/) }
+        end
+
+        context 'and allow_gem_not_installed is true' do
+          let(:allow_gem_not_installed) { true }
+
+          it { is_expected.to be_nil }
+        end
       end
 
-      context 'and bad_gem is loaded correctly' do
-        let(:gem_loads_ok) { true }
+      context 'when bad_gem is installed' do
+        let(:gem_installed) { true }
 
-        it { is_expected.to be_nil }
+        before do
+          stub_gem_loads_ok('bad_gem', gem_loads_ok)
+        end
+
+        context 'and bad_gem cannot be loaded' do
+          let(:gem_loads_ok) { false }
+
+          it { is_expected.to match(/bundle pristine bad_gem/) }
+        end
+
+        context 'and bad_gem is loaded correctly' do
+          let(:gem_loads_ok) { true }
+
+          it { is_expected.to be_nil }
+        end
       end
     end
   end
 
-  def stub_gem_installed(gem_name, success)
-    stub_shellout("/home/git/gdk/support/bundle-exec gem list -i #{gem_name}", success)
+  def stub_bundle_check(success)
+    stub_shellout("/home/git/gdk/support/bundle-exec bundle check", success)
   end
 
-  def stub_gem_loads_ok(gem_name, success)
+  def stub_gem_installed(name, success)
+    stub_shellout("/home/git/gdk/support/bundle-exec gem list -i #{name}", success)
+  end
+
+  def stub_gem_loads_ok(name, success)
+    gem_name = GDK::Diagnostic::RubyGems::GEM_REQUIRE_MAPPING[name]
     stub_shellout("/home/git/gdk/support/bundle-exec ruby -r #{gem_name} -e 'nil'", success)
   end
 

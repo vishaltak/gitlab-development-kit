@@ -35,7 +35,6 @@ module GDK
         check_runit_installed
         check_nginx_installed
 
-        # FIXME: This duplicates the RubyGems diagnostic check
         check_ruby_gems_ok
       end
 
