@@ -22,16 +22,24 @@ module GDK
       end
 
       def success?
+        return false unless bundle_check_ok?
+
         failed_to_load_gitlab_gems.empty?
       end
 
       def detail
-        gitlab_error_message unless success?
+        return if success?
+
+        return bundle_check_error_message unless bundle_check_ok?
+
+        gitlab_error_message
       end
 
       private
 
-      attr_reader :allow_gem_not_installed
+      def bundle_check_ok?
+        exec_cmd("#{bundle_exec_cmd} bundle check") || allow_gem_not_installed?
+      end
 
       def allow_gem_not_installed?
         @allow_gem_not_installed == true
@@ -79,6 +87,14 @@ module GDK
         defined? ::Bundler
       end
 
+      def bundle_check_error_message
+        <<~MESSAGE
+          There are Ruby gems missing that need to be installed. Try running the following to fix:
+
+            (cd #{config.gitlab.dir} && bundle install)
+        MESSAGE
+      end
+
       def gitlab_error_message
         <<~MESSAGE
           The following Ruby Gems appear to have issues:
@@ -87,7 +103,7 @@ module GDK
 
           Try running the following to fix:
 
-          cd #{config.gitlab.dir} && bundle pristine #{@failed_to_load_gitlab_gems.join(' ')}
+            (cd #{config.gitlab.dir} && bundle pristine #{@failed_to_load_gitlab_gems.join(' ')})
         MESSAGE
       end
     end
